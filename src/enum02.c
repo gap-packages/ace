@@ -3,14 +3,14 @@
 
 	enum02.c
 	Colin Ramsay (cram@csee.uq.edu.au)
-        15 Jan 99
+        25 Feb 00
 
-	ADAPTIVE COSET ENUMERATOR, Version 3.000
+	ADVANCED COSET ENUMERATOR, Version 3.001
 
-	Copyright 1999
+	Copyright 2000
 	Centre for Discrete Mathematics and Computing,
 	Department of Mathematics and 
-	Department of Computer Science & Electrical Engineering,
+	  Department of Computer Science & Electrical Engineering,
 	The University of Queensland, QLD 4072.
 	(http://www.csee.uq.edu.au/~havas/cdmc.html)
 
@@ -73,6 +73,7 @@ while (topded >= 0)
             {
             CT(iback, mi) = ifront; 
             CT(ifront, m) = iback;
+
             SAVED(iback, mi);
             INCR(cddedn); 
             iback = ifront;
@@ -88,6 +89,7 @@ while (topded >= 0)
       if (iback != ifront)
         {
         INCR(cdcoinc);
+
         if ((l = al0_coinc(ifront,iback,TRUE)) > 0)
           { return(l); }
         if (COL1(irow) < 0 || COL1(ires) < 0)
@@ -130,6 +132,7 @@ while (topded >= 0)
               {
               CT(iback, mi) = ifront; 
               CT(ifront, m) = iback;
+
               SAVED(iback, mi);
               INCR(cddedn); 
               iback = ifront;
@@ -145,6 +148,7 @@ while (topded >= 0)
         if (iback != ifront)
           {
           INCR(cdcoinc);
+
           if ((l = al0_coinc(ifront,iback,TRUE)) > 0)
             { return(l); }
           if (COL1(irow) < 0 || COL1(ires) < 0)

@@ -1210,6 +1210,33 @@ end);
 #############################################################################
 ####
 ##
+#F  NEW_ACE_OPTIONS
+##
+##  Looks at OptionsStack and returns the new options.
+##
+InstallGlobalFunction(NEW_ACE_OPTIONS, function()
+local newoptions, oldoptions, oldnames, optname;
+    if IsEmpty(OptionsStack) then
+      return rec();
+    elif Length(OptionsStack) = 1 then
+      return OptionsStack[ Length(OptionsStack) ];
+    else
+      newoptions := ShallowCopy( OptionsStack[ Length(OptionsStack) ] );
+      oldoptions := OptionsStack[ Length(OptionsStack) - 1 ];
+      oldnames := RecNames(oldoptions);
+      for optname in RecNames(newoptions) do
+        if optname in oldnames and 
+           oldoptions.(optname) = newoptions.(optname) then
+          Unbind( newoptions.(optname) );
+        fi;
+      od;
+      return newoptions;
+    fi;
+end);
+
+#############################################################################
+####
+##
 #F  FlushOptionsStack . . . . . . . . . . . Pops all options off OptionsStack
 ##
 ##

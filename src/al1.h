@@ -3,14 +3,14 @@
 
         al1.h
         Colin Ramsay (cram@csee.uq.edu.au)
-        29 Jan 99
+        6 Dec 00
 
-        ADAPTIVE COSET ENUMERATOR, Version 3.000
+        ADVANCED COSET ENUMERATOR, Version 3.001
 
-        Copyright 1999
+        Copyright 2000
         Centre for Discrete Mathematics and Computing,
         Department of Mathematics and 
-        Department of Computer Science & Electrical Engineering,
+          Department of Computer Science & Electrical Engineering,
         The University of Queensland, QLD 4072.
         (http://www.csee.uq.edu.au/~havas/cdmc.html)
 
@@ -127,8 +127,9 @@ extern int tgenlen;		/* Total list length */
 
 	/******************************************************************
         Many of the Level 0 parameters can be set directly.  However, some
-	of them have slightly different meanings at Level 1, or can effect
-	a continuing enumeration.  All of the following variables are 
+	of them have slightly different meanings at Level 1 (eg, a special 
+	value can be used to indicate a `default'), or can effect a 
+	continuing enumeration.  All of the following variables are 
 	`aliases' for Level 0 parameters, and it is up to the _start() 
 	function to decide when & how they should be transferred to their 
 	Level 0 namesakes.
@@ -144,7 +145,7 @@ extern int maxrow1, ffactor1, nrinsgp1;
 
 void   al1_init(void);
 void   al1_dump(Logic);
-void   al1_prtdetails(Logic);
+void   al1_prtdetails(int);
 void   al1_rslt(int);
 Wlist *al1_newwl(void);
 Wlelt *al1_newelt(void);
@@ -152,7 +153,7 @@ void   al1_addwl(Wlist*, Wlelt*);
 void   al1_concatwl(Wlist*, Wlist*);
 void   al1_emptywl(Wlist*);
 void   al1_prtwl(Wlist*, int);
-Logic   al1_addrep(int);
+Logic  al1_addrep(int);
 Logic  al1_bldrep(int);
 int    al1_trrep(int);
 int    al1_ordrep(void);

@@ -1,22 +1,21 @@
 
-# Makefile (make.flute) - Colin Ramsay - 26 Feb 99
+# Makefile (make.flute) - Colin Ramsay - 18 Oct 00
 #
-# Make file for ACE version 3.000.  Works on:
-#   flute  - sun4m/SPARC, SunOS 5.5, gcc v2.7, (SunOS) make ?
+# Make file for ACE version 3.001.
+# Intended for Sun boxes with gnu's gcc.
+# Tested on:
+#   "flute"	sun4m/SPARC, SunOS 5.5, gcc 2.95.2, SunOS make & ksh
 
-# Compiler switches (flute/darter)
+# Compiler switches
 #
 # -Wall     : print all warnings
 # -pedantic : be bloody picky
-# -ansi     : enforce ANSII compliance
+# -ansi     : enforce ANSI compliance
 # -O2/3     : optimise quite a bit / a lot
 # -g        : for xxgdb debugger
 # -pg       : profiling info for gprof
 
-CC  = gcc -Wall -pedantic -ansi -O2
-#CC = gcc -Wall -pedantic -ansi -O3
-#CC = gcc -Wall -pedantic -ansi -g
-#CC = gcc -Wall -pedantic -ansi -O2 -pg
+CC = gcc -Wall -pedantic -ansi -O2
 
 # ACE Level 0, 1 & 2 switches 
 #
@@ -28,7 +27,7 @@ CC  = gcc -Wall -pedantic -ansi -O2
 #                workspace multipliers.  Usually not defined.
 # AL2_HINFO  : Prints host name etc at start of run.  Usually defined.
 
-FLAGS  = -DAL2_HINFO -DAL0_STAT -DAL0_CC -DAL0_DD
+FLAGS = -DAL0_STAT -DAL0_CC -DAL0_DD -DAL2_HINFO
 
 # Sources
 
@@ -37,42 +36,15 @@ SRC1  = control.c util1.c
 SRC0  = coinc.c enum.c util0.c
 SRC0A = enum00.c enum01.c enum02.c
 
-# Level 2 (interactive interface)
-#
 # Note the setting of (THE)DATE, so that we can record the time/date of
-# this build in the executable (usage: "fprint(fop, "%s\n", DATE);")
+# this build in the executable (usage: "fprint(fop, "%s\n", DATE);").  This
+# may have to be changed for other shells/makes!
 
 THEDATE :sh = date
+
+# Build ACE
 
 ace: al2.h $(SRC2) al1.h $(SRC1) al0.h $(SRC0) $(SRC0A)
 	$(CC) $(FLAGS) -DDATE="\"$(THEDATE)\"" -o ace \
 		$(SRC2) $(SRC1) $(SRC0)
-
-# Level 1 (core wrapper)
-
-ex1a: ex1a.c al1.h $(SRC1) al0.h $(SRC0) $(SRC0A)
-	$(CC) $(FLAGS) -o ex1a ex1a.c $(SRC1) $(SRC0)
-
-ex1b: ex1b.c al1.h $(SRC1) al0.h $(SRC0) $(SRC0A)
-	$(CC) $(FLAGS) -o ex1b ex1b.c $(SRC1) $(SRC0)
-
-ex1c: ex1c.c al1.h $(SRC1) al0.h $(SRC0) $(SRC0A)
-	$(CC) $(FLAGS) -o ex1c ex1c.c $(SRC1) $(SRC0)
-
-ex1d: ex1d.c al1.h $(SRC1) al0.h $(SRC0) $(SRC0A)
-	$(CC) $(FLAGS) -o ex1d ex1d.c $(SRC1) $(SRC0)
-
-# Level 0 (core enumerator)
-
-ex0a: ex0a.c al0.h $(SRC0) $(SRC0A)
-	$(CC) $(FLAGS) -o ex0a ex0a.c $(SRC0)
-
-ex0b: ex0b.c al0.h $(SRC0) $(SRC0A)
-	$(CC) $(FLAGS) -o ex0b ex0b.c $(SRC0)
-
-ex0c: ex0c.c al0.h $(SRC0) $(SRC0A)
-	$(CC) $(FLAGS) -o ex0c ex0c.c $(SRC0)
-
-ex0d: ex0d.c al0.h $(SRC0) $(SRC0A)
-	$(CC) $(FLAGS) -DRUNA -o ex0d ex0d.c $(SRC0)
 

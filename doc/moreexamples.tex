@@ -44,7 +44,7 @@ Entering break read-eval-print loop ...
 brk> fgens := FreeGeneratorsOfFpGroup(FreeGroup("a"));
 [ a ]
 brk> return;
-rec( index := 0, cputime := 45, cputimeUnits := "10^-2 seconds", 
+rec( index := 0, cputime := 43, cputimeUnits := "10^-2 seconds", 
   activecosets := 499998, maxcosets := 499998, totcosets := 499998 )
 gap>
 \endexample
@@ -111,13 +111,13 @@ presentation and parameters:
 \beginexample
 gap> SetInfoACELevel(3);
 gap> ACEStats(fgens, [], [] : start, sr := 1);
-#I  ACE 3.000        Wed Mar 21 20:41:40 2001
+#I  ACE 3.001        Sun Apr  1 16:55:54 2001
 #I  =========================================
 #I  Host information:
 #I    name = hamal
 #I  OVERFLOW (a=249998 r=83333 h=83333 n=249999; l=337 c=0.29; m=249998 t=2499\
 98)
-#I    #-- ACE 3.000: Run Parameters ---
+#I    #--- ACE 3.001: Run Parameters ---
 #I  Group Name: G;
 #I  Group Generators: ab;
 #I  Group Relators: ;
@@ -126,9 +126,9 @@ gap> ACEStats(fgens, [], [] : start, sr := 1);
 #I  Wo:1000000; Max:249998; Mess:0; Ti:-1; Ho:-1; Loop:0;
 #I  As:0; Path:0; Row:1; Mend:0; No:0; Look:0; Com:10;
 #I  C:0; R:0; Fi:7; PMod:3; PSiz:256; DMod:4; DSiz:1000;
-#I    #--------------------------------
+#I    #---------------------------------
 #I  ***
-rec( index := 0, cputime := 29, cputimeUnits := "10^-2 seconds", 
+rec( index := 0, cputime := 29, cputimeUnits := "10^-2 seconds",
   activecosets := 249998, maxcosets := 249998, totcosets := 249998 )
 \endexample
 
@@ -141,16 +141,16 @@ level set to 3):
 
 \beginexample
 gap> ACEStats(fgens, [], [] : print := [-1, 12]);
-#I  ACE 3.000        Wed Mar 21 20:44:29 2001
+#I  ACE 3.001        Sun Apr  1 16:55:55 2001
 #I  =========================================
 #I  Host information:
 #I    name = hamal
 #I  ** ERROR (continuing with next line)
 #I     no information in table
-#I  OVERFLOW (a=249998 r=83333 h=83333 n=249999; l=337 c=0.29; m=249998 t=2499\
+#I  OVERFLOW (a=249998 r=83333 h=83333 n=249999; l=337 c=0.28; m=249998 t=2499\
 98)
 #I  ***
-rec( index := 0, cputime := 29, cputimeUnits := "10^-2 seconds", 
+rec( index := 0, cputime := 28, cputimeUnits := "10^-2 seconds",
   activecosets := 249998, maxcosets := 249998, totcosets := 249998 )
 \endexample
 
@@ -166,7 +166,7 @@ of the coset table), namely, insert  the  `start'  option  before  the
 
 \beginexample
 gap> ACEStats(fgens, [], [] : start, print := [-1, 12]);
-#I  ACE 3.000        Wed Mar 21 20:47:17 2001
+#I  ACE 3.001        Sun Apr  1 16:55:56 2001
 #I  =========================================
 #I  Host information:
 #I    name = hamal
@@ -230,11 +230,11 @@ include the `silent' option. (We still have the `InfoACE' level set at
 \beginexample
 gap> ACECosetTableFromGensAndRels(fgens, [], [] : start, print := [-1, 12],
 >                                                 silent);
-#I  ACE 3.000        Wed Mar 21 20:48:46 2001
+#I  ACE 3.001        Sun Apr  1 16:55:56 2001
 #I  =========================================
 #I  Host information:
 #I    name = hamal
-#I  OVERFLOW (a=249998 r=83333 h=83333 n=249999; l=337 c=0.29; m=249998 t=2499\
+#I  OVERFLOW (a=249998 r=83333 h=83333 n=249999; l=337 c=0.28; m=249998 t=2499\
 98)
 #I  co: a=249998 r=83333 h=83333 n=249999; c=+0.00
 #I   coset ||      a      A      b      B   order   rep've
@@ -277,7 +277,7 @@ standard form; so despite the differences in the {\GAP} versions, both
 gap> ACECosetTableFromGensAndRels(fgens, [], [] : max := 12,
 >                                                 start, print := -12,
 >                                                 incomplete);
-#I  ACE 3.000        Wed Mar 21 20:50:22 2001
+#I  ACE 3.001        Sun Apr  1 16:56:05 2001
 #I  =========================================
 #I  Host information:
 #I    name = hamal
@@ -360,16 +360,16 @@ the `InfoACE' level is still 3):
 
 \beginexample
 gap> ACEStart(fgens, [], []);
-#I  ACE 3.000        Wed Mar 21 20:52:31 2001
+#I  ACE 3.001        Sun Apr  1 16:56:06 2001
 #I  =========================================
 #I  Host information:
 #I    name = hamal
 #I  ***
-#I  OVERFLOW (a=249998 r=83333 h=83333 n=249999; l=337 c=0.29; m=249998 t=2499\
+#I  OVERFLOW (a=249998 r=83333 h=83333 n=249999; l=337 c=0.28; m=249998 t=2499\
 98)
 1
 gap> ACEParameters(1);
-#I    #-- ACE 3.000: Run Parameters ---
+#I    #--- ACE 3.001: Run Parameters ---
 #I  Group Name: G;
 #I  Group Generators: ab;
 #I  Group Relators: ;
@@ -378,11 +378,11 @@ gap> ACEParameters(1);
 #I  Wo:1000000; Max:249998; Mess:0; Ti:-1; Ho:-1; Loop:0;
 #I  As:0; Path:0; Row:1; Mend:0; No:0; Look:0; Com:10;
 #I  C:0; R:0; Fi:7; PMod:3; PSiz:256; DMod:4; DSiz:1000;
-#I    #--------------------------------
-rec( enumeration := "G", subgroup := "H", workspace := 1000000, 
-  max := 249998, messages := 0, time := -1, hole := -1, loop := 0, asis := 0, 
-  path := 0, row := 1, mendelsohn := 0, no := 0, lookahead := 0, 
-  compaction := 10, ct := 0, rt := 0, fill := 7, pmode := 3, psize := 256, 
+#I    #---------------------------------
+rec( enumeration := "G", subgroup := "H", workspace := 1000000,
+  max := 249998, messages := 0, time := -1, hole := -1, loop := 0, asis := 0,
+  path := 0, row := 1, mendelsohn := 0, no := 0, lookahead := 0,
+  compaction := 10, ct := 0, rt := 0, fill := 7, pmode := 3, psize := 256,
   dmode := 4, dsize := 1000 )
 \endexample
 
@@ -408,7 +408,7 @@ version of `ACEStats' (see~"ACEStats!interactive") :
 
 \beginexample
 gap> ACEStats(1); # The interactive version of ACEStats takes 1 or no arg'ts
-rec( index := 0, cputime := 29, cputimeUnits := "10^-2 seconds", 
+rec( index := 0, cputime := 28, cputimeUnits := "10^-2 seconds",
   activecosets := 249998, maxcosets := 249998, totcosets := 249998 )
 \endexample
 
@@ -490,20 +490,20 @@ gap> ACECosetTable(1 : incomplete);
 #I  ***
 #I  OVERFLOW (a=12 r=4 h=4 n=13; l=4 c=0.00; m=12 t=12)
 #I  co: a=12 r=4 h=4 n=13; c=+0.00
-#I   coset |      a      A      b      B
+#I   coset ||      a      A      b      B
 #I  -------+----------------------------
-#I       1 |      2      3      4      5
-#I       2 |      6      1      7      8
-#I       3 |      1      9     10     11
-#I       4 |     12      0      0      1
-#I       5 |      0      0      1      0
-#I       6 |      0      2      0      0
-#I       7 |      0      0      0      2
-#I       8 |      0      0      2      0
-#I       9 |      3      0      0      0
-#I      10 |      0      0      0      3
-#I      11 |      0      0      3      0
-#I      12 |      0      4      0      0
+#I       1 ||      2      3      4      5
+#I       2 ||      6      1      7      8
+#I       3 ||      1      9     10     11
+#I       4 ||     12      0      0      1
+#I       5 ||      0      0      1      0
+#I       6 ||      0      2      0      0
+#I       7 ||      0      0      0      2
+#I       8 ||      0      0      2      0
+#I       9 ||      3      0      0      0
+#I      10 ||      0      0      0      3
+#I      11 ||      0      0      3      0
+#I      12 ||      0      4      0      0
 #I  ACECosetTable: Coset table is incomplete, reduced & lenlex standardised.
 [ [ 2, 6, 1, 12, 0, 0, 0, 0, 3, 0, 0, 0 ], 
   [ 3, 1, 9, 0, 0, 2, 0, 0, 0, 0, 0, 4 ], 
@@ -569,7 +569,7 @@ gap> ACEStart(1, fgens, [a^2, b^3, (a*b)^5], []
 #I  ToACE> text:***;
 #I  ***
 #I  ToACE> Start;
-#I    #-- ACE 3.000: Run Parameters ---
+#I    #--- ACE 3.001: Run Parameters ---
 #I  Group Name: A_5;
 #I  Group Generators: ab;
 #I  Group Relators: (a)^2, (b)^3, (ab)^5;
@@ -578,7 +578,7 @@ gap> ACEStart(1, fgens, [a^2, b^3, (a*b)^5], []
 #I  Wo:1000000; Max:333331; Mess:1000; Ti:-1; Ho:-1; Loop:0;
 #I  As:0; Path:0; Row:1; Mend:0; No:3; Look:0; Com:10;
 #I  C:0; R:0; Fi:6; PMod:3; PSiz:256; DMod:4; DSiz:1000;
-#I    #--------------------------------
+#I    #---------------------------------
 #I  INDEX = 60 (a=60 r=77 h=1 n=77; l=3 c=0.00; m=66 t=76)
 1
 gap>
@@ -610,14 +610,14 @@ gap> ACEStart(1 : relators := ToACEWords(fgens, [a^2, b^3, (a*b)^5]),
 #I      `group', `relators', `generators'.
 #I  Discarding current values of args.
 #I  (The new args will be extracted from ACE, later).
+#I  ToACE> relators:a^2,b^3,a*b*a*b*a*b*a*b*a*b;
 #I  ToACE> enumeration:A_5;
 #I  ToACE> subgroup:Id;
 #I  ToACE> max:0;
 #I  ToACE> messages:1000;
-#I  ToACE> relators:a^2,b^3,a*b*a*b*a*b*a*b*a*b;
 #I  No group generators saved. Setting value(s) from ACE ...
 #I  ToACE> sr:1;
-#I    #-- ACE 3.000: Run Parameters ---
+#I    #--- ACE 3.001: Run Parameters ---
 #I  Group Name: A_5;
 #I  Group Generators: ab;
 #I  Group Relators: (a)^2, bbb, ababababab;
@@ -626,11 +626,11 @@ gap> ACEStart(1 : relators := ToACEWords(fgens, [a^2, b^3, (a*b)^5]),
 #I  Wo:1000000; Max:333331; Mess:1000; Ti:-1; Ho:-1; Loop:0;
 #I  As:0; Path:0; Row:1; Mend:0; No:3; Look:0; Com:10;
 #I  C:0; R:0; Fi:6; PMod:3; PSiz:256; DMod:4; DSiz:1000;
-#I    #--------------------------------
+#I    #---------------------------------
 #I  ToACE> text:***;
 #I  ***
 #I  ToACE> Start;
-#I    #-- ACE 3.000: Run Parameters ---
+#I    #--- ACE 3.001: Run Parameters ---
 #I  Group Name: A_5;
 #I  Group Generators: ab;
 #I  Group Relators: (a)^2, (b)^3, (ab)^5;
@@ -639,8 +639,8 @@ gap> ACEStart(1 : relators := ToACEWords(fgens, [a^2, b^3, (a*b)^5]),
 #I  Wo:1000000; Max:333331; Mess:1000; Ti:-1; Ho:-1; Loop:0;
 #I  As:0; Path:0; Row:1; Mend:0; No:3; Look:0; Com:10;
 #I  C:0; R:0; Fi:6; PMod:3; PSiz:256; DMod:4; DSiz:1000;
-#I    #--------------------------------
-#I  INDEX = 60 (a=60 r=77 h=1 n=77; l=3 c=0.01; m=66 t=76)
+#I    #---------------------------------
+#I  INDEX = 60 (a=60 r=77 h=1 n=77; l=3 c=0.00; m=66 t=76)
 1
 gap>
 \endexample
@@ -696,7 +696,7 @@ gap> ACEStart(1, ACEGroupGenerators(1), ACERelators(1), [ a*b ]
 >             : messages := 1);
 #I  ***
 #I  ***
-#I    #-- ACE 3.000: Run Parameters ---
+#I    #--- ACE 3.001: Run Parameters ---
 #I  Group Name: A_5;
 #I  Group Generators: ab;
 #I  Group Relators: (a)^2, (b)^3, (ab)^5;
@@ -705,12 +705,12 @@ gap> ACEStart(1, ACEGroupGenerators(1), ACERelators(1), [ a*b ]
 #I  Wo:1000000; Max:333331; Mess:1; Ti:-1; Ho:-1; Loop:0;
 #I  As:0; Path:0; Row:1; Mend:0; No:3; Look:0; Com:10;
 #I  C:0; R:0; Fi:6; PMod:3; PSiz:256; DMod:4; DSiz:1000;
-#I    #--------------------------------
+#I    #---------------------------------
 #I  AD: a=2 r=1 h=1 n=3; l=1 c=+0.00; m=2 t=2
 #I  SG: a=2 r=1 h=1 n=3; l=1 c=+0.00; m=2 t=2
 #I  RD: a=3 r=1 h=1 n=4; l=2 c=+0.00; m=3 t=3
 #I  RD: a=4 r=2 h=1 n=5; l=2 c=+0.00; m=4 t=4
-#I  RD: a=5 r=2 h=1 n=6; l=2 c=+0.01; m=5 t=5
+#I  RD: a=5 r=2 h=1 n=6; l=2 c=+0.00; m=5 t=5
 #I  RD: a=6 r=2 h=1 n=7; l=2 c=+0.00; m=6 t=6
 #I  RD: a=7 r=2 h=1 n=8; l=2 c=+0.00; m=7 t=7
 #I  RD: a=8 r=2 h=1 n=9; l=2 c=+0.00; m=8 t=8
@@ -724,7 +724,7 @@ gap> ACEStart(1, ACEGroupGenerators(1), ACERelators(1), [ a*b ]
 #I  RD: a=14 r=5 h=1 n=16; l=2 c=+0.00; m=14 t=15
 #I  CC: a=13 r=6 h=1 n=16; l=2 c=+0.00; d=0
 #I  CC: a=12 r=6 h=1 n=16; l=2 c=+0.00; d=0
-#I  INDEX = 12 (a=12 r=16 h=1 n=16; l=3 c=0.01; m=14 t=15)
+#I  INDEX = 12 (a=12 r=16 h=1 n=16; l=3 c=0.00; m=14 t=15)
 1
 gap>
 \endexample
@@ -750,7 +750,7 @@ We can dump out the  statistics  accumulated  during  the  run,  using
 
 \beginexample
 gap> ACEDumpStatistics();
-#I    #- ACE 3.000: Level 0 Statistics --
+#I    #- ACE 3.001: Level 0 Statistics -
 #I  cdcoinc=0 rdcoinc=2 apcoinc=0 rlcoinc=0 clcoinc=0
 #I    xcoinc=2 xcols12=4 qcoinc=3
 #I    xsave12=0 s12dup=0 s12new=0
@@ -762,7 +762,7 @@ gap> ACEDumpStatistics();
 #I  xcdefn=0 cddproc=0 cdddedn=0 cddedn=0
 #I    cdgap=0 cdidefn=0 cdidedn=0 cdpdl=0 cdpof=0
 #I    cdpdead=0 cdpdefn=0 cddefn=0
-#I    #----------------------------------
+#I    #---------------------------------
 gap>
 \endexample
 
@@ -861,9 +861,6 @@ gap> ACEStart(1, ACEGroupGenerators(1), ACERelators(1), [ a*b ]
 #I  ToACE> relators:aa, b^3,a*b*a*b*a*b*a*b*a*b;
 #I  ToACE> generators:a*b;
 #I  ToACE> asis:1;
-#I  ToACE> enumeration:A_5;
-#I  ToACE> subgroup:Id;
-#I  ToACE> max:0;
 #I  ToACE> messages:0;
 #I  ToACE> text:***;
 #I  ***

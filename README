@@ -5,7 +5,7 @@ coset enumeration by interfacing with the  Advanced  Coset  Enumerator
 (ACE), 
 
 ACE coset enumerator (C) 1995-2001 by George Havas and Colin Ramsay
-    http://www.csee.uq.edu.au/~havas/ace3.tar.gz
+    http://www.csee.uq.edu.au/~cram/ce.html
 
 from within GAP 4.
 
@@ -107,14 +107,11 @@ The only modification are those listed in src/CHANGES. In particular,
 the file `src/Makefile.in' from which `src/Makefile' is generated has
 been added, and the following bug was fixed on 25 February, 2001.
 
-A bug was discovered in ACE on 22 December, 2000 that was particularly
-manifested by the Linux  gcc  compilers  listed  below.  The  bug  was
-reported  with  fix  by  Volker  Gebhardt  (thanks!)  and   caused   a
-segmentation fault  when  ACE  output  coset  representatives.  Please
-ensure that src/util1.c has at line 704:
-    scol = 0;
-and the following change at line 714 (numbering after line 704 added):
-        else if (i == slow && scol)     /* Same row; earlier column? */
+A bug was discovered in ACE  3.000  on  22  December,  2000  that  was
+particularly manifested by the Linux gcc compilers listed  below.  The
+bug was reported with fix by Volker Gebhardt (thanks!)  and  caused  a
+segmentation fault when ACE output coset representatives. The  fix  is
+incorporated in ACE 3.001 which we now use.
 
 ACE has been compiled successfully with the following C compilers:
 
@@ -164,4 +161,4 @@ reproduce the problem; so please include:
     Australia
     e-mail: gregg@csee.uq.edu.au
     www:    http://www.csee.uq.edu.au/~gregg
-  -- 25 February, 2001.
+  -- 1 April, 2001.

@@ -3,14 +3,14 @@
 
         util2.c
         Colin Ramsay (cram@csee.uq.edu.au)
-        27 Feb 99
+        6 Dec 00
 
-        ADAPTIVE COSET ENUMERATOR, Version 3.000
+        ADVANCED COSET ENUMERATOR, Version 3.001
 
-        Copyright 1999
+        Copyright 2000
         Centre for Discrete Mathematics and Computing,
         Department of Mathematics and 
-        Department of Computer Science & Electrical Engineering,
+          Department of Computer Science & Electrical Engineering,
         The University of Queensland, QLD 4072.
 	(http://www.csee.uq.edu.au/~havas/cdmc.html)
 
@@ -29,6 +29,7 @@ These are the utilities for Level 2 of ACE.
         void al2_init(void)
 
         One-off initialisation of the Level 2 stuff, and all lower levels.
+	Note that there is no need to initialise, for example, intarr[].
         ******************************************************************/
 
 void al2_init(void)
@@ -48,7 +49,6 @@ void al2_init(void)
   currsiz  = currexp = 0;
 
   intcnt = 0;
-  /* intarr[] - no need to init */
 
   srand((unsigned int)time(NULL));	/* Seed rand() with time */
   }
@@ -56,7 +56,7 @@ void al2_init(void)
 	/******************************************************************
         char *al2_strdup(char *s)
 
-        strdup() is not ANSII C, so this is our version.  Should we regard
+        strdup() is not ANSI C, so this is our version.  Should we regard
 	an error as fatal, and abort?
 	******************************************************************/
 
@@ -91,10 +91,10 @@ int al2_outlen(int i)
 All Level 2 errors are filtered by one of the following three handlers. 
 These take the appropriate action, and then jump back to the top-level
 main() routine; ie, the outermost level of Level 2.  We swallow the 
-remainder of any input line (possibly losing some commands), so multi-line 
+remainder of any input line (possibly losing some commands); so multi-line 
 commands in error may not be properly tidied-up. The question of what
 exactly to do if fip/fop are not stdin/stdout is put in the `too hard' 
-basket, we simply switch them both back to their defaults.  Note that, 
+basket; we simply switch them both back to their defaults.  Note that, 
 although the code for _continue() & _restart() is the same, they return to 
 different points (& do different things) in main().
 
@@ -139,7 +139,7 @@ void al2_continue(char *msg)
 	/******************************************************************
 	void al2_restart(char *msg)
 
-	Something nasty has happened, so we'll have to start a new run.
+	Something nasty has happened & we'll be disallowing continue/redo.
         ******************************************************************/
 
 void al2_restart(char *msg)
@@ -266,11 +266,9 @@ void al2_dump(Logic allofit)
   {
   int i;
 
-  fprintf(fop, "  #--- %s: Level 2 Dump ----\n", ACE_VER);
+  fprintf(fop, "  #---- %s: Level 2 Dump ----\n", ACE_VER);
 
-	/* env; */
-  if (allofit)
-    { /* ?? */ }
+	/* env; - nothing (meaningful) we can do here! */
 
 	/* okstart, okcont, okredo; */
   fprintf(fop, "okstart=%d okcont=%d okredo=%d\n", 
@@ -316,7 +314,7 @@ void al2_dump(Logic allofit)
     fprintf(fop, "\n");
     }
 
-  fprintf(fop, "  #--------------------------------\n");
+  fprintf(fop, "  #---------------------------------\n");
   }
 
         /******************************************************************
@@ -329,9 +327,9 @@ void al2_dump(Logic allofit)
 void al2_opt(void)
   {
 #ifdef DATE
-  fprintf(fop, "Executable built:\n  %s\n", DATE);
+  fprintf(fop, "%s executable built:\n  %s\n", ACE_VER, DATE);
 #else
-  fprintf(fop, "Executable built: ??\n");
+  fprintf(fop, "%s executable built: ??\n", ACE_VER);
 #endif
 
   fprintf(fop, "Level 0 options:\n");
@@ -372,7 +370,7 @@ void al2_opt(void)
 
 void al2_help(void)
   {
-  fprintf(fop, "  #--- %s: Level 2 Help ----\n", ACE_VER);
+  fprintf(fop, "  #---- %s: Level 2 Help ----\n", ACE_VER);
   fprintf(fop, "add gen[erators] / sg : <word list> ;\n");
   fprintf(fop, "add rel[ators] / rl : <relation list> ;\n");
   fprintf(fop, "aep : 1..7 ;\n");
@@ -406,20 +404,20 @@ void al2_help(void)
   fprintf(fop, "hlt ;\n");
   fprintf(fop, "ho[le limit] : [-1/0..100] ;\n");
   fprintf(fop, "look[ahead] : [0/1..4] ;\n");
-  fprintf(fop, "loop[ limit] : [/0/1..] ;\n");
+  fprintf(fop, "loop[ limit] : [0/1..] ;\n");
   fprintf(fop, "max[ cosets] : [0/2..] ;\n");
   fprintf(fop, "mend[elsohn] : [0/1] ;\n");
   fprintf(fop, "mess[ages] / mon[itor] : [int] ;\n");
   fprintf(fop, "mo[de] ;\n");
   fprintf(fop, "nc / normal[ closure] : [0/1] ;\n");
-  fprintf(fop, "no[ relators in subgroup] : [-1/0..] ;\n");
+  fprintf(fop, "no[ relators in subgroup] : [-1/0/1..] ;\n");
+  fprintf(fop, "oo / order[ option] : int ;\n");
   fprintf(fop, "opt[ions] ;\n");
-  fprintf(fop, "oo / order[ option] : int;\n");
   fprintf(fop, "par[ameters] ; - old option (ignored)\n");
   fprintf(fop, "path[ compression] : [0/1] ;\n");
   fprintf(fop, "pd mo[de] / pmod[e] : [0/1..3] ;\n");
   fprintf(fop, "pd si[ze] / psiz[e] : [0/2/4/8/...] ;\n");
-  fprintf(fop, "print det[ails] / sr : [0/1] ;\n");
+  fprintf(fop, "print det[ails] / sr : [int] ;\n");
   fprintf(fop, "pr[int table] : [[-]int[,int[,int]]] ;\n");
   fprintf(fop, "pure c[t] ;\n");
   fprintf(fop, "pure r[t] ;\n");
@@ -443,7 +441,7 @@ void al2_help(void)
   fprintf(fop, "tw / trace[ word] : int,<word> ;\n");
   fprintf(fop, "wo[rkspace] : [int[k/m/g]] ;\n");
   fprintf(fop, "# ... <newline> - a comment (ignored)\n");
-  fprintf(fop, "  #--------------------------------\n");
+  fprintf(fop, "  #---------------------------------\n");
   }
 
         /******************************************************************

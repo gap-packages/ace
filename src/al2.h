@@ -3,14 +3,14 @@
 
         al2.h
         Colin Ramsay (cram@csee.uq.edu.au)
-        26 Feb 99
+        25 Feb 00
 
-        ADAPTIVE COSET ENUMERATOR, Version 3.000
+        ADVANCED COSET ENUMERATOR, Version 3.001
 
-        Copyright 1999
+        Copyright 2000
         Centre for Discrete Mathematics and Computing,
         Department of Mathematics and 
-	Department of Computer Science & Electrical Engineering,
+	  Department of Computer Science & Electrical Engineering,
         The University of Queensland, QLD 4072.
         (http://www.csee.uq.edu.au/~havas/cdmc.html)
 

@@ -7,7 +7,7 @@
 ##
 
 ##  Announce the package version and test for the existence of the binary
-DeclarePackage( "ace", "3.0",
+DeclarePackage( "ace", "3.001",
   function()
   local file;
     # Check that the version no. of GAP is ok.

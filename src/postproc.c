@@ -3,14 +3,14 @@
 
         postproc.c
         Colin Ramsay (cram@csee.uq.edu.au)
-        27 Feb 99
+        2 Mar 01
 
-        ADAPTIVE COSET ENUMERATOR, Version 3.000
+        ADVANCED COSET ENUMERATOR, Version 3.001
 
-        Copyright 1999
+        Copyright 2000
         Centre for Discrete Mathematics and Computing,
         Department of Mathematics and 
-        Department of Computer Science & Electrical Engineering,
+          Department of Computer Science & Electrical Engineering,
         The University of Queensland, QLD 4072.
 	(http://www.csee.uq.edu.au/~havas/cdmc.html)
 
@@ -64,7 +64,7 @@ void al2_oo(int arg)
             fprintf(fop, "--------+------------\n");
             }
 
-          fprintf(fop, "%7d |%7d  ", i, ord);
+          fprintf(fop, "%7d | %6d  ", i, ord);
           for (j = 0; j < repsiz; j++)
             {
             k = colgen[currrep[j]];             /* generator number */
@@ -98,7 +98,7 @@ void al2_oo(int arg)
 
 	Warning: this routine traces thro the subgrp gens, using the
 	enumerator's data structure.  Thus, it can only be used if the
-	al1_start() routine has been called & nsgpg has _not_ been altered.
+	al1_start() routine has been called & nsgpg has *not* been altered.
 	Similar remarks apply to al2_normcl().
 	******************************************************************/
 
@@ -193,7 +193,7 @@ void al2_sc(int arg)
 	void al2_cycles(void)
 
 	Print out the coset table in cycles (permutation representation).
-	This _must_ only be called when a completed _and_ compacted coset 
+	This *must* only be called when a completed *and* compacted coset 
 	table is present; ie, when a finite index has been computed & a
 	(final) CO phase has been run.  The dispatcher code in parser.c 
 	enforces this.  Note the use of the sign bit to track processed 
@@ -294,9 +294,9 @@ void al2_cycles(void)
 	group generators g and all subgroup generator words w, noting 
 	whether we get back to coset 1 or not.  Note that 1.w^g = 1 iff
         1.Gwg = 1 iff 1.Gw = 1.G (hence the apparent switch in the sense of
-        first when we set it).  If build is T, then conjugates of subgroup
+        first when we set it).  If build is T, then the conjugates of subgroup
         generators by group generators that cannot be traced to the subgroup
-	are added to the list of subgroup generators; the _user_ has rerun 
+	are added to the list of subgroup generators; the *user* has to rerun
         the enumeration.  Note that coset #1 is never redundant; however, 
         others may be, and the table may be incomplete.
 
@@ -499,15 +499,16 @@ void al2_cc(int cos)
 
 	Try to find a nontrival subgroup with index a multiple of a desired
         index `desire' by repeatedly putting randomly chosen cosets 
-	coincident with coset 1 and seeing what happens.  We use the (not 
-	very good, but ok for our purposes) random number generator rand(),
-	which returns numbers in the range 0..32767 (ie, lower 15 bits).  
-	We take care to ensure that we generate a `valid' coset to set
-	coincident with #1.  If an attempt fails, we restore the original 
-	subgrp gens, rerun the original enumeration, and try again (making 
-	up to count attempts in all).  We use the asis flag to prevent 
-	subgroup generator reordering, so that we can easily blow away the
-	added generators.
+	coincident with coset 1 and seeing what happens.  The special value
+	desire=0 accepts *any* non-trivial finite index, while desire=1
+	accepts *any* finite index.  We use the (not very good, but ok for 
+	our purposes) random number generator rand(), which returns numbers
+	in the range 0..32767 (ie, lower 15 bits).  We take care to ensure 
+	that we generate a `valid' coset to set coincident with #1.  If an 
+	attempt fails, we restore the original subgrp gens, rerun the 
+	original enumeration, and try again (making up to count attempts in
+	all).  We use the asis flag to prevent subgroup generator 
+	reordering, so that we can easily blow away the added generators.
 
 	Notes:
 	(i) This routine presupposes that an enumeration has already been
@@ -516,12 +517,12 @@ void al2_cc(int cos)
 	frozen at their current values during this call; only the subgroup
 	generator list is altered.  Any redo (or start) calls to the
 	enumerator use the current settings, including any messaging.
-	(ii) This routine can take a _long_ time.
+	(ii) This routine can take a *long* time.
 	(iii) On success, the presentation/table reflects the discovered
 	subgroup.  On failure, it reflects the original status.
 	(iv) We try hard to ensure that the system is always left in a
 	consistent state, and that all errors are picked up.  However, it
-	is _strongly_ recommended that a positive result is checked (by 
+	is *strongly* recommended that a positive result is checked (by 
 	doing a complete enumeration), and that nothing is assumed about 
 	the presentation/table on a negative result or on an error (note
 	that the call to al2_cc() could cause an error return).
@@ -531,7 +532,7 @@ void al2_cc(int cos)
 
 void al2_rc(int desire, int count)
   {
-  int r1, r2, cos, old, i;
+  int r1, r2, cos, old, i, cnt;
   Logic tmp;
   Wlelt *p, *q;
 
@@ -541,8 +542,10 @@ void al2_rc(int desire, int count)
   asis = TRUE;
   old  = nsgpg;
 
-  while (count-- > 0)			/* Try up to count times */
+  for (cnt = 1; cnt <= count; cnt++)	/* Try up to count times */
     {
+    fprintf(fop, "* Attempt %d ...\n", cnt);
+
     while (TRUE)			/* Try until success / too small */
       {
       do
@@ -586,14 +589,28 @@ void al2_rc(int desire, int count)
         al2_restart("* An unknown problem has occurred");
         }
 
-      if (tabindex && lresult%desire == 0)
+      if (desire == 0)
         {
-        fprintf(fop, "* An appropriate subgroup has been found\n");
-        asis = tmp;
-        return;
+        if (tabindex && lresult > 1)
+          {
+          fprintf(fop, "* An appropriate subgroup has been found\n");
+          asis = tmp;
+          return;
+          }
+        if (tabindex && lresult == 1)
+          { goto restore; }
         }
-      if (tabindex && lresult < desire)
-        { goto restore; }
+      else
+        {
+        if (tabindex && lresult%desire == 0)
+          {
+          fprintf(fop, "* An appropriate subgroup has been found\n");
+          asis = tmp;
+          return;
+          }
+        if (tabindex && lresult < desire)
+          { goto restore; }
+        }
       };
 
     /* Setup for another attempt */
@@ -611,7 +628,7 @@ void al2_rc(int desire, int count)
       }
     else
       {
-      for (i = 1, p = genlst->first; i <= old; i++, p = p->next)
+      for (i = 1, p = genlst->first; i < old; i++, p = p->next)
         { ; }
 
       q = p->next;		/* Points to first added generator */
@@ -659,11 +676,30 @@ void al2_rc(int desire, int count)
       asis = tmp;
       al2_restart("* An unknown problem has occurred");
       }
-    if (tabindex && lresult%desire == 0)
+
+    if (desire == 0)
       {
-      fprintf(fop, "* An appropriate subgroup has been found\n");
+      if (tabindex && lresult > 1)
+        {
+        fprintf(fop, "* The original subgroup is appropriate!\n");
+        asis = tmp;
+        return;
+        }
+      }
+    else
+      {
+      if (tabindex && lresult%desire == 0)
+        {
+        fprintf(fop, "* The original subgroup is appropriate!\n");
+        asis = tmp;
+        return;
+        }
+      }
+
+    if (tabindex && lresult == 1)
+      {
       asis = tmp;
-      return;
+      al2_restart("* Unable to restore original status");
       }
     if (desire >= nalive)
       {
@@ -826,13 +862,13 @@ void al2_per_rel(void)
 	/******************************************************************
 	void al2_munge_cyc(void)
 	void al2_munge_inv(void)
-	void al2_munge_pre(void)
+	void al2_munge_per(void)
 
 	These 3 routines implement random cyclings, inversions & 
 	permutations of the relators respectively.  Note that we have to 
 	take a `guess' as to how many relator list element moves are needed
 	to `randomly' reorder the relators.  The permutation becomes 
-	progressivly `better' the more runs we do.
+	progressively `better' the more runs we do.
 	******************************************************************/
 
 void al2_munge_cyc(void)
@@ -874,7 +910,7 @@ void al2_munge_per(void)
 
 	Do cnt enumerations using random equivalent presentations.  The 3
 	lsbs of cntrl control cycling, inverting & permuting respectively.
-	We turn messaging off, dump the relators _after_ each run (ie, 
+	We turn messaging off, dump the relators *after* each run (ie, 
 	after al1_start() processes them, so that we see what they actually
 	were for the run), and use asis to prevent al1_start() from 
 	messing up the relator ordering.
@@ -1011,19 +1047,24 @@ void al2_aep2(Wlelt *p, int *d)
         fprintf(fop, ";\n");
         al1_rslt(lresult);
         }
+
+      /* DTT code: dump *all* totcos values */
+      /*
+      fprintf(fop, "DTT: totcos=%d\n", totcos);
+      */
       }
     }
 
   /* Cycle and/or invert this word, and then recurse.  Note the care to 
   ensure that we always do just what is required; in particular, we must 
   ensure we restore a word to its original form.  Note that we correctly
-  cope with cycling in the presence of non-1 exponents.  We _cannot_ 
+  cope with cycling in the presence of non-1 exponents.  We *cannot* 
   suppress inverting (x)^n, if x is an involution, since the geninv[]
   array is recalculated by al1_start() & may change since we're
   manipulating asis.  To implement this, we'd need to duplicate the code in
   the al1_chkinvol() function.  In fact, there's no end to this, since
   inverting (ab)^n, if a & b are involutions, is equivalent to cycling it, 
-  and doing _both_ is wasteful! */
+  and doing *both* is wasteful! */
 
   else
     {
@@ -1070,6 +1111,8 @@ void al2_aep2(Wlelt *p, int *d)
 	Recursively generate the permutations, calling al2_aep2() for each
 	one.  p is a pointer to parent node of the unprocessed `tail' of 
 	rellst.  rellst contains >1 elts & p is (initially) the 1st elt.
+	The node pointed to by the parent node is put in all positions, and
+	then we recurse.  So 123 yields 321, 231, 213, 312, 132, 123.
 	******************************************************************/
 
 void al2_aep1(int *d, Wlelt *p)
@@ -1143,7 +1186,7 @@ void al2_aep(int cntrl)
   /* Temporary code, until we split al1_start() and do the presentation
   altering in the middle.  We need to ensure that the current presentation
   has been processed so that the word exponents are correctly set.  We do
-  this run using whatever the current setup is, _before_ we set asis &
+  this run using whatever the current setup is, *before* we set asis &
   turn messaging off.  After this run, the exponents will be fixed.
   However, setting asis may screw up involutions (ie, whether or not we'd
   need to invert some relators, if requested).  Note that this also sets

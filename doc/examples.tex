@@ -74,22 +74,22 @@ gap> # Recall that we did: TCENUM:=ACETCENUM;;
 gap> G := PerfectGroup(IsPermGroup, 16*60, 1   # Arguments ... as per usual
 >                      : max := 50, mess := 10 # ... but we use ACE options
 >                      );
-#I  ACE 3.000        Thu Mar  1 17:51:33 2001
+#I  ACE 3.001        Sun Apr  1 16:14:53 2001
 #I  =========================================
 #I  Host information:
 #I    name = hamal
-#I    #-- ACE 3.000: Run Parameters ---
+#I    #--- ACE 3.001: Run Parameters ---
 #I  Group Name: G;
 #I  Group Generators: abstuv;
-#I  Group Relators: (a)^2, (s)^2, (t)^2, (u)^2, (v)^2, (b)^3, (st)^2, (uv)^2, 
-#I    (su)^2, (sv)^2, (tu)^2, (tv)^2, asau, atav, auas, avat, Bvbu, Bsbvt, 
+#I  Group Relators: (a)^2, (s)^2, (t)^2, (u)^2, (v)^2, (b)^3, (st)^2, (uv)^2,
+#I    (su)^2, (sv)^2, (tu)^2, (tv)^2, asau, atav, auas, avat, Bvbu, Bsbvt,
 #I    Bubvu, Btbvuts, (ab)^5;
 #I  Subgroup Name: H;
 #I  Subgroup Generators: a, b;
 #I  Wo:1000000; Max:50; Mess:10; Ti:-1; Ho:-1; Loop:0;
 #I  As:0; Path:0; Row:1; Mend:0; No:21; Look:0; Com:10;
 #I  C:0; R:0; Fi:11; PMod:3; PSiz:256; DMod:4; DSiz:1000;
-#I    #--------------------------------
+#I    #---------------------------------
 #I  SG: a=1 r=1 h=1 n=2; l=1 c=+0.00; m=1 t=1
 #I  RD: a=11 r=1 h=1 n=12; l=2 c=+0.00; m=11 t=11
 #I  RD: a=21 r=2 h=1 n=22; l=2 c=+0.00; m=21 t=21
@@ -149,31 +149,30 @@ gap> table := ACECosetTableFromGensAndRels(
 >                 fgens, RelatorsOfFpGroup(G), fgens{[1]}
 >                 # options
 >                 : mendelsohn, max:=800, mess:=500);
-#I  ACE 3.000        Thu Mar  1 17:59:08 2001
+#I  ACE 3.001        Sun Apr  1 16:33:58 2001
 #I  =========================================
 #I  Host information:
 #I    name = hamal
-#I    #-- ACE 3.000: Run Parameters ---
+#I    #--- ACE 3.001: Run Parameters ---
 #I  Group Name: G;
 #I  Group Generators: abstuvd;
-#I  Group Relators: (s)^2, (t)^2, (u)^2, (v)^2, (d)^2, aad, (b)^3, (st)^2, 
-#I    (uv)^2, (su)^2, (sv)^2, (tu)^2, (tv)^2, Asau, Atav, Auas, Avat, Bvbu, 
-#I    dAda, dBdb, (ds)^2, (dt)^2, (du)^2, (dv)^2, Bubvu, Bsbdvt, Btbvuts, 
+#I  Group Relators: (s)^2, (t)^2, (u)^2, (v)^2, (d)^2, aad, (b)^3, (st)^2,
+#I    (uv)^2, (su)^2, (sv)^2, (tu)^2, (tv)^2, Asau, Atav, Auas, Avat, Bvbu,
+#I    dAda, dBdb, (ds)^2, (dt)^2, (du)^2, (dv)^2, Bubvu, Bsbdvt, Btbvuts,
 #I    (ab)^5;
 #I  Subgroup Name: H;
 #I  Subgroup Generators: a;
 #I  Wo:1000000; Max:800; Mess:500; Ti:-1; Ho:-1; Loop:0;
 #I  As:0; Path:0; Row:1; Mend:1; No:28; Look:0; Com:10;
 #I  C:0; R:0; Fi:13; PMod:3; PSiz:256; DMod:4; DSiz:1000;
-#I    #--------------------------------
+#I    #---------------------------------
 #I  SG: a=1 r=1 h=1 n=2; l=1 c=+0.00; m=1 t=1
-#I  RD: a=321 r=68 h=1 n=412; l=5 c=+0.00; m=327 t=411
-#I  CC: a=435 r=162 h=1 n=719; l=9 c=+0.01; d=0
-#I  CL: a=428 r=227 h=1 n=801; l=13 c=+0.00; m=473 t=800
-#I  DD: a=428 r=227 h=1 n=801; l=14 c=+0.00; d=534
-#I  DD: a=428 r=227 h=1 n=801; l=14 c=+0.01; d=32
+#I  RD: a=321 r=68 h=1 n=412; l=5 c=+0.01; m=327 t=411
+#I  CC: a=435 r=162 h=1 n=719; l=9 c=+0.00; d=0
+#I  CL: a=428 r=227 h=1 n=801; l=13 c=+0.01; m=473 t=800
+#I  DD: a=428 r=227 h=1 n=801; l=14 c=+0.00; d=33
 #I  CO: a=428 r=192 h=243 n=429; l=15 c=+0.00; m=473 t=800
-#I  INDEX = 480 (a=480 r=210 h=484 n=484; l=18 c=0.02; m=480 t=855)
+#I  INDEX = 480 (a=480 r=210 h=484 n=484; l=18 c=0.03; m=480 t=855)
 #I  ***
 #I  CO: a=480 r=210 h=481 n=481; c=+0.00
 #I   coset ||      a      A      b      B      s      t      u      v      d
@@ -229,7 +228,7 @@ ACEStart called with the following arguments:
  Group generators : [ a, b ]
  Group relators : [ a^2, b^3, a*b*a*b*a*b*a*b*a*b ]
  Subgroup generators : [ a*b ]
-#I  ACE 3.000        Thu Mar  1 18:00:49 2001
+#I  ACE 3.001        Sun Apr  1 16:40:47 2001
 #I  =========================================
 #I  Host information:
 #I    name = hamal
@@ -412,11 +411,11 @@ ACEStats called with the following options:
  wo := 2M
  mess := 25000
  purec (no value, passed to ACE via option: pure c)
-#I  ACE 3.000        Thu Mar  1 20:37:32 2001
+#I  ACE 3.001        Sun Apr  1 16:40:50 2001
 #I  =========================================
 #I  Host information:
 #I    name = hamal
-#I    #-- ACE 3.000: Run Parameters ---
+#I    #--- ACE 3.001: Run Parameters ---
 #I  Group Name: F(2,7), aka C_29;
 #I  Group Generators: abcdexy;
 #I  Group Relators: abC, bcD, cdE, deX, exY, xyA, yaB;
@@ -425,21 +424,21 @@ ACEStats called with the following options:
 #I  Wo:2M; Max:142855; Mess:25000; Ti:-1; Ho:-1; Loop:0;
 #I  As:0; Path:0; Row:0; Mend:0; No:0; Look:0; Com:100;
 #I  C:1000; R:0; Fi:1; PMod:0; PSiz:256; DMod:4; DSiz:1000;
-#I    #--------------------------------
-#I  DD: a=5290 r=1 h=1050 n=5291; l=8 c=+0.03; d=2
-#I  CD: a=10410 r=1 h=2149 n=10411; l=13 c=+0.02; m=10410 t=10410
-#I  DD: a=15428 r=1 h=3267 n=15429; l=18 c=+0.03; d=0
+#I    #---------------------------------
+#I  DD: a=5290 r=1 h=1050 n=5291; l=8 c=+0.04; d=2
+#I  CD: a=10410 r=1 h=2149 n=10411; l=13 c=+0.04; m=10410 t=10410
+#I  DD: a=15428 r=1 h=3267 n=15429; l=18 c=+0.04; d=0
 #I  DD: a=20430 r=1 h=4386 n=20431; l=23 c=+0.03; d=1
-#I  DD: a=25397 r=1 h=5519 n=25399; l=28 c=+0.03; d=1
-#I  CD: a=30313 r=1 h=6648 n=30316; l=33 c=+0.02; m=30313 t=30315
-#I  DS: a=32517 r=1 h=7326 n=33240; l=36 c=+0.02; s=2000 d=997 c=4
-#I  DS: a=31872 r=1 h=7326 n=33240; l=36 c=+0.01; s=4000 d=1948 c=53
-#I  DS: a=29077 r=1 h=7326 n=33240; l=36 c=+0.01; s=8000 d=3460 c=541
-#I  DS: a=23433 r=1 h=7326 n=33240; l=36 c=+0.02; s=16000 d=5940 c=2061
-#I  DS: a=4163 r=1 h=7326 n=33240; l=36 c=+0.08; s=32000 d=447 c=15554
-#I  INDEX = 29 (a=29 r=1 h=33240 n=33240; l=37 c=0.40; m=33237 t=33239)
+#I  DD: a=25397 r=1 h=5519 n=25399; l=28 c=+0.04; d=1
+#I  CD: a=30313 r=1 h=6648 n=30316; l=33 c=+0.04; m=30313 t=30315
+#I  DS: a=32517 r=1 h=7326 n=33240; l=36 c=+0.03; s=2000 d=997 c=4
+#I  DS: a=31872 r=1 h=7326 n=33240; l=36 c=+0.00; s=4000 d=1948 c=53
+#I  DS: a=29077 r=1 h=7326 n=33240; l=36 c=+0.02; s=8000 d=3460 c=541
+#I  DS: a=23433 r=1 h=7326 n=33240; l=36 c=+0.03; s=16000 d=5940 c=2061
+#I  DS: a=4163 r=1 h=7326 n=33240; l=36 c=+0.09; s=32000 d=447 c=15554
+#I  INDEX = 29 (a=29 r=1 h=33240 n=33240; l=37 c=0.53; m=33237 t=33239)
 #I  ***
-rec( index := 29, cputime := 53, cputimeUnits := "10^-2 seconds", 
+rec( index := 29, cputime := 53, cputimeUnits := "10^-2 seconds",
   activecosets := 29, maxcosets := 33237, totcosets := 33239 )
 \endexample
 
@@ -624,7 +623,6 @@ ACECosetTableFromGensAndRels called with the following arguments:
   x*y*a^-1, y*a*b^-1 ]
  Subgroup generators : [  ]
 ACECosetTableFromGensAndRels called with the following options:
- aceexampleoptions := true (inserted by ACEExample, not passed to ACE)
  enum := F(2,7), aka C_29
  wo := 2M
  mess := 25000

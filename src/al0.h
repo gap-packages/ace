@@ -3,14 +3,14 @@
 
         al0.h
         Colin Ramsay (cram@csee.uq.edu.au)
-        13 Feb 99
+        20 Dec 00
 
-        ADAPTIVE COSET ENUMERATOR, Version 3.000
+        ADVANCED COSET ENUMERATOR, Version 3.001
 
-        Copyright 1999 
+        Copyright 2000 
         Centre for Discrete Mathematics and Computing,
         Department of Mathematics and 
-        Department of Computer Science & Electrical Engineering,
+          Department of Computer Science & Electrical Engineering,
         The University of Queensland, QLD 4072.
 	(http://www.csee.uq.edu.au/~havas/cdmc.html)
 
@@ -19,7 +19,7 @@ routines.
 
 **************************************************************************/
 
-#define ACE_VER  "ACE 3.000"
+#define ACE_VER  "ACE 3.001"
 
         /******************************************************************
         Stdio.h and stdlib.h will be included in all the source files,
@@ -54,7 +54,7 @@ typedef int Logic;
 	/******************************************************************
 	Macro for access to coset table.  i is coset, j is generator (as
 	column number).  colptr[j] stores the start address of the block of
-	memory for column i.  CT(i,j), with j = 1...ncol, indicates the
+	memory for column j.  CT(i,j), with j = 1...ncol, indicates the
 	action of the associated generator (or inverse) of column j on 
 	coset i.  It contains the coset number if known, otherwise 0 (in
 	column 1, -ve numbers indicate coincidences).  Coset #1 is the 
@@ -67,15 +67,16 @@ typedef int Logic;
 	much (physical) memory is available, there will be some limit on 
 	how many rows the table can have.  The table size, in bytes, can
 	exceed 4G.  However, since ints are (currently) used throughout,
-	the number of cosets is at most 2147483647 (ie, 2^31-1).  In
-	practice, arithmetic overflow problems will cut in before this.  We
-	try, as far as possible, to postpone this point by performing some
+	the number of rows is at most 2147483647 (ie, 2^31-1).  In 
+	practice, arithmetic overflow problems, rounding effects, and guard
+	bands will limit the number of cosets to less than this.  We try, 
+	as far as possible, to postpone this point by performing some
 	potentially troublesome calculations using floats.
 	******************************************************************/
 
 #define CT(i,j)  (*(colptr[(j)] + (i)))
-#define COL1(j)  (*(col1ptr + (j)))
-#define COL2(j)  (*(col2ptr + (j)))
+#define COL1(i)  (*(col1ptr + (i)))
+#define COL2(i)  (*(col2ptr + (i)))
 
 extern FILE *fop, *fip;		/* All i/o goes through these */
 
@@ -285,30 +286,33 @@ extern int toppd, botpd;
 	expensive) about duplicates (either direct or inverted); these will
 	scan fast however, since `nothing' happens.
 
-	dedsiz is usually some `small' value, as the active stack is
-	normally small and shrinks back to empty rapidly.  Since the 
-	enumerator is `clever' enough to `notice' dropped/unprocessed 
-	deductions & take appropriate action when checking a finite result,
-	it makes sense in most circumstances to drop excessive deductions.
- 	In particular, if we have a lot of coincidences in al0_coinc, and 
-	thus a big stack (esp. one that doesn't shrink quickly), it is much
-	faster to ignore these and tidy up at the end (since most of the 
-	stack is redundant, duplicate or yields no info).  This is somewhat
-	similar to the adaptive flag of ACE1/2.  An alternative option is 
-	to do a C-lookahead at the top of _cdefn() if ever dedns have been
-	discarded.
-
 	We test various stack-handling options by the dedmode parameter.  0
-	(the default) means do nothing (except discard individually if no 
-	space), 1 means purge redundancies off the top (in _coinc()), 2 
-	means compact out all redundancies (in _coinc()), and 3 means 
+	means do nothing (except discard individually if no space), 1 means
+	purge redundancies off the top (on exiting _coinc()), 2 means 
+	compact out all redundancies (on exiting _coinc()), and 3 means 
 	throw away the entire stack if it overflows.  Mode 4 is a fancy 
 	mode; every time the stack overflows we call a function to
 	`process' it, on the basis that we're prepared to work _very_ hard
 	not to throw anything away.  The particular function used is
 	subject to review; currently, we expand the space available for the
 	stack and move the old stack, compressing it as it's moved by
-	removing redundancies.
+	removing redundancies.  In practice this works very well, and is
+	the default dedn handling method; it means that we always process 
+	all deductions.  In the presence of collapses, a judicious choice
+	of dedsize & the use of Mode 0 will often be faster however.
+
+	Discussion: dedsiz is usually some `small' value, as the active 
+	stack is normally small and shrinks back to empty rapidly.  Since 
+	the enumerator is `clever' enough to `notice' dropped/unprocessed 
+	deductions & take appropriate action when checking a finite result,
+	it makes sense in some circumstances to drop excessive deductions.
+ 	In particular, if we have a lot of coincidences in al0_coinc, and 
+	thus a big stack (esp. one that doesn't shrink quickly), it is much
+	faster to ignore these and tidy up at the end (since most of the 
+	stack is redundant, duplicate or yields no info).  This is somewhat
+	similar to the adaptive flag of ACE1/2.  (An alternative option
+	would be to do a C-lookahead at the top of _cdefn() if ever dedns 
+	have been discarded, but this could be very expensive.)
 	******************************************************************/
 
 extern int   dedsiz;
@@ -322,7 +326,8 @@ extern Logic disded;
 	stack overflows repeatedly (ie, a big collapse).  It's a question 
 	of which is faster; trying hard _not_ to discard deductions, or 
 	discarding them & having to run a checking phase at the end of an 
-	enumeration.
+	enumeration.  In practice, _dedn() doubles the stack space at each
+	call, so it's not actually called very often!
         ******************************************************************/
 
 #ifdef AL0_STAT
@@ -356,8 +361,8 @@ extern Logic disded;
     {                       \
     dedrow[++topded] = cos; \
     dedcol[topded] = gen;   \
-    SAVED00;                \
-    }
+    }                       \
+  SAVED00;
 
 	/******************************************************************
 	We note where generators occur in bases of relators, so that 
@@ -444,7 +449,10 @@ extern Logic sgdone;		/* ?have they been applied to coset #1 */
 extern int knr, knh, nextdf;
 
 	/******************************************************************
-	Externally visible functions defined in enum.c
+	Externally visible functions defined in enum.c.  Note that it is
+	not strictly necessary to make _apply() visible across files, since
+	it's only called from within enum.c, but we do anyway, since a
+	smart-arse Level 0 user might like to use it.
 	******************************************************************/
 
 int al0_apply(int, int*, int*, Logic, Logic);
@@ -473,15 +481,17 @@ void   al0_dump(Logic);
 void   al0_rslt(int);
 
 	/******************************************************************
-	During development, it is often helpful to monitor how many times a
-	particular situation occurs.  If the AL0_STAT (ie, statistics) flag
-	is defined, a statistics gathering & processing package is compiled
-	into the code.  If the flag is not defined, none of the macros
-	generate any code, and so there is no overhead.  To add an item of
-	interest, you have to add an "extern int x" declaration below, add
-	an "int x;" definition in enum.c, add "INCR(x);" statements where 
-	appropriate (or whatever other processing statements are required),
-	and add "x" to the _statinit() & _statdump() functions.
+	During code development/testing and when experimenting with an
+	enumeration's parameters, it is often helpful to monitor how many 
+	times a particular situation occurs.  If the AL0_STAT (ie, 
+	statistics) flag is defined, a statistics gathering & processing 
+	package is compiled into the code.  If the flag is not defined, 
+	none of the macros generate any code, and so there is no overhead. 
+	To add an item of interest, you have to add an "extern int x;" 
+	declaration below, add an "int x;" definition in enum.c, add 
+	"INCR(x);" statements where appropriate (or whatever other 
+	processing statements are required), and add "x" to the _statinit()
+	& _statdump() functions.
 	******************************************************************/
 
 #ifdef AL0_STAT

@@ -3,14 +3,14 @@
 
 	enum.c
 	Colin Ramsay (cram@csee.uq.edu.au)
-        13 Feb 99
+        20 Dec 00
 
-	ADAPTIVE COSET ENUMERATOR, Version 3.000
+	ADVANCED COSET ENUMERATOR, Version 3.001
 
-	Copyright 1999
+	Copyright 2000
 	Centre for Discrete Mathematics and Computing,
 	Department of Mathematics and 
-	Department of Computer Science & Electrical Engineering,
+	  Department of Computer Science & Electrical Engineering,
 	The University of Queensland, QLD 4072.
 	(http://www.csee.uq.edu.au/~havas/cdmc.html)
 
@@ -216,6 +216,7 @@ int al0_apply(int cos, int *beg, int *end, Logic defn, Logic save)
           CT(k,j) = iback; 
           if (save) 
             { SAVED(iback,ji); }
+
           iback = k;
           INCR(apdefn);
 
@@ -340,7 +341,7 @@ static int al0_rl(int first, int last, Logic saved)
         }
       }
     next_row:
-      ;					/* Prevent non-ANSII warning */
+      ;					/* Prevent non-ANSI warning */
     }
 
   return(-1);
@@ -404,6 +405,7 @@ static int al0_cl(int first, int last, Logic saved)
         CT(iback, ji) = ifront; 
         if (saved) 
           { SAVED(iback, ji); }
+
         CT(ifront, j) = iback;
 
         INCR(cldedn);
@@ -434,7 +436,7 @@ static int al0_cl(int first, int last, Logic saved)
         }
       }
     next_row:
-      ;                                 /* Prevent non-ANSII warning */
+      ;                                 /* Prevent non-ANSI warning */
     }
 
   return(-1);
@@ -566,6 +568,7 @@ static int al0_rdefn(int cnt, Logic fillr, Logic saved)
           CT(n,m) = iback;
           if (saved)
             { SAVED(iback,mi); }
+
           iback = n;			/* Advance to next spot */
 
           INCR(rddefn);
@@ -698,7 +701,7 @@ static int al0_cdefn(int cnt)
         ires = CT(irow,icol);
         rcol = invcol[icol];
         }
-      
+
       fi = TRUE;		/* first pass through */
 
       proc_ded:			/* entry point for second pass through */
@@ -754,6 +757,7 @@ static int al0_cdefn(int cnt)
           CT(iback, mi) = ifront; 
           CT(ifront, m) = iback;
           SAVED(iback, mi);
+
           INCR(cddedn); 
           }
         else if (bwd == fwd + 1)	/* gap of length = 1 */
@@ -781,6 +785,7 @@ static int al0_cdefn(int cnt)
               CT(iback, mi) = k;
               CT(k, m) = iback;
               SAVED(iback, mi);
+
               if (cnt > 0)
                 { cnt--; }		/* used an `allowed' definition */
               INCR(cdidefn);
@@ -806,6 +811,7 @@ static int al0_cdefn(int cnt)
               CT(iback, mi) = k;
               CT(k, m) = iback;
               SAVED(iback, mi);
+
               if (cnt > 0)
                 { cnt--; }		/* used an `allowed' definition */
               INCR(cdidefn);
@@ -813,6 +819,7 @@ static int al0_cdefn(int cnt)
               CT(ifront,*fwd) = k;
               CT(k,invcol[*fwd]) = ifront;
               SAVED(ifront,*fwd);
+
               INCR(cdidedn);
 
               if (msgctrl && --msgnext == 0)
@@ -956,6 +963,7 @@ static int al0_cdefn(int cnt)
           CT(pdqr,pdqc) = k;
           CT(k,invcol[pdqc]) = pdqr;
           SAVED(pdqr,pdqc);
+
           fi = TRUE;
           INCR(cdpdefn);
 
@@ -979,6 +987,7 @@ static int al0_cdefn(int cnt)
         CT(knh,icol) = k;
         CT(k,invcol[icol]) = knh;
         SAVED(knh,icol);
+
         INCR(cddefn);
 
         if (msgctrl && --msgnext == 0)
@@ -1139,10 +1148,10 @@ int al0_enum(int mode, int style)
   indicates that the table _may_ contain holes, and that the al0_upknh() 
   routine may need to be called before a finite index (due to knr = nextdf)
   is returned.  Any code anywhere which could cause empty table slots 
-  should take care to ensure that rhfree is false (eg, adaptive mode code).
-  Since rhfree is only invoked when checking a finite result due to knr = 
-  nextdf, its value if we get a result due to knh=nextdf is of no concern
-  (here, the table is hole-free, since that's what knh means!).
+  should take care to ensure that rhfree is false.  Since rhfree is only
+  invoked when checking a finite result due to knr = nextdf, its value if
+  we get a result due to knh=nextdf is of no concern (here, the table is
+  hole-free, since that's what knh means!).
 
   Instead of trying to be clever, and keeping a close watch on what the
   value of this should be at each point, we simply reset it at the start of
@@ -1243,11 +1252,13 @@ int al0_enum(int mode, int style)
 
   while (TRUE)
     {
+    /* lcount tracks which pass through the machine's loop this is.  Then 
+    use result of last action to get next state & action. */
+
     lcount++;
 
-    /* Advance to the next state and perform the requested action. */
-
-    /* DEBUG/TEST/TRACE */ /*
+    /* DEBUG/TEST/TRACE (DTT) code.  Monitors the state machine. */
+    /*
     fprintf(fop, "DTT: lcount=%d; state=%d action=%d result=%d", 
                        lcount,    state,   action,   result);
     */
@@ -1255,7 +1266,8 @@ int al0_enum(int mode, int style)
     action = al0_act[state][-result];
     state  =  al0_st[state][-result];
 
-    /* DEBUG/TEST/TRACE */ /*
+    /* Warning: DTT code (see above) */
+    /*
     fprintf(fop, " --> state=%d action=%d\n", state, action);
     */
 
@@ -1381,6 +1393,18 @@ int al0_enum(int mode, int style)
   else if ( (double)(nextdf-1 - nalive)/(double)(nextdf-1) 
               >= (double)comppc/100.0 )
     {
+    /* DTT: how expensive is compaction? */
+    /*
+    if (msgctrl)
+      {
+      msgnext = msgincr;
+      ETINT;
+      fprintf(fop, "co: a=%d r=%d h=%d n=%d;", nalive, knr, knh, nextdf);
+      MSGMID;
+      fprintf(fop, " m=%d t=%d\n", maxcos, totcos);
+      BTINT;
+      }
+    */
     al0_compact();
     if (msgctrl)
       {
@@ -1434,7 +1458,7 @@ int al0_enum(int mode, int style)
     { result = -2; }
   if (msgctrl)
     {
-    msgnext = msgctrl;
+    msgnext = msgincr;
     ETINT;
     fprintf(fop, "CL: a=%d r=%d h=%d n=%d;", nalive, knr, knh, nextdf);
     MSGMID;
@@ -1464,7 +1488,7 @@ int al0_enum(int mode, int style)
     al0_upknh();			/* check for holes ... */
     if (msgctrl)
       {
-      msgnext = msgctrl;
+      msgnext = msgincr;
       ETINT;
       fprintf(fop, "UH: a=%d r=%d h=%d n=%d;", nalive, knr, knh, nextdf);
       MSGMID;
@@ -1491,7 +1515,7 @@ int al0_enum(int mode, int style)
 
     if (msgctrl)
       {
-      msgnext = msgctrl;
+      msgnext = msgincr;
       ETINT;
       fprintf(fop, "RA: a=%d r=%d h=%d n=%d;", nalive, knr, knh, nextdf);
       MSGMID;

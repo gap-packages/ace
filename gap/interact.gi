@@ -1198,29 +1198,28 @@ end);
 ##  some integer ioIndex. For the non-interactive version, which will only be
 ##  invoked from within a break-loop, datarec is ACEData.
 ##
-##  enumResult, stats fields of ACEData.io[ioIndex] if user passed  some  new
-##  options
-##
 InstallGlobalFunction(SET_ACE_OPTIONS, function(datarec)
+local newoptnames;
 
-  datarec.newoptions := OptionsStack[ Length(OptionsStack) ];
+  datarec.newoptions := NEW_ACE_OPTIONS();
   # First we need to scrub any option names in datarec.options that
   # match those in datarec.newoptions ... to ensure that *all* new
   # options are at the end of the stack
   SANITISE_ACE_OPTIONS(datarec.options, datarec.newoptions);
-  # datarec.options contains the previous options (if there were any)
-  # We have to pop off newoptions and then push back
-  # options and newoptions, to get an updated options
   PopOptions();
-  PushOptions(datarec.options);
+  Add(OptionsStack, datarec.options);
   PushOptions(datarec.newoptions);
   # The following is needed when SetACEOptions is invoked via ACEExample
   Unbind(OptionsStack[ Length(OptionsStack) ].aceexampleoptions);
-  datarec.options := OptionsStack[ Length(OptionsStack) ];
-  # We pop options here, to ensure OptionsStack is the same length
-  # as before the call to SET_ACE_OPTIONS
+  datarec.options := ShallowCopy( OptionsStack[ Length(OptionsStack) ] );
+  # We ensure OptionsStack is the same length as before the call to 
+  # SET_ACE_OPTIONS, and ensure the updated options are on top
   PopOptions();
+  PopOptions();
+  Add(OptionsStack, datarec.options);
+  newoptnames := RecNames(datarec.newoptions);
   Unbind(datarec.newoptions);
+  return newoptnames;
 end);
 
 #############################################################################
@@ -1258,8 +1257,15 @@ local newoptnames, s, optnames, echo, ignored;
   if not(IsEmpty(OptionsStack) or
          ForAll(RecNames(OptionsStack[ Length(OptionsStack) ]),
                 optname -> optname in ACE_INTERACT_FUNC_OPTIONS)) then
+    if IsBound(datarec.options) then
+      newoptnames := SET_ACE_OPTIONS(datarec);
+    else
+      datarec.options := NEW_ACE_OPTIONS();
+      newoptnames := RecNames(datarec.options);
+    fi;
+    optnames := RecNames(datarec.options);
     newoptnames := Filtered(
-                       RecNames(OptionsStack[ Length(OptionsStack) ]),
+                       newoptnames,
                        optname -> not(optname in ACE_INTERACT_FUNC_OPTIONS));
     ignored := List(VALUE_ACE_OPTION(newoptnames, [], "aceignore"),
                     optname -> ACEPreferredOptionName(optname));
@@ -1284,13 +1290,6 @@ local newoptnames, s, optnames, echo, ignored;
       Unbind(datarec.args);
       Unbind(datarec.acegens);
     fi;
-    if IsBound(datarec.options) then
-      SET_ACE_OPTIONS(datarec);
-      OptionsStack[ Length(OptionsStack) ] := datarec.options;
-    else
-      datarec.options := OptionsStack[ Length(OptionsStack) ];
-    fi;
-    optnames := ACE_OPT_NAMES();
     echo := ACE_VALUE_ECHO(optnames);
     if IsBound(datarec.echoargs) then
       if IsBound(datarec.args) then
@@ -1308,7 +1307,9 @@ local newoptnames, s, optnames, echo, ignored;
                         # ignored
                         Concatenation( [ "aceinfile", "aceoutfile" ],
                                        ignored,
-                                       ACE_IF_EXPR(datarec.enforceAsis,
+                                       ACE_IF_EXPR(
+                                           IsBound(datarec.enforceAsis)
+                                           and datarec.enforceAsis,
                                                    [ "asis" ], [], []) ));
   fi;
 end);
@@ -2349,7 +2350,7 @@ local ioIndex, ACEout, iostream, datarec, fgens, standard, incomplete,
                       ACEData.enumResult];
           Error(ACE_ERROR(errmsg, onbreakmsg), "\n");
           if ACEData.options <> rec() then
-            PushOptions(ACEData.options);
+            Add(OptionsStack, ACEData.options);
             Unbind(ACEData.options);
           fi;
         fi;

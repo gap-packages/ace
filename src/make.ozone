@@ -1,8 +1,11 @@
 
-# Makefile (make.ozone) - Colin Ramsay - 26 Feb 99
+# Makefile (make.ozone) - Colin Ramsay - 18 Oct 00
 #
-# Make file for ACE version 3.000.  Works on:
-#   ozone  - IP27/R10000 (mips), IRIX64 6.5, cc (MIPS / MIPSpro C compiler)
+# Make file for ACE version 3.001.
+# Intended for SGI/IRIX boxes with cc.  
+# Tested on:
+#   "ozone"	Origin 2000 with R10000 (mips), IRIX64 6.5, 
+#		  cc (MIPS / MIPSpro C compiler)
 
 # Compiler switches
 #
@@ -15,7 +18,6 @@
 # -o32      : old style 32-bit mode
 
 CC = cc -64 -O2 -ansi
-#CC = cc -64 -O2 -fullwarn -pedantic -ansi
 
 # ACE Level 0, 1 & 2 switches 
 #
@@ -36,42 +38,16 @@ SRC1  = control.c util1.c
 SRC0  = coinc.c enum.c util0.c
 SRC0A = enum00.c enum01.c enum02.c
 
-# Level 2 (interactive interface)
-#
 # Note the setting of (THE)DATE, so that we can record the time/date of
-# this build in the executable (usage: "fprint(fop, "%s\n", DATE);")
+# this build in the executable (usage: "fprint(fop, "%s\n", DATE);").  This
+# may have to be changed for other shells/makes.  In fact, I can't figure
+# out how to do this on ozone!
 
 THEDATE = unknown
+
+# Build ACE
 
 ace: al2.h $(SRC2) al1.h $(SRC1) al0.h $(SRC0) $(SRC0A)
 	$(CC) $(FLAGS) -DDATE="\"$(THEDATE)\"" -o ace \
 		$(SRC2) $(SRC1) $(SRC0)
-
-# Level 1 (core wrapper)
-
-ex1a: ex1a.c al1.h $(SRC1) al0.h $(SRC0) $(SRC0A)
-	$(CC) $(FLAGS) -o ex1a ex1a.c $(SRC1) $(SRC0)
-
-ex1b: ex1b.c al1.h $(SRC1) al0.h $(SRC0) $(SRC0A)
-	$(CC) $(FLAGS) -o ex1b ex1b.c $(SRC1) $(SRC0)
-
-ex1c: ex1c.c al1.h $(SRC1) al0.h $(SRC0) $(SRC0A)
-	$(CC) $(FLAGS) -o ex1c ex1c.c $(SRC1) $(SRC0)
-
-ex1d: ex1d.c al1.h $(SRC1) al0.h $(SRC0) $(SRC0A)
-	$(CC) $(FLAGS) -o ex1d ex1d.c $(SRC1) $(SRC0)
-
-# Level 0 (core enumerator)
-
-ex0a: ex0a.c al0.h $(SRC0) $(SRC0A)
-	$(CC) $(FLAGS) -o ex0a ex0a.c $(SRC0)
-
-ex0b: ex0b.c al0.h $(SRC0) $(SRC0A)
-	$(CC) $(FLAGS) -o ex0b ex0b.c $(SRC0)
-
-ex0c: ex0c.c al0.h $(SRC0) $(SRC0A)
-	$(CC) $(FLAGS) -o ex0c ex0c.c $(SRC0)
-
-ex0d: ex0d.c al0.h $(SRC0) $(SRC0A)
-	$(CC) $(FLAGS) -DRUNA -o ex0d ex0d.c $(SRC0)
 

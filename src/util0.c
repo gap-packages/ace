@@ -3,14 +3,14 @@
 
         util0.c
         Colin Ramsay (cram@csee.uq.edu.au)
-        16 Feb 99
+        20 Dec 00
 
-        ADAPTIVE COSET ENUMERATOR, Version 3.000
+        ADVANCED COSET ENUMERATOR, Version 3.001
 
-        Copyright 1999
+        Copyright 2000
         Centre for Discrete Mathematics and Computing,
         Department of Mathematics and 
-        Department of Computer Science & Electrical Engineering,
+          Department of Computer Science & Electrical Engineering,
         The University of Queensland, QLD 4072.
 	(http://www.csee.uq.edu.au/~havas/cdmc.html)
 
@@ -183,7 +183,7 @@ void al0_init(void)
 	was `justified'.
 
 	Note that this routine is called `on-the-fly' by some of the Level
-	2 options.  It can also be called directly by the TBA option?
+	2 options.  It can also be called directly by the rec[over] option.
 	******************************************************************/
 
 Logic al0_compact(void)
@@ -523,24 +523,24 @@ void al0_upknh(void)
 	/******************************************************************
 	void al0_dedn(int cos, int gen)
 
-	Handling the deduction stack is a pain.  The best option seems to 
-	be to throw deductions away if we get too many at any one time 
-	(where `too many' is actually quite `small', eg, <1000), and run 
-	an "RA:" or a "CL:" check.  However, dedmode #4 allows a special 
-	stack-handling function to be called if we try to stack a deduction
-	& can't. 
+	Handling the deduction stack is a pain.  The best option, in many
+	cases, seems to be to throw deductions away if we get too many at 
+	any one time (where `too many' can be quite `small', eg, <1000), 
+	and run an "RA:" or a "CL:" check.  However, dedmode #4 (which is 
+	the default) allows a special stack-handling function to be called
+	if we try to stack a deduction & can't. 
 
 	Currently, in this mode our aim is _never_ to lose any deductions, 
 	so we expand the stack space to accomodate the new element.  We 
 	take the opportunity to eliminate redundancies from the stack.  The
-	code is essentially that used in dedmod=2 in _coinc() (which 
+	code is essentially that used in dedmod #2 in _coinc() (which 
 	emulates ACE2).
 
 	Note the messaging code, since we're interested in what the stack
 	actually `looks' like when it overflows!  Some ad hoc tests show 
-	that redundancies are common.  Duplicates (incl. `inverted'
-	duplicates) are not, and it's expensive to process these, so we 
-	don't bother trying to track them.
+	that redundancies are common (in collapses).  Duplicates (incl. 
+	`inverted' duplicates) are not, and it's expensive to process 
+	these, so we don't bother trying to track them.
 
 	Warning: this is the _only_ place in the core enumerator where we
 	make a system call (apart from o/p & date calls; if these fail 
@@ -643,7 +643,7 @@ void al0_dump(Logic allofit)
   {
   int i,j;
 
-  fprintf(fop, "  #--- %s: Level 0 Dump ----\n", ACE_VER);
+  fprintf(fop, "  #---- %s: Level 0 Dump ----\n", ACE_VER);
 
 	/* FILE *fop, *fip; */
   if (allofit)
@@ -756,17 +756,17 @@ void al0_dump(Logic allofit)
       {
       fprintf(fop, " invcol[]    ");
       for (i = 1; i <= ncol; i++)
-        { fprintf(fop, "%5d", invcol[i]); }
+        { fprintf(fop, " %4d", invcol[i]); }
       fprintf(fop, "\n");
 
       fprintf(fop, " colptr[][1] ");
       for (i = 1; i <= ncol; i++)
-        { fprintf(fop, "%5d", colptr[i][1]); }
+        { fprintf(fop, " %4d", colptr[i][1]); }
       fprintf(fop, "\n");
 
       fprintf(fop, " CT(2,)      ");
       for (i = 1; i <= ncol; i++)
-        { fprintf(fop, "%5d", CT(2,i)); }
+        { fprintf(fop, " %4d", CT(2,i)); }
       fprintf(fop, "\n");
       }
     }
@@ -797,7 +797,7 @@ void al0_dump(Logic allofit)
   else
     { fprintf(fop, " ndrel=%d", ndrel); }
 
-  	/* int nsgpg, *subggen, *subgindex, *subglength;  */
+  	/* int nsgpg, *subggen, *subgindex, *subglength, sgdone;  */
   if (allofit)
     {
     fprintf(fop, "nsgpg=%d sgdone=%d\n", nsgpg, sgdone);
@@ -822,7 +822,7 @@ void al0_dump(Logic allofit)
   fprintf(fop, "knr=%d knh=%d nextdf=%d\n",
           knr, knh, nextdf);
 
-  fprintf(fop, "  #--------------------------------\n");
+  fprintf(fop, "  #---------------------------------\n");
  }
 
 	/******************************************************************
@@ -901,7 +901,7 @@ void al0_statinit(void)
 
 void al0_statdump(void)
   {
-  fprintf(fop, "  #- %s: Level 0 Statistics --\n", ACE_VER);
+  fprintf(fop, "  #- %s: Level 0 Statistics -\n", ACE_VER);
 
   fprintf(fop, "cdcoinc=%d rdcoinc=%d apcoinc=%d rlcoinc=%d clcoinc=%d\n", 
                 cdcoinc,   rdcoinc,   apcoinc,   rlcoinc,   clcoinc);
@@ -923,7 +923,7 @@ void al0_statdump(void)
   fprintf(fop, "  cdpdead=%d cdpdefn=%d cddefn=%d\n", 
                   cdpdead,   cdpdefn,   cddefn);
 
-  fprintf(fop, "  #----------------------------------\n");
+  fprintf(fop, "  #---------------------------------\n");
   }
 
 #endif

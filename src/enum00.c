@@ -3,14 +3,14 @@
 
 	enum00.c
 	Colin Ramsay (cram@csee.uq.edu.au)
-        13 Jan 99
+        25 Feb 00
 
-	ADAPTIVE COSET ENUMERATOR, Version 3.000
+	ADVANCED COSET ENUMERATOR, Version 3.001
 
-	Copyright 1999
+	Copyright 2000
 	Centre for Discrete Mathematics and Computing,
 	Department of Mathematics and 
-	Department of Computer Science & Electrical Engineering,
+	  Department of Computer Science & Electrical Engineering,
 	The University of Queensland, QLD 4072.
 	(http://www.csee.uq.edu.au/~havas/cdmc.html)
 
@@ -24,33 +24,33 @@ main loop respectively.
 
 States:
 0	catch-all dummy/invalid state (forces return with fatal error)
-1	initial state for start mode / R/C-style
-2		--"--		     / R*-style
-3		--"--		     / Cr-style
-4		--"--		     / C*-style
-5		--"--		     / reserved
-6		--"--		     / C-style
-7		--"--		     / Rc-style
-8		--"--		     / R-style
-9		--"--		     / CR-style
-10	initial state for continue mode / R/C-style
-11		--"--			/ R*-style
-12		--"--			/ Cr-style
-13		--"--			/ C*-style
-14		--"--			/ reserved
-15		--"--			/ C-style
-16		--"--			/ Rc-style
-17		--"--			/ R-style
-18		--"--			/ CR-style
-19	initial state for redo mode / R/C-style
-20		--"--		    / R*-style
-21		--"--		    / Cr-style
-22		--"--		    / C*-style
-23		--"--		    / reserved
-24		--"--		    / C-style
-25		--"--		    / Rc-style
-26		--"--		    / R-style
-27		--"--		    / CR-style
+1	initial state for start mode	R/C-style
+2		--"--		     	R*-style
+3		--"--		     	Cr-style
+4		--"--		     	C*-style
+5		--"--		     	reserved
+6		--"--		     	C-style
+7		--"--		     	Rc-style
+8		--"--		     	R-style
+9		--"--		     	CR-style
+10	initial state for continue mode	R/C-style
+11		--"--			R*-style
+12		--"--			Cr-style
+13		--"--			C*-style
+14		--"--			reserved
+15		--"--			C-style
+16		--"--			Rc-style
+17		--"--			R-style
+18		--"--			CR-style
+19	initial state for redo mode 	R/C-style
+20		--"--		    	R*-style
+21		--"--		    	Cr-style
+22		--"--		    	C*-style
+23		--"--		    	reserved
+24		--"--		    	C-style
+25		--"--		    	Rc-style
+26		--"--		    	R-style
+27		--"--		    	CR-style
 28	RD in R-style
 29	Lx in R-style
 30	CO in R-style

@@ -3,14 +3,14 @@
 
 	enum01.c
 	Colin Ramsay (cram@csee.uq.edu.au)
-        18 Jan 99
+        18 Oct 00
 
-	ADAPTIVE COSET ENUMERATOR, Version 3.000
+	ADVANCED COSET ENUMERATOR, Version 3.001
 
-	Copyright 1999
+	Copyright 2000
 	Centre for Discrete Mathematics and Computing,
 	Department of Mathematics and 
-	Department of Computer Science & Electrical Engineering,
+	  Department of Computer Science & Electrical Engineering,
 	The University of Queensland, QLD 4072.
 	(http://www.csee.uq.edu.au/~havas/cdmc.html)
 
@@ -33,11 +33,11 @@ an UH phase (or neither), depending on circumstances.  Since we have to do
 some work anyway to terminate/check the result, this seems to be the 
 fastest way; the only `unnecessary' work is counting up knh.
 
-The orignial version of this routine (see snippets) processed deductions on
-a row by row basis.  The current version processes deductions on a scan by
-scan basis; ie, much more frequently.  It is closer in spirit to Felsch 
-mode, and tends to have smaller max/tot statistics (esp. if the there are
-any very long relators).
+The orignial version of this routine processed deductions on a row by row 
+basis.  The current version processes deductions on a scan by scan basis; 
+ie, much more frequently.  It is closer in spirit to Felsch mode, and tends
+to have smaller max/tot statistics (esp. if there are any very long 
+relators).
 
 **************************************************************************/
 
@@ -160,6 +160,7 @@ static int al0_rpefn(int cnt, Logic fill)
           CT(iback,mi) = n;
           CT(n,m) = iback;
           SAVED(iback,mi);
+
           iback = n;                    /* Advance to next spot */
 
           INCR(rddefn);

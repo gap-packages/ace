@@ -3,14 +3,14 @@
 
 	coinc.c
 	Colin Ramsay (cram@csee.uq.edu.au)
-        18 Jan 99
+        11 Dec 00
 
-	ADAPTIVE COSET ENUMERATOR, Version 3.000
+	ADVANCED COSET ENUMERATOR, Version 3.001
 
-	Copyright 1999 
+	Copyright 2000 
 	Centre for Discrete Mathematics and Computing,
 	Department of Mathematics and 
-	Department of Computer Science & Electrical Engineering,
+	  Department of Computer Science & Electrical Engineering,
 	The University of Queensland, QLD 4072.
 	(http://www.csee.uq.edu.au/~havas/cdmc.html)
 
@@ -36,17 +36,17 @@ would be quite feasible to have a (small, fixed size) auxiliary queue where
 we could store (some) primary coincs as they are discovered without 
 processing them immediately; but this would probably not be beneficial.
 
-Note that _during_ coincidence handling, as noted above, the table is
+Note that *during* coincidence handling, as noted above, the table is
 inconsistent.  So we have to continue processing until there are no more 
 coincs queued to ensure that the table will be consistent when we exit.  
 Thus we can't bail out early, with processing outstanding, except under 
 very special circumstances (eg, collapse to index=1).  Even if we detect a
 big collapse, and want to bail out (abandoning any stored deductions (we
-could also stop queueing _new_ coincidences!)), we need to process all 
+could also stop queueing *new* coincidences!)), we need to process all 
 coincs before we can exit.  Similarly, if all the cosets between knr or knh
 & nextdf become redundant, then we know (if we choose to detect this state)
-that we _will_ finish.  However, we need to continue to `fix up' the table 
-and to determine what the final index is (it could be _less_ than the value
+that we *will* finish.  However, we need to continue to `fix up' the table 
+and to determine what the final index is (it could be *less* than the value
 of nalive when guaranteed finishing was noted).
 
 Note that the coinc handling routines are predicated on the fact that the
@@ -104,16 +104,16 @@ coset numbers (ie, 1 <= x < nextdf).  If not, all bets are off!
 	coincs per primary coinc is `large', then compression is 
 	beneficial; otherwise, it wastes more time than it saves.
 
-	Note that these do _not_ trace through, or disturb in any way, the 
+	Note that these do *not* trace through, or disturb in any way, the 
 	coincidence queue (which is stored in column 2), but merely 
 	trace/reset the coset pointed to (in column 1) by those members of
 	the queue with which path is coincident.
 
-	Note that, if we want to find path's current rep _and_ compress its
+	Note that, if we want to find path's current rep *and* compress its
 	path down to this, then it is more efficient to combine the 
-	routines into one, as done in ACE2.  However, in _cols12() we have
-	to find both reps first, and then compress (if compression on) both
-	of them down to the smaller, so we couldn't use the combined 
+	routines into one, as was done in ACE2.  However, in _cols12() we 
+	have to find both reps first, and then compress (if compression on)
+	both of them down to the smaller, so we couldn't use the combined 
 	routine there.
 	******************************************************************/
 
@@ -150,17 +150,17 @@ coset numbers (ie, 1 <= x < nextdf).  If not, all bets are off!
 	collapsed all information in positions 1/2 (destroying the entries 
 	there in the process); thus, if all other entries in coset 1's row 
 	are defined (or are coincident with defined entries), then the 
-	index must be 1; i.e., _all_ the cosets are coincident and _all_
+	index must be 1; i.e., *all* the cosets are coincident and *all*
 	entries in row 1 are defined (as 1, or synonyms thereof).
 
 	Note that this routine does not (and, indeed, cannot (simply,
 	anyway)) distinguish between coincidences consequent on the current
 	primary coincidence and those from a previous primary coincidence.
-	However, _provided_ that all previous coincidences (that were
+	However, *provided* that all previous coincidences (that were
 	processed) were fully processed then any data (in any col>2) in any
 	row of the table is either valid or has been copied to a valid row.
 	So, any non-zero entry means that the corresponding col in row 1
-	_will_ be non-zero.
+	*will* be non-zero.
 	******************************************************************/
 
 static Logic al0_chk1(void)
@@ -172,7 +172,7 @@ static Logic al0_chk1(void)
     if (CT(1,j) != 0) 
       { continue; }
 
-    /* If CT(1,j)==0, look down column j for _any_ non-zero entry. */
+    /* If CT(1,j)==0, look down column j for *any* non-zero entry. */
 
     for (i = 2; i < nextdf; i++) 
       { 
@@ -182,10 +182,10 @@ static Logic al0_chk1(void)
     return(FALSE); 		/* column j has no defined entry */
 
     conti:			/* continue, to next column */
-      ;				/* prevent non-ANSII warning ! */
+      ;				/* prevent non-ANSI warning ! */
     }
 
-  /* Index _is_ 1: set all entries in first row to 1 and bump knr/knh up to
+  /* Index *is* 1: set all entries in first row to 1 and bump knr/knh up to
   nextdf (& nextdf down to 2). */
 
   for (i = 1; i <= ncol; i++) 
@@ -193,12 +193,13 @@ static Logic al0_chk1(void)
   knr = knh = nextdf = 2;
 
   /* Wipe out the coincidence list and any outstanding pd's.  Empty the 
-  dedn stack & say there were no discards. */
+  dedn stack & say there were no discards.  The SG phase is unnecessary. */
 
   chead  = ctail  = 0;
   toppd  = botpd  = 0;
   topded = -1;
   disded = FALSE;
+  sgdone = TRUE;
 
   return(TRUE);
   }
@@ -225,12 +226,12 @@ static Logic al0_chk1(void)
 
 	In general, we enter our main loop with only one save slot (the one
 	we've just removed to process) empty.  It may appear that 
-	processing this can generate _two_ more coincidences to be saved.
-	However, this is only true on the _first_ pass through the loop, 
+	processing this can generate *two* more coincidences to be saved.
+	However, this is only true on the *first* pass through the loop, 
 	when both slots are empty.  On subsequent passes, the coincidence 
 	being processed was generated by an earlier coincidence, and 
 	processing this has removed an entry from it (via processing an 
-	inverse entry).  So at most _one_ new coincidence can be generated.
+	inverse entry).  So at most *one* new coincidence can be generated.
 	******************************************************************/
 
 static Logic al0_cols12(int low, int high, Logic saved)
@@ -265,12 +266,12 @@ static Logic al0_cols12(int low, int high, Logic saved)
     /* If the two reps are equal there's nothing to do (ie, no info to
     move) & we jump over this if().  If not, we're in one of four states,
     depending as low (high) is (is not) redundant.  In any event, both src
-    & dst are _not_ redundant, and data from cols 1/2 has to be moved from
+    & dst are *not* redundant, and data from cols 1/2 has to be moved from
     src to dst (since queueing src as coincident overwrites this data).  
     Since a coset is queued (made redundant) as its data is processed, all
     relevant data is processed once only & is moved to the smallest coset
     currently known to be equivalent.  If dst later becomes redundant this
-    is ok, since it will be queued, and later dequeued, _after_ src. */
+    is ok, since it will be queued, and later dequeued, *after* src. */
 
     if (src != dst)
       {
@@ -296,11 +297,11 @@ static Logic al0_cols12(int low, int high, Logic saved)
       rows scr & dst (0, src, dst, X, Y), and check that the right thing is
       always done.  Note that we are guaranteed that at least one, but not
       necessarily both, of low1s/high1s & low2s/high2s are free at this 
-      point.  This code could be rewritten to be _much_ clearer; it would
+      point.  This code could be rewritten to be *much* clearer; it would
       be a lot longer, but whether or not it would be faster is moot.
 
       Note that at this point, CT(src,1) & CT(src,2) contain coinc queue
-      info and must _not_ be altered; so we have to take care in the
+      info and must *not* be altered; so we have to take care in the
       handling of inverse entries and/or if any of low1s/high1s or
       low2s/high2s equal src. */
 
@@ -376,8 +377,8 @@ static Logic al0_cols12(int low, int high, Logic saved)
 #endif
       }
 
-    /* Now compress both paths down to dst, if required.  This _may_
-    speed up future calls to CREP (on ave).  Also, if CREP is _not_ used 
+    /* Now compress both paths down to dst, if required.  This *may*
+    speed up future calls to CREP (on ave).  Also, if CREP is *not* used 
     in al0_coinc, it can dramatically decrease the amount of information 
     moved & deductions stacked when processing cols >=3 (ie, cded's).  Of
     course, lots of these stacked ded'ns will be redundant, but still. */
@@ -391,7 +392,7 @@ static Logic al0_cols12(int low, int high, Logic saved)
     /* After processing high (=rhigh) = low (=rlow) ==> dst, we can remove
    this, and any coincidences rendered redundant, from the stored pair.
    Note that we must preserve the pair's order here, so that SAVE12 works 
-   ok.  Is it necessary to check _all_ these cases? */
+   ok.  Is it necessary to check *all* these cases? */
 
     if (low1s != 0)
       {
@@ -449,17 +450,17 @@ static Logic al0_cols12(int low, int high, Logic saved)
 	Todd-Coxeter algorithm", Mathematics of Computation, 1973), with 
 	some modifications.
 
-	If saved is TRUE, we save any deductions on the stack.  In an
-	adaptive stategy we are free not to do this, or to detect a `big'
+	If saved is TRUE, we save any deductions on the stack.  (In the old
+	adaptive stategy we were free not to do this, or to detect a `big'
 	collapse `early' and stop recording deductions (& new coincs?) & 
-	throw away any existing ones.  If we have a collapse to 1 in 
+	throw away any existing ones.)  If we have a collapse to 1 in 
 	al0_cols12, we return 1, having adjusted knr/knh/nextdf.  We choose
-	_not_ to do any speculative checking as to whether or not knr/knh 
+	*not* to do any speculative checking as to whether or not knr/knh 
 	bumps into nextdf, which would imply a finite index (although not
 	necessarily =nalive), since this would not give an early result
 	frequently enough to justify its cost.  So, apart from the collapse
 	to 1 case, we return -1 and do not change knr/knh/nextdf.  However,
-	the cosets pointed to by knr/knh _can_ become redundant, and it is 
+	the cosets pointed to by knr/knh *can* become redundant, and it is 
 	the caller's responsibility to check for this and take apporpriate
 	action.
 
@@ -495,52 +496,19 @@ int al0_coinc(int low, int high, Logic saved)
   /* While there are coincidences on the queue, process columns 3 to ncol 
   of the coincidence chigh=clow.  Note that crep <= clow < chigh is 
   guaranteed.  When chigh = clow was queued, clow was non-redundant and
-  the rep of chigh.  This may no longer be true, so we should pick up the
-  rep of clow (chigh _must_ be left alone).  Formally, there is no problem
-  if we do not do this, since if clow is now redundant it was queued 
-  _after_ chigh.  So all we'd do is move info to clow, and then move it
-  again when clow is processed.
+  the rep of chigh.  This may no longer be true, so we could pick up the
+  current rep of clow (chigh *must* be left alone).  Formally, there is no
+  problem if we do not do this, since if clow is now redundant it was
+  queued *after* chigh.  So all we'd do is move info to clow, and then move
+  it again when clow is processed.
 
-  Is it worth doing the `right thing'?  Some testing indicates that, in
-  general, the answer seems to be no!  Finding reps & compressing paths
-  involves lots of table accesses, most of which are `worthless'.  We're 
-  going to throw away chigh when we're done, so it's only worthwhile if 
-  it's path is long & there's lot of future work queued.  It depends 
-  ultimately on how many `long' paths slip though from al0_cols12.  Note 
-  that processing the data in cols >=3 could cause calls to al0_cols12, 
-  which could change chigh's rep've (perhaps many times).  So we `should'
-  recalculate crep (& path compress) after every call to al0_cols12.  
-  However this would be even more costly (& maintaining consistency might
-  be `tricky'), so we KISS.
-
-  A good test case (big collapse) is "rel:aBCbac, bACbaacA, accAABab;" &
-  "gen:bc;", which has index 2^14 & a collapse involving ~500000 cosets
-  ("wo:4m;" + HLT+mendel, lookahead not activated, pcomp off):
-
-  Version		Ave (10 runs)		CosRep've table accesses
-  2.001			6.977			n/a
-  2.002			7.256 (+4.0%)		n/a
-  3.000 (+OUT00)	7.482 (+7.2%)		1894125 + 803904 + 147112
-  3.000 (-OUT00)	7.044 (+1.0%)		1391466 + 291560 +  51636
-
-  2.002 is like 3.000+OUT00, while 2.001 is like 3.000-OUT00, except that
-  it uses an old rep/comp macro, which is not quite right, but which 
-  _does_ do compression.  Times are relative to 2.001; which seems to be 
-  faster than the newer version (grr!). */
+  The (optional) path compression code in 3.000 has been removed. */
 
   while (chead != 0) 
     { 
     chigh = chead;
-    clow  = -COL1(chigh);
+    crep  = clow = -COL1(chigh);
     chead = COL2(chead);		/* dequeue coinc being processed */
-
-#ifdef OUT00
-    CREP(chigh,crep);
-    if (pcomp)
-      { COMPRESS(chigh,crep); }
-#else
-    crep = clow;
-#endif
 
     for (i = 3; i <= ncol; i++) 
       {	
@@ -572,7 +540,7 @@ int al0_coinc(int low, int high, Logic saved)
         {			/* Mark new ded'n for later processing? */
         CT(crep,i) = highi;
         if (saved)
-          { SAVED(crep,i); } 
+          { SAVED(crep,i); }
         }
 
       if ((lowi = CT(crep, i)) != 0 && CT(lowi, j) == 0)  

@@ -3,14 +3,14 @@
 
         util1.c
         Colin Ramsay (cram@csee.uq.edu.au)
-        16 Feb 99
+        22 Dec 00
 
-        ADAPTIVE COSET ENUMERATOR, Version 3.000
+        ADVANCED COSET ENUMERATOR, Version 3.001
 
-        Copyright 1999
+        Copyright 2000
         Centre for Discrete Mathematics and Computing,
         Department of Mathematics and 
-        Department of Computer Science & Electrical Engineering,
+          Department of Computer Science & Electrical Engineering,
         The University of Queensland, QLD 4072.
 	(http://www.csee.uq.edu.au/~havas/cdmc.html)
 
@@ -26,6 +26,7 @@ These are the utilities for Level 1 of ACE.
         void al1_init(void)
 
         One-off initialisation of the Level 1 stuff, and all lower levels.
+	Note that there is no need to initialise, for example, genal[].
 	******************************************************************/
 
 void al1_init(void)
@@ -51,7 +52,6 @@ void al1_init(void)
   gencol   = colgen   = NULL;
   galpha   = FALSE;
   algen[0] = algen[1] = '\0';		/* &algen[1] is printable string */
-  /* genal[] - no need to init */
 
   subgrpname = NULL;
   genlst     = NULL;
@@ -75,7 +75,7 @@ void al1_dump(Logic allofit)
   int i;
   Wlelt *p;
 
-  fprintf(fop, "  #--- %s: Level 1 Dump ----\n", ACE_VER);
+  fprintf(fop, "  #---- %s: Level 1 Dump ----\n", ACE_VER);
 
 	/* workspace, workmult, costable, tabsiz; */
   fprintf(fop, "workspace=%d workmult=%d", workspace, workmult);
@@ -218,23 +218,25 @@ void al1_dump(Logic allofit)
   fprintf(fop, "maxrow1=%d ffactor1=%d nrinsgp1=%d\n", 
                 maxrow1,   ffactor1,   nrinsgp1);
 
-  fprintf(fop, "  #--------------------------------\n");
+  fprintf(fop, "  #---------------------------------\n");
   }
 
 	/******************************************************************
-	void al1_prtdetails(Logic allofit)
+	void al1_prtdetails(int bits)
 
 	This prints out details of the Level 0 & 1 settings, in a form 
 	suitable for reading in by applications using the core enumerator 
-	plus its wrapper (eg, ACE Level 2).  If allofit is FALSE, then only
-	some of the items are printed.  If TRUE then all of the enumerator
-	control settings (this allows the run to be duplicated at a later 
-	date).  This feature is really intended for the ACE Level 2
-	interface, where some items cannot be examined by invoking them 
-	with an empty argument.  However it is put here (at Level 1), since
-	it is a useful utility (when allofit is TRUE) for any application.
+	plus its wrapper (eg, ACE Level 2).  If bits is 0, then enum, rel,
+	subg & gen are printed.  If 1 then *all* of the presentation and
+	the enumerator control settings (this allows the run to be 
+	duplicated at a later date).  If bits is 2-5, then only enum, rel,
+	subg & gen, respectively, are printed.  This routine is really 
+	intended for the ACE Level 2 interface, where some items cannot be 
+	examined by invoking them with an empty argument.  However it is 
+	put here (at Level 1), since it is a useful utility for any 
+	application.
 
-	If messaging in on, this routine (with allofit TRUE) is called by 
+	If messaging in on, this routine (with bits 1) is called by 
 	al1_start() after all the setup & just before the call to 
 	al0_enum().  So it shows what the parameters actually were.  They
 	may not match what you thought they were, since the Level 1 wrapper
@@ -242,65 +244,83 @@ void al1_dump(Logic allofit)
 	interactive interface) and the Level 0 enumerator) trys to prevent 
 	errors, and may occasionally ignore or change something.  If you
 	call this after changing parameters, but before calling _start(), 
-	the values do _not_ reflect the new values.  If you want to see
+	the values do *not* reflect the new values.  If you want to see
 	what the Level 2 parameters are (as opposed to the current Level 0
 	parameters), use the `empty argument' form of the commands, or the 
-	"sr;" Level 2 command (which invokes this function with allofit 
+	"sr;" Level 2 command (which invokes this function with bits 
 	false.
 
-	To _exactly_ duplicate a run, you may need to duplicate the entire 
+	To *exactly* duplicate a run, you may need to duplicate the entire 
 	sequence of commands since ACE was started, the execution 
 	environment, and use the same executable; but that's a project for 
 	some rainy Sunday afternoon sometime in the future.  However do
 	note that the allocation of generators to columns may have upset 
 	your intended handling of involutions and/or the ordering of the
 	generators; do a (full) Level 0/1 dump to check this, if you care!
-	In particular, the value of asis is the _current_ value, which may
-	not match that when the last start call to _start() was made (this 
-	is the call which allocates columns & determines which generators 
-	will be involutions).
+	In particular, the value of asis is the *current* value, which may
+	not match that when the call to _start() which allocated columns &
+	determined which generators will be involutions was made.
 	******************************************************************/
 
-void al1_prtdetails(Logic allofit)
+void al1_prtdetails(int bits)
   {
-  fprintf(fop, "  #-- %s: Run Parameters ---\n", ACE_VER);
+  if (bits < 2)
+    { fprintf(fop, "  #--- %s: Run Parameters ---\n", ACE_VER); }
 
-  if (grpname != NULL)
-    { fprintf(fop, "Group Name: %s;\n", grpname); }
-  else
-    { fprintf(fop, "Group Name:  ;\n"); }
-  if (allofit && ndgen > 0)
+  if (bits == 0 || bits == 1 || bits == 2)
     {
-    fprintf(fop, "Group Generators: ");
-    if (!galpha) 
-      { fprintf(fop, "%d", ndgen); }
-    else 
-      { fprintf(fop, "%s", &algen[1]); }
-    fprintf(fop, ";\n");
+    if (grpname != NULL)
+      { fprintf(fop, "Group Name: %s;\n", grpname); }
+    else
+      { fprintf(fop, "Group Name:  ;\n"); }
     }
-  if (rellst != NULL)
-    { 
-    fprintf(fop, "Group Relators: ");
-    al1_prtwl(rellst, 16);
-    fprintf(fop, ";\n");
-    }
-  else
-    { fprintf(fop, "Group Relators: ;\n"); }
 
-  if (subgrpname != NULL)
-    { fprintf(fop, "Subgroup Name: %s;\n", subgrpname); }
-  else
-    { fprintf(fop, "Subgroup Name: ;\n"); }
-  if (genlst != NULL)
-    { 
-    fprintf(fop, "Subgroup Generators: ");
-    al1_prtwl(genlst, 21);
-    fprintf(fop, ";\n");
+  if (bits == 1)
+    {
+    if (ndgen > 0)
+      {
+      fprintf(fop, "Group Generators: ");
+      if (!galpha) 
+        { fprintf(fop, "%d", ndgen); }
+      else 
+        { fprintf(fop, "%s", &algen[1]); }
+      fprintf(fop, ";\n");
+      }
     }
-  else
-    { fprintf(fop, "Subgroup Generators: ;\n"); }
 
-  if (allofit)
+  if (bits == 0 || bits == 1 || bits == 3)
+    {
+    if (rellst != NULL)
+      { 
+      fprintf(fop, "Group Relators: ");
+      al1_prtwl(rellst, 16);
+      fprintf(fop, ";\n");
+      }
+    else
+      { fprintf(fop, "Group Relators: ;\n"); }
+    }
+
+  if (bits == 0 || bits == 1 || bits == 4)
+    {
+    if (subgrpname != NULL)
+      { fprintf(fop, "Subgroup Name: %s;\n", subgrpname); }
+    else
+      { fprintf(fop, "Subgroup Name: ;\n"); }
+    }
+
+  if (bits == 0 || bits == 1 || bits == 5)
+    {
+    if (genlst != NULL)
+      { 
+      fprintf(fop, "Subgroup Generators: ");
+      al1_prtwl(genlst, 21);
+      fprintf(fop, ";\n");
+      }
+    else
+      { fprintf(fop, "Subgroup Generators: ;\n"); }
+    }
+
+  if (bits == 1)
     {
     switch (workmult)
       {
@@ -354,11 +374,12 @@ void al1_prtdetails(Logic allofit)
     ability to read the output back in. */
 
     fprintf(fop, "C:%d; R:%d; Fi:%d;", cfactor1, rfactor1, (int)ffactor);
-    fprintf(fop, " PMod:%d; PSiz:%d; DMod:%d; DSiz:%d;\n", 
-                 pdefn, pdsiz, dedmode, dedsiz);
+    fprintf(fop, " PMod:%d; PSiz:%d; DMod:%d;", pdefn, pdsiz, dedmode);
+    fprintf(fop, " DSiz:%d;\n", dedsiz);
     }
 
-  fprintf(fop, "  #--------------------------------\n");
+  if (bits < 2)
+    { fprintf(fop, "  #---------------------------------\n"); }
   }
 
 	/******************************************************************
@@ -492,7 +513,7 @@ void al1_concatwl(Wlist *l, Wlist *m)
 	void al1_emptywl(Wlist *l)
 
 	Delete the list of words in l, leaving l as an empty list.  Does
-	_not_ delete the storage for l.
+	*not* delete the storage for l.
 	******************************************************************/
 
 void al1_emptywl(Wlist *l)
@@ -526,8 +547,8 @@ void al1_emptywl(Wlist *l)
         with a really nasty presentation!)  Note that this prints out words
         in exp form.  If no enumeration has yet been run, exp is at its
         default of 1, so a printout will not be `exponentiated'.  Note that
-	relators of the form xx are _always_ printed out in the form (x)^2
-	_if_ they were entered thus; in all other cases they are printed as
+	relators of the form xx are *always* printed out in the form (x)^2
+	*if* they were entered thus; in all other cases they are printed as
 	xx.  This is to preserve the ability to specify whether or not a
 	generator should be treated as an involution when asis is true.
 
@@ -672,22 +693,24 @@ Logic al1_addrep(int col)
 	Traces back through the table, building up a rep've of #cos in
 	currrep.  The rep've is in terms of column numbers, and is 
 	guaranteed to be the `canonic' rep've (ie, first in `length + col 
-	order' order) in terms of the _current_ table.  The table may or 
+	order' order) in terms of the *current* table.  The table may or 
 	may not be compact/standard.  If the table is compact & standard,
 	then the rep've is guaranteed to be `really' canonic, independant 
 	of the details of the enumeration.  Fails if _addrep() fails.
 
-	The order of the columns is _not_ constrained in any way (apart
+	The order of the columns is *not* constrained in any way (apart
 	from the col 1/2 stuff), so we have to be careful to pick up the
-	1st col in order (_after_ they have been inverted) if more than one
-	entry in a row is minimal.
+	1st col (ie, scol) in order (*after* they have been inverted) if 
+	more than one entry in a row is minimal.
 
 	Note that our ability to backtrace is predicated on the fact that 
 	the first definition of a coset is always in terms of a lower-
 	numbered coset, and during coinc processing we keep the lower-
-	numbered coset & move data from the higher to the lower.  In this
-	routine we _assume_ that this property of the table has not been
-	compromised in any way; if it has, then the behaviour is undefined.
+	numbered coset & move data from the higher to the lower.  So each
+	coset's row, apart from #1, *must* contain a lower-numbered entry.
+	In this routine we *assume* that this property of the table has not
+	been compromised in any way; if it has, then the behaviour is 
+	undefined.
 	******************************************************************/
 
 Logic al1_bldrep(int cos)
@@ -706,13 +729,13 @@ Logic al1_bldrep(int cos)
       {
       if ((i = CT(low,col)) > 0)
         {
-        if (i < slow)			/* Lower row number found */
+        if (i < slow)				/* Lower row number found */
           {
           slow = i;
           scol = col;
           }
-        else if (i == slow && scol)	/* Same row; earlier column? */
-          {
+        else if (i == slow && scol != 0)	/* Same row & slow < low */
+          {					/* ... earlier column? */
           if (invcol[col] < invcol[scol])
             { scol = col; }
           }
@@ -802,12 +825,13 @@ int al1_ordrep(void)
 	of rows whatever the c flag is.  If or is true then the order and 
 	a representative are printed.  The rep've is found via a backtrace 
 	of the table; if the table is in standard form, this rep will be 
-	minimal & the `first' in `order' (length + _column_ order).  Note 
+	minimal & the `first' in `order' (length + *column* order).  Note 
 	that the table may or may not have been compacted and/or 
 	standardised.
 
 	Warnings/Notes:
-	i) If you print entries >999999, the output will be funny.
+	i) If you print entries >999999, then the neatly aligned columns
+	will be lost, although the entries *will* be spaced.
 	ii) _bldrep() can fail.  Most probably due to a lack of memory, but
 	also if the table is `corrupt' or it is called `inappropriately'.
 	In this situation we should perhaps alert the user, but we choose
@@ -829,7 +853,7 @@ void al1_prtct(int f, int l, int s, Logic c, Logic or)
   if (!galpha)
     {
     for (i = 1; i <= ncol; i++) 
-      { fprintf(fop, "%7d", colgen[i]); }
+      { fprintf(fop, " %6d", colgen[i]); }
     }
   else
     {
@@ -858,7 +882,7 @@ void al1_prtct(int f, int l, int s, Logic c, Logic or)
     {
     fprintf(fop, "%6d |", row);
     for (i = 1; i <= ncol; i++) 
-      { fprintf(fop, "%7d", CT(row,i)); }
+      { fprintf(fop, " %6d", CT(row,i)); }
     if (or && row != 1)
       {
       if (COL1(row) < 0)
@@ -882,13 +906,9 @@ void al1_prtct(int f, int l, int s, Logic c, Logic or)
           { fprintf(fop, "       ?   ?"); }
         }
       }
-    /*
-    else if (or)
-      { fprintf(fop, "       1   {}"); }
-    */
     fprintf(fop, "\n");
 
-    /* If we're printing _all_ rows, we can just incr row by s.  If not, we
+    /* If we're printing *all* rows, we can just incr row by s.  If not, we
     have to jump over non-redundant rows. */
 
     if (c)

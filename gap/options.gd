@@ -104,6 +104,7 @@ DeclareGlobalFunction("PROCESS_ACE_OPTIONS");
 DeclareGlobalFunction("PROCESS_ACE_OPTION");
 DeclareGlobalFunction("ACEOptionData");
 DeclareGlobalFunction("SANITISE_ACE_OPTIONS");
+DeclareGlobalFunction("NEW_ACE_OPTIONS");
 DeclareGlobalFunction("FlushOptionsStack");
 
 #E  options.gd  . . . . . . . . . . . . . . . . . . . . . . . . . . ends here 

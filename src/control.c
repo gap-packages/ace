@@ -3,14 +3,14 @@
 
         control.c
         Colin Ramsay (cram@csee.uq.edu.au)
-	22 Feb 99
+	2 Mar 01
 
-        ADAPTIVE COSET ENUMERATOR, Version 3.000
+        ADVANCED COSET ENUMERATOR, Version 3.001
 
-        Copyright 1999
+        Copyright 2000
         Centre for Discrete Mathematics and Computing,
         Department of Mathematics and 
-        Department of Computer Science & Electrical Engineering,
+          Department of Computer Science & Electrical Engineering,
         The University of Queensland, QLD 4072.
 	(http://www.csee.uq.edu.au/~havas/cdmc.html)
 
@@ -19,7 +19,7 @@ enumerator.  Note that we choose to always free & then reallocate space for
 the data structures.  This is simple, but may be inefficient on a long
 series of runs.  It would be more efficient to keep track of how much
 memory is currently allocated (for each structure), and only free/malloc
-if the new structure is _bigger_!
+if the new structure is *bigger*!
 
 **************************************************************************/
 
@@ -95,7 +95,7 @@ void al1_freered(Wlist *w)
         void al1_cycred(Wlist *w)
 
 	Cyclically reduce all the words in a word list.  Since this is run 
-	_after_ _freered(), it can't introduce any 0-length words (think
+	*after* _freered(), it can't introduce any 0-length words (think
 	about it!).
 	******************************************************************/
 
@@ -186,7 +186,7 @@ void al1_remempt(Wlist *w)
 
 	Sort word list into nondecreasing length order, using a stable (as
 	regards words of the same length) insertion sort.  Note that the 
-	list may contain duplicates, but is guaranteed _not_ to contain any
+	list may contain duplicates, but is guaranteed *not* to contain any
 	empty words.  We trace through the original list, stripping
 	elements off the front & inserting them in the new list in their
 	correct place.  Note the speculative check to see if we can tag the
@@ -230,7 +230,7 @@ void al1_sort(Wlist *w)
     else
       {
       /* At this point we have to scan the new list looking for tmp's
-      position; this _cannot_ be the first or last, because of the 
+      position; this *cannot* be the first or last, because of the 
       preceding checks.  Further the new list must have at least two
       elements in it by now (think about it!). */
 
@@ -300,12 +300,12 @@ Logic al1_chkinvol(void)
 	Logic al1_cols(void)
 
 	At this stage, geninv contains a list of the generators we would
-	_like_ to treat as involutions, based on the presentation & the 
+	*like* to treat as involutions, based on the presentation & the 
 	asis flag.  We now allocate the generators to columns, honouring 
-	the order of entry & geninv, as far as we can.  We _must_ ensure
+	geninv & the order of entry, as far as we can.  We *must* ensure
 	that the first two columns are either a generator & its inverse, 
 	or two involutions.  Once all this has been done, geninv & the 
-	columns are _fixed_ for the entire run.  The invcol & gencol/colgen
+	columns are *fixed* for the entire run.  The invcol & gencol/colgen
 	arrays are created here; note the offsetting of the data in gencol,
 	to cope with -ve generator nos (inverses)!
 	******************************************************************/
@@ -472,7 +472,6 @@ void al1_getlen(void)
       { tgenlen += p->len; }
     }
   }
-
 
 	/******************************************************************
 	void al1_baseexp(Wlelt *e)
@@ -687,15 +686,18 @@ Logic al1_setgen(void)
 	Logic al1_bldedp(void)
 
 	Build the edp data structure by scanning through the appropriate
-	portion of relators[] array for each relator.  Note that _if_ x is
+	portion of relators[] array for each relator.  Note that *if* x is
 	to be treated as an involution, then relators of the form xx are 
-	_not_ included, since they yield nothing.  However, relators of the
-	form xx _must_ be included if x/X has more than 1 column allocated 
-	in the table (ie, it is _not_ treated as an involution).  At this 
+	*not* included, since they yield nothing.  However, relators of the
+	form xx *must* be included if x/X has more than 1 column allocated 
+	in the table (ie, it is *not* treated as an involution).  At this 
 	stage, relators[] is still in the form of +/- gen'r nos.  Note that
 	generators with single cols are being treated as involutions, and
 	any X's have been changed to x's, so we do not need to worry about 
 	picking up inverses of 1-column generators.
+
+	Remark: if defn:1 is active there are no involns, so *all* the
+	relators will be included.
 	******************************************************************/
 
 Logic al1_bldedp(void)
@@ -778,7 +780,7 @@ void al1_transl(void)
 	parameter indicates what we want to do; for the moment it is the
 	same as al0_enum()'s mode parameter, and is used to determine how
 	much `set-up' we have to do.  (The order in which this setting-up 
-	is done is _important_, since there are dependencies between the
+	is done is *important*, since there are dependencies between the
 	various components.)  The style parameter for the call will be 
 	built from the values of rfactor1/cfactor1.  Several other of the 
 	Level 0 parameters are `aliased', to enable us to set them
@@ -790,7 +792,7 @@ void al1_transl(void)
 	-8194	table too small
 
 	Note: this routine (& all of Level 1) is written to be as general-
-	purpose as possible.  In particular, it is _not_ assumed that it 
+	purpose as possible.  In particular, it is *not* assumed that it 
 	will be driven by the Level 2 interactive interface.  So some of 
 	the code may seem unnecessary, or needlessly complicated.
 
@@ -801,7 +803,7 @@ void al1_transl(void)
 	responsibility to ensure that call sequences are valid!
 
 	Warning: this routine may invalidate the current table, without
-	explicitly noting this fact.  You _must_ check the return value,
+	explicitly noting this fact.  You *must* check the return value,
 	and only `believe' the table if this is >= -259 (ie, if the
 	enumerator is called and if it does something ok)!
 	******************************************************************/
@@ -814,7 +816,7 @@ int al1_start(int mode)
     { return(-8192); }
 
   /* If the mode is start or redo, then we have a (possibly) new or 
-  (possibly) expanded (ie, _additional_ relators/generators) presentation;
+  (possibly) expanded (ie, *additional* relators/generators) presentation;
   we have to do all the setup associated with the relator and generator
   lists.  If the mode is continue, we simply fall through. */
 
@@ -824,11 +826,11 @@ int al1_start(int mode)
     freely reduce the generators.  (This may introduce (additional) empty
     and/or duplicate words.)  We then remove any empty words, irrespective
     of the value of asis; duplicates are not (currently) removed.  If asis
-    is false, we sort both lists.  We _always_ (re)set ndrel & nsgpg, since
+    is false, we sort both lists.  We *always* (re)set ndrel & nsgpg, since
     it is not incumbent on a caller of _start() to set (& reset) these
     correctly, and the length of the lists may have changed anyway! 
 
-    Note: we do _not_ do any Tietze transformations, thus we are not free 
+    Note: we do *not* do any Tietze transformations, thus we are not free 
     to do, for example, xx --> 1 if x is an involution. */
 
     if (!asis)
@@ -858,9 +860,9 @@ int al1_start(int mode)
     }
 
   /* If we're in start mode, we need to build a list of which generators 
-  are to be _treated_ as involutions & do a column allocation (possibly 
-  changing this list).  These are _fixed_ over a run, even if later 
-  relators / values of asis would have changed it! */
+  are to be *treated* as involutions & do a column allocation (possibly 
+  changing this list).  These are *fixed* over a run (incl any redos), even
+  if later relators / values of asis would have changed it! */
 
   if (mode == 0)
     {
@@ -912,7 +914,7 @@ int al1_start(int mode)
     {
     /* The values in geninv have now been decided, and will be frozen for
     this run.  We now go through the relators/generators and change X to x
-    if x is to be _treated_ as an involution. */
+    if x is to be *treated* as an involution. */
 
     al1_xtox();
 
@@ -944,7 +946,7 @@ int al1_start(int mode)
 
   /* Having now done all the mode-specific setup, we embark on setting-up
   those Level 0 parameters which are aliased at Level 1 (ie, those which
-  are not set _directly_ by the user).  We _assume_ that the caller hasn't 
+  are not set *directly* by the user).  We *assume* that the caller hasn't 
   done anything stupid, and try to honour the parameters requested.  This 
   may be automatic, involve changing the enumerator's state on the fly, 
   cause an error return, or be silently ignored ... */
@@ -994,7 +996,7 @@ int al1_start(int mode)
   else
     { ffactor = (float)ffactor1; }
 
-  /* Deductions _may_ be preserved betweens calls; we need to be careful to
+  /* Deductions *may* be preserved betweens calls; we need to be careful to
   preserve them if we're in continue mode, but we are free to empty the
   stack in start/redo mode (if we choose).  We honour size increases using
   realloc (which acts like malloc if the existing pointer is null); this 
@@ -1044,14 +1046,13 @@ int al1_start(int mode)
     { nrinsgp = nrinsgp1; }
 
   /* If maxrow1 <= 1, or >= the number of rows allowed by the allocated 
-  memory, then maxrow defaults to the allocated memory size.  If it's >=
-  the current value of maxrow, then the request is honoured.  If it's less
-  than the current value, the request is honoured in start mode, and is
-  honoured in redo & continue modes _provided_ that it is at least as large
-  as nextdf; it not, it's set to nextdf (_not_  nextdf-1, as you might 
-  think, since this would allow maxrow=1 if nextdf=2, and we always want to
-  allow at least two rows).  Note that maxrow1 is initialised to 0 & nextdf
-  to 2, so we're ok the first time through. */
+  memory, then maxrow defaults to the allocated memory size; else if it's 
+  >= the current value of maxrow, then the request is honoured.  Otherwise,
+  the request is honoured in start mode, and is honoured in redo & 
+  continue modes *provided* that it is at least as large as nextdf; it not,
+  it's (re)set to nextdf-1 (here, maxrow >= 2, so we're OK as regards
+  always allowing at least 2 rows in the table).  Note that maxrow1 is 
+  initialised to 0 & nextdf to 2, so we're ok the first time through. */
 
   if (maxrow1 <= 1 || maxrow1 >= tabsiz)
     { 
@@ -1062,6 +1063,7 @@ int al1_start(int mode)
     { maxrow = maxrow1; }
   else
     {
+    /* Note: 1 < maxrow1 < tabsiz and maxrow1 < maxrow */
     if (mode == 0)				/* start mode */
       { maxrow = maxrow1; }
     else					/* redo/continue modes */
@@ -1069,7 +1071,8 @@ int al1_start(int mode)
       if (maxrow1 >= nextdf)
         { maxrow = maxrow1; }
       else
-        { maxrow = nextdf; }			/* allow 1 more row! */
+        /* Note: 2 <= maxrow1 < nextdf <= maxrow+1 <= tabsiz+1 */
+        { maxrow = nextdf-1; }			/* (re)set to CT size */
       }
     }
 
@@ -1153,13 +1156,16 @@ int al1_start(int mode)
 
   /* And away we go ... */
 
-  if (msgctrl)
-    { al1_prtdetails(TRUE); }
+  if (msgctrl)				/* normal message control */
+    { al1_prtdetails(1); }
 
-  /* DEBUG/TEST/TRACE */ /*
-  fprintf(fop, "** mode = %d & style = %d\n", mode, style);
+  /* Warning: DTT code */ 
+  /*
+  fprintf(fop, "DTT: mode = %d & style = %d\n", mode, style);
   */
 
-  return(al0_enum(mode,style));
+  i = al0_enum(mode,style);
+
+  return i;
   }
 

@@ -3,14 +3,14 @@
 
         parser.c
         Colin Ramsay (cram@csee.uq.edu.au)
-        27 Feb 99
+	2 Mar 01
 
-        ADAPTIVE COSET ENUMERATOR, Version 3.000
+        ADVANCED COSET ENUMERATOR, Version 3.001
 
-        Copyright 1999
+        Copyright 2000
         Centre for Discrete Mathematics and Computing,
         Department of Mathematics and 
-        Department of Computer Science & Electrical Engineering,
+          Department of Computer Science & Electrical Engineering,
         The University of Queensland, QLD 4072.
 	(http://www.csee.uq.edu.au/~havas/cdmc.html)
 
@@ -22,8 +22,9 @@ continue.
 Note: the al2_continue() routine is intended for cases where an `error'
 does not effect the ability to continue, while al2_restart() is intended
 for errors which (may) mean that continuing is not possible, so we have to
-start.  I'm not sure that I'm always careful in calling the `right' one;
-we may have to tinker with this in the light of experience.
+(re)start an enumeration.  I'm not sure that I'm always careful in calling 
+the `right' one; we may have to tinker with this in the light of 
+experience.
 
 **************************************************************************/
 
@@ -317,9 +318,9 @@ this list is accessed via a pointer in the `top-level' function _rdwl() or
 _rdrl().  This pointer should really be made a global, so that we could
 attempt error-recovery or free up the space it uses (currently, errors may
 cause memory leakage).  A successful call to either of the top-level
-functions returns a new list, which replaces the current list of either
-group relators or subgroup generators.  It is the caller's responsibility
-to deallocate any replaced list.
+functions returns a new list, which should be used to replace the current 
+list of either group relators or subgroup generators.  It is the caller's 
+(of the parser) responsibility to deallocate any replaced list.
 **************************************************************************/
 
 	/******************************************************************
@@ -773,7 +774,8 @@ void al2_cmdloop(void)
 
     al2_readkey();
 
-    /* The work-horse; just plow through until the first match ... */
+    /* The work-horse; just plow through until the first match, do it,
+    and then skip to the end of the while(). */
 
     if (al2_match("add gen[erators]") || al2_match("sg"))
       {
@@ -795,9 +797,11 @@ void al2_cmdloop(void)
 
       okcont  = FALSE;
       tabinfo = tabindex = FALSE;
+
+      continue;
       }
 
-    else if (al2_match("add rel[ators]") || al2_match("rl"))
+    if (al2_match("add rel[ators]") || al2_match("rl"))
       {
       if (ndgen < 1)
         { al2_continue("there are no generators as yet"); }
@@ -817,11 +821,13 @@ void al2_cmdloop(void)
 
       okcont   = FALSE;
       tabindex = FALSE;
+
+      continue;
       }
 
     /* All Equivalent Presentations */
 
-    else if (al2_match("aep"))
+    if (al2_match("aep"))
       {
       al2_readia();
       al2_endcmd();
@@ -837,9 +843,11 @@ void al2_cmdloop(void)
         { al2_continue("can't start (no relators)"); }
 
       al2_aep(intarr[0]);
+
+      continue;
       }
 
-    else if (al2_match("ai") || al2_match("alter i[nput]"))
+    if (al2_match("ai") || al2_match("alter i[nput]"))
       {
       al2_readname();
       al2_endcmd();
@@ -847,9 +855,11 @@ void al2_cmdloop(void)
       if (strlen(currname) == 0)
         { strcpy(currname, "stdin"); }
       al2_aip(currname);
+
+      continue;
       }
 
-    else if (al2_match("ao") || al2_match("alter o[utput]"))
+    if (al2_match("ao") || al2_match("alter o[utput]"))
       {
       al2_readname();
       al2_endcmd();
@@ -857,13 +867,16 @@ void al2_cmdloop(void)
       if (strlen(currname) == 0)
         { strcpy(currname, "stdout"); }
       al2_aop(currname);
+
+      continue;
       }
 
-    /* What to do with asis in continue/redo?  It's value in the printout
-    may not match that actually used at the start of a run, when the
-    involutary generators are picked up & the columns allocated!  */
+    /* What to do with asis in continue/redo?  It's (current) value in a
+    printout may not match that actually used at the start of a run, when
+    the involutary generators are picked up & the columns allocated, and
+    these settings are frozen until the next start/begin/end!  */
 
-    else if (al2_match("as[is]")) 
+    if (al2_match("as[is]")) 
       { 
       al2_readia();
       al2_endcmd();
@@ -874,10 +887,11 @@ void al2_cmdloop(void)
         { fprintf(fop, "asis = %s\n", asis ? "true" : "false"); }
       else
         { asis = (intarr[0] == 1); }
+
+      continue;
       }
 
-    else if ( al2_match("beg[in]") || al2_match("end") || 
-              al2_match("start") )
+    if (al2_match("beg[in]") || al2_match("end") || al2_match("start"))
       {
       al2_endcmd();
 
@@ -908,15 +922,18 @@ void al2_cmdloop(void)
         okcont  = okredo   = FALSE;
         tabinfo = tabindex = FALSE;
         }
+
+      continue;
       }
 
-    else if (al2_match("bye") || al2_match("exit") || al2_match("q[uit]"))
+    if (al2_match("bye") || al2_match("exit") || al2_match("q[uit]"))
       {
       al2_endcmd();
+
       break;
       }
 
-    else if (al2_match("cc") || al2_match("coset coinc[idence]"))
+    if (al2_match("cc") || al2_match("coset coinc[idence]"))
       {
       al2_readia();
       al2_endcmd();
@@ -929,9 +946,11 @@ void al2_cmdloop(void)
         { al2_continue("invalid/redundant coset number"); }
 
       al2_cc(intarr[0]);
+
+      continue;
       }
 
-    else if (al2_match("c[factor]") || al2_match("ct[ factor]"))
+    if (al2_match("c[factor]") || al2_match("ct[ factor]"))
       {
       al2_readia();
       al2_endcmd();
@@ -942,11 +961,13 @@ void al2_cmdloop(void)
         { fprintf(fop, "ct factor = %d\n", cfactor1); }
       else
         { cfactor1 = intarr[0]; }
+
+      continue;
       }
 
     /* See comments for "begin". */
 
-    else if (al2_match("check") || al2_match("redo"))
+    if (al2_match("check") || al2_match("redo"))
       {
       al2_endcmd();
 
@@ -973,9 +994,11 @@ void al2_cmdloop(void)
         }
       if (lresult < -260)
         { okredo = FALSE; }
+
+      continue;
       }
 
-    else if (al2_match("com[paction]"))
+    if (al2_match("com[paction]"))
       {
       al2_readia();
       al2_endcmd();
@@ -987,11 +1010,13 @@ void al2_cmdloop(void)
         { fprintf(fop, "compaction = %d\n", comppc); }
       else
         { comppc = intarr[0]; }
+
+      continue;
       }
 
     /* See comments for "begin". */
 
-    else if (al2_match("con[tinue]"))
+    if (al2_match("con[tinue]"))
       {
       al2_endcmd();
 
@@ -1012,9 +1037,11 @@ void al2_cmdloop(void)
         okcont  = FALSE;
         tabinfo = tabindex = FALSE;
         }
+
+      continue;
       }
 
-    else if (al2_match("cy[cles]"))
+    if (al2_match("cy[cles]"))
       {
       al2_endcmd();
 
@@ -1032,22 +1059,30 @@ void al2_cmdloop(void)
                    nalive, knr, knh, nextdf, al0_diff(begintime,endtime));
 
       al2_cycles();
+
+      continue;
       }
 
-    else if (al2_match("ded mo[de]") || al2_match("dmod[e]"))
+    if (al2_match("ded mo[de]") || al2_match("dmod[e]"))
       {
       al2_readia();
       al2_endcmd();
 
-      if ( (intcnt > 0 && (intarr[0] < 0 || intarr[0] > 4)) || intcnt > 1 )
-        { al2_continue("bad parameter"); }
-      else if (intcnt == 0)
+      if (intcnt == 0)
         { fprintf(fop, "deduction mode = %d\n", dedmode); }
+      else if (intcnt == 1)
+        {
+        if (intarr[0] < 0 || intarr[0] > 4)
+          { al2_continue("bad mode parameter"); }
+        dedmode = intarr[0];
+        }
       else
-        { dedmode = intarr[0]; }
+        { al2_continue("bad parameter count"); }
+
+      continue;
       }
 
-    else if (al2_match("ded si[ze]") || al2_match("dsiz[e]"))
+    if (al2_match("ded si[ze]") || al2_match("dsiz[e]"))
       {
       al2_readia();
       al2_endcmd();
@@ -1058,9 +1093,11 @@ void al2_cmdloop(void)
         { fprintf(fop, "deduction stack = %d\n", dedsiz1); }
       else
         { dedsiz1 = intarr[0]; }
+
+      continue;
       }
 
-    else if (al2_match("def[ault]"))
+    if (al2_match("def[ault]"))
       {
       al2_endcmd();
 
@@ -1077,9 +1114,11 @@ void al2_cmdloop(void)
       rfactor1 = 0;
       rfill    = TRUE;
       pcomp    = FALSE;
+
+      continue;
       }
 
-    else if (al2_match("del gen[erators]") || al2_match("ds"))
+    if (al2_match("del gen[erators]") || al2_match("ds"))
       {
       al2_readia();
       al2_endcmd();
@@ -1091,9 +1130,11 @@ void al2_cmdloop(void)
 
       okcont  = okredo   = FALSE;
       tabinfo = tabindex = FALSE;
+
+      continue;
       }
 
-    else if (al2_match("del rel[ators]") || al2_match("dr"))
+    if (al2_match("del rel[ators]") || al2_match("dr"))
       {
       al2_readia();
       al2_endcmd();
@@ -1105,9 +1146,11 @@ void al2_cmdloop(void)
 
       okcont  = okredo   = FALSE;
       tabinfo = tabindex = FALSE;
+
+      continue;
       }
 
-    else if (al2_match("d[ump]"))
+    if (al2_match("d[ump]"))
       {
       al2_readia();
       al2_endcmd();
@@ -1136,9 +1179,11 @@ void al2_cmdloop(void)
         else
           { al2_dump(intarr[1] == 1); }
         }
+
+      continue;
       }
 
-    else if (al2_match("easy"))
+    if (al2_match("easy"))
       {
       al2_endcmd();
 
@@ -1155,9 +1200,11 @@ void al2_cmdloop(void)
       rfactor1 = 1000;
       rfill    = TRUE;
       pcomp    = FALSE;
+
+      continue;
       }
 
-    else if (al2_match("echo")) 
+    if (al2_match("echo")) 
       { 
       al2_readia();
       al2_endcmd();
@@ -1168,13 +1215,15 @@ void al2_cmdloop(void)
         { fprintf(fop, "echo = %s\n", echo ? "true" : "false"); }
       else
         { echo = (intarr[0] == 1); }
+
+      continue;
       }
 
     /* Note that it is ok to set the name to "".  If the call to _strdup()
     fails, then _continue() will be invoked.  This could leave grpname 
     still pointing to freed storage, hence the explicit setting to NULL. */
 
-    else if (al2_match("enum[eration]") || al2_match("group name"))
+    if (al2_match("enum[eration]") || al2_match("group name"))
       {
       al2_readname();
       al2_endcmd();
@@ -1183,9 +1232,11 @@ void al2_cmdloop(void)
         { free(grpname); }
       grpname = NULL;
       grpname = al2_strdup(currname);
+
+      continue;
       }
 
-    else if (al2_match("fel[sch]"))
+    if (al2_match("fel[sch]"))
       {
       al2_readia();
       al2_endcmd();
@@ -1216,12 +1267,14 @@ void al2_cmdloop(void)
       rfactor1 = 0;
       rfill    = FALSE;
       pcomp    = FALSE;
+
+      continue;
       }
 
     /* If you set this to 0, Level 1 will set ffactor to a `sensible'
     default (eg, 5(ncol+2)/4). */
 
-    else if (al2_match("f[factor]") || al2_match("fi[ll factor]"))
+    if (al2_match("f[factor]") || al2_match("fi[ll factor]"))
       {
       al2_readia();
       al2_endcmd();
@@ -1232,10 +1285,11 @@ void al2_cmdloop(void)
         { fprintf(fop, "fill factor = %d\n", ffactor1); }
       else
         { ffactor1 = intarr[0]; }
+
+      continue;
       }
 
-    else if ( al2_match("gen[erators]") || 
-              al2_match("subgroup gen[erators]") )
+    if (al2_match("gen[erators]") || al2_match("subgroup gen[erators]"))
       {
       if (ndgen < 1)
         { al2_continue("there are no generators as yet"); }
@@ -1253,9 +1307,11 @@ void al2_cmdloop(void)
 
       okcont  = okredo   = FALSE;
       tabinfo = tabindex = FALSE;
+
+      continue;
       }
 
-    else if (al2_match("gr[oup generators]"))
+    if (al2_match("gr[oup generators]"))
       {
       if (isdigit(currip) || currip == '+' || currip == '-')
         {
@@ -1327,9 +1383,11 @@ void al2_cmdloop(void)
         else
           { fprintf(fop, "1..%d\n", ndgen); }
         }
+
+      continue;
       }
 
-    else if (al2_match("group relators") || al2_match("rel[ators]"))
+    if (al2_match("group relators") || al2_match("rel[ators]"))
       {
       if (ndgen < 1)
         { al2_continue("there are no generators as yet"); }
@@ -1347,9 +1405,11 @@ void al2_cmdloop(void)
 
       okcont  = okredo   = FALSE;
       tabinfo = tabindex = FALSE;
+
+      continue;
       }
 
-    else if (al2_match("hard"))
+    if (al2_match("hard"))
       {
       al2_endcmd();
 
@@ -1366,15 +1426,19 @@ void al2_cmdloop(void)
       rfactor1 = 1;
       rfill    = TRUE;
       pcomp    = FALSE;
+
+      continue;
       }
 
-    else if (al2_match("h[elp]"))
+    if (al2_match("h[elp]"))
       {
       al2_endcmd();
       al2_help();
+
+      continue;
       }
 
-    else if (al2_match("hlt"))
+    if (al2_match("hlt"))
       {
       al2_endcmd();
 
@@ -1391,9 +1455,11 @@ void al2_cmdloop(void)
       rfactor1 = 1000;
       rfill    = TRUE;
       pcomp    = FALSE;
+
+      continue;
       }
 
-    else if (al2_match("ho[le limit]"))
+    if (al2_match("ho[le limit]"))
       {
       al2_readia();
       al2_endcmd();
@@ -1405,9 +1471,11 @@ void al2_cmdloop(void)
         { fprintf(fop, "hole limit = %d\n", hlimit); }
       else
         { hlimit = intarr[0]; }
+
+      continue;
       }
 
-    else if (al2_match("look[ahead]"))
+    if (al2_match("look[ahead]"))
       {
       al2_readia();
       al2_endcmd();
@@ -1418,9 +1486,11 @@ void al2_cmdloop(void)
         { fprintf(fop, "lookahead = %d\n", lahead); }
       else
         { lahead = intarr[0]; }
+
+      continue;
       }
 
-    else if (al2_match("loop[ limit]"))
+    if (al2_match("loop[ limit]"))
       {
       al2_readia();
       al2_endcmd();
@@ -1431,9 +1501,11 @@ void al2_cmdloop(void)
         { fprintf(fop, "loop limit = %d\n", llimit); }
       else
         { llimit = intarr[0]; }
+
+      continue;
       }
 
-    else if (al2_match("max[ cosets]"))
+    if (al2_match("max[ cosets]"))
       {
       al2_readia();
       al2_endcmd();
@@ -1445,9 +1517,11 @@ void al2_cmdloop(void)
         { fprintf(fop, "max cosets = %d\n", maxrow1); }
       else
         { maxrow1 = intarr[0]; }
+
+      continue;
       }
 
-    else if (al2_match("mess[ages]") || al2_match("mon[itor]"))
+    if (al2_match("mess[ages]") || al2_match("mon[itor]"))
       {
       al2_readia();
       al2_endcmd();
@@ -1484,9 +1558,11 @@ void al2_cmdloop(void)
         msghol  = FALSE;
         msgincr = intarr[0];
         }
+
+      continue;
       }
 
-    else if (al2_match("mend[elsohn]")) 
+    if (al2_match("mend[elsohn]")) 
       { 
       al2_readia();
       al2_endcmd();
@@ -1497,9 +1573,11 @@ void al2_cmdloop(void)
         { fprintf(fop, "mendelsohn = %s\n", mendel ? "true" : "false"); }
       else
         { mendel = (intarr[0] == 1); }
+
+      continue;
       }
 
-    else if (al2_match("mo[de]"))
+    if (al2_match("mo[de]"))
       {
       al2_endcmd();
 
@@ -1515,9 +1593,11 @@ void al2_cmdloop(void)
         { fprintf(fop, " redo = yes\n"); }
       else
         { fprintf(fop, " redo = no\n"); }
+
+      continue;
       }
 
-    else if (al2_match("nc") || al2_match("normal[ closure]"))
+    if (al2_match("nc") || al2_match("normal[ closure]"))
       {
       al2_readia();
       al2_endcmd();
@@ -1541,9 +1621,11 @@ void al2_cmdloop(void)
         { al2_normcl(FALSE); }
       else
         { al2_normcl(intarr[0] == 1); }
+
+      continue;
       }
 
-    else if (al2_match("no[ relators in subgroup]"))
+    if (al2_match("no[ relators in subgroup]"))
       {
       al2_readia();
       al2_endcmd();
@@ -1554,9 +1636,11 @@ void al2_cmdloop(void)
         { fprintf(fop, "no. rels in subgr = %d\n", nrinsgp1); }
       else
         { nrinsgp1 = intarr[0]; }
+
+      continue;
       }
 
-    else if (al2_match("oo") || al2_match("order[ option]"))
+    if (al2_match("oo") || al2_match("order[ option]"))
       {
       al2_readia();
       al2_endcmd();
@@ -1567,20 +1651,27 @@ void al2_cmdloop(void)
         { al2_continue("no information in table"); }
 
       al2_oo(intarr[0]);
+
+      continue;
       }
 
-    else if (al2_match("opt[ions]"))
+    if (al2_match("opt[ions]"))
       {
       al2_endcmd();
       al2_opt();
+
+      continue;
       }
 
     /* an old command, which we quietly ignore */
 
-    else if (al2_match("par[ameters]"))
-      { al2_endcmd(); }
+    if (al2_match("par[ameters]"))
+      { 
+      al2_endcmd();
+      continue;
+      }
 
-    else if (al2_match("path[ compression]")) 
+    if (al2_match("path[ compression]")) 
       { 
       al2_readia();
       al2_endcmd();
@@ -1591,9 +1682,11 @@ void al2_cmdloop(void)
         { fprintf(fop, "path compression = %s\n", pcomp ? "on" : "off"); }
       else
         { pcomp = (intarr[0] == 1); }
+
+      continue;
       }
 
-    else if (al2_match("pd mo[de]") || al2_match("pmod[e]"))
+    if (al2_match("pd mo[de]") || al2_match("pmod[e]"))
       {
       al2_readia();
       al2_endcmd();
@@ -1604,9 +1697,11 @@ void al2_cmdloop(void)
         { fprintf(fop, "pref. definition mode = %d\n", pdefn); }
       else
         { pdefn = intarr[0]; }
+
+      continue;
       }
 
-    else if (al2_match("pd si[ze]") || al2_match("psiz[e]"))
+    if (al2_match("pd si[ze]") || al2_match("psiz[e]"))
       {
       al2_readia();
       al2_endcmd();
@@ -1629,19 +1724,23 @@ void al2_cmdloop(void)
         else
           { al2_continue("bad parameter"); }	/* not power of 2 */
         }
+
+      continue;
       }
 
-    else if (al2_match("print det[ails]") || al2_match("sr"))
+    if (al2_match("print det[ails]") || al2_match("sr"))
       {
       al2_readia();
       al2_endcmd();
 
-      if ( (intcnt > 0 && (intarr[0] < 0 || intarr[0] > 1)) || intcnt > 1 )
+      if ((intcnt > 0 && (intarr[0] < 0 || intarr[0] > 5)) || intcnt > 1)
         { al2_continue("bad parameter"); }
       else if (intcnt == 0)
-        { al1_prtdetails(FALSE); }
+        { al1_prtdetails(0); }
       else
-        { al1_prtdetails(intarr[0] == 1); }
+        { al1_prtdetails(intarr[0]); }
+
+      continue;
       }
 
     /* Negative first parameter means include order/rep, else don't.  No 
@@ -1650,7 +1749,7 @@ void al2_cmdloop(void)
     (x,y,z).  Note the compulsory compaction, to prevent utterly confusing 
     the user!  (This may cause disded to become true.) */
 
-    else if(al2_match("pr[int table]"))
+    if (al2_match("pr[int table]"))
       {
       al2_readia();
       al2_endcmd();
@@ -1705,9 +1804,11 @@ void al2_cmdloop(void)
                    nalive, knr, knh, nextdf, al0_diff(begintime,endtime));
 
       al1_prtct(intarr[0], intarr[1], intarr[2], FALSE, f);
+
+      continue;
       }
 
-    else if (al2_match("pure c[t]"))
+    if (al2_match("pure c[t]"))
       {
       al2_endcmd();
 
@@ -1724,9 +1825,11 @@ void al2_cmdloop(void)
       rfactor1 = 0;
       rfill    = FALSE;
       pcomp    = FALSE;
+
+      continue;
       }
 
-    else if (al2_match("pure r[t]"))
+    if (al2_match("pure r[t]"))
       {
       al2_endcmd();
 
@@ -1743,6 +1846,8 @@ void al2_cmdloop(void)
       rfactor1 = 1000;
       rfill    = FALSE;
       pcomp    = FALSE;
+
+      continue;
       }
 
     /* This is a `dangerous' option, since it can go wrong, or `corrupt'
@@ -1750,27 +1855,39 @@ void al2_cmdloop(void)
     very strict as to when we allow it to be called.  How much of this is
     necessary/desirable is moot. */
 
-    else if (al2_match("rc") || al2_match("random coinc[idences]"))
+    if (al2_match("rc") || al2_match("random coinc[idences]"))
       {
       al2_readia();
       al2_endcmd();
 
       if (intcnt < 1 || intcnt > 2)
         { al2_continue("bad number of parameters"); }
-      if (intarr[0] < 1)
+      if (intarr[0] < 0)
         { al2_continue("invalid first argument"); }
       if (intcnt == 2 && intarr[1] < 1)
         { al2_continue("invalid second argument"); }
+
       if (!tabinfo)
         { al2_continue("there is no table information"); }
-      if (lresult == 1)
-        { al2_continue("G:H is already 1"); }
-      if (lresult > 0 && lresult < intarr[0])
-        { al2_continue("finite index already < argument"); }
-      if (lresult > 0 && lresult%intarr[0] == 0)
-        { al2_continue("finite index already multiple of argument"); }
       if (!okredo)
         { al2_continue("can't redo (different presentation?)"); }
+
+      if (lresult == 1)
+        { al2_continue("trivial finite index already exists"); }
+
+      if (intarr[0] == 0)
+        {
+        if (lresult > 0)
+          { al2_continue("non-trivial finite index already present"); }
+        }
+      else
+        {
+        if (lresult > 0 && lresult < intarr[0])
+          { al2_continue("finite index already < argument"); }
+        if (lresult > 0 && lresult%intarr[0] == 0)
+          { al2_continue("finite index already multiple of argument"); }
+        }
+
       if (intarr[0] >= nalive)
         { al2_continue("not enough active cosets available"); }
 
@@ -1778,9 +1895,11 @@ void al2_cmdloop(void)
         { al2_rc(intarr[0],8); }
       else
         { al2_rc(intarr[0],intarr[1]); }
+
+      continue;
       }
 
-    else if (al2_match("rec[over]") || al2_match("contig[uous]"))
+    if (al2_match("rec[over]") || al2_match("contig[uous]"))
       {
       if (!tabinfo)
         { al2_continue("there is no table information"); }
@@ -1794,11 +1913,13 @@ void al2_cmdloop(void)
         { fprintf(fop, "co"); }
       fprintf(fop, ": a=%d r=%d h=%d n=%d; c=+%4.2f\n", 
                    nalive, knr, knh, nextdf, al0_diff(begintime,endtime));
+
+      continue;
       }
 
     /* Random Equivalent Presentations */
 
-    else if (al2_match("rep"))
+    if (al2_match("rep"))
       {
       al2_readia();
       al2_endcmd();
@@ -1819,14 +1940,19 @@ void al2_cmdloop(void)
         { al2_rep(intarr[0], 8); }
       else
         { al2_rep(intarr[0], intarr[1]); }
+
+      continue;
       }
 
     /* an old command, which we quietly ignore */
 
-    else if (al2_match("restart"))
-      { al2_endcmd(); }
+    if (al2_match("restart"))
+      { 
+      al2_endcmd();
+      continue;
+      }
 
-    else if (al2_match("r[factor]") || al2_match("rt[ factor]"))
+    if (al2_match("r[factor]") || al2_match("rt[ factor]"))
       {
       al2_readia();
       al2_endcmd();
@@ -1837,9 +1963,11 @@ void al2_cmdloop(void)
         { fprintf(fop, "rt factor = %d\n", rfactor1); }
       else
         { rfactor1 = intarr[0]; }
+
+      continue;
       }
 
-    else if (al2_match("row[ filling]")) 
+    if (al2_match("row[ filling]")) 
       { 
       al2_readia();
       al2_endcmd();
@@ -1850,9 +1978,11 @@ void al2_cmdloop(void)
         { fprintf(fop, "row fill = %s\n", rfill ? "on" : "off"); }
       else
         { rfill = (intarr[0] == 1); }
+
+      continue;
       }
 
-    else if (al2_match("sc") || al2_match("stabil[ising cosets]"))
+    if (al2_match("sc") || al2_match("stabil[ising cosets]"))
       {
       al2_readia();
       al2_endcmd();
@@ -1863,6 +1993,8 @@ void al2_cmdloop(void)
         { al2_continue("no information in table"); }
 
       al2_sc(intarr[0]);
+
+      continue;
       }
 
     /* We emulate, as best we can, the odd-numbered enumeration strategies
@@ -1874,7 +2006,7 @@ void al2_cmdloop(void)
     strategies are: 1) HLT, no save; 3) HLT, save; 5) CHLT, no save; 7) 
     CHLT, save; 9) Felsch (save). */
 
-    else if (al2_match("sims"))
+    if (al2_match("sims"))
       {
       al2_readia();
       al2_endcmd();
@@ -1932,9 +2064,11 @@ void al2_cmdloop(void)
       pdefn    = 0;		/* no preferred/immediate defns ... */
       pdsiz1   = 256;
       pcomp    = FALSE;
+
+      continue;
       }
 
-    else if (al2_match("st[andard table]"))
+    if (al2_match("st[andard table]"))
       {
       al2_endcmd();
 
@@ -1955,19 +2089,23 @@ void al2_cmdloop(void)
         { fprintf(fop, "/st"); }
       fprintf(fop, ": a=%d r=%d h=%d n=%d; c=+%4.2f\n", 
                    nalive, knr, knh, nextdf, al0_diff(begintime,endtime));
+
+      continue;
       }
 
     /* this stuff is done if the statistics package is included */
 
 #ifdef AL0_STAT
-    else if (al2_match("stat[istics]") || al2_match("stats"))
+    if (al2_match("stat[istics]") || al2_match("stats"))
       {
       al2_endcmd();
       STATDUMP;
+
+      continue;
       }
 #endif
 
-    else if (al2_match("style"))
+    if (al2_match("style"))
       {
       al2_endcmd();
 
@@ -1998,11 +2136,13 @@ void al2_cmdloop(void)
         else
           { fprintf(fop, "style = CR\n"); }
         }
+
+      continue;
       }
 
     /* see comment for "enum[eration]" */
 
-    else if (al2_match("subg[roup name]"))
+    if (al2_match("subg[roup name]"))
       {
       al2_readname();
       al2_endcmd();
@@ -2011,6 +2151,8 @@ void al2_cmdloop(void)
         { free(subgrpname); }
       subgrpname = NULL;
       subgrpname = al2_strdup(currname);
+
+      continue;
       }
 
     /* Allows access to the system; ie, fires up a shell & passes it the
@@ -2018,7 +2160,7 @@ void al2_cmdloop(void)
     consist of one line of printable characters (plus '\t'), excluding ';'.
     Trailing WS is removed.  We do _no_ error checking on the call. */
  
-    else if (al2_match("sys[tem]"))
+    if (al2_match("sys[tem]"))
       {
       al2_readname();
       al2_endcmd();
@@ -2027,16 +2169,20 @@ void al2_cmdloop(void)
         { al2_continue("empty argument"); }
       else
         { system(currname); }
+
+      continue;
       }
 
-    else if (al2_match("text"))
+    if (al2_match("text"))
       {
       al2_readname();
       al2_endcmd();
       fprintf(fop, "%s\n", currname);
+
+      continue;
       }
 
-    else if (al2_match("ti[me limit]"))
+    if (al2_match("ti[me limit]"))
       {
       al2_readia();
       al2_endcmd();
@@ -2047,12 +2193,14 @@ void al2_cmdloop(void)
         { fprintf(fop, "time limit = %d\n", tlimit); }
       else
         { tlimit = intarr[0]; }
+
+      continue;
       }
 
     /* The trace word command takes as arguments a coset number & a word.
     Unlike ACE2, we do not allow a multi-line word. */
 
-    else if (al2_match("tw") || al2_match("trace[ word]"))
+    if (al2_match("tw") || al2_match("trace[ word]"))
       {
       i = al2_readint();
       if (currip != ',')
@@ -2079,12 +2227,14 @@ void al2_cmdloop(void)
         { fprintf(fop, "* Trace does not complete\n"); }
       else
         { fprintf(fop, "%d * word = %d\n", i, k); }
+
+      continue;
       }
 
     /* Negative workspace sizes are errors, zero size selects DEFWORK, and
     values <1K are rounded up to 1K. */
 
-    else if (al2_match("wo[rkspace]"))
+    if (al2_match("wo[rkspace]"))
       {
       if ( !(isdigit(currip) || currip == '+' || currip == '-') )
         {
@@ -2128,11 +2278,13 @@ void al2_cmdloop(void)
         okcont  = okredo   = FALSE;
         tabinfo = tabindex = FALSE;
         }
+
+      continue;
       }
 
     /* ... no match; signal an error */
 
-    else
-      { al2_continue("there is no such keyword"); }
+    al2_continue("there is no such keyword");
     }
   }
+
