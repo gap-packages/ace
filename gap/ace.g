@@ -165,7 +165,7 @@ local fgens,grels,fsgens,j,k,n,nums,i,DoWords,ParseValueOption,
   fi;
 
   a:=ValueOption("mess");
-  if a<>fail then
+  if a<>fail and not stats then
     if IsInt(a) and (a<-1 or a>1) then
       AppendTo(infile,"MESS:",a,";\n");
     fi;
@@ -201,14 +201,14 @@ local fgens,grels,fsgens,j,k,n,nums,i,DoWords,ParseValueOption,
   # parse the line for statistics
   a:=Filtered(l,i->i in ". " or i in CHARS_DIGITS);
   a:=SplitString(a,""," .");
-  if l{[1..5]}="INDEX" then
-    statval:=[Int(a[1]),Int(a[7])+Int(a[8])/10^Length(a[8]),
-              Int(a[9]),Int(a[10])];
-  else
-    statval:=[0,Int(a[6])+Int(a[7])/10^Length(a[7]),Int(a[8]),Int(a[9])];
-  fi;
-
   if stats then 
+    if l{[1..5]}="INDEX" then
+      statval:=[Int(a[1]),Int(a[7])+Int(a[8])/10^Length(a[8]),
+		Int(a[9]),Int(a[10])];
+    else
+      statval:=[0,Int(a[6])+Int(a[7])/10^Length(a[7]),Int(a[8]),Int(a[9])];
+    fi;
+
     CloseStream(infile);
     return statval;
   fi;
