@@ -131,6 +131,9 @@ ACE has been compiled successfully with the following C compilers:
    gcc 2.95.2 19991024  Solaris 2.51, 2.8     (release)
    gcc 2.95.2 20000220  Linux                 (release)
    gcc 2.95.3 20010315  Linux                 (release)
+   gcc 2.95.4 20011002  Linux                 (Debian prerelease)
+   gcc 2.96 20000731    Red Hat Linux 7.2     (2.96-112.7.2)
+   gcc 3.2 20020903     Red Hat Linux 8.0     (3.2-7)
 
 (Since April 1999, egcs has been the official Gnu cc supplier. This is
 why the numbering now follows egcs' numbering.)
