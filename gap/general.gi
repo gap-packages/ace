@@ -458,8 +458,8 @@ local name, file;
   fi;
   file := Filename( DirectoriesPackageLibrary( "ace", "res-examples"), name );
   if file = fail then
-    Error("ACEReadResearchExample: Sorry! There is no ACE research example ",
-          "file with name `", name, "'\n");
+    Error("ACEReadResearchExample: Sorry! There is no ACE research example\n",
+          "file with name \"", name, "\"\n");
   else
     Read(file);
   fi;

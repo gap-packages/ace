@@ -29,11 +29,11 @@ if IsBound(IsACEResExampleOK) and IsACEResExampleOK() then
               )
           );
   ACEResExample.options :=
-      [ "ACEworkspace := 10^3",
+      [ "ACEworkspace := 2 * 10^3",
         "head := x*y*x*y*x*y^-1*x*y*x*y",
         "Ntails := 256",
         "maxTailLength := 6",
-        "minMiddleLength := 6",
+        "minMiddleLength := 4",
         "maxMiddleLength := 20",
         "Nrandom := 1000",
         "Nrandom := len -> 1000 * (LogInt(len + 1, 2) + 1)"];
@@ -85,7 +85,7 @@ Print("L2_8:\n", L2_8, "\n");
 L28 := TranslatePresentation([a,b], L2_8.rels, L2_8.sgens, [a^3*b, a^2*b]);
 # Using option "ACEworkspace" (default is 10^6)
 L28n := PGRelFind(L28.fgens, L28.rels, L28.sgens 
-                  : ACEworkspace := 10^3);
+                  : ACEworkspace := 2 * 10^3);
 # Using option "head" (default is x*y*x*y*x*y^-1)
 L28n := PGRelFind(L28.fgens, L28.rels, L28.sgens 
                   : head := x*y*x*y*x*y^-1*x*y*x*y);
@@ -97,7 +97,7 @@ L28n := PGRelFind(L28.fgens, L28.rels, L28.sgens
                   : maxTailLength := 6);
 # Using option "minMiddleLength" (default is 0)
 L28n := PGRelFind(L28.fgens, L28.rels, L28.sgens 
-                  : minMiddleLength := 6);
+                  : minMiddleLength := 4);
 # Using option "maxMiddleLength" (default is 30)
 L28n := PGRelFind(L28.fgens, L28.rels, L28.sgens 
                   : maxMiddleLength := 20);

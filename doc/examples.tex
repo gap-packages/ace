@@ -727,7 +727,7 @@ Section~"ACEReadResearchExample" describes, effects a  `Read'  of  the
 file `"pgrelfind.g"' in the `res-examples' directory:
 
 \beginexample
-gap> ACEReadResearchExample();
+gap> ACEReadResearchExample();                                 
 #I  The following are now defined:
 #I  
 #I  Functions:
@@ -743,11 +743,11 @@ gap> ACEReadResearchExample();
 #I  TCENUM = ACETCENUM  (Todd-Coxeter Enumerator is now ACE)
 #I  
 #I  For an example of their application, you might like to try:
-#I  gap> ACEReadResearchExample("doL28.g" : optex := [1,2,4]);
-#I  (the output is 90 lines followed by a 'gap> ' prompt)
+#I  gap> ACEReadResearchExample("doL28.g" : optex := [1,2,4,5,8]);
+#I  (the output is 65 lines followed by a 'gap> ' prompt)
 #I  
 #I  For information type: ?Using ACEReadResearchExample
-gap>
+gap> 
 \endexample
 
 The output (`Info'-ed at `InfoACELevel' 1) states  that  a  number  of
@@ -834,7 +834,10 @@ the index check of the large subgroup. If the index is  right,  {\ACE}
 is set to use  `2*<workspace>'  to  check  the  index  of  the  cyclic
 subgroup $\langle <b> \rangle$. By  default,  <workspace>  is  set  to
 `10^6', which is too small for many  of  the  `do<XXX>.g'  files  (see
-below).
+below). Of course, groups for which {\ACE} overflows the workspace are
+indistinguishable from infinite groups, and one can't easily  be  sure
+whether a relator wasn't found because the workspace was too small  or
+because there wasn't one to be found.
 
 \quad`Ntails := <Ntails>' & 
 Sets the approximate number of <tail>s generated to  <Ntails>;  it  is
@@ -993,9 +996,16 @@ mind~\dots~you will be reminded.
 Many of the outputs are fairly lengthy and you may wish to use `LogTo'
 (see~"ref:LogTo") in order to peruse the  output  at  leisure,  later.
 Also, for many of the larger groups  one  needs  to  be  able  to  set
-`ACEworkspace' to `10^8' which may be  beyond  the  capacity  of  your
-machine. In particular, the investigation showing  that  $L_3(5)$  has
-deficiency 0 was run on an SGI Origin 2000 with 6.4 Gb of RAM.
+`ACEworkspace' larger than `10^6', but how  large?  The  investigation
+showing that $L_3(5)$ has deficiency 0 was run on an SGI  Origin  2000
+with 6.4 Gb of RAM and with `ACEworkspace' set to `10^8',  to  find  a
+``third'' relator of 23 bisyllables. It turns  out  however  that  one
+need  only  set  `ACEworkspace   :=   5   *   10^6'   to   find   that
+relator~\dots~one can be very knowledgeable in hindsight! In the  list
+below we give values for `ACEworkspace' that will succeed  in  finding
+the  shortest  ``third''  relator  that  we  found,  when  the  method
+succeeded. (Of course, `PGRelFind' runs a lot faster if the  workspace
+given to {\ACE} is kept small.)
 
 Recall `ACEReadResearchExample' expects a filename (i.e.~a string), or
 no argument; here are the *filenames* of the `do<XXX>.g' provided:
@@ -1004,32 +1014,95 @@ no argument; here are the *filenames* of the `do<XXX>.g' provided:
 
 \quad`"doGrp.g"' &
 This allows the user to experiment with any of the  groups  that  have
-data in the `presentations' record. The user *must* supply values  for
-the following options:
+data in the `presentations' record. The user *must* supply a value for
+the following option:
 
 \qquad`grp := <presField>' &
 <presField> must be the  name  (i.e.~a  string)  of  a  field  in  the
 `presentations' record (this selects the group  to  be  investigated);
-and
+and, possibly one or both of the following options:
+
+\qquad`n := <n>' &
+If <presField>, above, ends in `s'  then  the  user  *must*  supply  a
+positive integer <n> for `n', which indicates that the <n>th record of
+`presentations.(<presField>)' is desired.
 
 \qquad`newgens := <wordlist>' &
 <wordlist> must be a list of two words in the generators `a'  and  `b'
 which are  to  be  the  words  used  for  the  <newgens>  argument  of
 `TranslatePresentation'    (see~"TranslatePresentation"    for     the
-conditions they must satisfy).
+conditions they must satisfy). If `newgens' is  not  supplied,  it  is
+assumed that `TranslatePresentation'  is  not  needed,  i.e.~that  the
+generators `a' and `b' are already an involution and an element of odd
+prime order, respectively, and that  `PGRelFind'  may  be  immediately
+applied.
 
 &
 The user may also supply `PGRelFind' options, though unlike `grp'  and
-`newgens', they will not be directly observable in the output. Here is
-an example using both sets of options:
+`newgens', they will not be directly observable in the output. 
+An example using both sets of options is given below.
+
+\quad`"doL28.g"' &
+This provides a nice small example. You  may  supply  any  `PGRelFind'
+options you wish, and/or you may use the following  option  which  has
+been specifically  designed  to  help  you  get  acquainted  with  the
+`PGRelFind' options (only the equivalent of the `optex'  options  will
+be explicitly observable in the output).
+
+\qquad`optex := <val>' &
+<val>  may  be  an  integer  or  a  list  of  integers  in  the  range
+$1,\ldots,8$. The output  of  `ACEReadResearchExample();'  suggests  a
+combination that is 65 lines long. Most of the  possible  choices  for
+`optex' give an output of the order of 100 to 200 lines,  which  isn't
+too bad if you have say an `xterm' window with the capacity to  scroll
+back.
+
+\quad`"doL216.g"' &
+As is the case with the remaining  `do<XXX>.g'  files,  there  are  no
+options other than those for `PGRelFind'.  It  is  sufficient  to  set
+`ACEworkspace := 2 * 10^4'.
+
+\quad`"doL33.g"' &
+It is sufficient to set `ACEworkspace := 2 * 10^4'.
+
+\quad`"doU33.g"' &
+Though   $U_3(3)$   is   known   to    have    deficiency    0,    the
+`TranslatePresentation'-`PGRelFind' method does not appear to be  able
+to demonstrate it.
+
+\quad`"doM11.g"' &
+`ACEworkspace' needs to be set to at least `6 * 10^6'.
+
+\quad`"doL232.g"' &
+It is sufficient to set `ACEworkspace := 5 * 10^4'.
+
+\quad`"doU34.g"' &
+It is sufficient to set `ACEworkspace := 5 * 10^4'.
+
+\quad`"doJ1.g"' &
+`ACEworkspace' needs to be set to at least `5 * 10^6'.
+
+\quad`"doL35.g"' &
+`ACEworkspace' needs to be set to at least `5 * 10^6'.
+
+\quad`"doPSp44.g"' &
+We were unable to determine whether $PSp_4(4)$ has deficiency  0,  via
+the `TranslatePresentation'-`PGRelFind' method.
+
+\enditems
+
+The following example shows that you can use both the options peculiar
+to  the  file  `doGrp.g'  and  the   options   of   `PGRelFind'   when
+`ACEReadResearchExample'   is   called   with   argument    (filename)
+`"doGrp.g"'.
 
 \beginexample
-gap> ACEReadResearchExample("doGrp.g"                                          
+gap> ACEReadResearchExample("doGrp.g"                       
 >                           : grp := "L2_8", newgens := [a^3*b, a^2*b],
 >                             head := x*y*x*y*x*y^-1*x*y*x*y);
 # IsACEResExampleOK() sets ACEResExample.grp     from options grp, n
 #                          ACEResExample.newgens from option  newgens
-gap> ACEResExample.G := TranslatePresentation([a,b],
+gap> ACEResExample.G := TranslatePresentation([a, b],
 >                                             ACEResExample.grp.rels,
 >                                             ACEResExample.grp.sgens,
 >                                             ACEResExample.newgens);
@@ -1052,10 +1125,10 @@ Candidate relator: x*y*x*y*x*y^-1*x*y*x*y*x*y^-1*x*y^-1*x*y*x*y*x*y*x*y^
 -1*x*y^-1*x*y^-1*x*y*x*y^-1
  #bisyllables = 15 (#bisyllables in tail = 10) #words tested: 1
 ACEStats:
-  index=72 cputime=0 ms maxcosets=98 totcosets=121
+  index=72 cputime=10 ms maxcosets=98 totcosets=121
 Large subgroup index OK
 ACEStats for cyclic subgroup:
-  index=168 cputime=0 ms maxcosets=170 totcosets=232
+  index=168 cputime=10 ms maxcosets=170 totcosets=232
 Cyclic subgroup index OK
 Success! ... new relator: 
    x*y*x*y*x*y^-1*x*y*x*y*x*y^-1*x*y^-1*x*y*x*y*x*y*x*y^-1*x*y^-1*x*y^
@@ -1065,7 +1138,7 @@ Candidate relator: x*y*x*y*x*y^-1*x*y*x*y*x*y^-1*x*y*x*y^-1*x*y^-1*x*y^
 -1*x*y*x*y*x*y*x*y^-1*x*y^-1
  #bisyllables = 15 (#bisyllables in tail = 10) #words tested: 1
 ACEStats:
-  index=72 cputime=0 ms maxcosets=102 totcosets=123
+  index=72 cputime=10 ms maxcosets=102 totcosets=123
 Large subgroup index OK
 ACEStats for cyclic subgroup:
   index=168 cputime=0 ms maxcosets=170 totcosets=236
@@ -1085,42 +1158,23 @@ x*y*x*y^-1*x*y^-1 ],
 gap>
 \endexample
 
-\quad`"doL28.g"' &
-This provides a nice small example. You  may  supply  any  `PGRelFind'
-options you wish, and/or you may use the following  option  which  has
-been specifically  designed  to  help  you  get  acquainted  with  the
-`PGRelFind' options (only the equivalent of the `optex'  options  will
-be explicitly observable in the output).
-
-\qquad`optex := <val>' &
-<val>  may  be  an  integer  or  a  list  of  integers  in  the  range
-$1,\ldots,8$. The following produces 135 lines and a  `gap> '  prompt,
-but  is  nevertheless  recommended  (particularly,  if  you  have   an
-`xterm'-type window with the ability to scroll back):
+The following 
 
 \beginexample
-gap> ACEReadResearchExample("doL28.g" : optex := [1,8]);  
+ACEReadResearchExample("doGrp.g" : grp := "L3_3s", n := 1);
 \endexample
 
-\quad`"doL216.g"' &
+is essentially equivalent to
 
-\quad`"doL33.g"' &
+\beginexample
+ACEReadResearchExample("doL33.g");
+\endexample
 
-\quad`"doU33.g"' &
-
-\quad`"doM11.g"' &
-
-\quad`"doL232.g"' &
-
-\quad`"doU34.g"' &
-
-\quad`"doJ1.g"' &
-
-\quad`"doL35.g"' &
-
-\quad`"doPSp44.g"' &
-
-\enditems
+Observe that the option `n' is needed because `grp' selects a list  of
+records (as indicated by the trailing `s' of `"L3_3s"'). Also, observe
+that the `newgens' option  was  not  used  since  we  already  have  a
+presentation where the generators `a' and `b' are an involution and of
+odd prime order, respectively. 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%

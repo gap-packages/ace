@@ -20,34 +20,51 @@ if IsBound(IsACEResExampleOK) and IsACEResExampleOK() then
   Print(
     "# IsACEResExampleOK() sets ACEResExample.grp     from options grp, n\n",
     "#                          ACEResExample.newgens from option  newgens\n");
-  ACEResExample.G :=
-      ACE_PRINT_AND_EVAL(
-          "ACEResExample.G",
-          ACE_JOIN(["TranslatePresentation([a,b],",
-                    "ACEResExample.grp.rels,",
-                    "ACEResExample.grp.sgens,",
-                    "ACEResExample.newgens)"],
-                   "\n                                              ")
-          );
-  ACEResExample.Gn :=
-      ACE_PRINT_AND_EVAL(
-          "ACEResExample.Gn",
-          ACE_JOIN(["PGRelFind(ACEResExample.G.fgens,",
-                    "ACEResExample.G.rels,",
-                    "ACEResExample.G.sgens)"],
-                   "\n                                   ")
-          );
+  if ACEResExample.newgens <> fail then
+    ACEResExample.G :=
+        ACE_PRINT_AND_EVAL(
+            "ACEResExample.G",
+            ACE_JOIN(["TranslatePresentation([a, b],",
+                      "ACEResExample.grp.rels,",
+                      "ACEResExample.grp.sgens,",
+                      "ACEResExample.newgens)"],
+                     "\n                                              ")
+            );
+    ACEResExample.Gn :=
+        ACE_PRINT_AND_EVAL(
+            "ACEResExample.Gn",
+            ACE_JOIN(["PGRelFind(ACEResExample.G.fgens,",
+                      "ACEResExample.G.rels,",
+                      "ACEResExample.G.sgens)"],
+                     "\n                                   ")
+            );
+  else
+    ACEResExample.G :=
+        ACE_PRINT_AND_EVAL(
+            "ACEResExample.G",
+            ACE_JOIN(["PGRelFind([a, b],",
+                      "ACEResExample.grp.rels,",
+                      "ACEResExample.grp.sgens)"],
+                     "\n                                  ")
+            );
+  fi;
 elif ACEResExample.print then
 ## Begin
 # IsACEResExampleOK() sets ACEResExample.grp     from options grp, n
 #                          ACEResExample.newgens from option  newgens
-ACEResExample.G := TranslatePresentation([a,b],
-                                         ACEResExample.grp.rels,
-                                         ACEResExample.grp.sgens,
-                                         ACEResExample.newgens);
-ACEResExample.Gn := PGRelFind(ACEResExample.G.fgens,
-                              ACEResExample.G.rels,
-                              ACEResExample.G.sgens);
+if ACEResExample.newgens <> fail then
+  ACEResExample.G := TranslatePresentation([a, b],
+                                           ACEResExample.grp.rels,
+                                           ACEResExample.grp.sgens,
+                                           ACEResExample.newgens);
+  ACEResExample.Gn := PGRelFind(ACEResExample.G.fgens,
+                                ACEResExample.G.rels,
+                                ACEResExample.G.sgens);
+else
+  ACEResExample.G := PGRelFind([a, b],
+                               ACEResExample.grp.rels,
+                               ACEResExample.grp.sgens);
+fi;
 ## End
 elif not IsBound(IsACEResExampleOK) then
   Print("Error, ACEReadResearchExample: functions and variables undefined.\n",

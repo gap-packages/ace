@@ -23,8 +23,10 @@ Revision.pgrelfind_g :=
     "@(#)$Id$";
 
 ## Begin
-ACEResExample := rec(filename := "pgrelfind.g");
-RequirePackage("ace", "3.0");
+if not(IsBound(ACEResExample) and IsBound(ACEResExample.reread)) then
+  ACEResExample := rec(filename := "pgrelfind.g");
+  RequirePackage("ace", "3.0");
+fi;
 # Use ACE for CosetTableFromGensAndRels coset enumerations
 TCENUM := ACETCENUM;;
 
@@ -436,9 +438,14 @@ local SetConstFromOption, NewRelator, F, a, b, t, permSgens, idx, orderS,
   permSgens := List(t{[1,3..Length(t)-1]}, PermList);
   idx := Length(t[1]);
 
+  if Order(permSgens[1]) <> 2 then
+    Error(a, " (1st gen'r) should be an involution, not of order ",
+          Order(permSgens[1]), "\n");
+  fi;
   orderb := Order(permSgens[2]);
-  if IsEvenInt(orderb) then
-    Error("Order of 2nd generator is ", orderb, " ... should be odd");
+  if orderb = 2 or not IsPrime(orderb) then
+    Error("order of ", b, " (2nd gen'r) is ", orderb, 
+          " ... it should be an odd prime\n");
   fi;
 
   if orderb = 3 then
@@ -1146,13 +1153,14 @@ local head, grp, n, newgens, ok, saved,
 
   IsnOK := function()
     return (grp[Length(grp)] <> 's') or 
-           (IsPosInt(n) and (n <= Length( presentations(grp) ))); 
+           (IsPosInt(n) and (n <= Length( presentations.(grp) ))); 
   end;
 
   IsNewgensOK := function()
     return IsBound(a) and IsBound(b) and IsGensOK(a, b) and
-           IsList(newgens) and (Length(newgens) = 2) and
-           ForAll(newgens, w -> FamilyObj(w) = FamilyObj(a));
+           (newgens = fail or 
+            (IsList(newgens) and (Length(newgens) = 2) and
+             (ForAll(newgens, w -> FamilyObj(w) = FamilyObj(a)))));
   end;
 
   ok := false;
@@ -1162,15 +1170,18 @@ local head, grp, n, newgens, ok, saved,
           "and try again.\n");
   elif ACEResExample.filename = "doGrp.g" and
        not(IsGroupOK() and IsnOK() and IsNewgensOK()) then
+    ACEResExample.reread := true;
     RequirePackage("ace", "3.0");
     ACEReadResearchExample("pgrelfind.g");
     ACEResExample := saved;
-    Print("Error, \"grp\" and \"newgens\" options must have values.\n",
+    Unbind(ACEResExample.reread);
+    Print("Error, ",
+          "`grp' (and maybe `n' and/or `newgens') options must have values.\n",
           "Usage: ACEReadResearchExample(\"doGrp.g\"\n",
           "                              : grp := <grp>,\n",
           "                                [n := <int>,]\n",
-          "                                newgens := [<w1>, <w2>]\n",
-          "                                [, opt := <val>, ...]);\n",
+          "                                [newgens := [<w1>, <w2>]]\n",
+          "                                [, opt := <val> ...]);\n",
           "where <grp> must be a string in the following list:\n",
           RecNames(presentations),"\n",
           "and <w1>, <w2> must be words in `a' and `b'.\n");
@@ -1192,37 +1203,41 @@ local head, grp, n, newgens, ok, saved,
       ACEResExample.newgens := newgens;
     elif not(IsFunctionsOK() and IsBound(a) and IsBound(b) and 
              IsGensOK(a, b)) then
+      ACEResExample.reread := true;
       RequirePackage("ace", "3.0");
       ACEReadResearchExample("pgrelfind.g");
       ACEResExample := saved;
+      Unbind(ACEResExample.reread);
     fi;
   fi;
   return ok;
 end;
 
 ## End
-for s in ["The following are now defined:",
-          "",
-          "Functions:",
-          "  PGRelFind, ClassesGenPairs, TranslatePresentation,",
-          "  IsACEResExampleOK",
-          "Variables:",
-          "  ACEResExample, ALLRELS, newrels, F, a, b, newF, x, y,",
-          "  L2_8, L2_16, L3_3s, U3_3s, M11, L2_32,",
-          "  U3_4s, J1s, L3_5s, PSp4_4s, presentations",
-          "",
-          "Also:",
-          "",
-          "TCENUM = ACETCENUM  (Todd-Coxeter Enumerator is now ACE)",
-          "",
-          "For an example of their application, you might like to try:",
-          "gap> ACEReadResearchExample(\"doL28.g\" : optex := [1,2,4]);",
-          "(the output is 90 lines followed by a 'gap> ' prompt)",
-          "",
-          "For information type: ?Using ACEReadResearchExample"
-         ] 
-do
-  Info(InfoACE, 1, s);
-od;
+if not(IsBound(ACEResExample.reread) and ACEResExample.reread) then
+  for s in ["The following are now defined:",
+            "",
+            "Functions:",
+            "  PGRelFind, ClassesGenPairs, TranslatePresentation,",
+            "  IsACEResExampleOK",
+            "Variables:",
+            "  ACEResExample, ALLRELS, newrels, F, a, b, newF, x, y,",
+            "  L2_8, L2_16, L3_3s, U3_3s, M11, L2_32,",
+            "  U3_4s, J1s, L3_5s, PSp4_4s, presentations",
+            "",
+            "Also:",
+            "",
+            "TCENUM = ACETCENUM  (Todd-Coxeter Enumerator is now ACE)",
+            "",
+            "For an example of their application, you might like to try:",
+            "gap> ACEReadResearchExample(\"doL28.g\" : optex := [1,2,4,5,8]);",
+            "(the output is 65 lines followed by a 'gap> ' prompt)",
+            "",
+            "For information type: ?Using ACEReadResearchExample"
+           ] 
+  do
+    Info(InfoACE, 1, s);
+  od;
+fi;
 
 #E  pgrelfind.g . . . . . . . . . . . . . . . . . . . . . . . . . . ends here 
