@@ -46,7 +46,6 @@ brk> fgens := FreeGeneratorsOfFpGroup(FreeGroup("a"));
 brk> return;
 rec( index := 0, cputime := 13, cputimeUnits := "10^-2 seconds", 
   activecosets := 499998, maxcosets := 499998, totcosets := 499998 )
-gap> 
 \endexample
 
 The example shows that the {\ACE} package does allow  you  to  recover
@@ -581,7 +580,6 @@ gap> ACEStart(1, fgens, [a^2, b^3, (a*b)^5], []
 #I    #---------------------------------
 #I  INDEX = 60 (a=60 r=77 h=1 n=77; l=3 c=0.00; m=66 t=76)
 1
-gap> 
 \endexample
 
 Observe that the `fgens' and  subgroup  generators  (the  empty  list)
@@ -642,7 +640,6 @@ gap> ACEStart(1 : relators := ToACEWords(fgens, [a^2, b^3, (a*b)^5]),
 #I    #---------------------------------
 #I  INDEX = 60 (a=60 r=77 h=1 n=77; l=3 c=0.00; m=66 t=76)
 1
-gap> 
 \endexample
 
 Note the usage  of  `ToACEWords'  (see~"ToACEWords")  to  provide  the
@@ -726,7 +723,6 @@ gap> ACEStart(1, ACEGroupGenerators(1), ACERelators(1), [ a*b ]
 #I  CC: a=12 r=6 h=1 n=16; l=2 c=+0.00; d=0
 #I  INDEX = 12 (a=12 r=16 h=1 n=16; l=3 c=0.00; m=14 t=15)
 1
-gap> 
 \endexample
 
 Observe that we used `ACERelators(1)' (see~"ACERelators") to grab  the
@@ -763,7 +759,6 @@ gap> ACEDumpStatistics();
 #I    cdgap=0 cdidefn=0 cdidedn=0 cdpdl=0 cdpof=0
 #I    cdpdead=0 cdpdefn=0 cddefn=0
 #I    #---------------------------------
-gap> 
 \endexample
 
 The statistic `qcoinc=3' states what we had already observed,  namely,
@@ -796,7 +791,6 @@ gap> ACEDisplayCosetTable([-12]);
 #I      11 ||     10     12     12       2   baBabaB
 #I      12 ||     11     10     11       3   baBabab
 #I  ------------------------------------------------------------
-gap> 
 \endexample
 
 Note  how  the  pre-printout  compaction  phase  now  does  some  work
@@ -807,10 +801,14 @@ columns  be  occupied  by  a  generator/inverse  pair  or  a  pair  of
 involutions. The `a' column is also the  `A'  column,  as  `a'  is  an
 involution.
 
-We could now use `ACEStandardCosetNumbering'  to  produce  a  `lenlex'
-standard table, within {\ACE}, but with respect to the ordering `b, a'
-of the generators, and then call `ACEDisplayCosetTable' again  to  see
-it:
+We now use `ACEStandardCosetNumbering' to produce a `lenlex'  standard
+table within {\ACE}, but note that this is only `lenlex' with  respect
+to  the  ordering   `b, a'   of   the   generators.   Then   we   call
+`ACEDisplayCosetTable' again to see  it.  Observe  that  at  both  the
+standardisation and coset table display steps a  compaction  phase  is
+invoked but on both occasions the lowercase `co:' tag  indicates  that
+nothing is done (all the recovery of dead coset numbers that could  be
+done was done earlier).
 
 \beginexample
 gap> ACEStandardCosetNumbering();
@@ -832,26 +830,20 @@ gap> ACEDisplayCosetTable([-12]);
 #I      11 ||     12     10     12       3   babaBab
 #I      12 ||     10     11     11       2   babaBaB
 #I  ------------------------------------------------------------
-gap> 
 \endexample
-
-Note that at both the standardisation and coset table display  step  a
-compaction phase was invoked but on both occasions the lowercase `co:'
-tag indicates that nothing was done (all the recovery  of  dead  coset
-numbers that could have been done was done earlier).
 
 Of course, the table above is not `lenlex' with respect to  the  order
 of the generators we had originally given to {\ACE}; to get  that,  we
 would have needed to specify `lenlex'  (see~"option  lenlex")  at  the
-enumeration stage. By doing that here, the `lenlex'  option  does  the
-following: behind the scenes it ensures  that  the  relator  `a^2'  is
-passed to {\ACE} as `aa' and then it sets the option `asis' to 1; this
-bit of  skulduggery  stops  {\ACE}  treating  `a'  as  an  involution,
-allowing `a' and `A' (the inverse of `a') to take  up  the  first  two
-columns  of  the  coset  table,  effectively  stopping   {\ACE}   from
-reordering the generators. To see what  we  pass  to  {\ACE},  at  the
-enumeration stage, we set the `InfoACELevel' to 4, but since we  don't
-really want to see messages this time we set `messages := 0'.
+enumeration  stage.  The  effect  of  the  `lenlex'  option   at   the
+enumeration stage is the following: behind the scenes it ensures  that
+the relator `a^2' is passed to {\ACE} as `aa' and  then  it  sets  the
+option `asis' to 1; this bit of skulduggery stops {\ACE} treating  `a'
+as an involution, allowing `a' and `A' (the inverse of `a') to take up
+the first two columns of the coset table, effectively stopping  {\ACE}
+from reordering the generators. To see what is passed  to  {\ACE},  at
+the enumeration stage, we set the `InfoACELevel' to 4,  but  since  we
+don't really want to see messages this time we set `messages := 0'.
 
 \beginexample
 gap> SetInfoACELevel(4);                                       
@@ -869,9 +861,14 @@ gap> ACEStart(1, ACEGroupGenerators(1), ACERelators(1), [ a*b ]
 #I  ToACE> Start;
 #I  INDEX = 12 (a=12 r=17 h=1 n=17; l=3 c=0.00; m=15 t=16)
 1
-gap> SetInfoACELevel(1); # We've seen enough behind the scenes now!
-gap> ACEStandardCosetNumbering();                                  
+gap> ACEStandardCosetNumbering();
+#I  ToACE> standard;
+#I  CO/ST: a=12 r=13 h=1 n=13; c=+0.00
+gap> # The capitalised `CO' indicates space was recovered during compaction
 gap> ACEDisplayCosetTable([-12]);
+#I  ToACE> print:-12;
+#I  ToACE> text:------------------------------------------------------------;
+#I  co: a=12 r=13 h=1 n=13; c=+0.00
 #I   coset ||      a      A      b      B   order   rep've
 #I  -------+---------------------------------------------
 #I       1 ||      2      2      3      2
@@ -886,8 +883,14 @@ gap> ACEDisplayCosetTable([-12]);
 #I      10 ||      9      9     11     12       3   babaBa
 #I      11 ||     12     12     12     10       3   babaBab
 #I      12 ||     11     11     10     11       2   babaBaB
-gap> 
+#I  ------------------------------------------------------------
 \endexample
+
+You may have noticed the use of {\ACE}'s `text' option  several  times
+above; this just tells {\ACE} to print the argument  given  to  `text'
+(as a comment). This is used by the {\GAP} interface  as  a  sentinel;
+when the string appears in the {\ACE}  output,  the  {\GAP}  interface
+knows not to expect anything else.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{Emulating Sims}
