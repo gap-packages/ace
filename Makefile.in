@@ -9,6 +9,11 @@ bindir:
 	if test ! -d bin/@GAPARCH@;  then mkdir bin/@GAPARCH@;  fi
 
 
-default: bindir src/Makefile
+default: bindir src/Makefile.in
+	echo "s/@DATE@/`date`/g" >sedfile
+	sed -f sedfile src/Makefile.in >src/Makefile
 	(cd src; make)
 	mv src/ace bin/@GAPARCH@/ace
+
+clean:	
+	rm -rf bin sedfile src/Makefile Makefile
