@@ -547,11 +547,12 @@ local fgens,rels,sgens,a,i,j,k,n,nums,fullopt,opt,optval,options,known,
     a := SplitString(a, "", " .");
 
     CloseStream(instream);
-    return rec(index      := Int(a[1]),
-               cputimeStr := Concatenation(a[7], ".", a[8]),
-               cputime    := Int(a[7])+Int(a[8])/10^Length(a[8]),
-               maxcosets  := Int(a[9]),
-               totcosets  := Int(a[10]));
+    return rec(index     := Int(a[1]),
+               cputime   := Int(a[7])*10^Length(a[8])+Int(a[8]),
+               cputimeUnits :=Concatenation("10^-", String(Length(a[2])),
+                                            " seconds");
+               maxcosets := Int(a[9]),
+               totcosets := Int(a[10]));
   fi;
 
   # Skip some header until the ` coset ' line

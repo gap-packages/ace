@@ -53,24 +53,24 @@ defined for the {\ACE} interface,  not  just  the  options  `max'  and
 action, the `default' strategy of the {\ACE} enumerator will  be  used
 (see Chapter~"Strategy Options for the  ACE  Enumerator").  An  {\ACE}
 strategy is merely a special option of {\ACE} that sets  a  number  of
-the options described in Chapter~"Options for ACE"  all
-at once. One can set options globally using the function `PushOptions'
-(see Chapter~"ref:Options Stack"  in  the  {\GAP}  Reference  Manual);
-options pushed onto `OptionsStack' this way,  remain  there  until  an
-explicit `PopOptions()' call is made. However, the usual way  to  pass
-options is  behind  a  colon  following  a  function's  arguments  (as
-described  for  the  function  `CallACE'  in  Section~"CallACE",   for
-example); options passed  this  way  are  local,  and  disappear  from
-`OptionsStack' after the function has executed  successfully.  Beware,
-however the function will see any other options on the  `OptionsStack'
-(in particular, any pushed  there  via  `PushOptions',  prior  to  the
-function call),  unless  over-ridden  by  an  option  passed  via  the
-function. Also note that duplication of  option  names  for  different
-programs   may   lead   to    misinterpretations.    You    can    use
-`DisplayOptionsStack' (see  Chapter~"ref:DisplayOptionsStack"  in  the
-{\GAP} Reference Manual) to ensure  that  there  is  no  such  danger.
-However, considering how much of a potential  mine-field  a  non-empty
-`OptionsStack' might be for the unwary user, we provide
+the options described in Chapter~"Options for ACE" all  at  once.  One
+can  set  options  globally  using  the  function  `PushOptions'  (see
+Chapter~"ref:Options Stack" in the {\GAP} Reference  Manual);  options
+pushed onto `OptionsStack' this way, remain there  until  an  explicit
+`PopOptions()' call is made. However, the usual way to pass options is
+behind a colon following a function's arguments (as described for  the
+function `CallACE' in Section~"CallACE", for example); options  passed
+this way are  local,  and  disappear  from  `OptionsStack'  after  the
+function has executed successfully. Beware, however the function  will
+see any other options on the `OptionsStack' (in particular, any pushed
+there  via  `PushOptions',  prior  to  the  function   call),   unless
+over-ridden by an option passed  via  the  function.  Also  note  that
+duplication of  option  names  for  different  programs  may  lead  to
+misinterpretations.   You   can   use    `DisplayOptionsStack'    (see
+Chapter~"ref:DisplayOptionsStack" in the {\GAP} Reference  Manual)  to
+ensure that there is no such danger. However, considering how much  of
+a potential mine-field a non-empty `OptionsStack'  might  be  for  the
+unwary user, we provide
 
 \>FlushOptionsStack()
 
@@ -176,18 +176,17 @@ can call
 
 \>ACEStats( <fgens>, <rels>, <sgens> : <options> )
 
-which returns a record `rec(index=<i>,  cputimeStr=<cs>,  cputime=<c>,
-maxcosets=<m>, totcosets=<t>]' where <i> is the index of the  subgroup
-$\langle <sgens> \rangle$ in $\langle <fgens> \mid <rels> \rangle$ (or
-$0$, whenever the enumeration does not succeed); <cs> is the total CPU
-time used for the enumeration (in seconds) as a string;  <c>  is  also
-the total CPU time, but as a  rational  number;  <m>  is  the  maximum
-number  of  \lq{}alive'  coset  numbers  at  any  one  time   in   the
-enumeration; and <t> is the total number of coset  numbers  that  were
-defined in the  enumeration.  See  also  Section~"Options  controlling
-Input and Output". The same warnings noted in Section~"Using ACE as  a
-Default for Coset Enumerations and some General  Warnings",  regarding
-options, apply.
+which returns a record `rec(index=<i>, cputime=<c>, cputimeUnits=<cu>,
+maxcosets=<m>, totcosets=<t>]' for which  <i>  is  the  index  of  the
+subgroup $\langle <sgens> \rangle$ in  $\langle  <fgens>  \mid  <rels>
+\rangle$ (or $0$, whenever the enumeration does not succeed);  <c>  is
+the total CPU time used as an integer; <cu> is a  string  representing
+the units of <c>, e.g.~`"10^-2 seconds"'; <m> is the maximum number of
+\lq{}alive' coset numbers at any one time in the enumeration; and  <t>
+is the total  number  of  coset  numbers  that  were  defined  in  the
+enumeration. Also see Section~"Options controlling Input and  Output".
+The same warnings noted in Section~"Using ACE as a Default  for  Coset
+Enumerations and some General Warnings", regarding options, apply.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{Writing ACE Standalone Input Files}
