@@ -322,14 +322,14 @@ gap> ACEExample();
 #I    "M12-fel1"       M_12 (Matthieu group)  Id             felsch := 1
 #I    "SL219-hard"     SL(2,19)               ||G : H|| = 180  hard
 #I    "perf602p5"      PerfectGroup(60*2^5,2) ||G : H|| = 480  default
-#I  * "2p17-fel1"      ||G|| = 2^17             ||G : H|| = 1    felsch := 1
+#I  * "2p17-fel1"      ||G|| = 2^17             Id             felsch := 1
+#I    "2p17-fel1a"     ||G|| = 2^17             ||G : H|| = 1    felsch := 1
+#I    "2p17-2p3-fel1"  ||G|| = 2^17             ||G : H|| = 2^3  felsch := 1
+#I    "2p17-2p14-fel1" ||G|| = 2^17             ||G : H|| = 2^14 felsch := 1
+#I    "2p17-id-fel1"   ||G|| = 2^17             Id             felsch := 1
 #I  * "2p18-fel1"      ||G|| = 2^18             ||G : H|| = 2    felsch := 1
 #I  * "big-fel1"       ||G|| = 2^18.3           ||G : H|| = 6    felsch := 1
 #I  * "big-hard"       ||G|| = 2^18.3           ||G : H|| = 6    hard
-#I    "2p17-id-fel1"   ||G|| = 2^17             Id             felsch := 1
-#I    "2p17-2p14-fel1" ||G|| = 2^17             ||G : H|| = 2^14 felsch := 1
-#I    "2p17-2p3-fel1"  ||G|| = 2^17             ||G : H|| = 2^3  felsch := 1
-#I    "2p17-fel1a"     ||G|| = 2^17             ||G : H|| = 1    felsch := 1
 #I  
 #I  Notes
 #I  -----
@@ -667,11 +667,32 @@ Generate  a  Coset  Table"):  whereas  `purec'  completed   the   same
 enumeration with a total number of coset numbers  of  332,  the  `hlt'
 strategy required 3127.
 
-Of course, running `ACEExample' with  `ACEStart'  as  second  argument
-opens up far more flexibility. Try it! Have fun!  Play  with  as  many
-options as you can. Also, note that the `*'-ed examples of  the  index
-fail  to  give  a  coset  table;  so  these  give  you  non-artificial
-`break'-loop examples for you to try.
+Before we finish this section, let us say something about the examples
+listed when one calls `ACEExample' with no arguments that have  a  `*'
+beside them; these are examples for which  the  enumeration  fails  to
+complete. The first such example  listed  is  `"2p17-fel1"',  where  a
+group of order $2^{17}$ is enumerated over the identity subgroup  with
+the `felsch := 1' strategy. The enumeration  fails  after  defining  a
+total number of 416664 coset numbers. (In fact, the enumeration can be
+made to succeed by simply increasing `workspace' to `"4700k"', but  in
+doing so a total of  783255  coset  numbers  are  defined.)  With  the
+example `"2p17-fel1a"' the same group is again enumerated, again  with
+the `felsch := 1' strategy, but this time over the  group  itself  and
+after tweaking a few options, to see how well we  can  do.  The  other
+`"2p17-<XXX>"' examples are again enumerations of the same  group  but
+over smaller and smaller subgroups, until we once again enumerate over
+the identity subgroup but far more efficiently this time (only needing
+to define a total of 550659 coset numbers, which can be achieved  with
+`workspace' set to `"3300k"').
+
+The other `*'-ed examples enumerate overgroups of the group  of  order
+$2^{17}$ of the `"2p17-<XXX>"' examples. It's recommended that you try
+these with second argument `ACECosetTableFromGensAndRels' so that  you
+enter a `break'-loop, where you  can  experiment  with  modifying  the
+options using `SetACEOptions'. The example `"2p18-fel1"' can  be  made
+to succeed with `hard, mend, workspace := "10M"'; why don't you see if
+you can do better! There  are  no  hints  for  the  other  two  `*'-ed
+examples; they are exercises for you to try.
 
 Let's now restore the original value of `OnBreak':
 
@@ -679,14 +700,18 @@ Let's now restore the original value of `OnBreak':
 gap> OnBreak := NormalOnBreak;;
 \endexample
 
+Of course, running `ACEExample' with  `ACEStart'  as  second  argument
+opens up far more flexibility. Try it! Have fun!  Play  with  as  many
+options as you can. 
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{Using ACEReadResearchExample}
 
 \indextt{PGRelFind}
 Without an argument, the function `ACEReadResearchExample'  reads  the
 file `"pgrelfind.g"' in the  `res-examples'  directory  which  defines
-functions such as `PGRelFind', that were used in \cite{CHHR01} to show
-that the group $L_3(5)$ has deficiency 0.
+{\GAP} functions such as `PGRelFind', that were used in  \cite{CHHR01}
+to show that the group $L_3(5)$ has deficiency 0.
 %display{nonhtml}
 %
 %*Some background*

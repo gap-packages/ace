@@ -1538,7 +1538,7 @@ end);
 ##  the user started the process via 'ACEStart(0);').
 ##
 InstallGlobalFunction(ACEParameters, function(arg)
-local ioIndex, datarec, line, fieldsAndValues, parameters, sgens, i, opt;
+local ioIndex, datarec, line, fieldsAndValues, parameters, sgens, i, opt, val;
 
   ACE_IOINDEX_ARG_CHK(arg);
   ioIndex := ACE_IOINDEX(arg);
@@ -1594,8 +1594,12 @@ local ioIndex, datarec, line, fieldsAndValues, parameters, sgens, i, opt;
                          line -> IS_ACE_MATCH(line, "  #---"));
   i := 1;
   while i < Length(fieldsAndValues) do
-    parameters.(ACEOptionData( fieldsAndValues[i] ).synonyms[1]) :=
-        Int(fieldsAndValues[i + 1]);
+    val := Int(fieldsAndValues[i + 1]);
+    if val = fail then
+      # workspace can be an integer or a string
+      val := fieldsAndValues[i + 1];
+    fi;
+    parameters.(ACEOptionData( fieldsAndValues[i] ).synonyms[1]) := val;
     i := i + 2;
   od;
   return parameters;
