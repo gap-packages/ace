@@ -24,28 +24,39 @@ ACEinfo.file:=PositionSublist(ACEinfo.version,"ACE")+3;
 ACEinfo.version:=ACEinfo.version{
                          [ACEinfo.file+1..Position(ACEinfo.version,' ',ACEinfo.file)-1]};
 
-Print("  Loading the `ACE' share package version ",PACKAGES_VERSIONS.ace,"\n");
+Print("  Loading the `ACE' share package\n");
 Print("  Using ACE binary version ",ACEinfo.version,"\n");
 
 BindGlobal("CallACE",function(fgens,grels,fsgens)
-  local j,k,n,nums,i,DoWords,infile,l,ind,p,gens,w,tab,a,redir,flag;
+  local j,k,n,nums,i,DoWords,ParseValueOption,ParseBooleanOption,infile,l,
+        ind,p,gens,w,tab,a,redir,flag;
+
   n:=Length(fgens);
   if ForAny(fgens,i->NumberSyllables(i)<>1 or ExponentSyllable(i,1)<>1) then
     Error("wrong fgens");
   fi;
   nums:=List(fgens,i->GeneratorSyllable(i,1));
   IsSSortedList(nums); # force sort flag
-  PrintTo(ACEinfo.infile,"ENUM:G\nGR:");
+
+
+  # do we want to produce only an input file
+  infile:=ACEinfo.infile;
+  a:=ValueOption("outfile");
+  if a<>fail and IsString(a) then
+    infile:=a;
+  fi;
+
+  PrintTo(infile,"ENUM:G\nGR:");
   gens:=[];
   for i in [1..n] do
     w:=WordAlp(CHARS_LALPHA,i);
     Add(gens,w);
-    AppendTo(ACEinfo.infile,w);
+    AppendTo(infile,w);
     if i<n then
-      AppendTo(ACEinfo.infile,",");
+      AppendTo(infile,",");
     fi;
   od;
-  AppendTo(ACEinfo.infile,";\nREL:");
+  AppendTo(infile,";\nREL:");
 
   DoWords:=function(w)
     local i,j,m,e,n;
@@ -54,147 +65,144 @@ BindGlobal("CallACE",function(fgens,grels,fsgens)
       for j in [1..m] do
         n:=Position(nums,GeneratorSyllable(w[i],j));
         e:=ExponentSyllable(w[i],j);
-        AppendTo(ACEinfo.infile,WordAlp(CHARS_LALPHA,n));
+        AppendTo(infile,WordAlp(CHARS_LALPHA,n));
         if e<>1 then
-          AppendTo(ACEinfo.infile,"^",e);
+          AppendTo(infile,"^",e);
         fi;
         if j<m then
-          AppendTo(ACEinfo.infile,"*");
+          AppendTo(infile,"*");
         fi;
       od;
       if i<Length(w) then
-        AppendTo(ACEinfo.infile,",");
+        AppendTo(infile,",");
       fi;
     od;
   end;
 
   DoWords(grels);
 
-  AppendTo(ACEinfo.infile,";\nSUBG:H\nGEN:");
+  AppendTo(infile,";\nSUBG:H\nGEN:");
   DoWords(fsgens);
-  AppendTo(ACEinfo.infile,";\n");
+  AppendTo(infile,";\n");
 
   # now do the options
-  a:=ValueOption("com");
-  if IsInt(a) and a>=0 then
-    AppendTo(ACEinfo.infile,"COM:",a,";\n");
-  fi;
 
-  a:=ValueOption("workspace");
-  if IsInt(a) and a>0 then
-    AppendTo(ACEinfo.infile,"WO:",a,";\n");
-  fi;
+  ParseBooleanOption:=function(arg)
+    a:=ValueOption(arg[1]);
+    if a=true then
+      if Length(arg)>1 then
+	AppendTo(infile,arg[2],";\n");
+      else
+	AppendTo(infile,arg[1],";\n");
+      fi;
+    elif a=false then
+      if Length(arg)>2 then
+	AppendTo(infile,arg[3],";\n");
+      fi;
+    fi;
+  end;
 
-  a:=ValueOption("max");
+  ParseValueOption:=function(arg)
+    a:=ValueOption(arg[1]);
+    if a<>fail then
+      if IsBool(a) then
+	PopOptions();
+        Error("Option ",arg[1]," needs a value");
+      fi;
+      AppendTo(infile,arg[Length(arg)],":",String(a),";\n");
+    fi;
+  end;
+
+  # first the strategies
+  ParseBooleanOption("default");
+  ParseBooleanOption("easy");
+  ParseBooleanOption("hard");
+  ParseBooleanOption("hlt");
+  ParseBooleanOption("purec");
+  ParseBooleanOption("purer");
+  ParseBooleanOption("felsch0","felsch:0");
+  ParseBooleanOption("felsch1","felsch:1");
+  ParseBooleanOption("sims1","sims:1");
+  ParseBooleanOption("sims3","sims:3");
+  ParseBooleanOption("sims5","sims:5");
+  ParseBooleanOption("sims7","sims:7");
+  ParseBooleanOption("sims9","sims:9");
+
+  # now the modifying options
+  ParseBooleanOption("asis","asis:1","asis:0");
+  ParseValueOption("ct");
+  ParseValueOption("rt");
+  ParseValueOption("number");
+  ParseBooleanOption("mendelsohn","mend:1","mend:0");
+  ParseValueOption("fill");
+  ParseValueOption("pmode");
+  ParseValueOption("psize");
+  ParseBooleanOption("norow","row:0","row:1");
+  ParseValueOption("look");
+  ParseValueOption("dmode");
+  ParseValueOption("dsize");
+
+  # Technical options
+  ParseValueOption("workspace");
+  ParseValueOption("rtime","time");
+  ParseValueOption("maxdef","max");
+
+  # Info Stuff
+  ParseValueOption("aep");
+  a:=ValueOption("rep");
   if a<>fail then
-    if IsList(a) then
-      l:="";
-      for i in [1..Length(a)] do
-        Append(l,String(a[i]));
-        if i<Length(a) then
-          Add(l,',');
-        fi;
-      od;
-      AppendTo(ACEinfo.infile,"MAX:",l,";\n");
-    elif IsInt(a) then
-      AppendTo(ACEinfo.infile,"MAX:",a,";\n");
+    if IsInt(a) then
+      AppendTo(infile,"rep:",a,";\n");
+    elif IsList(a) then
+      AppendTo(infile,"rep:",a[1],",",a[2],";\n");
     fi;
   fi;
 
-  a:=ValueOption("ct");
-  if a<>fail then
-    if IsList(a) then
-      l:="";
-      for i in [1..Length(a)] do
-        Append(l,String(a[i]));
-        if i<Length(a) then
-          Add(l,',');
-        fi;
-      od;
-      AppendTo(ACEinfo.infile,"CT:",l,";\n");
-    elif IsInt(a) then
-      AppendTo(ACEinfo.infile,"CT:",a,";\n");
-    fi;
-  fi;
-
-  a:=ValueOption("rt");
-  if a<>fail then
-    if IsList(a) then
-      l:="";
-      for i in [1..Length(a)] do
-        Append(l,String(a[i]));
-        if i<Length(a) then
-          Add(l,',');
-        fi;
-      od;
-      AppendTo(ACEinfo.infile,"RT:",l,";\n");
-    elif IsInt(a) then
-      AppendTo(ACEinfo.infile,"RT:",a,";\n");
-    fi;
-  fi;
-
-  a:=ValueOption("time");
-  if IsInt(a) and a>0 then
-    AppendTo(ACEinfo.infile,"TI:",a,";\n");
-  fi;
-
-  a:=ValueOption("fill");
-  if a<>fail then
-    if IsList(a) then
-      l:="";
-      for i in [1..Length(a)] do
-        Append(l,String(a[i]));
-        if i<Length(a) then
-          Add(l,',');
-        fi;
-      od;
-      AppendTo(ACEinfo.infile,"FI:",l,";\n");
-    elif IsInt(a) then
-      AppendTo(ACEinfo.infile,"FI:",a,";\n");
-    fi;
-  fi;
-
-  a:=ValueOption("mendelsohn");
-  if a<>fail then
-    AppendTo(ACEinfo.infile,"MEND:1;\n");
-  fi;
-  a:=ValueOption("asis");
-  if a<>fail then
-    AppendTo(ACEinfo.infile,"ASIS:0;\n");
-  fi;
   a:=ValueOption("mess");
   if a<>fail then
     if IsInt(a) and (a<-1 or a>1) then
-      AppendTo(ACEinfo.infile,"MESS:",a,";\n");
+      AppendTo(infile,"MESS:",a,";\n");
     fi;
     redir:="";
   else
     redir:="> temp";
   fi;
 
+  a:=ValueOption("messfile");
+  if a<>fail then
+    AppendTo(infile,"AO:",a,";\n");
+    redir:="> temp";
+  fi;
 
-  AppendTo(ACEinfo.infile,"END\nAO:");
-  AppendTo(ACEinfo.infile,ACEinfo.outfile);
-  AppendTo(ACEinfo.infile,";\nPR: 0;\n");
+  AppendTo(infile,"END\n");
+
+  if infile<>ACEinfo.infile then
+    # we only wanted to write an input file
+    return;
+  fi;
+
+  AppendTo(ACEinfo.infile,"AO:",ACEinfo.outfile);
+  AppendTo(ACEinfo.infile,";\nPR;\n");
   Exec(Concatenation("cd ",Filename(ACEinfo.tmpdir,""),"; ",
           ACEinfo.binary," <ein ",redir));
 
   infile:=InputTextFile(ACEinfo.outfile);
   l:=ReadLine(infile);
 
-  # skip some header
-  while l<>fail and l[1]<>' ' do
+  # skip some header until the ` coset ' line
+  while l<>fail and l{[1..6]}<>" coset" do
     l:=ReadLine(infile);
   od;
 
   if l=fail then
+    PopOptions();
     Error("no output from ACE?");
   fi;
 
   # get the indices
   ind:=[];
   p:=0;
-  i:=1;
+  i:=9;
   while i<Length(l) do
     while i<Length(l) and l[i] in " \n" do
       i:=i+1;
@@ -212,16 +220,20 @@ BindGlobal("CallACE",function(fgens,grels,fsgens)
       fi;
     fi;
   od;
+  # read the `---' line
+  l:=ReadLine(infile);
+
   # now read the table
   tab:=List([1..n],i->[]);
   p:=0;
   l:=ReadLine(infile);
   flag:=true;
-  while flag and l<>fail and Length(l)>1 do
+  while flag and l<>fail and Length(l)>1 and l[1]<>'=' do
     p:=p+1;
-    l:=SplitString(l,""," :\n"); # remove colon, space and newline
+    l:=SplitString(l,""," :|\n"); # remove colon, space, | and newline
     # syntax check
     if Int(l[1])=fail or Int(l[1])<>p then
+      PopOptions();
       Error("syntax error in file");
     fi;
     for i in [1..n] do
@@ -271,5 +283,6 @@ BindGlobal("ACETCENUM",rec(name:="ACE-enumerator",
             "to `ACE'.\nType `quit;' to exit to the main loop.");
     fi;
   until l<>fail;
+  StandardizeTable(l);
   return l;
 end));
