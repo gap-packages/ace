@@ -39,6 +39,7 @@ DeclareGlobalFunction("InfoACELevel");
 DeclareGlobalFunction("SetInfoACELevel");
 DeclareGlobalFunction("CALL_ACE");
 DeclareGlobalFunction("ACECosetTableFromGensAndRels");
+DeclareGlobalFunction("IsACEStandardCosetTable");
 DeclareGlobalFunction("IsACEGeneratorsInPreferredOrder");
 DeclareGlobalFunction("ACE_READ_AS_FUNC");
 DeclareGlobalFunction("ACEExample");

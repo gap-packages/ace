@@ -204,6 +204,38 @@ end);
 #############################################################################
 ####
 ##
+#F  IsACEStandardCosetTable . . . . . . Returns true if table is standardised
+##  . . . . . . . . . . . . . . . . . . according to GAP's default scheme  or
+##  . . . . . . . . . . . . . . . . . . with the lenlex option, according  to
+##  . . . . . . . . . . . . . . . . . . . . the lenlex standardisation scheme
+##
+InstallGlobalFunction(IsACEStandardCosetTable, function(table)
+local geninvIndices, index, next, j, i;
+
+  if ValueOption("lenlex") = true then
+    geninvIndices := [1 .. Length(table)];
+  else
+    geninvIndices := [1, 3 .. Length(table) - 1];
+  fi;
+
+  index := Length( table[1] );
+  next := 2;
+  for j in [1 .. index - 1] do
+    for i in geninvIndices do
+      if table[i][j] >= next then
+        if table[i][j] > next then
+          return false;
+        fi;
+        next := next + 1;
+      fi;
+    od;
+  od;
+  return true;
+end);
+
+#############################################################################
+####
+##
 #F  IsACEGeneratorsInPreferredOrder . . . . . Returns true if the  generators
 ##  . . . . . . . . . . . . . . . . . . . . . gens are already in  the  order
 ##  . . . . . . . . . . . . . . . . . . . . . . . . . . . .  preferred by ACE
@@ -216,7 +248,7 @@ end);
 ##  for relators that determine  whether  or  not  gens[1]  and  gens[2]  are
 ##  involutions.
 ##
-##  If IsACEGeneratorsInPreferredOrder would return true, it is  possible  to
+##  If IsACEGeneratorsInPreferredOrder would return false, it is possible  to
 ##  enforce a user's order of the generators within ACE, by  enforcing  ACE's
 ##  `asis' option and passing the relator,  that  determines  gens[1]  is  an
 ##  involution,  explicitly  to  ACE   as:   gens[1]*gens[1]   (rather   than

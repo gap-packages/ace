@@ -461,7 +461,7 @@ end);
 ##
 ##
 InstallGlobalFunction(ACE_COSET_TABLE, 
-                      function(enumIndex, acegens, iostream, readline)
+                      function(activecosets, acegens, iostream, readline)
 local n, line, genColIndex, invColIndex, table, i, rowi, j, colj, invcolj;
 
   n := Length(acegens);
@@ -499,7 +499,7 @@ local n, line, genColIndex, invColIndex, table, i, rowi, j, colj, invcolj;
       Add(table[2*j - 1], Int(rowi[ genColIndex[j] ]));
       Add(table[2*j],     Int(rowi[ invColIndex[j] ]));
     od;
-  until i = enumIndex;
+  until i = activecosets;
 
   return table;
 end);
@@ -1831,8 +1831,8 @@ end);
 #F  ACECosetTable  . . . . . . . . . . . .  Extracts the coset table from ACE
 ##
 InstallGlobalFunction(ACECosetTable, function(arg)
-local ioIndex, enumIndex, ACEout, iostream, datarec, fgens, lenlex, cosettable,
-      ACEOnBreak, NormalOnBreak, SetACEOptions, DisplayACEOptions;
+local ioIndex, ACEout, iostream, datarec, fgens, lenlex, incomplete,
+      cosettable, ACEOnBreak, NormalOnBreak, SetACEOptions, DisplayACEOptions;
 
   if Length(arg) = 2 or Length(arg) > 3 then
     Error("Expected 0, 1 or 3 arguments ... not ", Length(arg), " arguments\n");
@@ -1859,7 +1859,9 @@ local ioIndex, enumIndex, ACEout, iostream, datarec, fgens, lenlex, cosettable,
       WRITE_LIST_TO_ACE_STREAM(datarec.stream, ["start;"]);
       WRITE_LIST_TO_ACE_STREAM(datarec.stream, ["standard;"]);
     fi;
-    if datarec.stats.index = 0 then
+    incomplete := datarec.stats.index = 0 and
+                  DATAREC_VALUE_ACE_OPTION(datarec, false, "incomplete");
+    if not incomplete and datarec.stats.index = 0 then
       Info(InfoACE + InfoWarning, 1, 
            "The `ACE' coset enumeration failed with the result:");
       Info(InfoACE + InfoWarning, 1, datarec.enumResult);
@@ -1870,14 +1872,10 @@ local ioIndex, enumIndex, ACEout, iostream, datarec, fgens, lenlex, cosettable,
       return fail;
     else
       WRITE_LIST_TO_ACE_STREAM(datarec.stream, [ "Print Table;" ]);
-      cosettable := ACE_COSET_TABLE(datarec.stats.index, 
+      cosettable := ACE_COSET_TABLE(datarec.stats.activecosets, 
                                     datarec.acegens, 
                                     datarec.stream, 
                                     READ_NEXT_LINE);
-      if not lenlex then
-        StandardizeTable(cosettable);
-      fi;
-      return cosettable;
     fi;
   else
     # Called non-interactively
@@ -1923,8 +1921,11 @@ local ioIndex, enumIndex, ACEout, iostream, datarec, fgens, lenlex, cosettable,
       fi;
       iostream := InputTextFile(ACEout.outfile);
       ACEData.enumResult := ACE_ENUMERATION_RESULT(iostream, ReadLine);
-      enumIndex := ACE_STATS(ACEData.enumResult).index;
-      if enumIndex = 0 then
+      ACEData.stats := ACE_STATS(ACEData.enumResult);
+      incomplete := ACEData.stats.index = 0 and
+                    VALUE_ACE_OPTION(RecNames( ACE_OPTIONS() ), 
+                                     false, "incomplete");
+      if not incomplete and ACEData.stats.index = 0 then
         CloseStream(iostream);
         if ACEout.silent then
           return fail;
@@ -1943,16 +1944,20 @@ local ioIndex, enumIndex, ACEout, iostream, datarec, fgens, lenlex, cosettable,
           fi;
         fi;
       else
-        cosettable := ACE_COSET_TABLE(
-                          enumIndex, ACEout.acegens, iostream, ReadLine);
+        cosettable := ACE_COSET_TABLE(ACEData.stats.activecosets,
+                                      ACEout.acegens, iostream, ReadLine);
         CloseStream(iostream);
-        if not lenlex then
-          StandardizeTable(cosettable);
-        fi;
-        return cosettable;
+        break;
       fi;
     until false;
   fi;
+  if incomplete then
+    Info(InfoACE + InfoWarning, 1, 
+         "ACECosetTable: Warning: Coset table is incomplete.");
+  elif not lenlex then
+    StandardizeTable(cosettable);
+  fi;
+  return cosettable;
 end);
 
 #############################################################################
