@@ -249,7 +249,7 @@ present; <subgens> must be a string or list of strings that the {\ACE}
 binary can interpret as words in the group generators.
 
 The enumeration must  be  (re)`start'ed  or  `redo'ne,  it  cannot  be
-`continue'd.
+`continu'ed.
 
 To convert a {\GAP} list <sgens> of subgroup generators  in  the  free
 group generators <fgens> into a form  suitable  for  the  `generators'
@@ -265,7 +265,7 @@ relators present; <relators> must be a string or list of strings  that
 the {\ACE} binary can interpret as words in the group generators.
 
 The enumeration must  be  (re)`start'ed  or  `redo'ne,  it  cannot  be
-`continue'd.
+`continu'ed.
 
 To convert a  {\GAP}  list  <rels>  of  relators  in  the  free  group
 generators <fgens> into a form suitable for the `rl' option,  use  the
@@ -341,8 +341,8 @@ coset representatives.
 Prints the possible enumeration `mode's.
 (Shortest abbreviation: `mo'.)
 
-Prints the possible enumeration  `mode's  (i.e.~which  of  `continue',
-`redo' or `start' are possible (see~"option continue",  "option  redo"
+Prints the possible  enumeration  `mode's  (i.e.~which  of  `continu',
+`redo' or `start' are possible (see~"option  continu",  "option  redo"
 and "option start").
 
 *INTERACTIVELY*, use `ACEModes' (see~"ACEModes").
@@ -380,16 +380,22 @@ cause a collapse to a smaller index.
 
 *INTERACTIVELY*, use `ACERedo' (see~"ACERedo").
 
-\>`continue'{option continue}@{option `continue'}&
-`Continue's the current enumeration, building upon the existing table.
+\atindex{option continue!deprecated: use continu}%
+{@option \noexpand`continue'!deprecated: use \noexpand`continu'}
+\>`continu'{option continu}@{option `continu'}&
+`Continu'es the current enumeration, building upon the existing table.
 (Shortest abbreviation: `cont'.)
 
 If a previous run stopped without producing a finite index you can, in
-principle, change any of the parameters and `continue' on. Of  course,
+principle, change any of the parameters and `continu'e on. Of  course,
 if you make any changes which invalidate the current table, you  won't
 be allowed to `continue',  although  you  may  be  allowed  to  `redo'
 (see~"option redo"). If `redo' is not  allowed,  you  must  re-`start'
 (see~"option start").
+
+*Note:* The {\ACE} standalone allows the option `continue',  but  this
+is (as of {\GAP} 4.3) a {\GAP} keyword, and so {\GAP} users  must  use
+(mixed-case abbreviations of) `continu'.
 
 *INTERACTIVELY*, use `ACEContinue' (see~"ACEContinue").
 

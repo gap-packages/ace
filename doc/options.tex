@@ -34,8 +34,8 @@ gap> RecNames(KnownACEOptions);
   "aceincomment", "aceexampleoptions", "silent", "lenlex", "semilenlex", 
   "incomplete", "sg", "rl", "aep", "ai", "ao", "aceoutfile", "asis", "begin", 
   "start", "bye", "exit", "qui", "cc", "cfactor", "ct", "check", "redo", 
-  "compaction", "continue", "cycles", "dmode", "dsize", "default", "ds", 
-  "dr", "dump", "easy", "echo", "enumeration", "felsch", "ffactor", "fill", 
+  "compaction", "continu", "cycles", "dmode", "dsize", "default", "ds", "dr", 
+  "dump", "easy", "echo", "enumeration", "felsch", "ffactor", "fill", 
   "group", "generators", "relators", "hard", "help", "hlt", "hole", 
   "lookahead", "loop", "max", "mendelsohn", "messages", "monitor", "mode", 
   "nc", "normal", "no", "options", "oo", "order", "path", "pmode", "psize", 
@@ -105,22 +105,25 @@ passed options this way, will also  see  any  global  options  or  any
 options passed down recursively from functions calling that  function,
 unless those  options  are  over-ridden  by  options  passed  via  the
 function. Also note that duplication of  option  names  for  different
-programs may lead to misinterpretations. Considering  how  much  of  a
-potential mine-field a  non-empty  `OptionsStack'  might  be  for  the
-unwary user, we have provided
+programs  may  lead   to   misinterpretations.   Since   a   non-empty
+`OptionsStack' is potentially a mine-field for the  unwary  user,  the
+function  `ResetOptionsStack'  (see~"ref:ResetOptionsStack"   in   the
+Reference Manual) is now in the {\GAP} library and
 
 \>FlushOptionsStack() F
 
-which simply executes `PopOptions()' until `OptionsStack' is empty.
+introduced in version 3.001 of the {\ACE} Share Package to perform the
+same function, is now a synonym  for  `ResetOptionsStack';  it  simply
+executes `PopOptions()' until `OptionsStack' is empty.
 
-However, `FlushOptionsStack' does not wipe  out  the  options  already
-passed  to  an  *interactive*  {\ACE}  process.   We   have   provided
-`GetACEOptions' (see~"GetACEOptions") to keep track  of  options  that
-the {\ACE} binary process still considers active, which may or may not
-be  still  on   the   `OptionsStack'.   There   is   the   interactive
-`SetACEOptions' (see~"SetACEOptions") to change such options,  or,  of
-course, you can always elect to use `ACEQuit' (see~"ACEQuit") and then
-start a new interactive {\ACE} process.
+However, `ResetOptionsStack' (or `FlushOptionsStack')  does  not  wipe
+out the options already passed to an *interactive* {\ACE} process.  We
+have provided `GetACEOptions' (see~"GetACEOptions") to keep  track  of
+options that the {\ACE} binary process still considers  active,  which
+may  or  may  not  be  still  on  the  `OptionsStack'.  There  is  the
+interactive  `SetACEOptions'  (see~"SetACEOptions")  to  change   such
+options, or,  of  course,  you  can  always  elect  to  use  `ACEQuit'
+(see~"ACEQuit") and then start a new interactive {\ACE} process.
 
 Finally, there will be situations where an {\ACE}  interface  function
 needs to be told explicitly to ignore options passed down  recursively
@@ -161,11 +164,12 @@ respectively; (they are the only multiple-word {\ACE}  binary  options
 that do not have a single word alternative).  The  *only*  single-word
 {\ACE}  binary  options  that  are  *not*  available  via  the  {\ACE}
 interface are abbreviations that clash with {\GAP} keywords (e.g.~`fi'
-for `fill', and `rec' for `recover'). The detail of this paragraph  is
-probably of little importance to the {\GAP} user; these comments  have
-been included for the user who  wishes  to  reconcile  the  respective
-functionalities of the {\ACE} interface and the {\ACE} standalone, and
-are probably of most value to standalone users.
+for `fill', `rec' for `recover' and  `continu'  for  `continue').  The
+detail of this paragraph is  probably  of  little  importance  to  the
+{\GAP} user; these comments have been included for the user who wishes
+to reconcile the respective functionalities of  the  {\ACE}  interface
+and  the  {\ACE}  standalone,  and  are  probably  of  most  value  to
+standalone users.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{Honouring of the order in which ACE Options are passed}

@@ -45,6 +45,7 @@ F 1.11. ACEPackageVersion
 C install.tex 2. Installing and Loading the ACE Share Package
 S 2.1. Installing the ACE Share Package
 S 2.2. Loading the ACE Share Package
+I 2.2. banner!suppression
 C basics.tex 3. Some Basics
 I 3.0. strategy
 I 3.0. Felsch strategy
@@ -395,7 +396,8 @@ F 10.3. option begin
 F 10.3. option start
 F 10.3. option check
 F 10.3. option redo
-F 10.3. option continue
+I 10.3. option continue!deprecated: use continu
+F 10.3. option continu
 S 10.4. Options that Interact with the Operating System
 F 10.4. option ai
 F 10.4. option ai
