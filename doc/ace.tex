@@ -152,7 +152,7 @@ integers, the internal message level of `ACE' is changed.
 
 \enditems
 
-See the `ACE' manual for a more detailled description of the function of
+See the `ACE' `README' file for a more detailled description of the function of
 these options.
 
 The following example calls ACE for up to 500 cosets using
@@ -179,3 +179,28 @@ INDEX = 480  (MAX=480 TOT=684 KNR=67 KNC=481 CPU=0.06)
 #COINC: CT=0 RT=74 LA=65 ap=1
 \endtt
 
+If `ACE' is made the standard coset enumerator the same method of passing
+arguments may be used with all other commands and will affect coset
+enumerations. As an example we use the `ACE' enumerator to compute the
+permutation representation of a perfect group from the data library:
+
+\begintt
+gap> PerfectGroup(IsPermGroup,16*60,1:max:=[50,500,40],mess);
+Start ACE 2.000 on Fri Oct 23 10:09:53 1998
+host name: muir
+
+Enumeration: G;
+INDEX = 16 (MAX=30 TOT=35 KNR=36 KNC=1 CPU=0.00)
+INDEX = 16 (MAX=30 TOT=35 KNR=36 KNC=1 CPU=0.00)
+INDEX = 16 (MAX=30 TOT=35 KNR=36 KNC=1 CPU=0.00)
+INDEX = 16 (MAX=30 TOT=35 KNR=36 KNC=1 CPU=0.00)
+INDEX = 16 (MAX=30 TOT=35 KNR=36 KNC=1 CPU=0.00)
+INDEX = 16 (MAX=30 TOT=35 KNR=36 KNC=1 CPU=0.00)
+INDEX = 16 (MAX=30 TOT=35 KNR=36 KNC=1 CPU=0.01)
+INDEX = 16 (MAX=30 TOT=35 KNR=36 KNC=1 CPU=0.00)
+INDEX = 16 (MAX=30 TOT=35 KNR=36 KNC=1 CPU=0.00)
+INDEX = 16 (MAX=30 TOT=35 KNR=36 KNC=1 CPU=0.00)
+INDEX = 16 (MAX=30 TOT=35 KNR=36 KNC=1 CPU=0.00)
+INDEX = 16 (MAX=30 TOT=35 KNR=36 KNC=1 CPU=0.00)
+A5 2^4
+\endtt
