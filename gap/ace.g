@@ -432,11 +432,13 @@ local fgens,rels,sgens,a,i,j,k,n,nums,fullopt,opt,optval,options,known,
   end;
 
   for opt in options do
+    fullopt := FullOptionName(opt); # known is set here as a side-effect
     # We don't pass the options in the RHS list following to the
     # ACE infile, here (i.e. within this `for' loop).
-    fullopt := FullOptionName(opt); # known is set here as a side-effect
+    # The options "echo", "outfile" and "silent" are not passed to the ACE 
+    # binary at all, and "messfile" is only passed to the ACE binary as "ao".
     donothing := fullopt in ["echo", "outfile", "ao", "messfile", 
-                             "enumeration", "subgroup", 
+                             "enumeration", "subgroup", "silent",
                              "messages", "monitor"];
     optval := ValueOption(opt);
     if optval = true then
