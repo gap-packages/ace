@@ -26,7 +26,7 @@ interface, we provide other functions for interactive use.
 \beginitems
 
 \>`aep:=<val>'{option aep}@{option `aep'}&
-Runs  the enumeration for `a'll `e'quivalent `p'resentations;
+Runs the enumeration for `a'll `e'quivalent `p'resentations;
 <val> is in the integer range 0 to 7.
 
 The `aep' option runs  an  enumeration  for  combinations  of  relator
@@ -106,7 +106,7 @@ Interactively,             use              `ACEAllEquivPresentations'
 
 \>`rep:=<val>'{option rep}@{option `rep'}
 \>`rep:=[<val>, <Npresentations>]'{option rep}@{option `rep'}&
-Runs  the enumeration for `r'andom `e'quivalent `p'resentations;
+Run the enumeration for `r'andom `e'quivalent `p'resentations;
 <val> is in the integer range 0 to 7;
 <Npresentations> must be a positive integer.
 
@@ -153,9 +153,8 @@ Interactively,            use            `ACERandomEquivPresentations'
 \beginitems
 
 \>`generators:=<wordList>'{option generators}@{option `generators'}&
-Define the subgroup `generators'; <wordList> must be a list  of  words
-in the group generators.
-(Shortest abbreviation: `gen'.)
+Defines the subgroup `generators'; <wordList> must be a list of  words
+in the group generators. (Shortest abbreviation: `gen'.)
 
 There should *never* be a need to use this command, even when creating
 a standalone input file. The subgroup generators should  be  input  as
@@ -164,9 +163,8 @@ there are no subgroup generators and the  subgroup  is  trivial.  This
 command allows a list of subgroup generating words to be entered.
 
 \>`group:=<list>'{option group}@{option `group'}&
-Define the `group' generators; <list> must be a list of  {\GAP}  group
-generators.
-(Shortest abbreviation: `gr'.)
+Defines the `group' generators; <list> must be a list of {\GAP}  group
+generators. (Shortest abbreviation: `gr'.)
 
 There should *never* be a need to use this command, even when creating
 a standalone input file. The group generators should be input  as  one
@@ -193,9 +191,8 @@ the definition sequence of cosets and  impact  the  statistics  of  an
 enumeration.
 
 \>`relators:=<wordList>'{option relators}@{option `relators'}&
-Define the group `relators'; <wordList> must be a list of words in the
-group generators.
-(Shortest abbreviation: `rel'.)
+Defines the group `relators'; <wordList> must be a list  of  words  in
+the group generators. (Shortest abbreviation: `rel'.)
 
 There should *never* be a need to use this command, even when creating
 a standalone input file. The group relators should be input as one  of
@@ -213,7 +210,7 @@ Interactively,             use              `ACEAddSubgroupGenerators'
 (see~"ACEAddSubgroupGenerators").
 
 \>`rl:=<wordList>'{option rl}@{option `rl'}&
-Appends the `r'elator `l'ist,  <wordList>  to  the  existent  list  of
+Appends the `r'elator  `l'ist  <wordList>  to  the  existing  list  of
 relators present; <wordList> must be a list  of  words  in  the  group
 generators.
 
@@ -223,7 +220,7 @@ The enumeration must  be  (re)`start'ed  or  `redo'ne,  it  cannot  be
 Interactively, use `ACEAddRelators' (see~"ACEAddRelators").
 
 \>`ds:=<list>'{option ds}@{option `ds'}&
-`D'elete `s'ubgroup generators; <list> must  be  a  list  of  positive
+`D'eletes `s'ubgroup generators; <list> must be  a  list  of  positive
 integers.
 
 This command  allows  subgroup  generators  to  be  deleted  from  the
@@ -235,7 +232,7 @@ Interactively,            use            `ACEDeleteSubgroupGenerators'
 (see~"ACEDeleteSubgroupGenerators").
 
 \>`dr:=<list>'{option dr}@{option `dr'}&
-`D'elete relators; <list> must be a list of positive integers.
+`D'eletes relators; <list> must be a list of positive integers.
 
 This  command  allows  group  relators  to   be   deleted   from   the
 presentation. If the relators are numbered from 1 in  the  output  of,
@@ -245,8 +242,8 @@ say, the `sr' command (see~"option sr"), then the relators  listed  in
 Interactively, use `ACEDeleteRelators' (see~"ACEDeleteRelators").
 
 \>`cc:=<val>'{option cc}@{option `cc'}&
-Make `c'oset <val> `c'oincide with coset 1; <val> should be a positive
-integer.
+Makes `c'oset <val>  `c'oincide  with  coset  1;  <val>  should  be  a
+positive integer.
 
 Prints out the representative of coset `<val>', and  adds  it  to  the
 subgroup generators; i.e., forces coset `<val>' to coincide with coset
@@ -318,7 +315,7 @@ However, the additional data may allow the enumeration to complete, or
 cause a collapse to a smaller index.
 
 \>`continue'{option continue}@{option `continue'}&
-`Continue' the current enumeration, building upon the existing table.
+`Continue's the current enumeration, building upon the existing table.
 (Shortest abbreviation: `cont'.)
 
 If a previous run stopped without producing a finite index you can, in
@@ -369,7 +366,7 @@ directive `quit', but since `quit' is  a  {\GAP}  keyword  it  is  not
 available via the {\GAP} interface to {\ACE}.
 
 \>`system:=<string>'{option system}@{option `system'}&
-Do a shell escape, to execute <string>; <string> must be a string.
+Does a shell escape, to execute <string>; <string> must be a string.
 (Shortest abbreviation: `sys'.)
 
 Since {\GAP} already provides `Exec()' for this purpose,  this  option
@@ -383,7 +380,7 @@ is unlikely to have a use.
 \beginitems
 
 \>`cycles'{option cycles}@{option `cycles'}&
-Print out the table in `cycles'. (Shortest abbreviation: `cy'.)
+Prints out the table in `cycles'. (Shortest abbreviation: `cy'.)
 
 This option prints out the permutation representation.
 
@@ -393,8 +390,8 @@ Interactively, use `ACECycles' (see~"ACECycles").
 \>`dump:=<level>'{option dump}@{option `dump'}
 \>`dump:=[<level>]'{option dump}@{option `dump'}
 \>`dump:=[<level>, <detail>]'{option dump}@{option `dump'}&
-`Dump's the internal variables of {\ACE}; <level> must be  an  integer
-in the range 0 to 2, and <detail> must be 0 or 1.
+`Dump' the internal variables of {\ACE}; <level> must be an integer in
+the range 0 to 2, and <detail> must be 0 or 1.
 (Shortest abbreviation: `d'.)
 
 The value of <level> determines which of the three levels of {\ACE} to
@@ -410,7 +407,7 @@ temporary file with path `ACEData.banner'.
 Interactively, use `ACEDumpVariables' (see~"ACEDumpVariables").
 
 \>`help'{option help}@{option `help'}&
-Print the {\ACE} help screen. (Shortest abbreviation: `h'.)
+Prints the {\ACE} help screen. (Shortest abbreviation: `h'.)
 
 This option prints the list of options of the {\ACE} binary. Note that
 this list is longer than a standard screenful.
@@ -442,7 +439,7 @@ Interactively,       use       `ACEConjugatesForSubgroupNormalClosure'
 (see~"ACEConjugatesForSubgroupNormalClosure").
 
 \>`options'{option options}@{option `options'}&
-Dump version information of the {\ACE} binary.
+Dumps version information of the {\ACE} binary.
 (Shortest abbreviation: `opt'.)
 
 A rather unfortunate name for an option; this command dumps details of
@@ -552,7 +549,7 @@ variables.
 Interactively, use `ACEDumpStatistics' (see~"ACEDumpStatistics").
 
 \>`style'{option style}@{option `style'}&
-Print the current enumeration style.
+Prints the current enumeration style.
 
 This option prints the current enumeration style, as deduced from  the
 current `ct' and `rt' parameters (see~"Enumeration Style").
@@ -561,7 +558,7 @@ Interactively, use `ACEStyle' (see~"ACEStyle").
 
 \>`tw:=[<val>, <word>]'{option tw}@{option `tw'}
 \>`trace:=[<val>, <word>]'{option trace}@{option `trace'}&
-Traces `<word>' through the coset table, starting  at  coset  `<val>';
+Trace `<word>' through the coset table,  starting  at  coset  `<val>';
 <val> must be a positive integer, and <word> must be  a  word  in  the
 group generators.
 
@@ -638,7 +635,7 @@ Prints <string> in the output; <string> must be a string.
 This allows the user to add comments to the output from {\ACE}.
 
 \>`aceincomment:=<string>'{option aceincomment}@{option `aceincomment'}&
-Print comment <string> in the {\ACE} input; <string> must be a string.
+Prints comment <string> in the {\ACE} input; <string> must be a string.
 (Shortest abbreviation: `aceinc'.)
 
 This option prints the comment <string> behind a sharp sign (`\#')  in

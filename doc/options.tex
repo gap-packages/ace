@@ -26,7 +26,7 @@ Chapter~"Functions for Using ACE Interactively", or which most  {\GAP}
 users are unlikely to  need,  are  described  in  Appendix~"Other  ACE
 Options". From within a {\GAP} session, one may see the complete  list
 of {\ACE}  options,  after  loading  the  {\ACE}  Share  Package  (see
-Section~"Loading the ACE Share Package") by typing
+Section~"Loading the ACE Share Package"), by typing
 
 \beginexample
 gap> RecNames(KnownACEOptions);
@@ -46,9 +46,9 @@ gap> RecNames(KnownACEOptions);
 
 (See Section~"The KnownACEOptions Record".) Also, from within a {\GAP}
 session, you may use {\GAP}'s help browser (see Chapter~"ref:The  Help
-System" in the  {\GAP}  Reference  Manual),  to  find  out  about  any
+System" in the  {\GAP}  Reference  Manual);  to  find  out  about  any
 particular {\ACE} option, simply type: \lq{}`?option <option>'', where
-<option> is an of the options listed above without any quotes, e.g.
+<option> is one of the options listed above without any quotes, e.g.
 
 \beginexample
 gap> ?option echo
@@ -368,6 +368,50 @@ otherwise.
 
 \enditems
 
+The function `ACEOptionData' provides the  user  with  all  the  query
+facility she should ever need; nevertheless, we provide the  following
+functions.
+
+\>IsKnownACEOption( <optname> ) F
+
+returns `true' if <optname> is a mixed case abbreviation of a field of
+`KnownACEOptions',           or           `false'           otherwise.
+`IsKnownACEOption(<optname>);'        is         equivalent         to
+
+\beginitems
+\qquad`ACEOptionData(<optname>).known;'
+\enditems
+
+\>ACEPreferredOptionName( <optname> ) F
+
+returns the lowercase unabbreviated first alternative of <optname>  if
+it is a known {\ACE} option, or  <optname>  in  lowercase,  otherwise.
+`ACEPreferredOptionName(<optname>);' is equivalent to
+
+\beginitems
+\qquad`ACEOptionData(<optname>).synonyms[1];'
+\enditems
+
+\>IsACEParameterOption( <optname> ) F
+
+returns true if <optname> is an \lq{}{\ACE} parameter option'. ({\ACE}
+Parameter Options are described in Section~"ACE  Parameter  Options").
+`IsACEParameterOption(<optname>)' is equivalent to
+
+\beginitems
+\qquad`ACEPreferredOptionName(<optname>) in RecNames(ACEParameterOptions);'
+\enditems
+
+\>IsACEStrategyOption( <optname> ) F
+
+returns true if <optname> is  an  \lq{}{\ACE}  strategy  option'  (see
+Section~"The                ACEStrategyOptions                 list").
+`IsACEStrategyOption(<optname>)' is equivalent to
+
+\beginitems
+\qquad`ACEPreferredOptionName(<optname>) in ACEStrategyOptions;'
+\enditems
+
 For more on  synonyms  of  {\ACE}  options,  see  Section~"ACE  Option
 Synonyms".
 
@@ -376,9 +420,17 @@ Synonyms".
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{The ACEStrategyOptions list}
 
-For convenience the strategy options known  to  the  {\ACE}  interface
-functions  are  listed  in  the   {\GAP}   list  `ACEStrategyOptions'%
-{\undoquotes\atindex{ACEStrategyOptions}{@`ACEStrategyOptions'}}.
+For  convenience,  the  {\GAP}  list  `ACEStrategyOptions'{\undoquotes
+\atindex{ACEStrategyOptions}{@`ACEStrategyOptions'}},   contains   the
+strategy options known to the {\ACE} interface functions:
+
+\beginexample
+gap> ACEStrategyOptions;
+[ "default", "easy", "felsch", "hard", "hlt", "purec", "purer", "sims" ]
+\endexample
+
+See Chapter~"Strategy Options  for  ACE"  for  details  regarding  the
+{\ACE} strategy options.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{ACE Option Synonyms}

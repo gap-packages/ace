@@ -81,6 +81,10 @@ S 4.7. An Example of passing Options
 S 4.8. The KnownACEOptions Record
 I 4.8. KnownACEOptions
 F 4.8. ACEOptionData
+F 4.8. IsKnownACEOption
+F 4.8. ACEPreferredOptionName
+F 4.8. IsACEParameterOption
+F 4.8. IsACEStrategyOption
 S 4.9. The ACEStrategyOptions list
 I 4.9. ACEStrategyOptions
 S 4.10. ACE Option Synonyms
@@ -171,10 +175,16 @@ F 6.2. ACEReadUntil
 F 6.2. ACEReadUntil
 F 6.2. ACEReadUntil
 F 6.2. ACEReadUntil
-S 6.3. Some Interactive ACE Process Utilities
+S 6.3. Interactive ACE Process Utility Functions and Interruption of an Interactive ACE Process
 F 6.3. ACEProcessIndex
 F 6.3. ACEProcessIndex
 F 6.3. ACEProcessIndices
+I 6.3. interruption of an interactive ACE process
+I 6.3. break-loop
+F 6.3. IsACEProcessAlive
+F 6.3. IsACEProcessAlive
+F 6.3. ACEResurrectProcess
+F 6.3. ACEResurrectProcess
 S 6.4. General and Experimentation ACE Modes
 F 6.4. ACEModes
 F 6.4. ACEModes
