@@ -484,7 +484,8 @@ local n, line, genColIndex, invColIndex, table, i, rowi, j, colj, invcolj;
                                0 # doesn't occur
                                ));
   # Discard the `---' line
-  Info(InfoACE, 3, CHOMP( readline(iostream) ));
+  line := CHOMP( readline(iostream) );
+  Info(InfoACE, 3, line);
 
   # Now read the body of the coset table into table as a GAP List
   table := List([1 .. 2*n], j -> []);
