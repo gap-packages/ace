@@ -2384,7 +2384,9 @@ local datarec, iostream, line, stats;
     return datarec.stats;
   elif Length(arg) = 3 then              # args are: fgens,   rels,  sgens
     # Called non-interactively
-    return CALL_ACE("ACEStats", arg[1], arg[2], arg[3]).stats;
+    datarec := CALL_ACE("ACEStats", arg[1], arg[2], arg[3]);
+    CloseStream( datarec.stream );
+    return datarec.stats;
   else
     Error("expected 0, 1 or 3 arguments ... not ", Length(arg), " arguments\n");
   fi;
