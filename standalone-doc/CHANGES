@@ -23,10 +23,10 @@ Changes to Stand-alone documentation:
    ... so that they could explicitly be listed with a version no.
        at the GAP4 CVS repository
 
-28 Feb, 2000 [ These changes by Greg Gamble ]:
+28 Feb, 2000/22 Jan, 2001 [ These changes by Greg Gamble ]:
 
  * back.tex : added section `Groups notation'
-              [G : H] now represents the set of right cosets of H in G
+              (G : H) now represents the set of right cosets of H in G
               ## George will hate me for that ... but I really can't live
               ## with the G/H notation that suggests `quotient' when it 
               ## ain't one
@@ -38,7 +38,7 @@ Changes to Stand-alone documentation:
                3.3 Commands
              Put angle brackets around all `int's etc. in keeping with the
                glossary of 3.3 Command
- * pt.tex : Replaced `. / .' notation for cosets, by `[ . : . ]'.
+ * pt.tex : Avoided `. / .' notation for cosets.
             In 6.1 Example (4th paragraph) added sentences/clauses:
 
               - Cosets appear as subscripts.
