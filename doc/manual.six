@@ -314,12 +314,12 @@ F 6.6. ACEStats!interactive
 F 6.6. IsACEGeneratorsInPreferredOrder!interactive
 F 6.6. IsACEGeneratorsInPreferredOrder!interactive
 S 6.7. Steering ACE Interactively
-F 6.7. ACERecover
-F 6.7. ACERecover
 I 6.7. dead coset (number)
-F 6.7. ACEStandardCosetNumbering
-F 6.7. ACEStandardCosetNumbering
+F 6.7. ACERecover
+F 6.7. ACERecover
 I 6.7. lenlex standardisation scheme
+F 6.7. ACEStandardCosetNumbering
+F 6.7. ACEStandardCosetNumbering
 F 6.7. ACEAddRelators
 F 6.7. ACEAddRelators
 F 6.7. ACEAddSubgroupGenerators
@@ -364,31 +364,7 @@ S 8.4. Fun with ACEExample
 I 8.4. break-loop
 I 8.4. OnBreak
 S 8.5. Using ACEReadResearchExample
-F 8.5. PGRelFind
-F 8.5. ClassesGenPairs
-F 8.5. TranslatePresentation
-F 8.5. IsACEResExampleOK
-F 8.5. ACEResExample
-F 8.5. ALLRELS
-F 8.5. newrels
-F 8.5. F
-F 8.5. a
-F 8.5. b
-F 8.5. newF
-F 8.5. x
-F 8.5. y
-F 8.5. L2\unhbox \voidb@x \kern .06em \vbox {\hrule width.3em}8
-F 8.5. L2\unhbox \voidb@x \kern .06em \vbox {\hrule width.3em}16
-F 8.5. L3\unhbox \voidb@x \kern .06em \vbox {\hrule width.3em}3s
-F 8.5. U3\unhbox \voidb@x \kern .06em \vbox {\hrule width.3em}3s
-F 8.5. M11
-F 8.5. L2\unhbox \voidb@x \kern .06em \vbox {\hrule width.3em}32
-F 8.5. U3\unhbox \voidb@x \kern .06em \vbox {\hrule width.3em}4s
-F 8.5. J1s
-F 8.5. L3\unhbox \voidb@x \kern .06em \vbox {\hrule width.3em}5s
-F 8.5. PSp4\unhbox \voidb@x \kern .06em \vbox {\hrule width.3em}4s
-F 8.5. presentations
-C moreexamples.tex 9. More Examples
+C moreexamples.tex 9. Finer Points with Examples
 S 9.1. Getting Started
 I 9.1. ACEStats
 I 9.1. ACECosetTableFromGensAndRels

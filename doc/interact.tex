@@ -456,7 +456,7 @@ It  then  turns  `asis'  (see~"option   asis")   on   and   `messages'
 (see~"option messages") off (i.e.~sets `messages' to 0), and generates
 and tests the requested  equivalent  presentations.  The  maximum  and
 minimum values attained by `m' (the maximum number  of  coset  numbers
-defines at any stage) and `t'  (the  total  number  of  coset  numbers
+defined at any stage) and `t'  (the  total  number  of  coset  numbers
 defined) are tracked, and each time the  statistics  are  better  than
 what we've already seen, the {\ACE} binary emits a summary result line
 for the relators used. See  Appendix~"The  Meanings  of  ACE's  output
@@ -723,9 +723,10 @@ functions that accept options, actually call an  internal  version  of
 `SetACEOptions';  so,  it  is  generally   important   to   keep   the
 `OptionsStack' clear while working with {\ACE} interactively.
 
-After  setting  the  options  passed,  the  first  available  mode  of
+After setting the options passed, the first  mode  of  the  following:
 `ACEContinue'  (see~"ACEContinue"),   `ACERedo'   (see~"ACERedo")   or
-`ACEStart' (see~"ACEStart"), is automatically invoked.
+`ACEStart' (see~"ACEStart"), that may  be  applied,  is  automatically
+invoked.
 
 Since a user will sometimes have options  in  the  form  of  a  record
 (e.g.~via   `GetACEOptions'),   we   provide   a    `PushOptions'-like
@@ -778,10 +779,9 @@ when the `InfoLevel'  of  `InfoACE'  is  set  to  at  least  3),  when
 *Notes:*
 One use for this function might be to determine the  options  required
 to replicate a previous run,  but  be  sure  that,  if  this  is  your
-purpose, that any recent change in the  parameter  option  values  has
-been   followed   by   an   invocation   of   one   of   `ACEContinue'
-(see~"ACEContinue"),   `ACERedo'   (see~"ACERedo")    or    `ACEStart'
-(see~"ACEStart").
+purpose, any recent change in the parameter  option  values  has  been
+followed by an invocation of one of `ACEContinue' (see~"ACEContinue"),
+`ACERedo' (see~"ACERedo") or `ACEStart' (see~"ACEStart").
 
 As a side-effect, for  {\ACE}  process  <i>,  any  of  the  fields  of
 `ACEData.io[<i>].args' or `ACEData.io[<i>].acegens'  that  are  unset,
@@ -1107,10 +1107,10 @@ arguments.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{Steering ACE Interactively}
 
+\index{dead coset (number)}
 \>ACERecover( <i> ) F
 \>ACERecover() F
 
-\index{dead coset (number)}
 invoke the compaction routine on the coset  table  of  the  <i>th  (or
 default) interactive {\ACE} process started by `ACEStart', in order to
 recover the space used by the dead coset numbers. A `CO' message  line
@@ -1129,11 +1129,11 @@ The  compaction  routine  is  called   automatically   when   any   of
 (see~"ACECosetTable")    or    `ACEConjugatesForSubgroupNormalClosure'
 (see~"ACEConjugatesForSubgroupNormalClosure"), is invoked.
 
+\atindex{lenlex standardisation scheme}%
+{@\noexpand`lenlex' standardisation scheme}
 \>ACEStandardCosetNumbering( <i> ) F
 \>ACEStandardCosetNumbering() F
 
-\atindex{lenlex standardisation scheme}%
-{@\noexpand`lenlex' standardisation scheme}
 compact and then do a  `lenlex'  standardisation  (see  Section~"Coset
 Table Standardisation Schemes") of the  numbering  of  cosets  in  the
 coset table of the  <i>th  (or  default)  interactive  {\ACE}  process
@@ -1198,25 +1198,23 @@ standardising the coset numbering, and continuing.
 
 add, for the <i>th (or default) interactive {\ACE} process started  by
 `ACEStart', the words in the list <wordlist> to any  relators  already
-present, and automatically invokes  either  `ACERedo'  or  `ACEStart'.
-Note that {\ACE} sorts the resultant relator list, unless  the  `asis'
-option (see~"option asis") has been set to  1;  don't  assume,  unless
-`asis = 1', that the new relators have been appended in  user-provided
-order to the previously existing relator list.  `ACEAddRelators'  also
-returns the new relator list. Use `ACERelators' (see~"ACERelators") to
-determine the current relator list.
+present, and automatically invoke `ACERedo', if it can be applied,  or
+otherwise `ACEStart'. Note that {\ACE}  sorts  the  resultant  relator
+list, unless the `asis' option (see~"option asis") has been set to  1;
+don't assume, unless `asis = 1',  that  the  new  relators  have  been
+appended in user-provided order to  the  previously  existing  relator
+list.  `ACEAddRelators'  also  returns  the  new  relator  list.   Use
+`ACERelators' (see~"ACERelators") to  determine  the  current  relator
+list.
 
 \>ACEAddSubgroupGenerators( <i>, <wordlist> ) F
 \>ACEAddSubgroupGenerators( <wordlist> ) F
 
 add, for the <i>th (or default) interactive {\ACE} process started  by
 `ACEStart',  the  words  in  the  list  <wordlist>  to  any   subgroup
-generators already present.  The  enumeration  must  be  restarted  or
-redone, it cannot be  continued.  add,  for  the  <i>th  (or  default)
-interactive {\ACE} process started by `ACEStart',  the  words  in  the
-list <wordlist>  to  any  subgroup  generators  already  present,  and
-automatically invokes either `ACERedo' or `ACEStart'. Note that {\ACE}
-sorts the resultant subgroup generator list, unless the `asis'  option
+generators already present, and automatically invoke `ACERedo', if  it
+can be applied, or otherwise `ACEStart'. Note that  {\ACE}  sorts  the
+resultant  subgroup  generator  list,   unless   the   `asis'   option
 (see~"option asis") has been set to 1; don't assume,  unless  `asis  =
 1',  that  the  new  subgroup  generators  have   been   appended   in
 user-provided order to  the  previously  existing  subgroup  generator
@@ -1271,14 +1269,15 @@ by repeatedly making random coset numbers coincident with coset 1  and
 seeing what happens. The starting coset table must be  non-empty,  but
 must  *not*  be   complete   (use   `ACERandomlyApplyCosetCoincidence'
 (see~"ACERandomlyApplyCosetCoincidence")  if  your  table  is  already
-complete).  For  each  attempt,  we  repeatedly   add   random   coset
-representatives to the subgroup and `redo'  the  enumeration.  If  the
-table becomes too small, the attempt is aborted, the original subgroup
-generators restored, and another attempt made. If an attempt succeeds,
-then   the   new   set   of   subgroup   generators    is    retained.
-`ACERandomCoincidences' returns the list of  new  subgroup  generators
-added. Use  `ACESubgroupGenerators'  (see~"ACESubgroupGenerators")  to
-determine the current subgroup generator list.
+complete).  For  each  attempt,  by  applying  {\ACE}'s  `rc'   option
+(see~"option rc") random coset representatives are repeatedly added to
+the subgroup and the enumeration `redo'ne. If the  table  becomes  too
+small, the  attempt  is  aborted,  the  original  subgroup  generators
+restored, and another attempt made. If an attempt succeeds,  then  the
+new set of subgroup generators  is  retained.  `ACERandomCoincidences'
+returns   the   list   of   new   subgroup   generators   added.   Use
+`ACESubgroupGenerators' (see~"ACESubgroupGenerators") to determine the
+current subgroup generator list.
 
 *Notes:* 
 `ACERandomCoincidences' may add subgroup generators even if it  failed
@@ -1355,12 +1354,11 @@ current subgroup generator list.
 \>ACEConjugatesForSubgroupNormalClosure(: add ) F
 
 for the <i>th (or  default)  interactive  {\ACE}  process  started  by
-`ACEStart', tests each conjugate of a subgroup generator  by  a  group
-generator for membership of the subgroup, and  returns  the  (possibly
-empty) list of conjugates that were determined  to  belong  to  cosets
-other than coset 1 (the subgroup);  and,  if  called  with  the  `add'
-option, these conjugates are  also  added  to  the  existing  list  of
-subgroup generators.
+`ACEStart', test each conjugate of a subgroup  generator  by  a  group
+generator for membership in the subgroup,  and  return  the  (possibly
+empty) list of conjugates that were determined to not  belong  to  the
+subgroup (coset 1); and,  if  called  with  the  `add'  option,  these
+conjugates are also added to the existing list of subgroup generators.
 
 *Notes:* A conjugate of a subgroup generator is tested for  membership
 of the subgroup, by checking whether it can be traced from coset 1  to

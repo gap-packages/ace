@@ -1255,8 +1255,9 @@ local newoptnames, s, optnames, echo, ignored;
   if not(IsEmpty(OptionsStack) or
          ForAll(RecNames(OptionsStack[ Length(OptionsStack) ]),
                 optname -> optname in ACE_INTERACT_FUNC_OPTIONS)) then
-    newoptnames := List(RecNames(OptionsStack[ Length(OptionsStack) ]),
-                        optname -> not(optname in ACE_INTERACT_FUNC_OPTIONS));
+    newoptnames := Filtered(
+                       RecNames(OptionsStack[ Length(OptionsStack) ]),
+                       optname -> not(optname in ACE_INTERACT_FUNC_OPTIONS));
     ignored := List(VALUE_ACE_OPTION(newoptnames, [], "aceignore"),
                     optname -> ACEPreferredOptionName(optname));
     datarec.modereqd := ForAny(newoptnames, 
@@ -1818,10 +1819,18 @@ end);
 ##
 ##
 InstallGlobalFunction(ACEDisplayCosetTable, function(arg)
-  EXEC_ACE_DIRECTIVE_OPTION(
-      ACE_IOINDEX_AND_LIST(arg), "print", 1, "",
-      "------------------------------------------------------------", false
-      );
+local ioIndexAndValue, stream, closeline;
+  ioIndexAndValue := ACE_IOINDEX_AND_LIST(arg);
+  stream := ACEData.io[ ioIndexAndValue[1] ].stream;
+  PROCESS_ACE_OPTION(stream, "print", ioIndexAndValue[2]);
+  closeline := "------------------------------------------------------------";
+  PROCESS_ACE_OPTION(stream, "text", closeline);
+  FLUSH_ACE_STREAM_UNTIL(stream, 3, 3, READ_NEXT_LINE, 
+                         line -> IS_ACE_MATCH(line, "CO:") or
+                                 IS_ACE_MATCH(line, "co:") or
+                                 IS_ACE_MATCH(line, "** ERROR"));
+  FLUSH_ACE_STREAM_UNTIL(stream, 1, 3, READ_NEXT_LINE, 
+                         line -> IS_ACE_MATCH(line, closeline));
 end);
 
 #############################################################################

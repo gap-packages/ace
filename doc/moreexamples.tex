@@ -11,17 +11,15 @@
 %%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\Chapter{More Examples}
+\Chapter{Finer Points with Examples}
 
 The examples in this chapter  are  intended  to  provide  the  nearest
 {\GAP} equivalent of the similarly named  sections  in  Appendix~A  of
 `ace3001.dvi' (the standalone manual in  directory  `standalone-doc').
-It is *strongly* recommended that users  unfamiliar  with  the  {\ACE}
-standalone avoid this chapter until they have gained some  familiarity
-with the {\ACE} standalone. There is a *lot* of detail here, which the
-novice {\ACE} Share Package user won't want  to  know  about.  Please,
-despite the name of the  first  section  of  this  chapter,  read  the
-examples in Appendix~"Examples" first.
+There is a *lot* of detail here, which the novice {\ACE} Share Package
+user won't want to know about. Please, despite the name of  the  first
+section of this chapter,  read  the  examples  in  Appendix~"Examples"
+first.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{Getting Started}
@@ -51,15 +49,14 @@ rec( index := 0, cputime := 45, cputimeUnits := "10^-2 seconds",
 gap>
 \endexample
 
-The example shows that the {\ACE} share package does allow you to recover
-from the `break'-loop, but let us start again.
-
-After defining generators, we can do an enumeration:
+The example shows that the {\ACE} share  package  does  allow  you  to
+recover from the `break'-loop.  However,  the  definition  of  `fgens'
+above is local to the `break'-loop, and in any case we shall want  two
+generators for the examples we wish to consider and raise  some  other
+points; so let us re-define `fgens' and start again:
 
 \beginexample
-gap> F := FreeGroup("a", "b");;
-gap> fgens := FreeGeneratorsOfFpGroup(F);
-[ a, b ]
+gap> F := FreeGroup("a", "b");; fgens := FreeGeneratorsOfFpGroup(F);;
 \endexample
 
 \atindex{ACEStats}{@\noexpand`ACEStats'!example}
@@ -114,7 +111,7 @@ presentation and parameters:
 \beginexample
 gap> SetInfoACELevel(3);
 gap> ACEStats(fgens, [], [] : start, sr := 1);
-#I  ACE 3.000        Sat Mar  3 21:05:53 2001
+#I  ACE 3.000        Wed Mar 21 20:41:40 2001
 #I  =========================================
 #I  Host information:
 #I    name = hamal
@@ -143,7 +140,8 @@ happens if you disregard this (recall, we  still  have  the  `InfoACE'
 level set to 3):
 
 \beginexample
-#I  ACE 3.000        Sat Mar  3 21:06:42 2001
+gap> ACEStats(fgens, [], [] : print := [-1, 12]);
+#I  ACE 3.000        Wed Mar 21 20:44:29 2001
 #I  =========================================
 #I  Host information:
 #I    name = hamal
@@ -168,11 +166,11 @@ of the coset table), namely, insert  the  `start'  option  before  the
 
 \beginexample
 gap> ACEStats(fgens, [], [] : start, print := [-1, 12]);
-#I  ACE 3.000        Sat Mar  3 21:07:50 2001
+#I  ACE 3.000        Wed Mar 21 20:47:17 2001
 #I  =========================================
 #I  Host information:
 #I    name = hamal
-#I  OVERFLOW (a=249998 r=83333 h=83333 n=249999; l=337 c=0.29; m=249998 t=2499\
+#I  OVERFLOW (a=249998 r=83333 h=83333 n=249999; l=337 c=0.28; m=249998 t=2499\
 98)
 #I  co: a=249998 r=83333 h=83333 n=249999; c=+0.00
 #I   coset ||      a      A      b      B   order   rep've
@@ -190,7 +188,7 @@ gap> ACEStats(fgens, [], [] : start, print := [-1, 12]);
 #I      11 ||     33     34      3     35       0   AB
 #I      12 ||     36      4     37     38       0   ba
 #I  ***
-rec( index := 0, cputime := 29, cputimeUnits := "10^-2 seconds", 
+rec( index := 0, cputime := 28, cputimeUnits := "10^-2 seconds", 
   activecosets := 249998, maxcosets := 249998, totcosets := 249998 )
 \endexample
 
@@ -201,7 +199,7 @@ inverses. So the default workspace of $1000000$ words allows  a  table
 of $249998 = 1000000/4 - 2$ cosets. Since row  `fill'ing  (see~"option
 fill") is on by default, the table is simply  filled  with  cosets  in
 order. Note that a compaction phase is done before printing the table,
-but that this does nothing here (the lowercase `co' tag), since  there
+but that this does nothing here (the lowercase `co:' tag), since there
 are no dead cosets. The coset representatives are simply all  possible
 freely reduced words, in length plus lexicographic (i.e. `lenlex'; see
 Section~"Coset Table Standardisation Schemes") order.
@@ -232,7 +230,7 @@ include the `silent' option. (We still have the `InfoACE' level set at
 \beginexample
 gap> ACECosetTableFromGensAndRels(fgens, [], [] : start, print := [-1, 12],
 >                                                 silent);
-#I  ACE 3.000        Sat Mar  3 21:09:10 2001
+#I  ACE 3.000        Wed Mar 21 20:48:46 2001
 #I  =========================================
 #I  Host information:
 #I    name = hamal
@@ -279,7 +277,7 @@ standard form; so despite the differences in the {\GAP} versions, both
 gap> ACECosetTableFromGensAndRels(fgens, [], [] : max := 12,
 >                                                 start, print := -12,
 >                                                 incomplete);
-#I  ACE 3.000        Sat Mar  3 21:10:28 2001
+#I  ACE 3.000        Wed Mar 21 20:50:22 2001
 #I  =========================================
 #I  Host information:
 #I    name = hamal
@@ -315,7 +313,7 @@ gap> ACECosetTableFromGensAndRels(fgens, [], [] : max := 12,
 #I      10 ||      0      0      0      3
 #I      11 ||      0      0      3      0
 #I      12 ||      0      4      0      0
-#I  ACECosetTable: Coset table is incomplete, reduced and lenlex standardised.
+#I  ACECosetTable: Coset table is incomplete, reduced & lenlex standardised.
 [ [ 2, 6, 1, 12, 0, 0, 0, 0, 3, 0, 0, 0 ], 
   [ 3, 1, 9, 0, 0, 2, 0, 0, 0, 0, 0, 4 ], 
   [ 4, 7, 10, 0, 1, 0, 0, 2, 0, 0, 3, 0 ], 
@@ -341,7 +339,7 @@ warning that the coset table is incomplete is emitted at `InfoACE'  or
 
 The     limitation     of     the     functions     `ACEStats'     and
 `ACECosetTableFromGensAndRels' (on three arguments) is  that  they  do
-not interact with {\ACE}; they call {\ACE}  with  user-defined  input,
+not *interact* with {\ACE}; they call {\ACE} with user-defined  input,
 and collect and parse the output for  either  statistics  or  a  coset
 table. On the other hand,  the  `ACEStart'  (see~"ACEStart")  function
 allows one to start up an {\ACE} process and maintain a dialogue  with
@@ -361,12 +359,13 @@ explicitly listed. Alternatively, we may do the following  (note  that
 the `InfoACE' level is still 3):
 
 \beginexample
-#I  ACE 3.000        Sat Mar  3 21:12:28 2001
+gap> ACEStart(fgens, [], []);
+#I  ACE 3.000        Wed Mar 21 20:52:31 2001
 #I  =========================================
 #I  Host information:
 #I    name = hamal
 #I  ***
-#I  OVERFLOW (a=249998 r=83333 h=83333 n=249999; l=337 c=0.30; m=249998 t=2499\
+#I  OVERFLOW (a=249998 r=83333 h=83333 n=249999; l=337 c=0.29; m=249998 t=2499\
 98)
 1
 gap> ACEParameters(1);
@@ -409,7 +408,7 @@ version of `ACEStats' (see~"ACEStats!interactive") :
 
 \beginexample
 gap> ACEStats(1); # The interactive version of ACEStats takes 1 or no arg'ts
-rec( index := 0, cputime := 30, cputimeUnits := "10^-2 seconds", 
+rec( index := 0, cputime := 29, cputimeUnits := "10^-2 seconds", 
   activecosets := 249998, maxcosets := 249998, totcosets := 249998 )
 \endexample
 
@@ -446,7 +445,7 @@ coset table. Note that it is still necessary to invoke an  enumeration
 after setting the `max' (see~"option max") option. We could just  call
 `ACECosetTable' with the argument 1 and the same 4 options we used for
 `ACECosetTableFromGensAndRels'.   Alternatively,   we   can   do   the
-equivalent of the 4  options  one  (or  two)  at  a  time,  via  there
+equivalent of the 4  options  one  (or  two)  at  a  time,  via  their
 equivalent interactive commands.  Note  that  the  `ACEStart'  command
 (without `0' as first argument) inserts a `start' directive after  the
 user option `max':
@@ -526,29 +525,50 @@ options that are directed to {\ACE}, set  the  `InfoACE'  level  to  4
 (then all such commands are `Info'-ed behind a  ```ToACE> '''  prompt;
 see~"SetInfoACELevel").
 
-We now set things up to do the alternating group $A_5$, of order $60$.
-We turn  messaging  on  via  the  `messages'  (see~"option  messages")
-option, but set the interval high enough so that we will only get  the
-``Run Parameters'' block (the same as that obtained with  `sr  :=  1')
-and no progress messages. Recall `F' is the free group we  defined  on
-generators `fgens': `"a"' and `"b"', and the `InfoACE' level is  still
-3. Note, that when {\GAP} prints  `F.1'  ($=$ `fgens[1]') it  displays
-`a', but the *variable* `a' is (at  the  moment)  unassigned;  so  for
-convenience (in defining relators, for example) we  first  assign  the
-variable `a' to be `F.1' (and `b' to be `F.2').
+Following the standalone manual, we  now  set  things  up  to  do  the
+alternating group $A_5$, of order $60$. (We saw the group  $A_5$  with
+subgroup $C_5$ earlier in Section~"Example of Using ACE  Interactively
+(Using ACEStart)"; here we are concerned with observing and  remarking
+on the output from the {\ACE} binary.) We turn messaging  on  via  the
+`messages' (see~"option messages") option;  setting  `messages'  to  1
+tells {\ACE} to emit a *progress message* on each  pass  of  its  main
+loop. In the example following we set `messages := 1000',  which,  for
+our example, sets the interval between messages so high that  we  only
+get the ``Run Parameters'' block (the same as that obtained  with  `sr
+:= 1'), no progress messages and the final *results  message*.  Recall
+`F' is the free group we defined  on  generators  `fgens':  `"a"'  and
+`"b"'. Here we will be interested in seeing what is transmitted to the
+{\ACE} binary; so we will set  the  `InfoACE'  level  to  4  (what  is
+transmitted to {\ACE} will now appear behind a  ```ToACE> '''  prompt,
+and we will still see the messages *from*  {\ACE}).  Note,  that  when
+{\GAP}  prints  `F.1'  ($=$  `fgens[1]')  it  displays  `a',  but  the
+*variable* `a' is (at the moment) unassigned; so for  convenience  (in
+defining relators, for example) we first assign the variable `a' to be
+`F.1' (and `b' to be `F.2').
 
 \beginexample
+gap> SetInfoACELevel(4);
 gap> a := F.1;; b := F.2;;
-gap> # Enumerating A_5 = < a, b || a^2, b^3, (a*b)^5 > 
+gap> # Enumerating A_5 = < a, b || a^2, b^3, (a*b)^5 >
 gap> # over Id (trivial subgp)
-gap> ACEStart(1, fgens, [a^2, b^3, (a*b)^5], [] 
+gap> ACEStart(1, fgens, [a^2, b^3, (a*b)^5], []
 >                                     # 4th arg empty (to define Id)
 >             : enumeration := "A_5", # Define the Group Name
 >               subgroup := "Id",     # Define the Subgroup Name
 >               max := 0,             # Set `max' back to default (no limit)
 >               messages := 1000);    # Progress messages every 1000 iter'ns
+#I  ToACE> group:ab;
+#I  ToACE> relators:a^2,b^3,a*b*a*b*a*b*a*b*a*b;
+#I  ToACE> generators;
+#I  ToACE> enumeration:A_5;
+#I  ToACE> subgroup:Id;
+#I  ToACE> max:0;
+#I  ToACE> messages:1000;
+#I  ToACE> text:***;
 #I  ***
+#I  ToACE> text:***;
 #I  ***
+#I  ToACE> Start;
 #I    #-- ACE 3.000: Run Parameters ---
 #I  Group Name: A_5;
 #I  Group Generators: ab;
@@ -561,26 +581,42 @@ gap> ACEStart(1, fgens, [a^2, b^3, (a*b)^5], []
 #I    #--------------------------------
 #I  INDEX = 60 (a=60 r=77 h=1 n=77; l=3 c=0.00; m=66 t=76)
 1
+gap>
 \endexample
+
+Observe that the `fgens' and  subgroup  generators  (the  empty  list)
+arguments are transmitted to {\ACE} via the  {\ACE}  binary's  `group'
+and `generators' options, respectively. Observe also, that the relator
+`(a*b)^5'  is  expanded  by  {\GAP}  to   `a*b*a*b*a*b*a*b*a*b'   when
+transmitted to {\ACE} and then  {\ACE}  correctly  deduces  that  it's
+`(a*b)^5'.
 
 Since we  did  not  specify  a  strategy  the  `default'  (see~"option
 default") strategy was followed and  hence  coset  number  definitions
 were R (i.e.~HLT) style, and a total of $76$  coset  numbers  (`t=76')
-were defined. Note, that {\ACE} already ``knew'' the group  generators
-and subgroup generators, using the `relators' (see~"option  relators")
-option:
+were defined (if we had tried `felsch' we would have achieved the best
+possible: `t=60').  Note,  that  {\ACE}  already  ``knew''  the  group
+generators  and  subgroup  generators;  so,  we  could  have   avoided
+re-transmitting that information by using the `relators'  (see~"option
+relators") option:
 
 \beginexample
-gap> ACEStart(1 : relators := ToACEWords(fgens, [a^2, b^3, (a*b)^5]),
->                 enumeration := "A_5",                                        
->                 subgroup := "Id",                                            
->                 max := 0,                                                    
->                 messages := 1000);                                           
+gap> ACEStart(1 : relators := ToACEWords(fgens, [a^2, b^3, (a*b)^5]),          
+>                 enumeration := "A_5",
+>                 subgroup := "Id",
+>                 max := 0,
+>                 messages := 1000);
 #I  Detected usage of a synonym of one (or more) of the options:
 #I      `group', `relators', `generators'.
 #I  Discarding current values of args.
 #I  (The new args will be extracted from ACE, later).
+#I  ToACE> enumeration:A_5;
+#I  ToACE> subgroup:Id;
+#I  ToACE> max:0;
+#I  ToACE> messages:1000;
+#I  ToACE> relators:a^2,b^3,a*b*a*b*a*b*a*b*a*b;
 #I  No group generators saved. Setting value(s) from ACE ...
+#I  ToACE> sr:1;
 #I    #-- ACE 3.000: Run Parameters ---
 #I  Group Name: A_5;
 #I  Group Generators: ab;
@@ -591,7 +627,9 @@ gap> ACEStart(1 : relators := ToACEWords(fgens, [a^2, b^3, (a*b)^5]),
 #I  As:0; Path:0; Row:1; Mend:0; No:3; Look:0; Com:10;
 #I  C:0; R:0; Fi:6; PMod:3; PSiz:256; DMod:4; DSiz:1000;
 #I    #--------------------------------
+#I  ToACE> text:***;
 #I  ***
+#I  ToACE> Start;
 #I    #-- ACE 3.000: Run Parameters ---
 #I  Group Name: A_5;
 #I  Group Generators: ab;
@@ -602,8 +640,9 @@ gap> ACEStart(1 : relators := ToACEWords(fgens, [a^2, b^3, (a*b)^5]),
 #I  As:0; Path:0; Row:1; Mend:0; No:3; Look:0; Com:10;
 #I  C:0; R:0; Fi:6; PMod:3; PSiz:256; DMod:4; DSiz:1000;
 #I    #--------------------------------
-#I  INDEX = 60 (a=60 r=77 h=1 n=77; l=3 c=0.00; m=66 t=76)
+#I  INDEX = 60 (a=60 r=77 h=1 n=77; l=3 c=0.01; m=66 t=76)
 1
+gap>
 \endexample
 
 Note the usage  of  `ToACEWords'  (see~"ToACEWords")  to  provide  the
@@ -620,14 +659,16 @@ which immediately triggered the action of reinstantiating the value of
 
 was all about). Also observe that the  ``Run  Parameters''  block  was
 `Info'-ed twice; the first time was due to  `ACEStart'  emitting  `sr'
-with value `1' to {\ACE} ({\ACE}'s response is used to  re-instantiate
-`ACEData.io[1].args').
+with  value  `1'  to  {\ACE},  the  response  of  which  is  used   to
+re-instantiate `ACEData.io[1].args', and the second is in response  to
+transmitting `Start' to {\ACE}.
+
 
 In  particular,  {\GAP}  no  longer  thinks  `fgens'  are  the   group
 generators:
 
 \beginexample
-gap> ACEGroupGenerators(1)=fgens;
+gap> ACEGroupGenerators(1) = fgens;
 false
 \endexample
 
@@ -638,14 +679,19 @@ gap> fgens := ACEGroupGenerators(1);;
 gap> F := GroupWithGenerators(fgens);; a := F.1;; b := F.2;;
 \endexample
 
-We will now define a non-trivial subgroup, and monitor all the actions
-of the enumerator, by setting `messages := 1'.  As  for  defining  the
-relators, we could use the 1-argument version of `ACEStart', in  which
-case we would use the `subgroup' (see~"option subgroup")  option  with
-the value `ToACEWords(fgens, [ a*b ])'. Instead, we will use the  more
-convenient 4-argument form:
+We now define a non-trivial subgroup, of small enough index,  to  make
+the observation of all progress messages, by setting `messages :=  1',
+a not too onerous proposition. As for defining the relators, we  could
+use the 1-argument version of `ACEStart', in which case we  would  use
+the  `subgroup'  (see~"option  subgroup")  option   with   the   value
+`ToACEWords(fgens, [ a*b ])'. However, as we saw, in the end we  don't
+save anything by doing this, since afterwards the  variables  `fgens',
+`a', `b' and `F' would no longer be associated with `ACEStart' process
+1. Instead, we will use the more convenient 4-argument form, and  also
+switch the `InfoACELevel' back to 3:
 
 \beginexample
+gap> SetInfoACELevel(3);                                       
 gap> ACEStart(1, ACEGroupGenerators(1), ACERelators(1), [ a*b ]
 >             : messages := 1);
 #I  ***
@@ -664,7 +710,7 @@ gap> ACEStart(1, ACEGroupGenerators(1), ACERelators(1), [ a*b ]
 #I  SG: a=2 r=1 h=1 n=3; l=1 c=+0.00; m=2 t=2
 #I  RD: a=3 r=1 h=1 n=4; l=2 c=+0.00; m=3 t=3
 #I  RD: a=4 r=2 h=1 n=5; l=2 c=+0.00; m=4 t=4
-#I  RD: a=5 r=2 h=1 n=6; l=2 c=+0.00; m=5 t=5
+#I  RD: a=5 r=2 h=1 n=6; l=2 c=+0.01; m=5 t=5
 #I  RD: a=6 r=2 h=1 n=7; l=2 c=+0.00; m=6 t=6
 #I  RD: a=7 r=2 h=1 n=8; l=2 c=+0.00; m=7 t=7
 #I  RD: a=8 r=2 h=1 n=9; l=2 c=+0.00; m=8 t=8
@@ -678,30 +724,32 @@ gap> ACEStart(1, ACEGroupGenerators(1), ACERelators(1), [ a*b ]
 #I  RD: a=14 r=5 h=1 n=16; l=2 c=+0.00; m=14 t=15
 #I  CC: a=13 r=6 h=1 n=16; l=2 c=+0.00; d=0
 #I  CC: a=12 r=6 h=1 n=16; l=2 c=+0.00; d=0
-#I  INDEX = 12 (a=12 r=16 h=1 n=16; l=3 c=0.00; m=14 t=15)
+#I  INDEX = 12 (a=12 r=16 h=1 n=16; l=3 c=0.01; m=14 t=15)
 1
+gap>
 \endexample
 
 Observe that we used `ACERelators(1)' (see~"ACERelators") to grab  the
 value  of  the  relators  we  had  defined  earlier.  We   also   used
 `ACEGroupGenerators(1)' (see~"ACEGroupGenerators") to  get  the  group
-generators (`fgens' would do instead, except if, as  in  our  sequence
-above, the `relators' option was used, since  this  causes  {\GAP}  to
-lose  the  knowledge  that  `fgens'  and  `ACEGroupGenerators(1)'  are
-equal).
+generators.
 
 The  run  ended  with  12  active   (see   Section~"Coset   Statistics
 Terminology") coset numbers (`a=12') after defining a total number  of
-15 coset numbers (`t=15'). So there must  have  been  3  coincidences:
-observe  that  there  were  3  progress  messages  (see  Appendix~"The
-Meanings of ACE's Output Messages") with a `CC:' tag.
+15 coset numbers (`t=15'); the definitions occurred at the steps  with
+progress messages tagged by `AD:' (coset 1 application definition) and
+`SG:' (subgroup generator phase), and the 13 tagged by `RD:' (R  style
+definition). So there must have  been  3  coincidences:  observe  that
+there were 3 progress messages with a `CC:'  tag.  (See  Appendix~"The
+Meanings of ACE's Output Messages".)
 
-We now dump out the  statistics  accumulated  during  the  run,  using
+We can dump out the  statistics  accumulated  during  the  run,  using
 `ACEDumpStatistics'  (see~"ACEDumpStatistics"),  which   `Info's   the
 {\ACE}  output  of  the  `statistics'  (see~"option  statistics")   at
 `InfoACE' level 1.
 
 \beginexample
+gap> ACEDumpStatistics();
 #I    #- ACE 3.000: Level 0 Statistics --
 #I  cdcoinc=0 rdcoinc=2 apcoinc=0 rlcoinc=0 clcoinc=0
 #I    xcoinc=2 xcols12=4 qcoinc=3
@@ -715,6 +763,7 @@ We now dump out the  statistics  accumulated  during  the  run,  using
 #I    cdgap=0 cdidefn=0 cdidedn=0 cdpdl=0 cdpof=0
 #I    cdpdead=0 cdpdefn=0 cddefn=0
 #I    #----------------------------------
+gap>
 \endexample
 
 The statistic `qcoinc=3' states what we had already observed,  namely,
@@ -726,61 +775,122 @@ occurred during applications of the  coset  numbers  to  the  relators
 (`rddefn=13'). For more details on the meanings of the  variables  you
 will need to read the C code comments.
 
-%Note how the pre-printout compaction phase now  does  some  work  (the
-%upper-case `CO' tag), since there were coincidences,  and  hence  dead
-%cosets. Note how `b/B' have been used as the first two columns,  since
-%these must be occupied by  a  generator/inverse  pair  or  a  pair  of
-%involutions. The `a' column is also the  `A'  column,  as  `a'  is  an
-%involution.
-%
-%\begintt
-%  print  TABLE : -1, 12 ;
-%CO: a=12 r=13 h=1 n=13; c=+0.00
-% coset |      b      B      a   order   rep've
-%-------+--------------------------------------
-%     1 |      3      2      2
-%     2 |      1      3      1       3   B
-%     3 |      2      1      4       3   b
-%     4 |      8      5      3       5   ba
-%     5 |      4      8      6       2   baB
-%     6 |      9      7      5       5   baBa
-%     7 |      6      9      8       3   baBaB
-%     8 |      5      4      7       5   bab
-%     9 |      7      6     10       5   baBab
-%    10 |     12     11      9       3   baBaba
-%    11 |     10     12     12       2   baBabaB
-%    12 |     11     10     11       3   baBabab
-%\endtt
-%
-%If we define the generator order to be that of the columns,  then  the
-%table above is not in canonic form, and the coset representatives  are
-%not in order. We now standardise the table; note the compaction  phase
-%before standardisation, although it does nothing  in  this  particular
-%case. Note how, if we read through the table in row-major  order,  new
-%cosets are introduced using the smallest available  number,  and  that
-%the representatives are now in order and are minimal.
-%
-%\begintt
-%st;
-%co/ST: a=12 r=13 h=1 n=13; c=+0.00
-%pr:-1,12;
-%co: a=12 r=13 h=1 n=13; c=+0.00
-% coset |      b      B      a   order   rep've
-%-------+--------------------------------------
-%     1 |      2      3      3
-%     2 |      3      1      4       3   b
-%     3 |      1      2      1       3   B
-%     4 |      5      6      2       5   ba
-%     5 |      6      4      7       5   bab
-%     6 |      4      5      8       2   baB
-%     7 |      8      9      5       5   baba
-%     8 |      9      7      6       5   baBa
-%     9 |      7      8     10       3   babaB
-%    10 |     11     12      9       3   babaBa
-%    11 |     12     10     12       3   babaBab
-%    12 |     10     11     11       2   babaBaB
-%\endtt
-%
+Now let us display  all  12  lines  of  the  coset  table  with  coset
+representatives.
+
+\beginexample
+gap> ACEDisplayCosetTable([-12]);
+#I  CO: a=12 r=13 h=1 n=13; c=+0.00
+#I   coset ||      b      B      a   order   rep've
+#I  -------+--------------------------------------
+#I       1 ||      3      2      2
+#I       2 ||      1      3      1       3   B
+#I       3 ||      2      1      4       3   b
+#I       4 ||      8      5      3       5   ba
+#I       5 ||      4      8      6       2   baB
+#I       6 ||      9      7      5       5   baBa
+#I       7 ||      6      9      8       3   baBaB
+#I       8 ||      5      4      7       5   bab
+#I       9 ||      7      6     10       5   baBab
+#I      10 ||     12     11      9       3   baBaba
+#I      11 ||     10     12     12       2   baBabaB
+#I      12 ||     11     10     11       3   baBabab
+#I  ------------------------------------------------------------
+gap>
+\endexample
+
+Note  how  the  pre-printout  compaction  phase  now  does  some  work
+(indicated  by  the  upper-case   `CO:'   tag),   since   there   were
+coincidences, and hence dead coset numbers. Note how `b' and `B'  head
+the first two columns,  since  {\ACE}  requires  that  the  first  two
+columns  be  occupied  by  a  generator/inverse  pair  or  a  pair  of
+involutions. The `a' column is also the  `A'  column,  as  `a'  is  an
+involution.
+
+We could now use `ACEStandardCosetNumbering'  to  produce  a  `lenlex'
+standard table, within {\ACE}, but with respect to the ordering `b, a'
+of the generators, and then call `ACEDisplayCosetTable' again  to  see
+it:
+
+\beginexample
+gap> ACEStandardCosetNumbering();
+#I  co/ST: a=12 r=13 h=1 n=13; c=+0.00
+gap> ACEDisplayCosetTable([-12]);
+#I  co: a=12 r=13 h=1 n=13; c=+0.00
+#I   coset ||      b      B      a   order   rep've
+#I  -------+--------------------------------------
+#I       1 ||      2      3      3
+#I       2 ||      3      1      4       3   b
+#I       3 ||      1      2      1       3   B
+#I       4 ||      5      6      2       5   ba
+#I       5 ||      6      4      7       5   bab
+#I       6 ||      4      5      8       2   baB
+#I       7 ||      8      9      5       5   baba
+#I       8 ||      9      7      6       5   baBa
+#I       9 ||      7      8     10       3   babaB
+#I      10 ||     11     12      9       3   babaBa
+#I      11 ||     12     10     12       3   babaBab
+#I      12 ||     10     11     11       2   babaBaB
+#I  ------------------------------------------------------------
+gap>
+\endexample
+
+Note that at both the standardisation and coset table display  step  a
+compaction phase was invoked but on both occasions the lowercase `co:'
+tag indicates that nothing was done (all the recovery  of  dead  coset
+numbers that could have been done was done earlier).
+
+Of course, the table above is not `lenlex' with respect to  the  order
+of the generators we had originally given to {\ACE}; to get  that,  we
+would have needed to specify `lenlex'  (see~"option  lenlex")  at  the
+enumeration stage. By doing that here, the `lenlex'  option  does  the
+following: behind the scenes it ensures  that  the  relator  `a^2'  is
+passed to {\ACE} as `aa' and then it sets the option `asis' to 1; this
+bit of  skulduggery  stops  {\ACE}  treating  `a'  as  an  involution,
+allowing `a' and `A' (the inverse of `a') to take  up  the  first  two
+columns  of  the  coset  table,  effectively  stopping   {\ACE}   from
+reordering the generators. To see what  we  pass  to  {\ACE},  at  the
+enumeration stage, we set the `InfoACELevel' to 4, but since we  don't
+really want to see messages this time we set `messages := 0'.
+
+\beginexample
+gap> SetInfoACELevel(4);                                       
+gap> ACEStart(1, ACEGroupGenerators(1), ACERelators(1), [ a*b ]
+>             : messages := 0, lenlex);
+#I  ToACE> group:ab;
+#I  ToACE> relators:aa, b^3,a*b*a*b*a*b*a*b*a*b;
+#I  ToACE> generators:a*b;
+#I  ToACE> asis:1;
+#I  ToACE> enumeration:A_5;
+#I  ToACE> subgroup:Id;
+#I  ToACE> max:0;
+#I  ToACE> messages:0;
+#I  ToACE> text:***;
+#I  ***
+#I  ToACE> text:***;
+#I  ***
+#I  ToACE> Start;
+#I  INDEX = 12 (a=12 r=17 h=1 n=17; l=3 c=0.00; m=15 t=16)
+1
+gap> SetInfoACELevel(1); # We've seen enough behind the scenes now!
+gap> ACEStandardCosetNumbering();                                  
+gap> ACEDisplayCosetTable([-12]);
+#I   coset ||      a      A      b      B   order   rep've
+#I  -------+---------------------------------------------
+#I       1 ||      2      2      3      2
+#I       2 ||      1      1      1      3       2   a
+#I       3 ||      4      4      2      1       3   b
+#I       4 ||      3      3      5      6       5   ba
+#I       5 ||      7      7      6      4       5   bab
+#I       6 ||      8      8      4      5       2   baB
+#I       7 ||      5      5      8      9       5   baba
+#I       8 ||      6      6      9      7       5   baBa
+#I       9 ||     10     10      7      8       3   babaB
+#I      10 ||      9      9     11     12       3   babaBa
+#I      11 ||     12     12     12     10       3   babaBab
+#I      12 ||     11     11     10     11       2   babaBaB
+gap>
+\endexample
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{Emulating Sims}
