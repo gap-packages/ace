@@ -133,7 +133,7 @@ end);
 ##  list.
 ##
 InstallGlobalFunction(ACEResurrectProcess, function(arg)
-local ioIndex, datarec, gens, ToACE, uselist, useone, optname, field;
+local ioIndex, datarec, gens, ToACE, uselist, useone, saved, optname, field;
 
   ACE_IOINDEX_ARG_CHK(arg);
   ioIndex := ACE_IOINDEX(arg);
@@ -182,13 +182,14 @@ local ioIndex, datarec, gens, ToACE, uselist, useone, optname, field;
       uselist := uselist{[1]};
     fi;
     if "options" in uselist then
-      # Scrub any non-parameter or non-strategy options
+      # Scrub any non{-parameter,-strategy,-echo} options
       for optname in Filtered(
                          RecNames(datarec.options),
                          function(optname)
                            local prefname;
                            prefname := ACEPreferredOptionName(optname);
-                           return not (prefname in ACEStrategyOptions) and
+                           return prefname <> "echo" and
+                                  not (prefname in ACEStrategyOptions) and
                                   not (prefname in RecNames(
                                                        ACEParameterOptions
                                                        ));
@@ -197,9 +198,25 @@ local ioIndex, datarec, gens, ToACE, uselist, useone, optname, field;
       do
         Unbind( datarec.options.(optname) );
       od;
+      saved := rec(options := datarec.options, 
+                   parameters := datarec.parameters);
+    else
+      saved := rec( parameters := ShallowCopy(datarec.parameters) );
+      if IsBound(datarec.options) then
+        for optname in Filtered( 
+                           RecNames(datarec.options),
+                           optname -> ACEPreferredOptionName(optname) = "echo" 
+                           )
+        do
+          saved.parameters.(optname) := datarec.options.(optname);
+        od;
+      fi;
     fi;
+    Unbind( datarec.options );
     for field in uselist do
-      SetACEOptions( ioIndex, datarec.(field) );
+      PushOptions( saved.(field) );
+      INTERACT_SET_ACE_OPTIONS("ACEResurrectProcess", datarec);
+      PopOptions();
     od;
     Info(InfoACE, 1, "Options set to: ", GetACEOptions(ioIndex));
   fi;
@@ -445,7 +462,7 @@ end);
 ##
 InstallGlobalFunction(ACE_COSET_TABLE, 
                       function(enumIndex, acegens, iostream, readline)
-local n, line, colIndex, table, i, rowi, j, colj, invcolj;
+local n, line, genColIndex, invColIndex, table, i, rowi, j, colj, invcolj;
 
   n := Length(acegens);
 
@@ -458,8 +475,14 @@ local n, line, colIndex, table, i, rowi, j, colj, invcolj;
   # Look at the coset table column headers and determine the column
   # corresponding to each generator:
   #   colIndex[j] = Index of column(acegens[j])
-  colIndex := List(acegens, gen -> Position(rowi, gen));
-
+  genColIndex := List(acegens, gen -> Position(rowi, gen));
+  invColIndex := List(genColIndex, 
+                      i -> ACE_IF_EXPR(
+                               i + 1 in genColIndex or i + 1 > Length(rowi),
+                               i,
+                               i + 1,
+                               0 # doesn't occur
+                               ));
   # Discard the `---' line
   Info(InfoACE, 3, CHOMP( readline(iostream) ));
 
@@ -472,20 +495,11 @@ local n, line, colIndex, table, i, rowi, j, colj, invcolj;
     i := i + 1;
     rowi := SplitString(line, "", " :|");
     for j in [1..n] do
-      Add(table[2*j - 1], Int(rowi[ colIndex[j] ]));
+      Add(table[2*j - 1], Int(rowi[ genColIndex[j] ]));
+      Add(table[2*j],     Int(rowi[ invColIndex[j] ]));
     od;
   until i = enumIndex;
 
-  # Now we do the columns corresponding to the inverses of each generator
-  for j in [1..n] do
-    colj := table[2*j - 1];
-    invcolj := table[2*j];
-    for i in [1..enumIndex] do
-      invcolj[ colj[i] ] := i;
-    od;
-  od;
-
-  StandardizeTable(table);
   return table;
 end);
 
@@ -997,7 +1011,7 @@ local datarec;
       Info(InfoACE + InfoWarning, 1,
            "may be incorrect. Please use separate calls to SetACEOptions,");
       Info(InfoACE + InfoWarning, 1,
-           "e.g. 'SetACEOptions(<optionsRec>); SetACEOptions(: <options>;' ");
+           "e.g. 'SetACEOptions(<optionsRec>); SetACEOptions(: <options>);' ");
     fi;
     PushOptions( arg[Length(arg)] );
     datarec := ACEData.io[ ACE_IOINDEX(arg{[1..Length(arg) - 1]}) ];
@@ -1816,17 +1830,33 @@ end);
 #F  ACECosetTable  . . . . . . . . . . . .  Extracts the coset table from ACE
 ##
 InstallGlobalFunction(ACECosetTable, function(arg)
-local ioIndex, enumIndex, ACEout, iostream, datarec, cosettable,
+local ioIndex, enumIndex, ACEout, iostream, datarec, fgens, lenlex, cosettable,
       ACEOnBreak, NormalOnBreak, SetACEOptions, DisplayACEOptions;
 
   if Length(arg) = 2 or Length(arg) > 3 then
     Error("Expected 0, 1 or 3 arguments ... not ", Length(arg), " arguments\n");
   elif Length(arg) <= 1 then
     # Called as an interactive ACE command
-    datarec := ACEData.io[ ACE_IOINDEX(arg) ];
+    ioIndex := ACE_IOINDEX(arg);
+    datarec := ACEData.io[ ioIndex ];
     INTERACT_SET_ACE_OPTIONS("ACECosetTable", datarec);
     if not IsEmpty(OptionsStack) then
       CHEAPEST_ACE_MODE(datarec); 
+    fi;
+    lenlex := DATAREC_VALUE_ACE_OPTION(datarec, false, "lenlex");
+    if lenlex and not IsACEGeneratorsInPreferredOrder(ioIndex) then
+      fgens := ACEGroupGenerators(ioIndex);
+      WRITE_LIST_TO_ACE_STREAM(
+          datarec.stream,
+          [ "relators: ", datarec.acegens[1], datarec.acegens[1], ", ",
+            ACE_WORDS(Filtered(ACERelators(ioIndex), rel -> rel <> fgens[1]^2),
+                      fgens,
+                      datarec.acegens),
+            ";" ]
+          );
+      WRITE_LIST_TO_ACE_STREAM(datarec.stream, ["asis: 1;"]);
+      WRITE_LIST_TO_ACE_STREAM(datarec.stream, ["start;"]);
+      WRITE_LIST_TO_ACE_STREAM(datarec.stream, ["standard;"]);
     fi;
     if datarec.stats.index = 0 then
       Info(InfoACE + InfoWarning, 1, 
@@ -1839,10 +1869,14 @@ local ioIndex, enumIndex, ACEout, iostream, datarec, cosettable,
       return fail;
     else
       WRITE_LIST_TO_ACE_STREAM(datarec.stream, [ "Print Table;" ]);
-      return ACE_COSET_TABLE(datarec.stats.index, 
-                             datarec.acegens, 
-                             datarec.stream, 
-                             READ_NEXT_LINE);
+      cosettable := ACE_COSET_TABLE(datarec.stats.index, 
+                                    datarec.acegens, 
+                                    datarec.stream, 
+                                    READ_NEXT_LINE);
+      if not lenlex then
+        StandardizeTable(cosettable);
+      fi;
+      return cosettable;
     fi;
   else
     # Called non-interactively
@@ -1880,6 +1914,7 @@ local ioIndex, enumIndex, ACEout, iostream, datarec, cosettable,
     repeat
       ACEout := CALL_ACE(        # args are:         fgens,   rels,  sgens
                     "ACECosetTableFromGensAndRels", arg[1], arg[2], arg[3] );
+      lenlex := VALUE_ACE_OPTION(RecNames( ACE_OPTIONS() ), false, "lenlex");
       if ACEout.infile <> ACEData.infile then
         # User only wanted an ACE input file to use directly with standalone
         Info(InfoACE, 1, "ACE standalone input file: ", ACEout.infile);
@@ -1910,6 +1945,9 @@ local ioIndex, enumIndex, ACEout, iostream, datarec, cosettable,
         cosettable := ACE_COSET_TABLE(
                           enumIndex, ACEout.acegens, iostream, ReadLine);
         CloseStream(iostream);
+        if not lenlex then
+          StandardizeTable(cosettable);
+        fi;
         return cosettable;
       fi;
     until false;

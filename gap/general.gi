@@ -60,7 +60,8 @@ end);
 ##
 ##
 InstallGlobalFunction(CALL_ACE, function(ACEfname, fgens, rels, sgens)
-local optnames, echo, infile, instream, outfile, ToACE, gens, acegens, ignored;
+local optnames, echo, infile, instream, outfile, ToACE, gens, acegens, 
+      lenlex, enforceAsis, ignored;
 
   if ValueOption("aceexampleoptions") = true and
      IsBound(ACEData.aceexampleoptions) then
@@ -97,6 +98,7 @@ local optnames, echo, infile, instream, outfile, ToACE, gens, acegens, ignored;
     if ACEfname = "ACECosetTableFromGensAndRels" then
       # If option "aceinfile" is set we only want to produce an ACE input file
       infile := VALUE_ACE_OPTION(optnames, ACEData.infile, "aceinfile");
+      lenlex := VALUE_ACE_OPTION(optnames, false, "lenlex");
     elif ACEfname = "ACEStats" then
       infile := ACEData.infile; # If option "aceinfile" is set ... we ignore it
     fi;
@@ -111,7 +113,18 @@ local optnames, echo, infile, instream, outfile, ToACE, gens, acegens, ignored;
   acegens := gens.acegens;
 
   # Define the group relators ACE will use
-  ToACE([ "Group Relators: ", ACE_WORDS(rels, fgens, acegens), ";" ]);
+  if ACEfname <> "ACECosetTableFromGensAndRels" or not lenlex or
+     IsACEGeneratorsInPreferredOrder(fgens, rels) 
+  then
+    ToACE([ "Group Relators: ", ACE_WORDS(rels, fgens, acegens), ";" ]);
+    enforceAsis := false;
+  else
+    ToACE([ "Group Relators: ", acegens[1], acegens[1], ", ",
+            ACE_WORDS(Filtered(rels, rel -> rel <> fgens[1]^2), 
+                      fgens, acegens), 
+            ";" ]);
+    enforceAsis := true;
+  fi;
 
   # Define the subgroup generators ACE will use
   ToACE([ "Subgroup Generators: ", ACE_WORDS(sgens, fgens, acegens), ";" ]);
@@ -137,10 +150,18 @@ local optnames, echo, infile, instream, outfile, ToACE, gens, acegens, ignored;
     # Direct ACE output to outfile if called via
     # ACECosetTableFromGensAndRels or ACEStats
     ToACE([ "Alter Output:", outfile, ";" ]);
+
+    if enforceAsis then
+      ToACE([ "Asis: 1;" ]);
+    fi;
+
     ToACE([ "Start;" ]); # (one of) the ACE directives that initiate
                          # an enumeration
 
     if ACEfname = "ACECosetTableFromGensAndRels" then
+      if lenlex then
+        ToACE([ "Standard;" ]);
+      fi;
       ToACE([ "Print Table;" ]);
     fi;
 
@@ -178,6 +199,48 @@ end);
 InstallGlobalFunction(ACECosetTableFromGensAndRels, function(fgens, rels, sgens)
   # Use ACECosetTable non-interactively
   return ACECosetTable(fgens, rels, sgens);
+end);
+
+#############################################################################
+####
+##
+#F  IsACEGeneratorsInPreferredOrder . . . . . Returns true if the  generators
+##  . . . . . . . . . . . . . . . . . . . . . gens are already in  the  order
+##  . . . . . . . . . . . . . . . . . . . . . . . . . . . .  preferred by ACE
+##
+##  For a presentation with more than one generator, the first  generator  of
+##  which is an involution and the second is not, ACE prefers to  switch  the
+##  first two generators. IsACEGeneratorsInPreferredOrder returns true if the
+##  order of the generators gens would not  be  changed  by  ACE  and  false,
+##  otherwise. When necessary, the argument rels (the  relators)  is  scanned
+##  for relators that determine  whether  or  not  gens[1]  and  gens[2]  are
+##  involutions.
+##
+##  If IsACEGeneratorsInPreferredOrder would return true, it is  possible  to
+##  enforce a user's order of the generators within ACE, by  enforcing  ACE's
+##  `asis' option and passing the relator,  that  determines  gens[1]  is  an
+##  involution,  explicitly  to  ACE   as:   gens[1]*gens[1]   (rather   than
+##  gens[1]^2).
+##
+InstallGlobalFunction(IsACEGeneratorsInPreferredOrder, function(arg)
+local ioIndex, gens, rels;
+
+  if Length(arg) < 2 then
+    ioIndex := ACE_IOINDEX(arg);
+    gens := ACEGroupGenerators(ioIndex);
+    rels := ACERelators(ioIndex);
+  elif Length(arg) = 2 then
+    gens := arg[1];
+    rels := arg[2];
+  else
+    Error("Expected at most 2 arguments, not ", Length(arg), " arguments.");
+  fi;
+
+  if Length(gens) = 1 or not ForAny(rels, rel -> rel = gens[1]^2) then
+    return true;
+  else
+    return ForAny(rels, rel -> rel = gens[2]^2);
+  fi;
 end);
 
 #############################################################################

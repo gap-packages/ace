@@ -68,6 +68,8 @@ InstallValue(KnownACEOptions, rec(
   aceincomment := [6, IsString],
   aceexampleoptions := [17, [0,1]],
   silent := [6, [0,1]],
+  lenlex := [6, [0,1]],
+  incomplete := [10, [0,1]],
   sg := [2, x -> IsList(x) and ForAll(x, xi -> IsWord(xi)) ],
   rl := [2, x -> IsList(x) and ForAll(x, xi -> IsWord(xi)) ],
   aep  := [3, [1..7]],
@@ -208,7 +210,7 @@ InstallValue(ACEOptionSynonyms, rec(
 InstallValue(NonACEbinOptions,
   [ "aceinfile",     "aceoutfile", "aceignore",    "aceignoreunknown",
     "acenowarnings", "aceecho",    "aceincomment", "aceexampleoptions",
-    "echo",          "silent" ]
+    "echo",          "silent",     "lenlex",       "incomplete" ]
 );
 
 #############################################################################
@@ -539,6 +541,36 @@ local optname, optval;
   do
     optval := ValueOption(optname);
   od;
+  return optval;
+end);
+  
+#############################################################################
+####
+##
+#F  DATAREC_VALUE_ACE_OPTION  . . . . . . . . . . . . . . . Internal function
+##  . . . . . . . checks among RecNames(datarec.options) for any settings  of
+##  . . . . . . . synonyms of optnm The latest such optname prevails and  its
+##  . . . . . . . value is  returned.  Otherwise,  if  there  isn't  such  an
+##  . . . . . . . optname  or  datarec.options  is  unbound,  defaultval   is
+##  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . returned.
+##
+InstallGlobalFunction(DATAREC_VALUE_ACE_OPTION, 
+                      function(datarec, defaultval, optnm)
+local optname, optval;
+  optval := defaultval;
+  if IsBound(datarec.options) then
+    for optname in Filtered(RecNames(datarec.options), 
+                            optname -> ForAny(ACE_OPTION_SYNONYMS(optnm), 
+                                              s ->
+                                              MATCHES_KNOWN_ACE_OPT_NAME(
+                                                  s, 
+                                                  LowercaseString(optname)
+                                                  )
+                                              )) 
+    do
+      optval := datarec.options.(optname);
+    od;
+  fi;
   return optval;
 end);
   
