@@ -253,6 +253,9 @@ option `aceinfile' (see~"Option  `aceinfile'").  Most of  the  options
 below are for interactive use with the  standalone;  from  the  {\GAP}
 interface, we provide other functions for interactive use.
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{Experimentation Options}
+
 \beginitems
 
 \>`aep:=<val>'{Option `aep'}&
@@ -375,154 +378,12 @@ error-prone. The `rep' option provides a simple solution;  simply  run
 Interactively,            use            `ACERandomEquivPresentations'
 (see~"ACERandomEquivPresentations").
 
-\>`sg:=<wordList>'{Option `sg'}&
-Adds the words in <wordList> to any  `s'ubgroup  `g'enerators  already
-present; <wordList> must be a list of words in the group generators.
+\enditems
 
-The enumeration must  be  (re)`start'ed  or  `redo'ne,  it  cannot  be
-`continue'd.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{Options that Modify a Presentation}
 
-Interactively,             use              `ACEAddSubgroupGenerators'
-(see~"ACEAddSubgroupGenerators").
-
-\>`rl:=<wordList>'{Option `rl'}&
-Appends the `r'elator `l'ist,  <wordList>  to  the  existent  list  of
-relators present; <wordList> must be a list  of  words  in  the  group
-generators.
-
-The enumeration must  be  (re)`start'ed  or  `redo'ne,  it  cannot  be
-`continue'd.
-
-Interactively, use `ACEAddRelators' (see~"ACEAddRelators").
-
-\>`ai'{Option `ai'}
-\>`ai:=<filename>'{Option `ai'}&
-`A'lter `i'nput to standard input or <filename>; <filename> must be  a
-string.
-
-By default, commands to {\ACE} are read from standard input (i.e., the
-keyboard). With no value `ai' causes {\ACE} to revert to reading  from
-standard input; otherwise, the `ai' command closes the  current  input
-file,  and  opens  `<filename>'  as  the  source   of   commands.   If
-`<filename>' can't be opened, input reverts to standard input.
-
-*Notes:*
-If you switch to taking input from (another) file, remember to  switch
-back before the end of that file; otherwise the `EOF' there will cause
-{\ACE} to terminate.
-
-\>`begin'{Option `begin'}
-\>`start'{Option `start'}&
-Start an enumeration. (Shortest abbreviation of `begin' is `beg'.)
-
-Any existing information in the table is cleared, and the  enumeration
-starts from coset 1 (i.e., the subgroup).
-
-Interactively, use `ACEStart' (see~"ACEStart").
-
-\>`bye'{Option `bye'}
-\>`exit'{Option `exit'}
-\>`qui'{Option `qui'}&
-Quit {\ACE}. (Shortest abbreviation of `qui' is `q'.)
-
-This quits {\ACE} nicely, printing the date and  the  time.  An  `EOF'
-(end-of-file; i.e., `\^{}d') has the same effect, so proper termination
-occurs if {\ACE} is taking its input from a script file.
-
-Interactively, use `ACEQuit' (see~"ACEQuit").
-
-Note  that  `qui'  actually  abbreviates  the   corresponding   {\ACE}
-directive `quit', but since `quit' is  a  {\GAP}  keyword  it  is  not
-available via the {\GAP} interface to {\ACE}.
-
-\>`cc:=<val>'{Option `cc'}&
-Make `c'oset <val> `c'oincide with coset 1; <val> should be a positive
-integer.
-
-Prints out the representative of coset `<val>', and  adds  it  to  the
-subgroup generators; i.e., forces coset `<val>' to coincide with coset
-1, the subgroup.
-
-\>`check'{Option `check'}
-\>`redo'{Option `redo'}&
-`Redo' an extant enumeration, using the current parameters.
-
-As opposed to `start' (see~"Option `start'"), which clears an existing
-coset table, any existing information in the table  is  retained,  and
-the enumeration is restarted from coset 1 (i.e., the subgroup).
-
-Interactively, use `ACERedo' (see~"ACERedo").
-
-*Notes:*
-This option is really intended for the case where additional  relators
-(option `rl'; see~"Option `rl'") and/or  subgroup  generators  (option
-`sg'; see~"Option `sg'") have  been  introduced.  The  current  table,
-which may be incomplete or exhibit a finite index, is  still  *valid*.
-However, the additional data may allow the enumeration to complete, or
-cause a collapse to a smaller index.
-
-\>`continue'{Option `continue'}&
-`Continue' the current enumeration, building upon the existing table.
-(Shortest abbreviation: `cont'.)
-
-If a previous run stopped without producing a finite index you can, in
-principle, change any of the parameters and `continue' on. Of  course,
-if you make any changes which invalidate the current table, you  won't
-be allowed to `continue',  although  you  may  be  allowed  to  `redo'
-(see~"Option `redo'"). If `redo' is not allowed, you  must  re-`start'
-(see~"Option `start'").
-
-Interactively, use `ACEContinue' (see~"ACEContinue").
-
-\>`cycles'{Option `cycles'}&
-Print out the table in `cycles'. (Shortest abbreviation: `cy'.)
-
-This option prints out the permutation representation.
-
-Interactively, use `ACECycles' (see~"ACECycles").
-
-\>`ds:=<list>'{Option `ds'}&
-`D'elete `s'ubgroup generators; <list> must  be  a  list  of  positive
-integers.
-
-This command  allows  subgroup  generators  to  be  deleted  from  the
-presentation. If the generators are numbered from 1 in the output  of,
-say, the `sr' command (see~"Option `sr'"), then the generators  listed
-in `<list>' are  deleted;  `<list>'  must  be  a  strictly  increasing
-sequence.
-
-Interactively,            use            `ACEDeleteSubgroupGenerators'
-(see~"ACEDeleteSubgroupGenerators").
-
-\>`dr:=<list>'{Option `dr'}&
-`D'elete relators; <list> must be a list of positive integers.
-
-This  command  allows  group  relators  to   be   deleted   from   the
-presentation. If the relators are numbered from 1 in  the  output  of,
-say, the `sr' command (see~"Option `sr'"), then the relators listed in
-`<list>' are deleted; `<list>' must be a strictly increasing sequence.
-
-Interactively, use `ACEDeleteRelators' (see~"ACEDeleteRelators").
-
-\>`dump'{Option `dump'}
-\>`dump:=<level>'{Option `dump'}
-\>`dump:=[<level>]'{Option `dump'}
-\>`dump:=[<level>, <detail>]'{Option `dump'}&
-`Dump's the internal variables of {\ACE}; <level> must be  an  integer
-in the range 0 to 2, and <detail> must be 0 or 1.
-(Shortest abbreviation: `d'.)
-
-The value of <level> determines which of the three levels of {\ACE} to
-dump. (You will need to read the standalone manual to understand  what
-Levels 0, 1 and 2 are all about.) The value of <detail> determines the
-amount of detail (`<detail> = 0' means less detail).  The  first  form
-(with no arguments) selects `<level> = 0, <detail> =  0'.  The  second
-form of this command makes `<detail> = 0'. This option is intended for
-gurus; the source code should be consulted  to  see  what  the  output
-means. Non-interactively, the output from `dump' is  directed  to  the
-temporary file with path `ACEData.banner'.
-
-Interactively, use `ACEDumpVariables' (see~"ACEDumpVariables").
+\beginitems
 
 \>`generators:=<wordList>'{Option `generators'}&
 Define the subgroup `generators'; <wordList> must be a list  of  words
@@ -574,11 +435,86 @@ a standalone input file. The group relators should be input as one  of
 the arguments of an {\ACE} interface function.  If  <wordList>  is  an
 empty list, the group is free.
 
-\>`help'{Option `help'}&
-Print the {\ACE} help screen. (Shortest abbreviation: `h'.)
+\>`sg:=<wordList>'{Option `sg'}&
+Adds the words in <wordList> to any  `s'ubgroup  `g'enerators  already
+present; <wordList> must be a list of words in the group generators.
 
-This option prints the list of options of the {\ACE} binary. Note that
-this list is longer than a standard screenful.
+The enumeration must  be  (re)`start'ed  or  `redo'ne,  it  cannot  be
+`continue'd.
+
+Interactively,             use              `ACEAddSubgroupGenerators'
+(see~"ACEAddSubgroupGenerators").
+
+\>`rl:=<wordList>'{Option `rl'}&
+Appends the `r'elator `l'ist,  <wordList>  to  the  existent  list  of
+relators present; <wordList> must be a list  of  words  in  the  group
+generators.
+
+The enumeration must  be  (re)`start'ed  or  `redo'ne,  it  cannot  be
+`continue'd.
+
+Interactively, use `ACEAddRelators' (see~"ACEAddRelators").
+
+\>`ds:=<list>'{Option `ds'}&
+`D'elete `s'ubgroup generators; <list> must  be  a  list  of  positive
+integers.
+
+This command  allows  subgroup  generators  to  be  deleted  from  the
+presentation. If the generators are numbered from 1 in the output  of,
+say, the `sr' command (see~"Option `sr'"), then the generators  listed
+in `<list>' are  deleted;  `<list>'  must  be  a  strictly  increasing
+sequence.
+
+Interactively,            use            `ACEDeleteSubgroupGenerators'
+(see~"ACEDeleteSubgroupGenerators").
+
+\>`dr:=<list>'{Option `dr'}&
+`D'elete relators; <list> must be a list of positive integers.
+
+This  command  allows  group  relators  to   be   deleted   from   the
+presentation. If the relators are numbered from 1 in  the  output  of,
+say, the `sr' command (see~"Option `sr'"), then the relators listed in
+`<list>' are deleted; `<list>' must be a strictly increasing sequence.
+
+Interactively, use `ACEDeleteRelators' (see~"ACEDeleteRelators").
+
+\>`cc:=<val>'{Option `cc'}&
+Make `c'oset <val> `c'oincide with coset 1; <val> should be a positive
+integer.
+
+Prints out the representative of coset `<val>', and  adds  it  to  the
+subgroup generators; i.e., forces coset `<val>' to coincide with coset
+1, the subgroup.
+
+\>`rc:=<val>'{Option `rc'}
+\>`rc:=[<val>]'{Option `rc'}
+\>`rc:=[<val>, <attempts>]'{Option `rc'}&
+Enforce `r'andom `c'oincidences; <val> and <attempts> must be positive
+integers.
+
+This option attempts upto <attempts> (or,  in  the  first  and  second
+forms, 8) times to find nontrivial subgroups with index a multiple  of
+<val> by repeatedly making random coset numbers coincident with  coset
+1 and seeing what happens. The starting coset table must be non-empty,
+but need not be complete. For each attempt, we repeatedly  add  random
+coset representatives to the subgroup and `redo' the  enumeration.  If
+the table becomes too small, the  attempt  is  aborted,  the  original
+subgroup generators restored, and another attempt made. If an  attempt
+succeeds, then the new set of subgroup generators is retained.
+
+Interactively, use `ACERandomCoincidences' (see~"ACERandomCoincidences").
+
+*Guru Notes:*
+A coset number can have many different coset representatives. Consider
+running `standard' before `rc', to canonicise the table and hence  the
+coset representatives.
+
+\enditems
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{Mode Options}
+
+\beginitems
 
 \>`mode'{Option `mode'}&
 Prints the possible enumeration `mode's.
@@ -587,6 +523,131 @@ Prints the possible enumeration `mode's.
 Prints the possible enumeration  `mode's  (i.e.~which  of  `continue',
 `redo' or  `start'  are  possible  (see~"Option  `continue'",  "Option
 `redo'" and "Option `start'").
+
+\>`begin'{Option `begin'}
+\>`start'{Option `start'}&
+Start an enumeration. (Shortest abbreviation of `begin' is `beg'.)
+
+Any existing information in the table is cleared, and the  enumeration
+starts from coset 1 (i.e., the subgroup).
+
+Interactively, use `ACEStart' (see~"ACEStart").
+
+\>`check'{Option `check'}
+\>`redo'{Option `redo'}&
+`Redo' an extant enumeration, using the current parameters.
+
+As opposed to `start' (see~"Option `start'"), which clears an existing
+coset table, any existing information in the table  is  retained,  and
+the enumeration is restarted from coset 1 (i.e., the subgroup).
+
+Interactively, use `ACERedo' (see~"ACERedo").
+
+*Notes:*
+This option is really intended for the case where additional  relators
+(option `rl'; see~"Option `rl'") and/or  subgroup  generators  (option
+`sg'; see~"Option `sg'") have  been  introduced.  The  current  table,
+which may be incomplete or exhibit a finite index, is  still  *valid*.
+However, the additional data may allow the enumeration to complete, or
+cause a collapse to a smaller index.
+
+\>`continue'{Option `continue'}&
+`Continue' the current enumeration, building upon the existing table.
+(Shortest abbreviation: `cont'.)
+
+If a previous run stopped without producing a finite index you can, in
+principle, change any of the parameters and `continue' on. Of  course,
+if you make any changes which invalidate the current table, you  won't
+be allowed to `continue',  although  you  may  be  allowed  to  `redo'
+(see~"Option `redo'"). If `redo' is not allowed, you  must  re-`start'
+(see~"Option `start'").
+
+Interactively, use `ACEContinue' (see~"ACEContinue").
+
+\enditems
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{Options that Interact with the Operating System}
+
+\beginitems
+
+\>`ai'{Option `ai'}
+\>`ai:=<filename>'{Option `ai'}&
+`A'lter `i'nput to standard input or <filename>; <filename> must be  a
+string.
+
+By default, commands to {\ACE} are read from standard input (i.e., the
+keyboard). With no value `ai' causes {\ACE} to revert to reading  from
+standard input; otherwise, the `ai' command closes the  current  input
+file,  and  opens  `<filename>'  as  the  source   of   commands.   If
+`<filename>' can't be opened, input reverts to standard input.
+
+*Notes:*
+If you switch to taking input from (another) file, remember to  switch
+back before the end of that file; otherwise the `EOF' there will cause
+{\ACE} to terminate.
+
+\>`bye'{Option `bye'}
+\>`exit'{Option `exit'}
+\>`qui'{Option `qui'}&
+Quit {\ACE}. (Shortest abbreviation of `qui' is `q'.)
+
+This quits {\ACE} nicely, printing the date and  the  time.  An  `EOF'
+(end-of-file;  i.e.,  `\^{}d')  has  the  same   effect,   so   proper
+termination occurs if {\ACE} is taking its input from a script file.
+
+Interactively, use `ACEQuit' (see~"ACEQuit").
+
+Note  that  `qui'  actually  abbreviates  the   corresponding   {\ACE}
+directive `quit', but since `quit' is  a  {\GAP}  keyword  it  is  not
+available via the {\GAP} interface to {\ACE}.
+
+\>`system:=<string>'{Option `system'}&
+Do a shell escape, to execute <string>; <string> must be a string.
+(Shortest abbreviation: `sys'.)
+
+Since {\GAP} already provides `Exec()' for this purpose,  this  option
+is unlikely to have a use.
+
+\enditems
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{Query Options}
+
+\beginitems
+
+\>`cycles'{Option `cycles'}&
+Print out the table in `cycles'. (Shortest abbreviation: `cy'.)
+
+This option prints out the permutation representation.
+
+Interactively, use `ACECycles' (see~"ACECycles").
+
+\>`dump'{Option `dump'}
+\>`dump:=<level>'{Option `dump'}
+\>`dump:=[<level>]'{Option `dump'}
+\>`dump:=[<level>, <detail>]'{Option `dump'}&
+`Dump's the internal variables of {\ACE}; <level> must be  an  integer
+in the range 0 to 2, and <detail> must be 0 or 1.
+(Shortest abbreviation: `d'.)
+
+The value of <level> determines which of the three levels of {\ACE} to
+dump. (You will need to read the standalone manual to understand  what
+Levels 0, 1 and 2 are all about.) The value of <detail> determines the
+amount of detail (`<detail> = 0' means less detail).  The  first  form
+(with no arguments) selects `<level> = 0, <detail> =  0'.  The  second
+form of this command makes `<detail> = 0'. This option is intended for
+gurus; the source code should be consulted  to  see  what  the  output
+means. Non-interactively, the output from `dump' is  directed  to  the
+temporary file with path `ACEData.banner'.
+
+Interactively, use `ACEDumpVariables' (see~"ACEDumpVariables").
+
+\>`help'{Option `help'}&
+Print the {\ACE} help screen. (Shortest abbreviation: `h'.)
+
+This option prints the list of options of the {\ACE} binary. Note that
+this list is longer than a standard screenful.
 
 \>`nc'{Option `nc'}
 \>`nc:=<val>'{Option `nc'}
@@ -695,44 +756,6 @@ to be printed. In the last  form,  the  table  is  printed  from  line
 the  orders   modulo   the   subgroup   (if   available)   and   coset
 representatives are printed also.
 
-\>`rc:=<val>'{Option `rc'}
-\>`rc:=[<val>]'{Option `rc'}
-\>`rc:=[<val>, <attempts>]'{Option `rc'}&
-Enforce `r'andom `c'oincidences; <val> and <attempts> must be positive
-integers.
-
-This option attempts upto <attempts> (or,  in  the  first  and  second
-forms, 8) times to find nontrivial subgroups with index a multiple  of
-<val> by repeatedly making random coset numbers coincident with  coset
-1 and seeing what happens. The starting coset table must be non-empty,
-but need not be complete. For each attempt, we repeatedly  add  random
-coset representatives to the subgroup and `redo' the  enumeration.  If
-the table becomes too small, the  attempt  is  aborted,  the  original
-subgroup generators restored, and another attempt made. If an  attempt
-succeeds, then the new set of subgroup generators is retained.
-
-Interactively, use `ACERandomCoincidences' (see~"ACERandomCoincidences").
-
-*Guru Notes:*
-A coset number can have many different coset representatives. Consider
-running `standard' before `rc', to canonicise the table and hence  the
-coset representatives.
-
-\>`recover'{Option `recover'}
-\>`contiguous'{Option `contiguous'}&
-`Recover' space used by dead coset numbers\index{dead coset (number)}.
-(Shortest  abbreviation  of  `recover'   is   `reco',   and   shortest
-abbreviation of `contiguous' is `contig'.)
-
-This option invokes the compaction routine on the table to recover the
-space used by any dead coset numbers. A `CO' message line  is  printed
-if any cosets were recovered, and a  `co'  line  if  none  were.  This
-routine is called automatically if  the  `cycles',  `nc',  `print'  or
-`standard' options  (see~"Option  `cycles'",  "Option  `nc'",  "Option
-`print'" and "Option `standard'") are invoked.
-
-Interactively, use `ACERecover' (see~"ACERecover").
-
 \>`sc:=<val>'{Option `sc'}
 \>`stabilising:=<val>'{Option `stabilising'}&
 Print out the coset numbers whose elements stabilise  (i.e.~normalise)
@@ -748,6 +771,60 @@ stabilise the subgroup, plus their representatives, are printed.
 
 Interactively,          use           `ACECosetsThatStabiliseSubgroup'
 (see~"ACECosetsThatStabiliseSubgroup").
+
+\>`statistics'{Option `statistics'}
+\>`stats'{Option `stats'}&
+Dump enumeration statistics.
+(Shortest abbreviation of `statistics' is `stat'.)
+
+If the statistics package is compiled into the {\ACE} code,  which  it
+is by default (see the `options'~"Option `options'" option), then this
+option  dumps  the  statistics  accumulated  during  the  most  recent
+enumeration. See the `enum.c' source  file  for  the  meaning  of  the
+variables.
+
+Interactively, use `ACEDumpStatistics' (see~"ACEDumpStatistics").
+
+\>`style'{Option `style'}&
+Print the current enumeration style.
+
+This option prints the current enumeration style, as deduced from  the
+current `ct' and `rt' parameters (see~"Enumeration Style").
+
+Interactively, use `ACEStyle' (see~"ACEStyle").
+
+\>`tw:=[<val>, <word>]'{Option `tw'}
+\>`trace:=[<val>, <word>]'{Option `trace'}&
+Traces `<word>' through the coset table, starting  at  coset  `<val>';
+<val> must be a positive integer, and <word> must be  a  word  in  the
+group generators.
+
+This option prints the final coset number of the trace, if  the  trace
+completes.
+
+Interactively, use `ACETraceWord' (see~"ACETraceWord").
+
+\enditems
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{Options that Modify the Coset Table}
+
+\beginitems
+
+\>`recover'{Option `recover'}
+\>`contiguous'{Option `contiguous'}&
+`Recover' space used by dead coset numbers\index{dead coset (number)}.
+(Shortest  abbreviation  of  `recover'   is   `reco',   and   shortest
+abbreviation of `contiguous' is `contig'.)
+
+This option invokes the compaction routine on the table to recover the
+space used by any dead coset numbers. A `CO' message line  is  printed
+if any cosets were recovered, and a  `co'  line  if  none  were.  This
+routine is called automatically if  the  `cycles',  `nc',  `print'  or
+`standard' options  (see~"Option  `cycles'",  "Option  `nc'",  "Option
+`print'" and "Option `standard'") are invoked.
+
+Interactively, use `ACERecover' (see~"ACERecover").
 
 \>`standard'{Option `standard'}&
 Compacts {\ACE}'s  coset  table  and  standardises  the  numbering  of
@@ -782,49 +859,17 @@ standardising the coset numbering, and continuing.
 Interactively,             use             `ACEStandardCosetNumbering'
 (see~"ACEStandardCosetNumbering").
 
-\>`statistics'{Option `statistics'}
-\>`stats'{Option `stats'}&
-Dump enumeration statistics.
-(Shortest abbreviation of `statistics' is `stat'.)
+\enditems
 
-If the statistics package is compiled into the {\ACE} code,  which  it
-is by default (see the `options'~"Option `options'" option), then this
-option  dumps  the  statistics  accumulated  during  the  most  recent
-enumeration. See the `enum.c' source  file  for  the  meaning  of  the
-variables.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{Options for Comments}
 
-Interactively, use `ACEDumpStatistics' (see~"ACEDumpStatistics").
-
-\>`style'{Option `style'}&
-Print the current enumeration style.
-
-This option prints the current enumeration style, as deduced from  the
-current `ct' and `rt' parameters (see~"Enumeration Style").
-
-Interactively, use `ACEStyle' (see~"ACEStyle").
-
-\>`system:=<string>'{Option `system'}&
-Do a shell escape, to execute <string>; <string> must be a string.
-(Shortest abbreviation: `sys'.)
-
-Since {\GAP} already provides `Exec()' for this purpose,  this  option
-is unlikely to have a use.
+\beginitems
 
 \>`text:=<string>'{Option `text'}&
 Prints <string> in the output; <string> must be a string.
 
 This allows the user to add comments to the output from {\ACE}.
-
-\>`tw:=[<val>, <word>]'{Option `tw'}
-\>`trace:=[<val>, <word>]'{Option `trace'}&
-Traces `<word>' through the coset table, starting  at  coset  `<val>';
-<val> must be a positive integer, and <word> must be  a  word  in  the
-group generators.
-
-This option prints the final coset number of the trace, if  the  trace
-completes.
-
-Interactively, use `ACETraceWord' (see~"ACETraceWord").
 
 \>`aceincomment:=<string>'{Option `aceincomment'}&
 Print comment <string> in the {\ACE} input; <string> must be a string.
