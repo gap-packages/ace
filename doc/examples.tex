@@ -25,6 +25,7 @@ omitted the line
 
 \beginexample
 gap> RequirePackage("ace");
+true
 \endexample
 
 which is,  of  course,  required  at  the  beginning  of  any  session
@@ -82,8 +83,8 @@ gap> G := PerfectGroup(IsPermGroup, 16*60, 1   # Arguments ... as per usual
 #I    #--- ACE 3.001: Run Parameters ---
 #I  Group Name: G;
 #I  Group Generators: abstuv;
-#I  Group Relators: (a)^2, (s)^2, (t)^2, (u)^2, (v)^2, (b)^3, (st)^2, (uv)^2,
-#I    (su)^2, (sv)^2, (tu)^2, (tv)^2, asau, atav, auas, avat, Bvbu, Bsbvt,
+#I  Group Relators: (a)^2, (s)^2, (t)^2, (u)^2, (v)^2, (b)^3, (st)^2, (uv)^2, 
+#I    (su)^2, (sv)^2, (tu)^2, (tv)^2, asau, atav, auas, avat, Bvbu, Bsbvt, 
 #I    Bubvu, Btbvuts, (ab)^5;
 #I  Subgroup Name: H;
 #I  Subgroup Generators: a, b;
@@ -157,9 +158,9 @@ gap> table := ACECosetTableFromGensAndRels(
 #I    #--- ACE 3.001: Run Parameters ---
 #I  Group Name: G;
 #I  Group Generators: abstuvd;
-#I  Group Relators: (s)^2, (t)^2, (u)^2, (v)^2, (d)^2, aad, (b)^3, (st)^2,
-#I    (uv)^2, (su)^2, (sv)^2, (tu)^2, (tv)^2, Asau, Atav, Auas, Avat, Bvbu,
-#I    dAda, dBdb, (ds)^2, (dt)^2, (du)^2, (dv)^2, Bubvu, Bsbdvt, Btbvuts,
+#I  Group Relators: (s)^2, (t)^2, (u)^2, (v)^2, (d)^2, aad, (b)^3, (st)^2, 
+#I    (uv)^2, (su)^2, (sv)^2, (tu)^2, (tv)^2, Asau, Atav, Auas, Avat, Bvbu, 
+#I    dAda, dBdb, (ds)^2, (dt)^2, (du)^2, (dv)^2, Bubvu, Bsbdvt, Btbvuts, 
 #I    (ab)^5;
 #I  Subgroup Name: H;
 #I  Subgroup Generators: a;
@@ -1197,7 +1198,7 @@ gap> ?Using ACEReadResearchExample
 %   [ x^2, y^3, x*y*x*y*x*y^-1*x*y*x*y*x*y^-1*x*y*x*y^-1*x*y^-1*x*y^-1*x*y*x*y*\
 %x*y*x*y^-1*x*y^-1 ],
 %  sgens := [ x*y^-1 ] )
-%gap>
+%gap> 
 %\endexample
 %
 %The following 

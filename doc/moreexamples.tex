@@ -46,7 +46,7 @@ brk> fgens := FreeGeneratorsOfFpGroup(FreeGroup("a"));
 brk> return;
 rec( index := 0, cputime := 13, cputimeUnits := "10^-2 seconds", 
   activecosets := 499998, maxcosets := 499998, totcosets := 499998 )
-gap>
+gap> 
 \endexample
 
 The example shows that the {\ACE} package does allow  you  to  recover
@@ -379,10 +379,10 @@ gap> ACEParameters(1);
 #I  As:0; Path:0; Row:1; Mend:0; No:0; Look:0; Com:10;
 #I  C:0; R:0; Fi:7; PMod:3; PSiz:256; DMod:4; DSiz:1000;
 #I    #---------------------------------
-rec( enumeration := "G", subgroup := "H", workspace := 1000000,
-  max := 249998, messages := 0, time := -1, hole := -1, loop := 0, asis := 0,
-  path := 0, row := 1, mendelsohn := 0, no := 0, lookahead := 0,
-  compaction := 10, ct := 0, rt := 0, fill := 7, pmode := 3, psize := 256,
+rec( enumeration := "G", subgroup := "H", workspace := 1000000, 
+  max := 249998, messages := 0, time := -1, hole := -1, loop := 0, asis := 0, 
+  path := 0, row := 1, mendelsohn := 0, no := 0, lookahead := 0, 
+  compaction := 10, ct := 0, rt := 0, fill := 7, pmode := 3, psize := 256, 
   dmode := 4, dsize := 1000 )
 \endexample
 
@@ -581,7 +581,7 @@ gap> ACEStart(1, fgens, [a^2, b^3, (a*b)^5], []
 #I    #---------------------------------
 #I  INDEX = 60 (a=60 r=77 h=1 n=77; l=3 c=0.00; m=66 t=76)
 1
-gap>
+gap> 
 \endexample
 
 Observe that the `fgens' and  subgroup  generators  (the  empty  list)
@@ -642,7 +642,7 @@ gap> ACEStart(1 : relators := ToACEWords(fgens, [a^2, b^3, (a*b)^5]),
 #I    #---------------------------------
 #I  INDEX = 60 (a=60 r=77 h=1 n=77; l=3 c=0.00; m=66 t=76)
 1
-gap>
+gap> 
 \endexample
 
 Note the usage  of  `ToACEWords'  (see~"ToACEWords")  to  provide  the
@@ -726,7 +726,7 @@ gap> ACEStart(1, ACEGroupGenerators(1), ACERelators(1), [ a*b ]
 #I  CC: a=12 r=6 h=1 n=16; l=2 c=+0.00; d=0
 #I  INDEX = 12 (a=12 r=16 h=1 n=16; l=3 c=0.00; m=14 t=15)
 1
-gap>
+gap> 
 \endexample
 
 Observe that we used `ACERelators(1)' (see~"ACERelators") to grab  the
@@ -763,7 +763,7 @@ gap> ACEDumpStatistics();
 #I    cdgap=0 cdidefn=0 cdidedn=0 cdpdl=0 cdpof=0
 #I    cdpdead=0 cdpdefn=0 cddefn=0
 #I    #---------------------------------
-gap>
+gap> 
 \endexample
 
 The statistic `qcoinc=3' states what we had already observed,  namely,
@@ -796,7 +796,7 @@ gap> ACEDisplayCosetTable([-12]);
 #I      11 ||     10     12     12       2   baBabaB
 #I      12 ||     11     10     11       3   baBabab
 #I  ------------------------------------------------------------
-gap>
+gap> 
 \endexample
 
 Note  how  the  pre-printout  compaction  phase  now  does  some  work
@@ -886,7 +886,7 @@ gap> ACEDisplayCosetTable([-12]);
 #I      10 ||      9      9     11     12       3   babaBa
 #I      11 ||     12     12     12     10       3   babaBab
 #I      12 ||     11     11     10     11       2   babaBaB
-gap>
+gap> 
 \endexample
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

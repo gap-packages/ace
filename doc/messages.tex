@@ -39,21 +39,21 @@ be able to extend the description  to  explain  output  observed  from
 other  {\ACE}  interface  functions.  The  first-observed  (`Info'-ed)
 output from {\ACE}, is {\ACE}'s banner, e.g.
 
-\beginexample
+\begintt
 #I  ACE 3.001        Sun Sep 30 21:45:39 2001
 #I  =========================================
 #I  Host information:
 #I    name = rigel
-\endexample
+\endtt
 
 If there were any errors in the directives put to  {\ACE},  or  output
 from the options described in Appendix~"Other ACE Options", they  will
 appear next. Then,  the  next  observed  output  is  a  row  of  three
 asterisks:
 
-\beginexample
+\begintt
 #I  ***
-\endexample
+\endtt
 
 *Guru note:*
 The three asterisks are generated  by  a  ```text:***'''  (see~"option
@@ -64,18 +64,18 @@ user's use of Appendix~"Other ACE Options" options.
 Next, if the `messages' option (see~"option messages")  is  set  to  a
 non-zero value, what is observed is a heading like:
 
-\beginexample
+\begintt
 #I    #--- ACE 3.001: Run Parameters ---
-\endexample
+\endtt
 
 (where `3.001' may be replaced be some later  version  number  of  the
 {\ACE} binary) followed by the ``input parameters'' developed from the
 arguments  and  options  passed   to   `ACECosetTableFromGensAndRels',
 `ACEStats' or `ACEStart'. After these appears a separator:
 
-\beginexample
-#I    #--------------------------------
-\endexample
+\begintt
+#I    #---------------------------------
+\endtt
 
 followed by any *progress messages* (progress messages only  occur  if
 `messages' is non-zero;  recall  that  by  default  `messages'  =  0),
@@ -85,12 +85,12 @@ In the case of `ACECosetTableFromGensAndRels', the  *results  message*
 is followed by a compaction (`CO' or  `co')  progress  message  and  a
 coset table.
 
-{\ACE}'s exit banner which should looks something like:
+{\ACE}'s exit banner which should look something like:
 
-\beginexample
+\begintt
 =========================================
 ACE 3.001        Sun Sep 30 22:03:36 2001
-\endexample
+\endtt
 
 is only seen when running {\ACE} as a standalone.
 
@@ -105,17 +105,17 @@ really needed). Additionally, there may appear the statistics: `m' and
 `DS' progress message). The meanings of  the  various  statistics  and
 tags will follow later. The following is a sample progress message:
 
-\beginexample
+\begintt
 #I  AD: a=2 r=1 h=1 n=3; h=66.67% l=1 c=+0.00; m=2 t=2
-\endexample
+\endtt
 
 with tag `AD' and values for the statistics `a', `r',  `h',  `n',  `h'
 (appears because `messages' $\<  0$),  `l',  `c',  `m'  and  `t'.  The
 following is a sample results message:
 
-\beginexample
+\begintt
 #I  INDEX = 12 (a=12 r=16 h=1 n=16; l=3 c=0.01; m=14 t=15)
-\endexample
+\endtt
 
 which, in this case, declares a successful enumeration  of  the  coset
 numbers of a subgroup of index 12 within a group,  and,  as  it  turns
