@@ -419,7 +419,7 @@ Section~"The                ACEStrategyOptions                 list").
 \enditems
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\Section{The ACEStrategyOptions list}
+\Section{The ACEStrategyOptions List}
 
 For  convenience,  the  {\GAP}  list  `ACEStrategyOptions'{\undoquotes
 \atindex{ACEStrategyOptions}{@`ACEStrategyOptions'}},   contains   the
@@ -672,8 +672,8 @@ for example, the `messages' option is non-zero.
 
 We   describe   the   \lq{}{\ACE}   Parameter    Options'    in    the
 Sections~"General ACE Parameter Options that  Modify  the  Enumeration
-Process", "ACE Parameter Options Modifying C-Style Definitions",  "ACE
-Parameter Options for R-Style Definitions", "ACE Parameter Options for
+Process", "ACE Parameter Options Modifying C Style Definitions",  "ACE
+Parameter Options for R Style Definitions", "ACE Parameter Options for
 Deduction Handling", "Technical ACE Parameter Options", "ACE Parameter
 Options controlling ACE Output", and~"ACE Parameter Options that gives
 Names to the Group and Subgroup", following.
@@ -701,22 +701,22 @@ of involutory generators see the {\ACE} standalone manual.
 
 \>`ct:=<val>'{option ct}@{option `ct'}
 \>`cfactor:=<val>'{option cfactor}@{option `cfactor'}&
-Number of C-style definitions per pass; `<val>' should be an  integer. 
+Number of C style definitions per pass; `<val>' should be an  integer. 
 (Shortest abbreviation of `cfactor' is `c'.)
 
 The absolute value of `<val>' sets the
-number of C-style definitions per  pass through  the enumerator's main
+number of C style definitions per  pass through  the enumerator's main
 loop. The sign of `<val>'  sets the  style. The possible  combinations
 of the values of `ct' and  `rt'  (described below)  are  given in  the
 table of  enumeration styles in Section~"Enumeration Style".
 
 \>`rt:=<val>'{option rt}@{option `rt'}
 \>`rfactor:=<val>'{option rfactor}@{option `rfactor'}&
-Number of R-style definitions per pass; `<val>' should be an  integer. 
+Number of R style definitions per pass; `<val>' should be an  integer. 
 (Shortest abbreviation of `rfactor' is `r'.)
 
 The absolute value of `<val>' sets the
-number of R-style definitions per  pass through  the enumerator's main
+number of R style definitions per  pass through  the enumerator's main
 loop. The sign of `<val>'  sets the  style. The possible  combinations
 of the values of `ct' (described above)  and  `rt'  are  given in  the
 table of  enumeration styles in Section~"Enumeration Style".
@@ -730,7 +730,7 @@ the subgroup generators, in the sense that they are applied  to  coset
 number 1 at the start of an enumeration. A value of 0 for this  option
 turns this feature off and the (default) argument of $-1$ includes all
 the relators. A positive argument includes  the  specified  number  of
-relators,  in  order.  The  `no'  option  affects  only  the   C-style
+relators,  in  order.  The  `no'  option  affects  only  the   C style
 procedures.
 
 \>`mendelsohn'{option mendelsohn}@{option `mendelsohn'}&
@@ -755,18 +755,20 @@ off.
 \enditems
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\Section{ACE Parameter Options Modifying C-Style Definitions}
+\Section{ACE Parameter Options Modifying C Style Definitions}
 
-The  next  three  options  are  relevant  only  for   making   C-style
-definitions. Making definitions in C-style, that is filling the  coset
-table line by line, it can be very advantageous to  switch  to  making
-definitions from the preferred definition stack. Possible  definitions
-can be extracted from this stack in various ways and the  two  options
-`pmode'   and   `psize'   (see~"option   pmode"   and~"option   psize"
-respectively) regulate this. However it should be  clearly  understood
-that making all definitions from a preferred definition stack one  may
-violate the condition of Mendelsohn's theorem, and the  option  `fill'
-(see~"option fill") can be used to avoid this.
+The  next  three  options  are  relevant  only  for  making  *C  style
+definitions*\atindex{C style definitions}{@C style  definitions}  (see
+Section~"Enumeration Style"). Making definitions in C style,  that  is
+filling the coset table line by line, it can be very  advantageous  to
+switch to making definitions  from  the  preferred  definition  stack.
+Possible definitions can be extracted from this stack in various  ways
+and  the  two  options  `pmode'  and   `psize'   (see~"option   pmode"
+and~"option psize" respectively) regulate this. However it  should  be
+clearly understood  that  making  all  definitions  from  a  preferred
+definition  stack  one  may  violate  the  condition  of  Mendelsohn's
+theorem, and the option `fill' (see~"option  fill")  can  be  used  to
+avoid this.
 
 \beginitems
 
@@ -786,7 +788,8 @@ proportion of the coset table is always kept filled. Before defining a
 coset number to fill a  gap  of  length  one,  the  enumerator  checks
 whether `fill' times the completed part of the table is at  least  the
 total size of the table  and,  if  not,  fills  coset  table  rows  in
-standard order (C-style) instead of filling gaps.
+standard order (i.e.~C style; see Section~"Enumeration Style") instead
+of filling gaps.
 
 An  argument of  0  selects  the default  value  of $\lfloor  5(n+2)/4
 \rfloor$,  where $n$  is the  number of  columns in  the  table.  This
@@ -837,7 +840,7 @@ store up to $2^n-1$ entries.
 \enditems
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\Section{ACE Parameter Options for R-Style Definitions}
+\Section{ACE Parameter Options for R Style Definitions}
 
 \beginitems
 
@@ -845,20 +848,20 @@ store up to $2^n-1$ entries.
 Set the \lq{}row filling' option; `<val>' is either 0 or 1.
 
 By default, \lq{}row filling' is on (i.e.~`true' or 1). To turn it off
-set `row' to either `false' or 0 (both are translated to 0 when passed
-to  the {\ACE}  binary).   When making  HLT-style  definitions, it  is
-normal to scan each row of  the coset table after its coset number has
-been applied to  all relators, and make definitions  to fill any holes
-in that row of the  coset table encountered. This will, in particular,
-guarantee  that   the  condition  of  Mendelsohn's   Theorem  will  be
-fulfilled.  Failure  to do  so can cause  even simple  enumerations to
-overflow.
+set `row' to `false' or 0 (both are translated to 0 when passed to the
+{\ACE}  binary).  When   making   HLT   style   (i.e.~R   style;   see
+Section~"Enumeration Style") definitions, rows of the coset table  are
+scanned for holes after its coset  number  has  been  applied  to  all
+relators, and definitions are made to fill any holes encountered. This
+will,  in  particular,  guarantee  fulfilment  of  the  condition   of
+Mendelsohn's  Theorem.  Failure  to  do  so  can  cause  even   simple
+enumerations to overflow.
 
 \>`lookahead:=<val>'{option lookahead}@{option `lookahead'}&
 Lookahead; `<val>' should be in the integer range 0 to 4.
 (Shortest abbreviation: `look'.)
   
-Although HLT-style strategies are fast, they are local, in  the  sense
+Although HLT style strategies are fast, they are local, in  the  sense
 that  the  implications  of  any  definitions/deductions  made   while
 applying coset numbers may not become apparent until much  later.  One
 way to alleviate this problem is to perform  lookaheads  occasionally;
@@ -866,8 +869,8 @@ that is, to test the information in the table, looking for  deductions
 or  concidences.  {\ACE}  can  perform  a  lookahead  when  the  table
 overflows, before the compaction routine is called. Lookahead  can  be
 done using the entire table or only that part of the table  above  the
-current coset number, and it  can  be  done  R-style  (scanning  coset
-numbers from the  beginning  of  relators)  or  C-style  (testing  all
+current coset number, and it  can  be  done  R style  (scanning  coset
+numbers from the  beginning  of  relators)  or  C style  (testing  all
 definitions in all essentially different positions).
 
 The following are the effects of the possible values of `lookahead':
@@ -875,15 +878,18 @@ The following are the effects of the possible values of `lookahead':
 \beginlist
 
 \item{--} 0 disables lookahead;
-\item{--} 1 does a partial table lookahead, R-style; 
-\item{--} 2 does a whole table lookahead, C-style; 
-\item{--} 3 does a whole table lookahead, R-style; and
-\item{--} 4 does a partial table lookahead, C-style.  
+\item{--} 1 does a partial table lookahead, R style; 
+\item{--} 2 does a whole table lookahead, C style; 
+\item{--} 3 does a whole table lookahead, R style; and
+\item{--} 4 does a partial table lookahead, C style.  
 
 \endlist
 
 The default is 1 if the `hlt' strategy is used and  0  otherwise;  see
 Chapter~"Strategy Options for ACE".
+
+Section~"Enumeration Style" describes the various enumeration  styles,
+and, in particular, R style and C style.
 
 \enditems
 
@@ -898,11 +904,12 @@ Deduction mode; `<val>' should be in the integer range 0 to 4.
 
 A completed table  is only valid if every table  entry has been tested
 in all essentially different  positions in all relators.  This testing
-can either be done directly  (Felsch strategy) or via relator scanning
-(HLT strategy).  If it is  done directly, then more than one deduction
-(i.e., table  entry) can be waiting  to be processed at  any one time.
-So the untested deductions are stored in a stack.  Normally this stack
-is fairly small but, during a collapse, it can become very large.
+can either be done directly (`felsch' strategy;  see~"option  felsch")
+or via relator scanning (`hlt' strategy; see~"option hlt"). If  it  is
+done directly, then more than one deduction (i.e., table entry) can be
+waiting to be processed at any one time. So  the  untested  deductions
+are stored in a stack. Normally this stack is fairly small but, during
+a collapse, it can become very large.
 
 This command allows the user  to  specify  how  deductions  should  be
 handled. The value <val> has the following interpretations:
@@ -991,18 +998,6 @@ the limit the run is stopped and the current table returned.
 Note that a limit of $0$ performs exactly one pass  through  the  main
 loop, since $0 \ge 0$.
 
-%\begintt
-%???????????????????????????????????????????????????????????????????
-%*GREG:
-%
-%DOES THIS HAVE RELEVANCE TO THE INTERACTIVE MODE?*
-%
-%If the enumerator is run in the continue mode, this allows a form of
-%  ``single-stepping''
-%
-%??????????????????????????????????????????????????????????????????
-%\endtt
-
 The time  limit is approximate, in  the sense that  the enumerator may
 run for a longer, but never a shorter, time.  So, if there is, e.g., a
 big collapse (so that the time round the loop becomes very long), then
@@ -1084,28 +1079,49 @@ last compaction (or  from the start of the  enumeration, if there have
 been no compactions).
 
 *Notes:*
-In some strategies (e.g., `hlt') a lookahead phase may be  run  before
-compaction is attempted. In  other  strategies  (e.g.,  `sims  :=  3')
-compaction may be performed while there  are  outstanding  deductions;
-since deductions are discarded during compaction,  a  final  lookahead
-phase will (automatically) be performed.
+In some strategies (e.g., `hlt'; see~"option hlt") a  lookahead  phase
+may be run before compaction is attempted. In other strategies  (e.g.,
+`sims := 3'; see~"option sims")  compaction  may  be  performed  while
+there are  outstanding  deductions;  since  deductions  are  discarded
+during compaction, a final lookahead  phase  will  (automatically)  be
+performed.
 
 Compacting a table \lq{}destroys'  information  and  history,  in  the
 sense that the coincidence list is deleted, and the table entries  for
 any dead coset numbers\index{dead coset (number)} are deleted.
 
 \>`max:=<val>'{option max}@{option `max'}&
-Maximum number of coset numbers to be defined;
+Sets the maximum coset number that can be defined;
 `<val>' should be $0$ or an integer greater than or equal to 2.
 
-Sets the maximum  number of coset numbers to  be defined.  By default,
-all  of the workspace  is used,  if necessary,  in building  the coset
-table.  So the table size is  an upper bound on how many coset numbers
-can be active at any one time.   The `max' option allows a limit to be
-placed on  how much of the  physical table space is  made available to
-the enumerator.   Enough space for  at least two coset  numbers (i.e.,
-the subgroup and one other) must  be made available.  An argument of 0
-selects all of the workspace.
+By default (which is the case `max'${}=0$), all of  the  workspace  is
+used, if necessary, in building the coset table. So the table size (in
+terms of the number of rows) is an  upper  bound  on  how  many  coset
+numbers can be alive at any one time. The `max' option allows a  limit
+to be placed on how much physical table space is made available to the
+enumerator. Enough space for at least two  coset  numbers  (i.e.,  the
+subgroup and one other) must be made available.
+
+*Notes:*
+If the `easy'  strategy  (see~"option  easy")  is  selected,  so  that
+`compaction' (see~"option compaction") is off (i.e.~set  to  100)  and
+`lookahead' (see~"option lookahead") is off (i.e.~set to 0), and `max'
+is set to a positive integer, then coset numbers are not  reused,  and
+hence `max' bounds the *total* number `totcosets' (see  Section~"Coset
+Statistics  Terminology")  of  coset   numbers   defined   during   an
+enumeration.
+
+On the other hand, if one (or both) of `compaction' or `lookahead'  is
+not off, then some reuse of coset numbers may occur, so that, for  the
+case where `max' is a positive integer, the value of  `totcosets'  may
+be greater than `max'.
+
+However,  whenever  `max'  is  set  to  a   positive   integer,   both
+*activecosets* (the number of *alive* coset numbers at the end  of  an
+enumeration) and  *maxcosets*  (the  maximum  number  of  alive  coset
+numbers at any point of an enumeration)  are  bounded  by  `max'.  See
+Section~"Coset  Statistics  Terminology",  for  a  discussion  of  the
+terminology: *activecosets* and *maxcosets*.
 
 \>`hole:=<val>'{option hole}@{option `hole'}&
 Maximum percentage of holes allowed during an enumeration;

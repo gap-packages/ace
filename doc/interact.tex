@@ -1067,12 +1067,12 @@ The  compaction  routine  is  called   automatically   when   any   of
 \>ACEStandardCosetNumbering( <i> ) F
 \>ACEStandardCosetNumbering() F
 
-compact   and   then   does   a    `lenlex'{\undoquotes\atindex{lenlex
+compact   and   then    do    a    `lenlex'{\undoquotes\atindex{lenlex
 standardisation   scheme}    {@`lenlex'    standardisation    scheme}}
 standardisation (see Section~"Coset Table Standardisation Schemes") of
 the numbering of cosets in the coset table of the <i>th  (or  default)
 interactive {\ACE} process started by `ACEStart'. That is, for a given
-ordering of the generators in the columns of the table, it produces  a
+ordering of the generators in the columns of the table, they produce a
 canonic table. A table that  includes  a  column  for  each  generator
 inverse  immediately  following  the  column  for  the   corresponding
 generator, standardised according to  the  `lenlex'  scheme,  has  the
@@ -1120,8 +1120,9 @@ of the first two generators), followed by  the  re-`start'ing  of  the
 enumeration.
 
 *Guru Notes:*
-In  half  of  the  ten  standard  enumeration   strategies   of   Sims
-\cite{Sim94}, the table is standardised repeatedly. This is  expensive
+In  five  of  the  ten  standard  enumeration   strategies   of   Sims
+\cite{Sim94} (i.e.~the five Sims strategies not provided  by  {\ACE}),
+the   table   is   standardised   repeatedly.   This   is    expensive
 computationally, but can result in fewer cosets being  necessary.  The
 effect of doing this can be investigated  in  {\ACE}  by  (repeatedly)
 halting  the  enumeration  (by  say,  imposing  timing  restrictions),

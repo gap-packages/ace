@@ -101,18 +101,18 @@ to make definitions. When a new coset number has  to  be  defined,  in
 
 \item{--} One may fill the next empty entry  in  the  coset  table  by
 scanning from the left/top of the coset table towards the right/bottom
---  that  is,  in  order  row  by  row.  This   is   called   *C-style
-definition*\atindex{C-style  definition}{@C-style   definition}   (for
+--  that  is,  in  order  row  by  row.  This   is   called   *C style
+definition*\atindex{C  style  definition}{@C  style  definition}  (for
 *C*oset Table Based definition) of coset numbers. In fact a  procedure
 needs to follow a method like this to some extent for the proofs  that
 coset enumeration eventually terminates in the case  of  finite  index
 (see~\cite{Neu82}).
 
-\item{--} In *R-style definition*\atindex{R-style definition}{@R-style
-definition} (for *R*elator Based definition) the order in which  coset
-numbers are defined is explicitly prescribed by  the  order  in  which
-rows of (the subgroup generator tables and)  the  relator  tables  are
-filled by making definitions.
+\item{--} For an *R style definition*\atindex{R  style  definition}{@R
+style definition} (for *R*elator Based definition), the order in which
+coset numbers are defined is explicitly prescribed  by  the  order  in
+which rows of (the subgroup generator tables and) the  relator  tables
+are filled by making definitions.
 
 \item{--} One may choose  definitions  from  a  *Preferred  Definition
 Stack*\index{preferred definition stack}. In this stack  possibilities
@@ -128,9 +128,8 @@ stack'.
 \endlist
 
 The *enumeration style* is mainly determined by  the  balance  between
-C-style definitions and R-style definitions, which  is  controlled  by
-the values of the `ct' and `rt' options (see~"option  ct"  and~"option
-rt").
+C style and R style definitions, which is controlled by the values  of
+the `ct' and `rt' options (see~"option ct" and~"option rt").
 
 However this still leaves us with plenty of freedom for the design  of
 definition strategies, freedom which can,  for  example,  be  used  to
@@ -190,40 +189,41 @@ Rt value     Ct value     style name
 -----------------------------------------
 \endtt
 
-In *C-style*\atindex{C-style}{@C-style} most definitions are  made  in
+In *C style*\atindex{C style}{@C style}, most definitions are made  in
 the next empty coset table slot and are (in principle) tested  in  all
 essentially different  positions  in  the  relators;  i.e.~this  is  a
-Felsch-like mode.
+Felsch-like style.
 
-However in C-Style some definitions may be made following a  preferred
-definition strategy, controlled by the  `pmode'  and  `psize'  options
-(see~"option pmode" and~"option psize").
+However, in  C  style,  some  definitions  may  be  made  following  a
+preferred definition strategy, controlled by the `pmode'  and  `psize'
+options (see~"option pmode" and~"option psize").
 
-*Cr-style*\atindex{Cr-style}{@Cr-style} is like C-style except that  a
-single R-style pass is done after the initial C-style pass.
+*Cr style*\atindex{Cr style}{@Cr style} is like C style except that  a
+single R style pass is done after the initial C style pass.
 
-In *CR-style*\atindex{CR-style}{@CR-style} alternate passes of C-style
-and R-style are performed.
+In *CR style*\atindex{CR style}{@CR  style},  alternate  passes  of  C
+style and R style are performed.
 
-In *R-style*\atindex{R-style}{@R-style} all the definitions  are  made
-via relator scans; i.e.~this is an HLT-like mode.
+In *R style*\atindex{R style}{@R style}, all the definitions are  made
+via relator scans; i.e.~this is an HLT-like style.
 
-*R\*-style*\atindex{R\*-style}{@R\*-style} makes definitions the  same
-as R-style, but tests all definitions as for C-style.
+*R\* style*\atindex{R\* style}{@R\* style} makes definitions the  same
+as R style, but tests all definitions as for C style.
 
-*Rc-style*\atindex{Rc-style}{@Rc-style} is like R-style, except that a
-single C-style pass is done after the initial R-style pass.
+*Rc style*\atindex{Rc style}{@Rc style} is like R style, except that a
+single C style pass is done after the initial R style pass.
 
-In *R/C-style*\atindex{R/C-style}{@R/C-style} we run in R-style  until
+In *R/C style*\atindex{R/C style}{@R/C style}, we run in R style until
 an overflow, perform a lookahead on the entire table, and then  switch
-to CR-style.
+to CR style.
 
-*Defaulted     R/C-style*\atindex{Defaulted      R/C-style}{@Defaulted
-R/C-style} is the default style,  used  if  you  call  {\ACE}  without
-specifying options. In it we use R/C-style with `ct' set to  1000  and
-`rt' set to approximately $2000$ divided by the total  length  of  the
-relators in an attempt to balance R and C definitions when  we  switch
-to CR-style.
+*Defaulted R/C*\atindex{Defaulted  R/C  style}{@Defaulted  R/C  style}
+($={}$*R/C    (defaulted)*\atindex{R/C     (defaulted)     style}{@R/C
+(defaulted) style}$\,$) *style* is the default style used if you  call
+{\ACE} without specifying options. In it, we use R/C style  with  `ct'
+set to 1000 and `rt' set to approximately $2000$ divided by the  total
+length of the relators in an attempt to balance R style  and  C  style
+definitions when we switch to CR style.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{Finding Deductions, Coincidences, and Preferred Definitions} 
@@ -293,19 +293,19 @@ twice as many table entries (deductions)  as  other  definitions.  The
 value of the `pmode'  option  (see~"option  pmode")  determines  which
 definitions are *preferred*; if the value of  the  `pmode'  option  is
 non-zero, depending on the `pmode' value, gaps  of  length  one  found
-during relator scans in Felsch style  are  either  filled  immediately
-(subject to the value of `fill') or noted in the *preferred definition
-stack*\index{preferred definition  stack}.  The  preferred  definition
-stack is implemented as a ring  of  size  determined  by  the  `psize'
-option (see~"option psize").  However,  making  preferred  definitions
-carelessly  can  violate  the  conditions  required   for   guaranteed
-termination of the coset enumeration procedure in the case  of  finite
-index. To avoid such a violation {\ACE}  ensures  a  fraction  of  the
-coset table is filled before  a  preferred  definition  is  made;  the
-reciprocal of this fraction, the `fill factor', is manipulated via the
-`fill' option (see~"option fill"). In~\cite{Hav91}, the `felsch :=  1'
-type enumeration of the cosets of the certain index 40 subgroup of the
-$G(3,21)$ Macdonald group was further  improved  to  require  a  total
+during relator C style  (i.e.~Felsch-like)  scans  are  either  filled
+immediately  (subject  to  the  value  of  `fill')  or  noted  in  the
+*preferred definition stack*\index{preferred  definition  stack}.  The
+preferred definition stack is implemented as a ring of size determined
+by the `psize' option (see~"option psize"). However, making  preferred
+definitions  carelessly  can  violate  the  conditions  required   for
+guaranteed termination of the coset enumeration procedure in the  case
+of finite index. To avoid such a violation {\ACE} ensures  a  fraction
+of the coset table is filled before a preferred  definition  is  made;
+the reciprocal of this fraction, the `fill factor', is manipulated via
+the `fill' option (see~"option fill"). In~\cite{Hav91}, the `felsch :=
+1' type enumeration of the cosets of the certain index 40 subgroup  of
+the $G(3,21)$ Macdonald group was further improved to require a  total
 number of coset numbers  of  just  43  by  incorporating  the  use  of
 preferred definitions.
 
@@ -319,7 +319,7 @@ To do this one starts  at  a  known  subgroup  (possibly  the  trivial
 subgroup). Then one may augment it by adding new  subgroup  generators
 either        explicitly        via         `ACEAddSubgroupGenerators'
 (see~"ACEAddSubgroupGenerators")   or   implicitly   by    introducing
-*coincidences*\index{coincidences}     (see     `ACECosetCoincidence':
+*coincidences*\index{coincidence}     (see      `ACECosetCoincidence':
 "ACECosetCoincidence",           or           `ACERandomCoincidences':
 "ACERandomCoincidences"). Also, one may descend to  smaller  subgroups
 by  deleting  subgroup  generators  via  `ACEDeleteSubgroupGenerators'
@@ -435,6 +435,30 @@ already seen, 6, 7, etc.).
 In the next version of {\GAP}, it is expected that the `lenlex' scheme
 will be adopted as the standard  {\GAP}  coset  table  standardisation
 scheme.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{Coset Statistics Terminology}
+
+There are three statistics involved in the counting  of  coset  number
+definitions:                       *activecosets*\index{activecosets},
+*maxcosets*\index{maxcosets} and  *totcosets*\index{totcosets};  these
+are three of the fields of the  record  returned  by  `ACEStats'  (see
+Section~"Using ACE  Directly  to  Test  whether  a  Coset  Enumeration
+Terminates"), and they correspond to the `a', `m' and  `t'  statistics
+of an {\ACE} \lq{}results  message'  (see  Appendix~"The  Meanings  of
+ACE's Output  Messages").  As  already  described,  coset  enumeration
+proceeds by defining coset  numbers;  *totcosets*  counts  *all*  such
+definitions made during an enumeration. During the  coset  enumeration
+process, *coincidences*\index{coincidence} usually occur, resulting in
+the  larger  of  each  coincident  pair   becoming   a   *dead   coset
+number*\index{dead coset (number)}. The  statistic  *activecosets*  is
+the count of coset  numbers  left  *alive*\index{alive  coset  number}
+(i.e.~not dead) at the end of an enumeration; and *maxcosets*  is  the
+maximum number of *alive* cosets at any point of an enumeration.
+
+In practice, the statistics *maxcosets* and *totcosets* tend to be  of
+a similar order, though, of course, *maxcosets* can never be more than
+*totcosets*.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%

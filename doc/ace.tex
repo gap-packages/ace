@@ -59,7 +59,10 @@ Interactively").
 
 Each of these ways gives the user access to a welter of options, which
 are discussed in full  in  Chapters~"Options  for  ACE"  and~"Strategy
-Options for ACE".
+Options for ACE". Yet more options are provided in Appendix~"Other ACE
+Options",  but  please  take  note  of  the  Appendix's   introductory
+paragraph. Check out Appendix~"Examples" for numerous examples of  the
+{\ACE} commands.
 
 *Note*: Some care needs to be taken with  options;  be  sure  to  read
 Section~"General Warnings  regarding  the  Use  of  Options"  and  the
@@ -318,7 +321,13 @@ changed  within  {\ACE}  and  `false',  otherwise.  (Technically,   by
 there is a relator in <rels> of form `x*x' or `x^2''. Such a generator
 may, of course, turn out to actually be the identity.)
 
-*Note:* 
+*Notes:* 
+To initiate the coset enumeration,  the  `start'  option  (see~"option
+start") is quietly inserted after the user's supplied options,  unless
+the user herself supplies one  of  the  enumeration-invoking  options,
+which are: `start', or one of its synonyms, `aep'  (see~"option  aep")
+or `rep' (see~"option rep").
+
 When  a  user  calls  `ACECosetTable'   with   the   `lenlex'   option
 (see~"option  lenlex"),  occasionally  it  is  necessary  to   enforce
 `asis'${}=1$ (see~"option asis"), which may be counter to the  desires
@@ -350,20 +359,50 @@ don't want to  transfer the whole coset table  to {\GAP}, you can call
 \>ACEStats( <fgens>, <rels>, <sgens> [: <options>] ) F
 \label{ACEStatsNI}
 
-which returns a record `rec(index=<i>, cputime=<c>, cputimeUnits=<cu>,
-activecosets=<a>, maxcosets=<m>, totcosets=<t>)' for which <i> is  the
-index of the subgroup $\langle <sgens> \rangle$  in  $\langle  <fgens>
-\mid <rels> \rangle$  (or  $0$,  whenever  the  enumeration  does  not
-succeed); <c> is the total CPU time used as  an  integer;  <cu>  is  a
-string representing the units of <c>, e.g.~`"10^-2 seconds"';  <a>  is
-the number of currently active  coset  numbers;  <m>  is  the  maximum
-number  of  \lq{}alive'  coset  numbers  at  any  one  time   in   the
-enumeration; and <t> is the total number of coset  numbers  that  were
-defined in the enumeration. Options (see  Chapters~"Options  for  ACE"
-and~"Strategy Options for ACE") are used in exactly the  same  way  as
-for `ACECosetTableFromGensAndRels', discussed in the previous section;
-and the same warnings alluded to previously,  regarding  options  (see
+which returns a record with fields
+
+\beginitems
+
+\quad`index' &the index of the subgroup $\langle <sgens>  \rangle$  in
+$\langle <fgens> \mid <rels> \rangle$, or $0$ if the enumeration  does
+not succeed;
+
+\quad`cputime' &the total CPU  time  used  as  an  integer  number  of
+`cputimeUnits' (the next field);
+
+\quad`cputimeUnits' &the units of the  `cputime'  field,  e.g.~`"10^-2
+seconds"';
+
+\quad`activecosets'\index{activecosets}  &the  number   of   currently
+*active* (i.e.~*alive*) coset numbers (see  Section~"Coset  Statistics
+Terminology");
+
+\quad`maxcosets'\index{maxcosets} &the *maximum* number of alive coset
+numbers at  any  one  time  in  the  enumeration  (see  Section~"Coset
+Statistics Terminology"); and
+
+\quad`totcosets'\index{totcosets} &the *total* number of coset numbers
+that were defined in the enumeration  (see  Section~"Coset  Statistics
+Terminology").
+
+\enditems
+
+Options (see Chapters~"Options  for  ACE"  and~"Strategy  Options  for
+ACE")   are   used    in    exactly    the    same    way    as    for
+`ACECosetTableFromGensAndRels', discussed in the previous section; and
+the same  warnings  alluded  to  previously,  regarding  options  (see
 Section~"General Warnings regarding the Use of Options"), apply.
+
+*Notes:*
+To initiate the coset enumeration,  the  `start'  option  (see~"option
+start") is quietly inserted after the user's supplied options,  unless
+the user herself supplies one  of  the  enumeration-invoking  options,
+which are: `start', or one of its synonyms, `aep'  (see~"option  aep")
+or `rep' (see~"option rep").
+
+The fields of the  `ACEStats'  record  are  determined  by  parsing  a
+\lq{}results message' (see  Appendix~"The  Meanings  of  ACE's  Output
+Messages") from {\ACE}.
 
 `ACEStats' may also be called with 0 or 1 arguments; in  these  cases,
 it is being called interactively (see~"ACEStatsI").
@@ -427,7 +466,7 @@ subgroups by starting from a given one (possibly the trivial subgroup)
 and then augmenting  it  by  adding  new  subgroup  generators  either
 explicitly               via                `ACEAddSubgroupGenerators'
 (see~"ACEAddSubgroupGenerators")   or   implicitly   by    introducing
-*coincidences*\index{coincidences}     (see     `ACECosetCoincidence':
+*coincidences*\index{coincidence}     (see      `ACECosetCoincidence':
 "ACECosetCoincidence",           or           `ACERandomCoincidences':
 "ACERandomCoincidences");  or  one  can  find  smaller  subgroups   by
 deleting   subgroup   generators   via   `ACEDeleteSubgroupGenerators'
@@ -727,21 +766,20 @@ whereas
 gap> SetInfoACELevel(3);
 \endtt
 
-enables the display of all of  the  output  from  {\ACE},  except  the
-{\ACE} banner (including the host machine information); in particular,
-the progress messages, emitted by {\ACE} when  the  `messages'  option
-(see~"option messages") is set to a non-zero value, will be  displayed
-via `Info'. Finally,
+enables the display of  all  of  the  output  from  {\ACE}  (including
+{\ACE}'s  banner,  containing  the  host  machine   information);   in
+particular,  the  progress  messages,  emitted  by  {\ACE}  when   the
+`messages' option (see~"option messages") is set to a non-zero  value,
+will be displayed via `Info'. Finally,
 
 \begintt
 gap> SetInfoACELevel(4);
 \endtt
 
 enables the display of all the input  directed  to  {\ACE}  (behind  a
-\lq{}`ToACE> '' prompt, so you can distinguish it from  other  output)
-and, interactively, the {\ACE}  banner  (including  the  host  machine
-information). The `InfoACE' level of 4 is really  for  gurus  who  are
-familiar with the {\ACE} standalone.
+\lq{}`ToACE> '' prompt, so you can distinguish it from other  output).
+The `InfoACE' level of 4 is really for gurus who are familiar with the
+{\ACE} standalone.
 
 \enditems
 

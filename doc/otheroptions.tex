@@ -53,6 +53,13 @@ the statistics `m' and `t'. To observe these messages either  set  the
 `InfoLevel' of `InfoACE' to 3 or non-interactively you can peruse  the
 {\ACE} output file (see~"option aceoutfile").
 
+Normally when a non-interactive {\ACE} interface function  is  called,
+the option `start' (see~"option start"), is quietly inserted after all
+the options provided by the user, to  initiate  a  coset  enumeration.
+Since the `aep' option invokes an enumeration, the quiet insertion  of
+the `start' option is neither needed nor done, when a  non-interactive
+{\ACE} interface function is called with the `aep' option.
+
 The order in which the  equivalent  presentations  are  generated  and
 tested has no particular significance, but note that the  presentation
 as given *after* the initial priming run) is the  *last*  presentation
@@ -124,6 +131,13 @@ used and the  summary  result  line  are  printed.  To  observe  these
 messages either set the `InfoLevel' of `InfoACE'  to  at  least  3  or
 non-interactively you can peruse the {\ACE} output  file  (see~"option
 aceoutfile").
+
+Normally when a non-interactive {\ACE} interface function  is  called,
+the option `start' (see~"option start"), is quietly inserted after all
+the options provided by the user, to  initiate  a  coset  enumeration.
+Since the `rep' option invokes an enumeration, the quiet insertion  of
+the `start' option is neither needed nor done, when a  non-interactive
+{\ACE} interface function is called with the `rep' option.
 
 *Notes:*
 The relator inversions and rotations are \lq{}genuinely'  random.  The
@@ -294,6 +308,12 @@ Start an enumeration. (Shortest abbreviation of `begin' is `beg'.)
 Any existing information in the table is cleared, and the  enumeration
 starts from coset 1 (i.e., the subgroup).
 
+Normally when a non-interactive {\ACE} interface function  is  called,
+the option `start' (see~"option start"), is quietly inserted after all
+the options provided by the user, to  initiate  a  coset  enumeration;
+however, this is not done, if the user  herself  supplies  either  the
+`begin' or `start' option.
+
 Interactively, use `ACEStart' (see~"ACEStart").
 
 \>`check'{option check}@{option `check'}
@@ -395,14 +415,13 @@ the range 0 to 2, and <detail> must be 0 or 1.
 (Shortest abbreviation: `d'.)
 
 The value of <level> determines which of the three levels of {\ACE} to
-dump. (You will need to read the standalone manual to understand  what
-Levels 0, 1 and 2 are all about.) The value of <detail> determines the
-amount of detail (`<detail> = 0' means less detail).  The  first  form
-(with no arguments) selects `<level> = 0, <detail> =  0'.  The  second
-form of this command makes `<detail> = 0'. This option is intended for
-gurus; the source code should be consulted  to  see  what  the  output
-means. Non-interactively, the output from `dump' is  directed  to  the
-temporary file with path `ACEData.banner'.
+dump. (You will need to read the standalone manual  `acce3001.dvi'  in
+the `standalone-doc' directory to understand what Levels 0,  1  and  2
+are all about.) The value of <detail> determines the amount of  detail
+(`<detail> = 0' means less detail). The first form (with no arguments)
+selects `<level> = 0, <detail> = 0'. The second form of  this  command
+makes `<detail> = 0'. This option is intended for  gurus;  the  source
+code should be consulted to see what the output means.
 
 Interactively, use `ACEDumpVariables' (see~"ACEDumpVariables").
 
@@ -496,8 +515,13 @@ Interactively,  use  `ACEGroupGenerators'  (see~"ACEGroupGenerators"),
 "ACESubgroupGenerators"), and `ACEParameters' (see~"ACEParameters").
 
 *Notes:*
-Only use *after* an enumeration run; otherwise, the value 0  for  some
-options will be unreliable.
+The `sr' option should  only  be  used  *after*  an  enumeration  run;
+otherwise, the value 0 for some options will be unreliable. To  ensure
+this occurs non-interactively, ensure one of the options that  invokes
+an enumeration: `start' (see~"option  start")  or  `aep'  (see~"option
+aep") or `rep' (see~"option rep"), precedes the `sr' option. (When  an
+enumeration-invoking option is included  non-interactively  the  quiet
+inclusion step of the `start' option is omitted.)
 
 \>`print'{option print}@{option `print'}
 \>`print:=<val>'{option print}@{option `print'}
@@ -591,29 +615,34 @@ Interactively, use `ACERecover' (see~"ACERecover").
 
 \>`standard'{option standard}@{option `standard'}&
 Compacts {\ACE}'s  coset  table  and  standardises  the  numbering  of
-cosets. (Shortest abbreviation: `st'.)
+cosets, according to the `lenlex'  scheme  (see  Section~"Coset  Table
+Standardisation Schemes"). (Shortest abbreviation: `st'.)
 
 For a given ordering of the generators in the columns of the table, it
 produces a canonical numbering of the cosets. This function  does  not
 display the new table; use the `print' (see~"option print") for  that.
-Such a table has the property that a row-major scan  (i.e.~a  scan  of
-the successive rows of the *body* of the table row by row,  from  left
-to right) encounters previously unseen cosets in numeric order.
+Such a table has the property that a scan of the  successive  rows  of
+the *body* of the table row by row, from  left  to  right,  encounters
+previously unseen cosets in numeric order.
 
 *Notes:*
-In a canonic  table,  the  coset  representatives  are  ordered  first
-according to length and then the lexicographic order  defined  by  the
-order the generators and their inverses head the columns.  Note  that,
-since {\ACE} avoids having an involutory generator in the first column
-when it can, this lexicographic order does not necessarily  correspond
-with the order in which the generators were first put to  {\ACE}.  Two
-tables are equivalent only if their canonic forms are the same.  Also,
-standardising the coset numbering within {\ACE} does *not* affect  the
-{\GAP} coset table obtained via `ACECosetTable'.
+In a  `lenlex'  standardised  table,  the  coset  representatives  are
+ordered first according to length and  then  the  lexicographic  order
+defined by the order  the  generators  and  their  inverses  head  the
+columns. Note that, since {\ACE} avoids having an involutory generator
+in the first column when it can, this  lexicographic  order  does  not
+necessarily correspond with the order in  which  the  generators  were
+first put to {\ACE}. Two tables are equivalent only if  their  canonic
+forms are the same. Invoking this option directly  does  *not*  affect
+the {\GAP} coset table obtained via `ACECosetTable'; use the  `lenlex'
+(see~"option  lenlex")  option,  if  you  want  your  table   `lenlex'
+standardised. (The `lenlex' option restarts the enumeration, if it  is
+necessary to ensure the generators have not been rearranged.)
 
 *Guru Notes:*
-In  half  of  the  ten  standard  enumeration   strategies   of   Sims
-\cite{Sim94}, the table is standardised repeatedly. This is  expensive
+In  five  of  the  ten  standard  enumeration   strategies   of   Sims
+\cite{Sim94} (i.e.~the five Sims strategies not provided  by  {\ACE}),
+the   table   is   standardised   repeatedly.   This   is    expensive
 computationally, but can result in fewer cosets being  necessary.  The
 effect of doing this can be investigated  in  {\ACE}  by  (repeatedly)
 halting  the  enumeration  (by  say,  imposing  timing  restrictions),
@@ -633,6 +662,11 @@ Interactively,             use             `ACEStandardCosetNumbering'
 Prints <string> in the output; <string> must be a string.
 
 This allows the user to add comments to the output from {\ACE}.
+
+*Note:*
+Please avoid using this option to insert comments starting with  three
+asterisks: `***', since this string is used as a  sentinel  internally
+in flushing output from {\ACE}.
 
 \>`aceincomment:=<string>'{option aceincomment}@{option `aceincomment'}&
 Prints comment <string> in the {\ACE} input; <string> must be a string.

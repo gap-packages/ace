@@ -17,17 +17,57 @@
 In this chapter  we  collect  together  a  number  of  examples  which
 illustrate the various ways in which the {\ACE} Share Package  may  be
 used, and give some interactions with the  `ACEExample'  function.  In
-the first few cases, we have set the `InfoLevel' of `InfoACE' to 3, so
-that (except for {\ACE}'s banner in non-interactive use),  all  output
-from {\ACE} is displayed, prepended by \lq{}`\#I ''. We  have  omitted
-the line
+a number of cases, we have set the `InfoLevel' of `InfoACE' to  3,  so
+that all output from {\ACE} is displayed, prepended by  \lq{}`\#I  ''.
+We have omitted the line
 
 \beginexample
 gap> RequirePackage("ace");
 \endexample
 
 which is,  of  course,  required  at  the  beginning  of  any  session
-requiring {\ACE}.
+requiring {\ACE}. The  first  few  sections  are  the  nearest  {\GAP}
+equivalent of the similar sections in the  Appendix  of  `ace3001.dvi'
+(the standalone manual in directory `standalone-doc').
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{Getting Started}
+
+Each of the functions `ACECosetTableFromGensAndRels'
+(see~"ACECosetTableFromGensAndRels"), `ACEStats' (see~"ACEStatsNI")
+and `ACEStart' (see~"ACEStart"), may be called with three arguments:
+<fgens> (the group generators), <rels> (the group relators), and <sgens>
+(the subgroup generators). While it is legal for the arguments <rels> and
+<sgens> to be empty lists, it is always an error for <fgens> to be empty,
+e.g.
+
+\beginexample
+gap> ACEStats([], [], [] : echo, max := 10);
+ACEStats called with the following arguments:
+ Group generators : [  ]
+ Group relators : [  ]
+ Subgroup generators : [  ]
+Error : first argument defines an empty list of group generators at
+Error( ": first argument defines an empty list of group generators" );
+CALL_ACE( "ACEStats", arg[1], arg[2], arg[3] ) called from
+<function>( <arguments> ) called from read-eval-loop
+Entering break read-eval-print loop, you can 'quit;' to quit to outer loop,
+or you can return to continue
+brk> quit; # All we can do!                  
+gap> # We set some options. So 'OptionsStack' will be non-empty ...
+gap> DisplayOptionsStack();
+[ rec(
+      echo := true,
+      max := 10 ) ]
+gap> # We should clear the 'OptionsStack' before proceeding ...
+gap> FlushOptionsStack();
+gap> DisplayOptionsStack(); # Just to show 'OptionsStack' is now empty.
+[  ]
+gap>
+\endexample
+
+The function  `FlushOptionsStack'  is  described  in  Section~"General
+Warnings regarding the Use of Options".
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{Example where ACE is made the Standard Coset Enumerator}
@@ -46,6 +86,10 @@ gap> TCENUM:=ACETCENUM;; # Make ACE the standard coset enumerator
 gap> G := PerfectGroup(IsPermGroup, 16*60, 1   # Arguments ... as per usual
 >                      : max := 50, mess := 10 # ... but we use ACE options
 >                      );
+#I  ACE 3.000        Mon Aug 14 15:50:09 2000
+#I  =========================================
+#I  Host information:
+#I    name = boronia
 #I    #-- ACE 3.000: Run Parameters ---
 #I  Group Name: G;
 #I  Group Generators: abstuv;
@@ -65,6 +109,7 @@ gap> G := PerfectGroup(IsPermGroup, 16*60, 1   # Arguments ... as per usual
 #I  CC: a=19 r=4 h=1 n=31; l=2 c=+0.00; d=0
 #I  CC: a=19 r=6 h=1 n=36; l=2 c=+0.00; d=0
 #I  INDEX = 16 (a=16 r=36 h=1 n=36; l=3 c=0.00; m=30 t=35)
+#I  ***
 #I  CO: a=16 r=17 h=1 n=17; c=+0.00
 \endexample
 \beginexample
@@ -120,6 +165,10 @@ gap> table := ACECosetTableFromGensAndRels(
 >                 fgens, RelatorsOfFpGroup(G), fgens{[1]}
 >                 # options
 >                 : mendelsohn, max:=800, mess:=500);
+#I  ACE 3.000        Mon Aug 14 15:56:42 2000
+#I  =========================================
+#I  Host information:
+#I    name = boronia
 #I    #-- ACE 3.000: Run Parameters ---
 #I  Group Name: G;
 #I  Group Generators: abstuvd;
@@ -141,6 +190,7 @@ gap> table := ACECosetTableFromGensAndRels(
 #I  DD: a=428 r=227 h=1 n=801; l=14 c=+0.01; d=32
 #I  CO: a=428 r=192 h=243 n=429; l=15 c=+0.00; m=473 t=800
 #I  INDEX = 480 (a=480 r=210 h=484 n=484; l=18 c=0.08; m=480 t=855)
+#I  ***
 #I  CO: a=480 r=210 h=481 n=481; c=+0.00
 #I   coset ||      a      A      b      B      s      t      u      v      d
 #I  -------+---------------------------------------------------------------
@@ -176,12 +226,10 @@ Now we illustrate a simple interactive process, with an enumeration of
 an index 12 subgroup (isomorphic to $C_5$) within $A_5$. Observe  that
 we  have  relied  on  the  default  level  of  messaging  from  {\ACE}
 (`messages' = 0) which gives a result  line  only,  without  parameter
-information. Interactively, {\ACE}'s banner is not redirected  but  it
-is only observed when the `InfoLevel'  of  `InfoACE'  is  4.  We  have
-however used the option `echo', so that we can see how  the  interface
-handled the arguments and options. On-line  try:  `SetInfoACELevel(3);
-ACEExample("A5-C5", ACEStart);' to emulate the session  prior  to  the
-`ACEQuit' command.
+information. We have however used the option `echo', so  that  we  can
+see how the interface handled the arguments and options. On-line  try:
+`SetInfoACELevel(3); ACEExample("A5-C5", ACEStart);'  to  emulate  the
+session prior to the `ACEQuit' command.
 
 \beginexample
 gap> SetInfoACELevel(3);
@@ -197,10 +245,15 @@ ACEStart called with the following arguments:
  Group generators : [ a, b ]
  Group relators : [ a^2, b^3, a*b*a*b*a*b*a*b*a*b ]
  Subgroup generators : [ a*b ]
+#I  ACE 3.000        Sun Aug 13 17:21:24 2000
+#I  =========================================
+#I  Host information:
+#I    name = boronia
 ACEStart called with the following options:
  echo := true (not passed to ACE)
  enum := A_5
  subg := C_5
+#I  ***
 #I  INDEX = 12 (a=12 r=16 h=1 n=16; l=3 c=0.00; m=14 t=15)
 1
 gap> # The return value on the last line identifies the interactive process
@@ -214,7 +267,7 @@ gap> ACEStats();
 rec( index := 12, cputime := 0, cputimeUnits := "10^-2 seconds", 
   activecosets := 12, maxcosets := 14, totcosets := 15 )
 gap> # Similarly, we can use ACECosetTable() (which returns the 
-gap> # `standardized' coset table) with or without an argument:  
+gap> # `standardised' coset table) with or without an argument:  
 gap> ACECosetTable(); # Interactive version of ACECosetTableFromGensAndRels()
 #I  CO: a=12 r=13 h=1 n=13; c=+0.00
 #I   coset ||      b      B      a
@@ -339,6 +392,10 @@ ACEStats called with the following options:
  wo := 2M
  mess := 25000
  purec (no value)
+#I  ACE 3.000        Mon Aug 14 16:02:45 2000
+#I  =========================================
+#I  Host information:
+#I    name = boronia
 #I    #-- ACE 3.000: Run Parameters ---
 #I  Group Name: F(2,7), aka C_29;
 #I  Group Generators: abcdexy;
@@ -361,6 +418,7 @@ ACEStats called with the following options:
 #I  DS: a=23433 r=1 h=7326 n=33240; l=36 c=+0.02; s=16000 d=5940 c=2061
 #I  DS: a=4163 r=1 h=7326 n=33240; l=36 c=+0.08; s=32000 d=447 c=15554
 #I  INDEX = 29 (a=29 r=1 h=33240 n=33240; l=37 c=0.41; m=33237 t=33239)
+#I  ***
 rec( index := 29, cputime := 41, cputimeUnits := "10^-2 seconds", 
   activecosets := 29, maxcosets := 33237, totcosets := 33239 )
 gap>
@@ -400,7 +458,7 @@ identifying the subgroup (since it  will  no  longer  be  the  trivial
 group), via the `subgroup' option (see "option subgroup").
 
 \beginexample
-gap> SetInfoACELevel(2);                                                       
+gap> SetInfoACELevel(2);
 gap> ACEExample("F27-purec" : sg := ["c"], subgroup := "< c >", messages := 0);
 #I  # ACEExample "F27-purec" : enumeration of cosets of H in G,
 #I  # where G = F(2,7) = C_29, H = Id, using purec strategy.
