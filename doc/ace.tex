@@ -51,30 +51,30 @@ Section~"CallACE"), which then can be  called  with  all  the  options
 defined for the {\ACE} interface,  not  just  the  options  `max'  and
 `silent'. If `TCENUM'  is  set  to  `ACETCENUM'  without  any  further
 action, the `default' strategy of the {\ACE} enumerator will  be  used
-(see Chapter~"Predefined Strategies"). An {\ACE} strategy is merely  a
-special option of {\ACE} that sets a number of the  options  described
-in Chapter~"Options for the ACE Enumerator" all at once. One  can  set
-options   globally   using    the    function    `PushOptions'    (see
-Chapter~"ref:Options Stack" in the {\GAP} Reference  Manual);  options
-pushed onto `OptionsStack' this way, remain there  until  an  explicit
-`PopOptions()' call is made. However, the usual way to pass options is
-behind a colon following a function's arguments (as described for  the
-function `CallACE' in Section~"CallACE", for example); options  passed
-this way are  local,  and  disappear  from  `OptionsStack'  after  the
-function has executed successfully. Beware, however the function  will
-see any other options on the `OptionsStack' (in particular, any pushed
-there  via  `PushOptions',  prior  to  the  function   call),   unless
-over-ridden by an option passed  via  the  function.  Also  note  that
-duplication of  option  names  for  different  programs  may  lead  to
-misinterpretations.   You   can   use    `DisplayOptionsStack'    (see
-Chapter~"ref:DisplayOptionsStack" in the {\GAP} Reference  Manual)  to
-ensure that there is no such danger. However, considering how much  of
-a potential mine-field a non-empty `OptionsStack'  might  be  for  the
-unwary user, we provide
+(see Chapter~"Strategy Options for the  ACE  Enumerator").  An  {\ACE}
+strategy is merely a special option of {\ACE} that sets  a  number  of
+the options described in Chapter~"Options for ACE"  all
+at once. One can set options globally using the function `PushOptions'
+(see Chapter~"ref:Options Stack"  in  the  {\GAP}  Reference  Manual);
+options pushed onto `OptionsStack' this way,  remain  there  until  an
+explicit `PopOptions()' call is made. However, the usual way  to  pass
+options is  behind  a  colon  following  a  function's  arguments  (as
+described  for  the  function  `CallACE'  in  Section~"CallACE",   for
+example); options passed  this  way  are  local,  and  disappear  from
+`OptionsStack' after the function has executed  successfully.  Beware,
+however the function will see any other options on the  `OptionsStack'
+(in particular, any pushed  there  via  `PushOptions',  prior  to  the
+function call),  unless  over-ridden  by  an  option  passed  via  the
+function. Also note that duplication of  option  names  for  different
+programs   may   lead   to    misinterpretations.    You    can    use
+`DisplayOptionsStack' (see  Chapter~"ref:DisplayOptionsStack"  in  the
+{\GAP} Reference Manual) to ensure  that  there  is  no  such  danger.
+However, considering how much of a potential  mine-field  a  non-empty
+`OptionsStack' might be for the unwary user, we provide
 
 \>FlushOptionsStack()
 
-which  simply  executes `PopOptions()' until `OptionsStack' is empty.
+which simply executes `PopOptions()' until `OptionsStack' is empty.
 
 It  is  important  to  realize  that  {\ACE}'s   options   (even   the
 non-strategy options) are not orthogonal, i.e.\  the  order  in  which
@@ -128,13 +128,13 @@ the free generators. All these are given in the standard {\GAP} format
 Manual).
 
 Behind the colon any  selection  of  the  options  available  for  the
-interface   (see   Chapters~"Options   for   the    ACE    Enumerator"
-and~"Predefined Strategies") can be given, separated  by  commas  like
-record components. Note that strategies  are  simply  special  options
-that set a number of the options, detailed in Chapter~"Options for the
-ACE Enumerator", all at once. These can be used e.g.~to preset  limits
-of space and time to be used, to modify input and output and to modify
-the enumeration procedure.
+interface (see Chapters~"Options for ACE" and~"Strategy
+Options for ACE") can be  given,  separated  by  commas
+like record  components.  Note  that  strategies  are  simply  special
+options that set a number of the options, detailed in Chapter~"Options
+for ACE", all at once. These can be used e.g.~to preset
+limits of space and time to be used, to modify input and output and to
+modify the enumeration procedure.
 
 Please  see Section~"Using ACE as a Default for Coset Enumerations and 
 some General Warnings" for a discussion  regarding  global  and  local
@@ -144,8 +144,8 @@ The  function   calls the  {\ACE}  coset  enumerator  and returns  the
 (standardized) coset table obtained.
 
 If the coset enumeration does not  finish  in  the  preset  limits  it
-raises an error, unless the `silent'  option  (see~"parameter silent")
-is set, in which case it returns `fail'.
+raises an error, unless the `silent' option (see~"Option  silent")  is
+set, in which case it returns `fail'.
 
 The  example  given  below is  the  call  for  a presentation  of  the
 Fibonacci  group F(2,7)  for  which  we shall  discuss  the impact  of
@@ -181,16 +181,16 @@ which   calls   the    {\ACE}    binary    and    returns    a    list
 used for the enumeration, <m> is the  maximum  number  of  \lq{}alive'
 coset numbers at any time in the enumeration , while <t> is the  total
 number of coset numbers that were defined in the enumeration. See also
-Section~"Information about the Enumeration". The same  warnings  noted
-in Section~"Using ACE as a Default for  Coset  Enumerations  and  some
-General Warnings", regarding options, apply.
+Section~"Options controlling Input  and  Output".  The  same  warnings
+noted in Section~"Using ACE as a Default for  Coset  Enumerations  and
+some General Warnings", regarding options, apply.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{Writing ACE Standalone Input Files}
 
 If you want  to use ACE as  a standalone with its own  syntax, you can
 write  a  {\GAP}   input  and  can  use  `CallACE'   with  the  option
-`outfile:=<filename>' (see~"parameter outfile"). This  will  keep  the
+`outfile:=<filename>' (see~"Option outfile"). This  will  keep  the
 input file for the {\ACE} standalone produced by the {\GAP}  interface
 under the file name <filename> (and just return `fail')  so  that  you
 can perform interactive work in the standalone.
@@ -318,10 +318,10 @@ terminology that is closer to the actual implementation  and  also  to
 the  formulations  in  the  manual  for  the  {\ACE}  standalone   see
 \cite{CDHW73} and \cite{Hav91}.
 
-\item{--} Coset  enumeration proceeds by defining  \lq{}coset numbers'
-that  really denote  possible  representatives for  cosets written  as
-words in the generators  of the group. At the  time of their generation
-it is not  guaranteed that any two of these  words do indeed represent
+\item{--} Coset enumeration proceeds by defining  \lq{}coset  numbers'
+that really denote possible  representatives  for  cosets  written  as
+words in the generators of the group. At the time of their  generation
+it is not guaranteed that any two of these words do  indeed  represent
 different cosets.
 
 \item{--} It is customary in  talking about coset enumeration to speak
@@ -359,8 +359,8 @@ explain in the sequel.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{Enumeration  Style}
 
-The first main decision for any coset enumeration is in  which sequence
-to  make definitions. When a new  coset number has to  be defined, in
+The first main decision for any coset enumeration is in which sequence
+to make definitions. When a new coset number has  to  be  defined,  in
 {\ACE} there are basically three possible methods to choose from:
 
 \beginlist
@@ -391,8 +391,8 @@ obtains this \lq{}preferred definition stack'.
 
 The *enumeration style* is mainly determined by  the  balance  between
 C-style definitions and R-style definitions, which  is  controlled  by
-the values  of  the  `ct'  and  `rt'  parameters  (see~"parameter  ct"
-and~"parameter rt").
+the values of the `ct' and `rt' options (see~"Option  ct"  and~"Option
+rt").
 
 However this still leaves us with  plenty of freedom for the design of
 definition  strategies,  freedom which  can, for example,  be  used to
@@ -479,57 +479,57 @@ switch to CR-style.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\Chapter{Options for the ACE Enumerator}
+\Chapter{Options for ACE}
 
-{\ACE} offers  a wide  range of  options to direct  and guide  a coset
-enumeration,  most of  which are  available from  {\GAP}  through this
+{\ACE} offers a wide range of options to  direct  and  guide  a  coset
+enumeration, most of which are  available  from  {\GAP}  through  this
 interface. We describe most of the options available via the interface
 in this chapter; other options, termed strategies, are defined in  the
-following chapter.  Strategies  are  merely special options of  {\ACE}
-that set a number of options described in this chapter,  all  at once.
+following chapter. Strategies are merely  special  options  of  {\ACE}
+that set a number of options described in this chapter, all at once.
 
-Except for limitations imposed  by {\GAP}  e.g.\ clashes  with {\GAP}
-keywords and blank spaces not allowed in keywords, the options of the
-{\ACE} interface are the same as for the binary; so, for example, the
-options can appear in upper or lower case (or indeed, mixed case) and
-most may be abbreviated. Below we only list the options in all  lower
-case, and in their longest form;  where  abbreviation is possible  we
-give the shortest abbreviation in the option's description   e.g.~for
-the `mendelsohn' option we state that  its  shortest  abbreviation is
-`mend', which means `mende', `mendel' etc., and  indeed,  `Mend'  and
-`MeND', are all valid abbreviations of that option. Some options have
+Except for limitations imposed by {\GAP}  e.g.\  clashes  with  {\GAP}
+keywords and blank spaces not allowed in keywords, the options of  the
+{\ACE} interface are the same as for the binary; so, for example,  the
+options can appear in upper or lower case (or indeed, mixed case)  and
+most may be abbreviated. Below we only list the options in  all  lower
+case, and in their longest form; where  abbreviation  is  possible  we
+give the shortest abbreviation in the  option's  description  e.g.~for
+the `mendelsohn' option we state that  its  shortest  abbreviation  is
+`mend', which means `mende', `mendel' etc.,  and  indeed,  `Mend'  and
+`MeND', are all valid abbreviations of that option. Some options  have
 synonyms e.g.~`cfactor' is an alternative for `ct'.
 
-It is important to realize that {\ACE}'s options (even the non-strategy 
-options) are not orthogonal, i.e.\ the order in which they are put to
-{\ACE} can be important.  For this reason,  except for a  few options
-that have no effect on the course of an  enumeration,  the  order  in
-which  options  are passed to the {\ACE} interface is preserved  when 
-those same options are passed to the {\ACE} binary. One of the reasons
-for  the  non-orthogonality  of  options  is to protect the user from
-obtaining invalid enumerations from bad combinations of options;  the
-general rule is that the later option prevails.
+It  is  important  to  realize  that  {\ACE}'s   options   (even   the
+non-strategy options) are not orthogonal, i.e.\  the  order  in  which
+they are put to {\ACE} can be important. For this reason, except for a
+few options that have no effect on the course of an  enumeration,  the
+order in which options are passed to the {\ACE} interface is preserved
+when those same options are passed to the {\ACE} binary.  One  of  the
+reasons for the non-orthogonality of options is to  protect  the  user
+from obtaining invalid enumerations from bad combinations of  options;
+the general rule is that the later option prevails.
 
-Any  option  that the {\ACE} binary doesn't  understand  is    simply
-ignored  and a warning is sent to standard error (which should appear
-in your {\GAP} session). If this occurs, the input fed to  {\ACE} and
-the output from {\ACE} will be files  in a  temporary directory;  the
-full   path   to  these   files   is  recorded  in  the record fields
-`ACEinfo.infile' and `ACEinfo.outfile', respectively.
+Any option that the {\ACE} binary doesn't understand is simply ignored
+and a warning is sent to standard error (which should appear  in  your
+{\GAP} session). If this occurs, the  input  fed  to  {\ACE}  and  the
+output from {\ACE} will be files in a temporary  directory;  the  full
+path to these files is recorded in the record fields  `ACEinfo.infile'
+and `ACEinfo.outfile', respectively.
 
-If `CallACE' (see Section~"CallACE") is given no options, the `default'
-strategy (see Chapter~"Predefined Strategies")  is  selected.  If  the
-`default' strategy does not suffice, most usually a user will   select
-one   of   the   other   strategies   from   among  the ones listed in 
-Chapter~"Predefined Strategies", and   possibly   modify   some of the 
-parameter choices by selecting from the options in this chapter.  It's
-not illegal to select more than one strategy,  but  it's not sensible;
-as mentioned above, the later one prevails.
+If  `CallACE'  (see  Section~"CallACE")  is  given  no  options,   the
+`default'  strategy  (see  Chapter~"Strategy  Options  for  ACE")   is
+selected. If the `default' strategy does not suffice, most  usually  a
+user will select one of the  other  strategies  from  among  the  ones
+listed in Chapter~"Strategy Options for ACE", and possibly modify some
+of the options by selecting from the options in this chapter. It's not
+illegal to select more than one strategy, but it's  not  sensible;  as
+mentioned above, the later one prevails.
 
-Please  see Section~"Using ACE as a Default for Coset Enumerations and 
-some General Warnings" for a general discussion of the option mechanism
-and of the pitfalls one  may encounter, in the passing of options.
-There are two ways options may be passed to {\ACE}:
+Please see Section~"Using ACE as a Default for Coset Enumerations  and
+some  General  Warnings"  for  a  general  discussion  of  the  option
+mechanism and of the pitfalls one may encounter,  in  the  passing  of
+options. There are two ways options may be passed to {\ACE}:
 
 \beginlist
 
@@ -545,27 +545,27 @@ in turn have options of their own.
 
 \endlist
 
-Options  are  given  like  record  components,  separated  by  commas.
-Options that take a parameter are  given as an  assignment to the name
-(such  as `time:=<val>').   Options passed without assigning a value,
-are treated by {\GAP} as the setting of a boolean option to the value
-`true'. If the option is a known {\ACE} option, `CallACE' will   make
-the   appropriate  translation  to  the value expected by the  {\ACE}
-binary; the appropriate translation may be to pass to the binary:  no
-value, 0, or 1.  In general,  this  should not concern the user since
-`CallACE' will take care of it. Options announced as unknown (options
-are  echoed  to  the  screen,  if  the  `echo' option is passed) will
-*always*  be  passed to  {\ACE} as no-value  options;  the  user  can
-over-ride this behaviour  simply by assigning the intended value. The
-reason for  passing  unknown  options in this way, is that the {\ACE} 
-interface should still work,  albeit with erroneous warning messages,
-with  an  updated  binary. The  {\ACE}  options  known  to the {\ACE} 
-interface are the fields of the record `KnownACEoptions';  each field
-(known {\ACE} option) is assigned to a list of the form
-`[<i>, <ListOrFunction>]', where `<i>' is an integer representing the
-shortest abbreviation of the option and `<ListOrFunction>' is  either
-a list of (known) allowed values or a boolean function that  may   be 
-used to determine if the given value is a (known) valid value e.g.
+Options are given like record components, separated by commas. Options
+that take a value are given as an assignment  to  the  name  (such  as
+`time:=<val>'). Options passed without assigning a value, are  treated
+by {\GAP} as the setting of a boolean option to the value  `true'.  If
+the  option  is  a  known  {\ACE}  option,  `CallACE'  will  make  the
+appropriate translation to the value expected by  the  {\ACE}  binary;
+the appropriate translation may be to pass to the binary: no value, 0,
+or 1. In general, this should not concern  the  user  since  `CallACE'
+will take care of it. Options announced as unknown (options are echoed
+to the screen, if the `echo' option is passed) will *always* be passed
+to {\ACE} as no-value options; the user can over-ride  this  behaviour
+simply by assigning the intended value. The reason for passing unknown
+options in this way, is that the {\ACE} interface should  still  work,
+albeit with erroneous warning messages, with an  updated  binary.  The
+{\ACE} options known to the {\ACE} interface are  the  fields  of  the
+record `KnownACEoptions'; each field (known {\ACE} option) is assigned
+to a list of the form `[<i>, <ListOrFunction>]',  where  `<i>'  is  an
+integer representing the  shortest  abbreviation  of  the  option  and
+`<ListOrFunction>' is either a list of (known)  allowed  values  or  a
+boolean function that may be used to determine if the given value is a
+(known) valid value e.g.
 
 \begintt
 gap> KnownACEoptions.compaction;
@@ -603,30 +603,30 @@ workspace to $10^7$ words for the example given above, one could call:
 gap> CallACE(fgens,rels,[c]:hard,workspace:=10^7);;
 \endtt
 
-Except for a few additional option synonyms (e.g.~`messfile' is a 
-{\GAP}-introduced synonym for the `ao' {\ACE} option), and just two
-multiple-word {\ACE} options (the `pure r' and `pure c' strategies
-have become `purer' and `purec', respectively, for the {\GAP} interface),
-and a small number of additional non-{\ACE} options (e.g.~`silent'
-and `outfile'), all option names for the interface are the same as for
-the {\ACE} standalone. The {\ACE} binary has many multiple-word options
-but all except `pure r' and `pure c' have single-word alternatives;
-only the single-word option names are available via the {\GAP} interface.
-Some abbreviations that are possible for the {\ACE} binary (e.g.~`fi'
-for `fill', and `rec' for `recover') are *not* allowed via the {\GAP}
-interface, since they clash with {\GAP} keywords. Again, most of the
-preceding paragraph will not be of importance to the {\GAP} user;
-these comments have been made merely for the user who wishes to reconcile
-what the interface does with how the {\ACE} binary performs, and is
-of most use to standalone users.
+Except for a few additional  option  synonyms  (e.g.~`messfile'  is  a
+{\GAP}-introduced synonym for the `ao' {\ACE} option),  and  just  two
+multiple-word {\ACE} options (the `pure r'  and  `pure  c'  strategies
+have  become  `purer'  and  `purec',  respectively,  for  the   {\GAP}
+interface), and  a  small  number  of  additional  non-{\ACE}  options
+(e.g.~`silent' and `outfile'), all option names for the interface  are
+the same as for the {\ACE} standalone.  The  {\ACE}  binary  has  many
+multiple-word options but all  except  `pure  r'  and  `pure  c'  have
+single-word  alternatives;  only  the  single-word  option  names  are
+available via  the  {\GAP}  interface.  Some  abbreviations  that  are
+possible for the {\ACE} binary (e.g.~`fi' for `fill',  and  `rec'  for
+`recover') are *not* allowed via  the  {\GAP}  interface,  since  they
+clash with {\GAP} keywords. Again, most  of  the  preceding  paragraph
+will not be of importance to the {\GAP} user; these comments have been
+made merely for the user who wishes to reconcile  what  the  interface
+does with how the {\ACE} binary  performs,  and  is  of  most  use  to
+standalone users.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\Section{An Option that Modifies the Input to the Enumeration}
+\Section{General Options that Modify the Enumeration Process}
 
 \beginitems
-\>`asis'{parameter asis}&
+\>`asis'{Option asis}&
 Do not reduce relators. (Shortest abbreviation: `as'.)
-\enditems
 
 By default, {\ACE} freely  and cyclically reduces the relators, freely
 reduces  the  subgroup generators,  and  sorts  relators and  subgroup
@@ -641,14 +641,8 @@ can  have a significant  impact on  the enumeration  statistics.)  For
 some fine points of the influence of `asis' being set on the treatment
 of involutory generators see the {\ACE} standalone manual.
 
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\Section{General Parameters that Modify the Enumeration Process}
-
-\beginitems
-
-\>`ct:=<val>'{parameter ct}
-\>`cfactor:=<val>'{parameter cfactor}&
+\>`ct:=<val>'{Option ct}
+\>`cfactor:=<val>'{Option cfactor}&
 Number of C-style definitions per pass; `<val>' should be an  integer. 
 (Shortest abbreviation of `cfactor' is `c'.)
 
@@ -658,8 +652,8 @@ loop. The sign of `<val>'  sets the  style. The possible  combinations
 of the values of `ct' and  `rt'  (described below)  are  given in  the
 table of  enumeration styles in Section~"Enumeration Style".
 
-\>`rt:=<val>'{parameter rt}
-\>`rfactor:=<val>'{parameter rfactor}&
+\>`rt:=<val>'{Option rt}
+\>`rfactor:=<val>'{Option rfactor}&
 Number of R-style definitions per pass; `<val>' should be an  integer. 
 (Shortest abbreviation of `rfactor' is `r'.)
 
@@ -669,9 +663,9 @@ loop. The sign of `<val>'  sets the  style. The possible  combinations
 of the values of `ct' (described above)  and  `rt'  are  given in  the
 table of  enumeration styles in Section~"Enumeration Style".
 
-\>`no:=<val>'{parameter number}&
-The number of group relators to include in the subgroup; `<val>' should
-be an integer greater than or equal to $-1$.
+\>`no:=<val>'{Option number}&
+The number of group relators to include in the subgroup;  
+`<val>' should be an integer greater than or equal to $-1$.
 
 It is sometimes helpful to include the group relators into the list of
 the subgroup generators,  in the sense that they  are applied to coset
@@ -681,7 +675,7 @@ includes all the relators.  A positive argument includes the specified
 number of relators, in order. The `no' option affects only the C-style
 procedures.
 
-\>`mendelsohn'{parameter mendelsohn}&
+\>`mendelsohn'{Option mendelsohn}&
 Turns on mendelsohn processing. (Shortest abbreviation: `mend'.)
 
 Mendelsohn style processing during relator scanning/closing is  turned
@@ -701,21 +695,21 @@ other things being equal, the  Mendelsohn flag should normally be left
 off.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\Section{Parameters Modifying C-Style Definition}
+\Section{Options Modifying C-Style Definitions}
 
-The  next  three  options  are   relevant  only  for  making   C-style
-definitions.  Making definitions in C-style, that is filling the coset
-table line  by line, it can  be very advantageous to  switch to making
-definitions from the preferred definition stack.  Possible definitions
-can  be  extracted  from  this  stack  in various  ways  and  the  two
-parameters `pmode' and `psize' (see~"parameter  pmode" and ~"parameter
-psize"  respectively)  regulate this.  However  it  should be  clearly
-understood that  making  all definitions from  a preferred  definition
-stack one may  violate the condition of Mendelsohn's  theorem, and the
-parameter `fill' (see~"parameter fill") can be used to avoid this.
+The  next  three  options  are  relevant  only  for   making   C-style
+definitions. Making definitions in C-style, that is filling the  coset
+table line by line, it can be very advantageous to  switch  to  making
+definitions from the preferred definition stack. Possible  definitions
+can be extracted from this stack in various ways and the  two  options
+`pmode'  and  `psize'  (see~"Option   pmode"   and   ~"Option   psize"
+respectively) regulate this. However it should be  clearly  understood
+that making all definitions from a preferred definition stack one  may
+violate the condition of Mendelsohn's theorem, and the  option  `fill'
+(see~"Option fill") can be used to avoid this.
 
-\>`fill:=<val>'{parameter fill}
-\>`ffactor:=<val>'{parameter ffactor}&
+\>`fill:=<val>'{Option fill}
+\>`ffactor:=<val>'{Option ffactor}&
 Controls the preferred definition strategy by setting the fill factor;
 `<val>' must be a non-negative integer.
 (Shortest abbreviation of `fill' is `fil', and  shortest  abbreviation
@@ -742,8 +736,8 @@ well.  The  effects of the various gap-filling  strategies vary widely.
 It is  not clear  which values are  good general defaults  or, indeed,
 whether any strategy is always ``not too bad''.
 
-\>`pmode:=<val>'{parameter pmode}&
-Parameter for preferred definitions;  `<val>' should be in the integer
+\>`pmode:=<val>'{Option pmode}&
+Option for preferred definitions;  `<val>' should be in the integer
 range 0 to 3. (Shortest abbreviation: `pmod'.)
 
 The  value of  the  `pmode' option  determines  which definitions  are
@@ -756,14 +750,14 @@ consequent deduction  is also made  immediately (of course,  these are
 also put on the deduction stack).  If the argument is 3, then the gaps
 of length one are noted in the preferred definition queue.
 
-Provided such a gap survives  (and no coincidence occurs, which causes
-the queue  to be discarded) the  next coset number will  be defined to
-fill the oldest  gap of length one.  The default value  is either 0 or
-3,  depending  on  the  strategy  selected  (see  Section  "Predefined
-Strategies").  If you want to know more details, read the code.
+Provided such a gap survives (and no coincidence occurs, which  causes
+the queue to be discarded) the next coset number will  be  defined  to
+fill the oldest gap of length one. The default value is either 0 or 3,
+depending on the strategy selected (see Section "Strategy Options  for
+ACE"). If you want to know more details, read the code.
 
 
-\>`psize:=<val>'{parameter psize}&
+\>`psize:=<val>'{Option psize}&
 Size of preferred definition queue; `<val>' *must*  be $2^n$, for some
 integer $n>0$. (Shortest abbreviation: `psiz'.)
 
@@ -773,10 +767,10 @@ Each  queue slot takes two words (i.e., 8 bytes),  and the  queue  can
 store up to $2^n-1$ entries.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\Section{Parameters for R-Style Definition}
+\Section{Options for R-Style Definitions}
 
-\>`row:=<val>'{parameter row}&
-Set the \lq{}row filling' parameter; `<val>' is either 0 or 1.
+\>`row:=<val>'{Option row}&
+Set the \lq{}row filling' option; `<val>' is either 0 or 1.
 
 By default, \lq{}row filling' is on (i.e.~`true' or 1). To turn it off
 set `row' to either `false' or 0 (both are translated to 0 when passed
@@ -788,7 +782,7 @@ guarantee  that   the  condition  of  Mendelsohn's   Theorem  will  be
 fulfilled.  Failure  to do  so can cause  even simple  enumerations to
 overflow.
 
-\>`lookahead:=<val>'{parameter lookahead}&
+\>`lookahead:=<val>'{Option lookahead}&
 Lookahead; `<val>' should be in the integer range 0 to 4.
 (Shortest abbreviation: `look'.)
   
@@ -816,13 +810,13 @@ The following are the effects of the possible values of `lookahead':
 
 \endlist
 
-The  default  is  1 if the `hlt' strategy is used and 0 otherwise;
-see Section~"Predefined Strategies".
+The default is 1 if the `hlt' strategy is used and  0  otherwise;  see
+Section~"Strategy Options for ACE".
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\Section{Further Parameters}
+\Section{Options for Deduction Handling}
 
-\>`dmode:=<val>'{parameter dmode}&
+\>`dmode:=<val>'{Option dmode}&
 Deduction mode; `<val>' should be in the integer range 0 to 4.
 (Shortest abbreviation: `dmod'.)
 
@@ -847,7 +841,7 @@ as for $0$, but purge any redundant coset numbers on the  top  of  the
 stack at every coincidence;
 
 \item{--} $2$: 
-as for 0, but  purge all redundant coset numbers from the stack at
+as for 0, but purge all redundant coset  numbers  from  the  stack  at
 every coincidence;
 
 \item{--} $3$:
@@ -860,7 +854,7 @@ coset numbers from the stack.
 \endlist
 
 The default deduction mode is either $0$  or  $4$,  depending  on  the
-strategy selected (see Section~"Predefined  Strategies"),  and  it  is
+strategy selected (see Section~"Strategy Options for ACE"), and it  is
 recommended that you stay with the default. If you want to  know  more
 details, read the well-commented C code.
 
@@ -869,7 +863,7 @@ If deductions are discarded for any reason, then a final relator check
 phase  will be run  automatically at  the end  of the  enumeration, if
 necessary, to check the result.
 
-\>`dsize:=<val>'{parameter dsize}&
+\>`dsize:=<val>'{Option dsize}&
 Deduction stack size; `<val>' should be a non-negative integer.
 (Shortest abbreviation: `dsiz'.)
 
@@ -891,7 +885,7 @@ given machine.
 
 \beginitems
 
-\>`workspace:=<val>'{parameter workspace}&
+\>`workspace:=<val>'{Option workspace}&
 Workspace size in words (default $10^6$);
 `<val>' should be an expression that evaluates to a positive  integer,
 or a string of digits ending in a  `k',  `M'  or  `G'  representing  a
@@ -908,7 +902,7 @@ columns.   Although  the  number   of  coset  numbers  is  limited  to
 $2^{31}-1$ (if the C `int' type is 32 bits), the table size can exceed
 the $4$GByte 32-bit limit if a suitable machine is used.
 
-\>`time:=<val>'{parameter time}&
+\>`time:=<val>'{Option time}&
 Maximum execution time in seconds; `<val>' must be an integer  greater
 than or equal to $-1$. (Shortest abbreviation: `ti'.)
 
@@ -944,7 +938,7 @@ Unix, the clock's granularity (usually  $10$ mSec) and the system load
 can affect  the timing;  so the  number of main  loop iterations  in a
 given time may vary.
 
-\>`loop:=<val>'{parameter loop}&
+\>`loop:=<val>'{Option loop}&
 Loop limit; `<val>' should be a non-negative integer.
 
 The core enumerator is organised as a state machine,  with  each  step
@@ -960,7 +954,7 @@ You can do lots of really neat things using this feature, but you need
 some understanding of the internals of {\ACE} to get real benefit from
 it.
 
-\>`path'{parameter path}&
+\>`path'{Option path}&
 Turns on path compression.
 
 To correctly  process  multiple  concidences,  a  union-find  must  be
@@ -981,16 +975,17 @@ path  compression on  cuts down  the  amount of  data movement  during
 coincidence processing at the expense of having to trace the paths and
 compress them.  In general, it does not seem to be worthwhile.
 
-\>`compaction:=<val>'{parameter compaction}&
+\>`compaction:=<val>'{Option compaction}&
 Percentage of dead cosets to trigger compaction;
 `<val>' should be an integer (percentage) in the integer range 0 to 100.
 (Shortest abbreviation: `com'.)
 
-The parameter `compaction' sets the percentage of *dead* coset numbers
-needed  to  trigger  compaction  of  the  coset   table,   during   an
-enumeration. A *dead* coset (number) is a coset found to be coincident
-with a lower numbered coset. The default is 10 or  100,  depending  on
-the strategy used (see Section~"Predefined Strategies").
+The option `compaction'  sets  the  percentage  of  *dead*~\index{dead
+coset (number)} coset numbers needed  to  trigger  compaction  of  the
+coset table, during an enumeration. A *dead* coset (number) is a coset
+found to be coincident with a lower numbered coset. The default is  10
+or 100, depending on the strategy used (see Section~"Strategy  Options
+for ACE").
 
 Compaction recovers the space allocated to  coset  numbers  which  are
 flagged as dead. It results in a table where all the active cosets are
@@ -1000,9 +995,9 @@ available for new cosets.
 The coset table is compacted when a definition of a  coset  number  is
 required, there is no space for a  new  coset  number  available,  and
 provided that the given percentage of the coset  table  contains  dead
-coset numbers. For example, `compaction = 20'  means  compaction  will
-occur only if 20\% or more of the cosets in the  table  are  dead.  An
-argument of 100 means that compaction is  never  performed,  while  an
+coset numbers. For example, if `compaction'  =  $20$  then  compaction
+will occur only if 20\% or more of the cosets in the table  are  dead.
+An argument of 100 means that compaction is never performed, while  an
 argument of 0 means always compact,  no  matter  how  few  dead  coset
 numbers there are (provided there is at least one, of course).
 
@@ -1028,14 +1023,15 @@ any dead cosets are deleted.
 %*GREG:
 %WILL THIS BE RELEVANT FOR INTERACTIVE USE?*
 %
-%If  messaging is  enabled (see~"Information  About  the Enumeration"),
+%If messaging is enabled 
+%(see~"Options controlling Input and Output"),
 %then a progress  message (labelled {\tt CO}) is  printed each time the
 %compaction routine is  actually called (as opposed to  each time it is
 %potentially called).
 %
 %??????????????????????????????????????????????????????????????????????
 
-\>`max:=<val>'{parameter max}&
+\>`max:=<val>'{Option max}&
 Maximum number of cosets to be defined;
 `<val>' should be $0$ or an integer greater than or equal to 2.
 
@@ -1050,323 +1046,200 @@ selects all of the workspace.
 
 \enditems
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\Chapter{Predefined Strategies}
-
-The versatility of {\ACE} means that it can  be  difficult  to  select
-appropriate parameters when presented  with  a  new  enumeration.  The
-problem is compounded by the fact that no generally  applicable  rules
-exist to predict, given a presentation, which parameter  settings  are
-\lq{}good'. To help overcome this  problem,  {\ACE}  contains  various
-commands which select particular enumeration strategies. One or  other
-of these strategies may work and, if not, the results may indicate how
-the parameters can be varied to obtain a successful enumeration.
-
-By default {\ACE} uses a strategy `default'  which  assumes  that  the
-enumeration is easy, and if it turns out not to be so, {\ACE} switches
-to a strategy designed for  more  difficult  enumerations.  The  other
-straightforward options for beginning users  are  `easy'  and  `hard'.
-Thus, `easy' will quickly succeed or fail (in the context of the given
-resources); `default' may quickly succeed, but then try `hard'  for  a
-while; `hard' will run  more  slowly  from  the  beginning  trying  to
-succeed.
-
-The following options, we will refer to as strategies;  these  options
-are special in that they set many  options  all  at  once.  They  are:
-`default', `easy', `felsch',  `hard',  `hlt',  `purec',  `purer',  and
-`sims'. All of these can be passed as boolean options from the  {\ACE}
-interface, except `sims' which expects one of the integer  values:  1,
-3, 5, 7, or 9. Also, `felsch' can be given the  value  0  or  1;  when
-`felsch' is passed with no value it has the same effect as passing  it
-with a value of 0.
-
-Strategy options are  parsed  in  *exactly*  the  same  way  as  other
-options; order *is* important. What is special about strategy options,
-is that they modify a whole swag of options defined  in  the  previous
-chapter, all at once. So it is usual to specify  one  strategy  option
-and possibly follow it  with  a  number  of  options  defined  in  the
-previous chapter. Please refer to the  introduction  of  the  previous
-chapter and to Section~"Using ACE as a Default for Coset  Enumerations
-and some General Warnings" for more  information  and  warnings  about
-using options.
-
-In the table below, we list the thirteen standard strategies,  showing
-the options (of Chapter~"Options for the ACE  Enumerator")  that  they
-set, except that all  of  them  additionally  set  `path'  =  `false',
-`psize' = $256$, and `dsize'  =  $1000$.  Recall  that  `mend'  is  an
-abbreviation for `mendelsohn' (see~"parameter mendelsohn") and  `look'
-is an abbreviation for `lookahead' (see~"parameter lookahead").
-
-% \begin{table}
-% \hrule
-% \caption{The Predefined Strategies}
-% \label{tab:pred}
-% \smallskip
-% \renewcommand{\arraystretch}{0.875}
-% \begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}lrrrrrrrrrrrrr} 
-% \hline\hline
-%           & \multicolumn{13}{c}{parameter} \\ 
-% \cline{2-14}
-% strategy & path & row & mend & no & look & com & ct   & rt    & fill &
-% pmode & psize & dmode & dsize \\ 
-% \hline
-% default    & 0   & 1   & 0    & -1 & 0    & 10  & 0    & 0     & 0  & 3    & 256  & 4    & 1000 \\
-% easy   & 0   & 1   & 0    & 0  & 0    & 100 & 0    & 1000  & 1  & 0    & 256  & 0    & 1000 \\
-% felsch:0& 0   & 0   & 0    & 0  & 0    & 10  & 1000 & 0     & 1  & 0    & 256  & 4    & 1000 \\
-% felsch:1  & 0   & 0   & 0    & -1 & 0    & 10  & 1000 & 0     & 0  & 3    & 256  & 4    & 1000 \\
-% hard   & 0   & 1   & 0    & -1 & 0    & 10  & 1000 & 1     & 0  & 3    & 256  & 4    & 1000 \\
-% hlt    & 0   & 1   & 0    & 0  & 1    & 10  & 0    & 1000  & 1  & 0    & 256  & 0    & 1000 \\
-% purec & 0   & 0   & 0    & 0  & 0    & 100 & 1000 & 0     & 1  & 0    & 256  & 4    & 1000 \\
-% purer & 0   & 0   & 0    & 0  & 0    & 100 & 0    & 1000  & 1  & 0    & 256  & 0    & 1000 \\
-% sims:1 & 0   & 1   & 0    & 0  & 0    & 10  & 0    & 1000  & 1  & 0    & 256  & 0    & 1000 \\
-% sims:3 & 0   & 1   & 0    & 0  & 0    & 10  & 0    & -1000 & 1  & 0    & 256  & 4    & 1000 \\
-% sims:5 & 0   & 1   & 1    & 0  & 0    & 10  & 0    & 1000  & 1  & 0    & 256  & 0    & 1000 \\
-% sims:7 & 0   & 1   & 1    & 0  & 0    & 10  & 0    & -1000 & 1  & 0    & 256  & 4    & 1000 \\
-% sims:9 & 0   & 0   & 0    & 0  & 0    & 10  & 1000 & 0     & 1  & 0    & 256  & 4    & 1000 \\
-% \hline\hline
-% \end{tabular*}
-% \end{table}
-
-\begintt
-                                     parameter
-            ----------------------------------------------------------
-strategy    row   mend  no  look  com    ct     rt  fill  pmode  dmode
-----------------------------------------------------------------------
-default       1  false  -1     0   10     0      0     0      3      4
-easy          1  false   0     0  100     0   1000     1      0      0
-felsch := 0   0  false   0     0   10  1000      0     1      0      4
-felsch := 1   0  false  -1     0   10  1000      0     0      3      4
-hard          1  false  -1     0   10  1000      1     0      3      4
-hlt           1  false   0     1   10     0   1000     1      0      0
-purec         0  false   0     0  100  1000      0     1      0      4
-purer         0  false   0     0  100     0   1000     1      0      0
-sims := 1     1  false   0     0   10     0   1000     1      0      0
-sims := 3     1  false   0     0   10     0  -1000     1      0      4
-sims := 5     1   true   0     0   10     0   1000     1      0      0
-sims := 7     1   true   0     0   10     0  -1000     1      0      4
-sims := 9     0  false   0     0   10  1000      0     1      0      4
-----------------------------------------------------------------------
-\endtt
-
-Note  that  we  explicitly  (re)set  all  of  the  listed   enumerator
-parameters in all of the predefined strategies, even although some  of
-them have no effect. For example, the `fill' value  is  irrelevant  in
-HLT mode. The idea behind this is  that,  if  you  later  change  some
-parameters individually, then the enumeration retains the `flavour' of
-the last selected predefined strategy.
-
-Note also that other parameters which may effect  an  enumeration  are
-left untouched by  setting  one  of  the  predefined  strategies;  for
-example,  the  values  of  `max'  (see~"parameter  max")  and   `asis'
-(see~"parameter asis"). These  parameters  have  an  effect  which  is
-independant of the selected strategy.
-
-Note that, apart from the `felsch := 0' and `sims  :=  9'  strategies,
-all of the strategies are distinct, although some are very similar.
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\Section{The Strategies in Detail}
+
+\Section{Options controlling Input and Output}
 
 \beginitems
 
-\>`default'{parameter default}&
-Selects the default strategy. (Shortest abbreviation: `def'.)
+\>`silent'{Option silent}& 
+Inhibits an error return.
 
-This   strategy   is   based   on   the   defaulted   R/C-style;   see
-Section~"Enumeration Style". The idea here is that we assume that  the
-enumeration is \lq{}easy' and start out in R-style. If  it  turns  out
-not to be easy, then  we  regard  it  as  \lq{}hard',  and  switch  to
-CR-style, after performing a lookahead on the entire table.
-
-\>`easy'{parameter easy}&
-
-If this strategy is selected, we run in R-style (i.e., HLT)  and  turn
-`lookahead' and `compaction' off. For small and/or easy  enumerations,
-this mode is likely to be the fastest.
-
-\>`felsch'{parameter felsch}
-\>`felsch:=<val>'{parameter felsch}&
-Selects a Felsch strategy. (Shortest abbreviation: `fel'.)
-
-Assigning `felsch' 0 or no value selects a pure Felsch strategy, and a
-value of 1 selects a Felsch strategy with all relators in the subgroup
-and turns gap-filling on.
-
-\>`hard'{parameter hard}&  
-
-In many \lq{}hard' enumerations, a  mixture  of  R-style  and  C-style
-definitions, all tested in all  essentially  different  positions,  is
-appropriate. This option selects such a mixed strategy. The idea  here
-is that most of the work is done C-style (with  the  relators  in  the
-subgroup and with gap-filling active), but that every  $1000$  C-style
-definitions a further coset is applied to all  relators.
-
-*Guru  Notes:*
-The $1000/1$ mix is not necessarily optimal, and some  experimentation
-may be needed  to  find  an  acceptable  balance  (see,  for  example,
-\cite{HR99b}). Note also that, the longer  the  total  length  of  the
-presentation,  the  more  work  needs  to  be  done  for  each   coset
-application to the relators; one coset application can result in  more
-than $1000$ definitions, reversing the  balance  between  R-style  and
-C-style definitions.
-
-\>`hlt'{parameter hlt}&
-Selects the standard HLT strategy.
-
-\>`purec'{parameter purec}&
-Sets  the  strategy  to  basic  C-style  (coset  table  based).
-
-In this strategy there is no `compaction',  no  gap-`fill'ing  and  no
-relators in subgroup (`no = 0').
-
-\>`purer'{parameter purer}&
-Sets the strategy  to basic R-style (relator based).
-
-In this strategy there is no `mendelsohn', no `compaction', no 
-`lookahead' and no row-`fill'ing.
-
-\>`sims:=<val>'{parameter sims}&
-Set a Sims strategy; <val> should be one of 1, 3, 5, 7 or 9.
-
-In his book~\cite{Sim94},  Sims  discusses  ten  standard  enumeration
-strategies.  These  are  effectively  HLT  (with   and   without   the
-`mendelsohn' parameter -see~"parameter mendelsohn")  and  Felsch,  all
-either with  or  without  table  standardisation  as  the  enumeration
-proceeds. {\ACE} does not implement table  standardisation  during  an
-enumeration, although incomplete tables can  be  standardised  and  an
-enumeration  continued.  The   five   odd-numbered   non-standardising
-strategies of~\cite{Sim94} are implemented ({\ACE}'s numbering is  the
-same as given  in  Section  5.5~of~\cite{Sim94}).  With  care,  it  is
-possible to  duplicate  the  statistics  given  in~\cite{Sim94};  some
-examples are given in Chapter~"Examples". 
-% again, in the appendix ...
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\Chapter{Information and Experimentation}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%UPTOHERE 
-
-\Section{Information about the Enumeration}
-
-\beginitems
-
-\>`silent'{parameter silent}& 
-If the coset  enumeration did not finish within  the preset limits, an
+If the coset enumeration does not finish within the preset limits,  an
 error is raised by the interface to {\GAP}, unless the option `silent'
-has been set,  in which case `fail' is returned.  Note  that this is a
-feature of  the {\GAP}  interface only, it  has no counterpart  in the
+has been set, in which case `fail' is returned. Note that `silent'  is
+a feature of the {\GAP} interface only, it has no counterpart  in  the
 {\ACE} standalone.
 
-\>`outfile:=<filename>'{parameter outfile}&
-If this  option is used,  {\GAP} will keep  the input file  for {\ACE}
-produced by he {\GAP} interface under the filename <filename>, so that
-one  could  easily  use  the  {\ACE}  standalone  for  work  with  the
-respective presentation,  without having to  create an input  file for
-the standalone anew.  Clearly this is a feature  of the interface only
-that has no counterpart in the {\ACE} standalone.
+\>`ACEinfile:=<filename>'{Option ACEinfile}&
+Creates an {\ACE} input file <filename> for use with  the  standalone,
+only; <filename> should be a string.
 
-\>`mess'{parameter mess}
-\>`mess:=<val>'{parameter mess}&
-If only `mess' is given, messages are turned on. It is also possible to
-assign the message level.
+If this option is used, {\GAP} creates an  input  file  with  filename
+<filename> only,  and  then  exits  (i.e.~the  {\ACE}  binary  is  not
+called). This option is provided for users who wish to  work  directly
+(and interactively) with the {\ACE} standalone; and is, of  course,  a
+feature of the interface only, that has no counterpart in  the  {\ACE}
+standalone. The full path to the input file normally  used  by  {\ACE}
+(i.e.~when  option   `ACEinfile'   is   not   used)   is   stored   in
+`ACEinfo.infile'.   This   option   used   to    be    performed    by
+`outfile'\index{Option outfile (deprecated: use ACEinfile)}, which was
+deemed confusing and so is now deprecated.
 
-\>`messfile:=<filename>'{parameter messfile}&
-Messages are printed in file <filename> (the default output is on the
-screen).
+\>`messages:=<val>'{Option messages}
+\>`monitor:=<val>'{Option monitor}&
+Sets the verbosity of output; <val> should be an integer.
+(Shortest  abbreviation  of  `messages'  is   `mess',   and   shortest
+abbreviation of `monitor' is `mon'.)
+
+By default, <val> = 0, for which {\ACE} prints out only a single  line
+of information, giving the result of each  enumeration.  If  <val>  is
+non-zero then the presentation and the parameters are  echoed  at  the
+start of the run, and messages  on  the  enumeration's  status  as  it
+progresses are also printed out. The absolute value of <val> sets  the
+frequency of the progress messages, with a negative sign turning  hole
+monitoring on. Note that, hole monitoring is expensive, so don't  turn
+it on unless you really need it.  (See  option  `ACEoutfile'  and  the
+discussion below on the meanings of {\ACE}'s output messages,  if  you
+intend to peruse all this output.)
+
+\>`ao:=<filename>'{Option ao}
+\>`ACEoutfile:=<filename>'{Option ACEoutfile}&
+Redirects (`a'lters) `o'utput to <filename>; <filename>  should  be  a
+string.
+
+Normally {\ACE}'s output is directed to a temporary  file  whose  full
+path is stored in `ACEinfo.outfile', which  is  parsed  to  produce  a
+coset table or a list  of  statistics.  This  option  causes  {\ACE}'s
+output to be directed to <filename> instead,  presumably  because  the
+user wishes to see (and keep) data output by the {\ACE} binary,  other
+than the coset table output from `CallACE' or the statistics output by
+`ACEStats'. Below we discuss the meaning of the additional data to  be
+found in the {\ACE} binary's output.  The  option  `ACEoutfile'  is  a
+{\GAP}-introduced synonym for `ao', that is translated to `ao'  before
+submission to the {\ACE} binary. Do not use option  `ACEoutfile'  when
+running    the    standalone    directly.    An     older     synonym,
+`messfile'\index{Option  messfile  (deprecated:  use  ACEoutfile)}  is
+deprecated. Happily, `ao' can  also  be  regarded  as  mnemonical  for
+`ACEoutfile'.
 
 \enditems
 
-By default,  or if the argument `mess'  = 0, {\ACE} prints  out only a
-single line of information giving  the result of each enumeration.  If
-`mess' is non-zero then the presentation and the parameters are echoed
-at the start  of the run, and messages on  the enumeration's status as
-it progresses are also printed  out.  The absolute value of `val' sets
-the frequency of  the progress messages, with a  negative sign turning
-hole monitoring on.
+*The meanings of {\ACE}'s output messages*
 
-The result line gives the result of the call to the enumerator and some
-basic statistics.  The statistics given are, in order: 
- 
-\beginlist
-\item{--}  `a':   number of active cosets; 
-\item{--}  `r':   number of applied cosets;
-\item{--}  `h':   first (potentially) incomplete row;
-\item{--}  `n':   next coset definition number; 
-\item{--}  `h':   (if `mess'$ \< 0$), percentage of holes in the table;
-\item{--}  `l':   number of main loop passes;
-\item{--}  `c':   total CPU time;
-\item{--}  `m':   maximum number of active cosets;
-\item{--}  `t':   total number of cosets defined.
-\endlist
+For the rest of this section we discuss the meanings of  the  messages
+that appear in the output of the {\ACE} binary (which is held  in  the
+file `ACEinfo.outfile', or `ACEoutfile' (or  `ao')  if  the  user  has
+chosen to use this option). Note that the banner stating  the  version
+number and date, which will be observed if one runs the standalone  is
+re-directed to the file `ACEinfo.banner'.
 
-The possible results are given in the following Table; any result not
-listed represents an internal error and should be reported.
+What is first observed in the {\ACE} output file is a heading like:
 
 \begintt
-result               level     meaning 
-----------------------------------------------------------------------------
-INDEX = x                0     finite index of `x' obtained
-OVERFLOW                 0     out of table space
-SG PHASE OVERFLOW        0     out of space (processing subgroup generators)
-ITERATION LIMIT          0     `loop' limit triggered
-TIME LIMT                0     `ti' limit triggered
-HOLE LIMIT               0     `ho' limit triggered
-INCOMPLETE TABLE         0     all cosets applied, but table has holes
-MEMORY PROBLEM           1     out of memory (building data structures)
-----------------------------------------------------------------------------
+  #-- ACE 3.000: Run Parameters ---
 \endtt
 
-% \begin{table}
-% \hrule
-% \caption{Possible enumeration results}
-% \label{tab:rslts}
-% \smallskip
-% \renewcommand{\arraystretch}{0.875}
-% \begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}lll} 
-% \hline\hline
-% result & level & meaning \\
-% \hline
-% \ttt{INDEX = x}         & 0 & finite index of \ttt{x} obtained \\
-% \ttt{OVERFLOW}          & 0 & out of table space \\
-% \ttt{SG PHASE OVERFLOW} & 0 & out of space (processing subgroup
-% 				generators) \\
-% \ttt{ITERATION LIMIT}   & 0 & \ttt{loop} limit triggered \\
-% \ttt{TIME LIMT}         & 0 & \ttt{ti} limit triggered \\
-% \ttt{HOLE LIMIT}        & 0 & \ttt{ho} limit triggered \\
-% \ttt{INCOMPLETE TABLE}  & 0 & all cosets applied, but table has holes \\
-% \ttt{MEMORY PROBLEM}    & 1 & out of memory (building data structures) \\
-% \hline\hline
-% \end{tabular*}
-% \end{table}
-
-The  progress message  lines consist  of  an initial  tag, some  fixed
-statistics, and  some variable statistics.  The  possible message tags
-are listed in the folowing table, along with their meanings.
-
+(where `3.000' may be replaced be some later version number)  followed
+by the \lq{}input parameters' developed from the arguments and options
+passed to `CallACE' or `ACEStats'.  After these appears a separator:
 
 \begintt
-----------------------------------------------------------------------
-message   action      meaning
-----------------------------------------------------------------------
-AD             y      coset 1 application definition (`SG'/`RS' phase)
-RD             y      R-style definition
-RF             y      row-filling definition
-CG             y      immediate gap-filling definition
-CC             y*     coincidence processed
-DD             y*     deduction processed
-CP             y      preferred list gap-filling definition
-CD             y      C-style definition
-Lx             n      lookahead performed (type `x')
-CO             n      table compacted
-CL             n      complete lookahead (table as deduction stack)
-UH             n      updated completed-row counter
-RA             n      remaining cosets applied to relators
-SG             n      subgroup generator phase
-RS             n      relators in subgroup phase
-DS             n      stack overflowed (compacted and doubled)
-----------------------------------------------------------------------
+  #--------------------------------
+\endtt
+
+followed by  any  *progress  messages*  (progress  messages  are  only
+printed if `messages' is non-zero; recall that by default `messages' =
+0), followed by a *results message*. In the case of  `CallACE',  these
+messages are followed by yet more progress messages (if `messages'  is
+non-zero) and a coset  table.  Finally,  the  {\ACE}  output  file  is
+terminated by {\ACE}'s exit banner, which should look something like:
+
+\begintt
+=========================================
+ACE 3.000        Sun Mar 12 17:25:37 2000
+\endtt
+
+Both *progress messages* and  the  *results  message*  consist  of  an
+initial tag followed by a list of statistics. All messages have values
+for the statistics `a', `r', `h', `n', `h',  `l'  and  `c'  (excepting
+that the second `h', the one following  the  `n'  statistic,  is  only
+given if hole monitoring has been turned on by setting `messages'  $\<
+0$, which as noted above is expensive and  should  be  avoided  unless
+really needed). Additionally, there may appear the statistics: `m' and
+`t' (as for the results message); `d'; or `s', `d' and `c' (as for the
+`DS' progress message). The meanings of  the  various  statistics  and
+tags will follow later. The following is a sample progress message:
+
+\begintt
+AD: a=2 r=1 h=1 n=3; h=66.67% l=1 c=+0.00; m=2 t=2
+\endtt
+
+with tag `AD' and values for the statistics `a', `r',  `h',  `n',  `h'
+(appears because `messages' $\<  0$),  `l',  `c',  `m'  and  `t'.  The
+following is a sample results message:
+
+\begintt
+INDEX = 12 (a=12 r=16 h=1 n=16; l=3 c=0.01; m=14 t=15)
+\endtt
+
+which, in this case, declares a successful enumeration of  the  cosets
+of a subgroup of index 12 within a group, and, as it turns out, values
+for the same statistics as the sample progress message.
+
+In the following table we  list  the  statistics  that  can  follow  a
+progress or results message tag, in order:
+
+\begintt
+--------------------------------------------------------------------
+statistic   meaning
+--------------------------------------------------------------------
+a           number of active cosets
+r           number of applied cosets
+h           first (potentially) incomplete row
+n           next coset definition number
+h           percentage of holes in the table (if `messages'$ \< 0$) 
+l           number of main loop passes
+c           total CPU time
+m           maximum number of active cosets
+t           total number of cosets defined
+s           new deduction stack size (with DS tag)
+d           current deduction stack size, or
+              no. of non-redundant deductions retained (with DS tag)
+c           no. of redundant deductions discarded (with DS tag)
+--------------------------------------------------------------------
+\endtt
+
+Now that we have discussed the various  meanings  of  the  statistics,
+it's time to discuss the various types of progress messages possible.
+
+*Progress Messages*
+
+A progress message (and its tag) indicates the function just completed
+by the enumerator. In the following table, the possible message `tag's
+appear in the first column. In the `action' column,  a  `y'  indicates
+the function is aggregated and counted. Every time this count  reaches
+the value of `messages', a message line is printed and  the  count  is
+zeroed. Those tags flagged  with  a  `y*'  are  only  present  if  the
+appropriate option was included when the {\ACE} binary was compiled (a
+default compilation includes the appropriate options; so normally read
+`y*' as `y').
+
+Tags with an `n' in the `action' column indicate the function  is  not
+counted, and cause a message line to be output every time they  occur.
+They also cause the action count to be reset.
+
+\begintt
+------------------------------------------------------------------
+tag   action      meaning
+------------------------------------------------------------------
+AD         y      coset 1 application definition (`SG'/`RS' phase)
+RD         y      R-style definition
+RF         y      row-filling definition
+CG         y      immediate gap-filling definition
+CC         y*     coincidence processed
+DD         y*     deduction processed
+CP         y      preferred list gap-filling definition
+CD         y      C-style definition
+Lx         n      lookahead performed (type `x')
+CO         n      table compacted
+CL         n      complete lookahead (table as deduction stack)
+UH         n      updated completed-row counter
+RA         n      remaining cosets applied to relators
+SG         n      subgroup generator phase
+RS         n      relators in subgroup phase
+DS         n      stack overflowed (compacted and doubled)
+------------------------------------------------------------------
 \endtt
 
 % \begin{table}
@@ -1400,94 +1273,113 @@ DS             n      stack overflowed (compacted and doubled)
 % \end{tabular*}
 % \end{table}
 
+*Results Messages*
 
-The tags indicate the function  just completed by the enumerator.  The
-tags with a  `y' in the `action' column  represent functions which are
-aggregated and counted.
+The possible results are given in the following table; any result  not
+listed represents an internal error and  should  be  reported  to  the
+{\ACE} authors.
 
-Every time this count overflows the value of `mess', a message line is
-printed and the  count is zeroed.  Those tags flagged  with a `y*' are
-only present if the appropriate option has been included in the build.
+% The level column is omitted ... since it won't mean anything to a
+% GAP user
+\begintt
+result tag           meaning 
+------------------------------------------------------------------
+INDEX = x            finite index of `x' obtained
+OVERFLOW             out of table space
+SG PHASE OVERFLOW    out of space (processing subgroup generators)
+ITERATION LIMIT      `loop' limit triggered
+TIME LIMT            `ti' limit triggered
+HOLE LIMIT           `ho' limit triggered
+INCOMPLETE TABLE     all cosets applied, but table has holes
+MEMORY PROBLEM       out of memory (building data structures)
+---------------------------------------------------------------------
+\endtt
 
-Tags with an `n' in the `action' column are not counted, and cause a
-message line to be output every time they occur.
-They also cause the action count to be reset.
+% \begin{table}
+% \hrule
+% \caption{Possible enumeration results}
+% \label{tab:rslts}
+% \smallskip
+% \renewcommand{\arraystretch}{0.875}
+% \begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}lll} 
+% \hline\hline
+% result & level & meaning \\
+% \hline
+% \ttt{INDEX = x}         & 0 & finite index of \ttt{x} obtained \\
+% \ttt{OVERFLOW}          & 0 & out of table space \\
+% \ttt{SG PHASE OVERFLOW} & 0 & out of space (processing subgroup
+% 				generators) \\
+% \ttt{ITERATION LIMIT}   & 0 & \ttt{loop} limit triggered \\
+% \ttt{TIME LIMT}         & 0 & \ttt{ti} limit triggered \\
+% \ttt{HOLE LIMIT}        & 0 & \ttt{ho} limit triggered \\
+% \ttt{INCOMPLETE TABLE}  & 0 & all cosets applied, but table has holes \\
+% \ttt{MEMORY PROBLEM}    & 1 & out of memory (building data structures) \\
+% \hline\hline
+% \end{tabular*}
+% \end{table}
 
-The fixed  portion of  the statistics consists  of the `a',  `r', `h',
-`n', `h', `l' and `c' values,  as for the result line, except that `c'
-is the time since the last message line.
+*Notes*
 
-The variable portion of the statistics can be:
-
-\beginlist
-
-\item{--}  the `m' and `t' values, as for the result line;
-\item{--}  `d', the current size of the deduction stack;
-\item{--}  `s', `d' and `c' (with `DS' tag), the new stack size,
-the non-redundant deductions retained, and the redundant deductions
-discarded.
-
-\endlist
-
-*Notes:*
-Hole monitoring  is expensive, so don't  turn it on  unless you really
-need  it.   If  you  wish  to  print  out  the  presentation  and  the
-parameters, but  not the progress messages, then  set `mess' non-zero,
-but very large.  (You'll still  get the `SG', `DS', etc. messages, but
-not the `RD', `DD', etc. ones.)  You can set `mess' to $1$, to monitor
-all enumerator actions,  but be warned that this  can yield very large
+Hole monitoring is expensive, so don't turn it on  unless  you  really
+need it. If you wish to print out the presentation  and  the  options,
+but not the progress messages, then set `messages' non-zero, but  very
+large. (You'll still get the `SG', `DS', etc. messages,  but  not  the
+`RD', `DD', etc. ones.) You can set `messages' to $1$, to monitor  all
+enumerator actions, but be warned  that  this  can  yield  very  large
 output files.
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{Options for Experimentation}
 
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\Section{Experimentation Possibilities}
+With each of the options in this section you will probably want to set
+the option `ACEoutfile' (see~"Option ACEoutfile").  In  fact,  if  you
+haven't already done so,  read  the  entire  previous  section.
 
 \beginitems
 
-\>`aep:=<val>'{parameter aep}&
-<val> is  an integer $0 \leq  <val> \leq 7$. Runs  the enumeration for
-equivalent presentations.
+\>`aep:=<val>'{Option aep}&
+Runs  the enumeration for `a'll `e'quivalent `p'resentations;
+<val> is in the integer range 0 to 7.
 
 \enditems
 
-The `aep'  (all equivalent  presentations) option runs  an enumeration
-for combinations  of relator ordering, relator  rotations, and relator
-inversions.
+The `aep' option runs  an  enumeration  for  combinations  of  relator
+ordering, relator rotations, and relator inversions.
 
-The mandatory  argument <val> is  considered as a binary  number.  Its
-three bits  are treated as  flags, and control relator  rotations (the
-$2^0$ bit),  relator inversions (the $2^1$ bit)  and relator orderings
-(the $2^2$  bit); $1$  means 'active' and  $0$ means  'inactive'. (See
-below for an example).
+The argument <val> is considered as a binary number.  Its  three  bits
+are treated as flags, and control relator rotations (the  $2^0$  bit),
+relator inversions (the $2^1$ bit) and relator  orderings  (the  $2^2$
+bit),  respectively;  where  $1$  means  \lq{}active'  and  $0$  means
+\lq{}inactive'. (See below for an example).
 
-The `aep' option  first performs a 'priming run'  using the parameters
-as they  stand.  In particular,  the `asis' and `mess'  parameters are
+The `aep' option first performs a \lq{}priming run' using the  options
+as they stand. In particular, the `asis' and  `messages'  options  are
 honoured.
 
-It then  turns `asis' on and  `mess' off, and generates  and tests the
-requested  equivalent presentations.  The  maximum and  minimum values
-attained by  `m' (the maximum number  of coset numbers  defines at any
-stage)  and  `t' (the  total  number  of  coset numbers  defined)  are
-tracked, and each  time a new 'record' is found  the relators used and
-the summary result line is printed.
+It then turns `asis' on and `messages' off  (i.e.~sets  `messages'  to
+0), and generates and tests the  requested  equivalent  presentations.
+The maximum and minimum values attained by `m' (the maximum number  of
+coset numbers defines at any stage) and `t' (the total number of coset
+numbers defined) are tracked, and each  time  a  new  \lq{}record'  is
+found, the relators used and the summary result line is  printed.  See
+the previous section for a discussion of the statistics `m'  and  `t'.
+To observe these messages you will probably want  to  set  the  option
+`ACEoutfile' (see~"Option ACEoutfile").
 
-The  order in  which the  equivalent presentations  are  generated and
-tested has no particular  significance, but note that the presentation
-as  given *after*  the initial  priming  run) is  the *last*
-presentation to be generated and  tested, so that the group's relators
-are left `unchanged' by running the `aep' option.
+The order in which the  equivalent  presentations  are  generated  and
+tested has no particular significance, but note that the  presentation
+as given *after* the initial priming run) is the  *last*  presentation
+to be generated and tested, so that  the  group's  relators  are  left
+`unchanged' by running the `aep' option, (not that  a  non-interactive
+user cares).
 
-Use  with  the  `mess' option  to  see  the  result. 
+As discussed by Cannon, Dimino, Havas  and  Watson  \cite{CDHW73}  and
+Havas and Ramsay \cite{HR99b} such equivalent presentations can  yield
+large variations in the number of cosets required in  an  enumeration.
+For this command, we are interested in this variation.
 
-As discussed by Cannon, Dimino, Havas and Watson \cite{CDHW73} and Havas
-and Ramsay  \cite{HR99b} such  equivalent presentations can  yield large
-variations in  the number of  cosets required in an  enumeration.  For
-this command, we are interested in this variation.
-
-At the end, some additional status information is printed: 
-
+After  the  final  presentation  is  run,   some   additional   status
+information messages are printed to the {\ACE} output file:
 
 \beginlist
 \item{--}  the number of runs which yielded a finite index; 
@@ -1495,72 +1387,277 @@ At the end, some additional status information is printed:
 \item{--}  the range of values observed for `m' and `t'.
 \endlist
 
-
-As an example (drawn from the discussion in \cite{HR99a}) consider the enumeration of the $448$ cosets of the subgroup $\langle a^2,Ab \rangle$ of the group
-     $$ (8,7 \mid 2,3) 
-    = \langle a,b \mid a^8 = b^7 = (ab)^2 = (Ab)^3 = 1 \rangle . $$
-There are $4!=24$ relator orderings and $2^4=16$ combinations of relator or
-inverted relator.
-Exponents are taken into account when rotating relators, so the relators
-given give rise to 1, 1, 2 and 2 rotations respectively, for a total
-of $1.1.2.2=4$ combinations.
-So the command `aep` := $7$ would generate and test $24.16.4=1536$ 
-equivalent presentations, while `aep' := $3$ would generate and test 
-$16.4=64$ equivalent presentations.
+As an example (drawn from the discussion in \cite{HR99a}) consider the
+enumeration of the  $448$  cosets  of  the  subgroup  $\langle  a^2,Ab
+\rangle$ of the group
+$$ (8,7 \mid 2,3) 
+    = \langle a,b \mid a^8 = b^7 = (ab)^2 = (Ab)^3 = 1 \rangle. $$
+There are $4!=24$  relator  orderings  and  $2^4=16$  combinations  of
+relator or inverted relator. Exponents are  taken  into  account  when
+rotating relators, so the relators given give rise to 1, 1,  2  and  2
+rotations respectively, for a total of $1.1.2.2=4$  combinations.  So,
+for  `aep'  =  $7$   (resp.~$3$),   $24.16.4=1536$   (resp.~$16.4=64$)
+equivalent presentations are tested.
 
 *Notes:*
-There is  no way  to stop  the `aep' option  before it  has completed,
-other than killing the task.  So  do a reality check beforehand on the
-size of  the search space and  the time for each  enumeration.  If you
-are  interested  in finding  a  `good'  enumeration,  it can  be  very
-helpful, in terms of running time,  to put a tight limit on the number
-of cosets via the `max' parameter.
-You may also have to set `com' := $100$ to prevent time-wasting attempts
-to recover space via compaction.
-This maximises throughput by causing the `bad' enumerations, which are in
-the majority, to overflow quickly and abort.
-If you wish to explore a very large search-space, consider firing up many
-copies of {\ACE}, and starting each with a `random' equivalent
-presentation.
-Alternatively, you could use the `rep' command.
+There is no way to stop the `aep'  option  before  it  has  completed,
+other than killing the task. So do a reality check beforehand  on  the
+size of the search space and the time for each enumeration. If you are
+interested in  finding  a  \lq{}good'  enumeration,  it  can  be  very
+helpful, in terms of running time, to put a tight limit on the  number
+of cosets via the `max' option. You may also have to set  `compaction'
+=  $100$  to  prevent  time-wasting  attempts  to  recover  space  via
+compaction.  This  maximises  throughput  by  causing  the   \lq{}bad'
+enumerations, which are in  the  majority,  to  overflow  quickly  and
+abort. If you wish to explore  a  very  large  search-space,  consider
+firing up many copies of {\ACE}, and starting each with a \lq{}random'
+equivalent  presentation.  Alternatively,  you  could  use  the  `rep'
+command.
 
 \beginitems
 
-\>`rep:=<val>'{parameter rep}&
-Runs the enumeration for random equivalent presentations. See the `aep'
-option.
+\>`rep:=<val>'{Option rep}
+\>`rep:=[<val>, <Npresentations>]'{Option rep}&
+Runs  the enumeration for `r'andom `e'quivalent `p'resentations;
+<val> is in the integer range 0 to 7;
+<Npresentations> must be a positive integer.
 
 \enditems
 
-The  `rep' (random  equivalent presentations)  option  complements the
-`aep'  option.    It  generates  and  tests   some  random  equivalent
-presentations.  The mandatory argument acts  as for `aep'.  It is also
-possible to set the number  of presentations used (a default of eight)
-by using the extended syntax 'rep':=[<val>,<number>].
+The `rep' (random equivalent  presentations)  option  complements  the
+`aep'  option.  It  generates  and  tests   some   random   equivalent
+presentations. The argument <val>  acts  as  for  `aep'.  It  is  also
+possible to set the number <Npresentations>  of  random  presentations
+used (by default, eight  are  used),  by  using  the  extended  syntax
+`rep:=[<val>,<Npresentations>]'.
 
-The routine first  turns `asis' on and `mess'  off, and then generates
-and   tests  the   requested  equivalent   presentations.    For  each
-presentation  the  relators  used  and  the summary  result  line  are
-printed.
+The routine first  turns  `asis'  on  and  `messages'  off  (i.e.~sets
+`messages' to 0), and then generates and tests the requested number of
+random equivalent presentations. For each  presentation, the  relators
+used and the  summary  result  line  are  printed.  To  observe  these
+messages you  will  probably  want  to  set  the  option  `ACEoutfile'
+(see~"Option ACEoutfile").
 
 *Notes:*
-The  relator inversions  and  rotations are  'genuinely' random.   The
-relator permuting is  a little bit of a kludge,  with the 'quality' of
-the  permutations tending  to improve  with  successive presentations.
-When the `rep' command completes,  the presentation active is the {\it
-last} one generated.
+The relator inversions and rotations are \lq{}genuinely'  random.  The
+relator permuting is a little bit of a kludge, with the  \lq{}quality'
+of the permutations tending to improve with successive  presentations.
+When the `rep' command  completes,  the  presentation  active  is  the
+*last* one generated, (not that the non-interactive user cares).
 
-*Guru Note:*
-It might  appear that neglecting to restore  the original presentation
-is an error.  In fact, it is a useful feature!  Suppose that the space
-of  equivalent presentations is  too large  to exhaustively  test.  As
-noted in the  entry for `aep', we can start  up multiple copies of
-`aep'  at  random points  in  the  search-space.  Manually  generating
-`random'  equivalent  presentations  to  serve as  starting-points  is
-tedious and error-prone.  The `rep' option provides a simple solution;
-simply run `rep' := $7$ before `aep' := $7$!
+*Guru Notes:*
+It might appear that neglecting to restore the  original  presentation
+is an error. In fact, it is a useful feature! Suppose that  the  space
+of equivalent presentations is too  large  to  exhaustively  test.  As
+noted in the entry for `aep', we can start up multiple copies of `aep'
+at random points in the  search-space.  Manually  generating  `random'
+equivalent presentations to serve as starting-points  is  tedious  and
+error-prone. The `rep' option provides a simple solution;  simply  run
+`rep := 7' before `aep := 7'.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{Other Options}
+
+*YET ANOTHER SECTION TO BE WRITTEN*
+
+Here we will list all the known {\ACE} options that ordinarily  should
+not be used via `CallACE' or `ACEStats'.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Chapter{Strategy Options for ACE}
+
+It can be difficult to select appropriate options when presented  with
+a new enumeration. The problem is  compounded  by  the  fact  that  no
+generally applicable rules exist to  predict,  given  a  presentation,
+which option settings are \lq{}good'. To help overcome  this  problem,
+{\ACE} contains various commands which select  particular  enumeration
+strategies. One or other of these strategies may work and, if not, the
+results may indicate how  the  options  can  be  varied  to  obtain  a
+successful enumeration.
+
+Strategies are merely options that set a number of the options seen in
+the previous chapter, all at  once;  those  provided  are:  `default',
+`easy', `felsch', `hard', `hlt', `purec', `purer', and `sims'. All  of
+these can be passed as boolean  options  from  the  {\ACE}  interface,
+except `sims' which expects one of the integer values: 1, 3, 5, 7,  or
+9. Also, `felsch' can accept a value of 0 or 1, where 0 has  the  same
+effect as passing `felsch' with no value.
+
+If no options are passed to {\ACE}, the `default' strategy is assumed,
+which starts out presuming that the enumeration will be easy,  and  if
+it turns out not to be so, {\ACE} switches to a strategy designed  for
+more difficult enumerations. The  other  straightforward  options  for
+beginning users are `easy'  and  `hard'.  Thus,  `easy'  will  quickly
+succeed or fail (in the context of the given resources); `default' may
+succeed quickly, or if not will try the `hard'  strategy;  and  `hard'
+will run more slowly, from the beginning trying to succeed.
+
+Strategy options are  parsed  in  *exactly*  the  same  way  as  other
+options; order *is* important. It is usual  to  specify  one  strategy
+option and possibly follow it with a number of options defined in  the
+previous chapter, possibly modifying some of the options  set  by  the
+strategy option. Please refer to  the  introduction  of  the  previous
+chapter and to Section~"Using ACE as a Default for Coset  Enumerations
+and some General Warnings" for more  information  and  warnings  about
+using options.
+
+In the table below, we list the thirteen standard strategies,  showing
+the options (of Chapter~"Options for ACE")  that  they
+set, except that all  of  them  additionally  set  `path'  =  `false',
+`psize' = $256$, and `dsize' = $1000$. Recall that `mend', `look'  and
+`com' are abbreviations for  `mendelsohn'  (see~"Option  mendelsohn"),
+`lookahead' (see~"Option  lookahead")  and  `compaction'  (see~"Option
+compaction"), respectively.
+
+% \begin{table}
+% \hrule
+% \caption{The Predefined Strategies}
+% \label{tab:pred}
+% \smallskip
+% \renewcommand{\arraystretch}{0.875}
+% \begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}lrrrrrrrrrrrrr} 
+% \hline\hline
+%           & \multicolumn{13}{c}{parameter} \\ 
+% \cline{2-14}
+% strategy & path & row & mend & no & look & com & ct   & rt    & fill &
+% pmode & psize & dmode & dsize \\ 
+% \hline
+% default    & 0   & 1   & 0    & -1 & 0    & 10  & 0    & 0     & 0  & 3    & 256  & 4    & 1000 \\
+% easy   & 0   & 1   & 0    & 0  & 0    & 100 & 0    & 1000  & 1  & 0    & 256  & 0    & 1000 \\
+% felsch:0& 0   & 0   & 0    & 0  & 0    & 10  & 1000 & 0     & 1  & 0    & 256  & 4    & 1000 \\
+% felsch:1  & 0   & 0   & 0    & -1 & 0    & 10  & 1000 & 0     & 0  & 3    & 256  & 4    & 1000 \\
+% hard   & 0   & 1   & 0    & -1 & 0    & 10  & 1000 & 1     & 0  & 3    & 256  & 4    & 1000 \\
+% hlt    & 0   & 1   & 0    & 0  & 1    & 10  & 0    & 1000  & 1  & 0    & 256  & 0    & 1000 \\
+% purec & 0   & 0   & 0    & 0  & 0    & 100 & 1000 & 0     & 1  & 0    & 256  & 4    & 1000 \\
+% purer & 0   & 0   & 0    & 0  & 0    & 100 & 0    & 1000  & 1  & 0    & 256  & 0    & 1000 \\
+% sims:1 & 0   & 1   & 0    & 0  & 0    & 10  & 0    & 1000  & 1  & 0    & 256  & 0    & 1000 \\
+% sims:3 & 0   & 1   & 0    & 0  & 0    & 10  & 0    & -1000 & 1  & 0    & 256  & 4    & 1000 \\
+% sims:5 & 0   & 1   & 1    & 0  & 0    & 10  & 0    & 1000  & 1  & 0    & 256  & 0    & 1000 \\
+% sims:7 & 0   & 1   & 1    & 0  & 0    & 10  & 0    & -1000 & 1  & 0    & 256  & 4    & 1000 \\
+% sims:9 & 0   & 0   & 0    & 0  & 0    & 10  & 1000 & 0     & 1  & 0    & 256  & 4    & 1000 \\
+% \hline\hline
+% \end{tabular*}
+% \end{table}
+
+\begintt
+                                option
+            ----------------------------------------------------------
+strategy    row   mend  no  look  com    ct     rt  fill  pmode  dmode
+----------------------------------------------------------------------
+default       1  false  -1     0   10     0      0     0      3      4
+easy          1  false   0     0  100     0   1000     1      0      0
+felsch := 0   0  false   0     0   10  1000      0     1      0      4
+felsch := 1   0  false  -1     0   10  1000      0     0      3      4
+hard          1  false  -1     0   10  1000      1     0      3      4
+hlt           1  false   0     1   10     0   1000     1      0      0
+purec         0  false   0     0  100  1000      0     1      0      4
+purer         0  false   0     0  100     0   1000     1      0      0
+sims := 1     1  false   0     0   10     0   1000     1      0      0
+sims := 3     1  false   0     0   10     0  -1000     1      0      4
+sims := 5     1   true   0     0   10     0   1000     1      0      0
+sims := 7     1   true   0     0   10     0  -1000     1      0      4
+sims := 9     0  false   0     0   10  1000      0     1      0      4
+----------------------------------------------------------------------
+\endtt
+
+Note that we explicitly (re)set all of the listed  enumerator  options
+in all of the predefined strategies, even although some of  them  have
+no effect. For example, the `fill' value is irrelevant  in  HLT  mode.
+The idea behind this  is  that,  if  you  later  change  some  options
+individually, then the enumeration retains the `flavour' of  the  last
+selected predefined strategy.
+
+Note also that other options which may effect an enumeration are  left
+untouched by setting one of the predefined  strategies;  for  example,
+the values of `max' (see~"Option max") and `asis' (see~"Option asis").
+These options have an effect which  is  independant  of  the  selected
+strategy.
+
+Note that, apart from the `felsch := 0' and `sims  :=  9'  strategies,
+all of the strategies are distinct, although some are very similar.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{The Strategies in Detail}
+
+\beginitems
+
+\>`default'{Option default}&
+Selects the default strategy. (Shortest abbreviation: `def'.)
+
+This   strategy   is   based   on   the   defaulted   R/C-style;   see
+Section~"Enumeration Style". The idea here is that we assume that  the
+enumeration is \lq{}easy' and start out in R-style. If  it  turns  out
+not to be easy, then  we  regard  it  as  \lq{}hard',  and  switch  to
+CR-style, after performing a lookahead on the entire table.
+
+\>`easy'{Option easy}&
+Selects an \lq{}easy' R-style strategy.
+
+If this strategy is selected, we run in R-style (i.e., HLT), but  turn
+`lookahead' and `compaction' off. For small and/or easy  enumerations,
+this mode is likely to be the fastest.
+
+\>`felsch'{Option felsch}
+\>`felsch:=<val>'{Option felsch}&
+Selects a Felsch strategy; <val> should be 0 or 1. 
+(Shortest abbreviation: `fel'.)
+
+Assigning `felsch' 0 or no value selects a pure Felsch strategy, and a
+value of 1 selects a Felsch strategy with all relators in the subgroup
+(`no = -1') and turns gap-`fill'ing on.
+
+\>`hard'{Option hard}&  
+Selects a mixed R-style and C-style strategy.
+
+In many \lq{}hard' enumerations, a  mixture  of  R-style  and  C-style
+definitions, all tested in all  essentially  different  positions,  is
+appropriate. This option selects such a mixed strategy. The idea  here
+is that most of the work is done C-style (with  the  relators  in  the
+subgroup (`no = -1') and with gap-`fill'ing active),  but  that  every
+$1000$ C-style definitions a further coset is applied to all relators.
+
+*Guru  Notes:*
+The $1000/1$ mix is not necessarily optimal, and some  experimentation
+may be needed  to  find  an  acceptable  balance  (see,  for  example,
+\cite{HR99b}). Note also that, the longer  the  total  length  of  the
+presentation,  the  more  work  needs  to  be  done  for  each   coset
+application to the relators; one coset application can result in  more
+than $1000$ definitions, reversing the  balance  between  R-style  and
+C-style definitions.
+
+\>`hlt'{Option hlt}&
+Selects the standard HLT strategy.
+
+\>`purec'{Option purec}&
+Sets the strategy to basic C-style (coset table based).
+
+In this strategy there is no `compaction',  no  gap-`fill'ing  and  no
+relators in subgroup (`no = 0').
+
+\>`purer'{Option purer}&
+Sets the strategy  to basic R-style (relator based).
+
+In this  strategy  there  is  no  `mendelsohn',  no  `compaction',  no
+`lookahead' and no `row'-filling.
+
+\>`sims:=<val>'{Option sims}&
+Sets a Sims strategy; <val> should be one of 1, 3, 5, 7 or 9.
+
+In his book~\cite{Sim94},  Sims  discusses  ten  standard  enumeration
+strategies. These are effectively HLT (with and  without  `mendelsohn'
+set -- see~"Option mendelsohn") and Felsch, all either with or without
+table standardisation as the enumeration  proceeds.  {\ACE}  does  not
+implement  table  standardisation  during  an  enumeration,   although
+incomplete tables can be standardised and  an  enumeration  continued.
+The five odd-numbered non-standardising strategies of~\cite{Sim94} are
+implemented ({\ACE}'s numbering is the same as  given  in  Section~5.5
+of~\cite{Sim94}).  With  care,  it  is  possible  to   duplicate   the
+statistics  given  in~\cite{Sim94};  some  examples   are   given   in
+Chapter~"Examples". 
+% again, in the appendix ...
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%UPTOHERE 
 
 \Chapter{Using ACE Interactively}
 
@@ -1606,7 +1703,7 @@ INTERFACE*
 \>ACECheck( <aceobj> ) F
 \>ACERedo( <aceobj> ) F
 
-An extant  enumeration is redone,  using the current  parameters.  Any
+An extant  enumeration is redone,  using the current  options.  Any
 existing information in the table  is retained, and the enumeration is
 restarted from coset \#1 (i.e., the subgroup).
 
@@ -1622,7 +1719,7 @@ a collapse to a smaller index.
 
 Continue the  current enumeration,  building upon the  existing table.
 If a previous run stopped without producing a finite index you can, in
-principle, change any  of the parameters and continue  on.  Of course,
+principle, change any  of the options and continue  on.  Of course,
 if you make any changes  which invalidate the current table, you won't
 be allowed to continue, although you may be allowed to redo.
 
@@ -1692,20 +1789,20 @@ Level 2 options:
 \>ACEPrintDetails( <aceobj>[, <params> ) F
 
 This  command  prints out  details  of  the  current presentation  and
-parameters.  No second argument, or second argument `false', prints out
+options.  No second argument, or second argument `false', prints out
 the group
 and subgroup name, the group's relators and the subgroup's generators.
 If the second argument is `true', then  the current setting of the
-parameters is
+options is
 also printed.  The printout is the  same as that produced at the start
 of a run when messaging is on.
 
 % *Notes:*
 % The output is printed out in a form suitable for input, so that a record
 % of a previous run can be used to replicate the run.
-% Note that, due to the defaulting of some parameters and the special
+% Note that, due to the defaulting of some options and the special
 % meaning attached to some values, a little care has to be taken in
-% interpreting the parameters.
+% interpreting the options.
 %T mention outfile option here?
 
 *GREG: DOES THE FOLLOWING PASSAGE MAKE SENSE WITH THE INTERFACE?*
