@@ -252,10 +252,12 @@ end);
 BindGlobal("ACETCENUM",rec(name:="ACE-enumerator",
  CosetTableFromGensAndRels:=
   function(fgens,grels,fsgens)
-  local l;
+  local l,silent;
+    silent:=ValueOption("silent")=true;
     repeat
       l:=CallACE(fgens,grels,fsgens);
       if l=fail then
+	if silent then return fail;fi;
 	Error("the coset enumeration using the `ACE' enumerator did not ",
 		"complete.\n If you called the command with restrictive",
 		"options relax these. Otherwise increase the memory available",

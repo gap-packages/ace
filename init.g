@@ -6,7 +6,7 @@
 ##
 
 # announce the package version and test for the existence of the binary
-DeclarePackage("ace","1.0",
+DeclarePackage("ace","1.1",
   function()
   local path,file,line,a;
     # test for existence of the compiled binary
