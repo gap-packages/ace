@@ -165,7 +165,7 @@ Error( ": No coset table ..." );
 #I  The `ACE' coset enumeration failed with the result:
 #I  OVERFLOW (a=2 r=1 h=1 n=3; l=5 c=0.00; m=2 t=2)
 #I  Try relaxing any restrictive options:
-#I  type: 'CurrentACEOptions();' to see current ACE options;
+#I  type: 'DisplayACEOptions();' to see current ACE options;
 #I  type: 'SetACEOptions(:<option1> := <value1>, ...);'
 #I  to set <option1> to <value1> etc.
 #I  (i.e. pass options after the ':' in the usual way)
@@ -530,9 +530,9 @@ To set the `InfoLevel' of `InfoACE' we also provide
 
 which for a non-negative integer  <level>,  sets  the  `InfoLevel'  of
 `InfoACE'    to    <level>    (i.e.~it    is    a    shorthand     for
-`SetInfoACELevel(InfoACE,  <level>)').  Currently,  information   from
-{\ACE} is directed to `Info' at two non-zero `InfoACE' levels:  1  and
-2. The command
+`SetInfoLevel(InfoACE, <level>)'). Currently, information from  {\ACE}
+is directed to `Info' at two non-zero `InfoACE' levels: 1 and  2.  The
+command
 
 \begintt
 gap> SetInfoACELevel(1);
@@ -2429,6 +2429,11 @@ Name', the group's `relators'  and  the  subgroup's  `generators'.  If
 also printed. The printout is the same as that produced at  the  start
 of a run when option `messages' (see~"Option `messages'") is non-zero.
 
+Interactively,  use  `ACEGroupGenerators'  (see~"ACEGroupGenerators"),
+`ACERelators'       (see~"ACERelators"),       `ACESubgroupGenerators'
+(see~"ACESubgroupGenerators"),           and           `ACEParameters'
+(see~"ACEParameters").
+
 *Notes:*
 Only use *after* an enumeration run; otherwise, the value 0  for  some
 options will be unreliable.
@@ -2873,33 +2878,6 @@ at once, we provide:
 
 \>ACEQuitAll() F
 
-%T return an exit status if possible?
-%  Hmm! ... CloseStream doesn't give an exit status? ... suggestions?
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\Section{Viewing and Setting Options of an Interactive Process}
-
-\>CurrentACEOptions( <i> ) F
-\>CurrentACEOptions() F
-
-display the options of the  <i>th  (or  default)  process  started  by
-`ACEStart'. In fact, `CurrentACEOptions(<i>)' is just a pretty-printer
-of the `ACEData.io[<i>].options' record.
-
-\>SetACEOptions( <i> [:<options>] ) F
-\>SetACEOptions( [:<options>] ) F
-
-modify the current options of the <i>th (or default)  process  started
-by `ACEStart'. Please ensure that the `OptionsStack' is  empty  before
-calling  `SetACEOptions'  (or  any  interactive  function  that  calls
-`SetACEOptions'; any interactive function  that  accepts  new  options
-actually calls an internal version of `SetACEOptions').
-
-When `ACECosetTableFromGensAndRels' enters a  `break'-loop{\undoquotes
-\atindex {break-loop} {@`break'-loop}} local versions  of  the  second
-form  of  each  of  `CurrentACEOptions'  and  `SetACEOptions'   become
-available. (Even though the names are similar and  their  function  is
-analogous they are in fact different functions.)
-
 \enditems
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -2978,12 +2956,241 @@ indefinitely.
 With argument <i> which must be a positive  integer  argument  returns
 <i> if it corresponds to an active interactive process, or  raises  an
 error. With no arguments it returns  the  default  active  interactive
-process or raises an error.
+process or returns `fail' and emits a warning  message  to  `Info'  at
+`InfoACE' or `InfoWarning' level 1.
 
 \>ACEStreams() F
 
 Returns the list of integer indices of all active  interactive  {\ACE}
 processes.
+
+\enditems
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{(Other) ACE Modes}
+
+After changing any of {\ACE}'s parameters, one  of  three  *modes*  is
+possible:  one  may  be  able  to  \lq{}continue'  via   `ACEContinue'
+(see~"ACEContinue"), or \lq{}redo' via `ACERedo'  (see~"ACERedo"),  or
+if neither of these is possible one may  have  to  re-\lq{}start'  the
+enumeration via `ACEStart' (see~"ACEStart").
+
+\beginitems
+
+\>ACEModes( <i> ) F
+\>ACEModes() F
+
+For the <i>th (or default) interactive {\ACE} process returns a record
+whose fields are the modes `ACEStart',  `ACEContinue'  and  `ACERedo',
+and whose values are `true' if the mode is possible  for  the  process
+and `false' otherwise.
+
+\>ACEContinue( <i> [:<options>] ) F
+\>ACEContinue( [:<options>] ) F
+
+For the <i>th (or default) interactive  {\ACE}  process,  applies  any
+<options> and then \lq{}continues' the current  enumeration,  building
+upon the existing table. If a previous run stopped without producing a
+finite index you can, in principle, change  any  of  the  options  and
+continue on. Of course, if you make any changes which  invalidate  the
+current table, you won't be allowed to `ACEContinue' and an error will
+be raised. However, after `quit'ting the `break'-loop, the interactive
+{\ACE} process should normally still be active; after  doing  so,  run
+`ACEModes' (see~"ACEModes") to see which of `ACERedo' or `ACEStart' is
+possible.
+
+\>ACERedo( <i> [:<options>] ) F
+\>ACERedo( [:<options>] ) F
+
+For the <i>th (or default) interactive  {\ACE}  process,  applies  any
+<options> and then \lq{}redoes' the current enumeration; any  existing
+information in the table is retained, and the enumeration is restarted
+from coset 1 (i.e., the subgroup).
+
+*Notes:*
+
+This option is really intended for the case where additional  relators
+and/or subgroup generators have been introduced.  The  current  table,
+which  may  be  incomplete  or  exhibit  a  finite  index,  is   still
+\lq{}valid'. However, the  new  data  may  allow  the  enumeration  to
+complete, or cause a collapse to  a  smaller  index.  In  some  cases,
+`ACERedo' may not be possible and an error will  be  raised;  in  this
+case, `quit' the `break'-loop, and try `ACEStart', which will  discard
+the current table and re-\lq{}start' the enumeration.
+
+\enditems
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{Interactive Questions}
+
+\beginitems
+
+\>ACEGroupGenerators( <i> ) F
+\>ACEGroupGenerators() F
+
+return  the  {\GAP}  group  generators,  of  the  <i>th  (or  default)
+interactive {\ACE} process. If no generators were saved an empty  list
+is  returned  and  an  `Info'  message  is  emitted  at  `InfoACE'  or
+`InfoWarning' level 1. Essentially, `ACEGroupGenerators(<i>)'  returns
+`ACEData.io[<i>].args.fgens' if bound, or an empty list, otherwise.
+
+\>ACERelators( <i> ) F
+\>ACERelators() F
+
+return the {\GAP} relators, of  the  <i>th  (or  default)  interactive
+{\ACE} process. If no relators were saved an empty  list  is  returned
+and an `Info' message is emitted at `InfoACE' or  `InfoWarning'  level
+1. Essentially, `ACERelators(<i>)' returns `ACEData.io[<i>].args.rels'
+if bound, or an empty list, otherwise.
+
+\>ACESubgroupGenerators( <i> ) F
+\>ACESubgroupGenerators() F
+
+return the {\GAP} subgroup  generators,  of  the  <i>th  (or  default)
+interactive {\ACE} process. If no subgroup generators  were  saved  an
+empty list is returned and an `Info' message is emitted  at  `InfoACE'
+or `InfoWarning' level  1.  Essentially,  `ACESubgroupGenerators(<i>)'
+returns `ACEData.io[<i>].args.sgens'  if  bound,  or  an  empty  list,
+otherwise.
+
+\>DisplayACEOptions( <i> ) F
+\>DisplayACEOptions() F
+
+display the options of the  <i>th  (or  default)  process  started  by
+`ACEStart'. In fact, `DisplayACEOptions(<i>)' is just a pretty-printer
+of   the   `ACEData.io[<i>].options'   record.   Use   `GetACEOptions'
+(see~"GetACEOptions") in assignments. Please note that no-value {\ACE}
+options  will   appear   with   the   assigned   value   `true'   (see
+Section~"Interpretation of ACE Options" for how the  {\ACE}  interface
+functions interpret such options).
+
+\>GetACEOptions( <i> ) F
+\>GetACEOptions() F
+
+return a record of the current  options  of  the  <i>th  (or  default)
+process started  by  `ACEStart'.  Please  note  that  no-value  {\ACE}
+options  will   appear   with   the   assigned   value   `true'   (see
+Section~"Interpretation of ACE Options" for how the  {\ACE}  interface
+functions interpret such options).
+
+\>SetACEOptions( <i> [:<options>] ) F
+\>SetACEOptions( [:<options>] ) F
+
+modify the current options of the <i>th (or default)  process  started
+by `ACEStart'. Please ensure that the `OptionsStack' is  empty  before
+calling `SetACEOptions', otherwise the options already present on  the
+`OptionsStack'  will  also  be  \lq{}seen'.  All  interactive   {\ACE}
+interface functions that accept options,  actually  call  an  internal
+version of `SetACEOptions'; so, it is generally important to keep  the
+`OptionsStack' clear while working with {\ACE} interactively.
+
+Since a user will sometimes have options  in  the  form  of  a  record
+(e.g.~via   `GetACEOptions'),   we   provide   a    `PushOptions'-like
+alternative to the behind-the-colon syntax for the passing of  options
+via `SetACEOptions':
+
+\>SetACEOptions( <i>, <optionsRec>] ) F
+\>SetACEOptions( <optionsRec>] ) F
+
+In this form, the record <optionsRec> is used to  update  the  current
+options of the <i>th (or default) process started by `ACEStart'.  Note
+that since <optionsRec> is a record each field must have  an  assigned
+value; in particular, no-value {\ACE} options should be  assigned  the
+value `true' (see Section~"Interpretation  of  ACE  Options").  Please
+don't mix this form of `SetACEOptions' with the previous form; i.e.~do
+*not* pass both a record argument and options, since this will lead to
+options appearing in the wrong order; if you want to do this, make two
+separate calls to `SetACEOptions', e.g.
+
+\beginexample
+gap> SetACEOptions( rec(echo := 2) );
+gap> SetACEOptions( : hlt);
+\endexample
+
+*Notes:*
+
+When `ACECosetTableFromGensAndRels' enters a  `break'-loop{\undoquotes
+\atindex {break-loop} {@`break'-loop}} local versions  of  the  second
+form  of  each  of  `DisplayACEOptions'  and  `SetACEOptions'   become
+available. (Even though the names are similar and  their  function  is
+analogous they are in fact different functions.)
+
+\>ACEParameters( <i> ) F
+\>ACEParameters() F
+
+return a record of the current values of the {\ACE} Parameter  Options
+(see Section~"ACE  Parameter  Options")  of  the  <i>th  (or  default)
+process started by `ACEStart', according to {\ACE}. Please  note  that
+some options may be reported with incorrect values if they  have  been
+changed  recently  without  following  up  with  one  of   the   modes
+`ACEContinue',  `ACERedo'  or  `ACEStart'.   Together   the   commands
+`ACEGroupGenerators',   `ACERelators',   `ACESubgroupGenerators'   and
+`ACEParameters'  give  the  equivalent  {\GAP}  information  that   is
+obtained in {\ACE} with `sr := 1' (see~"Option `sr'"),  which  is  the
+\lq{}Run  Parameters'  block  obtained   in   the   messaging   output
+(observable when the `InfoLevel' of `InfoACE' is set to at  least  2),
+when `messages' (see~"Option `messages'") is set a non-zero value.
+
+*Notes:*
+One use for this function might be to determine the  options  required
+to replicate a previous run,  but  be  sure  that,  if  this  is  your
+purpose, that any recent change in the  parameter  option  values  has
+been   followed   by   an   invocation   of   one   of   `ACEContinue'
+(see~"ACEContinue"),   `ACERedo'   (see~"ACERedo")    or    `ACEStart'
+(see~"ACEStart").
+
+\>ACEVersion( <i> ) F
+\>ACEVersion() F
+
+for the  <i>th  (or  default) process started by `ACEStart',
+print version details of the {\ACE} binary you are currently running,
+including what compiler flags  were set  when the
+executable  was built; essentially the information obtained is
+what is obtained via {\ACE}'s `options' option (see~"Option
+`options'").
+ A  typical output,  illustrating the  default
+build, is:
+
+\beginexample
+gap> ACEVersion();
+#I  ACE 3.000
+#I  Executable built:
+#I    Sat Feb 27 15:57:59 EST 1999
+#I  Level 0 options:
+#I    statistics package = on
+#I    coinc processing messages = on
+#I    dedn processing messages = on
+#I  Level 1 options:
+#I    workspace multipliers = decimal
+#I  Level 2 options:
+#I    host info = on
+\endexample
+
+*Note:*
+Unlike other {\ACE} interface functions, the information obtained  via
+`ACEVersion();' is absolutely independent of any enumeration. For this
+reason, we make it permissible to run `ACEVersion();' when  there  are
+no currently active interactive {\ACE} processes; and, in such a case,
+`ACEVersion();' initiates (and closes again) its own stream to  obtain
+the information from the {\ACE} binary.
+
+\>ACEDumpVariables( <i> ) F
+\>ACEDumpVariables() F
+
+% \>`dump' := [0/1/2[,0/1]]&
+% 
+% Dumps  the internal  variables of  {\ACE}.  The  first  argument selects
+% which of  the three levels  of {\ACE} to  dump, and defaults  to Level
+% $0$.  The second argument selects the level of detail, and defaults to
+% $0$  (i.e., less  detail).  This  option  is intended  for gurus;  the
+% source code should be consulted to see what the output means.
+
+\>ACEDumpStatistics( <i> ) F
+\>ACEDumpStatistics() F
+
+If the statistics package is compiled into the code (which it is by
+default),
+then print the statistics accumulated during the most recent enumeration.
 
 \enditems
 
@@ -2997,14 +3204,24 @@ processes.
 
 perform  the  same  function  as  `ACECosetTableFromGensAndRels'   and
 `ACECosetTable' on three arguments, albeit interactively, on the <i>th
-(or default) process started by `ACEStart'.
+(or default) process started by `ACEStart'. If options are passed then
+an internal version of `ACEModes' is run to  determine  which  of  the
+modes (see Section~"(Other) ACE Modes")  `ACEContinue',  `ACERedo'  or
+`ACEStart' is possible; and (an internal version of) the first mode of
+these that is allowed is executed, to ensure the  resultant  table  is
+correct for the current options.
 
 \>ACEStats( <i> [:<options>] ) F
 \>ACEStats( [:<options>] ) F
 
 perform the same function as `ACEStats'  on  three  arguments,  albeit
 interactively,  on  the  <i>th  (or  default)   process   started   by
-`ACEStart'.
+`ACEStart'.  If  options  are  passed  then  an  internal  version  of
+`ACEModes'  is  run   to   determine   which   of   the   modes   (see
+Section~"(Other) ACE Modes") `ACEContinue', `ACERedo' or `ACEStart' is
+possible; and (an internal version of) the first mode of these that is
+allowed is executed, to ensure the resultant table is correct for  the
+current options.
 
 See Section~"Example of Using ACE Interactively (Using ACEStart)"  for
 an example demonstrating both these functions  within  an  interactive
@@ -3016,38 +3233,6 @@ process.
 \Section{Steering ACE Interactively}
 
 \beginitems
-
-\>ACEModes( <i> ) F
-\>ACEModes() F
-
-For the <i>th (or default) interactive {\ACE} process returns a record
-whose fields are the modes `ACEStart',  `ACEContinue'  and  `ACERedo',
-and whose values are `true' if the mode is possible  for  the  process
-and `false' otherwise.
-
-\>ACECheck( <aceobj> ) F
-\>ACERedo( <aceobj> ) F
-
-An extant  enumeration is redone,  using the current  options.  Any
-existing information in the table  is retained, and the enumeration is
-restarted from coset 1 (i.e., the subgroup).
-
-*Notes:*
-
-This option is really intended  for the case where additional relators
-and/or subgroup  generators have been introduced.   The current table,
-which may be  incomplete or exhibit a finite  index, is still 'valid'.
-However, the new data may  allow the enumeration to complete, or cause
-a collapse to a smaller index.
-
-\>ACEContinue( <aceobj> ) F
-
-Continue the  current enumeration,  building upon the  existing table.
-If a previous run stopped without producing a finite index you can, in
-principle, change any  of the options and continue  on.  Of course,
-if you make any changes  which invalidate the current table, you won't
-be allowed to continue, although you may be allowed to redo.
-
 
 \>ACERecover( <aceobj> ) F
 
@@ -3077,72 +3262,6 @@ The enumeration must be restarted or redone, it cannot be continued.
 Print out the representative of coset <int>, and add it to the
 subgroup generators; i.e., equates this coset with coset 1, the
 subgroup.
-
-\enditems
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\Section{Interactive Questions}
-
-\beginitems
-
-% \>`dump' := [0/1/2[,0/1]]&
-% 
-% Dumps  the internal  variables of  {\ACE}.  The  first  argument selects
-% which of  the three levels  of {\ACE} to  dump, and defaults  to Level
-% $0$.  The second argument selects the level of detail, and defaults to
-% $0$  (i.e., less  detail).  This  option  is intended  for gurus;  the
-% source code should be consulted to see what the output means.
-
-\>ACEPrintOptions( <aceobj> ) F
-
-This command prints details of the options included  in the version of
-{\ACE} you're  running; i.e.,  what compiler flags  were set  when the
-executable  was built.   A  typical output,  illustrating the  default
-build, is:
-
-\begintt
-Executable built:
-  Sat Feb 27 15:57:59 EST 1999
-Level 0 options:
-  statistics package = on
-  coinc processing messages = on
-  dedn processing messages = on
-Level 1 options:
-  workspace multipliers = decimal
-Level 2 options:
-  host info = on
-\endtt
-
-
-\>ACEPrintDetails( <aceobj>[, <params> ) F
-
-This  command  prints out  details  of  the  current presentation  and
-options.  No second argument, or second argument `false', prints out
-the group
-and subgroup name, the group's relators and the subgroup's generators.
-If the second argument is `true', then  the current setting of the
-options is
-also printed.  The printout is the  same as that produced at the start
-of a run when messaging is on.
-
-% *Notes:*
-% The output is printed out in a form suitable for input, so that a record
-% of a previous run can be used to replicate the run.
-% Note that, due to the defaulting of some options and the special
-% meaning attached to some values, a little care has to be taken in
-% interpreting the options.
-%T mention outfile option here?
-
-*GREG: DOES THE FOLLOWING PASSAGE MAKE SENSE WITH THE INTERFACE?*
-If you wish to *exactly* duplicate a run, you should use the output
-of `sr' *after* the run completes.
-
-
-\>ACEPrintStatistics( <aceobj> ) F
-
-If the statistics package is compiled into the code (which it is by
-default),
-then print the statistics accumulated during the most recent enumeration.
 
 \enditems
 
@@ -3988,7 +4107,7 @@ Error( ": No coset table ..." );
 #I  The `ACE' coset enumeration failed with the result:
 #I  OVERFLOW (a=2 r=1 h=1 n=3; l=4 c=0.00; m=2 t=2)
 #I  Try relaxing any restrictive options:
-#I  type: 'CurrentACEOptions();' to see current ACE options;
+#I  type: 'DisplayACEOptions();' to see current ACE options;
 #I  type: 'SetACEOptions(:<option1> := <value1>, ...);'
 #I  to set <option1> to <value1> etc.
 #I  (i.e. pass options after the ':' in the usual way)
@@ -4000,7 +4119,7 @@ brk> # Let's give ACE enough coset numbers to work with ...
 brk> # and while we're at it see the effect of 'echo := 2' :                   
 brk> SetACEOptions(: max := 0, echo := 2);                                     
 brk> # Let's check what the options are now:                                   
-brk> CurrentACEOptions();                                                      
+brk> DisplayACEOptions();                                                      
 rec(
   enum := "F(2,7), aka C_29",
   wo := "2M",
