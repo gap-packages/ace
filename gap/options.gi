@@ -337,6 +337,45 @@ InstallGlobalFunction(IS_INC_POS_INT_LIST,
 #############################################################################
 ####
 ##
+#F  IsKnownACEOption  . . . . . . . . Returns true if optname is a mixed case
+##  . . . . . . . . . . . . . . . . . abbreviation    of    a    field     of
+##  . . . . . . . . . . . . . . . . . .  KnownACEOptions, or false otherwise.
+##
+InstallGlobalFunction(IsKnownACEOption, 
+  optname -> ACEOptionData(optname).known);
+
+#############################################################################
+####
+##
+#F  ACEPreferredOptionName  . . . . Returns the lowercase unabbreviated first
+##  . . . . . . . . . . . . . . . . alternative of optname if it is  a  known
+##  . . . . . . . . . . . . . . . . ACE  option,  or  optname  in  lowercase,
+##  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .  otherwise.
+##
+InstallGlobalFunction(ACEPreferredOptionName, 
+  optname -> ACEOptionData(optname).synonyms[1]);
+
+#############################################################################
+####
+##
+#F  IsACEParameterOption  . . Returns true if ACEPreferredOptionName(optname) 
+##  . . . . . . . . . . . . . . . . . . . . is a field of ACEParameterOptions
+##
+InstallGlobalFunction(IsACEParameterOption, 
+  optname -> ACEPreferredOptionName(optname) in RecNames(ACEParameterOptions));
+
+#############################################################################
+####
+##
+#F  IsACEStrategyOption . . . Returns true if ACEPreferredOptionName(optname) 
+##  . . . . . . . . . . . . . . . . . . . . . . . .  is in ACEStrategyOptions
+##
+InstallGlobalFunction(IsACEStrategyOption, 
+  optname -> ACEPreferredOptionName(optname) in ACEStrategyOptions);
+
+#############################################################################
+####
+##
 #F  ACE_OPTIONS . . . . . . . . . . . . . . . . . . . . . . Internal function
 ##  . . . . . . . . . returns the options passed to an ACE interface function
 ##
@@ -432,6 +471,54 @@ end);
 #############################################################################
 ####
 ##
+#F  ACE_IF_EXPR . . . . . . . . . . . . . . . . . . . . . .  An expression if
+##
+##
+InstallGlobalFunction(ACE_IF_EXPR, function(bool, trueval, falseval, failval)
+  if bool = true then
+    return trueval;
+  elif bool = false then
+    return falseval;
+  else
+    return failval;
+  fi;
+end);
+  
+#############################################################################
+####
+##
+#F  ACE_VALUE_OPTION  . . . . . . . . Essentially an extension of ValueOption
+##  . . . . . . . . . . . . . . .  but also removes optname from OptionsStack
+##
+##  ACE_VALUE_OPTION(optname,  defaultval)  returns  ValueOption(optname)  if
+##  optname is set and defaultval, otherwise.
+##
+##  ACE_VALUE_OPTION(optname, val,  trueval,  elseval).  If optname has value
+##  val then return trueval else return elseval.
+##
+##  If ACE_VALUE_OPTION is called with a different no. of aguments to 1 or 2,
+##  all but  the  first  argument  is  ignored,  and  ValueOption(arg[1])  is
+##  returned. Calling ACE_VALUE_OPTION with no arguments is an error.
+##
+InstallGlobalFunction(ACE_VALUE_OPTION, function(arg)
+local optval;
+  optval := ValueOption(arg[1]);
+  if not IsEmpty(OptionsStack) then
+    Unbind( OptionsStack[ Length(OptionsStack) ].(arg[1]) );
+  fi;
+  if Length(arg) = 2 then
+    return ACE_IF_EXPR(optval <> fail, optval, arg[2], arg[2]);
+  elif Length(arg) = 4 then
+    return ACE_IF_EXPR(optval = arg[2], arg[3], arg[4], arg[4]);
+  elif not IsEmpty(arg) then
+    # Ignore all but the first argument
+    return optval;
+  fi;
+end);
+  
+#############################################################################
+####
+##
 #F  VALUE_ACE_OPTION  . . . . . . . . . . . . . . . . . . . Internal function
 ##  . . . . . . . checks among optnames for any settings of synonyms of optnm
 ##  . . . . . . . The latest such optname in optnames will  prevail  and  its
@@ -466,13 +553,46 @@ local echoval;
   echoval := VALUE_ACE_OPTION(optnames, 0, "echo");
   if echoval in KnownACEOptions.echo[2] then
     return echoval;
-  elif echoval = true then
-    return 1;
-  else
-    return 0;
+  else 
+    return ACE_IF_EXPR(echoval = true, 1, 0, 0);
   fi;
 end);
   
+#############################################################################
+####
+##
+#F  TO_ACE_GENS . . . . . . . . . . . . . . . . . . . . . . Internal function
+##  . . . . . . . . . .  returns the translation of words in generators fgens
+##  . . . . . . . . . . .  to words in ACEgens (the generators ACE will use),
+##  . . . . . . . . . . . . . . . . . . . . . . . . . . . . .  as one string.
+##
+InstallGlobalFunction(TO_ACE_GENS, function(fgens)
+local n, acegens;
+
+  n := Length(fgens);
+  # Define the generators ACE will use
+  if n <= 26 then
+    # if #generators <= 26 tell ACE to use alphabetic generators: a ...
+    if ForAll(fgens, function(g)
+                       local gstring;
+                       gstring := String(g);
+                       return Length(gstring) = 1 and
+                              LowercaseString(gstring) = gstring;
+                     end) 
+    then
+      # if all generators are represented by single lowercase letters
+      # ... use the user's set of generators for ACE
+      acegens := List(fgens, g -> String(g));
+    else
+      acegens := List([1..n], i -> WordAlp(CHARS_LALPHA, i));
+    fi;
+    return rec(acegens := acegens, toace := Flat(acegens));
+  else
+    # if #generators > 26 tell ACE to use numerical generators: 1 ...
+    return rec(acegens := List([1..n], i -> String(i)), toace := n);
+  fi;
+end);
+
 #############################################################################
 ####
 ##

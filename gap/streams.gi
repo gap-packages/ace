@@ -131,14 +131,20 @@ end);
 #F  WRITE_LIST_TO_ACE_STREAM . . . . . . . . . . . . . . .  Internal function
 ##
 ##  Writes list to stream and with a `ToACE> '  prompt  to  Info  at  InfoACE
-##  level 4
+##  level 4 and returns true if successful and fail otherwise.
 ##
 InstallGlobalFunction(WRITE_LIST_TO_ACE_STREAM, function(stream, list)
 local string;
 
+  if IsEndOfStream(stream) then
+    Info(InfoACE + InfoWarning, 1, "Sorry. Process stream has died!");
+    Info(InfoACE + InfoWarning, 1, 
+         "You might like to try using 'ACEResurrect(<i>);'");
+    return fail;
+  fi;
   string := Concatenation( List(list, x -> String(x)) );
   Info(InfoACE, 4, "ToACE> ", string);
-  WriteLine(stream, string);
+  return WriteLine(stream, string);
 end);
 
 #E  streams.gi  . . . . . . . . . . . . . . . . . . . . . . . . . . ends here 

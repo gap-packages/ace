@@ -72,13 +72,20 @@ DeclareGlobalVariable("ACE_ERRORS",
 ##
 
 DeclareGlobalFunction("IS_INC_POS_INT_LIST");
+DeclareGlobalFunction("IsKnownACEOption");
+DeclareGlobalFunction("ACEPreferredOptionName");
+DeclareGlobalFunction("IsACEParameterOption");
+DeclareGlobalFunction("IsACEStrategyOption");
 DeclareGlobalFunction("ACE_OPTIONS");
 DeclareGlobalFunction("ACE_OPT_NAMES");
 DeclareGlobalFunction("MATCHES_KNOWN_ACE_OPT_NAME");
 DeclareGlobalFunction("FULL_ACE_OPT_NAME");
 DeclareGlobalFunction("ACE_OPTION_SYNONYMS");
+DeclareGlobalFunction("ACE_IF_EXPR");
+DeclareGlobalFunction("ACE_VALUE_OPTION");
 DeclareGlobalFunction("VALUE_ACE_OPTION");
 DeclareGlobalFunction("ACE_VALUE_ECHO");
+DeclareGlobalFunction("TO_ACE_GENS");
 DeclareGlobalFunction("ACE_WORDS");
 DeclareGlobalFunction("PROCESS_ACE_OPTIONS");
 DeclareGlobalFunction("PROCESS_ACE_OPTION");

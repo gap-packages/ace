@@ -21,6 +21,8 @@ DeclareGlobalFunction("ACE_IOINDEX");
 DeclareGlobalFunction("ACE_IOINDEX_ARG_CHK");
 DeclareGlobalFunction("ACEProcessIndex");
 DeclareGlobalFunction("ACEProcessIndices");
+DeclareGlobalFunction("IsACEProcessAlive");
+DeclareGlobalFunction("ACEResurrectProcess");
 DeclareGlobalFunction("READ_ACE_ERRORS");
 DeclareGlobalFunction("INTERACT_TO_ACE_WITH_ERRCHK");
 DeclareGlobalFunction("FLUSH_ACE_STREAM_UNTIL");

@@ -67,8 +67,6 @@ end);
 ##  argument are ignored (and a warning is issued).
 ##
 InstallGlobalFunction(ACEProcessIndex, function(arg)
-local ioIndex;
-
   ACE_IOINDEX_ARG_CHK(arg);
   return ACE_IOINDEX(arg);
 end);
@@ -81,9 +79,130 @@ end);
 ##
 ##
 InstallGlobalFunction(ACEProcessIndices, function()
-local ioIndex;
-
   return Filtered( [1..Length(ACEData.io)], i -> IsBound( ACEData.io[i] ) );
+end);
+
+#############################################################################
+####
+##
+#F  IsACEProcessAlive . . . . . . . . . . Returns true if the stream  of  the
+##  . . . . . . . . . . . . . . . . . . . interactive ACE process  determined
+##  . . . . . . . . . . . . . . . . . . . by arg can be written to  (i.e.  is
+##  . . . . . . . . . . . . . . . . . . . .  still alive) and false otherwise
+##
+InstallGlobalFunction(IsACEProcessAlive, function(arg)
+  ACE_IOINDEX_ARG_CHK(arg);
+  return not IsEndOfStream( ACEData.io[ ACE_IOINDEX(arg) ].stream );
+end);
+
+#############################################################################
+####
+##
+#F  ACEResurrectProcess . . . . . . . . . Re-generates the stream of the i-th
+##  . . . . . . . . . . . . . . . . . . . interactive ACE process, where i is
+##  . . . . . . . . . . . . . . . . . . . determined by  arg,  and  tries  to
+##  . . . . . . . . . . . . . . . . . . . recover as much as possible of  the
+##  . . . . . . . . . . . . . . . . . . . previous state from saved values of
+##  . . . . . . . . . . . . . . . . . . . . .  the args and parameter options
+##
+##  The  args  of  the  i-th  interactive   ACE   process   are   stored   in
+##  ACEData.io[i].args (a record with fields fgens, rels and sgens, which are
+##  the   GAP   group   generators,   relators   and   subgroup   generators,
+##  respectively). Option information is saved in ACEData.io[i].options  when
+##  a user uses an interactive ACE interface function with  options  or  uses
+##  SetACEOptions. Option information is saved in ACEData.io[i].parameters if
+##  ACEParameters is used to extract from ACE the current values of  the  ACE
+##  parameter options (this is generally less reliable unless one of the  ACE
+##  modes has been run previously).
+##
+##  By default, ACEResurrectProcess  recovers  parameter  option  information
+##  from    ACEData.io[i].options    if    it    is    bound,     or     from
+##  ACEData.io[i].parameters if is bound, otherwise. To alter this behaviour,
+##  the user is provided two options:
+##
+##   use := list  . list  may  contain  one  or   both   of   "options"   and
+##                  "parameters". By default: use = ["options", "parameters"]
+##
+##   useboth  . . . (boolean) By default: useboth = false
+##
+##  If useboth is true, ACEResurrectProcess applies SetACEOptions  with  each
+##  ACEData.io[i].(field) for each field ("options" or "parameters") that  is
+##  bound and in use's list, in the order implied  by  list.  If  useboth  is
+##  false,      ACEResurrectProcess      applies      SetACEOptions      with
+##  ACEData.io[i].(field) for only the first field that  is  bound  in  use's
+##  list.
+##
+InstallGlobalFunction(ACEResurrectProcess, function(arg)
+local ioIndex, datarec, gens, ToACE, uselist, useone, optname, field;
+
+  ACE_IOINDEX_ARG_CHK(arg);
+  ioIndex := ACE_IOINDEX(arg);
+  datarec := ACEData.io[ ioIndex ];
+  if not IsEndOfStream( datarec.stream ) then
+    Info(InfoACE + InfoWarning, 1, 
+         "Huh? Stream of interactive ACE process ", ioIndex, " not dead?");
+    return fail;
+  fi;
+
+  # Restart the stream
+  datarec.stream := InputOutputLocalProcess(ACEData.tmpdir, ACEData.binary, []);
+
+  if IsBound(datarec.args) and IsBound(datarec.args.fgens) then
+    gens := TO_ACE_GENS(datarec.args.fgens);
+    ToACE := function(list) WRITE_LIST_TO_ACE_STREAM(datarec.stream, list); end;
+    ToACE([ "Group Generators: ", gens.toace, ";" ]);
+    Info(InfoACE, 1, "Group generators:", datarec.args.fgens);
+    if IsBound(datarec.args.rels) then
+      ToACE([ "Group Relators: ", 
+              ACE_WORDS(datarec.args.rels, datarec.args.fgens, gens.acegens), 
+              ";" ]);
+      Info(InfoACE, 1, "Relators:", datarec.args.rels);
+    else
+      Info(InfoACE + InfoWarning, 1, "No relators.");
+    fi;
+    if IsBound(datarec.args.sgens) then
+      ToACE([ "Subgroup Generators: ", 
+              ACE_WORDS(datarec.args.sgens, datarec.args.fgens, gens.acegens), 
+              ";" ]);
+      Info(InfoACE, 1, "Subgroup generators:", datarec.args.sgens);
+    else
+      Info(InfoACE + InfoWarning, 1, "No subgroup generators.");
+    fi;
+  else
+    Info(InfoACE + InfoWarning, 1, "No group generators.");
+  fi;
+    
+  uselist := Filtered( ACE_VALUE_OPTION("use", ["options", "parameters"]),
+                   field -> IsBound(datarec.(field)) );
+  useone := not ACE_VALUE_OPTION("useboth", false);
+  if IsEmpty(uselist) then
+    Info(InfoACE + InfoWarning, 1, "Sorry. No parameter options recovered.");
+  else
+    if useone then
+      uselist := uselist{[1]};
+    fi;
+    if "options" in uselist then
+      # Scrub any non-parameter or non-strategy options
+      for optname in Filtered(
+                         RecNames(datarec.options),
+                         function(optname)
+                           local prefname;
+                           prefname := ACEPreferredOptionName(optname);
+                           return not (prefname in ACEStrategyOptions) and
+                                  not (prefname in RecNames(
+                                                       ACEParameterOptions
+                                                       ));
+                         end
+                         )
+      do
+        Unbind( datarec.options.(optname) );
+      od;
+    fi;
+    for field in uselist do
+      SetACEOptions( ioIndex, datarec.(field) );
+    od;
+    Info(InfoACE, 1, "Options set to: ", GetACEOptions(ioIndex));
+  fi;
 end);
 
 #############################################################################
@@ -186,15 +305,16 @@ end);
 ##  Writes the last argument to the i-th interactive ACE process, where i  is
 ##  the first argument if there are 2 arguments or  the  default  process  if
 ##  there is only 1 argument. The action is echoed via Info at InfoACE  level
-##  4 (with a `ToACE> ' prompt).
+##  4 (with a `ToACE> ' prompt). Returns true if successful in writing to the
+##  stream and fail otherwise.
 ##
 InstallGlobalFunction(ACEWrite, function(arg)
 local ioIndex, line;
 
   if Length(arg) in [1, 2] then
     ioIndex := ACE_IOINDEX(arg{[1..Length(arg) - 1]});
-    WRITE_LIST_TO_ACE_STREAM( ACEData.io[ioIndex].stream,
-                              arg{[Length(arg)..Length(arg)]} );
+    return WRITE_LIST_TO_ACE_STREAM( ACEData.io[ioIndex].stream,
+                                     arg{[Length(arg)..Length(arg)]} );
   else
     Error("Expected 1 or 2 arguments ... not ", Length(arg), " arguments\n");
   fi;
@@ -804,7 +924,7 @@ InstallGlobalFunction(SET_ACE_OPTIONS, function(datarec)
   # match those in datarec.newoptions ... to ensure that *all* new
   # options are at the end of the stack
   SANITISE_ACE_OPTIONS(datarec.options, datarec.newoptions);
-  # datarec.options contains the previous options 
+  # datarec.options contains the previous options (if there were any)
   # We have to pop off newoptions and then push back
   # options and newoptions, to get an updated options
   PopOptions();
@@ -834,8 +954,12 @@ InstallGlobalFunction(INTERACT_SET_ACE_OPTIONS, function(ACEfname, datarec)
 local newoptnames, optnames;
   if not IsEmpty(OptionsStack) then
     newoptnames := ShallowCopy(RecNames(OptionsStack[ Length(OptionsStack) ]));
-    SET_ACE_OPTIONS(datarec);
-    OptionsStack[ Length(OptionsStack) ] := datarec.options;
+    if IsBound(datarec.options) then
+      SET_ACE_OPTIONS(datarec);
+      OptionsStack[ Length(OptionsStack) ] := datarec.options;
+    else
+      datarec.options := OptionsStack[ Length(OptionsStack) ];
+    fi;
     optnames := ACE_OPT_NAMES();
     PROCESS_ACE_OPTIONS(ACEfname, optnames, newoptnames,
                         # echo
@@ -996,9 +1120,6 @@ end);
 ##
 InstallGlobalFunction(ACE_GENS, function(datarec, string)
 local line;
-  if not IsBound(datarec.args) then
-    datarec.args := rec();
-  fi;
   if IsAlphaChar(string[1]) then
     datarec.acegens := List([1..Length(string)], i -> WordAlp(string, i));
     datarec.args.fgens := GeneratorsOfGroup( FreeGroup(datarec.acegens) );
@@ -1026,17 +1147,34 @@ end);
 InstallGlobalFunction(ACE_ARGS, function(ioIndex, field)
 local datarec, line;
   datarec := ACEData.io[ ioIndex ];
-  if not IsBound(datarec.args) or not IsBound(datarec.args.fgens) or
-     field = "fgens" then
+  if not IsBound(datarec.args) then
+    datarec.args := rec();
+  fi;
+  if not IsBound(datarec.args.fgens) or field = "fgens" then
     WRITE_LIST_TO_ACE_STREAM(datarec.stream, [ "sr:1;" ]);
-    ACE_GENS(datarec, ACE_PARAMETER(ioIndex, "Group Generators"));
+    line := FLUSH_ACE_STREAM_UNTIL(datarec.stream, 3, 3, READ_NEXT_LINE,
+                                   line -> line{[1..9]} in [ "Group Gen",
+                                                             "Group Rel" ]);
+    if line{[1..9]} = "Group Gen" then
+      ACE_GENS(datarec, ACE_PARAMETER_WITH_LINE(ioIndex, 
+                                                "Group Generators", 
+                                                line));
+    else
+      datarec.acegens := [];
+      datarec.args.fgens := [];
+    fi;
   else
     WRITE_LIST_TO_ACE_STREAM(datarec.stream, [ "sr;" ]);
   fi;
   if not IsBound(datarec.args.rels) or field = "rels" then
+    if not IsBound(line) or line{[1..9]} <> "Group Rel" then
+      line := FLUSH_ACE_STREAM_UNTIL(datarec.stream, 3, 3, READ_NEXT_LINE,
+                                     line -> line{[1..9]} = "Group Rel");
+    fi;
     datarec.args.rels := ACE_GAP_WORDS(datarec,
-                                       ACE_PARAMETER(ioIndex, 
-                                                     "Group Relators"));
+                                       ACE_PARAMETER_WITH_LINE(
+                                           ioIndex, "Group Relators", line
+                                           ));
   fi;
   if not IsBound(datarec.args.sgens) or field = "sgens" then
     datarec.args.sgens := ACE_GAP_WORDS(datarec,
@@ -1066,15 +1204,34 @@ local ioIndex, datarec, line, fieldsAndValues, parameters, sgens, i, opt;
   datarec := ACEData.io[ ioIndex ];
   READ_ACE_ERRORS(datarec.stream);
   WRITE_LIST_TO_ACE_STREAM(datarec.stream, [ "sr:1;" ]);
-  parameters := rec(enumeration := ACE_PARAMETER(ioIndex, "Group Name"));
-  if not IsBound(datarec.args) or not IsBound(datarec.acegens) or
-     not IsBound(datarec.args.fgens) then
-    ACE_GENS(datarec, ACE_PARAMETER(ioIndex, "Group Generators"));
+  datarec.parameters 
+      := rec(enumeration := ACE_PARAMETER(ioIndex, "Group Name"));
+  parameters := datarec.parameters;
+  if not IsBound(datarec.args) then
+    datarec.args := rec();
+  fi;
+  if not IsBound(datarec.acegens) or not IsBound(datarec.args.fgens) then
+    line := FLUSH_ACE_STREAM_UNTIL(datarec.stream, 3, 3, READ_NEXT_LINE,
+                                   line -> line{[1..9]} in [ "Group Gen",
+                                                             "Group Rel" ]);
+    if line{[1..9]} = "Group Gen" then
+      ACE_GENS(datarec, ACE_PARAMETER_WITH_LINE(ioIndex, 
+                                                "Group Generators", 
+                                                line));
+    else
+      datarec.args.fgens := [];
+      datarec.acegens := [];
+    fi;
   fi;
   if not IsBound(datarec.args.rels) then
+    if not IsBound(line) or line{[1..9]} <> "Group Rel" then
+      line := FLUSH_ACE_STREAM_UNTIL(datarec.stream, 3, 3, READ_NEXT_LINE,
+                                     line -> line{[1..9]} = "Group Rel");
+    fi;
     datarec.args.rels := ACE_GAP_WORDS(datarec,
-                                       ACE_PARAMETER(ioIndex, 
-                                                     "Group Relators"));
+                                       ACE_PARAMETER_WITH_LINE(
+                                           ioIndex, "Group Relators", line
+                                           ));
   fi;
   parameters.subgroup := ACE_PARAMETER(ioIndex, "Subgroup Name");
   sgens := ACE_PARAMETER(ioIndex, "Subgroup Generators");
