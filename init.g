@@ -9,31 +9,28 @@
 ##  Announce the package version and test for the existence of the binary
 
 ACEPackageVersion := function()
-  local versionfile, stream, version;
+  local versionfile, version;
   versionfile := Filename( DirectoriesPackageLibrary("ace", ""), "VERSION" );
-  stream := InputTextFile( versionfile );
-  version := ReadAll(stream);
-  CloseStream(stream);
+  version := StringFile(versionfile);
   return version{[1..Length(version) - 1]};
 end;
 
 DeclarePackage( "ace", ACEPackageVersion(),
   function()
-  local file;
     # Check that the version no. of GAP is ok.
     if not(IsBound( CompareVersionNumbers ) and 
-           CompareVersionNumbers( VERSION, "4.2" )) then
+           CompareVersionNumbers( VERSION, "4.3" )) then
       Info(InfoWarning, 1,
-           "Package ``ace'': Sorry! ACE needs at least GAP 4.2");
+           "Package ``ACE'' ACEPackageVersion(): requires at least GAP 4.3");
       return false;
     fi;
     # Test for existence of the compiled binary
-    file := Filename(DirectoriesPackagePrograms("ace"), "ace");
-    if file = fail then
+    if Filename(DirectoriesPackagePrograms("ace"), "ace") = fail then
       Info(InfoWarning, 1,
            "Package ``ace'': The program `ace' is not compiled");
+      return fail;
     fi;
-    return file<>fail;
+    return true;
   end
 );
 
@@ -47,10 +44,6 @@ DeclarePackageAutoDocumentation( "ace", "doc" );
 ReadPkg( "ace", "gap/general.gd" );
 ReadPkg( "ace", "gap/interact.gd" );
 ReadPkg( "ace", "gap/streams.gd" );
-if not CompareVersionNumbers( VERSION, "4.3" ) then
-  ReadPkg( "ace", "gap/compat4r2.gd" );
-  ReadPkg( "ace", "gap/compat4r2.gi" );
-fi;
 ReadPkg( "ace", "gap/options.gd" );
 ReadPkg( "ace", "gap/ace.g" );
 
