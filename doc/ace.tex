@@ -2868,11 +2868,22 @@ kill' if these hints are unhelpful).
 
 The first form of `ACEStart' (on the  one  argument:  0)  is  used  to
 initiate an interactive {\ACE} process, but does  nothing  more.  This
-form is for gurus who are familiar with the {\ACE} standalone who wish
-to communicate with {\ACE} using the  primitive  read/write  tools  of
-Section~"Primitive  ACE  Read/Write  Functions".  In  this  case,  the
-translation of the strings output from {\ACE}  into  a  useful  {\GAP}
-form is completely up to the user.
+form is mainly for gurus who are familiar with the  {\ACE}  standalone
+and who wish, at least initially, to communicate with {\ACE} using the
+primitive  read/write  tools  of  Section~"Primitive  ACE   Read/Write
+Functions". In this case, after the group  generators,  relators,  and
+subgroup generators have been set in the {\ACE}  process,  invocations
+of    any    of    `ACEGroupGenerators'    (see~"ACEGroupGenerators"),
+`ACERelators'       (see~"ACERelators"),       `ACESubgroupGenerators'
+(see~"ACESubgroupGenerators"),           or            `ACEParameters'
+(see~"ACEParameters") will establish the corresponding {\GAP}  values.
+Be warned, though, that unless one of the modes `ACEStart' (without  a
+zero   argument),   `ACERedo'   (see~"ACERedo")    or    `ACEContinue'
+(see~"ACEContinue"), or their equivalent  for  the  standalone  {\ACE}
+(`start;', `redo;', or `continue;'), has been invoked since  the  last
+change of any parameter options (see Section~"ACE Parameter Options"),
+some  of  the  values  reported  by  `ACEParameters'   may   well   be
+*incorrect*.
 
 The second form of `ACEStart' (on three arguments) is used to start an
 interactive process; here <fgens> is a list of free generators, <rels>
@@ -2922,7 +2933,7 @@ Each of
 \>ACEQuit( <i> ) F
 \>ACEQuit() F
 
-terminates an interactive {\ACE} process, where  <i>  is  the  integer
+terminate an interactive {\ACE} process,  where  <i>  is  the  integer
 returned by `ACEStart' when the process was  started.  If  the  second
 form is used (i.e.~without arguments) then the interactive process  of
 least index that is still running is terminated.
@@ -2940,25 +2951,37 @@ at once, we provide:
 For those familiar with the  workings  of  the  {\ACE}  standalone  we
 provide primitive read/write tools to  communicate  directly  with  an
 interactive {\ACE} process,  started  via  `ACEStart'  (possibly  with
-argument 0, but this is not essential).  It  is  up  to  the  user  to
-translate the output strings from {\ACE} into a form useful in {\GAP}.
+argument 0, but this is not essential). For the most part, it is up to
+the user to translate the output  strings  from  {\ACE}  into  a  form
+useful in {\GAP}. However, after the group generators,  relators,  and
+subgroup  generators  have  been  set  in  the  {\ACE}  process,   via
+`ACEWrite',    invocations    of    any    of     `ACEGroupGenerators'
+(see~"ACEGroupGenerators"),     `ACERelators'     (see~"ACERelators"),
+`ACESubgroupGenerators'       (see~"ACESubgroupGenerators"),        or
+`ACEParameters' (see~"ACEParameters") will establish the corresponding
+{\GAP} values.  Be  warned  though,  that  unless  one  of  the  modes
+`ACEStart'  (without  a  zero  argument;  see~"ACEStart"),   `ACERedo'
+(see~"ACERedo")  or  `ACEContinue'   (see~"ACEContinue"),   or   their
+equivalent  for  the  standalone   {\ACE}   (`start;',   `redo;',   or
+`continue;'), has been invoked since the last change of any  parameter
+options (see Section~"ACE Parameter  Options"),  some  of  the  values
+reported by `ACEParameters' may well be *incorrect*.
 
 \beginitems
 
 \>ACEWrite( <i>, <string> ) F
 \>ACEWrite( <string> ) F
 
-Writes <string> to the <i>th or default  interactive  {\ACE}  process;
+write <string> to the <i>th or  default  interactive  {\ACE}  process;
 <string> must be in exactly the form the  {\ACE}  standalone  expects.
 The command is  echoed  via  `Info'  at  `InfoACE'  level  4  (with  a
 \lq{}`ToACE> '' prompt); i.e.~do `SetInfoACELevel(4);' to see what  is
 transmitted to the {\ACE} binary.
 
-
 \>ACERead( <i> ) F
 \>ACERead() F
 
-Reads a complete line of {\ACE} output,  from  the  <i>th  or  default
+read a complete line of {\ACE}  output,  from  the  <i>th  or  default
 interactive {\ACE} process, if there is output to be read and  returns
 `fail' otherwise. When successful, the line is returned  as  a  string
 complete with trailing newline  character.  Please  note  that  it  is
@@ -2969,7 +2992,7 @@ finds any output at all, it waits for a complete line.
 \>ACEReadAll( <i> ) F
 \>ACEReadAll() F
 
-Reads and returns as many *complete* lines of {\ACE} output, from  the
+read and return as many *complete* lines of {\ACE}  output,  from  the
 <i>th or default interactive {\ACE} process, as there are to be  read,
 *at the time of the call*, as a list  of  strings  with  the  trailing
 newlines removed and returns the empty  list  otherwise.  `ACEReadAll'
@@ -2980,22 +3003,29 @@ output to be had from {\ACE}.
 
 \>ACEReadUntil( <i>, <IsMyLine> ) F
 \>ACEReadUntil( <IsMyLine> ) F
+\>ACEReadUntil( <i>, <IsMyLine>, <Modify> ) F
+\>ACEReadUntil( <IsMyLine>, <Modify> ) F
 
-Reads complete lines of {\ACE}  output,  from  the  <i>th  or  default
-interactive  {\ACE}  process,  until   a   line   <line>   for   which
-`<IsMyLine>(<line>)' is true, i.e.~<IsMyLine>  should  take  a  single
-argument that should be a string and should  return  a  boolean.  Like
-`ACEReadAll', `ACEReadUntil'  returns  a  list  of  strings  with  the
-trailing newlines removed and writes each  line  read  via  `Info'  at
-`InfoACE' level 3.
+read complete lines of  {\ACE}  output,  from  the  <i>th  or  default
+interactive  {\ACE}  process,  \lq{}chomps'  them  (i.e.~removes   any
+trailing newline character), emits them to `Info' at  `InfoACE'  level
+3, and applies the function  <Modify>  (where  <Modify>  is  just  the
+identity map/function for the first two forms) until  a  \lq{}chomped'
+line <line>  for  which  `<IsMyLine>(  <Modify>(<line>)  )'  is  true.
+`ACEReadUntil' returns the list  of  <Modify>-ed  \lq{}chomped'  lines
+read.
 
 *Notes:* 
 
-<IsMyLine> is applied to each line *after* the trailing new  line  has
-been removed.
+When provided by the user, <Modify> should be a function that  accepts
+a single string argument.
 
-If  `<IsMyLine>(<line>)'  is  never  true,  `ACEReadUntil'  will  wait
-indefinitely.
+<IsMyLine> should be a function that is able to accept the  output  of
+<Modify> (or take a  single  string  argument  when  <Modify>  is  not
+provided) and should return a boolean.
+
+If `<IsMyLine>( <Modify>(<line>) )' is never true, `ACEReadUntil' will
+wait indefinitely.
 
 \enditems
 
@@ -3004,18 +3034,18 @@ indefinitely.
 
 \beginitems
 
-\>ACEStream( <i> ) F
-\>ACEStream() F
+\>ACEProcessIndex( <i> ) F
+\>ACEProcessIndex() F
 
-With argument <i> which must be a positive  integer  argument  returns
-<i> if it corresponds to an active interactive process, or  raises  an
-error. With no arguments it returns  the  default  active  interactive
-process or returns `fail' and emits a warning  message  to  `Info'  at
-`InfoACE' or `InfoWarning' level 1.
+With argument <i>, which must be a positive integer, `ACEProcessIndex'
+returns <i> if it corresponds to an  active  interactive  process,  or
+raises an error. With no  arguments  it  returns  the  default  active
+interactive process or returns `fail' and emits a warning  message  to
+`Info' at `InfoACE' or `InfoWarning' level 1.
 
-\>ACEStreams() F
+\>ACEProcessIndices() F
 
-Returns the list of integer indices of all active  interactive  {\ACE}
+returns the list of integer indices of all active  interactive  {\ACE}
 processes.
 
 \enditems
@@ -3027,14 +3057,16 @@ After changing any of {\ACE}'s parameters, one  of  three  *modes*  is
 possible:  one  may  be  able  to  \lq{}continue'  via   `ACEContinue'
 (see~"ACEContinue"), or \lq{}redo' via `ACERedo'  (see~"ACERedo"),  or
 if neither of these is possible one may  have  to  re-\lq{}start'  the
-enumeration via `ACEStart' (see~"ACEStart").
+enumeration   via   `ACEStart'   (see~"ACEStart").   Generally,    the
+appropriate mode is invoked automatically when options are changed; so
+most users should be able to ignore these functions.
 
 \beginitems
 
 \>ACEModes( <i> ) F
 \>ACEModes() F
 
-For the <i>th (or default) interactive {\ACE} process returns a record
+for the <i>th (or default) interactive {\ACE} process, return a record
 whose fields are the modes `ACEStart',  `ACEContinue'  and  `ACERedo',
 and whose values are `true' if the mode is possible  for  the  process
 and `false' otherwise.
@@ -3042,8 +3074,8 @@ and `false' otherwise.
 \>ACEContinue( <i> [:<options>] ) F
 \>ACEContinue( [:<options>] ) F
 
-For the <i>th (or default) interactive  {\ACE}  process,  applies  any
-<options> and then \lq{}continues' the current  enumeration,  building
+for the <i>th (or  default)  interactive  {\ACE}  process,  apply  any
+<options> and then \lq{}continue' the  current  enumeration,  building
 upon the existing table. If a previous run stopped without producing a
 finite index you can, in principle, change  any  of  the  options  and
 continue on. Of course, if you make any changes which  invalidate  the
@@ -3056,14 +3088,14 @@ possible.
 \>ACERedo( <i> [:<options>] ) F
 \>ACERedo( [:<options>] ) F
 
-For the <i>th (or default) interactive  {\ACE}  process,  applies  any
-<options> and then \lq{}redoes' the current enumeration; any  existing
+for the <i>th (or  default)  interactive  {\ACE}  process,  apply  any
+<options> and then \lq{}redo' the current  enumeration;  any  existing
 information in the table is retained, and the enumeration is restarted
 from coset 1 (i.e., the subgroup).
 
 *Notes:*
 
-This option is really intended for the case where additional  relators
+This command is really intended for the case where additional relators
 and/or subgroup generators have been introduced.  The  current  table,
 which  may  be  incomplete  or  exhibit  a  finite  index,  is   still
 \lq{}valid'. However, the  new  data  may  allow  the  enumeration  to
@@ -3083,29 +3115,46 @@ the current table and re-\lq{}start' the enumeration.
 \>ACEGroupGenerators() F
 
 return  the  {\GAP}  group  generators,  of  the  <i>th  (or  default)
-interactive {\ACE} process. If no generators were saved an empty  list
-is  returned  and  an  `Info'  message  is  emitted  at  `InfoACE'  or
-`InfoWarning' level 1. Essentially, `ACEGroupGenerators(<i>)'  returns
-`ACEData.io[<i>].args.fgens' if bound, or an empty list, otherwise.
+interactive {\ACE} process. If no generators have been saved  for  the
+interactive {\ACE} process, possibly because the process  was  started
+via   `ACEStart(0);'   (see~"ACEStart"),   the   {\ACE}   process   is
+interrogated,  the  equivalent  in  {\GAP}  is  saved  and   returned.
+Essentially,  `ACEGroupGenerators(<i>)',   interrogates   {\ACE}   and
+establishes `ACEData.io[<i>].args.fgens', if  necessary,  and  returns
+`ACEData.io[<i>].args.fgens'.  As  a  side-effect,  if  any   of   the
+remaining       fields       of       `ACEData.io[<i>].args'        or
+`ACEData.io[<i>].acegens' are unset, they are  also  set.  Note  that,
+{\GAP} provides  `GroupWithGenerators'  (see~"ref:GroupWithGenerators"
+in the {\GAP} Reference Manual) to establish a free group on  a  given
+set of already-defined generators.
 
 \>ACERelators( <i> ) F
 \>ACERelators() F
 
 return the {\GAP} relators, of  the  <i>th  (or  default)  interactive
-{\ACE} process. If no relators were saved an empty  list  is  returned
-and an `Info' message is emitted at `InfoACE' or  `InfoWarning'  level
-1. Essentially, `ACERelators(<i>)' returns `ACEData.io[<i>].args.rels'
-if bound, or an empty list, otherwise.
+{\ACE} process. If no relators have been  saved  for  the  interactive
+{\ACE}  process,  possibly  because  the  process  was   started   via
+`ACEStart(0);' (see~"ACEStart"), the {\ACE} process  is  interrogated,
+the  equivalent  in  {\GAP}  is  saved  and   returned.   Essentially,
+`ACERelators(<i>)',    interrogates     {\ACE}     and     establishes
+`ACEData.io[<i>].args.rels',     if     necessary,     and     returns
+`ACEData.io[<i>].args.rels'. As a side-effect, if any of the remaining
+fields  of  `ACEData.io[<i>].args'  or  `ACEData.io[<i>].acegens'  are
+unset, they are also set.
 
 \>ACESubgroupGenerators( <i> ) F
 \>ACESubgroupGenerators() F
 
 return the {\GAP} subgroup  generators,  of  the  <i>th  (or  default)
-interactive {\ACE} process. If no subgroup generators  were  saved  an
-empty list is returned and an `Info' message is emitted  at  `InfoACE'
-or `InfoWarning' level  1.  Essentially,  `ACESubgroupGenerators(<i>)'
-returns `ACEData.io[<i>].args.sgens'  if  bound,  or  an  empty  list,
-otherwise.
+interactive {\ACE} process. If no subgroup generators have been  saved
+for the interactive {\ACE} process, possibly because the  process  was
+started via `ACEStart(0);' (see~"ACEStart"),  the  {\ACE}  process  is
+interrogated,  the  equivalent  in  {\GAP}  is  saved  and   returned.
+Essentially,  `ACESubgroupGenerators(<i>)',  interrogates  {\ACE}  and
+establishes `ACEData.io[<i>].args.sgens', if  necessary,  and  returns
+`ACEData.io[<i>].args.sgens'.  As  a  side-effect,  if  any   of   the
+remaining       fields       of       `ACEData.io[<i>].args'        or
+`ACEData.io[<i>].acegens' are unset, they are also set.
 
 \>DisplayACEOptions( <i> ) F
 \>DisplayACEOptions() F
@@ -3116,7 +3165,8 @@ of   the   `ACEData.io[<i>].options'   record.   Use   `GetACEOptions'
 (see~"GetACEOptions") in assignments. Please note that no-value {\ACE}
 options  will   appear   with   the   assigned   value   `true'   (see
 Section~"Interpretation of ACE Options" for how the  {\ACE}  interface
-functions interpret such options).
+functions interpret such options). Note, however, that any options set
+via `ACEWrite' (see~"ACEWrite") will *not* be displayed.
 
 \>GetACEOptions( <i> ) F
 \>GetACEOptions() F
@@ -3125,7 +3175,9 @@ return a record of the current  options  of  the  <i>th  (or  default)
 process started  by  `ACEStart'.  Please  note  that  no-value  {\ACE}
 options  will   appear   with   the   assigned   value   `true'   (see
 Section~"Interpretation of ACE Options" for how the  {\ACE}  interface
-functions interpret such options).
+functions interpret such options). Note, however, that any options set
+via `ACEWrite' (see~"ACEWrite") will *not* be included in the returned
+record.
 
 \>SetACEOptions( <i> [:<options>] ) F
 \>SetACEOptions( [:<options>] ) F
@@ -3137,6 +3189,10 @@ calling `SetACEOptions', otherwise the options already present on  the
 interface functions that accept options,  actually  call  an  internal
 version of `SetACEOptions'; so, it is generally important to keep  the
 `OptionsStack' clear while working with {\ACE} interactively.
+
+After  setting  the  options  passed,  the  first  available  mode  of
+`ACEContinue'  (see~"ACEContinue"),   `ACERedo'   (see~"ACERedo")   or
+`ACEStart' (see~"ACEStart"), is automatically invoked.
 
 Since a user will sometimes have options  in  the  form  of  a  record
 (e.g.~via   `GetACEOptions'),   we   provide   a    `PushOptions'-like
@@ -3192,6 +3248,10 @@ purpose, that any recent change in the  parameter  option  values  has
 been   followed   by   an   invocation   of   one   of   `ACEContinue'
 (see~"ACEContinue"),   `ACERedo'   (see~"ACERedo")    or    `ACEStart'
 (see~"ACEStart").
+
+As a side-effect, for  {\ACE}  process  <i>,  any  of  the  fields  of
+`ACEData.io[<i>].args' or `ACEData.io[<i>].acegens'  that  are  unset,
+are set.
 
 \>ACEVersion( <i> ) F
 \>ACEVersion() F
@@ -3290,16 +3350,76 @@ two forms, the table is displayed from line `|<val>|' to  line  <last>
 in steps of <by>. If <val> is negative, then  the  orders  modulo  the
 subgroup (if available) and coset representatives are displayed also.
 
+\>IsCompleteACECosetTable( <i> ) F
+\>IsCompleteACECosetTable() F
+
+return, for the <i>th (or  default)  process  started  by  `ACEStart',
+`true' if {\ACE}'s current coset table is complete (as  determined  by
+the index of the current enumeration), and `false' otherwise.
+
+\>ACECosetRepresentative( <i>, <n> ) F
+\>ACECosetRepresentative( <n> ) F
+
+return, for the <i>th (or default) process started by `ACEStart',  the
+coset representative of coset <n> of the current coset table  held  by
+{\ACE}, where <n> must be a positive integer.
+
+\>ACECosetRepresentatives( <i> ) F
+\>ACECosetRepresentatives() F
+
+return, for the <i>th (or default) process started by `ACEStart',  the
+list of coset representatives of  the  current  coset  table  held  by
+{\ACE}.
+
+\>ACETransversal( <i> ) F
+\>ACETransversal() F
+
+return, for the <i>th (or default) process started by `ACEStart',  the
+list of coset representatives of  the  current  coset  table  held  by
+{\ACE}, if the  current  table  is  complete,  and  `fail'  otherwise.
+Essentially, `ACETransversal(<i>) = ACECosetRepresentatives(<i>)'  for
+a complete table.
+
 \>ACECycles( <i> ) F
 \>ACECycles() F
 \>ACEPermutationRepresentation( <i> ) F
 \>ACEPermutationRepresentation() F
 
-returns, for the <i>th (or default) process started by  `ACEStart',  a
+return, for the <i>th (or default) process started  by  `ACEStart',  a
 list of permutations corresponding to the group generators, (i.e., the
 permutation representation), if the current coset table held by {\ACE}
 is complete or `fail', otherwise. In the event of failure a message is
 emitted to `Info' at `InfoACE' or `InfoWarning' level 1.
+
+\>ACETraceWord( <i>, <n>, <word> ) F
+\>ACETraceWord( <n>, <word> ) F
+
+for the <i>th (or  default)  interactive  {\ACE}  process  started  by
+`ACEStart', trace <word> through {\ACE}'s  coset  table,  starting  at
+coset <n>, and return the final coset number if the  trace  completes,
+and `fail' otherwise. In Group  Theory  terms,  if  the  cosets  of  a
+subgroup $H$ in a group $G$ are  the  subject  of  interactive  {\ACE}
+process <i> and the coset identified by that process  by  the  integer
+<n> corresponds to some coset $Hx$, for some $x$ in  $G$,  and  <word>
+represents the element $g$ of $G$, then, providing the  current  coset
+table is complete enough, `ACETraceWord( <i>, <n>, <word>  )'  returns
+the integer identifying the coset $Hxg$.
+
+*Notes:*
+You may wish to compact {\ACE}'s coset table first, either  explicitly
+via `ACERecover' (see~"ACERecover"), or, implicitly, via any  function
+call that invokes {\ACE}'s `print' option (see~"Option `print'")  will
+do       this,       e.g.~`ACECosetTable'       (see~"ACECosetTable"),
+`ACEDisplayCosetTable'                   (see~"ACEDisplayCosetTable"),
+`ACECosetRepresentative' (see~"ACECosetRepresentative"). One can check
+whether a function invokes {\ACE}'s  `print'  option,  by  trying  the
+function after setting  the  `InfoLevel'  of  `InfoACE'  to  4.  Also,
+`ACECycles'  (see~"ACECycles"),   among   others,   invokes   {\ACE}'s
+compaction routine.
+
+If you actually wanted {\ACE}'s  coset  representative,  then,  for  a
+*compact*   table,   feed   the   output    of    `ACETraceWord'    to
+`ACECosetRepresentative' (see~"ACECosetRepresentative").
 
 \enditems
 
@@ -3365,7 +3485,7 @@ invoked.
 \>ACEStandardCosetNumbering() F
 
 compacts and then standardises the numbering of cosets  in  the  coset
-table of <i>th (or default)  interactive  {\ACE}  process  started  by
+table of the <i>th (or default) interactive {\ACE} process started  by
 `ACEStart'.  This  function  does  not  display  the  new  table;  use
 `ACEDisplayCosetTable' (see~"ACEDisplayCosetTable") for that. That is,
 for a given ordering of the generators in the columns of the table, it
@@ -3393,17 +3513,18 @@ effect of doing this can be investigated  in  {\ACE}  by  (repeatedly)
 halting  the  enumeration  (by  say,  imposing  timing  restrictions),
 standardising the coset numbering, and continuing.
 
-\>ACEAddRelators( <i>, <relatorlist> ) F
-\>ACEAddRelators( <relatorlist> ) F
+\>ACEAddRelators( <i>, <wordlist> ) F
+\>ACEAddRelators( <wordlist> ) F
 
 add, for the <i>th (or default) interactive {\ACE} process started  by
-`ACEStart', the words  in  the  list  <relatorlist>  to  any  relators
-already  present,  and  automatically  invokes  either  `ACERedo'   or
-`ACEStart'. Note that, {\ACE} chooses an \lq{}optimal' ordering of the
-resultant relator list, unless the `asis' option (see~"Option `asis'")
-has been set to 1; don't assume, unless `asis  :=  1',  that  the  new
-relators have been appended in user-provided order to  the  previously
-existing relator list.
+`ACEStart', the words in the list <wordlist> to any  relators  already
+present, and automatically invokes  either  `ACERedo'  or  `ACEStart'.
+Note that, {\ACE} sorts the resultant relator list, unless the  `asis'
+option (see~"Option `asis'") has been set to 1; don't  assume,  unless
+`asis = 1', that the new relators have been appended in  user-provided
+order to the previously existing relator list.  `ACEAddRelators'  also
+returns the new relator list. Use `ACERelators' (see~"ACERelators") to
+determine the current relator list.
 
 \>ACEAddSubgroupGenerators( <i>, <wordlist> ) F
 \>ACEAddSubgroupGenerators( <wordlist> ) F
@@ -3414,55 +3535,82 @@ generators already present.  The  enumeration  must  be  restarted  or
 redone, it cannot be  continued.  add,  for  the  <i>th  (or  default)
 interactive {\ACE} process started by `ACEStart',  the  words  in  the
 list <wordlist>  to  any  subgroup  generators  already  present,  and
-automatically invokes either `ACERedo' or `ACEStart'. The new subgroup
-generators are simply appended by  {\ACE}  to  the  existing  list  of
-subgroup generators in user-provided order.
+automatically invokes  either  `ACERedo'  or  `ACEStart'.  Note  that,
+{\ACE} sorts the resultant subgroup generator list, unless the  `asis'
+option (see~"Option `asis'") has been set to 1; don't  assume,  unless
+`asis = 1', that the new subgroup generators  have  been  appended  in
+user-provided order to  the  previously  existing  subgroup  generator
+list.  `ACEAddSubgroupGenerators'  also  returns  the   new   subgroup
+generator          list.          Use          `ACESubgroupGenerators'
+(see~"ACESubgroupGenerators")  to  determine  the   current   subgroup
+generator list.
 
 \>ACEDeleteRelators( <i>, <list> ) F
 \>ACEDeleteRelators( <list> ) F
 
-delete, for the <i>th (or default) interactive {\ACE} process  started
-by `ACEStart', from the current relators those indexed by the integers
-in <list>, which must be a strictly increasing  sequence  of  positive
-integers, and automatically  invoke  `ACEStart'.  Use  `ACEParameters'
-(see~"ACEParameters") to determine the current relator list.
+for the <i>th (or  default)  interactive  {\ACE}  process  started  by
+`ACEStart', delete <list> from the current relators, if list is a list
+of words in the group generators, or those current relators indexed by
+the integers in <list>, if <list> is a list of positive integers,  and
+automatically invoke `ACEStart'. `ACEDeleteRelators' also returns  the
+new relator list. Use `ACERelators' (see~"ACERelators")  to  determine
+the current relator list.
 
-\>`dr:=<list>'{Option `dr'}&
-`D'elete relators; <list> must be a list of positive integers.
+\>ACEDeleteSubgroupGenerators( <i>, <list> ) F
+\>ACEDeleteSubgroupGenerators( <list> ) F
 
-\>ACEDeleteSubgroupGenerators( <i>, <wordlist> ) F
-\>ACEDeleteSubgroupGenerators( <wordlist> ) F
+for the <i>th (or  default)  interactive  {\ACE}  process  started  by
+`ACEStart', delete <list> from the  current  subgroup  generators,  if
+list is a list of words in the  group  generators,  or  those  current
+subgroup generators indexed by the integers in <list>, if <list> is  a
+list  of  positive  integers,  and  automatically  invoke  `ACEStart'.
+`ACEDeleteSubgroupGenerators' also returns the new subgroup  generator
+list.  Use  `ACESubgroupGenerators'  (see~"ACESubgroupGenerators")  to
+determine the current subgroup generator list.
 
-delete, for the <i>th (or default) interactive {\ACE} process  started
-by `ACEStart', from the current subgroup generators those  indexed  by
-the integers in <list>, which must be a strictly  increasing  sequence
-of  positive  integers,  and  automatically  invoke  `ACEStart'.   Use
-`ACEParameters'  (see~"ACEParameters")  to   determine   the   current
-subgroup generator list.
+\>ACECosetCoincidence( <i>, <n> ) F
+\>ACECosetCoincidence( <n> ) F
 
-\>ACECosetCoincidence( <i>, <int> ) F
-\>ACECosetCoincidence( <int> ) F
+for the <i>th (or  default)  interactive  {\ACE}  process  started  by
+`ACEStart', return the representative of coset <n>, where <n> must  be
+a positive integer, and add  it  to  the  subgroup  generators;  i.e.,
+equates  this  coset  with  coset  1,  the  subgroup.   `ACERedo'   is
+automatically invoked.
 
-print, for the <i>th (or default) interactive {\ACE}  process  started
-by `ACEStart', out the representative of coset <int>, and  add  it  to
-the subgroup generators; i.e., equates this coset with  coset  1,  the
-subgroup. `ACERedo' is automatically invoked.
+\>ACERandomCoincidences( <i>, <subindex> ) F
+\>ACERandomCoincidences( <subindex> ) F
+\>ACERandomCoincidences( <i>, [<subindex>] ) F
+\>ACERandomCoincidences( [<subindex>] ) F
+\>ACERandomCoincidences( <i>, [<subindex>, <attempts>] ) F
+\>ACERandomCoincidences( [<subindex>, <attempts>] ) F
 
-\>ACERandomCoincidences( <i>, [<index>] ) F
-\>ACERandomCoincidences( [<index>] ) F
-\>ACERandomCoincidences( <i>, [<index>, <attempts>] ) F
-\>ACERandomCoincidences( [<index>, <attempts>] ) F
-
-attempt, for the <i>th (or default) interactive {\ACE} process started
-by `ACEStart', upto <attempts> (or, in the first and second forms,  8)
-times to find nontrivial subgroups with index a multiple of <index> by
-repeatedly making random coset numbers coincident  with  coset  1  and
+for the <i>th (or  default)  interactive  {\ACE}  process  started  by
+`ACEStart', attempt upto <attempts> (or, in the first four  forms,  8)
+times to find nontrivial subgroups with index a multiple of <subindex>
+by repeatedly making random coset numbers coincident with coset 1  and
 seeing what happens. The starting coset table must be  non-empty,  but
-need not be complete. For each attempt, we repeatedly add random coset
-representatives to the subgroup and `redo'  the  enumeration.  If  the
-table becomes too small, the attempt is aborted, the original subgroup
-generators restored, and another attempt made. If an attempt succeeds,
-then the new set of subgroup generators is retained.
+should not be complete. For each attempt,  we  repeatedly  add  random
+coset representatives to the subgroup and `redo' the  enumeration.  If
+the table becomes too small, the  attempt  is  aborted,  the  original
+subgroup generators restored, and another attempt made. If an  attempt
+succeeds, then  the  new  set  of  subgroup  generators  is  retained.
+`ACERandomCoincidences' returns the list of  new  subgroup  generators
+added. Use  `ACESubgroupGenerators'  (see~"ACESubgroupGenerators")  to
+determine the current subgroup generator list.
+
+*Notes:* 
+`ACERandomCoincidences' may add subgroup generators even if it  failed
+to  determine  a  nontrivial  subgroup  with  index  a   multiple   of
+<subindex>; in such a case, the original status  may  be  restored  by
+applying                                 `ACEDeleteSubgroupGenerators'
+(see~"ACEDeleteSubgroupGenerators")  with   the   list   returned   by
+`ACERandomCoincidences'.
+
+It  makes  no  sense  to  invoke   `ACERandomCoincidences'   when   an
+enumeration has already obtained a finite index (either, <subindex> is
+already a divisor of that finite index, or the request is impossible).
+Thus an invocation of `ACERandomCoincidences', in  this  case,  is  an
+error.
 
 *Guru  Notes:*  A  coset  can  have  many  different  representatives.
 Consider              running              `ACEStandardCosetNumbering'
@@ -3497,37 +3645,31 @@ numbers.
 \>ACEOrder( <i>, <int> ) F
 \>ACEOrder( <int> ) F
 
-search, for the <i>th (or default) interactive {\ACE} process  started
-by `ACEStart', for cosets with order modulo the subgroup a multiple of
-the absolute value of the integer <int>. If <int> is negative then the
-list of all cosets meeting the requirement is returned.  If  <int>  is
-positive then the first coset meeting the requirement is  returned  if
-such a coset exists, and `fail' otherwise.
+for the <i>th (or  default)  interactive  {\ACE}  process  started  by
+`ACEStart', search for coset numbers with coset  representative  order
+modulo the subgroup a multiple of the absolute value  of  the  integer
+<int>. If <int> is negative then the list of all coset numbers meeting
+the requirement is returned. If <int> is positive then the first coset
+number meeting the requirement is returned  if  such  a  coset  number
+exists, and `fail' otherwise.
 
 \>ACEStabilisingCosets( <i>, <int> ) F
 \>ACEStabilisingCosets( <int> ) F
 
 return, for the <i>th (or default) interactive {\ACE} process  started
-by `ACEStart', stabilising cosets of the subgroup.
+by `ACEStart', coset numbers of stabilising cosets of the subgroup.
 
 \beginlist
-\item{--} If <int> $> 0$, the list  of  the  first  <int>  stabilising
-cosets is returned. 
+\item{--} If <int> $> 0$, the list of the first <int> coset numbers of
+stabilising cosets is returned.
 
-\item{--} If <int> $\< 0$, the  list  of  pairs  of  the  first  <int>
-stabilising cosets, plus their representatives, is returned.
+\item{--} If <int> $\< 0$, the list of pairs of the first <int>  coset
+numbers  of  stabilising  cosets,  plus  their   representatives,   is
+returned.
 
-\item{--} If <int> = $0$, the list of pairs of all of the  stabilising
-cosets, plus their representatives, is returned.
-\endlist
-
-\>ACETraceWord( <i>, <int>, <word> ) F
-\>ACETraceWord( <int>, <word> ) F
-
-trace, for the <i>th (or default) interactive {\ACE}  process  started
-by `ACEStart', <word> through {\ACE}'s coset table, starting at  coset
-<int>, and return the final coset number if the trace  completes,  and
-`fail' otherwise.
+\item{--} If <int> = $0$, the list  of  pairs  of  all  of  the  coset
+numbers of stabilising cosets, plus their  coset  representatives,  is
+returned. \endlist
 
 \enditems
 

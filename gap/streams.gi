@@ -73,7 +73,7 @@ end);
 ##
 InstallGlobalFunction(CHOMP, function(string)
 
-  if string<>fail and string[Length(string)] = '\n' then
+  if string<>fail and string <> "" and string[Length(string)] = '\n' then
     return string{[1 .. Length(string) - 1]};
   else
     return string;

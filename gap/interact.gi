@@ -16,10 +16,10 @@ Revision.interact_gi :=
 #############################################################################
 ####
 ##
-#F  ACE_STREAM  . . . . . . . . . . . .  Get the index of the ACEData.io list
+#F  ACE_IOINDEX . . . . . . . . . . . .  Get the index of the ACEData.io list
 ##  . . . . . . . . . . . . . . . . . . . . . for an interactive ACE session.
 ##
-InstallGlobalFunction(ACE_STREAM, function(arglist)
+InstallGlobalFunction(ACE_IOINDEX, function(arglist)
 local ioIndex;
 
   if IsEmpty(arglist) then
@@ -35,22 +35,20 @@ local ioIndex;
            "No interactive ACE sessions are currently active");
       return fail;
     fi;
+  elif IsBound(ACEData.io[ arglist[1] ]) then
+    return arglist[1];
   else
-    if IsBound(ACEData.io[ arglist[1] ]) then
-      return arglist[1];
-    else
-      Error("No such interactive ACE session");
-    fi;
+    Error("No such interactive ACE session");
   fi;
 end);
 
 #############################################################################
 ####
 ##
-#F  ACE_STREAM_ARG_CHK  . . . . . . . . Checks for the right no. of arguments
+#F  ACE_IOINDEX_ARG_CHK . . . . . . . . Checks for the right no. of arguments
 ##  . . . . . . . . . . . . . . . . . . warns user of any  ignored  arguments 
 ##
-InstallGlobalFunction(ACE_STREAM_ARG_CHK, function(arglist)
+InstallGlobalFunction(ACE_IOINDEX_ARG_CHK, function(arglist)
   if Length(arglist) > 1 then
     Info(InfoACE + InfoWarning, 1,
          "Expected 0 or 1 arguments, all but first argument ignored");
@@ -60,7 +58,7 @@ end);
 #############################################################################
 ####
 ##
-#F  ACEStream . . . . . . . . . . . . . . . . . .  User version of ACE_STREAM
+#F  ACEProcessIndex . . . . . . . . . . . . . . . User version of ACE_IOINDEX
 ##
 ##  If given (at least) one integer argument returns the first argument if it
 ##  corresponds  to  an  active  interactive  process  or  raises  an  error,
@@ -68,21 +66,21 @@ end);
 ##  provides more than one argument then all arguments other than  the  first
 ##  argument are ignored (and a warning is issued).
 ##
-InstallGlobalFunction(ACEStream, function(arg)
+InstallGlobalFunction(ACEProcessIndex, function(arg)
 local ioIndex;
 
-  ACE_STREAM_ARG_CHK(arg);
-  return ACE_STREAM(arg);
+  ACE_IOINDEX_ARG_CHK(arg);
+  return ACE_IOINDEX(arg);
 end);
 
 #############################################################################
 ####
 ##
-#F  ACEStreams  . . . . . . . . . . . . .  Returns the list of indices of all
+#F  ACEProcessIndices . . . . . . . . . .  Returns the list of indices of all
 ##  . . . . . . . . . . . . . . . . . . .  active interactive  ACE  processes
 ##
 ##
-InstallGlobalFunction(ACEStreams, function()
+InstallGlobalFunction(ACEProcessIndices, function()
 local ioIndex;
 
   return Filtered( [1..Length(ACEData.io)], i -> IsBound( ACEData.io[i] ) );
@@ -194,7 +192,7 @@ InstallGlobalFunction(ACEWrite, function(arg)
 local ioIndex, line;
 
   if Length(arg) in [1, 2] then
-    ioIndex := ACE_STREAM(arg{[1..Length(arg) - 1]});
+    ioIndex := ACE_IOINDEX(arg{[1..Length(arg) - 1]});
     WRITE_LIST_TO_ACE_STREAM( ACEData.io[ioIndex].stream,
                               arg{[Length(arg)..Length(arg)]} );
   else
@@ -214,8 +212,8 @@ end);
 ##
 InstallGlobalFunction(ACERead, function(arg)
 
-  ACE_STREAM_ARG_CHK(arg);
-  return READ_ALL_LINE( ACEData.io[ ACE_STREAM(arg) ].stream );
+  ACE_IOINDEX_ARG_CHK(arg);
+  return READ_ALL_LINE( ACEData.io[ ACE_IOINDEX(arg) ].stream );
 end);
 
 #############################################################################
@@ -233,9 +231,9 @@ end);
 InstallGlobalFunction(ACEReadAll, function(arg)
 local lines, stream, line;
 
-  ACE_STREAM_ARG_CHK(arg);
+  ACE_IOINDEX_ARG_CHK(arg);
   lines := [];
-  stream := ACEData.io[ ACE_STREAM(arg) ].stream;
+  stream := ACEData.io[ ACE_IOINDEX(arg) ].stream;
   line := READ_ALL_LINE(stream);
   while line <> fail do
     line := CHOMP(line);
@@ -253,28 +251,43 @@ end);
 ##
 ##  Reads complete lines  of  ACE  output,  from  the  i-th  interactive  ACE
 ##  process, until a line for which IsMyLine(line) is true, where  i  is  the
-##  first argument if there are 2 arguments or the default process  if  there
-##  is one argument. The lines read are returned as a list  of  strings  with
-##  the  trailing  newlines  removed.  If  IsMyLine(line)   is   never   true
-##  ACEReadUntil will wait indefinitely. Also  writes  via  Info  at  InfoACE
-##  level 3 each line read.
+##  first argument if the first argument is an integer or the default process
+##  otherwise, and IsMyLine is the first function argument.  The  lines  read
+##  are returned as a list of strings with the trailing newlines removed.  If
+##  IsMyLine(line) is never true ACEReadUntil will  wait  indefinitely.  Also
+##  writes via Info at InfoACE level 3 each line read. If there is  a  second
+##  function argument it is used to modify each returned line; in this  case,
+##  each line is emitted to  Info  before  modification,  but  each  line  is
+##  modified before the IsMyLine test.
 ##
 InstallGlobalFunction(ACEReadUntil, function(arg)
-local lines, IsMyLine, stream, line;
+local idx1stfn, stream, IsMyLine, Modify, lines, line;
 
-  lines := [];
-  if Length(arg) in [1, 2] then
-    IsMyLine := arg[Length(arg)];
-    stream := ACEData.io[ ACE_STREAM(arg{[1..Length(arg) - 1]}) ].stream;
+  idx1stfn := First([1..Length(arg)], i -> IsFunction(arg[i]));
+  if idx1stfn = fail then
+    Error("Expected at least one function argument");
+  elif Length(arg) > idx1stfn + 1 then
+    Error("Expected 1 or 2 function arguments, not ", 
+          Length(arg) - idx1stfn + 1);
+  elif idx1stfn > 2  then
+    Error("Expected 0 or 1 integer arguments, not ", idx1stfn - 1);
+  else
+    stream := ACEData.io[ ACE_IOINDEX(arg{[1..idx1stfn - 1]}) ].stream;
+    IsMyLine := arg[idx1stfn];
+    if idx1stfn = Length(arg) then
+      Modify := line -> line; # The identity function
+    else
+      Modify := arg[Length(arg)];
+    fi;
+    lines := [];
     repeat
       line := CHOMP( READ_NEXT_LINE(stream) );
       Info(InfoACE, 3, line);
+      line := Modify(line);
       Add(lines, line);
     until IsMyLine(line);
-  else
-    Error("Expected 1 or 2 arguments ... not ", Length(arg), " arguments\n");
+    return lines;
   fi;
-  return lines;
 end);
 
 #############################################################################
@@ -288,7 +301,7 @@ local stats;
 
   # Parse line for statistics and return
   stats := Filtered(line, char -> char in ". " or char in CHARS_DIGITS);
-  if line{[1..5]}<>"INDEX" then
+  if line{[1..5]} <> "INDEX" then
     # Enumeration failed so the index is missing 
     # ... shove a 0 index on the front of stats
     stats := Concatenation("0 ", stats);
@@ -317,32 +330,27 @@ local n, line, colIndex, table, i, rowi, j, colj, invcolj;
   n := Length(acegens);
 
   # Skip some header until the ` coset ' line
-  repeat
-    line := readline(iostream);
-    Info(InfoACE, 3, CHOMP(line));
-  until line=fail or line{[1..6]}=" coset";
-
+  line := FLUSH_ACE_STREAM_UNTIL(iostream, 3, 3, readline, 
+                                 line -> line{[1..6]} = " coset");
   # Extract the coset table column headers
   rowi := SplitString(line, "", " |\n");
 
   # Look at the coset table column headers and determine the column
   # corresponding to each generator:
   #   colIndex[j] = Index of column(acegens[j])
-  colIndex := Filtered(List(acegens, j -> Position(rowi, String(j))),
-                       x -> x<>fail);
+  colIndex := List(acegens, gen -> Position(rowi, gen));
 
   # Discard the `---' line
-  line := readline(iostream);
-  Info(InfoACE, 3, CHOMP(line));
+  Info(InfoACE, 3, CHOMP( readline(iostream) ));
 
   # Now read the body of the coset table into table as a GAP List
   table := List([1 .. 2*n], j -> []);
   i := 0;
   repeat
-    line := readline(iostream);
-    Info(InfoACE, 3, CHOMP(line));
+    line := CHOMP( readline(iostream) );
+    Info(InfoACE, 3, line);
     i := i + 1;
-    rowi := SplitString(line, ""," :|\n");
+    rowi := SplitString(line, "", " :|");
     for j in [1..n] do
       Add(table[2*j - 1], Int(rowi[ colIndex[j] ]));
     od;
@@ -384,7 +392,7 @@ end);
 ##
 InstallGlobalFunction(ACE_MODE_AFTER_SET_OPTS, function(mode, arglist)
 local ioIndex;
-  ioIndex := ACE_STREAM(arglist);
+  ioIndex := ACE_IOINDEX(arglist);
   INTERACT_SET_ACE_OPTIONS(Flat( ["ACE", mode] ), ACEData.io[ioIndex]);
   ACE_MODE(mode, ACEData.io[ioIndex]);
   return ioIndex;
@@ -446,7 +454,7 @@ end);
 InstallGlobalFunction(ACEQuit, function(arg)
 local ioIndex;
 
-  ioIndex := ACE_STREAM(arg);
+  ioIndex := ACE_IOINDEX(arg);
   CloseStream(ACEData.io[ioIndex].stream);
   Unbind(ACEData.io[ioIndex]);
 end);
@@ -495,8 +503,8 @@ end);
 InstallGlobalFunction(ACEModes, function(arg)
 local stream, modes;
 
-  ACE_STREAM_ARG_CHK(arg);
-  return ACE_MODES( ACEData.io[ ACE_STREAM(arg) ].stream );
+  ACE_IOINDEX_ARG_CHK(arg);
+  return ACE_MODES( ACEData.io[ ACE_IOINDEX(arg) ].stream );
 end);
 
 #############################################################################
@@ -529,11 +537,13 @@ end);
 InstallGlobalFunction(ACEGroupGenerators, function(arg)
 local ioIndex;
 
-  ACE_STREAM_ARG_CHK(arg);
-  ioIndex := ACE_STREAM(arg);
-  if ioIndex = fail or not IsBound( ACEData.io[ioIndex].args.fgens ) then
-    Info(InfoACE + InfoWarning, 1, "No group generators saved?");
-    return [];
+  ACE_IOINDEX_ARG_CHK(arg);
+  ioIndex := ACE_IOINDEX(arg);
+  if ioIndex = fail or not IsBound( ACEData.io[ioIndex].args ) or
+     not IsBound( ACEData.io[ioIndex].args.fgens ) then
+    Info(InfoACE + InfoWarning, 1, 
+         "No group generators saved. Setting value(s) from ACE ...");
+    return ACE_ARGS(ioIndex, "fgens");
   else
     return ACEData.io[ioIndex].args.fgens;
   fi;
@@ -549,11 +559,13 @@ end);
 InstallGlobalFunction(ACERelators, function(arg)
 local ioIndex;
 
-  ACE_STREAM_ARG_CHK(arg);
-  ioIndex := ACE_STREAM(arg);
-  if ioIndex = fail or not IsBound( ACEData.io[ioIndex].args.rels ) then
-    Info(InfoACE + InfoWarning, 1, "No relators saved?");
-    return [];
+  ACE_IOINDEX_ARG_CHK(arg);
+  ioIndex := ACE_IOINDEX(arg);
+  if ioIndex = fail or not IsBound( ACEData.io[ioIndex].args ) or 
+     not IsBound( ACEData.io[ioIndex].args.rels ) then
+    Info(InfoACE + InfoWarning, 1, 
+         "No relators saved. Setting value(s) from ACE ...");
+    return ACE_ARGS(ioIndex, "rels");
   else
     return ACEData.io[ioIndex].args.rels;
   fi;
@@ -569,11 +581,13 @@ end);
 InstallGlobalFunction(ACESubgroupGenerators, function(arg)
 local ioIndex;
 
-  ACE_STREAM_ARG_CHK(arg);
-  ioIndex := ACE_STREAM(arg);
-  if ioIndex = fail or not IsBound( ACEData.io[ioIndex].args.sgens ) then
-    Info(InfoACE + InfoWarning, 1, "No subgroup generators saved?");
-    return [];
+  ACE_IOINDEX_ARG_CHK(arg);
+  ioIndex := ACE_IOINDEX(arg);
+  if ioIndex = fail or not IsBound( ACEData.io[ioIndex].args ) or 
+     not IsBound( ACEData.io[ioIndex].args.sgens ) then
+    Info(InfoACE + InfoWarning, 1, 
+         "No subgroup generators saved. Setting value(s) from ACE ...");
+    return ACE_ARGS(ioIndex, "sgens");
   else
     return ACEData.io[ioIndex].args.sgens;
   fi;
@@ -587,8 +601,8 @@ end);
 ##
 InstallGlobalFunction(DisplayACEOptions, function(arg)
 
-  ACE_STREAM_ARG_CHK(arg);
-  DISPLAY_ACE_OPTIONS( ACEData.io[ ACE_STREAM(arg) ] );
+  ACE_IOINDEX_ARG_CHK(arg);
+  DISPLAY_ACE_OPTIONS( ACEData.io[ ACE_IOINDEX(arg) ] );
 end);
 
 #############################################################################
@@ -600,8 +614,8 @@ end);
 InstallGlobalFunction(GetACEOptions, function(arg)
 local datarec;
 
-  ACE_STREAM_ARG_CHK(arg);
-  datarec := ACEData.io[ ACE_STREAM(arg) ];
+  ACE_IOINDEX_ARG_CHK(arg);
+  datarec := ACEData.io[ ACE_IOINDEX(arg) ];
   if not IsBound(datarec.options) then
     Info(InfoACE + InfoWarning, 1, "No options saved.");
     return rec();
@@ -704,11 +718,11 @@ local datarec;
            "e.g. 'SetACEOptions(<optionsRec>); SetACEOptions(: <options>;' ");
     fi;
     PushOptions( arg[Length(arg)] );
-    datarec := ACEData.io[ ACE_STREAM(arg{[1..Length(arg) - 1]}) ];
+    datarec := ACEData.io[ ACE_IOINDEX(arg{[1..Length(arg) - 1]}) ];
     INTERACT_SET_ACE_OPTIONS("SetACEOptions", datarec);
     PopOptions();
   elif Length(arg) <= 1 then
-    datarec := ACEData.io[ ACE_STREAM(arg) ];
+    datarec := ACEData.io[ ACE_IOINDEX(arg) ];
     INTERACT_SET_ACE_OPTIONS("SetACEOptions", datarec);
   else
     Error("2nd argument should have been a record\n");
@@ -719,25 +733,184 @@ end);
 #############################################################################
 ####
 ##
+#F  ACE_PARAMETER . . . . . . . . . . . . . . . . . . . . . Internal function
+##  . . . . . . . . . . . . . . . . . .  for the ACE process of index ioIndex
+##  . . . . . . . . . . . . . . . . . .  returns ACE's value of the parameter
+##  . . . . . . . . . . . . . . . . . . . . . . . . . .  identified by string
+##
+InstallGlobalFunction(ACE_PARAMETER, function(ioIndex, string)
+local line;
+  line := FLUSH_ACE_STREAM_UNTIL(ACEData.io[ ioIndex ].stream, 3, 3, 
+                                 READ_NEXT_LINE, 
+                                 line -> line{[1..Length(string)]} = string);
+  # Remove "<string>: " and trailing newline
+  line := line{[Length(string) + 3 .. Length(line) - 1]};
+  if line = "" or line[ Length(line) ] <> ';' then
+    line := Flat([line,
+                  List(ACEReadUntil(ioIndex, line -> line[Length(line)] = ';'),
+                       line -> line{[3..Length(line)]}) # Scrub two blanks at
+                                                        # beginning of lines
+                  ]);
+  fi;
+  # Remove any blanks after commas and trailing ';'
+  return ReplacedString(line{[1..Length(line) - 1]}, ", ", ",");
+end);
+
+#############################################################################
+####
+##
+#F  ACE_GAP_WORDS . . . . . . . . . . . . . . . . . . . . . Internal function
+##  . . . . . . . .  returns the translation into GAP of an ACE list of words
+##
+##  ACE stores words according to the BNF:
+##      <word>      = <element> <word> | "(" <word> ")^" <power>
+##      <power>     = <integer>
+##      <element>   = <generator> | <inverse>
+##      <generator> = <integer> <space> | <lowercase letter>
+##      <inverse>   = "-" <generator> | <uppercase letter> 
+##
+InstallGlobalFunction(ACE_GAP_WORDS, function(datarec, words)
+local GAPWord;
+  
+  GAPWord := function(word)
+  local power, parts, elements;
+    if word[1] = '(' then
+      parts := SplitString(word, "", "()^");
+      word := parts[1];
+      power := Int(parts[2]);
+    else
+      power := 1;
+    fi;
+    if IsDigitChar(word[1]) then
+      elements := SplitString(word, " ");
+      # Convert to GAP elements
+      elements := List(elements, 
+                       function(element)
+                         if element < 0 then
+                           return datarec.args.fgens[ AbsInt(element) ]^-1;
+                         else
+                           return datarec.args.fgens[element];
+                         fi;
+                       end);
+    else
+      elements := List([1..Length(word)], i -> WordAlp(word, i));
+      # Convert to GAP elements
+      elements := List(elements, 
+                       function(element)
+                         if IsUpperAlphaChar(element[1]) then
+                           return datarec.args.fgens[ 
+                                      Position(
+                                          datarec.acegens,
+                                          LowercaseString(element)
+                                          )
+                                      ]^-1;
+                         else
+                           return datarec.args.fgens[ Position(datarec.acegens, 
+                                                              element) ];
+                         fi;
+                       end);
+    fi;
+    return Product( elements, One(datarec.args.fgens[1]) )^power;
+  end;
+
+  return List(SplitString(words, ','), GAPWord);
+end);
+
+#############################################################################
+####
+##
+#F  ACE_GENS  . . . . . . . . . . . . . . . . . . . . . .  Internal procedure
+##  . . . . . . . . . . . . . . . sets datarec.args.fgens and datarec.acegens
+##  . . . . . . . . . . . . . . . from the value of ACE's "Group  Generators"
+##  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . parameter
+##
+InstallGlobalFunction(ACE_GENS, function(datarec, string)
+local line;
+  if not IsBound(datarec.args) then
+    datarec.args := rec();
+  fi;
+  if IsAlphaChar(string[1]) then
+    datarec.acegens := List([1..Length(string)], i -> WordAlp(string, i));
+    datarec.args.fgens := GeneratorsOfGroup( FreeGroup(datarec.acegens) );
+  else
+    datarec.acegens := List([1..Int(string)], i -> String(i));
+    datarec.args.fgens := GeneratorsOfGroup(FreeGroup(
+                                                List(datarec.acegens, 
+                                                     s -> Flat(["x", s]))
+                                                ));
+  fi;
+end);
+
+#############################################################################
+####
+##
+#F  ACE_ARGS  . . . . . . . . . . . . . . . . . . . . . . . Internal function
+##  . . . . . . . . . . . . . . for the ACE process indexed by  ioIndex  sets
+##  . . . . . . . . . . . . . . and returns  ACEData.io[ioIndex].args.(field)
+##  . . . . . . . . . . . . . . . . . . .  according to ACE's parameter value
+##
+##  If ACEData.io[ioIndex].args is unset, it and  ACEData.io[ioIndex].acegens
+##  are set according to the values  held  by  the  ACE  process  indexed  by
+##  ioIndex.
+##
+InstallGlobalFunction(ACE_ARGS, function(ioIndex, field)
+local datarec, line;
+  datarec := ACEData.io[ ioIndex ];
+  if not IsBound(datarec.args) or not IsBound(datarec.args.fgens) or
+     field = "fgens" then
+    WRITE_LIST_TO_ACE_STREAM(datarec.stream, [ "sr:1;" ]);
+    ACE_GENS(datarec, ACE_PARAMETER(ioIndex, "Group Generators"));
+  else
+    WRITE_LIST_TO_ACE_STREAM(datarec.stream, [ "sr;" ]);
+  fi;
+  if not IsBound(datarec.args.rels) or field = "rels" then
+    datarec.args.rels := ACE_GAP_WORDS(datarec,
+                                       ACE_PARAMETER(ioIndex, 
+                                                     "Group Relators"));
+  fi;
+  if not IsBound(datarec.args.sgens) or field = "sgens" then
+    datarec.args.sgens := ACE_GAP_WORDS(datarec,
+                                        ACE_PARAMETER(ioIndex, 
+                                                      "Subgroup Generators"));
+  fi;
+  FLUSH_ACE_STREAM_UNTIL(datarec.stream, 3, 3, READ_NEXT_LINE, 
+                         line -> line{[1..5]} = "  #--");
+  return datarec.args.(field);
+end);
+
+#############################################################################
+####
+##
 #F  ACEParameters . . . . . .  Returns the ACE value of ACE parameter options
 ##
+##  Also ensures for the interactive ACE process indexed by i that  the  args
+##  and acegens fields of  ACEData.io[i]  are  set.  If  not,  it  sets  them
+##  according to the values held by ACE process i (the assumption being  that
+##  the user started the process via 'ACEStart(0);').
 ##
 InstallGlobalFunction(ACEParameters, function(arg)
-local ioIndex, stream, line, fieldsAndValues, parameters, i, opt;
+local ioIndex, datarec, line, fieldsAndValues, parameters, sgens, i, opt;
 
-  ACE_STREAM_ARG_CHK(arg);
-  ioIndex := ACE_STREAM(arg);
-  stream := ACEData.io[ ioIndex ].stream;
-  READ_ACE_ERRORS(stream);
-  WRITE_LIST_TO_ACE_STREAM(stream, [ "sr:1;" ]);
-  line := FLUSH_ACE_STREAM_UNTIL(stream, 3, 3, READ_NEXT_LINE,
-                                 line -> line{[1..10]} = "Group Name");
-  parameters := rec(enumeration := line{[13..Length(line) - 2]});
-  line := FLUSH_ACE_STREAM_UNTIL(stream, 3, 3, READ_NEXT_LINE,
-                                 line -> line{[1..13]} = "Subgroup Name");
-  parameters.subgroup := line{[16..Length(line) - 2]};
-  FLUSH_ACE_STREAM_UNTIL(stream, 3, 3, READ_NEXT_LINE,
-                         line -> line{[1..19]} = "Subgroup Generators");
+  ACE_IOINDEX_ARG_CHK(arg);
+  ioIndex := ACE_IOINDEX(arg);
+  datarec := ACEData.io[ ioIndex ];
+  READ_ACE_ERRORS(datarec.stream);
+  WRITE_LIST_TO_ACE_STREAM(datarec.stream, [ "sr:1;" ]);
+  parameters := rec(enumeration := ACE_PARAMETER(ioIndex, "Group Name"));
+  if not IsBound(datarec.args) or not IsBound(datarec.acegens) or
+     not IsBound(datarec.args.fgens) then
+    ACE_GENS(datarec, ACE_PARAMETER(ioIndex, "Group Generators"));
+  fi;
+  if not IsBound(datarec.args.rels) then
+    datarec.args.rels := ACE_GAP_WORDS(datarec,
+                                       ACE_PARAMETER(ioIndex, 
+                                                     "Group Relators"));
+  fi;
+  parameters.subgroup := ACE_PARAMETER(ioIndex, "Subgroup Name");
+  sgens := ACE_PARAMETER(ioIndex, "Subgroup Generators");
+  if not IsBound(datarec.args.sgens) then
+    datarec.args.sgens := ACE_GAP_WORDS(datarec, sgens);
+  fi;
   fieldsAndValues :=
       SplitString( 
           ReplacedString(
@@ -746,7 +919,7 @@ local ioIndex, stream, line, fieldsAndValues, parameters, i, opt;
               ),
           "", " :;" 
           );
-  FLUSH_ACE_STREAM_UNTIL(stream, 3, 3, READ_NEXT_LINE,
+  FLUSH_ACE_STREAM_UNTIL(datarec.stream, 3, 3, READ_NEXT_LINE,
                          line -> line{[1..6]} = "  #---");
   i := 1;
   while i < Length(fieldsAndValues) do
@@ -766,8 +939,8 @@ end);
 InstallGlobalFunction(ACEVersion, function(arg)
 local ioIndex, stream;
 
-  ACE_STREAM_ARG_CHK(arg);
-  ioIndex := ACE_STREAM(arg);
+  ACE_IOINDEX_ARG_CHK(arg);
+  ioIndex := ACE_IOINDEX(arg);
   if ioIndex = fail then 
     # Fire up a new stream ... which we'll close when we're finished
     stream := InputOutputLocalProcess( ACEData.tmpdir, ACEData.binary, [] );
@@ -803,54 +976,67 @@ end);
 ##  then return the final line. If IsMyLine is the the null string  then  ACE
 ##  is also directed to print closeline via option  `text'  and  IsMyLine  is
 ##  defined to be true if a line matches closeline; in this way closeline  is
-##  a sentinel.
+##  a sentinel. If both IsMyLine and  closeline  are  null  strings  then  we
+##  expect no ACE output and just check for error output from ACE.
 ##
 InstallGlobalFunction(EXEC_ACE_DIRECTIVE_OPTION, 
 function(arglist, optname, infoLevel, IsMyLine, closeline)
-local datarec, optval, Linefunc, line, error;
-  datarec := arglist[1];
+local datarec, optval, line;
+  datarec := ACEData.io[ arglist[1] ];
   optval := arglist[2];
   READ_ACE_ERRORS(datarec.stream); # purge any output not yet collected
                                    # e.g. error messages due to unknown options
-  error := PROCESS_ACE_OPTION(datarec.stream, optname, optval);
+  PROCESS_ACE_OPTION(datarec.stream, optname, optval);
 
   if IsMyLine = "" then
-    PROCESS_ACE_OPTION(datarec.stream, "text", closeline);
-    IsMyLine := line -> CHOMP(line) = closeline;
-  elif error then
-    Linefunc := IsMyLine;
-    IsMyLine := line -> Linefunc(line) or line{[1..3]} = "   ";
+    if closeline = "" then 
+      # We don't expect any ACE output ... just check for errors
+      READ_ACE_ERRORS(datarec.stream);
+      return;
+    else
+      PROCESS_ACE_OPTION(datarec.stream, "text", closeline);
+      IsMyLine := line -> CHOMP(line) = closeline;
+    fi;
+  else
+    line := FLUSH_ACE_STREAM_UNTIL(datarec.stream, infoLevel, infoLevel, 
+                                   READ_NEXT_LINE, 
+                                   line -> IsMyLine(line) or
+                                           line{[1..8]} = "** ERROR");
+    if line{[1..8]} <> "** ERROR" then
+      return line;
+    else 
+      IsMyLine := line -> line{[1..3]} = "   "; # One more line to flush
+    fi;
   fi;
 
-  line := FLUSH_ACE_STREAM_UNTIL(datarec.stream, infoLevel, infoLevel, 
-                                 READ_NEXT_LINE, IsMyLine);
-  return line;
+  return FLUSH_ACE_STREAM_UNTIL(datarec.stream, infoLevel, infoLevel, 
+                                READ_NEXT_LINE, IsMyLine);
 end);
 
 #############################################################################
 ####
 ##
-#F  DATAREC_AND_NO_VALUE  . . . . . . . . . . . . . . . . . Internal Function
-##  . . . . . . . . . . . . . . . . . . . .  returns a list [datarec, optval]
+#F  IOINDEX_AND_NO_VALUE  . . . . . . . . . . . . . . . . . Internal Function
+##  . . . . . . . . . . . . . . . . . . . .  returns a list [ioIndex, optval]
 ##  . . . . . . . . . . . . . . . . . . . .  for a no-value  ACE  `directive'
 ##  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .  option
 ##
-InstallGlobalFunction(DATAREC_AND_NO_VALUE, function(arglist)
-  ACE_STREAM_ARG_CHK(arglist);
-  return [ ACEData.io[ ACE_STREAM(arglist) ], "" ];
+InstallGlobalFunction(IOINDEX_AND_NO_VALUE, function(arglist)
+  ACE_IOINDEX_ARG_CHK(arglist);
+  return [ ACE_IOINDEX(arglist), "" ];
 end);
 
 #############################################################################
 ####
 ##
-#F  DATAREC_AND_ONE_VALUE . . . . . . . . . . . . . . . . . Internal Function
-##  . . . . . . . . . . . . . . . . . . . .  returns a list [datarec, optval]
+#F  IOINDEX_AND_ONE_VALUE . . . . . . . . . . . . . . . . . Internal Function
+##  . . . . . . . . . . . . . . . . . . . .  returns a list [ioIndex, optval]
 ##  . . . . . . . . . . . . . . . . . . . .  for a one-value ACE  `directive'
 ##  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .  option
 ##
-InstallGlobalFunction(DATAREC_AND_ONE_VALUE, function(arglist)
+InstallGlobalFunction(IOINDEX_AND_ONE_VALUE, function(arglist)
   if Length(arglist) in [1,2] then
-    return [ ACEData.io[ ACE_STREAM(arglist{[1..Length(arglist) - 1]}) ],
+    return [ ACE_IOINDEX(arglist{[1..Length(arglist) - 1]}),
              arglist[Length(arglist)] ];
   else
     Error("Expected 1 or 2 arguments ... not ", 
@@ -861,20 +1047,20 @@ end);
 #############################################################################
 ####
 ##
-#F  DATAREC_AND_LIST  . . . . . . . . . . . . . . . . . . . Internal Function
-##  . . . . . . . . . . . . . . . . . . . .  returns a list [datarec, optval]
+#F  IOINDEX_AND_LIST  . . . . . . . . . . . . . . . . . . . Internal Function
+##  . . . . . . . . . . . . . . . . . . . .  returns a list [ioIndex, optval]
 ##  . . . . . . . . . . . . . . . . . . . .  for a no-value or list-value ACE
 ##  . . . . . . . . . . . . . . . . . . . . . . . . . . .  `directive' option
 ##
-InstallGlobalFunction(DATAREC_AND_LIST, function(arglist)
+InstallGlobalFunction(IOINDEX_AND_LIST, function(arglist)
   if Length(arglist) > 2 then
     Error("Expected 0, 1 or 2 arguments ... not ", 
           Length(arglist), " arguments\n");
   elif Length(arglist) in [1, 2] and IsList( arglist[Length(arglist)] ) then
-    return [ ACEData.io[ ACE_STREAM(arglist{[1..Length(arglist) - 1]}) ],
+    return [ ACE_IOINDEX(arglist{[1..Length(arglist) - 1]}),
              arglist[Length(arglist)] ];
   elif Length(arglist) <= 1 then
-    return [ ACEData.io[ ACE_STREAM(arglist) ], "" ];
+    return [ ACE_IOINDEX(arglist), "" ];
   else
     Error("2nd argument should have been a list\n");
   fi;
@@ -888,7 +1074,7 @@ end);
 ##
 InstallGlobalFunction(ACEDumpVariables, function(arg)
   EXEC_ACE_DIRECTIVE_OPTION(
-      DATAREC_AND_LIST(arg), "dump", 1, line -> line{[1..7]} = "  #----", "");
+      IOINDEX_AND_LIST(arg), "dump", 1, line -> line{[1..7]} = "  #----", "");
 end);
 
 #############################################################################
@@ -899,7 +1085,7 @@ end);
 ##
 InstallGlobalFunction(ACEDumpStatistics, function(arg)
   EXEC_ACE_DIRECTIVE_OPTION(
-      DATAREC_AND_NO_VALUE(arg), "statistics", 1, 
+      IOINDEX_AND_NO_VALUE(arg), "statistics", 1, 
       line -> line{[1..7]} = "  #----", "");
 end);
 
@@ -913,7 +1099,7 @@ InstallGlobalFunction(ACEStyle, function(arg)
 local splitstyle;
   splitstyle := SplitString(
                     EXEC_ACE_DIRECTIVE_OPTION(
-                        DATAREC_AND_NO_VALUE(arg), "style", 3, 
+                        IOINDEX_AND_NO_VALUE(arg), "style", 3, 
                         line -> line{[1..5]} = "style", ""
                         ),
                     "", " =\n"
@@ -928,15 +1114,135 @@ end);
 #############################################################################
 ####
 ##
-#F  ACEDisplayCosetTable . . . . . . . . . Prints the current ACE coset table
+#F  ACEDisplayCosetTable  . . . . . . . .  Prints the current ACE coset table
 ##  . . . . . . . . . . . . . . . . . . at it's current level of completeness
 ##
 ##
 InstallGlobalFunction(ACEDisplayCosetTable, function(arg)
   EXEC_ACE_DIRECTIVE_OPTION(
-      DATAREC_AND_LIST(arg), "print", 1, "",
+      IOINDEX_AND_LIST(arg), "print", 1, "",
       "------------------------------------------------------------"
       );
+end);
+
+#############################################################################
+####
+##
+#F  IsCompleteACECosetTable . . . . . Returns true if the current coset table 
+##  . . . . . . . . . . . . . . . . . is  complete,  as  determined  by   the
+##  . . . . . . . . . . . . . . . . . current value of the enumeration index,
+##  . . . . . . . . . . . . . . . . . . . . . . . . . . . and false otherwise
+##
+InstallGlobalFunction(IsCompleteACECosetTable, function(arg)
+local datarec;
+  ACE_IOINDEX_ARG_CHK(arg);
+  datarec := ACEData.io[ ACE_IOINDEX(arg) ];  
+  if not IsBound(datarec.stats) then
+    CHEAPEST_ACE_MODE(datarec);
+  fi;
+  return datarec.stats.index <> 0;
+end);
+
+#############################################################################
+####
+##
+#F  ACECosetRepresentative  . . . . . . . . Returns the coset  representative
+##  . . . . . . . . . . . . . . . . . . . . of coset n, for the current coset
+##  . . . . . . . . . . . . . . . . . . . . table held by interactive process
+##  . . . . . . . . . . . . . . . . . . . . . . i, for i, n determined by arg
+##
+InstallGlobalFunction(ACECosetRepresentative, function(arg)
+local ioIndexAndValue, datarec, coset, line, list;
+  ioIndexAndValue := IOINDEX_AND_ONE_VALUE(arg);
+  datarec := ACEData.io[ ioIndexAndValue[1] ];
+  coset := ioIndexAndValue[2];
+  READ_ACE_ERRORS(datarec.stream); # purge any output not yet collected
+  if coset = 1 then
+    return One(ACEGroupGenerators( ioIndexAndValue[1] )[1]);
+  fi;
+  PROCESS_ACE_OPTION(datarec.stream, "print", [-coset, coset]);
+  line := FLUSH_ACE_STREAM_UNTIL(datarec.stream, 3, 3, READ_NEXT_LINE, 
+                                 line -> line{[1..2]} in ["--", "  "]);
+  if line{[1..2]} = "  " then
+    Error("ACECosetRepresentative: ", line{[4..Length(line)]});
+  fi;
+  list := ACEReadUntil(ioIndexAndValue[1], list -> true, 
+                       line -> SplitString(line, "", "| "))[1];
+  return ACE_GAP_WORDS(datarec, list[ Length(list) ])[1];
+end);
+
+#############################################################################
+####
+##
+#F  ACECosetRepresentatives . . . . . . . . Returns the coset representatives
+##  . . . . . . . . . . . . . . . . . . . . . .  of ACE's current coset table
+##
+##
+InstallGlobalFunction(ACECosetRepresentatives, function(arg)
+local ioIndex, datarec, line, activecosets, cosetreps;
+  ACE_IOINDEX_ARG_CHK(arg);
+  ioIndex := ACE_IOINDEX(arg);
+  datarec := ACEData.io[ ioIndex ];
+  if not IsBound(datarec.stats) then
+    Error("ACECosetRepresentatives: No current table?");
+  fi;
+  READ_ACE_ERRORS(datarec.stream); # purge any output not yet collected
+  PROCESS_ACE_OPTION(datarec.stream, "print", -datarec.stats.activecosets);
+  line := FLUSH_ACE_STREAM_UNTIL(datarec.stream, 3, 3, READ_NEXT_LINE, 
+                                 line -> line{[1..2]} in ["co", "CO", "  "]);
+  if line{[1..2]} = "  " then
+    Error("ACECosetRepresentatives: ", line{[4..Length(line)]});
+  fi;
+  activecosets := Int( SplitString(line, "", "coCO: a=")[1] );
+  FLUSH_ACE_STREAM_UNTIL(datarec.stream, 3, 3, READ_NEXT_LINE, 
+                         line -> line{[1..7]} = "     1 ");
+  cosetreps := List(ACEReadUntil(
+                        ioIndex, 
+                        list -> Int(list[1]) = Minimum(
+                                                   activecosets,
+                                                   datarec.stats.activecosets),
+                        line -> SplitString(line, "", "| ")
+                        ),
+                    list -> ACE_GAP_WORDS(datarec, list[ Length(list) ])[1]
+                    );
+  if datarec.stats.activecosets < activecosets then
+    # We missed some
+    PROCESS_ACE_OPTION(datarec.stream, "print", 
+                       [-(datarec.stats.activecosets + 1), activecosets]);
+    line := FLUSH_ACE_STREAM_UNTIL(datarec.stream, 3, 3, READ_NEXT_LINE, 
+                                   line -> line{[1..3]} = "---");
+    return Concatenation([One(ACEGroupGenerators(ioIndex)[1])],
+                         cosetreps,
+                         List(ACEReadUntil(ioIndex, 
+                                           list -> Int(list[1]) = activecosets,
+                                           line -> SplitString(line, "", "| ")),
+                              list -> ACE_GAP_WORDS(
+                                          datarec, list[ Length(list) ])[1]
+                              )
+                         );
+  else
+    return Concatenation([One(ACEGroupGenerators(ioIndex)[1])], cosetreps);
+  fi;
+end);
+
+#############################################################################
+####
+##
+#F  ACETransversal  . . . . . . . . . Returns ACECosetRepresentatives(arg) if
+##  . . . . . . . . . . . . . . . . . the current coset  table  is  complete,
+##  . . . . . . . . . . . . . . . . . . . . . . . . . . .  and fail otherwise
+##
+InstallGlobalFunction(ACETransversal, function(arg)
+local ioIndex;
+  ACE_IOINDEX_ARG_CHK(arg);
+  ioIndex := ACE_IOINDEX(arg);  
+  if IsCompleteACECosetTable(ioIndex) then
+    return ACECosetRepresentatives(ioIndex);
+  else
+    Info(InfoACE + InfoWarning, 1,
+         "ACETransversal: coset table is not complete");
+    return fail;
+  fi;
 end);
 
 #############################################################################
@@ -947,8 +1253,8 @@ end);
 ##
 InstallGlobalFunction(ACECycles, function(arg)
 local ioIndex, stream, error, cycles;
-  ACE_STREAM_ARG_CHK(arg);
-  ioIndex := ACE_STREAM(arg);
+  ACE_IOINDEX_ARG_CHK(arg);
+  ioIndex := ACE_IOINDEX(arg);
   stream := ACEData.io[ ioIndex ].stream;
   READ_ACE_ERRORS(stream); # purge any output not yet collected
                            # e.g. error messages due to unknown options
@@ -956,7 +1262,7 @@ local ioIndex, stream, error, cycles;
   PROCESS_ACE_OPTION(stream, "text", ""); # Causes ACE to print a blank line
                                           # ... that we use as a sentinel
   error := FLUSH_ACE_STREAM_UNTIL(
-               stream, 2, 2, READ_NEXT_LINE, 
+               stream, 3, 3, READ_NEXT_LINE, 
                line -> line{[1..2]} in ["**", "CO", "co"]
                ){[1..2]} = "**";
   cycles := ACEReadUntil(ioIndex, line -> line = "");
@@ -993,7 +1299,7 @@ local ioIndex, enumIndex, ACEout, iostream, datarec, cosettable,
     Error("Expected 0, 1 or 3 arguments ... not ", Length(arg), " arguments\n");
   elif Length(arg) <= 1 then
     # Called as an interactive ACE command
-    datarec := ACEData.io[ ACE_STREAM(arg) ];
+    datarec := ACEData.io[ ACE_IOINDEX(arg) ];
     INTERACT_SET_ACE_OPTIONS("ACECosetTable", datarec);
     if not IsEmpty(OptionsStack) then
       CHEAPEST_ACE_MODE(datarec); 
@@ -1097,7 +1403,7 @@ local datarec, iostream, line, stats;
 
   if Length(arg) <= 1 then 
     # Called as an interactive ACE command
-    datarec := ACEData.io[ ACE_STREAM(arg) ];
+    datarec := ACEData.io[ ACE_IOINDEX(arg) ];
     INTERACT_SET_ACE_OPTIONS("ACEStats", datarec);
     if not IsEmpty(OptionsStack) then
       CHEAPEST_ACE_MODE(datarec);
@@ -1118,11 +1424,11 @@ end);
 ####
 ##
 #F  ACERecover . . . . . . . . . . . .  Recover space from dead coset numbers
-##
+##  . . . . . . . . . . . . . . for interactive ACE process determined by arg
 ##
 InstallGlobalFunction(ACERecover, function(arg)
   EXEC_ACE_DIRECTIVE_OPTION(
-      DATAREC_AND_NO_VALUE(arg), "recover", 3, 
+      IOINDEX_AND_NO_VALUE(arg), "recover", 3, 
       line -> line{[1..2]} in ["CO", "co"], "");
 end);
 
@@ -1130,78 +1436,236 @@ end);
 ####
 ##
 #F  ACEStandardCosetNumbering  . .  Reassigns coset numbers in standard order
-##
+##  . . . . . . . . . . . . . . for interactive ACE process determined by arg
 ##
 InstallGlobalFunction(ACEStandardCosetNumbering, function(arg)
   EXEC_ACE_DIRECTIVE_OPTION(
-      DATAREC_AND_NO_VALUE(arg), "standard", 3, 
+      IOINDEX_AND_NO_VALUE(arg), "standard", 3, 
       line -> line{[1..2]} in ["CO", "co"], "");
 end);
 
 #############################################################################
 ####
 ##
-#F  ACEAddRelators . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+#F  ACEAddRelators  . . . . . . . . . . . . . . . Add relatorlist to relators 
+##  . . . . . . . . . . . . . . . for interactive ACE process and relatorlist
+##  . . . . . . . . . . . . . . . . . . . . . . . . . . . . determined by arg
 ##
+##  Also sets and returns ACEData.io[i].args.rels, where i is  the  index  of
+##  the interactive ACE process.
 ##
 InstallGlobalFunction(ACEAddRelators, function(arg)
-  EXEC_ACE_DIRECTIVE_OPTION(
-      DATAREC_AND_ONE_VALUE(arg), "rl", 3, "", "");
+local ioIndexAndOptval;
+  ioIndexAndOptval := IOINDEX_AND_ONE_VALUE(arg);
+  EXEC_ACE_DIRECTIVE_OPTION(ioIndexAndOptval, "rl", 3, "", "");
+  CHEAPEST_ACE_MODE(ACEData.io[ ioIndexAndOptval[1] ]);
+  return ACE_ARGS(ioIndexAndOptval[1], "rels");
 end);
 
 #############################################################################
 ####
 ##
-#F  ACEAddSubgroupGenerators . . . . . . . . . . . . . . . . . . . . . . . .
+#F  ACEAddSubgroupGenerators  . . . . . . . . . Add generatorlist to relators 
+##  . . . . . . . . . . . . . . for interactive ACE process and generatorlist
+##  . . . . . . . . . . . . . . . . . . . . . . . . . . . . determined by arg
 ##
+##  Also sets and returns ACEData.io[i].args.sgens, where i is the  index  of
+##  the interactive ACE process.
 ##
 InstallGlobalFunction(ACEAddSubgroupGenerators, function(arg)
-  EXEC_ACE_DIRECTIVE_OPTION(
-      DATAREC_AND_ONE_VALUE(arg), "sg", 3, "", "");
+local ioIndexAndOptval;
+  ioIndexAndOptval := IOINDEX_AND_ONE_VALUE(arg);
+  EXEC_ACE_DIRECTIVE_OPTION(ioIndexAndOptval, "sg", 3, "", "");
+  CHEAPEST_ACE_MODE(ACEData.io[ ioIndexAndOptval[1] ]);
+  return ACE_ARGS(ioIndexAndOptval[1], "sgens");
 end);
 
 #############################################################################
 ####
 ##
-#F  ACEDeleteRelators . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+#F  WORDS_OR_UNSORTED . . . . . . . . . . . . . . . . . . . Internal function
+##  . . . . . . . . . . . . . . check val is a word list of goodwords, if  so
+##  . . . . . . . . . . . . . . return the sorted list  of  indices  of  word
+##  . . . . . . . . . . . . . . list in goodwords or report that  some  words
+##  . . . . . . . . . . . . . . are not of wordtype. If  val  is  an  integer
+##  . . . . . . . . . . . . . . list  a  sorted  integer  list  is  returned.
+##  . . . . . . . . . . . . . . Otherwise, if  val  is  not  a  list  or  not
+##  . . . . . . . . . . . . . . . . . . . . . . homogeneous, val is returned.
 ##
+InstallGlobalFunction(WORDS_OR_UNSORTED, function(val, goodwords, wordtype)
+local badwords;
+  if IsList(val) then
+    if ForAll(val, IsWord) then
+      badwords := Filtered(val, w -> not(w in goodwords));
+      if IsEmpty(badwords) then
+        return SortedList(List(val, w -> Position(goodwords, w)));
+      else
+        Error(badwords, " are not ", wordtype);
+      fi;
+    elif ForAll(val, IsInt) then
+      return SortedList(val);
+    fi;
+  fi;
+  # Let the default error message sort it out
+  return val;
+end);
+
+#############################################################################
+####
+##
+#F  ACEDeleteRelators . . . . . . . . . . .  Delete relatorlist from relators 
+##  . . . . . . . . . . . . . . . for interactive ACE process and relatorlist
+##  . . . . . . . . . . . . . . . . . . . . . . . . . . . . determined by arg
+##
+##  Also sets and returns ACEData.io[i].args.rels, where i is  the  index  of
+##  the interactive ACE process.
 ##
 InstallGlobalFunction(ACEDeleteRelators, function(arg)
-  EXEC_ACE_DIRECTIVE_OPTION(
-      DATAREC_AND_ONE_VALUE(arg), "dr", 3, "", "");
+local ioIndexAndOptval;
+  ioIndexAndOptval := IOINDEX_AND_ONE_VALUE(arg);
+  ioIndexAndOptval[2] := WORDS_OR_UNSORTED(ioIndexAndOptval[2],
+                                           ACERelators(ioIndexAndOptval[1]),
+                                           "relators");
+  EXEC_ACE_DIRECTIVE_OPTION(ioIndexAndOptval, "dr", 3, "", "");
+  CHEAPEST_ACE_MODE(ACEData.io[ ioIndexAndOptval[1] ]);
+  return ACE_ARGS(ioIndexAndOptval[1], "rels");
 end);
 
 #############################################################################
 ####
 ##
-#F  ACEDeleteSubgroupGenerators . . . . . . . . . . . . . . . . . . . . . . .
+#F  ACEDeleteSubgroupGenerators . . . . .  Delete generatorlist from relators 
+##  . . . . . . . . . . . . . . for interactive ACE process and generatorlist
+##  . . . . . . . . . . . . . . . . . . . . . . . . . . . . determined by arg
 ##
+##  Also sets and returns ACEData.io[i].args.sgens, where i is the  index  of
+##  the interactive ACE process.
 ##
 InstallGlobalFunction(ACEDeleteSubgroupGenerators, function(arg)
-  EXEC_ACE_DIRECTIVE_OPTION(
-      DATAREC_AND_ONE_VALUE(arg), "ds", 3, "", "");
+local ioIndexAndOptval;
+  ioIndexAndOptval := IOINDEX_AND_ONE_VALUE(arg);
+  ioIndexAndOptval[2] := WORDS_OR_UNSORTED(ioIndexAndOptval[2],
+                                           ACESubgroupGenerators(
+                                               ioIndexAndOptval[1]
+                                               ),
+                                           "subgroup generators");
+  EXEC_ACE_DIRECTIVE_OPTION(ioIndexAndOptval, "ds", 3, "", "");
+  CHEAPEST_ACE_MODE(ACEData.io[ ioIndexAndOptval[1] ]);
+  return ACE_ARGS(ioIndexAndOptval[1], "sgens");
 end);
 
 #############################################################################
 ####
 ##
-#F  ACECosetCoincidence . . . . . . . . . . . . . . . . . . . . . . . . . . .
+#F  ACECosetCoincidence . . . . . . . . . . Force the coincidence of coset  n 
+##  . . . . . . . . . . . . . . . . . . . . with coset 1, for the interactive
+##  . . . . . . . . . . . . . . . . . . . . ACE  process  i  and  integer   n
+##  . . . . . . . . . . . . . . . . . . . . . . . . . . . . determined by arg
 ##
+##  Essentially, the coset representative of coset n is added to the subgroup
+##  generators, ACERedo and ACESubgroupGenerators are invoked, and the  coset
+##  representative of coset n is returned.
 ##
 InstallGlobalFunction(ACECosetCoincidence, function(arg)
-  EXEC_ACE_DIRECTIVE_OPTION(
-      DATAREC_AND_ONE_VALUE(arg), "cc", 3, "", "");
+local ioIndexAndOptval, cosetrep, datarec;
+  ioIndexAndOptval := IOINDEX_AND_ONE_VALUE(arg);
+  cosetrep := EXEC_ACE_DIRECTIVE_OPTION(ioIndexAndOptval, "cc", 3, 
+                                        line -> line{[1..5]} = "Coset", "");
+  if cosetrep{[1..2]} = "  " then
+    return fail; # Error in input
+  fi;
+  datarec := ACEData.io[ ioIndexAndOptval[1] ];
+  FLUSH_ACE_STREAM_UNTIL(datarec.stream, 3, 3, READ_NEXT_LINE,
+                         line -> line[1] = '*');
+  CHEAPEST_ACE_MODE(datarec);
+  ACE_ARGS(ioIndexAndOptval[1], "sgens");
+  return ACE_GAP_WORDS(
+             datarec,
+             cosetrep{[Position(cosetrep, ':') + 2..Length(cosetrep) - 1]}
+             )[1];
 end);
 
 #############################################################################
 ####
 ##
-#F  ACERandomCoincidences . . . . . . . . . . . . . . . . . . . . . . . . . .
+#F  ACERandomCoincidences . . . . . . . . . Force the coincidence  of  random
+##  . . . . . . . . . . . . . . . . . . . . coset numbers with coset  1,  for
+##  . . . . . . . . . . . . . . . . . . . . the  interactive  ACE  process  i
+##  . . . . . . . . . . . . . . . . . . . . upto limit  (or  8)  times  until
+##  . . . . . . . . . . . . . . . . . . . . index is a multiple of  subindex,
+##  . . . . . . . . . . . . . . . . . . . . for i, subindex, limit determined
+##  . . . . . . . . . . . . . . . . . . . . . . . . . . by arg or return fail
 ##
+##  Essentially, coset representatives are added to the subgroup  generators,
+##  to try to achieve the objective, and any new coset representatives  added
+##  to the subgroup generators are returned as a (possibly empty) list.
 ##
 InstallGlobalFunction(ACERandomCoincidences, function(arg)
-  EXEC_ACE_DIRECTIVE_OPTION(
-      DATAREC_AND_ONE_VALUE(arg), "rc", 3, "", "");
+local ioIndexAndOptval, datarec, sgens, lines;
+  ioIndexAndOptval := IOINDEX_AND_ONE_VALUE(arg);
+  datarec := ACEData.io[ ioIndexAndOptval[1] ];
+  sgens := ACE_ARGS(ioIndexAndOptval[1], "sgens");
+  READ_ACE_ERRORS(datarec.stream); # purge any output not yet collected
+  if not IsBound(datarec.stats) then
+    CHEAPEST_ACE_MODE(datarec);
+  fi;
+  if datarec.stats.index <> 0 then
+    Error("ACERandomCoincidences: enumeration index is already finite!");
+  fi;
+  PROCESS_ACE_OPTION(datarec.stream, "rc", ioIndexAndOptval[2]);
+  # Perhaps it's wasteful to use ACEReadUntil here ...
+  lines := ACEReadUntil(ioIndexAndOptval[1],
+                        line -> line{[1..13]} in ["* No success;",
+                                                  "* An appropri",
+                                                  "   finite ind",
+                                                  "  * Unable to"]);
+  if lines[Length(lines)]{[1..13]} = "* An appropri" then
+    datarec.enumResult := lines[Length(lines) - 1];
+    datarec.stats := ACE_STATS(datarec.enumResult);
+  else
+    Info(InfoACE + InfoWarning, 1, "ACERandomCoincidences: Unsuccessful!");
+  fi;
+  return Difference(ACE_ARGS(ioIndexAndOptval[1], "sgens"), sgens);
+end);
+
+#############################################################################
+####
+##
+#F  ACETraceWord  . . . . . . . . . . . . Traces word through the coset table
+##  . . . . . . . . . . . . . . . . . . . of the i-th interactive ACE process
+##  . . . . . . . . . . . . . . . . . . . starting at coset n, for i, n, word
+##  . . . . . . . . . . . . . . . . . . . determined by arg, and  return  the
+##  . . . . . . . . . . . . . . . . . . . final coset  number  if  the  trace
+##  . . . . . . . . . . . . . . . . . . . . . . completes, and fail otherwise
+##
+InstallGlobalFunction(ACETraceWord, function(arg)
+local ioIndex, datarec, twArgs, expected, line;
+  if Length(arg) in [2,3] then
+    ioIndex := ACE_IOINDEX(arg{[1..Length(arg) - 2]});
+    datarec := ACEData.io[ ioIndex ];
+    twArgs := arg{[Length(arg) - 1..Length(arg)]};
+  else
+    Error("Expected 2 or 3 arguments ... not ", 
+          Length(arg), " arguments\n");
+  fi;
+  READ_ACE_ERRORS(datarec.stream); # purge any output not yet collected
+  PROCESS_ACE_OPTION(datarec.stream, "tw", twArgs);
+  expected := Flat([String(twArgs[1]), " * word = "]){[1..8]};
+  line := FLUSH_ACE_STREAM_UNTIL(datarec.stream, 3, 3, READ_NEXT_LINE, 
+                                 line -> line{[1..8]} in [expected,
+                                                          "* Trace ",
+                                                          "** ERROR"]);
+  if line{[1..8]} = expected then
+    return Int(SplitString(line, "", " *word=\n")[2]);
+  elif line{[1..8]} = "* Trace " then
+    Info(InfoACE + InfoWarning, 1,
+         "ACETraceWord:", line{[2..Length(line) - 1]});
+    return fail;
+  else
+    line := CHOMP( READ_NEXT_LINE(datarec.stream) );
+    Info(InfoACE, 3, line);
+    Error("ACETraceWord:", line{[3..Length(line)]});
+  fi;
 end);
 
 #############################################################################
@@ -1212,7 +1676,7 @@ end);
 ##
 InstallGlobalFunction(ACENormalClosure, function(arg)
   EXEC_ACE_DIRECTIVE_OPTION(
-      DATAREC_AND_LIST(arg), "nc", 3, "", "");
+      IOINDEX_AND_LIST(arg), "nc", 3, "", "");
 end);
 
 #############################################################################
@@ -1223,7 +1687,7 @@ end);
 ##
 InstallGlobalFunction(ACEOrders, function(arg)
   EXEC_ACE_DIRECTIVE_OPTION(
-      DATAREC_AND_NO_VALUE(arg), "order", 3, "", "");
+      IOINDEX_AND_NO_VALUE(arg), "order", 3, "", "");
 end);
 
 #############################################################################
@@ -1234,7 +1698,7 @@ end);
 ##
 InstallGlobalFunction(ACEOrder, function(arg)
   EXEC_ACE_DIRECTIVE_OPTION(
-      DATAREC_AND_ONE_VALUE(arg), "order", 3, "", "");
+      IOINDEX_AND_ONE_VALUE(arg), "order", 3, "", "");
 end);
 
 #############################################################################
@@ -1245,18 +1709,7 @@ end);
 ##
 InstallGlobalFunction(ACEStabilisingCosets, function(arg)
   EXEC_ACE_DIRECTIVE_OPTION(
-      DATAREC_AND_ONE_VALUE(arg), "stabilising", 3, "", "");
-end);
-
-#############################################################################
-####
-##
-#F  ACETraceWord . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
-##
-##
-InstallGlobalFunction(ACETraceWord, function(arg)
-  EXEC_ACE_DIRECTIVE_OPTION(
-      DATAREC_AND_ONE_VALUE(arg), "tw", 3, "", "");
+      IOINDEX_AND_ONE_VALUE(arg), "stabilising", 3, "", "");
 end);
 
 #E  interact.gi . . . . . . . . . . . . . . . . . . . . . . . . .  ends here 

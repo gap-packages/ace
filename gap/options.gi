@@ -332,7 +332,7 @@ InstallValue(ACE_ERRORS, rec(
 ##  . . . . . . . . . . .  is a strictly increasing list of positive integers
 ##
 InstallGlobalFunction(IS_INC_POS_INT_LIST, 
-  x -> IsPosInt(x) or (IsSSortedList(x) and IsPosInt(x[1]) and x[1] < x[2]));
+  x -> IsPosInt(x) or (IsPosInt(x[1]) and IsSSortedList(x)));
 
 #############################################################################
 ####
