@@ -23,7 +23,7 @@ The {\GAP} interface has been written by Alexander Hulpke.
 
 The package interfaces to an external binary and therefore is only usable
 under UNIX. It will not work on Windows or the Macintosh. It requires
-{\GAP}~4 in at least beta version 5.
+{\GAP}~4.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{Installing the ACE share package}
@@ -47,6 +47,11 @@ make
 \endtt
 to compile the binary and to install it in the appropriate place.
 
+Note that the current version of the configuration process only sets up
+directory paths. If you need a different compiler or different compiler
+options, you need to edit `src/Makefile.in' prior to calling `make'
+yourself.
+
 If you use this installation of {\GAP} on different hardware platforms you will
 have to compile the binary for each platform separately. This is done by
 calling `configure' and `make' for the package anew immediately after
@@ -60,8 +65,9 @@ For details on how to use the `ACE' package see the documentation in the
 `doc' subdirectory.
 
 The `src' subdirectory contains a copy of the original source of `ACE'. (The
-only modification is that a make-file was copied to `Makefile'.) You can
-replace it by a newer version before compiling.
+only modification is that a file `Makefile.in' was obtained from the different
+`make.xyz' and will be used to create a `Makefile'.)
+You can replace the source by a newer version before compiling.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{Loading the ACE share package}
@@ -143,12 +149,15 @@ cases, however if problems become more complicated you might have to select
 specific strategies to get the coset enumeration to finish successfully and
 quickly.
 
-These options and their functionality are described in detail in chapter~XXX
-of the manual of the `ACE' standalone~\cite{aceman}.
+All these options and their functionality are described in detail in the
+chapter on the interactive interface (``level 2'') of the manual of the
+`ACE' standalone~\cite{aceman}. 
 
 This section therefore only lists how to pass the options from {\GAP}.
+We refer the reader to this manual for a
+description of these options and of general enumeration strategies.
 
-This is done via the option mechanism of {\GAP} (see
+Options are passed via the option mechanism of {\GAP} (see
 chapter~"ref:Options Stack" in the reference manual):
 Options can be are appended to the argument list of any function call,
 separated by a colon from the argument list. They are then passed on

@@ -1,3 +1,4 @@
+# makefile.in for ACE (GAP interface version)
 # Compiler switches
 #
 # -Wall     : print all warnings
@@ -5,6 +6,8 @@
 # -pedantic : be bloody picky
 # -ansi     : enforce ANSII compliance
 
+# on a SGI ozone machine, the following assignement needs to be replaced by:
+# CC = cc -64 -O2 -ansi
 CC  = gcc -Wall -pedantic -ansi -O2
 
 # ACE Level 0, 1 & 2 switches 
