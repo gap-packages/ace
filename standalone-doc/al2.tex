@@ -891,11 +891,22 @@ Prints the possible enumeration modes, as deduced from the command history
 
 \subsection{\ttt{nc\ /\ normal[\ closure]\ :\ [0/1]\ ;}}
 
-If the argument is missing or \ttt{0}, test for normal closure.
-If a subgroup generator does not normalise a generator, then this is
-  printed out.
-If the argument is \ttt{1}, then any non-normalising conjugates are
+This command tests the subgroup for normal closure within the group. 
+If a conjugate of a subgroup generator by a generator, is determined
+  to belong to a coset other than coset \#1, it is printed out, 
+  and if the argument of \ttt{nc} is \ttt{1}, any such conjugate is 
   also added to the subgroup generators.
+When the argument is missing or \ttt{0}, no new subgroup generators are
+  added.
+
+\tsc{Notes:}
+The method of determination of whether a conjugate of a subgroup
+  generator is in the subgroup, is by testing whether it can be traced
+  from coset \#1 to coset \#1.
+The resultant subgroup need not be normally closed after executing
+  \ttt{nc} with the value \ttt{1}, i.e., 
+  it is still possible that some conjugates of the newly added subgroup 
+  generators will not be elements of the subgroup.
 
 \subsection{\ttt{no[\ relators\ in\ subgroup]\ :\ [-1/0/1..]\ ;}}
 
