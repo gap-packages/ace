@@ -761,12 +761,22 @@ value `true' (see Section~"Interpretation  of  ACE  Options").  Please
 don't mix these two forms of `SetACEOptions'  with  the  previous  two
 forms; i.e.~do *not* pass both a record argument  and  options,  since
 this will lead to options appearing in the wrong order; if you want to
-do this, make two separate calls to `SetACEOptions', e.g.
+do this, make two separate calls to  `SetACEOptions',  e.g.~let's  say
+you have a process like that started by:
+
+\beginexample
+gap> ACEExample("A5", ACEStart);
+\endexample
+
+then the following demonstrates both usages of `SetACEOptions':
 
 \beginexample
 gap> SetACEOptions( rec(echo := 2) );
 gap> SetACEOptions( : hlt);
 \endexample
+
+Each of the three commands above generates output; for brevity it  has
+not been included.
 
 *Notes:*
 

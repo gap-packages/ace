@@ -659,14 +659,14 @@ within {\GAP} is stored; its fields are:
 non-interactive   {\ACE}   input   and   output   files   (also    see
 "ACEDirectoryTemporary" below);
 
+\quad`ni'     & the data record for a non-interactive {\ACE} process;
+
 \quad`io'     & list  of  data  records  for  `ACEStart'   (see  below 
 and~"ACEStart") processes;
 
-\quad`infile' & the full path of the  (non-interactive)  {\ACE}  input
-file;
+\quad`infile' & the full path of the {\ACE} input file;
 
-\quad`outfile'& the full path of the (non-interactive)  {\ACE}  output
-file; and
+\quad`outfile'& the full path of the {\ACE} output file; and
 
 \quad`version'& the  version  of  the  current  {\ACE}  binary.   More
 detailed information regarding the compilation of the binary is  given
@@ -674,12 +674,20 @@ by `ACEBinaryVersion' (see~"ACEBinaryVersion").
 
 \enditems
 
+Non-interactive processes used to use files rather than streams (hence
+the fields `infile' and `outfile' above;  these  may  disappear  in  a
+later version of the {\ACE} package).
+
 Each time an interactive {\ACE} process is  initiated  via  `ACEStart'
 (see~"ACEStart"), an identifying number <ioIndex> is generated for the
 interactive process and  a  record  `ACEData.io[<ioIndex>]'  with  the
-following fields is created:
+following fields is created. A  non-interactive  process  has  similar
+fields but is stored in the record `ACEData.ni'.
 
 \beginitems
+
+\quad`procId' & the identifying number of the process  (<ioIndex>  for
+interactive processes, and 0 for a non-interactive process);
 
 \quad`args'   & a record with fields: `fgens', `rels',  `sgens'  whose
 values  are  the  corresponding   arguments   passed   originally   to
