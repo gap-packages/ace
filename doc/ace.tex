@@ -840,7 +840,7 @@ possibilities leads to the following table of *enumeration styles*.
 % \end{table}
 \begintt
 Rt value     Ct value     style name
----------------------------------------
+-----------------------------------------
 
    0           >0         C
   <0           >0         Cr
@@ -850,9 +850,9 @@ Rt value     Ct value     style name
   <0            0         R*
   >0           <0         Rc
   <0           <0         R/C
-   0            0         R/C (default)
+   0            0         R/C (defaulted)
 
----------------------------------------
+-----------------------------------------
 \endtt
 
 In *C-style*  most definitions are made in the  next empty coset table
@@ -2287,22 +2287,25 @@ presentation. If the relators are numbered from 1 in  the  output  of,
 say, the `sr' command (see~"Option `sr'"), then the relators listed in
 `<list>' are deleted; `<list>' must be a strictly increasing sequence.
 
+\>`dump'{Option `dump'}
 \>`dump:=<level>'{Option `dump'}
+\>`dump:=[<level>]'{Option `dump'}
 \>`dump:=[<level>, <detail>]'{Option `dump'}&
 `Dump's the internal variables of {\ACE}; <level> must be  an  integer
 in the range 0 to 2, and <detail> must be 0 or 1.
 (Shortest abbreviation: `d'.)
 
-The argument <level> selects which of the three levels  of  {\ACE}  to
-dump, and defaults to Level 0. (You will need to read  the  standalone
-manual to understand what Levels 0,  1  and  2  are  all  about.)  The
-argument <detail> determines the amount  of  detail  (`<detail>  =  0'
-means less detail). The second form of this command with  `<detail>  =
-0' is equivalent to the first form (without  the  <detail>  argument).
-This option is intended for gurus; the source code should be consulted
-to see what the output means.
+The value of <level> determines which of the three levels of {\ACE} to
+dump. (You will need to read the standalone manual to understand  what
+Levels 0, 1 and 2 are all about.) The value of <detail> determines the
+amount of detail (`<detail> = 0' means less detail).  The  first  form
+(with no arguments) selects `<level> = 0, <detail> =  0'.  The  second
+form of this command makes `<detail> = 0'. This option is intended for
+gurus; the source code should be consulted  to  see  what  the  output
+means. Non-interactively, the output from `dump' is  directed  to  the
+temporary file with path `ACEData.banner'.
 
-Interactively, use `ACEDump' (see~"ACEDump").
+Interactively, use `ACEDumpVariables' (see~"ACEDumpVariables").
 
 \>`generators:=<wordList>'{Option `generators'}&
 Define the subgroup `generators'; <wordList> must be a list  of  words
@@ -2430,9 +2433,8 @@ also printed. The printout is the same as that produced at  the  start
 of a run when option `messages' (see~"Option `messages'") is non-zero.
 
 Interactively,  use  `ACEGroupGenerators'  (see~"ACEGroupGenerators"),
-`ACERelators'       (see~"ACERelators"),       `ACESubgroupGenerators'
-(see~"ACESubgroupGenerators"),           and           `ACEParameters'
-(see~"ACEParameters").
+`ACERelators'   (see~"ACERelators"),   `ACESubgroupGenerators'    (see
+"ACESubgroupGenerators"), and `ACEParameters' (see~"ACEParameters").
 
 *Notes:*
 Only use *after* an enumeration run; otherwise, the value 0  for  some
@@ -2490,6 +2492,8 @@ routine is called automatically if  the  `cycles',  `nc',  `print'  or
 `standard' options  (see~"Option  `cycles'",  "Option  `nc'",  "Option
 `print'" and "Option `standard'") are invoked.
 
+Interactively, use `ACERecover' (see~"ACERecover").
+
 \>`sc:=<val>'{Option `sc'}
 \>`stabilising:=<val>'{Option `stabilising'}&
 Print out the stabilising coset numbers of the subgroup; <val> must be
@@ -2502,24 +2506,37 @@ representatives, are printed. If `<val> \<  0',  the  first  `|<val>|'
 stabilising cosets, plus their representatives, are printed.
 
 \>`standard'{Option `standard'}&
-Compact and standardise the table. (Shortest abbreviation: `st'.)
+Compacts {\ACE}'s  coset  table  and  standardises  the  numbering  of
+cosets. (Shortest abbreviation: `st'.)
 
 For a given ordering of the generators in the columns of the table, it
-produces a canonic table. In such a table, a row-major scan encounters
-previously unseen cosets in numeric order.
+produces a canonical numbering of the cosets. This function  does  not
+display the new table; use  the  `print'  (see~"Option  `print'")  for
+that. Such a table has the property that a row-major scan (i.e.~a scan
+of the successive rows of the *body* of the table  row  by  row,  from
+left to right) encounters previously unseen cosets in numeric order.
 
 *Notes:*
-In a canonic table, the  coset  representatives  are  in  length  plus
-(column order) lexicographic order, and each is the  minimum  in  this
-order. Two tables are equivalent only if their canonic forms  are  the
-same.
+In a canonic  table,  the  coset  representatives  are  ordered  first
+according to length and then the lexicographic order  defined  by  the
+order the generators and their inverses head the columns.  Note  that,
+since {\ACE} avoids having an involutory generator in the first column
+when it can, this lexicographic order does not necessarily  correspond
+with the order in which the generators were first put to  {\ACE}.  Two
+tables are equivalent only if their canonic forms are the same.  Also,
+standardising the coset numbering within {\ACE} does *not* affect  the
+{\GAP} coset table obtained via `ACECosetTable'.
 
 *Guru Notes:*
 In  half  of  the  ten  standard  enumeration   strategies   of   Sims
 \cite{Sim94}, the table is standardised repeatedly. This is  expensive
 computationally, but can result in fewer cosets being  necessary.  The
 effect of doing this can be investigated  in  {\ACE}  by  (repeatedly)
-halting the enumeration, standardising the table, and continuing.
+halting  the  enumeration  (by  say,  imposing  timing  restrictions),
+standardising the coset numbering, and continuing.
+
+Interactively,           use            `ACEStandardiseCosetNumbering'
+(see~"ACEStandardiseCosetNumbering").
 
 \>`statistics'{Option `statistics'}
 \>`stats'{Option `stats'}&
@@ -2532,11 +2549,15 @@ option  dumps  the  statistics  accumulated  during  the  most  recent
 enumeration. See the `enum.c' source  file  for  the  meaning  of  the
 variables.
 
+Interactively, use `ACEDumpStatistics' (see~"ACEDumpStatistics").
+
 \>`style'{Option `style'}&
 Print the current enumeration style.
 
 This option prints the current enumeration style, as deduced from  the
 current `ct' and `rt' parameters (see~"Enumeration Style").
+
+Interactively, use `ACEStyle' (see~"ACEStyle").
 
 \>`system:=<string>'{Option `system'}&
 Do a shell escape, to execute <string>; <string> must be a string.
@@ -3021,7 +3042,7 @@ the current table and re-\lq{}start' the enumeration.
 \enditems
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\Section{Interactive Questions}
+\Section{Interactive Query Functions and an Option Setting Function}
 
 \beginitems
 
@@ -3142,14 +3163,12 @@ been   followed   by   an   invocation   of   one   of   `ACEContinue'
 \>ACEVersion( <i> ) F
 \>ACEVersion() F
 
-for the  <i>th  (or  default) process started by `ACEStart',
-print version details of the {\ACE} binary you are currently running,
-including what compiler flags  were set  when the
-executable  was built; essentially the information obtained is
-what is obtained via {\ACE}'s `options' option (see~"Option
-`options'").
- A  typical output,  illustrating the  default
-build, is:
+for the <i>th  (or  default)  process  started  by  `ACEStart',  print
+version details of  the  {\ACE}  binary  you  are  currently  running,
+including what compiler flags were set when the executable was  built;
+essentially the information obtained is what is obtained via  {\ACE}'s
+`options'  option  (see~"Option   `options'").   A   typical   output,
+illustrating the default build, is:
 
 \beginexample
 gap> ACEVersion();
@@ -3174,23 +3193,50 @@ no currently active interactive {\ACE} processes; and, in such a case,
 `ACEVersion();' initiates (and closes again) its own stream to  obtain
 the information from the {\ACE} binary.
 
+The next two functions of this section are really intended for  {\ACE}
+standalone gurus. To fully understand their output you  will  need  to
+consult the standalone manual and the C source code.
+
 \>ACEDumpVariables( <i> ) F
 \>ACEDumpVariables() F
+\>ACEDumpVariables( <i>, [<level>] ) F
+\>ACEDumpVariables( [<level>] ) F
+\>ACEDumpVariables( <i>, [<level>, <detail>] ) F
+\>ACEDumpVariables( [<level>, <detail>] ) F
 
-% \>`dump' := [0/1/2[,0/1]]&
-% 
-% Dumps  the internal  variables of  {\ACE}.  The  first  argument selects
-% which of  the three levels  of {\ACE} to  dump, and defaults  to Level
-% $0$.  The second argument selects the level of detail, and defaults to
-% $0$  (i.e., less  detail).  This  option  is intended  for gurus;  the
-% source code should be consulted to see what the output means.
+dump the internal variables  of  {\ACE}  of  the  <i>th  (or  default)
+process started by `ACEStart'; <level> should be one of 0,  1,  or  2,
+and <detail> should be 0 or 1.
+
+The value of <level> determines which of the three levels of {\ACE} to
+dump. (You will need to read the standalone manual to understand  what
+Levels 0, 1 and 2 are all about.) The value of <detail> determines the
+amount of detail (`<detail> = 0' means less  detail).  The  first  two
+forms of `ACEDumpVariables' (with no list argument) selects `<level> =
+0, <detail> = 0'. The third and fourth forms  (with  a  list  argument
+containing the integer <level>) makes `<detail> = 0'. This command  is
+intended for gurus; the source code should be consulted  to  see  what
+the output means.
 
 \>ACEDumpStatistics( <i> ) F
 \>ACEDumpStatistics() F
 
-If the statistics package is compiled into the code (which it is by
-default),
-then print the statistics accumulated during the most recent enumeration.
+dump {\ACE}'s internal statistics accumulated during the  most  recent
+enumeration of the <i>th (or default) process started  by  `ACEStart',
+provided the {\ACE} binary  was  built  with  the  statistics  package
+(which it is by default). Use  `ACEVersion();'  (see~"ACEVersion")  to
+check for the inclusion of the statistics package.
+
+\>ACEStyle( <i> ) F
+\>ACEStyle() F
+
+returns the current enumeration style as one of  the  strings:  `"C"',
+`"Cr"', `"CR"', `"R"', `"R*"', `"Rc"', `"R/C"', or `"R/C (defaulted)"'
+(see Section~"Enumeration Style").
+
+*TODO*
+\>ACEDisplayCosetTable( <i> ) F
+\>ACEDisplayCosetTable() F
 
 \enditems
 
@@ -3202,14 +3248,16 @@ then print the statistics accumulated during the most recent enumeration.
 \>ACECosetTable( <i> [:<options>] ) F
 \>ACECosetTable( [:<options>] ) F
 
-perform  the  same  function  as  `ACECosetTableFromGensAndRels'   and
-`ACECosetTable' on three arguments, albeit interactively, on the <i>th
-(or default) process started by `ACEStart'. If options are passed then
-an internal version of `ACEModes' is run to  determine  which  of  the
-modes (see Section~"(Other) ACE Modes")  `ACEContinue',  `ACERedo'  or
-`ACEStart' is possible; and (an internal version of) the first mode of
-these that is allowed is executed, to ensure the  resultant  table  is
-correct for the current options.
+return a coset table  as  a  {\GAP}  object,  in  standard  form  (for
+{\GAP}).   These   functions   perform   the    same    function    as
+`ACECosetTableFromGensAndRels' and `ACECosetTable' on three arguments,
+albeit interactively, on the <i>th (or  default)  process  started  by
+`ACEStart'.  If  options  are  passed  then  an  internal  version  of
+`ACEModes'  is  run   to   determine   which   of   the   modes   (see
+Section~"(Other) ACE Modes") `ACEContinue', `ACERedo' or `ACEStart' is
+possible; and (an internal version of) the first mode of these that is
+allowed is executed, to ensure the resultant table is correct for  the
+current options.
 
 \>ACEStats( <i> [:<options>] ) F
 \>ACEStats( [:<options>] ) F
@@ -3220,8 +3268,8 @@ interactively,  on  the  <i>th  (or  default)   process   started   by
 `ACEModes'  is  run   to   determine   which   of   the   modes   (see
 Section~"(Other) ACE Modes") `ACEContinue', `ACERedo' or `ACEStart' is
 possible; and (an internal version of) the first mode of these that is
-allowed is executed, to ensure the resultant table is correct for  the
-current options.
+allowed is executed, to ensure the resultant  statistics  are  correct
+for the current options.
 
 See Section~"Example of Using ACE Interactively (Using ACEStart)"  for
 an example demonstrating both these functions  within  an  interactive
@@ -3234,33 +3282,87 @@ process.
 
 \beginitems
 
-\>ACERecover( <aceobj> ) F
+\>ACERecover( <i> ) F
+\>ACERecover() F
 
-Invokes the compaction routine on the table to recover the space  used
-by the dead coset numbers. A `CO' message line is printed if any  rows
-of the coset table were recovered, and a `co' line if none were.
+invokes on the coset table, of  the  <i>th  (or  default)  interactive
+{\ACE} process  started  by  `ACEStart',  the  compaction  routine  to
+recover the space used by the dead coset numbers. A `CO' message  line
+is printed if any rows of the coset table were recovered, and  a  `co'
+line  if  none  were.  (See  Chapter~"The  Meanings  of  ACE's  output
+messages" for the meanings of these messages.)
 
-*GREG: DOES THE NEXT SENTENCE MAKE SENSE FOR THE INTERFACE?*
+The compaction routine is called automatically when any of `ACECycles'
+(see~"ACECycles"),    `ACENormalClosure'     (see~"ACENormalClosure"),
+`ACEDisplayTable'              (see~"ACEDisplayTable")              or
+`ACEStandardiseCosetNumbering' (see~"ACEStandardiseCosetNumbering") is
+invoked.
 
-This routine is  called automatically if the `cy',  `nc', `pr',or `st'
-options are involved.
+\>ACEStandardiseCosetNumbering( <i> ) F
+\>ACEStandardiseCosetNumbering() F
 
+compacts and then standardises the numbering of cosets  in  the  coset
+table of <i>th (or default)  interactive  {\ACE}  process  started  by
+`ACEStart'.  This  function  does  not  display  the  new  table;  use
+`ACEDisplayCosetTable' (see~"ACEDisplayCosetTable") for that. That is,
+for a given ordering of the generators in the columns of the table, it
+produces a canonic table.  Such  a  table  has  the  property  that  a
+row-major scan (i.e.~a scan of the successive rows of  the  *body*  of
+the table row by row, from left to right) encounters previously unseen
+cosets in numeric order.
 
-\>ACEAddGenerators( <aceobj>, <wordlist> ) F
+*Notes:*
+In a canonic  table,  the  coset  representatives  are  ordered  first
+according to length and then the lexicographic order  defined  by  the
+order the generators and their inverses head the columns.  Note  that,
+since {\ACE} avoids having an involutory generator in the first column
+when it can, this lexicographic order does not necessarily  correspond
+with the order in which the generators were first put to  {\ACE}.  Two
+tables are equivalent only if their canonic forms are the same.  Also,
+standardising the coset numbering within {\ACE} does *not* affect  the
+{\GAP} coset table obtained via `ACECosetTable'.
 
-Adds the words in the list <wordlist> to any subgroup generators already
-present.
-The enumeration must be restarted or redone, it cannot be continued.
+*Guru Notes:*
+In  half  of  the  ten  standard  enumeration   strategies   of   Sims
+\cite{Sim94}, the table is standardised repeatedly. This is  expensive
+computationally, but can result in fewer cosets being  necessary.  The
+effect of doing this can be investigated  in  {\ACE}  by  (repeatedly)
+halting  the  enumeration  (by  say,  imposing  timing  restrictions),
+standardising the coset numbering, and continuing.
 
-\>ACEAddRelators( <aceobj>, <relatorlist> ) F
+\>ACEAddRelators( <i>, <relatorlist> ) F
+\>ACEAddRelators( <relatorlist> ) F
 
-Adds the words in the list <relatorlist> to any relators already present.
-The enumeration must be restarted or redone, it cannot be continued.
+Adds the words in the  list  <relatorlist>  to  any  relators  already
+present. The enumeration must be restarted or  redone,  it  cannot  be
+continued.
 
-\>ACECosetCoincidence( <aceobj>, <int> ) F
+\>ACEAddSubgroupGenerators( <i>, <wordlist> ) F
+\>ACEAddSubgroupGenerators( <wordlist> ) F
 
-Print out the representative of coset <int>, and add it to the
-subgroup generators; i.e., equates this coset with coset 1, the
+Adds the words in the  list  <wordlist>  to  any  subgroup  generators
+already present. The enumeration  must  be  restarted  or  redone,  it
+cannot be continued.
+
+\>ACEDeleteRelators( <i>, <relatorlist> ) F
+\>ACEDeleteRelators( <relatorlist> ) F
+
+Deletes the words in the list <relatorlist> to  any  relators  already
+present. The enumeration must be restarted or  redone,  it  cannot  be
+continued.
+
+\>ACEDeleteSubgroupGenerators( <i>, <wordlist> ) F
+\>ACEDeleteSubgroupGenerators( <wordlist> ) F
+
+Deletes the words in the list <wordlist> to  any  subgroup  generators
+already present. The enumeration  must  be  restarted  or  redone,  it
+cannot be continued.
+
+\>ACECosetCoincidence( <i>, <int> ) F
+\>ACECosetCoincidence( <int> ) F
+
+Print out the representative  of  coset  <int>,  and  add  it  to  the
+subgroup generators; i.e.,  equates  this  coset  with  coset  1,  the
 subgroup.
 
 \enditems
@@ -3270,7 +3372,8 @@ subgroup.
 
 \beginitems
 
-\>ACECycles( <aceobj> ) F
+\>ACECycles( <i> ) F
+\>ACECycles() F
 
 returns a list of permutations corresponding to the generators,
 i.e., the permutation representation.
@@ -3311,28 +3414,6 @@ This function returns stabilising cosets of the subgroup.
     plus their representatives, is returned.
 \endlist
 
-
-\>ACEStandardTable( <aceobj> ) F
-
-This function compacts and then standardises the table.
-That is, for a given ordering of the generators in the columns of the
-table, it produces a canonic table.
-In such a table, a row-major scan encounters previously unseen cosets in
-numeric order.
-
-*GREG, WHAT DOES THE LAST SENTENCE MEAN???*
-
-*Notes:*
-In a canonic table, the coset representatives are in length plus (column
-order) lexicographic order, and each is the minimum in this order.
-Two tables are equivalent only if their canonic forms are the same.
-
-*Guru Notes:*
-In half of the ten standard enumeration strategies of Sims \cite{Sim94},
-the   table   is   standardised   repeatedly.    This   is   expensive
-computationally, but can result  in fewer cosets being necessary.  The
-effect of  doing this  can be investigated  in {\ACE}  by (repeatedly)
-halting the enumeration, standardising the table, and continuing.
 
 \>ACETraceWord( <aceobj>, <int>, <word> ) F
 
