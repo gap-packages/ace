@@ -29,19 +29,19 @@ of {\ACE}  options,  after  loading  the  {\ACE}  Share  Package  (see
 Section~"Loading the ACE Share Package"), by typing
 
 \beginexample
-gap> RecNames(KnownACEOptions);
 [ "aceinfile", "aceignore", "aceignoreunknown", "acenowarnings", "aceecho", 
-  "aceincomment", "aceexampleoptions", "silent", "lenlex", "incomplete", 
-  "sg", "rl", "aep", "ai", "ao", "aceoutfile", "asis", "begin", "start", 
-  "bye", "exit", "qui", "cc", "cfactor", "ct", "check", "redo", "compaction", 
-  "continue", "cycles", "dmode", "dsize", "default", "ds", "dr", "dump", 
-  "easy", "echo", "enumeration", "felsch", "ffactor", "fill", "group", 
-  "generators", "relators", "hard", "help", "hlt", "hole", "lookahead", 
-  "loop", "max", "mendelsohn", "messages", "monitor", "mode", "nc", "normal", 
-  "no", "options", "oo", "order", "path", "pmode", "psize", "sr", "print", 
-  "purec", "purer", "rc", "recover", "contiguous", "rep", "rfactor", "rt", 
-  "row", "sc", "stabilising", "sims", "standard", "statistics", "stats", 
-  "style", "subgroup", "system", "text", "time", "tw", "trace", "workspace" ]
+  "aceincomment", "aceexampleoptions", "silent", "lenlex", "semilenlex", 
+  "incomplete", "sg", "rl", "aep", "ai", "ao", "aceoutfile", "asis", "begin", 
+  "start", "bye", "exit", "qui", "cc", "cfactor", "ct", "check", "redo", 
+  "compaction", "continue", "cycles", "dmode", "dsize", "default", "ds", 
+  "dr", "dump", "easy", "echo", "enumeration", "felsch", "ffactor", "fill", 
+  "group", "generators", "relators", "hard", "help", "hlt", "hole", 
+  "lookahead", "loop", "max", "mendelsohn", "messages", "monitor", "mode", 
+  "nc", "normal", "no", "options", "oo", "order", "path", "pmode", "psize", 
+  "sr", "print", "purec", "purer", "rc", "recover", "contiguous", "rep", 
+  "rfactor", "rt", "row", "sc", "stabilising", "sims", "standard", 
+  "statistics", "stats", "style", "subgroup", "system", "text", "time", "tw", 
+  "trace", "workspace" ]
 \endexample
 
 (See Section~"The KnownACEOptions Record".) Also, from within a {\GAP}
@@ -492,7 +492,8 @@ returned.  This  option  is  included  to  make   the   behaviour   of
 also set, it overrides option `silent'.
 
 \>`lenlex'{option lenlex}@{option `lenlex'}& 
-Standardises coset numbering according to the `lenlex' scheme.
+Ensures that `ACECosetTable' and `ACECosetTableFromGensAndRels' output
+a coset table that is `lenlex' standardised.
 
 The  `lenlex'  scheme,  numbers  cosets  in  such  a  way  that  their
 \lq{}preferred' (coset) representatives, in an alphabet consisting  of
@@ -505,11 +506,35 @@ inverses of these generators by the corresponding  uppercase  letters:
 `[X, Y, A, B]', then  the  `lexical'  ordering  of  `lenlex'  is  that
 derived from defining `x \< X \< y \< Y \< a \< A \< b \< B'.
 
+*Notes:*
+In  some  circumstances,  {\ACE}  prefers  to  swap  the   first   two
+generators;   such   cases    are    detected    by    the    function
+`IsACEGeneratorsInPreferredOrder'                                 (see
+"IsACEGeneratorsInPreferredOrder"). In such cases, special  action  is
+taken to avoid {\ACE} swapping the first two generators;  this  action
+is   described   in   the   notes   for    `ACEStandardCosetNumbering'
+(see~"ACEStandardCosetNumbering").  When  this   special   action   is
+invoked, a side-effect is that any setting of the `asis'  (see~"option
+asis") option by the user is ignored.
+
+The  `lenlex'  standardisation  scheme  is  the  default  coset  table
+standardisation scheme of {\GAP}~4.3. However,  `semilenlex'  was  the
+standardisation scheme for versions of {\GAP} up to  {\GAP}~4.2.  Both
+schemes   are   described   in   detail   in   Section~"Coset    Table
+Standardisation Schemes".
+
+\>`semilenlex'{option semilenlex}@{option `semilenlex'}& 
+Ensures that `ACECosetTable' and `ACECosetTableFromGensAndRels' output
+a coset table that is `semilenlex' standardised.
+
+The `semilenlex' scheme, numbers cosets  in  such  a  way  that  their
+\lq{}preferred' (coset) representatives, in an alphabet consisting  of
+only the user-submitted generators, are  ordered  first  according  to
+`length' and then according to a `lexical' ordering.
+
 *Note:*
-{\GAP}'s standardisation scheme is similar to `lenlex', but  does  not
-use  generator   inverses.   For   a   longer   discussion   of   both
-standardisation  schemes  see  Section~"Coset  Table   Standardisation
-Schemes".
+Up to {\GAP}~4.2, `semilenlex' was the default standardisation  scheme
+used by {\GAP} (see also~"option lenlex").
 
 \>`incomplete'{option incomplete}@{option `incomplete'}& 
 Allows the return  of  an  `incomplete'  coset  table,  when  a  coset
@@ -1193,9 +1218,9 @@ and this is how it is identified in the \lq{}Run Parameters' block  of
 the {\ACE} output when `messages' has a non-zero  value.  The  default
 `Group Name' is `"G"'.
 
-\>`subgroup:=<string>'{option subgroup}@{option `subgroup'}& Sets the `Subgroup Name' to
-<string>; <string>, must of course be a string.
-(Shortest abbreviation: `subg'.) 
+\>`subgroup:=<string>'{option subgroup}@{option `subgroup'}& 
+Sets the `Subgroup Name' to <string>; <string> must  of  course  be  a
+string. (Shortest abbreviation: `subg'.)
 
 The default `Subgroup Name' is `"H"'.
 

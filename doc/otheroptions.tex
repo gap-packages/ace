@@ -166,27 +166,29 @@ Interactively,            use            `ACERandomEquivPresentations'
 
 \beginitems
 
-\>`generators:=<wordList>'{option generators}@{option `generators'}&
-Defines the subgroup `generators'; <wordList> must be a list of  words
-in the group generators. (Shortest abbreviation: `gen'.)
+\>`group:=<grpgens>'{option group}@{option `group'}&
+Defines the `group' generators; <grpgens> should be an  integer  (that
+is the number of generators) or a string that is the concatenation of,
+or a list of, single-lowercase-letter group generator  names,  i.e.~it
+should be in a form suitable  for  the  {\ACE}  binary  to  interpret.
+(Shortest abbreviation: `gr'.)
 
-There should *never* be a need to use this command, even when creating
-a standalone input file. The subgroup generators should  be  input  as
-one of the arguments of an  {\ACE}  interface  function.  By  default,
-there are no subgroup generators and the  subgroup  is  trivial.  This
-command allows a list of subgroup generating words to be entered.
+The group generators should normally be input as one of the  arguments
+of an {\ACE} interface function, though this option may be useful when
+`ACEStart' (see~"ACEStart") is called with the single argument 0. This
+option may also be useful for re-using an interactive  process  for  a
+new enumeration, rather than using `ACEQuit' to kill the  process  and
+`ACEStart' to initiate a new process.  If  the  generators  each  have
+names that as strings are single lowercase letters, those same strings
+are used to represent the same generators by {\ACE}; otherwise, {\ACE}
+will represent each generator by  an  integer,  numbered  sequentially
+from 1.
 
-\>`group:=<list>'{option group}@{option `group'}&
-Defines the `group' generators; <list> must be a list of {\GAP}  group
-generators. (Shortest abbreviation: `gr'.)
-
-There should *never* be a need to use this command, even when creating
-a standalone input file. The group generators should be input  as  one
-of the arguments of an {\ACE} interface function.  If  the  generators
-each have names that as strings are single  lowercase  letters,  those
-same strings are used to represent  the  same  generators  by  {\ACE};
-otherwise,  {\ACE}  will  represent  each  generator  by  an  integer,
-numbered sequentially from 1.
+To convert a {\GAP} list <fgens> of free group generators into a  form
+suitable   for   the   `group'   option,   use    the    construction:
+`ToACEGroupGenerators(<fgens>)'  (see~"ToACEGroupGenerators").  It  is
+*strongly recommended* that users  of  the  `group'  option  use  this
+construction.
 
 *Notes:*
 Any use of the  `group'  command  which  actually  defines  generators
@@ -204,32 +206,64 @@ involutions. The ordering of the columns can, in  some  cases,  affect
 the definition sequence of cosets and  impact  the  statistics  of  an
 enumeration.
 
-\>`relators:=<wordList>'{option relators}@{option `relators'}&
-Defines the group `relators'; <wordList> must be a list  of  words  in
-the group generators. (Shortest abbreviation: `rel'.)
+\>`relators:=<relators>'{option relators}@{option `relators'}&
+Defines the group `relators'; <relators> must be a string or  list  of
+strings that the {\ACE} binary can interpret as  words  in  the  group
+generators. (Shortest abbreviation: `rel'.)
 
-There should *never* be a need to use this command, even when creating
-a standalone input file. The group relators should be input as one  of
-the arguments of an {\ACE} interface function.  If  <wordList>  is  an
-empty list, the group is free.
+The group relators should normally be input as one of the arguments of
+an {\ACE} interface function, but  this  option  may  occasionally  be
+useful with interactive processes (see~"option group"). If  <wordList>
+is an empty list, the group is free.
 
-\>`sg:=<wordList>'{option sg}@{option `sg'}&
-Adds the words in <wordList> to any  `s'ubgroup  `g'enerators  already
-present; <wordList> must be a list of words in the group generators.
+To convert a  {\GAP}  list  <rels>  of  relators  in  the  free  group
+generators <fgens> into a form suitable for the `relators' option, use
+the construction: `ToACEWords(<fgens>, <rels>)' (see~"ToACEWords").
+
+\>`generators:=<subgens>'{option  generators}@{option `generators'}&
+Defines the subgroup `generators'; <subgens> must be a string or  list
+of strings that the {\ACE} binary can interpret as words in the  group
+generators. (Shortest abbreviation: `gen'.)
+
+The subgroup generators  should  normally  be  input  as  one  of  the
+arguments of  an  {\ACE}  interface  function,  but  this  option  may
+occasionally  be  useful  with  interactive   processes   (see~"option
+group"). By default, there are no subgroup generators and the subgroup
+is trivial. This command allows a list of subgroup generating words to
+be entered.
+
+To convert a {\GAP} list <sgens> of subgroup generators  in  the  free
+group generators <fgens> into a form  suitable  for  the  `generators'
+option,   use   the   construction:   `ToACEWords(<fgens>,   <sgens>)'
+(see~"ToACEWords").
+
+\>`sg:=<subgens>'{option sg}@{option `sg'}&
+Adds the words in <subgens> to  any  `s'ubgroup  `g'enerators  already
+present; <subgens> must be a string or list of strings that the {\ACE}
+binary can interpret as words in the group generators.
 
 The enumeration must  be  (re)`start'ed  or  `redo'ne,  it  cannot  be
 `continue'd.
+
+To convert a {\GAP} list <sgens> of subgroup generators  in  the  free
+group generators <fgens> into a form  suitable  for  the  `generators'
+option,   use   the   construction:   `ToACEWords(<fgens>,   <sgens>)'
+(see~"ToACEWords").
 
 Interactively,             use              `ACEAddSubgroupGenerators'
 (see~"ACEAddSubgroupGenerators").
 
-\>`rl:=<wordList>'{option rl}@{option `rl'}&
-Appends the `r'elator  `l'ist  <wordList>  to  the  existing  list  of
-relators present; <wordList> must be a list  of  words  in  the  group
-generators.
+\>`rl:=<relators>'{option rl}@{option `rl'}&
+Appends the `r'elator  `l'ist  <relators>  to  the  existing  list  of
+relators present; <relators> must be a string or list of strings  that
+the {\ACE} binary can interpret as words in the group generators.
 
 The enumeration must  be  (re)`start'ed  or  `redo'ne,  it  cannot  be
 `continue'd.
+
+To convert a  {\GAP}  list  <rels>  of  relators  in  the  free  group
+generators <fgens> into a form suitable for the `rl' option,  use  the
+construction: `ToACEWords(<fgens>, <rels>)' (see~"ToACEWords").
 
 Interactively, use `ACEAddRelators' (see~"ACEAddRelators").
 
@@ -626,18 +660,18 @@ the *body* of the table row by row, from  left  to  right,  encounters
 previously unseen cosets in numeric order.
 
 *Notes:*
-In a  `lenlex'  standardised  table,  the  coset  representatives  are
-ordered first according to length and  then  the  lexicographic  order
-defined by the order  the  generators  and  their  inverses  head  the
-columns. Note that, since {\ACE} avoids having an involutory generator
-in the first column when it can, this  lexicographic  order  does  not
-necessarily correspond with the order in  which  the  generators  were
-first put to {\ACE}. Two tables are equivalent only if  their  canonic
-forms are the same. Invoking this option directly  does  *not*  affect
-the {\GAP} coset table obtained via `ACECosetTable'; use the  `lenlex'
-(see~"option  lenlex")  option,  if  you  want  your  table   `lenlex'
-standardised. (The `lenlex' option restarts the enumeration, if it  is
-necessary to ensure the generators have not been rearranged.)
+In a `lenlex' standard table, the coset  representatives  are  ordered
+first according to length and then the lexicographic order defined  by
+the order the generators and their inverses  head  the  columns.  Note
+that, since {\ACE} avoids having an involutory generator in the  first
+column when it can, this  lexicographic  order  does  not  necessarily
+correspond with the order in which the generators were  first  put  to
+{\ACE}. Two tables are equivalent only if their canonic forms are  the
+same. Invoking this option directly does *not* affect the {\GAP} coset
+table obtained via  `ACECosetTable';  use  the  `lenlex'  (see~"option
+lenlex") option, if you want your table  `lenlex'  standardised.  (The
+`lenlex' option restarts the enumeration, if it is necessary to ensure
+the generators have not been rearranged.)
 
 *Guru Notes:*
 In  five  of  the  ten  standard  enumeration   strategies   of   Sims

@@ -19,15 +19,16 @@ setting   the   `InfoLevel'   of   `InfoACE'    to    at    least    3
 (see~"SetInfoACELevel"),  particularly  if  she  uses  the  `messages'
 option with a non-zero value.
 
-All functions that manipulate an interactive process  (that  has  been
-initiated by `ACEStart', with three arguments), have a form where  the
-first  argument  is  the  integer  <i>  returned  by  the   initiating
-`ACEStart' command, and a second form with one fewer arguments  (where
-the integer <i> is  discovered  by  a  default  mechanism,  namely  by
-determining the least integer <i>  for  which  there  is  a  currently
-active interactive {\ACE} process). In each case, it is an  error,  if
-<i> is not the index of an active interactive process, or there are no
-current active interactive processes.
+All functions that manipulate an interactive {\ACE} process (that  has
+been initiated by one of the 3 forms of `ACEStart'  that  initiate  an
+interactive {\ACE} process), have a form where the first  argument  is
+the integer <i> returned by the initiating `ACEStart' command,  and  a
+second form with  one  fewer  arguments  (where  the  integer  <i>  is
+discovered by a default mechanism, namely  by  determining  the  least
+integer <i> for which there is a currently active  interactive  {\ACE}
+process). In each case, it is an error, if <i> is not the index of  an
+active interactive process, or there are no current active interactive
+processes.
 
 *Notes*: 
 
@@ -52,38 +53,56 @@ kill' if these hints are unhelpful).
 
 \beginitems
 
-\>ACEStart( 0 ) F
 \>ACEStart( <fgens>, <rels>, <sgens> [:<options>] ) F
 \>ACEStart( <i> [:<options>] ) F
 \>ACEStart( [:<options>] ) F
+\>ACEStart( <i>, <fgens>, <rels>, <sgens> [:<options>] ) F
+\>ACEStart( 0 [:<options>] ) F
+\>ACEStart( 0, <fgens>, <rels>, <sgens> [:<options>] ) F
+\>ACEStart( 0, <i> [:<options>] ) F
+\>ACEStart( 0, <i>, <fgens>, <rels>, <sgens> [:<options>] ) F
 \label{ACEStartDetails}
 
-The first form of `ACEStart' (on the  one  argument:  0)  is  used  to
-initiate an interactive {\ACE} process, but does  nothing  more.  This
-form is mainly for gurus who are familiar with the  {\ACE}  standalone
-and who wish, at least initially, to communicate with {\ACE} using the
-primitive  read/write  tools  of  Section~"Primitive  ACE   Read/Write
-Functions". In this case, after the group  generators,  relators,  and
-subgroup generators have been set in the {\ACE}  process,  invocations
-of    any    of    `ACEGroupGenerators'    (see~"ACEGroupGenerators"),
-`ACERelators'       (see~"ACERelators"),       `ACESubgroupGenerators'
-(see~"ACESubgroupGenerators"),           or            `ACEParameters'
-(see~"ACEParameters") will establish the corresponding {\GAP}  values.
-Be warned, though, that unless one of the modes `ACEStart' (without  a
-zero   argument),   `ACERedo'   (see~"ACERedo")    or    `ACEContinue'
-(see~"ACEContinue"), or their equivalent  for  the  standalone  {\ACE}
-(`start;', `redo;', or `continue;'), has been invoked since  the  last
-change of any parameter options (see Section~"ACE Parameter Options"),
-some  of  the  values  reported  by  `ACEParameters'   may   well   be
-*incorrect*.
+The variables are: <i>, a  positive  integer  numbering  from  1  that
+represents (indexes) an already running  interactive  {\ACE}  process;
+<fgens>, a list of free generators; <rels>, a list  of  words  in  the
+generators <fgens> giving relators for a finitely presented group; and
+<sgens>, a list of subgroup generators, again expressed  as  words  in
+the free generators <fgens>. Each of <fgens>, <rels> and  <sgens>  are
+given in the standard {\GAP} format for finitely presented groups (See
+Chapter~"ref:Finitely  Presented  Groups"  of  the  {\GAP}   Reference
+Manual).
 
-The second form of `ACEStart' (on three arguments) is used to start an
-interactive process; here <fgens> is a list of free generators, <rels>
-a list of words in these generators giving  relators  for  a  finitely
-presented group, and <sgens> the list of  subgroup  generators,  again
-expressed as words in the free generators. All these are given in  the
-standard {\GAP} format (See Chapter~"ref:Finitely Presented Groups" of
-the {\GAP} Reference Manual).
+All forms of `ACEStart' accept options described in  Chapters~"Options
+for ACE" and~"Strategy  Options  for  ACE",  and  Appendix~"Other  ACE
+Options", which are listed behind  a  colon  in  the  usual  way  (see
+"ref:Function Calls" in the {\GAP} Reference Manual).  The  reader  is
+strongly   encouraged   to   read   the   introductory   sections   of
+Chapter~"Options  for  ACE",  with  regard  to  options.  The   global
+mechanism (via `PushOptions') of passing options is *not*  recommended
+for use with the interactive {\ACE} interface functions; please ensure
+the `OptionsStack' is  empty  before  calling  an  interactive  {\ACE}
+interface function. 
+
+The  return  value  (for  all  forms  of  `ACEStart')  is  an  integer
+(numbering from  1)  which  represents  the  running  process.  It  is
+possible to have more than one interactive process  running  at  once.
+The integer returned may be used to index which of these processes  an
+interactive {\ACE} interface function should be applied to.
+
+The first four forms  of  `ACEStart'  insert  a  `start'  (see~"option
+start") directive after the user's options to invoke  an  enumeration.
+The last four forms, with `0' as  first  argument,  do  not  insert  a
+`start' directive. Moreover, the last 3 forms of `ACEStart', with  `0'
+as  first  argument  only  differ  from  the  corresponding  forms  of
+`ACEStart' without the `0' argument, in that  they  do  not  insert  a
+`start' directive. `ACEStart(0)',  however,  is  special;  unlike  the
+no-argument form of `ACEStart' it invokes  a  new  interactive  {\ACE}
+process. We will now further describe each form of `ACEStart', in  the
+order they appear above.
+
+The first form of `ACEStart' (on three arguments) is the usual way  to
+start an interactive {\ACE} process.
 
 When `ACEStart' is called with one positive integer  argument  <i>  it
 starts a new enumeration on the <i>th running process, i.e.~it  scrubs
@@ -102,23 +121,52 @@ applies `ACEStart(<i>)'. (Most users will  only  run  one  interactive
 process at a time. Hence, `ACEStart()' will be a useful  shortcut  for
 `ACEStart(1)'.)
 
-If you intend to use options these are  listed  behind  a  colon;  any
-selection  of  the  options   available   for   the   interface   (see
-Chapters~"Options for ACE" and~"Strategy  Options  for  ACE")  can  be
-given,  separated  by  commas  like  record  components.   Note   that
-strategies are simply  special  options  that  set  a  number  of  the
-options, detailed in Chapter~"Options  for  ACE",  all  at  once.  The
-reader is strongly encouraged to read  the  introductory  sections  of
-Chapter~"Options for ACE". The global mechanism (via `PushOptions') of
-passing options is *not* recommended  for  use  with  the  interactive
-{\ACE} interface functions; please ensure the `OptionsStack' is  empty
-before calling an interactive {\ACE} interface function.
+The fourth form of `ACEStart' on four arguments, invokes a new enumeration
+on the <i>th running process, with new generators <fgens>, relators <rels>
+and subgroup generators <sgens>. This is provided so a user can re-use an
+already running process, rather than start a new process. (This may be
+useful when pseudo-ttys are a scarce resource.)
 
-The return value (for all four forms  of  `ACEStart')  is  an  integer
-(numbering from  1)  which  represents  the  running  process.  It  is
-possible to have more than one interactive process  running  at  once.
-The integer returned may be used to index which of these processes  an
-interactive {\ACE} interface function should be applied to.
+The fifth form of `ACEStart' (on the one argument: `0')  initiates  an
+interactive {\ACE} process, processes any user options, but  does  not
+insert a `start' (see~"option start") directive. This form  is  mainly
+for gurus who are familiar with the {\ACE} standalone and who wish, at
+least initially,  to  communicate  with  {\ACE}  using  the  primitive
+read/write tools of Section~"Primitive ACE Read/Write  Functions".  In
+this  case,  after  the  group  generators,  relators,  and   subgroup
+generators have been set in the {\ACE} process, invocations of any  of
+`ACEGroupGenerators'     (see~"ACEGroupGenerators"),     `ACERelators'
+(see~"ACERelators"),                           `ACESubgroupGenerators'
+(see~"ACESubgroupGenerators"),           or            `ACEParameters'
+(see~"ACEParameters") will establish the corresponding {\GAP}  values.
+Be warned, though, that unless one of the modes `ACEStart' (without  a
+zero   argument),   `ACERedo'   (see~"ACERedo")    or    `ACEContinue'
+(see~"ACEContinue"), or one of the mode options: `start'  (see~"option
+start"),  `redo'  (see~"option  redo")  or   `continue'   (see~"option
+continue"), has been invoked since the last change  of  any  parameter
+options (see Section~"ACE Parameter  Options"),  some  of  the  values
+reported by `ACEParameters' may well be *incorrect*.
+
+The sixth form of `ACEStart' (on four arguments), is  like  the  first
+form of `ACEStart' (on three  arguments),  except  that  it  does  not
+insert a `start'  (see~"option  start")  directive.  It  initiates  an
+interactive {\ACE} process, with a presentation defined by its last  3
+arguments.
+
+The seventh form of `ACEStart' (on two arguments), is like the  second
+form of `ACEStart' (on one argument), except that it does not insert a
+`start' (see~"option start") directive. It processes any  new  options
+for  the  <i>th  interactive  {\ACE}  process.  `ACEStart(0,  <i>   [:
+<options> ] )', is similar to `SetACEOptions(<i>  [:  <options>  ]  )'
+(see~"SetACEOptions"), but unlike the latter does not invoke a general
+mode (see Section~"General and Experimentation ACE Modes").
+
+The last form of `ACEStart' (on five arguments), is  like  the  fourth
+form of `ACEStart' (on four arguments), except that it does not insert
+a `start' (see~"option  start")  directive.  It  re-uses  an  existing
+interactive {\ACE} process, with a new presentation. There is no  form
+of `ACEStart' with the same functionality as this form, where the  <i>
+argument is omitted.
 
 \>ACEQuit( <i> ) F
 \>ACEQuit() F
@@ -214,7 +262,6 @@ line <line>  for  which  `<IsMyLine>(  <Modify>(<line>)  )'  is  true.
 read.
 
 *Notes:* 
-
 When provided by the user, <Modify> should be a function that  accepts
 a single string argument.
 
@@ -333,6 +380,22 @@ updated.
 Section~"General and Experimentation ACE Modes"). This leaves the user
 free to use `SetACEOptions' (which does  invoke  an  {\ACE}  mode)  to
 further modify options afterwards.
+
+\>ToACEGroupGenerators( <fgens> ) F
+
+This function produces, from a  {\GAP}  list  <fgens>  of  free  group
+generators, the  {\ACE}  directive  string  required  by  the  `group'
+(see~"option group") option. (The `group' option may be used to define
+the equivalent of <fgens> in an {\ACE} process.)
+
+\>ToACEWords( <fgens>, <words> ) F
+
+This function produces, from a  {\GAP}  list  <words>  in  free  group
+generators <fgens>, a string  that  represents  those  <words>  as  an
+{\ACE} list of words. `ToACEWords' may be  used  to  provide  suitable
+values   for   the   options   `relators'   (see~"option   relators"),
+`generators' (see~"option generators"), `sg'  (see~"option  sg"),  and
+`rl' (see~"option rl").
 
 \enditems
 
@@ -651,6 +714,32 @@ establishes `ACEData.io[<i>].args.sgens', if  necessary,  and  returns
 `ACEData.io[<i>].args.sgens'.  As  a  side-effect,  if  any   of   the
 remaining       fields       of       `ACEData.io[<i>].args'        or
 `ACEData.io[<i>].acegens' are unset, they are also set.
+
+\>DisplayACEArgs( <i> ) F
+\>DisplayACEArgs() F
+
+display the arguments (i.e.~<fgens>, <rels> and <sgens>) of the  <i>th
+(or   default)   process   started    by    `ACEStart'.    In    fact,
+`DisplayACEArgs(<i>)'   is    just    a    pretty-printer    of    the
+`ACEData.io[<i>].args' record. Use `GetACEArgs'  (see~"GetACEOptions")
+in          assignments.          Unlike          `ACEGroupGenerators'
+(see~"ACEGroupGenerators"),  `ACERelators'   (see~"ACERelators")   and
+`ACESubgroupGenerators'                 (see~"ACESubgroupGenerators"),
+`DisplayACEArgs' does not have the side-effect of setting any  of  the
+fields of `ACEData.io[<i>].args' if they are unset.
+
+\>GetACEArgs( <i> ) F
+\>GetACEArgs() F
+
+return a record of the current  arguments  (i.e.~<fgens>,  <rels>  and
+<sgens>) of the <i>th (or default) process started by  `ACEStart'.  In
+fact, `GetACEOptions(<i>)' simply returns  the  `ACEData.io[<i>].args'
+record,  or  an  empty  record  if  that  record  is  unbound.  Unlike
+`ACEGroupGenerators'     (see~"ACEGroupGenerators"),     `ACERelators'
+(see~"ACERelators")            and             `ACESubgroupGenerators'
+(see~"ACESubgroupGenerators"),  `GetACEOptions'  does  not  have   the
+side-effect of setting any of the fields of `ACEData.io[<i>].args'  if
+they are unset.
 
 \>DisplayACEOptions( <i> ) F
 \>DisplayACEOptions() F

@@ -328,8 +328,8 @@ by  deleting  subgroup  generators  via  `ACEDeleteSubgroupGenerators'
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{Coset Table Standardisation Schemes}
 
-A standardisation scheme that will soon become the one used in  {\GAP}
-and  is  the  standardisation   scheme   used   in   {\ACE}   is   the
+The   default   standardisation   scheme   of   {\GAP}~4.3   and   the
+standardisation    scheme    provided     by     {\ACE}     is     the
 `lenlex'{\undoquotes\atindex{lenlex standardisation scheme} {@`lenlex'
 standardisation scheme}} scheme, of Charles  Sims~\cite{Sims94}.  This
 scheme  numbers  cosets  first  according  to  word-length  and   then
@@ -339,7 +339,7 @@ user-supplied generators and their inverses, and the lexical  ordering
 of `lenlex' is that implied by ordering that  alphabet  so  that  each
 generator is followed by its inverse, and  the  generators  appear  in
 user-supplied order. As an example, the first 20 lines of the `lenlex'
-standardised coset table of the  (infinite)  group  with  presentation
+standard  coset  table  of  the  (infinite)  group  with  presentation
 $\langle x, y, a, b \mid x^2, y^3, a^4, b^2\rangle$ is as follows:
 
 \begintt
@@ -373,31 +373,36 @@ etc.), and the lexical ordering of the representatives is that implied
 by defining an ordering of the alphabet  of  user-supplied  generators
 and  their  inverses  to  be  $x\<X\<y\<Y\<a\<A\<b\<B$.  
 
-A `lenlex'-standardised  coset  table  whose  columns  correspond,  in
-order, to the already-described  alphabet,  of  generators  and  their
-inverses, has an important property: a scan of the body of  the  table
-row by row from left to right, encounters new coset numbers in numeric
-order. Observe that the table above has this property: the  definition
-of coset 1 is implicit; the first coset number  we  encounter  in  the
-table body is 2, then 2 again, 3, 4, 5, 6, 7, then 7 again, etc.
+A `lenlex' standard coset table whose columns correspond, in order, to
+the already-described alphabet, of generators and their inverses,  has
+an important property: a scan of the body of the table row by row from
+left to right, encounters new coset numbers in numeric order.  Observe
+that the table above has this property: the definition of coset  1  is
+implicit; the first coset number we encounter in the table body is  2,
+then 2 again, 3, 4, 5, 6, 7, then 7 again, etc.
 
 With the `lenlex' option (see~"option lenlex"), the coset table output
 by `ACECosetTable' or `ACECosetTableFromGensAndRels'  is  standardised
 according to the `lenlex' scheme.
 
-Another  standardisation  scheme  for  coset  tables  (currently   the
-standard one used  in  {\GAP}),  numbers  cosets  according  to  coset
-representative  word-length  in  the  group  generators  and   lexical
-ordering imposed by the user-supplied ordering of the group generators
-(i.e.~ it is like `lenlex' but generator  inverses  do  not  feature).
-This scheme ensures that as one scans the columns corresponding to the
-group generators (in user-supplied order) row by row,  one  encounters
-new coset numbers in numeric order. As an example, consider again  the
-(infinite) group with presentation $\langle x, y, a, b \mid x^2,  y^3,
-a^4,  b^2\rangle$.  According  to  this   scheme   the   coset   table
-corresponding  to  the  aforementioned  presentation   (with   columns
-corresponding to  inverse  generators,  which  play  no  part  in  the
-numbering scheme, omitted) would begin as follows:
+Another standardisation scheme for coset tables (the default scheme of
+versions of {\GAP} up to  {\GAP}~4.2),  numbers  cosets  according  to
+coset representative word-length in the group generators  and  lexical
+ordering  imposed  by  the  user-supplied  ordering   of   the   group
+generators; it is known as `semilenlex'{\undoquotes\atindex{semilenlex
+standardisation scheme} {@`semilenlex' standardisation scheme}}  since
+though like `lenlex', generator inverses do  not  feature.  (The  term
+`semilenlex'   was   coined   by   Edmund   Robertson   and    Joachim
+Neub{\accent127u}ser, for the  scheme's  applicability  to  semigroups
+where generator inverses need not exist.) This scheme ensures that  as
+one scans the  columns  corresponding  to  the  group  generators  (in
+user-supplied order) row by row, one encounters new coset  numbers  in
+numeric order. As an example, consider again the (infinite) group with
+presentation $\langle x, y, a, b  \mid  x^2,  y^3,  a^4,  b^2\rangle$.
+According  to  this  scheme  the  coset  table  corresponding  to  the
+aforementioned presentation (with  columns  corresponding  to  inverse
+generators, which play no part in the numbering scheme, omitted) would
+begin as follows:
 
 \begintt
  coset no. ||      x      y      a      b    rep've
@@ -431,10 +436,6 @@ the ordering). Also observe that as one scans the body  of  the  table
 row by row from left to right new  coset  numbers  appear  in  numeric
 order without gaps (2, 3, 4,  5,  then  1  which  we  have  implicitly
 already seen, 6, 7, etc.).
-
-In the next version of {\GAP}, it is expected that the `lenlex' scheme
-will be adopted as the standard  {\GAP}  coset  table  standardisation
-scheme.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{Coset Statistics Terminology}
