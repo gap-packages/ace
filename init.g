@@ -1,6 +1,6 @@
 #############################################################################
 ##
-#W  init.g                ACE Share Package                  Alexander Hulpke
+#W  init.g                   ACE Package                     Alexander Hulpke
 #W                                                                Greg Gamble
 ##
 #H  @(#)$Id$

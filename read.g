@@ -1,6 +1,6 @@
 #############################################################################
 ##
-#W  read.g                  ACE Share Package                     Greg Gamble
+#W  read.g                     ACE Package                        Greg Gamble
 ##
 ##    
 #H  @(#)$Id$

@@ -1,7 +1,7 @@
 #############################################################################
 ####
 ##
-#W  compat4r2.gi            ACE Share Package                     Greg Gamble
+#W  compat4r2.gi               ACE Package                        Greg Gamble
 ##
 ##  This file declares and installs functions not in GAP 4.2, unless  already
 ##  provided, for backward compatibility.

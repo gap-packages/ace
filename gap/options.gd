@@ -1,7 +1,7 @@
 #############################################################################
 ####
 ##
-#W  options.gd              ACE Share Package                     Greg Gamble
+#W  options.gd                 ACE Package                        Greg Gamble
 ##
 ##  This file declares functions and records for manipulating ACE options.
 ##    

@@ -1,7 +1,7 @@
 #############################################################################
 ####
 ##
-#W  streams.gi              ACE Share Package                     Greg Gamble
+#W  streams.gi                 ACE Package                        Greg Gamble
 ##
 ##  This file installs non-user functions used in interactions with streams.
 ##    

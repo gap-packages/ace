@@ -1,7 +1,7 @@
 #############################################################################
 ####
 ##
-#W  ace.g                   ACE Share Package                Alexander Hulpke
+#W  ace.g                      ACE Package                   Alexander Hulpke
 #W                                                                Greg Gamble
 ##
 ##  `Head' file for the GAP interface to the ACE (Advanced Coset Enumerator),
@@ -21,7 +21,7 @@ Revision.ace_g :=
 #############################################################################
 ####
 ##
-#V  ACEData . . . . record used by various functions of the ACE share package
+#V  ACEData . . . . . . . record used by various functions of the ACE package
 ##
 ##  The fields of ACEData are:
 ##
@@ -33,7 +33,7 @@ Revision.ace_g :=
 ##    "version" . . the version of the current ACE binary
 ##
 DeclareGlobalVariable( "ACEData",
-  "A record containing various data associated with the ACE share package."
+  "A record containing various data associated with the ACE package."
   );
 InstallValue( ACEData,
   rec( binary := Filename(DirectoriesPackagePrograms("ace"), "ace"),
@@ -64,7 +64,7 @@ SetInfoLevel(InfoACE, 1);
 ##
 if not QUIET and BANNER then
 
-Info(InfoWarning,1,"  The ACE (Advanced Coset Enumerator) share package");
+Info(InfoWarning,1,"    The ACE (Advanced Coset Enumerator) Package");
 Info(InfoWarning,1,"  C code by George Havas <havas@csee.uq.edu.au> and");
 Info(InfoWarning,1,"            Colin Ramsay <cram@csee.uq.edu.au>");
 Info(InfoWarning,1,"                 ACE binary version: ", ACEData.version);

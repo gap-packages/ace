@@ -1,7 +1,7 @@
 #############################################################################
 ####
 ##
-#W  compat4r2.gd            ACE Share Package                     Greg Gamble
+#W  compat4r2.gd               ACE Package                        Greg Gamble
 ##
 ##  This file declares functions not in GAP 4.2, unless already provided, for
 ##  backward compatibility.

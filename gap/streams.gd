@@ -1,7 +1,7 @@
 #############################################################################
 ####
 ##
-#W  streams.gd              ACE Share Package                     Greg Gamble
+#W  streams.gd                 ACE Package                        Greg Gamble
 ##
 ##  This file declares non-user functions used in interactions with streams.
 ##    

@@ -1,7 +1,7 @@
 #############################################################################
 ####
 ##
-#W  options.gi              ACE Share Package                     Greg Gamble
+#W  options.gi                 ACE Package                        Greg Gamble
 ##
 ##  This file installs functions and records for manipulating ACE options.
 ##    

@@ -1,6 +1,6 @@
 #############################################################################
 ##
-#W  interact.gd             ACE Share Package                     Greg Gamble
+#W  interact.gd                ACE Package                        Greg Gamble
 ##
 ##  This file  declares  commands for using ACE interactively via IO Streams.
 ##    

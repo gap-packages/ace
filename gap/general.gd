@@ -1,7 +1,7 @@
 #############################################################################
 ####
 ##
-#W  general.gd              ACE Share Package                     Greg Gamble
+#W  general.gd                 ACE Package                        Greg Gamble
 ##
 ##  This file declares mainly non-interactive ACE variables and functions.
 ##    
