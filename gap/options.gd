@@ -82,12 +82,8 @@ DeclareGlobalFunction("ACE_VALUE_ECHO");
 DeclareGlobalFunction("ACE_WORDS");
 DeclareGlobalFunction("PROCESS_ACE_OPTIONS");
 DeclareGlobalFunction("ACEOptionData");
-DeclareGlobalFunction("CURRENT_ACE_OPTIONS");
-DeclareGlobalFunction("CurrentACEOptions");
+DeclareGlobalFunction("DISPLAY_ACE_OPTIONS");
 DeclareGlobalFunction("SANITISE_ACE_OPTIONS");
-DeclareGlobalFunction("SET_ACE_OPTIONS");
-DeclareGlobalFunction("INTERACT_SET_ACE_OPTIONS");
-DeclareGlobalFunction("SetACEOptions");
 DeclareGlobalFunction("FlushOptionsStack");
 
 #E  options.gd  . . . . . . . . . . . . . . . . . . . . . . . . . . ends here 

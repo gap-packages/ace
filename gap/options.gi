@@ -115,7 +115,7 @@ InstallValue(KnownACEOptions, rec(
   hard := [2, [""]],
   help := [1, [""]],
   hlt  := [3, [""]],
-  hole := [4, [-1..100]],
+  hole := [2, [-1..100]],
   lookahead := [4, [0..4]],
   loop := [4, x -> x = 0 or IsPosInt(x)],
   max  := [3, x -> x = 0 or (IsInt(x) and x >= 2)],
@@ -731,34 +731,24 @@ end);
 #############################################################################
 ####
 ##
-#F  CURRENT_ACE_OPTIONS . . . . . . . . . . . . . . . . .  Internal procedure
-##  . . . . . . . . . . . . . . . . . . . . . . . Called by CurrentACEOptions
+#F  DISPLAY_ACE_OPTIONS . . . . . . . . . . . . . . . . .  Internal procedure
+##  . . . . . . . . . . . . . . . . . . . . . . . Called by DisplayACEOptions
 ##
-##  CurrentACEOptions has two forms: the interactive version (below) and  the
-##  non-interactive version defined locally  within  ACECosetTable.  For  the
-##  interactive version the data record datarec  is  ACEData.io[ioIndex]  for
-##  some integer ioIndex. For the non-interactive version, which will only be
-##  invoked from within a break-loop, datarec is ACEData.
+##  DisplayACEOptions  has  two   forms:   the   interactive   version   (see
+##  interact.g*) and  the  non-interactive  version  defined  locally  within
+##  ACECosetTable. For the interactive version the  data  record  datarec  is
+##  ACEData.io[ioIndex] for some integer  ioIndex.  For  the  non-interactive
+##  version, which will only be invoked from within a break-loop, datarec  is
+##  ACEData.
 ##
-InstallGlobalFunction(CURRENT_ACE_OPTIONS, function(datarec)
+InstallGlobalFunction(DISPLAY_ACE_OPTIONS, function(datarec)
 
-  if datarec.options = rec() then
+  if not IsBound(datarec.options) or datarec.options = rec() then
     Print("No options.\n");
   else
     Display(datarec.options);
     Print("\n");
   fi;
-end);
-
-#############################################################################
-####
-##
-#F  CurrentACEOptions . . . . . . . . . . .  Displays the current ACE options
-##
-##
-InstallGlobalFunction(CurrentACEOptions, function(arg)
-
-  CURRENT_ACE_OPTIONS( ACEData.io[ ACE_STREAM(arg) ] );
 end);
 
 #############################################################################
@@ -786,88 +776,6 @@ local newoptnames, optname, opt;
         Unbind(optsrec.(optname));
       fi;
     od;
-end);
-
-#############################################################################
-####
-##
-#F  SET_ACE_OPTIONS . . . . . . . . . . . . . . . . . . .  Internal procedure
-##  . . . . . . . . . . . . . . . . . . . . . . . . . Called by SetACEOptions
-##
-##  SetACEOptions has two forms: the  interactive  version  (below)  and  the
-##  non-interactive version defined locally  within  ACECosetTable.  For  the
-##  interactive version the data record datarec  is  ACEData.io[ioIndex]  for
-##  some integer ioIndex. For the non-interactive version, which will only be
-##  invoked from within a break-loop, datarec is ACEData.
-##
-##  enumResult, stats fields of ACEData.io[ioIndex] if user passed  some  new
-##  options
-##
-InstallGlobalFunction(SET_ACE_OPTIONS, function(datarec)
-
-  datarec.newoptions := OptionsStack[ Length(OptionsStack) ];
-  # First we need to scrub any option names in datarec.options that
-  # match those in datarec.newoptions ... to ensure that *all* new
-  # options are at the end of the stack
-  SANITISE_ACE_OPTIONS(datarec.options, datarec.newoptions);
-  # datarec.options contains the previous options 
-  # We have to pop off newoptions and then push back
-  # options and newoptions, to get an updated options
-  PopOptions();
-  PushOptions(datarec.options);
-  PushOptions(datarec.newoptions);
-  # The following is needed when SetACEOptions is invoked via ACEExample
-  Unbind(OptionsStack[ Length(OptionsStack) ].aceexampleoptions);
-  datarec.options := OptionsStack[ Length(OptionsStack) ];
-  # We pop options here, to ensure OptionsStack is the same length
-  # as before the call to SET_ACE_OPTIONS
-  PopOptions();
-  Unbind(datarec.newoptions);
-end);
-
-#############################################################################
-####
-##
-#F  INTERACT_SET_ACE_OPTIONS  . . . . . . . . . . . . . .  Internal procedure
-##  . . . . . . . . . . . . . . . . . . . . . . .  Passes new options to  ACE
-##  . . . . . . . . . . . . . . . . . . . . . . .  and updates stored options
-##
-##  Called by the ACE function with name ACEfname and with datarec  equal  to
-##  ACEData.io[ioIndex] for some integer ioIndex,  the  updated  options  are
-##  stored in datarec.options.
-##
-InstallGlobalFunction(INTERACT_SET_ACE_OPTIONS, function(ACEfname, datarec)
-local newoptnames, optnames;
-  if not IsEmpty(OptionsStack) then
-    newoptnames := ShallowCopy(RecNames(OptionsStack[ Length(OptionsStack) ]));
-    SET_ACE_OPTIONS(datarec);
-    OptionsStack[ Length(OptionsStack) ] := datarec.options;
-    optnames := ACE_OPT_NAMES();
-    PROCESS_ACE_OPTIONS(ACEfname, optnames, newoptnames,
-                        # echo
-                        ACE_VALUE_ECHO(optnames),
-                        # ToACE
-                        function(list) 
-                          WRITE_LIST_TO_ACE_STREAM(datarec.stream, list);
-                        end,
-                        # disallowed (options)
-                        rec(group      := ACE_ERRORS.argnotopt,
-                            generators := ACE_ERRORS.argnotopt,
-                            relators   := ACE_ERRORS.argnotopt), 
-                        # ignored
-                        [ "aceinfile", "aceoutfile" ]);
-  fi;
-end);
-  
-#############################################################################
-####
-##
-#F  SetACEOptions . . . . . . . . . . . .  Interactively, passes  new options 
-##  . . . . . . . . . . . . . . . . . . .  to ACE and updates stored  options
-##
-InstallGlobalFunction(SetACEOptions, function(arg)
-
-  INTERACT_SET_ACE_OPTIONS("SetACEOptions", ACEData.io[ ACE_STREAM(arg) ]);
 end);
 
 #############################################################################

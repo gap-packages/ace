@@ -15,15 +15,10 @@ Revision.interact_gd :=
 
 #############################################################################
 ##
-#I  InfoClass
-##
-DeclareInfoClass("InfoACE");
-
-#############################################################################
-##
 #D  Declare functions for using ACE interactively via IO Streams.
 ##
 DeclareGlobalFunction("ACE_STREAM");
+DeclareGlobalFunction("ACE_STREAM_ARG_CHK");
 DeclareGlobalFunction("ACEStream");
 DeclareGlobalFunction("ACEStreams");
 DeclareGlobalFunction("READ_ACE_ERRORS");
@@ -36,11 +31,26 @@ DeclareGlobalFunction("ACEReadAll");
 DeclareGlobalFunction("ACEReadUntil");
 DeclareGlobalFunction("ACE_STATS");
 DeclareGlobalFunction("ACE_COSET_TABLE");
-DeclareGlobalFunction("ACE_START");
+DeclareGlobalFunction("ACE_MODE");
+DeclareGlobalFunction("ACE_MODE_AFTER_SET_OPTS");
+DeclareGlobalFunction("CHEAPEST_ACE_MODE");
 DeclareGlobalFunction("ACEStart");
 DeclareGlobalFunction("ACEQuit");
 DeclareGlobalFunction("ACEQuitAll");
+DeclareGlobalFunction("ACE_MODES");
 DeclareGlobalFunction("ACEModes");
+DeclareGlobalFunction("ACEContinue");
+DeclareGlobalFunction("ACERedo");
+DeclareGlobalFunction("ACEGroupGenerators");
+DeclareGlobalFunction("ACERelators");
+DeclareGlobalFunction("ACESubgroupGenerators");
+DeclareGlobalFunction("DisplayACEOptions");
+DeclareGlobalFunction("GetACEOptions");
+DeclareGlobalFunction("SET_ACE_OPTIONS");
+DeclareGlobalFunction("INTERACT_SET_ACE_OPTIONS");
+DeclareGlobalFunction("SetACEOptions");
+DeclareGlobalFunction("ACEParameters");
+DeclareGlobalFunction("ACEVersion");
 DeclareGlobalFunction("ACECosetTable");
 DeclareGlobalFunction("ACEStats");
 
