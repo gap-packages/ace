@@ -2620,7 +2620,7 @@ end);
 ##  determine the current subgroup generator list.
 ##
 InstallGlobalFunction(ACERandomCoincidences, function(arg)
-local ioIndexAndOptval, datarec, sgens, lines;
+local ioIndexAndOptval, datarec, index, sgens, lines, newsgens;
   ioIndexAndOptval := ACE_IOINDEX_AND_ONE_VALUE(arg);
   datarec := ACEData.io[ ioIndexAndOptval[1] ];
   sgens := ACE_ARGS(ioIndexAndOptval[1], "sgens");
@@ -2628,7 +2628,8 @@ local ioIndexAndOptval, datarec, sgens, lines;
   if not IsBound(datarec.stats) then
     CHEAPEST_ACE_MODE(datarec);
   fi;
-  if datarec.stats.index <> 0 then
+  index := datarec.stats.index;
+  if index <> 0 then
     Error("ACERandomCoincidences: enumeration index is already finite!\n");
   fi;
   PROCESS_ACE_OPTION(datarec.stream, "rc", ioIndexAndOptval[2]);
@@ -2638,12 +2639,17 @@ local ioIndexAndOptval, datarec, sgens, lines;
                                 line{[1..13]} in ["* No success;",
                                                   "* An appropri",
                                                   "   finite ind",
-                                                  "  * Unable to"]);
+                                                  "   * Unable t"]);
   if IS_ACE_MATCH(lines[Length(lines)], "* An appropri", 1) then
     datarec.enumResult := lines[Length(lines) - 1];
     datarec.stats := ACE_STATS(datarec.enumResult);
   else
     Info(InfoACE + InfoWarning, 1, "ACERandomCoincidences: Unsuccessful!");
+    newsgens := Difference(ACE_ARGS(ioIndexAndOptval[1], "sgens"), sgens);
+    if not IsEmpty(newsgens) then
+      ACEDeleteSubgroupGenerators(ioIndexAndOptval[1], newsgens);
+      Info(InfoACE + InfoWarning, 1, "Subgroup generators restored.");
+    fi;
   fi;
   return Difference(ACE_ARGS(ioIndexAndOptval[1], "sgens"), sgens);
 end);
