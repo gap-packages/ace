@@ -4,7 +4,7 @@ The ACE package provides functions associated with Todd-Coxeter  coset
 enumeration by interfacing with the Advanced Coset Enumerator (ACE),
 
 ACE coset enumerator (C) 1995-2001 by George Havas and Colin Ramsay
-    http://www.csee.uq.edu.au/~cram/ce.html
+    http://www.itee.uq.edu.au/~cram/ce.html
 
 from within GAP 4.
 
@@ -40,7 +40,7 @@ http://wwwmaths.anu.edu.au/research.groups/algebra/GAP/www/Info4/share.html
 
 or, alternatively, from one of the authors' home page at
 
-http://www.csee.uq.edu.au/~gregg/ACE/home.html
+http://www.itee.uq.edu.au/~gregg/ACE/home.html
 
 Since the ACE share package interfaces to an external  binary,  it  is
 only usable under UNIX or a UNIX-like environment. It will not work on
@@ -130,11 +130,11 @@ ACE has been compiled successfully with the following C compilers:
 why the numbering now follows egcs' numbering.)
 
 If you encounter problems with the ACE binary, please contact  one  of
-the C code  authors:  George  Havas  <havas@csee.uq.edu.au>  or  Colin
-Ramsay <cram@csee.uq.edu.au>.
+the C code  authors:  George  Havas  <havas@itee.uq.edu.au>  or  Colin
+Ramsay <cram@itee.uq.edu.au>.
 
 If you encounter problems at the GAP level, please contact one of  the
-ACE package authors: Greg Gamble <gregg@csee.uq.edu.au>  or  Alexander
+ACE package authors: Greg Gamble <gregg@itee.uq.edu.au>  or  Alexander
 Hulpke <hulpke@math.colostate.edu>.
 
 When sending a bug report,  remember  we  will  need  to  be  able  to
@@ -154,10 +154,10 @@ reproduce the problem; so please include:
 
   - Greg Gamble 
     Centre for Discrete Mathematics and Computing, 
-    Department of Computer Science and Electrical Engineering,
+    Department of Information Technology and Electrical Engineering,
     The University of Queensland,
     Brisbane, Queensland, 4072
     Australia
-    e-mail: gregg@csee.uq.edu.au
-    www:    http://www.csee.uq.edu.au/~gregg
-  -- 20 August, 2001.
+    e-mail: gregg@itee.uq.edu.au
+    www:    http://www.itee.uq.edu.au/~gregg
+  -- 6 February, 2002.

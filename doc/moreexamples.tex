@@ -393,14 +393,14 @@ function which interactive {\ACE} process we wish to communicate with.
 Above we passed `1' to the `ACEParameters' command which caused `sr :=
 1' (see~"option sr") to be passed to the  interactive  {\ACE}  process
 indexed by 1 (the process we just started), and  a  record  containing
-the  parameter  options  (see  Section~"ACE  Parameter  Options")   is
-returned. Note that the ``Run Parameters'': `Group Generators', `Group
-Relators'  and   `Subgroup   Generators'   are   considered   ``args''
-(i.e.~arguments) and a record containing  these  is  returned  by  the
-`GetACEArgs' (see~"GetACEArgs")  command;  or  they  may  be  obtained
-individually     via      the      commands:      `ACEGroupGenerators'
-(see~"ACEGroupGenerators"),  `ACERelators'   (see~"ACERelators"),   or
-`ACESubgroupGenerators' (see~"ACESubgroupGenerators").
+the parameter options (see~"ACEParameterOptions")  is  returned.  Note
+that the ``Run Parameters'': `Group Generators', `Group Relators'  and
+`Subgroup Generators' are considered ``args'' (i.e.~arguments)  and  a
+record   containing   these   is   returned   by   the    `GetACEArgs'
+(see~"GetACEArgs") command; or they may be obtained  individually  via
+the   commands:    `ACEGroupGenerators'    (see~"ACEGroupGenerators"),
+`ACERelators'    (see~"ACERelators"),    or    `ACESubgroupGenerators'
+(see~"ACESubgroupGenerators").
 
 We can obtain the enumeration statistics record, via  the  interactive
 version of `ACEStats' (see~"ACEStats!interactive") :

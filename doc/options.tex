@@ -125,11 +125,12 @@ interactive  `SetACEOptions'  (see~"SetACEOptions")  to  change   such
 options, or,  of  course,  you  can  always  elect  to  use  `ACEQuit'
 (see~"ACEQuit") and then start a new interactive {\ACE} process.
 
-Finally, there will be situations where an {\ACE}  interface  function
-needs to be told explicitly to ignore options passed down  recursively
-to it from calling functions. For this purpose we  have  provided  the
-options `aceignore' (see~"option  aceignore")  and  `aceignoreunknown'
-(see~"option aceignoreunknown").
+Finally,       if       `ACEIgnoreUnknownDefault       :=       false'
+(see~"ACEIgnoreUnknownDefault"), there will  be  situations  where  an
+{\ACE} interface function  needs  to  be  told  explicitly  to  ignore
+options passed down recursively to it from calling functions. For this
+purpose  we  have  provided  the  options   `aceignore'   (see~"option
+aceignore") and `aceignoreunknown' (see~"option aceignoreunknown").
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{Abbreviations and mixed case for ACE Options}
@@ -200,13 +201,13 @@ user options, if any. This ensures that {\ACE} has a value for all its
 ``run parameters'';  three  of  these  are  defined  from  the  {\ACE}
 interface function arguments; and the remaining ``run parameters'', we
 denote by ``{\ACE} Parameter Options''. For user convenience, we  have
-provided the `ACEParameterOptions' record (see Section~"ACE  Parameter
-Options"), the fields of which are the ``{\ACE}  Parameter  Options''.
-The value of each field (option) of the  `ACEParameterOptions'  record
-is either a default value or (in the case of an option that is set  by
-a strategy) a record of default values that {\ACE}  assumes  when  the
-user does not define a value for  the  option  (either  indirectly  by
-selecting a strategy option or directly).
+provided the `ACEParameterOptions' record (see~"ACEParameterOptions"),
+the fields of which are the ``{\ACE} Parameter Options''. The value of
+each field (option) of the `ACEParameterOptions' record  is  either  a
+default value or (in the case of an option that is set by a  strategy)
+a record of default values that {\ACE} assumes when the user does  not
+define a value for  the  option  (either  indirectly  by  selecting  a
+strategy option or directly).
 
 If the `default' strategy does not suffice, most usually a  user  will
 select one of the other strategies  from  among  the  ones  listed  in
@@ -278,16 +279,52 @@ assigning `true' or  `false'),  whereas  strategy  (no-value)  options
 should *not* be thought of as boolean (a `false' assignment will *not*
 give you what you might have expected).
 
-Options, that are unknown to the {\ACE} interface functions, that  are
-passed without a value, are *always* passed to the  {\ACE}  binary  as
-no-value options (except when the options are ignored); the  user  can
-over-ride this behaviour simply by assigning the  intended  value.  An
-option is ignored if it is unknown to the {\ACE}  interface  functions
-and the `aceignoreunknown' option (see "option  aceignoreunknown")  is
-passed, or if the `aceignore' option is passed and the  option  is  an
-element of the list value of  `aceignore'  (see  "option  aceignore").
+Options that are unknown to the {\ACE}  interface  functions  and  not
+ignored (see below), that are passed without  a  value,  are  *always*
+passed to the {\ACE} binary  as  no-value  options  (except  when  the
+options are ignored); the user can over-ride this behaviour simply  by
+assigning the intended value. Note that it is perfectly safe to  allow
+the {\ACE} binary to be passed unknown options,  since  {\ACE}  simply
+ignores options it doesn't understand, issues an error message  (which
+is just a warning and is output by {\GAP} unless `acenowarnings'  (see
+"option acenowarnings") is passed) and continues  on  with  any  other
+options passed in exactly the way it would  have  if  the  ``unknown''
+options had not been passed.
+
+An option is  ignored  if  it  is  unknown  to  the  {\ACE}  interface
+functions and one of the following is true:
+
+\beginlist%unordered
+\item{--} the global  variable  `ACEIgnoreUnknownDefault'  is  set  to
+`false' (see~"ACEIgnoreUnknownDefault") or,
+
+\item{--} the `aceignoreunknown' option (see~"option aceignoreunknown")
+is passed, or 
+
+\item{--} the `aceignore' option  is  passed  and  the  option  is  an
+element of the list value of `aceignore' (see~"option aceignore").
+
+\endlist
+
+\index{debugging}
+\indextt{ACEIgnoreUnknownDefault!use as debugging tool}
+It    is    actually    *recommended*    that     the     user     set
+`ACEIgnoreUnknownDefault' to `false', since this will allow  the  user
+to see when  {\ACE}  functions  have  been  passed  options  that  are
+``unknown'' to the {\ACE} package.  In  this  way  the  user  will  be
+informed about misspelt options, for example. So it's a good debugging
+tool. Also, if the {\ACE} binary is updated with a  version  with  new
+options then these will not be known by the package (the {\GAP}  part)
+and it will be necessary to set `ACEIgnoreUnknownDefault'  to  `false'
+in order for the new options to be  passed  to  the  binary.  When  an
+{\ACE} function is invoked indirectly by some function that was called
+with non-{\ACE} options the warning messages may begin to be annoying,
+and it's then a simple matter to set `ACEIgnoreUnknownDefault' back to
+the {\ACE} 3.003 default value of `true'.
+
 Warning messages regarding unknown  options  are  printed  unless  the
-`acenowarnings' (see "option acenowarnings") is passed.
+`acenowarnings' (see "option acenowarnings") is passed or  the  option
+is ignored.
 
 To see how options are interpreted by an  {\ACE}  interface  function,
 pass the `echo' option.
@@ -382,8 +419,7 @@ otherwise.
 
 \enditems
 
-For more on  synonyms  of  {\ACE}  options,  see  Section~"ACE  Option
-Synonyms".
+For more on synonyms of {\ACE} options, see~"ACEOptionSynonyms".
 
 The function `ACEOptionData' provides the  user  with  all  the  query
 facility she should ever need; nevertheless, we provide the  following
@@ -407,8 +443,8 @@ it is a known {\ACE} option, or  <optname>  in  lowercase,  otherwise.
 
 \>IsACEParameterOption( <optname> ) F
 
-returns true if <optname> is an ``{\ACE} parameter option''. ({\ACE}
-Parameter Options are described in Section~"ACE  Parameter  Options").
+returns true if <optname> is an ``{\ACE} parameter  option''.  ({\ACE}
+Parameter Options  are  described  in  Section~"ACEParameterOptions").
 `IsACEParameterOption(<optname>);' is equivalent to
 
 \)\kernttindent{ACEPreferredOptionName(<optname>) in RecNames(ACEParameterOptions);}
@@ -488,14 +524,15 @@ section, the following.
 \>`ACEIgnoreUnknownDefault' V
 
 is a global variable (*not* an option) that is initially  set  by  the
-{\ACE} package to `false', and is the default action that {\ACE} takes
+{\ACE} package to `true', and is the default action that {\ACE}  takes
 for options that are unknown to the {\ACE} package  (but  may  be  new
-options provided in a new version of the {\ACE} binary). If  the  user
-sets `ACEIgnoreUnknownDefault := true', then  for  any  function  call
-requiring {\ACE} for which the user does not want options  unknown  to
-the package to be  ignored,  the  user  pass  among  the  option  list
-`aceignoreunknown   :=   false'   (see   "option   aceignoreunknown"),
-explicitly (thus reversing the usual behaviour).
+options provided in a new version of the {\ACE} binary).  Despite  the
+fact that it is normally set `true', it is recommended (especially for
+the novice user of the {\ACE} package) to set `ACEIgnoreUnknownDefault
+:= false'; the worst that can happen is being annoyed by  a  profusion
+of warnings of unknown options. For individual functions, the user may
+use the option `aceignoreunknown' (see~"option  aceignoreunknown")  to
+over-ride the setting of `ACEIgnoreUnknownDefault'.
 
 Here now, are the  few  options  that  are  available  to  the  {\GAP}
 interface to {\ACE} that have no counterpart in the {\ACE} standalone:
@@ -608,14 +645,17 @@ Directs an {\ACE} function to  ignore  the  options  in  <optionList>;
 If a function called with its own options, in  turn  calls  an  {\ACE}
 function for which those options are not intended, the {\ACE} function
 will pass those options to the {\ACE} binary.  If  those  options  are
-unknown to the {\ACE} interface a warning is issued. Options that  are
-unknown to the {\ACE} binary are  simply  ignored  by  {\ACE}  (and  a
-warning that the option was ignored  appears  in  the  {\ACE}  output,
-which the user will not see unless the `InfoLevel' of `InfoACE' is set
-to 3). This option enables the user to avoid such options being passed
-at all, thus avoiding the warning messages and also any  options  that
-coincidentally are {\ACE} options but are not intended for the  {\ACE}
-function being called.
+unknown to  the  {\ACE}  interface  (and  `ACEIgnoreUnknownDefault  :=
+false'      and      `aceignoreunknown'      is      not       passed;
+see~"ACEIgnoreUnknownDefault" and~"option aceignoreunknown") a warning
+is issued. Options that are unknown to the {\ACE}  binary  are  simply
+ignored by {\ACE} (and a warning that the option was  ignored  appears
+in the  {\ACE}  output,  which  the  user  will  not  see  unless  the
+`InfoLevel' of `InfoACE' or `InfoWarning' is set to  1).  This  option
+enables the user to avoid such  options  being  passed  at  all,  thus
+avoiding the warning messages and also any options that coincidentally
+are {\ACE} options but are not intended for the {\ACE} function  being
+called.
 
 \>`aceignoreunknown'{option aceignoreunknown}@{option `aceignoreunknown'}&
 Directs an {\ACE} function to ignore any  options  not  known  to  the
@@ -624,12 +664,14 @@ Directs an {\ACE} function to ignore any  options  not  known  to  the
 
 This option is provided for similar reasons to `aceignore'.  Normally,
 it is safe to include it, to avoid aberrant warning messages from  the
-{\ACE} interface. However, fairly obviously, it should not be used  in
-the situation where a new {\ACE} binary has been  installed  with  new
-options that are not listed among  the  fields  of  `KnownACEOptions',
-which you intend to use. Omitting  the  `aceignoreunknown'  option  is
-equivalent to setting it to  the  value  of  `ACEIgnoreUnknownDefault'
-(see "ACEIgnoreUnknownDefault").
+{\ACE} interface. However, fairly obviously, it should not  be  passed
+without a value (or set to `true') in the situation where a new {\ACE}
+binary has been installed with new options that are not  listed  among
+the fields of `KnownACEOptions', which you intend to use. Omitting the
+`aceignoreunknown' option is equivalent to setting it to the value  of
+`ACEIgnoreUnknownDefault' (see "ACEIgnoreUnknownDefault"); i.e.~it  is
+superfluous    if    `ACEIgnoreUnknownDefault    :=    true'    unless
+`aceignoreunknown' is set to `false'.
 
 \>`acenowarnings'{option acenowarnings}@{option `acenowarnings'}& 
 Inhibits the warning message ```unknown (maybe new) or bad option'''
@@ -713,9 +755,9 @@ whose values are records with at least two fields.)
 
 *Note:*
 Where  an  ``{\ACE}  Parameter  Option''  has   synonyms,   only   the
-``preferred'' option name (see Section~"ACE Option Synonyms")  appears
-as a field of `ACEParameterOptions'. The  complete  list  of  ``{\ACE}
-Parameter Options'' may be obtained by
+``preferred'' option name (see~"ACEOptionSynonyms") appears as a field
+of `ACEParameterOptions'. The  complete  list  of  ``{\ACE}  Parameter
+Options'' may be obtained by
 
 \beginexample
 gap> Concatenation( List(RecNames(ACEParameterOptions),

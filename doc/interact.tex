@@ -137,7 +137,10 @@ The fourth form  of  `ACEStart'  on  four  arguments,  invokes  a  new
 enumeration on the <i>th running process, with new generators <fgens>,
 relators <rels> and subgroup generators <sgens>. This is provided so a
 user can re-use an already running process, rather than  start  a  new
-process. (This may be useful when pseudo-ttys are a scarce resource.)
+process. This may be useful when pseudo-ttys are  a  scarce  resource.
+See   the    notes    for    the    non-interactive    `ACECosetTable'
+("ACECosetTableFromGensAndRels") which demonstrates an application  of
+a usage of this and the following form of `ACEStart' in a loop.
 
 The fifth form of `ACEStart' (on the one argument: `0')  initiates  an
 interactive {\ACE} process, processes any user options, but  does  not
@@ -152,13 +155,12 @@ generators have been set in the {\ACE} process, invocations of any  of
 (see~"ACESubgroupGenerators"),           or            `ACEParameters'
 (see~"ACEParameters") will establish the corresponding {\GAP}  values.
 Be warned, though, that unless one of the general  {\ACE}  modes  (see
-Section~"General ACE modes"):`ACEStart'  (without  a  zero  argument),
+Section~"General ACE modes"): `ACEStart' (without  a  zero  argument),
 `ACERedo' (see~"ACERedo") or `ACEContinue' (see~"ACEContinue"), or one
 of the mode options: `start' (see~"option start"), `redo' (see~"option
 redo") or `continu' (see~"option continu"), has been invoked since the
-last change of  any  parameter  options  (see  Section~"ACE  Parameter
-Options"), some of the values reported by `ACEParameters' may well  be
-*incorrect*.
+last change of any parameter options (see~"ACEParameterOptions"), some
+of the values reported by `ACEParameters' may well be *incorrect*.
 
 The sixth form of `ACEStart' (on four arguments), is  like  the  first
 form of `ACEStart' (on three  arguments),  except  that  it  does  not
@@ -375,7 +377,7 @@ By   default,   `ACEResurrectProcess'   recovers   parameter    option
 information from `ACEData.io[<i>].options' if it  is  bound,  or  from
 `ACEData.io[<i>].parameters'  if   it   is   bound,   otherwise.   The
 `ACEData.io[<i>].options'  record,  however,  is  first  filtered  for
-parameter and strategy options (see Sections~"ACE  Parameter  Options"
+parameter and  strategy  options  (see  Sections~"ACEParameterOptions"
 and~"The ACEStrategyOptions list") and the `echo' option  (see~"option
 echo"). To alter this behaviour, the user is provided two options:
 
@@ -714,9 +716,9 @@ Any  options  set  via  `ACEWrite'  (see~"ACEWrite")  will  *not*   be
 displayed. Also, recall that if {\ACE} is not  given  any  options  it
 uses the `default' strategy  (see  Section~"What  happens  if  no  ACE
 Strategy Option or if no ACE  Option  is  passed").  To  discover  the
-various settings of the {\ACE} Parameter Options  (see~"ACE  Parameter
-Options")  in  vogue  for  the  {\ACE}  process,  use  `ACEParameters'
-(see~"ACEParameters").
+various    settings    of     the     {\ACE}     Parameter     Options
+(see~"ACEParameterOptions") in  vogue  for  the  {\ACE}  process,  use
+`ACEParameters' (see~"ACEParameters").
 
 \>GetACEOptions( <i> ) F
 \>GetACEOptions() F
@@ -791,17 +793,17 @@ different functions.)
 \>ACEParameters() F
 
 return a record of the current values of the {\ACE} Parameter  Options
-(see Section~"ACE  Parameter  Options")  of  the  <i>th  (or  default)
-process started by `ACEStart', according to {\ACE}. Please  note  that
-some options may be reported with incorrect values if they  have  been
-changed  recently  without  following  up  with  one  of   the   modes
-`ACEContinue',  `ACERedo'  or  `ACEStart'.   Together   the   commands
-`ACEGroupGenerators',   `ACERelators',   `ACESubgroupGenerators'   and
-`ACEParameters'  give  the  equivalent  {\GAP}  information  that   is
-obtained in {\ACE} with `sr := 1'  (see~"option  sr"),  which  is  the
-``Run Parameters'' block obtained in the messaging output  (observable
-when the `InfoLevel'  of  `InfoACE'  is  set  to  at  least  3),  when
-`messages' (see~"option messages") is set a non-zero value.
+(see~"ACEParameterOptions") of the <i>th (or default) process  started
+by `ACEStart', according to {\ACE}. Please note that some options  may
+be reported with incorrect values if they have been  changed  recently
+without following up with one of the modes `ACEContinue', `ACERedo' or
+`ACEStart'. Together the commands `ACEGroupGenerators', `ACERelators',
+`ACESubgroupGenerators' and `ACEParameters' give the equivalent {\GAP}
+information that is obtained in {\ACE} with  `sr  :=  1'  (see~"option
+sr"), which is the ``Run Parameters'' block obtained in the  messaging
+output (observable when the `InfoLevel' of  `InfoACE'  is  set  to  at
+least 3), when `messages' (see~"option messages") is  set  a  non-zero
+value.
 
 *Notes:*
 One use for this function might be to determine the  options  required
@@ -1495,8 +1497,8 @@ subgroup  generators  have  been  set  in  the  {\ACE}  process,   via
 (see~"ACERedo")  or  `ACEContinue'   (see~"ACEContinue"),   or   their
 equivalent  for  the  standalone   {\ACE}   (`start;',   `redo;',   or
 `continue;'), has been invoked since the last change of any  parameter
-options (see Section~"ACE Parameter  Options"),  some  of  the  values
-reported by `ACEParameters' may well be *incorrect*.
+options (see~"ACEParameterOptions"), some of the  values  reported  by
+`ACEParameters' may well be *incorrect*.
 
 \>ACEWrite( <i>, <string> ) F
 \>ACEWrite( <string> ) F

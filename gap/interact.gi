@@ -781,6 +781,7 @@ local start, ioIndex, stream, datarec, gens;
       else
         Add( ACEData.io, rec(stream := stream, options := rec()) );
         ioIndex := Length(ACEData.io);
+        ACEData.io[ioIndex].procId := ioIndex;
       fi;
     fi;
     NO_START_DO_ACE_OPTIONS(ioIndex, true);

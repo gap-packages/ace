@@ -20,7 +20,7 @@ The ``Advanced Coset Enumerator'' {\ACE}:
 \begintt
 ACE coset enumerator (C) 1995-2001 by George Havas and Colin Ramsay
 \endtt
-\URL{http://www.csee.uq.edu.au/~cram/ce.html}
+\URL{http://www.itee.uq.edu.au/~cram/ce.html}
 
 can  be called  from within  {\GAP} through  an interface,  written by
 Alexander Hulpke and Greg Gamble, which is described in this manual.
@@ -299,6 +299,35 @@ of the  user.  The  occasions  where  this  action  is  necessary  are
 precisely those for which, for the  arguments  <gens>  and  <rels>  of
 `ACECosetTable',   `IsACEGeneratorsInPreferredOrder'   would    return
 `false'.
+
+The non-interactive `ACECosetTable' and `ACECosetTableFromGensAndRels'
+now use an iostream to communicate with the {\ACE} binary in order  to
+avoid filling up a temporary directory with an incomplete coset  table
+in  the  case  where  an  enumeration  overflows.  This  is  generally
+advantageous. However, on some systems, it may *not* be  advisable  to
+repeatedly  call  `ACECosetTable'  or   `ACECosetTableFromGensAndRels'
+(e.g.~in a loop), since one may run out of the pseudo  ttys  used  for
+iostreams.  If  you  encounter  this  problem,  consider   using   the
+non-interactive `ACEStats' (see~"ACEStats"), which only uses files, to
+first  test  whether  the  coset  enumeration  will  succeed.  Another
+alternative, if one is looping over several possibilities of  <fgens>,
+<rels> and <sgens>, is to just use one interactive {\ACE} process, and
+re-use the process continually in something like the following manner:
+
+\){\kernttindent}\# start the interactive ACE process with no group information
+\){\kernttindent}procId := ACEStart(0);
+\){\kernttindent}while <expr> do
+\){\kernttindent\quad}fgens := ...; rels := ...; sgens := ...;
+\){\kernttindent\quad}ACEStart(procId, fgens, rels, sgens : <options>);
+\){\kernttindent\quad}if ACEStats(procId).index > 0 then
+\){\kernttindent\quad\quad}table := ACECosetTable(procId);
+\){\kernttindent\quad\quad}...
+\){\kernttindent\quad}fi;
+\){\kernttindent}od;
+
+See~"ACEStart", for the two special forms of  `ACEStart'  used  above,
+and see~"ACEStats!interactive" and~"ACECosetTable!interactive" for the
+interactive usages of `ACEStats' and `ACECosetTable'.
 
 For an already  calculated  coset  table,  we  provide  the  following
 function to determine whether or not it has been standardised.
@@ -858,8 +887,13 @@ Option `continue'  changed  to  `continu'  (see~"option  continu")  --
 `continue' is a keyword in {\GAP} 4.3.
 
 \item{`3.003'}
-Non-interactive calls to {\ACE} functions invoke iostreams (previously
-files were used).
+Initial value of `ACEIgnoreUnknownDefault' is now  `true'  (previously
+it was `false').
+
+\item{}
+`ACECosetTableFromGensAndRels'      (and      the      non-interactive
+`ACECosetTable') invoke iostreams (previously files were used,  as  is
+still the case with the non-interactive `ACEStats').
 
 \endlist
 

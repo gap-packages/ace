@@ -67,10 +67,10 @@ SetInfoLevel(InfoACE, 1);
 if not QUIET and BANNER then
 
 Info(InfoWarning,1,"    The ACE (Advanced Coset Enumerator) Package");
-Info(InfoWarning,1,"  C code by George Havas <havas@csee.uq.edu.au> and");
-Info(InfoWarning,1,"            Colin Ramsay <cram@csee.uq.edu.au>");
+Info(InfoWarning,1,"  C code by George Havas <havas@itee.uq.edu.au> and");
+Info(InfoWarning,1,"            Colin Ramsay <cram@itee.uq.edu.au>");
 Info(InfoWarning,1,"                 ACE binary version: ", ACEData.version);
-Info(InfoWarning,1,"  GAP code by Greg Gamble <gregg@csee.uq.edu.au> and");
+Info(InfoWarning,1,"  GAP code by Greg Gamble <gregg@itee.uq.edu.au> and");
 Info(InfoWarning,1,"         Alexander Hulpke <hulpke@math.colostate.edu>");
 Info(InfoWarning,1,"                 ACE package version: ", 
                                      PACKAGES_VERSIONS.ace);
@@ -85,7 +85,7 @@ fi;
 #V  ACEIgnoreUnknownDefault . . . . . . . . . . . .  the default value of the 
 ##  . . . . . . . . . . . . . . . . . . . . . . . . `aceignoreunknown' option
 ##
-ACEIgnoreUnknownDefault := false;
+ACEIgnoreUnknownDefault := true;
 
 #############################################################################
 ####
