@@ -549,8 +549,8 @@ local fgens,rels,sgens,a,i,j,k,n,nums,fullopt,opt,optval,options,known,
     CloseStream(instream);
     return rec(index     := Int(a[1]),
                cputime   := Int(a[7])*10^Length(a[8])+Int(a[8]),
-               cputimeUnits :=Concatenation("10^-", String(Length(a[2])),
-                                            " seconds");
+               cputimeUnits :=Concatenation("10^-", String(Length(a[8])),
+                                            " seconds"),
                maxcosets := Int(a[9]),
                totcosets := Int(a[10]));
   fi;
