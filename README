@@ -141,6 +141,21 @@ If you encounter problems at the GAP level, please contact one of  the
 ACE share  package  authors:  Greg  Gamble  <gregg@csee.uq.edu.au>  or
 Alexander Hulpke <ahulpke@math.ohio-state.edu>.
 
+When sending a bug report,  remember  we  will  need  to  be  able  to
+reproduce the problem; so please include:
+
+ * The version of GAP you are using; either look at  the  header  when
+   you start up GAP, or at the gap> prompt type: VERSION;
+ * The operating system you are using e.g. Linux, SunOS 5.8 =  Solaris
+   2.8, IRIX 6.5, ...
+ * The compiler you used to compile ACE  and  the  options  you  used.
+   Type: gcc -v or: cc -version, and  look  in  src/Makefile  for  the
+   value of CC to find out.
+ * A script, either in GAP or standalone ACE,  that  demonstrates  the
+   bug, along with a description of why it's a  bug  (e.g.  by  adding
+   comments  to  the  script  -  recall,  comments,  both  in  GAP  or
+   standalone ACE, begin with a #).
+
   - Greg Gamble 
     Centre for Discrete Mathematics and Computing, 
     Department of Computer Science and Electrical Engineering,
