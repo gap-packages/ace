@@ -1,58 +1,64 @@
-	                 The ACE share package
+                        The ACE share package
 
-The ACE share package permits to call the Advanced Coset Enumerator written
-by George Havas and Colin Ramsay from within GAP. 
+The ACE share package provides an  interface  to  the  Advanced  Coset
+Enumerator (ACE) from within GAP 4:
 
 ACE coset enumerator (C) 1995-1999 by George Havas and Colin Ramsay
     http://www.it.uq.edu.au/~havas/ace3.tar.gz
 
-The GAP interface has been written by Alexander Hulpke.
+The GAP interface has  been  written  by  Alexander  Hulpke  and  Greg
+Gamble.
 
-The package interfaces to an external binary and therefore is only usable
-under UNIX. It will not work on Windows or the Macintosh. It requires
-GAP 4.
+The package interfaces to an external binary  and  therefore  is  only
+usable under UNIX or a UNIX-like environment.  It  will  not  work  on
+Windows or the Macintosh. It requires GAP 4.
 
 
-		Installing the ACE share package
+                   Installing the ACE share package
 
-To install unpack the archive file in a directory in the `pkg' hierarchy of
-your version of {\GAP}4. (This might be the `pkg' directory of the
-GAP4 home directory; it is however also possible to keep an additional `pkg'
-directory in you private directories, see section "ref:Installing Share
-Packages" of the {\GAP}4 reference manual for details on how to do this.)
-Go to the newly created `ACE' directory and call `configure <path>' where
-<path> is the path to the GAP home directory. So for example if you install
-the package in the main `pkg' directory call
+To install unpack the  archive  file  in  a  directory  in  the  `pkg'
+hierarchy of your version of GAP 4. (This might be the `pkg' directory
+of the GAP 4 home directory; it is however also possible  to  keep  an
+additional `pkg' directory in you  private  directories,  see  section
+"ref:Installing Share Packages" of the  GAP  4  reference  manual  for
+details on how to do this.) Go to the newly  created  `ACE'  directory
+and call `configure <path>' where <path> is the path to the  GAP  home
+directory. So for example if you install the package in the main `pkg'
+directory call
 
   ./configure ../..
 
-This will fetch the architecture type for which GAP has been compiled last
-and create a `Makefile'. 
-Now simply call
+This will fetch the architecture type for which GAP has been  compiled
+last and create a `Makefile'. Now simply call
 
   make
 
 to compile the binary and to install it in the appropriate place.
 
-Note that the current version of the configuration process only sets up
-directory paths. If you need a different compiler or different compiler
-options, you need to edit `src/Makefile.in' prior to calling `make'
-yourself.
+Note that the current version of the configuration process  only  sets
+up directory paths. If you need  a  different  compiler  or  different
+compiler options, you need to edit `src/Makefile.in' prior to  calling
+`make' yourself.
 
-If you use this installation of GAP on different hardware platforms you will
-have to compile the binary for each platform separately. This is done by
-calling `configure' and `make' for the package anew immediately after
-compiling GAP itself for the respective architecture.
-If your version of GAP is already compiled (and has last been compiled on
-the same architecture) you do not need to compile GAP
+If you use this installation of GAP on  different  hardware  platforms
+you will have to compile the binary for each platform separately. This
+is done by  calling  `configure'  and  `make'  for  the  package  anew
+immediately  after   compiling   GAP   itself   for   the   respective
+architecture. If your version of GAP is already compiled (and has last
+been compiled on the same architecture) you do not need to compile GAP
 again, it is sufficient to call the `configure' script in the GAP home
 directory.
 
-For details on how to use the `ACE' package see the documentation in the
-`doc' subdirectory and the `ACE' user manual in the `acedoc' directory.
+For details on how to use the `ACE'  package  see  the  share  package
+documentation in the `doc' subdirectory (execute `make_doc'  and  then
+view either `manual.dvi' via `xdvi' or `manual.ps'  via  `ghostview'),
+which gives information on how to use `ACE' from within GAP,  and  the
+`ACE' user manual (`ace3001.dvi' created by executing `latex  ace3001'
+three  times)  in  the   `standalone-doc'   directory,   which   gives
+information on how to use the `ACE' binary as a stand-alone.
 
-The `src' subdirectory contains a copy of the original source of `ACE'. (The
-only modification is that a make-file was copied to `Makefile'.) You can
-replace it by a newer version before compiling.
+The `src' subdirectory contains a  copy  of  the  original  source  of
+`ACE'. (The only modification  is  that  a  make-file  was  copied  to
+`Makefile'.) You can replace it by a newer version before compiling.
 
 If you encounter problems, please write to `ahulpke@dcs.st-and.ac.uk'.
