@@ -54,6 +54,35 @@ InstallGlobalFunction(SetInfoACELevel, function(arg)
 end);
 
 #############################################################################
+##
+#M  IS_ACE_MATCH( <list>, <sub>[, <ind>] )
+##
+InstallMethod( IS_ACE_MATCH,"list, sub, pos",IsFamFamX,
+  [IsList,IsList,IS_INT], 0,
+function( list,sub,first )
+local last;
+
+  last:=first+Length(sub)-1;
+  return Length(list) >= last and list{[first..last]} = sub;
+end);
+
+# no installation restrictions to avoid extra installations for empty list
+InstallOtherMethod( IS_ACE_MATCH,"list, sub",true,
+  [IsObject,IsObject], 0,
+function( list, sub )
+  return IS_ACE_MATCH(list, sub, 1);
+end);
+
+InstallOtherMethod( IS_ACE_MATCH,"empty list, sub, pos",true,
+  [IsEmpty,IsList,IS_INT], 0,
+function(list,sub,first )
+  return not IsEmpty(sub);
+end);
+
+InstallOtherMethod( IS_ACE_MATCH,"list, empty list, pos",true,
+  [IsList,IsEmpty,IS_INT], 0, ReturnTrue);
+
+#############################################################################
 ####
 ##
 #F  CALL_ACE . . . . . . . . . Called by ACECosetTable, ACEStats and ACEStart
@@ -96,7 +125,7 @@ local optnames, echo, infile, instream, outfile, ToACE, gens, acegens,
       Error("sorry! Run out of pseudo-ttys. Can't initiate stream.\n");
     fi;
     FLUSH_ACE_STREAM_UNTIL(instream, 3, 3, READ_NEXT_LINE, 
-                           line -> line{[3..6]} = "name");
+                           line -> IS_ACE_MATCH(line, "name", 3));
     ToACE := function(list) INTERACT_TO_ACE_WITH_ERRCHK(instream, list); end;
   else 
     if ACEfname = "ACECosetTableFromGensAndRels" then
@@ -301,7 +330,7 @@ local line, instream, rest;
   instream := InputTextFile(file);
   # We don't want the user to see this ... so we flush at InfoACE level 10.
   line := FLUSH_ACE_STREAM_UNTIL( instream, 10, 10, ReadLine,
-                                  line -> line{[1..5]} = "local" );
+                                  line -> IS_ACE_MATCH(line, "local") );
   rest := ReadAll(instream);
   CloseStream(instream);
   return ReadAsFunction(
@@ -352,21 +381,19 @@ local name, file, instream, line, ACEfunc,
   instream := InputTextFile(file);
   if name <> "index" then
     line := FLUSH_ACE_STREAM_UNTIL( instream, 1, 10, ReadLine,
-                                    line -> line{[1..5]} = "local" );
+                                    line -> IS_ACE_MATCH(line, "local") );
     Info(InfoACE, 1,
          "#", line{[Position(line, ' ')..Position(line, ';') - 1]},
          " are local to ACEExample");
     line := FLUSH_ACE_STREAM_UNTIL( instream, 1, 10, ReadLine, 
-                                    line -> line{[1..6]} = "return" );
+                                    line -> IS_ACE_MATCH(line, "return") );
     Info(InfoACE, 1, 
          CHOMP(ReplacedString(line, "return ACEfunc", NameFunction(ACEfunc)))
          );
     if IsBound(ACEData.aceexampleoptions) then
-      line := FLUSH_ACE_STREAM_UNTIL( instream, 1, 10, ReadLine, 
-                                      line -> ForAny(
-                                                  [1..Length(line)],
-                                                  i -> line{[i..i+1]} = ");"
-                                                  ) );
+      line := FLUSH_ACE_STREAM_UNTIL(
+                  instream, 1, 10, ReadLine, 
+                  line -> PositionSublist(line, ");") <> fail );
       Info(InfoACE, 1, CHOMP(ReplacedString(line, ");", ", ")));
       Info(InfoACE, 1, "    # User Options");
       optnames := ShallowCopy( RecNames(ACEData.aceexampleoptions) );
@@ -465,11 +492,11 @@ local outstream, print, file, instream, line;
   instream := InputTextFile(file);
   repeat
     line := ReadLine(instream);
-  until line{[1 .. 8]} = "## Begin";
+  until IS_ACE_MATCH(line, "## Begin");
   repeat
     line := ReadLine(instream);
     print(line);
-  until line{[1 .. 6]} = "## End";
+  until IS_ACE_MATCH(line, "## End");
   CloseStream(instream);
 
   if print <> Print then

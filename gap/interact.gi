@@ -266,7 +266,7 @@ InstallGlobalFunction(ENSURE_NO_ACE_ERRORS, function(stream)
 
   PROCESS_ACE_OPTION(stream, "text", "***"); # Causes ACE to print "***"
   FLUSH_ACE_STREAM_UNTIL(stream, 3, 3, READ_NEXT_LINE,
-                         line -> line{[1 .. 3]} = "***");
+                         line -> IS_ACE_MATCH(line, "***"));
 end);
 
 #############################################################################
@@ -345,14 +345,13 @@ local IsLastLine, IsEnumLine, line, enumResult;
     IsLastLine := line -> true;
     IsEnumLine := line -> Length(line) > 1 and line[ Length(line) - 1 ] = ')';
   else
-    IsLastLine := line -> line = "***";
-    IsEnumLine := line -> Length(line) > 1 and 
-                          (line{[1..3]} = "***" or 
-                           line[ Length(line) - 1 ] = ')');
+    IsLastLine := line -> IS_ACE_MATCH(line, "***");
+    IsEnumLine := line -> IS_ACE_MATCH(line, "***") or 
+                          Length(line) > 1 and line[ Length(line) - 1 ] = ')';
   fi;
   repeat
     line := CHOMP(FLUSH_ACE_STREAM_UNTIL(stream, 3, 10, readline, IsEnumLine));
-    if line{[1..3]} = "** " and line{[4..8]} = "ERROR" then
+    if IS_ACE_MATCH(line, "** ERROR") then
       Info(InfoACE + InfoWarning, 1, line);
       line := CHOMP( readline(stream) );
       Info(InfoACE + InfoWarning, 1, line);
@@ -364,7 +363,7 @@ local IsLastLine, IsEnumLine, line, enumResult;
       Info(InfoACE, 3, line);
     fi;
   until IsLastLine(line);
-  if enumResult{[1 .. 8]} = "ACE Enum" and first <> fail then
+  if IS_ACE_MATCH(enumResult, "ACE Enum") and first <> fail then
     Error(enumResult, "\n");
   fi;
   return enumResult;
@@ -494,7 +493,7 @@ local stats;
 
   # Parse line for statistics and return
   stats := Filtered(line, char -> char in ". " or char in CHARS_DIGITS);
-  if line{[1..5]} <> "INDEX" then
+  if not IS_ACE_MATCH(line, "INDEX") then
     # Enumeration failed so the index is missing 
     # ... shove a 0 index on the front of stats
     stats := Concatenation("0 ", stats);
@@ -524,8 +523,9 @@ local n, line, genColIndex, invColIndex, table, i, rowi, j, colj, invcolj;
 
   # Skip some header until the ` coset ' line
   line := FLUSH_ACE_STREAM_UNTIL(iostream, 3, 3, readline, 
-                                 line -> line{[1..6]} in [" coset", "** ERR"]);
-  if line{[1..6]} = "** ERR" then
+                                 line -> Length(line)>5 and
+                                         line{[1..6]} in [" coset", "** ERR"]);
+  if IS_ACE_MATCH(line, "** ERROR") then
     line := CHOMP(readline(iostream));
     Info(InfoACE, 1, line);
     Error(line{[3..Length(line)]}, ". Try running ACEStart first.\n");
@@ -722,7 +722,7 @@ local datarec, setEnumResult;
       fi;
     else
       FLUSH_ACE_STREAM_UNTIL(datarec.stream, 3, 3, READ_NEXT_LINE,
-                             line -> line{[1..3]} = "***");
+                             line -> IS_ACE_MATCH(line, "***"));
     fi;
   fi;
 end);
@@ -823,7 +823,7 @@ local modes;
   WRITE_LIST_TO_ACE_STREAM(stream, [ "mode;" ]);
   modes := SplitString(FLUSH_ACE_STREAM_UNTIL(
                            stream, 3, 2, READ_NEXT_LINE,
-                           line -> line{[1..8]} = "start = "
+                           line -> IS_ACE_MATCH(line, "start = ")
                            ),
                        "",
                        " =,\n");
@@ -877,15 +877,16 @@ local datarec, out, run;
   datarec := ACEData.io[ ioIndex ];
   out := rec(line := FLUSH_ACE_STREAM_UNTIL(
                          datarec.stream, 3, 3, READ_NEXT_LINE, 
-                         line -> line{[1..6]} in [ "Group ", "** ERR" ] 
+                         line -> Length(line) > 5 and
+                                 line{[1..6]} in [ "Group ", "** ERR" ] 
                          ),
              runs := []);
-  if out.line{[1..6]} = "** ERR" then
+  if IS_ACE_MATCH(out.line, "** ERROR") then
     # Can only happen for ACERandomEquivPresentations
-    out.line := ACEReadUntil(ioIndex, line -> line{[1..12]} = string)[1];
+    out.line := ACEReadUntil(ioIndex, line -> IS_ACE_MATCH(line, string))[1];
     Error("ACERandomEquivPresentations:", out.line{[3..Length(out.line)]});
   fi;
-  while out.line{[1..12]} <> string do
+  while not IS_ACE_MATCH(out.line, string) do
     run := rec(rels := ACE_GAP_WORDS(datarec,
                                      ACE_PARAMETER_WITH_LINE(ioIndex, 
                                                              "Group Relators",
@@ -959,8 +960,9 @@ local ioIndexAndOptval, ioIndex, datarec, aep, epRec, line;
   datarec := ACEData.io[ ioIndex ];
 
   line := EXEC_ACE_DIRECTIVE_OPTION(ioIndexAndOptval, "aep", 3, 
-                                    line -> line{[1..3]} = "* P", "", false);
-  if line{[1..3]} <> "* P" then
+                                    line -> IS_ACE_MATCH(line, "* P"), 
+                                    "", false);
+  if not IS_ACE_MATCH(line, "* P") then
     Error("ACEAllEquivPresentations:", line{[3..Length(line)]});
   fi;
 
@@ -1468,9 +1470,10 @@ local datarec, line;
   if not IsBound(datarec.args.fgens) or field = "fgens" then
     WRITE_LIST_TO_ACE_STREAM(datarec.stream, [ "sr:1;" ]);
     line := FLUSH_ACE_STREAM_UNTIL(datarec.stream, 3, 3, READ_NEXT_LINE,
-                                   line -> line{[1..9]} in [ "Group Gen",
+                                   line -> Length(line) > 8 and
+                                           line{[1..9]} in [ "Group Gen",
                                                              "Group Rel" ]);
-    if line{[1..9]} = "Group Gen" then
+    if IS_ACE_MATCH(line, "Group Gen") then
       ACE_GENS(datarec, ACE_PARAMETER_WITH_LINE(ioIndex, 
                                                 "Group Generators", 
                                                 line));
@@ -1482,9 +1485,10 @@ local datarec, line;
     WRITE_LIST_TO_ACE_STREAM(datarec.stream, [ "sr;" ]);
   fi;
   if not IsBound(datarec.args.rels) or field = "rels" then
-    if not IsBound(line) or line{[1..9]} <> "Group Rel" then
-      line := FLUSH_ACE_STREAM_UNTIL(datarec.stream, 3, 3, READ_NEXT_LINE,
-                                     line -> line{[1..9]} = "Group Rel");
+    if not IsBound(line) or not IS_ACE_MATCH(line, "Group Rel") then
+      line := FLUSH_ACE_STREAM_UNTIL(
+                  datarec.stream, 3, 3, READ_NEXT_LINE,
+                  line -> IS_ACE_MATCH(line, "Group Rel") );
     fi;
     datarec.args.rels := ACE_GAP_WORDS(datarec,
                                        ACE_PARAMETER_WITH_LINE(
@@ -1497,7 +1501,7 @@ local datarec, line;
                                                       "Subgroup Generators"));
   fi;
   FLUSH_ACE_STREAM_UNTIL(datarec.stream, 3, 3, READ_NEXT_LINE, 
-                         line -> line{[1..5]} = "  #--");
+                         line -> IS_ACE_MATCH(line, "  #--"));
   return datarec.args.(field);
 end);
 
@@ -1527,9 +1531,10 @@ local ioIndex, datarec, line, fieldsAndValues, parameters, sgens, i, opt;
   fi;
   if not IsBound(datarec.acegens) or not IsBound(datarec.args.fgens) then
     line := FLUSH_ACE_STREAM_UNTIL(datarec.stream, 3, 3, READ_NEXT_LINE,
-                                   line -> line{[1..9]} in [ "Group Gen",
+                                   line -> Length(line) > 8 and
+                                           line{[1..9]} in [ "Group Gen",
                                                              "Group Rel" ]);
-    if line{[1..9]} = "Group Gen" then
+    if IS_ACE_MATCH(line, "Group Gen") then
       ACE_GENS(datarec, ACE_PARAMETER_WITH_LINE(ioIndex, 
                                                 "Group Generators", 
                                                 line));
@@ -1539,9 +1544,10 @@ local ioIndex, datarec, line, fieldsAndValues, parameters, sgens, i, opt;
     fi;
   fi;
   if not IsBound(datarec.args.rels) then
-    if not IsBound(line) or line{[1..9]} <> "Group Rel" then
-      line := FLUSH_ACE_STREAM_UNTIL(datarec.stream, 3, 3, READ_NEXT_LINE,
-                                     line -> line{[1..9]} = "Group Rel");
+    if not IsBound(line) or not IS_ACE_MATCH(line, "Group Rel") then
+      line := FLUSH_ACE_STREAM_UNTIL(
+                  datarec.stream, 3, 3, READ_NEXT_LINE,
+                  line -> IS_ACE_MATCH(line, "Group Rel"));
     fi;
     datarec.args.rels := ACE_GAP_WORDS(datarec,
                                        ACE_PARAMETER_WITH_LINE(
@@ -1556,13 +1562,14 @@ local ioIndex, datarec, line, fieldsAndValues, parameters, sgens, i, opt;
   fieldsAndValues :=
       SplitString( 
           ReplacedString(
-              Flat( ACEReadUntil(ioIndex, line -> line{[1..2]} = "C:") ),
+              Flat( ACEReadUntil(ioIndex, 
+                                 line -> IS_ACE_MATCH(line, "C:")) ),
               "Fi:", "Fil:"
               ),
           "", " :;" 
           );
   FLUSH_ACE_STREAM_UNTIL(datarec.stream, 3, 3, READ_NEXT_LINE,
-                         line -> line{[1..6]} = "  #---");
+                         line -> IS_ACE_MATCH(line, "  #---"));
   i := 1;
   while i < Length(fieldsAndValues) do
     parameters.(ACEOptionData( fieldsAndValues[i] ).synonyms[1]) :=
@@ -1595,7 +1602,7 @@ local ioIndex, stream;
   Info(InfoACE, 1, "ACE Version: ", ACEData.version);
   WRITE_LIST_TO_ACE_STREAM(stream, [ "options;" ]);
   FLUSH_ACE_STREAM_UNTIL(stream, 1, 1, READ_NEXT_LINE,
-                         line -> line{[1..13]} = "  host info =");
+                         line -> IS_ACE_MATCH(line, "  host info ="));
   if ioIndex = fail then 
     CloseStream(stream);
   fi;
@@ -1646,11 +1653,11 @@ local datarec, optval, line;
     line := FLUSH_ACE_STREAM_UNTIL(datarec.stream, infoLevel, infoLevel, 
                                    READ_NEXT_LINE, 
                                    line -> IsMyLine(line) or
-                                           line{[1..8]} = "** ERROR");
-    if line{[1..8]} <> "** ERROR" then
-      return line;
+                                           IS_ACE_MATCH(line, "** ERROR"));
+    if IS_ACE_MATCH(line, "** ERROR") then
+      IsMyLine := line -> IS_ACE_MATCH(line, "   "); # One more line to flush
     else 
-      IsMyLine := line -> line{[1..3]} = "   "; # One more line to flush
+      return line;
     fi;
   fi;
 
@@ -1742,7 +1749,7 @@ end);
 InstallGlobalFunction(ACEDumpVariables, function(arg)
   EXEC_ACE_DIRECTIVE_OPTION(
       ACE_IOINDEX_AND_LIST(arg), "dump", 1, 
-      line -> line{[1..7]} = "  #----", "", false);
+      line -> IS_ACE_MATCH(line, "  #----"), "", false);
 end);
 
 #############################################################################
@@ -1754,7 +1761,7 @@ end);
 InstallGlobalFunction(ACEDumpStatistics, function(arg)
   EXEC_ACE_DIRECTIVE_OPTION(
       ACE_IOINDEX_AND_NO_VALUE(arg), "statistics", 1, 
-      line -> line{[1..7]} = "  #----", "", false);
+      line -> IS_ACE_MATCH(line, "  #----"), "", false);
 end);
 
 #############################################################################
@@ -1768,7 +1775,7 @@ local splitstyle;
   splitstyle := SplitString(
                     EXEC_ACE_DIRECTIVE_OPTION(
                         ACE_IOINDEX_AND_NO_VALUE(arg), "style", 3, 
-                        line -> line{[1..5]} = "style", "", false
+                        line -> IS_ACE_MATCH(line, "style"), "", false
                         ),
                     "", " =\n"
                     );
@@ -1830,8 +1837,9 @@ local ioIndexAndValue, datarec, coset, line, list;
   fi;
   PROCESS_ACE_OPTION(datarec.stream, "print", [-coset, coset]);
   line := FLUSH_ACE_STREAM_UNTIL(datarec.stream, 3, 3, READ_NEXT_LINE, 
-                                 line -> line{[1..2]} in ["--", "  "]);
-  if line{[1..2]} = "  " then
+                                 line -> Length(line) > 1 and
+                                         line{[1..2]} in ["--", "  "]);
+  if IS_ACE_MATCH(line, "  ") then
     Error("ACECosetRepresentative: ", line{[4..Length(line)]});
   fi;
   list := ACEReadUntil(ioIndexAndValue[1], list -> true, 
@@ -1857,13 +1865,14 @@ local ioIndex, datarec, line, activecosets, cosetreps;
   READ_ACE_ERRORS(datarec.stream); # purge any output not yet collected
   PROCESS_ACE_OPTION(datarec.stream, "print", -datarec.stats.activecosets);
   line := FLUSH_ACE_STREAM_UNTIL(datarec.stream, 3, 3, READ_NEXT_LINE, 
-                                 line -> line{[1..2]} in ["co", "CO", "  "]);
-  if line{[1..2]} = "  " then
+                                 line -> Length(line) > 1 and
+                                         line{[1..2]} in ["co", "CO", "  "]);
+  if IS_ACE_MATCH(line, "  ") then
     Error("ACECosetRepresentatives: ", line{[4..Length(line)]});
   fi;
   activecosets := Int( SplitString(line, "", "coCO: a=")[1] );
   FLUSH_ACE_STREAM_UNTIL(datarec.stream, 3, 3, READ_NEXT_LINE, 
-                         line -> line{[1..7]} = "     1 ");
+                         line -> IS_ACE_MATCH(line, "     1 "));
   cosetreps := List(ACEReadUntil(
                         ioIndex, 
                         list -> Int(list[1]) = Minimum(
@@ -1878,7 +1887,7 @@ local ioIndex, datarec, line, activecosets, cosetreps;
     PROCESS_ACE_OPTION(datarec.stream, "print", 
                        [-(datarec.stats.activecosets + 1), activecosets]);
     line := FLUSH_ACE_STREAM_UNTIL(datarec.stream, 3, 3, READ_NEXT_LINE, 
-                                   line -> line{[1..3]} = "---");
+                                   line -> IS_ACE_MATCH(line, "---"));
     return Concatenation([One(ACEGroupGenerators(ioIndex)[1])],
                          cosetreps,
                          List(ACEReadUntil(ioIndex, 
@@ -1929,10 +1938,13 @@ local ioIndex, stream, error, cycles;
   PROCESS_ACE_OPTION(stream, "cycles", "");
   PROCESS_ACE_OPTION(stream, "text", ""); # Causes ACE to print a blank line
                                           # ... that we use as a sentinel
-  error := FLUSH_ACE_STREAM_UNTIL(
-               stream, 3, 3, READ_NEXT_LINE, 
-               line -> line{[1..2]} in ["**", "CO", "co"]
-               ){[1..2]} = "**";
+  error := IS_ACE_MATCH(
+               FLUSH_ACE_STREAM_UNTIL( 
+                   stream, 3, 3, READ_NEXT_LINE, 
+                   line -> Length(line) > 1 and
+                           line{[1..2]} in ["**", "CO", "co"]
+                   ),
+               "**", 1);
   cycles := ACEReadUntil(ioIndex, line -> line = "");
   if error then
     Info(InfoACE + InfoWarning, 1,
@@ -1944,7 +1956,7 @@ local ioIndex, stream, error, cycles;
                              posEq := Position(line, '=');
                              if posEq = fail then
                                return line;
-                             elif line{[posEq..posEq + 9]} = "= identity" then
+                             elif IS_ACE_MATCH(line, "= identity", posEq) then
                                return ", ()";
                              else
                                return ReplacedString(line, 
@@ -1981,12 +1993,13 @@ local ioIndex, datarec, twArgs, expected, line;
   PROCESS_ACE_OPTION(datarec.stream, "tw", twArgs);
   expected := Flat([String(twArgs[1]), " * word = "]){[1..8]};
   line := FLUSH_ACE_STREAM_UNTIL(datarec.stream, 3, 3, READ_NEXT_LINE, 
-                                 line -> line{[1..8]} in [expected,
+                                 line -> Length(line) > 7 and
+                                         line{[1..8]} in [expected,
                                                           "* Trace ",
                                                           "** ERROR"]);
-  if line{[1..8]} = expected then
+  if IS_ACE_MATCH(line, expected) then
     return Int(SplitString(line, "", " *word=\n")[2]);
-  elif line{[1..8]} = "* Trace " then
+  elif IS_ACE_MATCH(line, "* Trace ") then
     Info(InfoACE + InfoWarning, 1,
          "ACETraceWord:", line{[2..Length(line) - 1]});
     return fail;
@@ -2016,7 +2029,7 @@ local lines, line, datarec;
     else
       return [];
     fi;
-  elif lines[Length(lines) - 2]{[1..8]} = "** ERROR" then
+  elif IS_ACE_MATCH(lines[Length(lines) - 2], "** ERROR", 1) then
     line := lines[Length(lines) - 1];
     Error(ACEfname, ":", line{[3..Length(line)]}, "\n",
           "(most probably the value passed to ", ACEfname, 
@@ -2024,8 +2037,8 @@ local lines, line, datarec;
   else
     datarec := ACEData.io[ ioIndexAndValue[1] ];
     return List(lines{[First([1..Length(lines)], 
-                             i -> lines[i]{[1..8]} = "--------") + 1 ..
-                       Length(lines) - 1]},
+                             i -> IS_ACE_MATCH(lines[i], "--------")) + 1
+                       .. Length(lines) - 1]},
                 function(line)
                   line := SplitString(line, "", "| ");
                   return rec(coset := Int(line[1]),
@@ -2122,18 +2135,18 @@ local ACEfname, ioIndexAndValue, lines, line, datarec;
   ioIndexAndValue := ACE_IOINDEX_AND_ONE_VALUE(arg);
   lines := EXEC_ACE_DIRECTIVE_OPTION(
                ioIndexAndValue, "sc", 3, "", "---------------------", true);
-  if Length(lines) > 2 and lines[Length(lines) - 2]{[1..6]} = "** ERR" then
+  if IS_ACE_MATCH(lines[Length(lines) - 2], "** ERROR", 1) then
     line := lines[Length(lines) - 1];
     Error(ACEfname, ":", line{[3..Length(line)]}, "\n",
           "(most probably the value passed to ", ACEfname, 
           "\nwas inappropriate)\n");
   else
-    if lines[Length(lines) - 1]{[1..6]} = "* Noth" then      # Nothing found
+    if IS_ACE_MATCH(lines[Length(lines) - 1], "* Nothing found", 1) then
       lines := [];
       Info(InfoACE + InfoWarning, 1, "no nontrivial normalising cosets found");
     else
       lines := lines{[First([1..Length(lines)], 
-                            i -> lines[i]{[1..6]} = "Stabil") + 1 ..
+                            i -> IS_ACE_MATCH(lines[i], "Stabil")) + 1 ..
                       Length(lines) - 1]};
     fi;
     if ioIndexAndValue[2] > 0 then
@@ -2311,7 +2324,7 @@ local ioIndex, ACEout, iostream, datarec, fgens, standard, incomplete,
     fi;
   elif standard = "semilenlex" and "CosetTableStandard" in NamesGVars() then
     StandardizeTable(cosettable, "semilenlex");
-  elif (standard{[1..3]} = "GAP") or (standard = "semilenlex") then
+  elif IS_ACE_MATCH(standard, "GAP") or standard = "semilenlex" then
     StandardizeTable(cosettable);
   fi;
   return cosettable;
@@ -2354,7 +2367,7 @@ end);
 InstallGlobalFunction(ACERecover, function(arg)
   EXEC_ACE_DIRECTIVE_OPTION(
       ACE_IOINDEX_AND_NO_VALUE(arg), "recover", 3, 
-      line -> line{[1..2]} in ["CO", "co"], "", false);
+      line -> Length(line) > 1 and line{[1..2]} in ["CO", "co"], "", false);
 end);
 
 #############################################################################
@@ -2367,7 +2380,7 @@ end);
 InstallGlobalFunction(ACEStandardCosetNumbering, function(arg)
   EXEC_ACE_DIRECTIVE_OPTION(
       ACE_IOINDEX_AND_NO_VALUE(arg), "standard", 3, 
-      line -> line{[1..2]} in ["CO", "co"], "", false);
+      line -> Length(line) > 1 and line{[1..2]} in ["CO", "co"], "", false);
 end);
 
 #############################################################################
@@ -2514,14 +2527,14 @@ InstallGlobalFunction(ACECosetCoincidence, function(arg)
 local ioIndexAndOptval, cosetrep, datarec;
   ioIndexAndOptval := ACE_IOINDEX_AND_ONE_VALUE(arg);
   cosetrep := EXEC_ACE_DIRECTIVE_OPTION(ioIndexAndOptval, "cc", 3, 
-                                        line -> line{[1..5]} = "Coset", "",
-                                        false);
-  if cosetrep{[1..2]} = "  " then
+                                        line -> IS_ACE_MATCH(line, "Coset"),
+                                        "", false);
+  if IS_ACE_MATCH(cosetrep, "  ") then
     return fail; # Error in input
   fi;
   datarec := ACEData.io[ ioIndexAndOptval[1] ];
   FLUSH_ACE_STREAM_UNTIL(datarec.stream, 3, 3, READ_NEXT_LINE,
-                         line -> line[1] = '*');
+                         line -> IS_ACE_MATCH(line, "*"));
   CHEAPEST_ACE_MODE(datarec);
   ACE_ARGS(ioIndexAndOptval[1], "sgens");
   return ACE_GAP_WORDS(
@@ -2560,11 +2573,12 @@ local ioIndexAndOptval, datarec, sgens, lines;
   PROCESS_ACE_OPTION(datarec.stream, "rc", ioIndexAndOptval[2]);
   # Perhaps it's wasteful to use ACEReadUntil here ...
   lines := ACEReadUntil(ioIndexAndOptval[1],
-                        line -> line{[1..13]} in ["* No success;",
+                        line -> Length(line)>12 and
+                                line{[1..13]} in ["* No success;",
                                                   "* An appropri",
                                                   "   finite ind",
                                                   "  * Unable to"]);
-  if lines[Length(lines)]{[1..13]} = "* An appropri" then
+  if IS_ACE_MATCH(lines[Length(lines)], "* An appropri", 1) then
     datarec.enumResult := lines[Length(lines) - 1];
     datarec.stats := ACE_STATS(datarec.enumResult);
   else
@@ -2614,7 +2628,7 @@ local ACEfname, ioIndex, add, lines, line, datarec;
     Info(InfoACE + InfoWarning, 1, 
          ACEfname, ": All (traceable) conjugates in subgp");
     return [];
-  elif lines[Length(lines) - 2]{[1..8]} = "** ERROR" then
+  elif IS_ACE_MATCH(lines[Length(lines) - 2], "** ERROR", 1) then
     line := lines[Length(lines) - 1];
     Error(ACEfname, ":", line{[3..Length(line)]}, "\n",
           "(most probably the value passed to ", ACEfname, 
@@ -2625,7 +2639,7 @@ local ACEfname, ioIndex, add, lines, line, datarec;
       CHEAPEST_ACE_MODE(datarec);
       ACE_ARGS(ioIndex, "sgens"); # Update saved subgroup generators
     fi;
-    return List(Filtered(lines, line -> line{[1..3]} = "Grp"),
+    return List(Filtered(lines, line -> IS_ACE_MATCH(line, "Grp")),
                 function(line)
                   line := SplitString(line, '"');
                   return ACE_GAP_WORDS(datarec, line[4])[1]

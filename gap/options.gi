@@ -439,8 +439,7 @@ end);
 ##
 InstallGlobalFunction(MATCHES_KNOWN_ACE_OPT_NAME, 
 function(knownoptname, optname)
-  return Length(optname) <= Length(knownoptname) and
-         optname = knownoptname{[1..Length(optname)]} and
+  return IS_ACE_MATCH(knownoptname, optname) and
          KnownACEOptions.(knownoptname)[1] <= Length(optname);
 end);
 

@@ -37,6 +37,23 @@ DeclareGlobalVariable("ACETCENUM",
 
 DeclareGlobalFunction("InfoACELevel");
 DeclareGlobalFunction("SetInfoACELevel");
+
+#############################################################################
+##
+#O  IS_ACE_MATCH( <list>, <sub> )
+#O  IS_ACE_MATCH( <list>, <sub>, <at> )
+##
+##  returns `true' if <sub> matches a sublist of <list> from position  1  (or
+##  position <at>, in the case of the second version), or `false', otherwise.
+##  If <sub> is empty `true' is returned. If <list> is  empty  but  <sub>  is
+##  non-empty  `false'  is  returned.  (This  operation   is   identical   to
+##  IsMatchingSublist introduced in GAP 4.3; when backward compatibility with
+##  GAP  4.2  is  no  longer  necessary  or  desirable  all  occurrences   of
+##  IS_ACE_MATCH may be replaced with  IsMatchingSublist  and  the  operation
+##  IS_ACE_MATCH may be deleted.)
+##
+DeclareOperation("IS_ACE_MATCH", [ IsList, IsList, IS_INT ] );
+
 DeclareGlobalFunction("CALL_ACE");
 DeclareGlobalFunction("ACECosetTableFromGensAndRels");
 DeclareGlobalFunction("IsACEStandardCosetTable");
