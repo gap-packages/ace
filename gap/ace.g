@@ -257,7 +257,11 @@ local fgens,rels,sgens,a,i,j,k,n,nums,fullopt,opt,optval,options,known,
   nums := List(fgens, i -> GeneratorSyllable(i, 1));
   IsSSortedList(nums); # force sort flag
 
-  options := RecNames(OptionsStack[ Length(OptionsStack) ]);
+  if IsEmpty(OptionsStack) then
+    options := [];
+  else
+    options := RecNames(OptionsStack[ Length(OptionsStack) ]);
+  fi;
   if "messfile" in options then
     Error("Option `messfile' deprecated: use `ACEoutfile' instead");
   elif "outfile" in options then
