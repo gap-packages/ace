@@ -23,6 +23,7 @@ Revision.streams_gd :=
 DeclareGlobalFunction("ACE_JOIN");
 DeclareGlobalFunction("ACE_STRINGS");
 DeclareGlobalFunction("ACE_EVAL_STRING_EXPR");
+DeclareGlobalFunction("ACE_PRINT_AND_EVAL");
 DeclareGlobalFunction("CHOMP");
 DeclareGlobalFunction("READ_ALL_LINE");
 DeclareGlobalFunction("READ_NEXT_LINE");

@@ -1,0 +1,58 @@
+#############################################################################
+####
+##
+#W  doGrp.g             ACE Research Example                      Greg Gamble
+##
+##  Provides  a  generic  way  of  trying  some  easy  applications  of   the
+##  pgrelfind.g functions.
+##
+#H  @(#)$Id$
+##
+#Y  Copyright (C) 2001  Centre for Discrete Mathematics and Computing
+#Y                      Department of Computer Science & Electrical Eng.
+#Y                      University of Queensland, Australia.
+##
+Revision.doGrp_g :=
+    "@(#)$Id$";
+
+ACEResExample := rec(filename := "doGrp.g", print := false);
+if IsBound(IsACEResExampleOK) and IsACEResExampleOK() then
+  Print(
+    "# IsACEResExampleOK() sets ACEResExample.grp     from options grp, n\n",
+    "#                          ACEResExample.newgens from option  newgens\n");
+  ACEResExample.G :=
+      ACE_PRINT_AND_EVAL(
+          "ACEResExample.G",
+          ACE_JOIN(["TranslatePresentation([a,b],",
+                    "ACEResExample.grp.rels,",
+                    "ACEResExample.grp.sgens,",
+                    "ACEResExample.newgens)"],
+                   "\n                                              ")
+          );
+  ACEResExample.Gn :=
+      ACE_PRINT_AND_EVAL(
+          "ACEResExample.Gn",
+          ACE_JOIN(["PGRelFind(ACEResExample.G.fgens,",
+                    "ACEResExample.G.rels,",
+                    "ACEResExample.G.sgens)"],
+                   "\n                                   ")
+          );
+elif ACEResExample.print then
+## Begin
+# IsACEResExampleOK() sets ACEResExample.grp     from options grp, n
+#                          ACEResExample.newgens from option  newgens
+ACEResExample.G := TranslatePresentation([a,b],
+                                         ACEResExample.grp.rels,
+                                         ACEResExample.grp.sgens,
+                                         ACEResExample.newgens);
+ACEResExample.Gn := PGRelFind(ACEResExample.G.fgens,
+                              ACEResExample.G.rels,
+                              ACEResExample.G.sgens);
+## End
+elif not IsBound(IsACEResExampleOK) then
+  Print("Error, ACEReadResearchExample: functions and variables undefined.\n",
+        "Please type: 'ACEReadResearchExample();'\n",
+        "and try again.\n");
+fi;
+
+#E  doGrp.g . . . . . . . . . . . . . . . . . . . . . . . . . . . . ends here 

@@ -768,41 +768,58 @@ end);
 #############################################################################
 ####
 ##
-#F  ACE_FGENS_ARG_CHK . . . . . . . . . . . . . . . . . . . Internal function
-##  . . . . . . . . . . Checks that fgens is a list of free group generators.
-##  . . . . . . . . . . If not produces an error  message  for  the  whicharg
-##  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . argument.
+#F  ACE_FGENS_ARG_CHK( <fgens> )
+##
+##  Checks that <fgens> is a list of free group generators for the same  free
+##  group, gives the user a chance to fix them if necessary, and then returns
+##  the (repaired) <fgens>.
 ##
 InstallGlobalFunction(ACE_FGENS_ARG_CHK, function(fgens)
-local errmsg, onbreakmsg;
+local errmsg, onbreakmsg, error, fam;
 
   onbreakmsg := 
       ["Type: 'quit;' to quit to outer loop, or",
        "type: 'fgens := <val>; return;' to assign <val> to fgens to continue."];
-  while not IsList(fgens) or
-        not ForAll(fgens, g -> IsAssocWord(g) and
-                               (NumberSyllables(g) = 1) and
-                               (ExponentSyllable(g, 1) = 1))
-  do
-    if IsList(fgens) and ForAll(fgens, IsElementOfFpGroup) then
-      errmsg := ["fgens must be a list of free group gen'rs,",
-                 "not fp group elements e.g. use 'FreeGeneratorsOfFpGroup'",
-                 "rather than 'GeneratorsOfGroup'"];
+  error := true;
+  repeat
+    if not IsList(fgens) then
+        errmsg := ["fgens must be a *list* of free group gen'rs"];
+    elif not ForAll(fgens, g -> IsAssocWordWithInverse(g) and
+                                (NumberSyllables(g) = 1) and
+                                (ExponentSyllable(g, 1) = 1)) then
+      if ForAll(fgens, IsElementOfFpGroup) then
+        errmsg := ["fgens must be a list of free group gen'rs,",
+                   "not fp group elements e.g. use 'FreeGeneratorsOfFpGroup'",
+                   "rather than 'GeneratorsOfGroup'"];
+      else
+        errmsg := ["fgens must be a list of free group gen'rs"];
+      fi;
     else
-      errmsg := ["fgens must be a list of free group gen'rs"];
+      fam := FamilyObj(fgens[1]);
+      if not ForAll(fgens{[2..Length(fgens)]}, g -> fam = FamilyObj(g)) then
+        errmsg := ["fgens must all belong to the same free group"];
+      else
+        error := false;
+      fi;
     fi;
-    Error(ACE_ERROR(errmsg, onbreakmsg), "\n");
-  od;
+    if error then
+      Error(ACE_ERROR(errmsg, onbreakmsg), "\n");
+    fi;
+  until not error;
   return fgens;
 end);
 
 #############################################################################
 ####
 ##
-#F  ACE_WORDS_ARG_CHK . . . . . . . . . . . . . . . . . . . Internal function
-##  . . . . . . . . . . Checks that words is a valid list  of  words  in  the
-##  . . . . . . . . . . free group generators fgens. If not produces an error
-##  . . . . . . . . . . . . . . . . . . .  message for the whicharg argument.
+#F  ACE_WORDS_ARG_CHK( <fgens>, <words>, <whicharg> )
+##
+##  Checks that <words> is a valid list of words in the free group generators
+##  <fgens>. If not, an error message for  the  <whicharg>  (which  indicates
+##  what type of words they are,  e.g.  "relators",  "subgp  gen'rs"  or  "")
+##  argument is generated, telling the user how  to  fix  the  problem.  Once
+##  everything is ok, <words> after being filtered of any  identity  elements
+##  is returned.
 ##
 InstallGlobalFunction(ACE_WORDS_ARG_CHK, function(fgens, words, whicharg)
 local fam, errmsg, onbreakmsg;
@@ -914,6 +931,9 @@ local IsValidOptionValue, CheckValidOption, ProcessOption,
         Print( ACE_OPT_ACTIONS.(opt.fullname), ")\n" );
       elif opt.fullname in NonACEbinOptions then
         Print(" ", opt.name, " := ", opt.value, " (not passed to ACE)\n");
+      elif opt.list then
+        Print(" ", opt.name, " := ", opt.value, 
+              " (brackets are not passed to ACE)\n");
       elif val = "" then
         Print(" ", opt.name, " (no value)\n");
       else
@@ -934,7 +954,10 @@ local IsValidOptionValue, CheckValidOption, ProcessOption,
         # The ACE optname is the same as the GAP optname
         opt.ace := opt.name;
       fi;
-      if val = "" then
+      if opt.list then
+        ToACE([ opt.ace,":", 
+                ACE_JOIN( ACE_STRINGS(val), "," ), ";" ]);
+      elif val = "" then
         ToACE([ opt.ace, ";" ]);
       elif opt.fullname = "aceincomment" then
         ToACE([ opt.ace, val, ";" ]);
@@ -998,6 +1021,7 @@ local IsValidOptionValue, CheckValidOption, ProcessOption,
     opt.ignore := opt.fullname in RecNames(disallowed) or
                   opt.fullname in ignored or
                   (ignoreunknown and not opt.known);
+    opt.list := false;
     if opt.value = true then
       # An option detected by GAP as boolean may in fact be a no-value
       # option of ACE ... unknown ACE options detected as being true are
@@ -1012,17 +1036,8 @@ local IsValidOptionValue, CheckValidOption, ProcessOption,
     elif opt.value = false then
       ProcessOption(0);
     elif not IsString(opt.value) and IsList(opt.value) then
-      # ProcessOption() is not designed to cope with a list
-      # ... we do it `manually'.
-      if echo > 0 then 
-        Print(" ", opt.name, " := ", opt.value, 
-              " (brackets are not passed to ACE)\n");
-      fi;
-      CheckValidOption(opt.value);
-      if not opt.donotpass then
-        ToACE([ opt.name,":", 
-                ACE_JOIN( ACE_STRINGS(opt.value), "," ), ";" ]);
-      fi;
+      opt.list := true;
+      ProcessOption(opt.value);
     else
       ProcessOption(opt.value);
     fi;

@@ -678,9 +678,449 @@ gap> OnBreak := NormalOnBreak;;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{Using ACEReadResearchExample}
 
-Here I will describe how  `ACEReadResearchExample'  defines  functions
-such  as  `PGRelFind',  and  how  these   functions   were   used   in
+Below  we  briefly  describe  how   `ACEReadResearchExample'   defines
+functions such as `PGRelFind', and how these functions  were  used  in
 \cite{CHHR00} to show that the group $L_3(5)$ has deficiency 0.
+
+*Some background*
+
+The *deficiency* of a finite presentation $\{X \mid R\}$ of  a  finite
+group $G$ is $|R| - |X|$, and the *deficiency* of the group $G$ is the
+minimum of the deficiencies of all finite presentations of $G$.
+
+The following result (with a  constructive  proof)  is  Lemma  2.2  in
+\cite{CHHR00}.
+
+*Lemma*
+Let $G$ be a simple group with trivial Schur multiplier.  Suppose  $G$
+has a presentation of the form
+$$
+P = \{ a, b \mid a^2=1, b^p=1, w(a,b)=1\}
+$$
+with $p$ prime. Then $G$ has deficiency zero.
+
+Prior to the paper \cite{CHHR00} there remained just two simple groups
+with trivial Schur multiplier of order less than one  million,  namely
+$L_3(5)$ and $PSp_4(4)$, that had not been shown  to  have  deficiency
+zero. Using `TranslatePresentation' and `PGRelFind' the  question  for
+$L_3(5)$ is now settled, but whether $PSp_4(4)$ has  deficiency  0  is
+still open.
+
+We now sketch the method used in \cite{CHHR00} to show that  a  simple
+group $G$ with trivial Schur multiplier (in particular, $L_3(5)$)  has
+deficiency 0. We start with a known two-generator presentation of  the
+group  $G$,  on   say   $x$   and   $y$.   Then   an   invocation   of
+`TranslatePresentation' (which uses Tietze transformations) translates
+the presentation into a presentation on two new generators $a$ and $b$
+say, having several relators but for which the first two relators  are
+of form $a^2$ and $b^p$ for some prime $p$.  Finally,  `PGRelFind'  is
+invoked to find a presentation on the generators $a$ and $b$ found  by
+`TranslatePresentation' that contains $a^2$ and  $b^p$  and  just  one
+more relator. If the search by  `PGRelFind'  is  successful  then  the
+Lemma shows the group has deficiency zero.
+
+
+*Some details (what the file `pgrelfind.g' defines)*
+
+Let us now invoke `ACEReadResearchExample' with no arguments, which as
+Section~"ACEReadResearchExample" describes, effects a  `Read'  of  the
+file `"pgrelfind.g"' in the `res-examples' directory:
+
+\beginexample
+gap> ACEReadResearchExample();
+#I  The following are now defined:
+#I  
+#I  Functions:
+#I    PGRelFind, ClassesGenPairs, TranslatePresentation,
+#I    IsACEResExampleOK
+#I  Variables:
+#I    ACEResExample, ALLRELS, newrels, F, a, b, newF, x, y,
+#I    L2_8, L2_16, L3_3s, U3_3s, M11, L2_32,
+#I    U3_4s, J1s, L3_5s, PSp4_4s, presentations
+#I  
+#I  Also:
+#I  
+#I  TCENUM = ACETCENUM  (Todd-Coxeter Enumerator is now ACE)
+#I  
+#I  For an example of their application, you might like to try:
+#I  gap> ACEReadResearchExample("doL28.g" : optex := [1,2,4]);
+#I  (the output is 90 lines followed by a 'gap> ' prompt)
+#I  
+#I  For information type: ?Using ACEReadResearchExample
+gap>
+\endexample
+
+The output (`Info'-ed at `InfoACELevel' 1) states  that  a  number  of
+functions and variables have been defined, which we will now describe.
+
+\>PGRelFind( <fgens>, <rels>, <sgens> ) F
+
+For the perfect *simple*  group  $S  =  \langle  <fgens>  \mid  <rels>
+\rangle$ with subgroup $\langle <sgens> \rangle$ where each element of
+the list <sgens> is a word  in  the  generators  <fgens>,  `PGRelFind'
+tries to find  a  third  relator  such  that  together  with  the  two
+order-defining relators of <fgens> a presentation on three relators is
+determined, and if successful returns a record with fields  `fgens  :=
+<fgens>', `rels' set to the new 3-relator list found,  and  `sgens  :=
+<sgens>'. <fgens> should be a list of two generators of a free  group,
+say `[<a>, <b>]';  <rels>  should  contain  words  in  the  generators
+<fgens>,  the  first  of  which  should  determine  that  <a>  is   an
+involution, and the second should determine that <b> is of  order  <p>
+for some prime <p>. The  subgroup  $\langle  <sgens>  \rangle$  should
+ideally  be  a  maximal  subgroup  of  $\langle  <fgens>  \mid  <rels>
+\rangle$. It turns out that one only needs to test for  relators  that
+are the products of an odd number of bi-syllables of form  $<a><b>^k$,
+for some integer $k$ in the range $1,\ldots,<p> - 1$. We will use  the
+term *bi-syllabic length* to mean the number of bi-syllables  of  form
+$<a><b>^k$ in such a relator. Furthermore, each relator we test can be
+assumed to have the prefix (which we  subsequently  call  the  <head>)
+$<a><b><a><b><a><b>^{-1}$ if <p> is 3, or $<a><b>$ otherwise.
+
+Each relator tested is of form `<head> *  <middle>  *  <tail>',  where
+each of <head>, <middle>, <tail> is a  word  of  integral  bi-syllabic
+length. Moreover,
+
+\beginlist
+
+\item{--} <head> is fixed (as mentioned above); 
+
+\item{--} all <tail>s of the opposite parity bi-syllabic length up  to
+a  maximum  prescribed  length  are  pre-computed  (since  <head>   is
+generally of odd bi-syllabic length, <tail>s  are  generally  of  even
+bi-syllabic length); and
+
+\item{--} the bi-syllabic length of  the  <middle>s  is  always  even,
+starting from an initial minimum <middle>  length  and  increasing  in
+steps of `<granularity> + 2', where <granularity> is defined to be the
+difference of the maximum and minimum bi-syllabic lengths of a  <tail>
+(see below).
+
+\endlist
+
+Since the <tail>s in general are not all of the  same  length,  it  is
+possible when a search is successful that the first relator  found  is
+not the  shortest.  Hence  searching  continues  until  a  relator  of
+shortest length can be guaranteed.
+
+To provide some user control  of  the  algorithm,  `PGRelFind'  has  a
+number of options (entered after the arguments and after  a  colon  in
+the usual way):
+
+\beginitems
+
+\quad`head := <head>' & 
+Redefines <head> which by default is `<a>*<b>*<a>*<b>*<a>/<b>' if  the
+order of <b> is 3, or `<a>*<b>' otherwise, where <a> and  <b>  are  as
+defined above; <head> must  be  a  word  consisting  of  `<a>*<b>^<k>'
+bi-syllables for integers <k>.
+
+\quad`Nrandom := <nOrFunc>' & 
+Sets the number of <middle>s to be generated  for  each  length  of  a
+<middle>; <nOrFunc> may be a non-negative integer or a single-argument
+function that returns a positive integer.
+
+&
+Each <middle> may be generated sequentially or randomly. If `<nOrFunc>
+=  0'  then  <middle>s   are   generated   sequentially   (and   hence
+exhaustively), as they are by default.  If  <nOrFunc>  is  a  positive
+integer then, for each bi-syllabic length  of  a  <middle>,  <nOrFunc>
+``random'' <middle>s are generated. If <nOrFunc> is a  single-argument
+function then  for  each  bi-syllabic length  <len>  of  a  <middle>,
+`<nOrFunc>(<len>)' ``random'' <middle>s are generated.
+
+\quad`ACEworkspace := <workspace>' & 
+Sets the option `workspace' used by {\ACE} to <workspace> when running
+the index check of the large subgroup. If the index is  right,  {\ACE}
+is set to use  `2*<workspace>'  to  check  the  index  of  the  cyclic
+subgroup $\langle <b> \rangle$. By  default,  <workspace>  is  set  to
+`10^6', which is too small for many  of  the  `do<XXX>.g'  files  (see
+below).
+
+\quad`Ntails := <Ntails>' & 
+Sets the approximate number of <tail>s generated to  <Ntails>;  it  is
+used to set `maxTailLength' (described next); <Ntails> must a positive
+integer. The default behaviour is given by `<Ntails> = 2048'.
+
+\quad`maxTailLength := <len>' & 
+Sets the *intended* maximum bi-syllabic length of a <tail>  to  <len>;
+<len> must be a positive integer.
+
+&
+The default behaviour is given by `<len> = LogInt(<Ntails>, <orderb> -
+1)', where  <orderb>  is  the  order  of  <b>.  The  *actual*  maximum
+bi-syllabic length of a <tail> may be set 1 less, in order that it has
+the same parity as the minimum bi-syllabic length of a <tail>.
+
+\quad`minMiddleLength := <len>' & 
+Sets the minimum bi-syllabic length of a <middle> (which,  by  default
+is 0) to <len>; <len> should be a non-negative even integer.
+
+\quad`maxMiddleLength := <len>' & 
+Sets the *intended* maximum bi-syllabic length of a <middle> to <len>;
+<len> should be a positive integer.
+
+&
+The default behaviour is given by `<len> = 30'. The  *actual*  maximum
+bi-syllabic length of a <middle> is adjusted downwards  by  the  least
+amount necessary to ensure that the  difference  of  the  minimum  and
+maximum  bi-syllabic lengths  of   a   <middle>   is   divisible   by
+`<granularity> + 2'. (Recall that <granularity> is the  difference  of
+the maximum and minimum bi-syllabic lengths of a <tail>.)
+
+\enditems
+
+Please note that the relators tested are saved in the lists  `ALLRELS'
+and `newrels' (see~"ALLRELS").
+
+\>ClassesGenPairs( <G>, <orderx>, <ordery> ) F
+
+finds, and returns as a list of 2-element lists,  generator  pairs  of
+elements for the group <G> of  orders  <orderx>  and  <ordery>,  where
+<orderx> and <ordery> are positive integers.
+
+\>TranslatePresentation( <fgens>, <rels>, <sgens>, <newgens> ) F
+
+finds a new presentation, in terms of the  generators  <newgens>,  for
+the *simple* group $S = \langle <fgens>  \mid  <rels>  \rangle$,  with
+subgroup generated by <sgens>; <fgens> should  be  a  *pair*  of  free
+group generators; <rels>, <sgens> and <newgens>  should  be  lists  of
+words in <fgens>. Furthermore, <newgens>  should  be  a  list  of  two
+words, the first of which should be of even order and  the  second  of
+odd prime order in the group $S$. The idea is that,  by  using  Tietze
+transformations, the variables `x' and `y' (see~"x") are  assigned  to
+the words of <newgens>, which make up the new <fgens>, and <rels>  and
+<sgens>   are   written    in    terms    of    the    new    <fgens>,
+`TranslatePresentation' returns a record with fields  `fgens',  `rels'
+and `sgens' that are  the  new  values  of  <fgens>,  and  <rels>  and
+<sgens>, respectively.
+
+\>IsACEResExampleOK() F
+
+does a number of integrity  checks  and  tries  to  give  an  accurate
+diagnosis if something is wrong, returning  `true'  if  everything  is
+``OK''   and   `false'    otherwise.    It    is    called    whenever
+`ACEReadResearchExample' is executed and is not  intended  for  direct
+usage by users.
+
+\>`ACEResExample' V
+
+is initially set to  a  record  with  one  field  `filename'  whenever
+`ACEReadResearchExample' is executed and the value set to  that  field
+is the name of the file read by `ACEReadResearchExample'; other fields
+are set as the need arises. Essentially, it is  used  as  a  temporary
+variable store when `ACEReadResearchExample' reads a `do<XXX>.g' file.
+
+\>`ALLRELS' V
+\>`newrels' V
+
+are initially set to null lists. Each  time  `PGRelFind'  is  executed
+these each ``third'' relator tested is appended to `ALLRELS' and  each
+relator that is satisfied by the group  defined  by  the  <fgens>  and
+<rels> arguments  of  `PGRelFind'  (see~"PGRelFind")  is  appended  to
+`newrels'. The user should normally reset these  lists  back  to  null
+lists between invocations of `PGRelFind'.
+
+\>`F' V
+\>`a' V
+\>`b' V
+
+are the free group `F' and its two generators `a' and `b', used in the
+presentations described below.
+
+\>`newF' V
+\>`x' V
+\>`y' V
+
+are the free group `newF' and its two  generators  `x'  and  `y';  the
+record field `fgens' returned by `TranslatePresentation' is  the  list
+`[x, y]' (see~"TranslatePresentation").
+
+\>`L2_8' V
+\>`L2_16' V
+\>`L3_3s' V
+\>`U3_3s' V
+\>`M11' V
+\>`L2_32' V
+\>`U3_4s' V
+\>`J1s' V
+\>`L3_5s' V
+\>`PSp4_4s' V
+
+contain  presentations  for  the  perfect  simple   groups   $L_2(8)$,
+$L_2(16)$, $L_3(3)$, $U_3(3)$, $M_{11}$, $L_2(32)$,  $U_3(4)$,  $J_1$,
+$L_3(5)$ and $PSp_4(4)$, respectively. Those with names ending in  `s'
+contain lists of records (the `s' is meant to suggest ``plural''), and
+those with no `s' are just single records, where each record  has  the
+following fields:
+
+\beginitems
+
+\quad`source' & 
+a citation giving the source from which the presentation was obtained,
+where `CCN85', `CMY79' and `CR84' indicate \cite{CCN85},  \cite{CMY79}
+and \cite{CR84}, respectively;
+
+\quad`rels' & 
+the relators of the group in terms  of  the  generators  `a'  and  `b'
+defined above (see~"a"); and
+
+\quad`sgens' & 
+the generators of a large (usually maximal) subgroup of the group,  in
+terms of the generators `a' and `b'.
+
+\enditems
+
+\>`presentations' V
+
+is a record whose fields are the names of the  presentation  variables
+of~"M11",     and     whose     values     are     the      variables,
+e.g.~`presentations.L2_16' is the same object as `L2_16'.
+
+*The `do<XXX>.g' files*
+
+Each `do<XXX>.g' file (other than the generic `doGrp.g')  had  a  name
+that is formed  by  taking  one  of  the  fields  of  `presentations',
+removing any  underscore  or  `s',  prepending  `"do"'  and  appending
+`".g"'; also, each requires that you run
+
+\beginexample
+gap> ACEReadResearchExample();
+\endexample
+
+first to define the functions described above. If  you  forget,  never
+mind~\dots~you will be reminded.
+
+Many of the outputs are fairly lengthy and you may wish to use `LogTo'
+(see~"ref:LogTo") in order to peruse the  output  at  leisure,  later.
+Also, for many of the larger groups  one  needs  to  be  able  to  set
+`ACEworkspace' to `10^8' which may be  beyond  the  capacity  of  your
+machine. In particular, the investigation showing  that  $L_3(5)$  has
+deficiency 0 was run on an SGI Origin 2000 with 6.4 Gb of RAM.
+
+Recall `ACEReadResearchExample' expects a filename (i.e.~a string), or
+no argument; here are the *filenames* of the `do<XXX>.g' provided:
+
+\beginitems
+
+\quad`"doGrp.g"' &
+This allows the user to experiment with any of the  groups  that  have
+data in the `presentations' record. The user *must* supply values  for
+the following options:
+
+\qquad`grp := <presField>' &
+<presField> must be the  name  (i.e.~a  string)  of  a  field  in  the
+`presentations' record (this selects the group  to  be  investigated);
+and
+
+\qquad`newgens := <wordlist>' &
+<wordlist> must be a list of two words in the generators `a'  and  `b'
+which are  to  be  the  words  used  for  the  <newgens>  argument  of
+`TranslatePresentation'    (see~"TranslatePresentation"    for     the
+conditions they must satisfy).
+
+&
+The user may also supply `PGRelFind' options, though unlike `grp'  and
+`newgens', they will not be directly observable in the output. Here is
+an example using both sets of options:
+
+\beginexample
+gap> ACEReadResearchExample("doGrp.g"                                          
+>                           : grp := "L2_8", newgens := [a^3*b, a^2*b],
+>                             head := x*y*x*y*x*y^-1*x*y*x*y);
+# IsACEResExampleOK() sets ACEResExample.grp     from options grp, n
+#                          ACEResExample.newgens from option  newgens
+gap> ACEResExample.G := TranslatePresentation([a,b],
+>                                             ACEResExample.grp.rels,
+>                                             ACEResExample.grp.sgens,
+>                                             ACEResExample.newgens);
+#I  there are 4 generators and 6 relators of total length 45
+#I  there are 2 generators and 4 relators of total length 55
+rec(
+  fgens := [ x, y ],
+  rels := [ x^2, y^3, y^-1*x*y^-1*x*y^-1*x*y^-1*x*y^-1*x*y^-1*x*y^-1*x, 
+      x*y^-1*x*y*x*y^-1*x*y*x*y^-1*x*y*x*y^-1*x*y*x*y*x*y^-1*x*y*x*y^
+        -1*x*y*x*y^-1*x*y*x*y^-1*x*y*x*y ],
+  sgens := [ x*y^-1 ] )
+gap> ACEResExample.Gn := PGRelFind(ACEResExample.G.fgens,
+>                                  ACEResExample.G.rels,
+>                                  ACEResExample.G.sgens);
+GroupOrder=504 SubgroupIndex=72
+#bisyllables in head = 5 head: x*y*x*y*x*y^-1*x*y*x*y
+Max #bisyllables in tail = 10 (granularity = 10)
+#bisyllables in middle = 0
+Candidate relator: x*y*x*y*x*y^-1*x*y*x*y*x*y^-1*x*y^-1*x*y*x*y*x*y*x*y^
+-1*x*y^-1*x*y^-1*x*y*x*y^-1
+ #bisyllables = 15 (#bisyllables in tail = 10) #words tested: 1
+ACEStats:
+  index=72 cputime=0 ms maxcosets=98 totcosets=121
+Large subgroup index OK
+ACEStats for cyclic subgroup:
+  index=168 cputime=0 ms maxcosets=170 totcosets=232
+Cyclic subgroup index OK
+Success! ... new relator: 
+   x*y*x*y*x*y^-1*x*y*x*y*x*y^-1*x*y^-1*x*y*x*y*x*y*x*y^-1*x*y^-1*x*y^
+-1*x*y*x*y^-1
+... continuing (there may be a shorter relator).
+Candidate relator: x*y*x*y*x*y^-1*x*y*x*y*x*y^-1*x*y*x*y^-1*x*y^-1*x*y^
+-1*x*y*x*y*x*y*x*y^-1*x*y^-1
+ #bisyllables = 15 (#bisyllables in tail = 10) #words tested: 1
+ACEStats:
+  index=72 cputime=0 ms maxcosets=102 totcosets=123
+Large subgroup index OK
+ACEStats for cyclic subgroup:
+  index=168 cputime=0 ms maxcosets=170 totcosets=236
+Cyclic subgroup index OK
+Success! ... new relator: 
+   x*y*x*y*x*y^-1*x*y*x*y*x*y^-1*x*y*x*y^-1*x*y^-1*x*y^-1*x*y*x*y*x*y*x*y^
+-1*x*y^-1
+... continuing (there may be a shorter relator).
+Middles of length 0 exhausted.
+Relator found of length 15, is shortest.
+rec(
+  gens := [ x, y ],
+  rels := 
+   [ x^2, y^3, x*y*x*y*x*y^-1*x*y*x*y*x*y^-1*x*y*x*y^-1*x*y^-1*x*y^-1*x*y*x*y*\
+x*y*x*y^-1*x*y^-1 ],
+  sgens := [ x*y^-1 ] )
+gap>
+\endexample
+
+\quad`"doL28.g"' &
+This provides a nice small example. You  may  supply  any  `PGRelFind'
+options you wish, and/or you may use the following  option  which  has
+been specifically  designed  to  help  you  get  acquainted  with  the
+`PGRelFind' options (only the equivalent of the `optex'  options  will
+be explicitly observable in the output).
+
+\qquad`optex := <val>' &
+<val>  may  be  an  integer  or  a  list  of  integers  in  the  range
+$1,\ldots,8$. The following produces 135 lines and a  `gap> '  prompt,
+but  is  nevertheless  recommended  (particularly,  if  you  have   an
+`xterm'-type window with the ability to scroll back):
+
+\beginexample
+gap> ACEReadResearchExample("doL28.g" : optex := [1,8]);  
+\endexample
+
+\quad`"doL216.g"' &
+
+\quad`"doL33.g"' &
+
+\quad`"doU33.g"' &
+
+\quad`"doM11.g"' &
+
+\quad`"doL232.g"' &
+
+\quad`"doU34.g"' &
+
+\quad`"doJ1.g"' &
+
+\quad`"doL35.g"' &
+
+\quad`"doPSp44.g"' &
+
+\enditems
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%

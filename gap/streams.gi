@@ -51,17 +51,35 @@ InstallGlobalFunction(ACE_STRINGS,
 #############################################################################
 ####
 ##
-#F  ACE_EVAL_STRING_EXPR  . . . . . . . . . . . . . . . . . evaluate a string
-##  . . . . . . . . . . . . . . . . passes string through an  InputTextStream
-##  . . . . . . . . . . . . . . . . . . . . . . . . so that GAP interprets it
+#F  ACE_EVAL_STRING_EXPR( <expr> )  . . . . . . . . . . . . evaluate a string
 ##
-InstallGlobalFunction(ACE_EVAL_STRING_EXPR, function(string)
-local expr, temp;
+##  passes <expr> (a string) through  an  `InputTextStream'  so  that  {\GAP}
+##  interprets it, and returns the result.
+##
+InstallGlobalFunction(ACE_EVAL_STRING_EXPR, function(expr)
+local temp;
 
   temp := TemporaryGlobalVarName();
-  Read( InputTextString(Concatenation( temp, ":=", string, ";" )) );
+  Read( InputTextString(Concatenation( temp, ":=", expr, ";" )) );
   expr := ValueGlobal(temp);
   UnbindGlobal(temp);
+  return expr;
+end);
+
+#############################################################################
+####
+##
+#F  ACE_PRINT_AND_EVAL( <varname>, <expr> ) . . . print and evaluate a string
+##
+##  emulates a user typing at the `gap> ' prompt: `<varname> := <expr>;'  and
+##  prints and returns the evaluation of <expr>; <varname> and <expr>  should
+##  be strings.
+##
+InstallGlobalFunction(ACE_PRINT_AND_EVAL, function(varname, expr)
+
+  Print("gap> ", varname, " := ", ReplacedString(expr, "\n ", "\n>"), ";\n");
+  expr := ACE_EVAL_STRING_EXPR(expr);
+  Print(expr, "\n");
   return expr;
 end);
 

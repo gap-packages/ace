@@ -23,6 +23,7 @@ Revision.pgrelfind_g :=
     "@(#)$Id$";
 
 ## Begin
+ACEResExample := rec(filename := "pgrelfind.g");
 RequirePackage("ace", "3.0");
 # Use ACE for CosetTableFromGensAndRels coset enumerations
 TCENUM := ACETCENUM;;
@@ -31,61 +32,60 @@ TCENUM := ACETCENUM;;
 ALLRELS := []; # in case we want to collect all relators tried.
 newrels := []; # in case we want to collect all relators that work.
 
-PGRelFind := function(Fgens, rels, suwo)
-#  For the perfect *simple* group S  =  <Fgens  |  rels>  with  subgroup
-#  <suwo> where each  element  of  the  list  suwo  is  a  word  in  the
-#  generators Fgens, try to  find  one  `extra'  relator.  Fgens  should
-#  contain two generators of a free  group,  say  [a,  b];  rels  should
-#  contain words in the generators Fgens, the  first  of  which,  should
-#  determine that a is an involution, the second  should  determine  the
-#  order of b. The subgroup <suwo> should ideally be a maximal  subgroup
-#  of <Fgens | rels>. The purpose of PGRelFind is to find a presentation
-#  containing just 3 relators, one  determining  the  order  of  a,  one
-#  determining the order of b, and just one other.  After  a  search  is
-#  successful, searching continues in case for a  shorter  relator,  and
-#  terminates with a relator of shortest length.
-#
-# Options : 
-#   head : Each relator tested is of form `head' * `middle' * `tail'
-#      where `head' is constant. This option sets the value of `head'.
-#     Value: a word in Fgens
-#     Default: a*b*a*b*a/b (if |b| = 3), a*b (otherwise)
-#   Nrandom : Each `middle' may be generated sequentially or randomly.
-#      If Nrandom = 0 then `middle's are generated sequentially.
-#      If Nrandom is a positive integer then for each length of a
-#       middle Nrandom `middle's are generated.
-#      If Nrandom is a positive integer valued single-argument
-#       function then for each length len of a middle Nrandom(len)
-#       `middle's are generated.
-#     Value: a non-negative integer OR a single-argument function
-#            that returns a positive integer.
-#     Default: 0
-#   ACEworkspace : The workspace ACE is set to use when running the
-#      index check of the large subgroup. If the index is right,
-#      double this workspace is used to check the index of <b>.
-#     Value: a positive integer
-#     Default: 10^8
-#   Ntails : Approximate no. of tails generated. It is used to set
-#      maxTailLength.
-#     Value: a positive integer
-#     Default: 2048
-#   maxTailLength : (Intended) maximum tail length. Actual maximum
-#      tail length may be 1 less, so that it has the same parity as
-#      the minimum tail length. Overrides the effect of Ntails.
-#     Value: a positive integer
-#     Default: LogInt(Ntails, |b| - 1)
-#   minMiddleLength : Minimum length of a `middle'.
-#     Value: non-negative integer
-#     Default: 0
-#   maxMiddleLength : (Intended) maximum length of a `middle'. Actual
-#      maximum may be less, in order to ensure granularity + 2 divides
-#       maxMiddleLength - minMiddleLength, where 
-#
-#          granularity = maxTailLength - minMiddleLength
-#
-#     Value: positive integer
-#     Default: 30
-#   
+PGRelFind := function(Fgens, rels, sgens)
+##  For the perfect *simple* group S = <Fgens | rels> with  subgroup  <sgens>
+##  where each element of the list sgens is a word in the  generators  Fgens,
+##  try to find one `extra' relator. Fgens should contain two generators of a
+##  free group, say [a, b]; rels  should  contain  words  in  the  generators
+##  Fgens, the first of which, should determine that a is an involution,  the
+##  second should determine the order  of  b.  The  subgroup  <sgens>  should
+##  ideally be a maximal subgroup of <Fgens | rels>. The purpose of PGRelFind
+##  is to find a presentation containing just 3 relators, one determining the
+##  order of a, one determining the order of b, and just one other.  After  a
+##  search is successful, searching continues in  case  there  is  a  shorter
+##  relator, and terminates with a relator of shortest length.
+##
+##  Options : 
+##   head : Each relator tested is of form `head' * `middle' * `tail'
+##      where `head' is constant. This option sets the value of `head'.
+##     Value: a word in Fgens
+##     Default: a*b*a*b*a/b (if |b| = 3), a*b (otherwise)
+##   Nrandom : Each `middle' may be generated sequentially or randomly.
+##      If Nrandom = 0 then `middle's are generated sequentially.
+##      If Nrandom is a positive integer then for each length of a
+##       middle Nrandom `middle's are generated.
+##      If Nrandom is a positive integer valued single-argument
+##       function then for each length len of a middle Nrandom(len)
+##       `middle's are generated.
+##     Value: a non-negative integer OR a single-argument function
+##            that returns a positive integer.
+##     Default: 0
+##   ACEworkspace : The workspace ACE is set to use when running the
+##      index check of the large subgroup. If the index is right,
+##      double this workspace is used to check the index of <b>.
+##     Value: a positive integer
+##     Default: 10^6
+##   Ntails : Approximate no. of tails generated. It is used to set
+##      maxTailLength.
+##     Value: a positive integer
+##     Default: 2048
+##   maxTailLength : (Intended) maximum tail length. Actual maximum
+##      tail length may be 1 less, so that it has the same parity as
+##      the minimum tail length. Overrides the effect of Ntails.
+##     Value: a positive integer
+##     Default: LogInt(Ntails, |b| - 1)
+##   minMiddleLength : Minimum length of a `middle'.
+##     Value: non-negative integer
+##     Default: 0
+##   maxMiddleLength : (Intended) maximum length of a `middle'. Actual
+##      maximum may be less, in order to ensure granularity + 2 divides
+##       maxMiddleLength - minMiddleLength, where 
+##
+##          granularity = maxTailLength - minTailLength
+##
+##     Value: positive integer
+##     Default: 30
+##   
 local SetConstFromOption, NewRelator, F, a, b, t, permSgens, idx, orderS, 
       orderb, whead;
 
@@ -110,10 +110,10 @@ local SetConstFromOption, NewRelator, F, a, b, t, permSgens, idx, orderS,
         Initc, cLength, c, cCtr, NcVectors, bExptSum, GetNextc, Permc, Wordc,
         TailLenIndex, tails, NonZeroModOrderb, tail, UnbindList, nrandom, 
         bPowers, Randomc, relatorExclusions, maxTailLenIndex, p, tailrec, 
-        w, Nwsyllables;
+        w, Nwbisyllables;
 
-    # Constants ... read `Length' as #a,b-syllables
-    ACEworkspace := SetConstFromOption("ACEworkspace", 10^8);
+    # Constants ... read `Length' as #a,b-bisyllables
+    ACEworkspace := SetConstFromOption("ACEworkspace", 10^6);
     Nrandom := SetConstFromOption("Nrandom", 0);
     headLength := ExponentSumWord(whead, a);
     minTailLength := (headLength - 1) mod 2;
@@ -125,6 +125,8 @@ local SetConstFromOption, NewRelator, F, a, b, t, permSgens, idx, orderS,
     maxTailLength := maxTailLength - (maxTailLength - minTailLength) mod 2;
     granularity := maxTailLength - minTailLength;
     minMiddleLength := SetConstFromOption("minMiddleLength", 0);
+    # ensure minMiddleLength is even
+    minMiddleLength := minMiddleLength - (minMiddleLength mod 2);
     maxMiddleLength := SetConstFromOption("maxMiddleLength", 30);
     # ensure granularity + 2 divides maxMiddleLength - minTailLength
     maxMiddleLength 
@@ -142,7 +144,7 @@ local SetConstFromOption, NewRelator, F, a, b, t, permSgens, idx, orderS,
     #
     # To be a relator, such a word w must be the identity.
     # In particular, 1^wp = 1 i.e. 1^(head * middle) = 1^(tail^-1).
-    # As we go, we ensure that the total number of syllables
+    # As we go, we ensure that the total number of bisyllables
     # (= ExponentSum(w, a)) is odd ... avoiding an explicit
     # perfectness test for the as.
 
@@ -158,7 +160,7 @@ local SetConstFromOption, NewRelator, F, a, b, t, permSgens, idx, orderS,
       end;
 
       # First test whether the subgroup has the right index
-      t := ACEStats([a,b], [a^2,b^orderb,word], suwo
+      t := ACEStats([a,b], [a^2,b^orderb,word], sgens
                     :workspace:=ACEworkspace, hard, mend, 
                      acenow, aceignoreu);
       PrintACEStats("");
@@ -182,7 +184,7 @@ local SetConstFromOption, NewRelator, F, a, b, t, permSgens, idx, orderS,
     ap := gens[1];
     bp := gens[2];
 
-    Print("#syllables in head = ", headLength, " head: ", whead, "\n");
+    Print("#bisyllables in head = ", headLength, " head: ", whead, "\n");
     head := MappedWord(whead, [a,b], [ap,bp]);
     headbExptSum := ExponentSumWord(whead, b);
 
@@ -197,7 +199,7 @@ local SetConstFromOption, NewRelator, F, a, b, t, permSgens, idx, orderS,
     bexpts  # Possible b exponents (we assume |b| is odd)
             # [ 1, 2, ..., |b| div 2, -(|b| div 2), ..., -2, -1 ]
        := Concatenation([1 .. Int(orderb/2)], [-Int(orderb/2) .. -1]);
-    absylls := List(bexpts, i -> ap*bp^i); # feasible a,b-syllables
+    absylls := List(bexpts, i -> ap*bp^i); # feasible a,b-bisyllables
 
     Initc := function()
     # Initialise c
@@ -237,15 +239,15 @@ local SetConstFromOption, NewRelator, F, a, b, t, permSgens, idx, orderS,
     # Wordc gives the corresponding a,b-word to c
     Wordc := c -> Product(c, ci -> a*b^bexpts[ci], One(a));
     
-    Print("Max #syllables in tail = ", maxTailLength, 
+    Print("Max #bisyllables in tail = ", maxTailLength, 
           " (granularity = ", maxTailLength - minTailLength, ")\n");
 
-    # Produce all tails up to maxTailLength syllables and index them 
+    # Produce all tails up to maxTailLength bisyllables and index them 
     # according to:
     #
     #   * their preimages of 1 
     #   * their b exponent sums after multiplication by head
-    #   * their number of syllables
+    #   * their number of bisyllables
     # 
     # in the following way. If tailrec = tails[i][j][k] and
     #
@@ -259,9 +261,9 @@ local SetConstFromOption, NewRelator, F, a, b, t, permSgens, idx, orderS,
     #        (except that j = |b| where the above returns 0)
     #        ... this enables a fast perfectness check for
     #            the b exponent sum
-    #    k = ((#syllables in wtail) div 2) + 1
+    #    k = ((#bisyllables in wtail) div 2) + 1
     #
-    # We also include #syllables in wtail in the tailrec as
+    # We also include #bisyllables in wtail in the tailrec as
     #
     #   aExpt = tailrec.aExptSum
     #
@@ -344,7 +346,7 @@ local SetConstFromOption, NewRelator, F, a, b, t, permSgens, idx, orderS,
     # Now compute all middles ... and use them
     for cLength in [minMiddleLength, 
                     minMiddleLength + granularity + 2 .. maxMiddleLength] do
-      Print("#syllables in middle = ", cLength, "\n");
+      Print("#bisyllables in middle = ", cLength, "\n");
       Initc();
       for cCtr in [1 .. NcVectors] do
         if cCtr mod 10000 = 0 then
@@ -362,15 +364,15 @@ local SetConstFromOption, NewRelator, F, a, b, t, permSgens, idx, orderS,
              # ... first check 2 fixed - (quicker test than order)
              (2^p)^tailrec.perm = 2 and Order(p * tailrec.perm) = 1 then
             w := whead * Wordc(c) * tailrec.word;
-            Nwsyllables := headLength + cLength + tailrec.aExptSum;
+            Nwbisyllables := headLength + cLength + tailrec.aExptSum;
             if ForAll(RelatorRepresentatives([w]),
-                      wc -> not(wc in relatorExclusions[Nwsyllables])) then
-              Add(relatorExclusions[Nwsyllables], w); # Avoid testing 
+                      wc -> not(wc in relatorExclusions[Nwbisyllables])) then
+              Add(relatorExclusions[Nwbisyllables], w); # Avoid testing 
                                                       # essentially the 
                                                       # same relator twice
               Print("Candidate relator: ",w,"\n",
-                    " #syllables = ", Nwsyllables,
-                    " (#syllables in tail = ", tailrec.aExptSum, ")",
+                    " #bisyllables = ", Nwbisyllables,
+                    " (#bisyllables in tail = ", tailrec.aExptSum, ")",
                     " #words tested: ", cCtr, "\n"); 
               Add(ALLRELS, w);
               if IsPresentation(w) then
@@ -429,7 +431,7 @@ local SetConstFromOption, NewRelator, F, a, b, t, permSgens, idx, orderS,
   #
   # is an isomorphism. Word calculations using this permutation repres-
   # entation are far more efficient than using a free presentation.
-  t := CosetTableFromGensAndRels(Fgens, rels, suwo : 
+  t := CosetTableFromGensAndRels(Fgens, rels, sgens : 
                                  acenow, aceignoreu);
   permSgens := List(t{[1,3..Length(t)-1]}, PermList);
   idx := Length(t[1]);
@@ -451,21 +453,21 @@ local SetConstFromOption, NewRelator, F, a, b, t, permSgens, idx, orderS,
 
   return rec(gens := Fgens, 
              rels := [a^2, b^orderb, NewRelator(permSgens)],
-             suwo := suwo);
+             sgens := sgens);
 end;
 
-ClassesGenPairs := function(G, x, y)
-# Finds generator pairs for G of orders |x| and |y|.
+ClassesGenPairs := function(G, orderx, ordery)
+##  Finds generator pairs for G of orders orderx and ordery.
 local a, b, p, h, cla, clb, ai, bi, ra, rb, cena, cenb, gens, u, dc, j;
   a := AutomorphismGroup(G);
   p := IsomorphismPermGroup(a);
   b := Image(p, a);
   h := Image(p, InnerAutomorphismsAutomorphismGroup(a));
   cla := Filtered(ConjugacyClasses(b),
-                  i -> Order(Representative(i)) = x 
+                  i -> Order(Representative(i)) = orderx 
                        and Representative(i) in h);
   clb := Filtered(ConjugacyClasses(b),
-                  i -> Order(Representative(i)) = y
+                  i -> Order(Representative(i)) = ordery
                        and Representative(i) in h);
   gens := [];
   for ai in cla do
@@ -492,17 +494,21 @@ local a, b, p, h, cla, clb, ai, bi, ra, rb, cena, cenb, gens, u, dc, j;
   return gens;
 end;
 
-TranslatePresentation := function(Fgens, rels, suwo, newgens)
-# For the *simple* quotient q = F/rels where F is a free group with  two
-# generators Fgens, and the subgroup of q  generated  by  the  words  in
-# Fgens in the list suwo and a pair of new generators newgens for q,  in
-# terms of Fgens, returns a record with fields gens,  rels,  suwo  where
-# gens = [x, y] represent the new generators newgens, <gens |  rels>  is
-# the new presentation (rels is a list of words in x and y) and suwo  is
-# the list of subgroup words of the input suwo, but in terms of x and y.
-# The first new generator newgens[1] should be an involution.
-local F, t, Permqgens, Permqnewgens, ValueInPermq, orderx, ordery, q,
-      p, newF, x, y, newFgens, n, nrels, Prune, CheckOrders, xwords,
+# Global variables used in TranslatePresentation
+newF := FreeGroup("x", "y"); x := newF.1; y := newF.2;
+
+TranslatePresentation := function(Fgens, rels, sgens, newgens)
+##  For the *simple* quotient q = F/rels where F is a  free  group  with  two
+##  generators Fgens, and the subgroup of q generated by the words  in  Fgens
+##  in the list sgens and a pair of new generators newgens for q, in terms of
+##  Fgens, returns a record with fields gens, rels, sgens where gens = [x, y]
+##  represent  the  new  generators  newgens,  <gens  |  rels>  is  the   new
+##  presentation (rels is a list of words in x and y) and sgens is  the  list
+##  of subgroup words of the input sgens, but in terms of x and y. The  first
+##  new generator newgens[1] should be an involution.
+##
+local F, t, Permqgens, Permqnewgens, ValueInPermq, orderx, ordery,
+      q, p, newFgens, n, nrels, Prune, CheckOrders, xwords,
       ywords, xywords, xyValueInPermq, Permqvalues, MakeNewWords,
       xyFgens, unboundi, xyList, i;
   if Length(Fgens) <> 2 then
@@ -519,7 +525,7 @@ local F, t, Permqgens, Permqnewgens, ValueInPermq, orderx, ordery, q,
   #
   # is an isomorphism. Word calculations using this permutation repres-
   # entation are far more efficient than using a free presentation.
-  t := CosetTableFromGensAndRels(Fgens, rels, suwo);
+  t := CosetTableFromGensAndRels(Fgens, rels, sgens : acenow, aceignoreu);
   Permqgens := List(t{[1,3..Length(t)-1]}, PermList);
   Permqnewgens := List(newgens, i -> MappedWord(i, Fgens, Permqgens));
 
@@ -551,7 +557,6 @@ local F, t, Permqgens, Permqnewgens, ValueInPermq, orderx, ordery, q,
            );
   TzGoGo(p);
 
-  newF := FreeGroup("x", "y"); x := newF.1; y := newF.2;
   newFgens := GeneratorsOfGroup(newF);
   n := FpGroupPresentation(p);
   nrels := 
@@ -564,7 +569,7 @@ local F, t, Permqgens, Permqnewgens, ValueInPermq, orderx, ordery, q,
             );
 
   # Calculate x,y-expressions xyFgens for the old generators Fgens.
-  # We need these to rewrite suwo in terms of x and y.
+  # We need these to rewrite sgens in terms of x and y.
   # This is of course hidden in the rewriting code, 
   # but there is no proper interfacing function yet. 
   # So we recursively generate x,y-words until we find what we want.
@@ -631,15 +636,13 @@ local F, t, Permqgens, Permqnewgens, ValueInPermq, orderx, ordery, q,
     fi;
   until IsEmpty(unboundi);
 
-  return rec(gens := [x, y],
+  return rec(fgens := [x, y],
              rels := nrels,
-             suwo := List(suwo, w -> MappedWord(w, Fgens, xyFgens)) );
+             sgens := List(sgens, w -> MappedWord(w, Fgens, xyFgens)) );
 
 end;
 
 F := FreeGroup("a","b");     a := F.1;    b := F.2;
-
-newF := FreeGroup("x", "y"); x := newF.1; y := newF.2;
 
 # The presentations below have been obtained from:
 #   [CCN85] J.H. Conway et al, `Atlas of Finite Groups'
@@ -652,62 +655,62 @@ newF := FreeGroup("x", "y"); x := newF.1; y := newF.2;
 
 L2_8 := rec( source := "[CCN85, p6]",
              rels := [a^7, (a^2*b)^3, (a^3*b)^2, (a*b^5)^2],
-             suwo := [a] );
+             sgens := [a] );
 
 L2_16 := rec( source := "[CCN85, p12]",
               rels := [a^15, (a^2*b)^3, (a^3*b)^2, (a*b^9)^2,
                        (a^8*b^2)^2, b^17 ],
-              suwo := [a] );
+              sgens := [a] );
 
 L3_3s := [# L_3(3), 1
           rec( source := "[CMY79, 5.1]",
                rels := [a^2, b^3, (a*b)^13, 
                         ((a*b)^4*a*b^-1)^2*(a*b)^2*(a*b^-1)^2*
                          (a*b)*(a*b^-1)^2*(a*b)^2*a*b^-1], 
-               suwo := [a^(b*a), b] ),
+               sgens := [a^(b*a), b] ),
 
           # L_3(3), 2 
           rec( source := "[CMY79, 5.2]",
                rels := [a^2, b^3, (a*b)^13, (Comm(a,b))^6,
                         ((a*b)^2*(a*b^-1)^2)^3],
-               suwo := [a^(b*a), b^(a*b)] ),
+               sgens := [a^(b*a), b^(a*b)] ),
 
           # L_3(3), 3 
           rec( source := "[CCN85, p13]",
                rels := [a^6, b^3, (a*b)^4, (a^2*b)^4, (a^3*b)^3,
                         Comm(a^2,(b*a^2*b)^2)], 
-               suwo := [a] )
+               sgens := [a] )
           ];
 
 U3_3s := [# U_3(3), 1 
           rec( source := "[CMY79, 6.1]",
                rels := [a^2, b^6, (a*b)^7, (a*b^2)^3*(a*b^-2)^3,
                         (a*b*a*b^-2)^3*a*b*(a*b^-1)^2], 
-               suwo := [a^b, a*b*a*b*a*b^-2] ),
+               sgens := [a^b, a*b*a*b*a*b^-2] ),
 
           # U_3(3), 2 
           rec( source := "[CMY79, 6.2]",
                rels := [a^2, b^6, (a*b)^8, (Comm(a,b))^4, (a*b^3)^3,
                         (a*b^2)^3*(a*b^-2)^3, ((a*b)^2*a*b^2)^3], 
-               suwo := [a, a^b*b] )
+               sgens := [a, a^b*b] )
           ];
 
 M11 := rec( source := "[CMY79, 7.1]",
             rels := [a^2, b^4, (a*b)^11, (a*b^2)^6,
                      (a*b)^2*(a*b^-1)^2*a*b*a*b^-1*a*b^2*a*b*a*b^-1],
-            suwo := [a, b^((a*b)^2)] );
+            sgens := [a, b^((a*b)^2)] );
 
 L2_32 := rec( source := "[CCN85, p29]",
               rels := [a^31, (a^2*b)^3, (a^3*b)^2, (a*b^6)^2,
                        (a^2*b^4*a^4*b^5)^2, (a^2*b^5*a^4*b^4)^2 ],
-              suwo := [a] );
+              sgens := [a] );
 
 U3_4s := [# U_3(4), 1 
           rec( source := "[CMY79, 12.1]",
                rels := [a^2, b^3, (a*b)^13,
                         a*b*(a*b^-1)^2*(a*b)^2*a*b^-1*a*b*(a*b^-1)^4*
                          a*b*a*b^-1*(a*b)^4*a*b^-1],
-               suwo := [(a*b)^5*a, (a*b)^2*a*b^-1*a*b*(a*b^-1)^2*a,
+               sgens := [(a*b)^5*a, (a*b)^2*a*b^-1*a*b*(a*b^-1)^2*a,
                         (a*b*(a*b^-1)^2)^2,
                         a*b*a*b^2*(a*b)^2*(a*b^-1)^2*a*b] ),
 
@@ -715,140 +718,140 @@ U3_4s := [# U_3(4), 1
           rec( source := "[CMY79, 12.2]",
                rels := [a^2, b^3, (a*b)^15, (Comm(a,b))^5,
                         ((a*b)^3*(a*b^-1)^3)^3, (a*b^-1*(a*b)^5)^4],
-               suwo := [a*b*a*b^2*a*b^-1*a*b*a, b*a*b*(a*b^-1)^3*a*b])
+               sgens := [a*b*a*b^2*a*b^-1*a*b*a, b*a*b*(a*b^-1)^3*a*b])
           ];
 
 J1s := [#J1, 1  
         rec( source := "[CR84, 15.1]",
              rels := [a^2, b^3, (a*b)^7, (Comm(a,b))^10,
                       (Comm(a, b^-1*(a*b)^2))^6],
-             suwo := [a, b^(a*b*(a*b^-1)^2)] ),
+             sgens := [a, b^(a*b*(a*b^-1)^2)] ),
 
         #J1, 2  
         rec( source := "[CR84, 15.3]",
              rels := [a^2, b^3, (a*b)^7, ((a*b)^2*a*b^-1)^11,
                       (Comm(a,b*(a*b^-1)^2))^5],
-             suwo := [a, b^(a*b^-1)] ),
+             sgens := [a, b^(a*b^-1)] ),
 
         #J1, 3  
         rec( source := "[CR84, 15.5]",
              rels := [a^2, b^3, (a*b)^7, (Comm(a,b))^15,
                       (Comm(a,b^-1*(a*b)^2))^5,
                       ((a*b*a*b^-1)^2*a*b)^6],
-             suwo := [a, b^((a*b^-1*a*b)^2*a*b^-1)] ),
+             sgens := [a, b^((a*b^-1*a*b)^2*a*b^-1)] ),
 
         #J1, 4  
         rec( source := "[CR84, 15.7]",
              rels := [a^2, b^3, (a*b)^7, ((a*b*a*b^-1)^3*a*b)^5,
                       ((a*b*a*b^-1)^3*(a*b^-1*a*b)^3)^3],
-             suwo := [a, b^((a*b^-1*a*b)^2*a*b^-1*(a*b)^2)] ),
+             sgens := [a, b^((a*b^-1*a*b)^2*a*b^-1*(a*b)^2)] ),
 
         #J1, 5  
         rec( source := "[CR84, 15.8]",
              rels := [a^2, b^3, (a*b)^10, (Comm(a, b^-1*a*b^-1*(a*b)^3))^2,
                       ((a*b)^3*(a*b*a*b^-1)^2*(a*b)^2*(a*b^-1)^2)^3],
-             suwo := [a, b^((a*b^-1)^3)] ),
+             sgens := [a, b^((a*b^-1)^3)] ),
 
         #J1, 6  
         rec( source := "[CR84, 15.10]",
              rels := [a^2, b^3, (a*b)^10, ((a*b)^2*a*b^-1)^7,
                       (Comm(a, b*a*b^-1*(a*b)^3))^2],
-             suwo := [a, b^(a*b^-1*a*b*(a*b^-1)^2)] ),
+             sgens := [a, b^(a*b^-1*a*b*(a*b^-1)^2)] ),
 
         #J1, 7  
         rec( source := "[CR84, 15.12]",
              rels := [a^2, b^3, (a*b)^10, (Comm(a, b*a*b*(a*b^-1)^3))^2,
                       ((a*b)^4*a*b^-1*a*b*(a*b*a*b^-1)^2)^3],
-             suwo := [a, b^(a*b^-1*a*b*a*b^-1)] ),
+             sgens := [a, b^(a*b^-1*a*b*a*b^-1)] ),
 
         #J1, 8  
         rec( source := "[CR84, 15.14]",
              rels := [a^2, b^3, (a*b)^10, ((a*b)^2*a*b^-1)^5,
                       ((a*b)^2*(a*b*a*b^-1)^2*(a*b)^2*(a*b^-1)^3)^3],
-             suwo := [a, b^(a*b*(a*b^-1)^2*(a*b)^2)] ),
+             sgens := [a, b^(a*b*(a*b^-1)^2*(a*b)^2)] ),
 
         #J1, 9  
         rec( source := "[CR84, 15.15]",
              rels := [a^2, b^3, (a*b)^10, ((a*b)^3*(a*b^-1)^2)^5,
                       ((a*b)^2*(a*b*a*b^-1)^2*(a*b)^2*(a*b^-1)^3)^3],
-             suwo := [a, b^(a*b*(a*b^-1)^2*(a*b)^2)] ),
+             sgens := [a, b^(a*b*(a*b^-1)^2*(a*b)^2)] ),
 
         #J1, 10  
         rec( source := "[CR84, 15.16]",
              rels := [a^2, b^3, (a*b)^11, ((a*b)^2*(a*b^-1)^2)^5,
                       ((a*b)^4*(a*b^-1)^3*(a*b)^2*(a*b^-1)^4)^2],
-             suwo := [a, b^(a*b^-1*a*b*(a*b^-1)^2*a*b)] ),
+             sgens := [a, b^(a*b^-1*a*b*(a*b^-1)^2*a*b)] ),
 
         #J1, 11  
         rec( source := "[CR84, 15.18]",
              rels := [a^2, b^3, (a*b)^11, ((a*b)^2*a*b^-1)^6,
                       ((a*b)^4*(a*b^-1)^3)^3],
-             suwo := [a, b^((a*b^-1)^2*(a*b)^2)] ),
+             sgens := [a, b^((a*b^-1)^2*(a*b)^2)] ),
 
         #J1, 12  
         rec( source := "[CR84, 15.19]",
              rels := [a^2, b^3, (a*b)^15, (Comm(a,b))^5,
                       ((a*b)^4*(a*b^-1)^2)^5,
                       ((a*b)^2*((a*b^2)*(a*b^-1)^2)^2)^3],
-             suwo := [a, b^((a*b^-1)^3*(a*b)^2)] ),
+             sgens := [a, b^((a*b^-1)^3*(a*b)^2)] ),
 
         #J1, 13  
         rec( source := "[CR84, 15.20]",
              rels := [a^2, b^3, (Comm(a,b))^6, ((a*b)^2*a*b^-1)^7,
                       (Comm(a, b^-1*(a*b)^3))^2],
-             suwo := [a, b^(a*b*(a*b^-1)^4)] ),
+             sgens := [a, b^(a*b*(a*b^-1)^4)] ),
 
         #J1, 14  
         rec( source := "[CR84, 15.22]",
              rels := [a^2, b^3, (a*b)^15, (Comm(a, b*a*b))^5,
                       ((a*b)^5*(a*b^-1*a*b*a*b^-1)^2*a*b^-1)^2,
                       ((a*b)^3*((a*b)^2*a*b^-1)^2*(a*b^-1*a*b)^2)^2],
-             suwo := [a, b^(a*b^-1)] ),
+             sgens := [a, b^(a*b^-1)] ),
 
         #J1, 15  
         rec( source := "[CR84, 15.24]",
              rels := [a^2, b^3, (a*b)^15, (Comm(a, b*a*b))^5,
                       ((a*b)^2*a*b^-1)^6, ((a*b)^5*a*b^-1)^7,
                       (Comm(a, (b*a)^2*(b^-1*a)^3*b))^2],
-             suwo := [a, b^((a*b)^3*a*b^-1)] ),
+             sgens := [a, b^((a*b)^3*a*b^-1)] ),
 
         #J1, 16  
         rec( source := "[CR84, 15.26]",
              rels := [a^2, b^3, (a*b)^15, (Comm(a, b*a*b))^3,
                       ((a*b)^4*(a*b^-1)^2)^5,
                       ((a*b)^4*(a*b^-1*a*b)^2*(a*b^-1)^2*a*b*(a*b^-1)^3)^2],
-             suwo := [a, b^(a*b)] ),
+             sgens := [a, b^(a*b)] ),
 
         #J1, 17  
         rec( source := "[CR84, 15.27]",
              rels := [a^2, b^3, (a*b)^19, ((a*b)^3*(a*b^-1*a*b)^4)^2,
                       (((a*b)^4*a*b^-1)^2*a*b^-1)^2],
-             suwo := [a, b^(a*b^-1*(a*b)^4)] ),
+             sgens := [a, b^(a*b^-1*(a*b)^4)] ),
 
         #J1, 18  
         rec( source := "[CR84, 15.28]",
              rels := [a^2, b^3, (a*b)^19, ((a*b)^2*(a*b*a*b^-1)^2)^2,
                       (((a*b)^4*a*b^-1)^2*a*b^-1)^3],
-             suwo := [a, b^((a*b)^2)] ),
+             sgens := [a, b^((a*b)^2)] ),
 
         #J1, 19  
         rec( source := "[CR84, 15.29]",
              rels := [a^2, b^3, (a*b)^19, ((a*b)^2*a*b^-1)^6,
                       ((a*b)^3*a*b^-1)^6, (Comm(a, (b*a)^4*b^-1*a*b))^2,
                       ((a*b)^4*a*b^-1*a*b*(a*b^-1)^3*(a*b)^2*a*b^-1)^2],
-             suwo := [a, b^((a*b^-1*a*b)^2*a*b^-1*(a*b)^2)] ),
+             sgens := [a, b^((a*b^-1*a*b)^2*a*b^-1*(a*b)^2)] ),
 
         #J1, 20  
         rec( source := "[CR84, 15.31]",
              rels := [a^2, b^3, (a*b)^19, (Comm(a, b*(a*b)^2))^3,
                       ((a*b)^5*((a*b)^2*a*b^-1)^2)^2],
-             suwo := [a, b^(a*b*a*b^-1*(a*b)^2)] ),
+             sgens := [a, b^(a*b*a*b^-1*(a*b)^2)] ),
 
         #J1, 21  
         rec( source := "[CR84, 15.32]",
              rels := [a^2, b^3, (a*b)^19, (Comm(a, b*a*b))^3,
                       ((a*b)^3*(a*b*a*b^-1)^2)^3],
-             suwo := [a, b^((a*b)^5)] )
+             sgens := [a, b^((a*b)^5)] )
         ];
 
 L3_5s := [# L_3(5), 1 
@@ -856,33 +859,33 @@ L3_5s := [# L_3(5), 1
                rels := [a^2, b^3, (a*b)^24, Comm(a,b)^6, 
                         ((a*b)^6*(a/b)^2)^3, ((a*b)^3*(a*b*a/b)^2)^5,
                         ((a*b)^5*(a/b*a*b)^2*(a*b)^2*(a*b*a/b)^2)^2],
-               suwo := [a, (b*a*b)^(a*b)] ),
+               sgens := [a, (b*a*b)^(a*b)] ),
 
           # L_3(5), 2 
           rec( source := "[CR84, 17.2]",
                rels := [a^2, b^3, (a*b)^24, Comm(a,b)^10, 
                         Comm(a,b*a*b)^3, Comm(a,b*(a*b)^2)^4,
                         ((a*b*a/b)^3*a*b)^5,((a*b)^2*((a*b)^2*a/b)^2)^3],
-               suwo := [a, (b*a*b)^(a*b*a/b)] ),
+               sgens := [a, (b*a*b)^(a*b*a/b)] ),
 
           # L_3(5), 3 
           rec( source := "[CR84, 17.3]",
                rels := [a^2, b^3, (a*b)^31, Comm(a,b)^4, 
                         ((a*b)^4*a/b)^4, Comm(a,b*(a*b)^4)^3],
-               suwo := [a, (b^-1*a)^3*b*(a*b*a/b)^2] ),
+               sgens := [a, (b^-1*a)^3*b*(a*b*a/b)^2] ),
 
           # L_3(5), 4 
           rec( source := "[CR84, 17.4]",
                rels := [a^2, b^3, (a*b)^31, Comm(a,b)^5, 
                         ((a*b)^5*(a/b)^4)^2, ((a*b)^6*(a/b)^2)^3],
-               suwo := [a^b, (b*a)^3/b*a] ),
+               sgens := [a^b, (b*a)^3/b*a] ),
 
           # L_3(5), 5 
           rec( source := "[CR84, 17.5]",
                rels := [a^2, b^3, (a*b)^31, Comm(a,b)^6, 
                         Comm(a,b*(a*b)^2)^3, Comm(a,b*(a*b)^3)^3,
                         ((a*b)^3*(a*b*a/b)^2)^3],
-               suwo := [a, b*a/b*a*b*a*b] ),
+               sgens := [a, b*a/b*a*b*a*b] ),
 
           # L_3(5), 6 
           rec( source := "[CR84, 17.6]",
@@ -890,35 +893,35 @@ L3_5s := [# L_3(5), 1
                         (a*b)^9*a/b*a*b*((a/b)^3*a*b)^3*a/b,
                         (a*b)^4*(a*b*a/b)^2*(a*b)^5*(a/b)^4*
                          (a*b*a/b)^2*(a/b)^3],
-               suwo := [a^(b*a), b*a*(a^(b*a*b))] ),
+               sgens := [a^(b*a), b*a*(a^(b*a*b))] ),
 
           # L_3(5), 7 
           rec( source := "[CR84, 17.7]",
                rels := [a^2, b^3, (a*b)^31, Comm(a,b*a*b)^4, 
                         Comm(a,b^-1*(a*b)^2)^6, ((a*b)^5*(a/b)^2)^3, 
                         ((a*b)^3*(a/b)^2)^5],
-               suwo := [a*b*a/b, b^-1*(a*b)^5*a/b*(a*b)^3] )
+               sgens := [a*b*a/b, b^-1*(a*b)^5*a/b*(a*b)^3] )
           ];
 
 PSp4_4s := [#PSp(4,4), 1 
             rec( source := "[CR84, 20.1]",
                  rels := [a^2, b^5, Comm(a,b)^5, (a*b^2)^17, 
                           Comm(a,b^2)^2, ((a*b)^2*a/b^2)^4],
-                 suwo := [b*(b*a)^3/b*a, (a/b*a*b)^2*b] ),
+                 sgens := [b*(b*a)^3/b*a, (a/b*a*b)^2*b] ),
 
             #PSp(4,4), 2 
             rec( source := "[CR84, 20.2]",
                  rels := [a^2, b^5, (a*b)^17, Comm(a,b)^2, 
                           Comm(a,b^2)^5, (a*b*(a*b^2)^2)^4, 
                           Comm(a,b^2*a*b*a*b^2)^2],
-                 suwo := [a*b^2*(a*b)^3, (b^2*a)^5*b] ),
+                 sgens := [a*b^2*(a*b)^3, (b^2*a)^5*b] ),
 
             #PSp(4,4), 3 
             rec( source := "[CR84, 20.3]",
                  rels := [a^2, b^5, (a*b)^17, Comm(a,b)^5,
                           Comm(a,b*a*b)^3, Comm(a,(b*a)^2/b)^2,
                           Comm(b^-1*a*b,(b*a)^2)^2],
-                 suwo := [b^2*(a*b)^4*b, a/b*(a*b^2*a*b^-2)^2] ),
+                 sgens := [b^2*(a*b)^4*b, a/b*(a*b^2*a*b^-2)^2] ),
 
             #PSp(4,4), 4 
             rec( source := "[CR84, 20.4]",
@@ -926,7 +929,7 @@ PSp4_4s := [#PSp(4,4), 1
                           (a*b*(a*b^2)^4*a*b^-1*(a*b^2)^2)^2,
                           (a*b)^2*(a*b^2)^4*(a*b^-1)^2*(a*b^2)^2*
                           a*b*a*b^2*a*b^-1*(a*b^2)^2],
-                 suwo := [a*b^2, a^(b^-1*a*b^-1*a*b)*a*b] ),
+                 sgens := [a*b^2, a^(b^-1*a*b^-1*a*b)*a*b] ),
                  
             #PSp(4,4), 5 
             rec( source := "[CR84, 20.6]",
@@ -937,7 +940,7 @@ PSp4_4s := [#PSp(4,4), 1
                           ((a*b*a*b^-1)^2*(a*b^2)^2*a*b^-1*(a*b^2)^2)^2,
                           ((a*b*a*b^2)^2*(a*b^2*a*b^-1)^2*a*b^-1)^2,
                           ((a*b)^4*b*a*b*a*b^-1*a*b^2*(a*b)^2*a*b^-1)^2],
-                 suwo := [a*b, b^(a*b*a*b^-1)*a*b^-1] ),
+                 sgens := [a*b, b^(a*b*a*b^-1)*a*b^-1] ),
                  
             #PSp(4,4), 6 
             rec( source := "[CR84, 20.8]",
@@ -947,7 +950,7 @@ PSp4_4s := [#PSp(4,4), 1
                           ((a*b)^3*b)^4,
                           (((a*b)^4*b)^2*a*b^2)^2,
                           ((a*b*a*b^-1)^2*a*b^-1*a*b^2*(a*b^-1)^2)^2],
-                 suwo := [a*b, (b*a*b^2*a)^2*b^(a*b^-1)] ),
+                 sgens := [a*b, (b*a*b^2*a)^2*b^(a*b^-1)] ),
                  
             #PSp(4,4), 7 
             rec( source := "[CR84, 20.9]",
@@ -956,7 +959,7 @@ PSp4_4s := [#PSp(4,4), 1
                           ((a*b)^2*(a*b^-1)^2*b^-1)^5,
                           ((a*b*a*b^2*(a*b^-1)^2)^2*b^-1)^2,
                           ((a*b)^2*a*b^-1*a*b*a*b^2*a*b^-1*a*b^2)^2],
-                 suwo := [a*b, a^(b^2)*(a*b^-1)^3] ),
+                 sgens := [a*b, a^(b^2)*(a*b^-1)^3] ),
                  
             #PSp(4,4), 8 
             rec( source := "[CR84, 20.11]",
@@ -965,7 +968,7 @@ PSp4_4s := [#PSp(4,4), 1
                           (a*b*(a*b^2*(a*b)^2*a*b^-1)^2)^2,
                           ((a*b)^6*b*(a*b^-1)^2*a*b*a*b^2)^2,
                           ((a*b)^2*a*b^-1*a*b*a*b^2*a*b*(a*b^2)^3)^2],
-                 suwo := [a*b^2*a*b^-1, (b^2*a)^3*b^(a*b^-1)] ),
+                 sgens := [a*b^2*a*b^-1, (b^2*a)^3*b^(a*b^-1)] ),
                  
             #PSp(4,4), 9 
             rec( source := "[CR84, 20.13]",
@@ -975,7 +978,7 @@ PSp4_4s := [#PSp(4,4), 1
                           Comm(a,b)^6, 
                           ((a*b^2)^3*(a*b)^3*a*b^-1*a*b)^2,
                           (a*b)^3*((a*b)^3*(b*a)^2*b^-1)^2*(a*b^-1)^2],
-                 suwo := [a*b^2*a*b*a*b, (b^2*a)^3*a^(b*a*b)] ),
+                 sgens := [a*b^2*a*b*a*b, (b^2*a)^3*a^(b*a*b)] ),
                  
             #PSp(4,4), 10 
             rec( source := "[CR84, 20.15]",
@@ -984,7 +987,7 @@ PSp4_4s := [#PSp(4,4), 1
                           (a*b*a*b^2*a*b^-1)^5,
                           (a*b*(a*b^-1)^2*(a*b^2)^2*a*b^-1)^2,
                           (a*b*a*b^-1*(a*b^2)^3*a*b^-1*(a*b^2)^2)^2],
-                 suwo := [a*b^2*a*b^-1, (a*b^2)^4*a*b] ),
+                 sgens := [a*b^2*a*b^-1, (a*b^2)^4*a*b] ),
                  
             #PSp(4,4), 11 
             rec( source := "[CR84, 20.17]",
@@ -993,7 +996,7 @@ PSp4_4s := [#PSp(4,4), 1
                           ((a*b*a*b^-1)^2*a*b^2)^5,
                           (a*b*(a*b^2)^2*a*b^-1*(a*b^2)^2*a*b*a*b^-1)^2,
                           ((a*b)^3*b*a*b*a*b^-1*a*b*(a*b^2)^2*a*b^-1)^2],
-                 suwo := [a*b*a*b^-1, (b^2*a)^2*b*a] ),
+                 sgens := [a*b*a*b^-1, (b^2*a)^2*b*a] ),
                  
             #PSp(4,4), 12 
             rec( source := "[CR84, 20.18]",
@@ -1003,7 +1006,7 @@ PSp4_4s := [#PSp(4,4), 1
                           ((a*b)^2*b)^6,
                           ((a*b)^4*(b*a)^2*b^-1*(a*b)^2*b)^2,
                           (a*b*((a*b)^2*b)^2*a*b*a*b^-1*a*b^2)^3],
-                 suwo := [(a*b)^2*a*b^-1, a*b^2] ),
+                 sgens := [(a*b)^2*a*b^-1, a*b^2] ),
                  
             #PSp(4,4), 13
             rec( source := "[CR84, 20.19]",
@@ -1012,7 +1015,7 @@ PSp4_4s := [#PSp(4,4), 1
                           (a*b*a*b^2*a*b^-1*(a*b^2)^4)^3,
                           (a*b^-1*a*b^2*a*b*(a*b^2)^4)^3,
                           (a*b^-1*(a*b^2)^2*a*b*a*b^-1*a*b*(a*b^2)^2)^3],
-                 suwo := [(a*b^2*a*b)^2*b^2, a*b^-1*a*(b^2*a)^3*b*a*b^-1] ),
+                 sgens := [(a*b^2*a*b)^2*b^2, a*b^-1*a*(b^2*a)^3*b*a*b^-1] ),
                  
             #PSp(4,4), 14 
             rec( source := "[CR84, 20.20]",
@@ -1024,7 +1027,7 @@ PSp4_4s := [#PSp(4,4), 1
                           ((a*b)^4*a*b^2*a*b^-1*(a*b^2)^3)^2,
                           (a*b)^4*(b*a*b*a*b^-1*a*b^2)^2*(a*b)^3*
                            b*a*b^2*(a*b^-1*a*b)^2],
-                 suwo := [a*b^2, (b*a*b^2*a*b*a)^2*b^-1] ),
+                 sgens := [a*b^2, (b*a*b^2*a*b*a)^2*b^-1] ),
                  
             #PSp(4,4), 15 
             rec( source := "[CR84, 20.22]",
@@ -1033,7 +1036,7 @@ PSp4_4s := [#PSp(4,4), 1
                           ((a*b)^3*b)^4,
                           Comm(a,b*(a*b)^2)^2,
                           ((a*b)^3*(b*a)^2*b^-1*(a*b^2)^2)^3],
-                 suwo := [a*b*a*b^-1, a*b^2*(a*b)^5] ),
+                 sgens := [a*b*a*b^-1, a*b^2*(a*b)^5] ),
                  
             #PSp(4,4), 16 
             rec( source := "[CR84, 20.23]",
@@ -1043,7 +1046,7 @@ PSp4_4s := [#PSp(4,4), 1
                           (a*b*(a*b^2)^2)^4,
                           Comm(a,(b*a*b)^2)^2,
                           ((a*b*a*b^-1)^2*a*b^2*a*b^-1*a*b)^3],
-                 suwo := [a*b, (b^2*a*b^-1*a)^2*b^2] ),
+                 sgens := [a*b, (b^2*a*b^-1*a)^2*b^2] ),
                  
             #PSp(4,4), 17 
             rec( source := "[CR84, 20.24]",
@@ -1051,7 +1054,7 @@ PSp4_4s := [#PSp(4,4), 1
                           (a*b^2)^5,
                           Comm(a,b*a*b)^4,
                           ((a*b)^4*(b*a)^2*b^-1*a*b^2)^2],
-                 suwo := [(a*b)^3*a*b^-1, (b^2*a)^2*b*a*b^-1] ),
+                 sgens := [(a*b)^3*a*b^-1, (b^2*a)^2*b*a*b^-1] ),
                  
             #PSp(4,4), 18 
             rec( source := "[CR84, 20.26]",
@@ -1061,7 +1064,7 @@ PSp4_4s := [#PSp(4,4), 1
                           (a*b*(a*b^2)^2*(a*b^-1*a*b)^2*b)^3,
                           ((a*b)^2*a*b^2)^2*(a*b)^3*(a*b^-1*a*b)^3,
                           (a*b*(a*b^2)^3*a*b*a*b^-1*a*b^2*a*b^-1)^2],
-                 suwo := [a*b, a^(b^2)] ),
+                 sgens := [a*b, a^(b^2)] ),
                  
             #PSp(4,4), 19 
             rec( source := "[CR84, 20.27]",
@@ -1070,7 +1073,7 @@ PSp4_4s := [#PSp(4,4), 1
                           ((a*b)^4*b)^4,
                           ((a*b)^2*(b*a)^2*b^-1)^2,
                           ((a*b)^2*(a*b^2)^3*(a*b^-1)^3)^3],
-                 suwo := [(a*b)^2*a*b^-1, b*(a*b^2)^4] ),
+                 sgens := [(a*b)^2*a*b^-1, b*(a*b^2)^4] ),
                  
             #PSp(4,4), 20 
             rec( source := "[CR84, 20.28]",
@@ -1080,7 +1083,7 @@ PSp4_4s := [#PSp(4,4), 1
                           (a*b^2)^10,
                           ((a*b^-1*a*b)^3*(b^2*a)^2*b^-1)^2,
                           ((a*b^-1*a*b^2)^3*b^-1*a*b^2*a*b)^2],
-                 suwo := [a*b*a*b^-1*a*b*a*b*a*b^-1, a*b^2*a*b] ),
+                 sgens := [a*b*a*b^-1*a*b*a*b*a*b^-1, a*b^2*a*b] ),
                  
             #PSp(4,4), 21 
             rec( source := "[CR84, 20.29]",
@@ -1089,7 +1092,7 @@ PSp4_4s := [#PSp(4,4), 1
                           (a*b*(a*b^2)^4*a*b*a*b^-1*(a*b^2)^2)^2,
                           a*b*(a*b^2)^3*(a*b*a*b^-1)^2*(a*b^2)^3*
                            a*b^-1*(a*b^2)^3],
-                 suwo := [a*b*a*b^-1, b^-1*(a*b)^3*b*a*b^-1] ),
+                 sgens := [a*b*a*b^-1, b^-1*(a*b)^3*b*a*b^-1] ),
                  
             #PSp(4,4), 22 
             rec( source := "[CR84, 20.31]",
@@ -1099,7 +1102,7 @@ PSp4_4s := [#PSp(4,4), 1
                           ((a*b)^3*b*a*b*a*b^-1*(a*b*a*b^2)^2)^2,
                           (a*b)^2*a*b^-1*(a*b^2)^5*a*b*(a*b^-1)^2*
                            a*b^2*a*b^-1*a*b*a*b^2],
-                 suwo := [a*b^2, a*b*a*b^-1*a*b*a*b] )
+                 sgens := [a*b^2, a*b*a*b^-1*a*b*a*b] )
             ];
 
 presentations := rec( L2_8 := L2_8,
@@ -1112,21 +1115,111 @@ presentations := rec( L2_8 := L2_8,
                       J1s := J1s,
                       L3_5s := L3_5s,
                       PSp4_4s := PSp4_4s );
+
+IsACEResExampleOK := function()
+##  does a number of integrity checks and tries to give an accurate diagnosis
+##  if something is wrong.
+local head, grp, n, newgens, ok, saved,
+      IsFunctionsOK, IsGensOK, IsGroupOK, IsNewgensOK, IsnOK;
+  head := ValueOption("head");
+  grp := ValueOption("grp");
+  n := ValueOption("n");
+  newgens := ValueOption("newgens");
+  saved := ACEResExample;
+
+  IsFunctionsOK := function()
+    return IsBound(PGRelFind) and IsFunction(PGRelFind) and
+           IsBound(TranslatePresentation) and
+           IsFunction(TranslatePresentation);
+  end;
+
+  IsGensOK := function(u, v)
+    return (FamilyObj(u) = FamilyObj(v)) and IsAssocWordWithInverse(u) and
+           ForAll([u, v], g -> (NumberSyllables(g) = 1) and
+                               (ExponentSyllable(g, 1) = 1));
+  end;
+
+  IsGroupOK := function()
+    return (grp <> fail) and IsBound(presentations) and
+           IsRecord(presentations) and (grp in RecNames(presentations));
+  end;
+
+  IsnOK := function()
+    return (grp[Length(grp)] <> 's') or 
+           (IsPosInt(n) and (n <= Length( presentations(grp) ))); 
+  end;
+
+  IsNewgensOK := function()
+    return IsBound(a) and IsBound(b) and IsGensOK(a, b) and
+           IsList(newgens) and (Length(newgens) = 2) and
+           ForAll(newgens, w -> FamilyObj(w) = FamilyObj(a));
+  end;
+
+  ok := false;
+  if ACEResExample.filename = "doGrp.g" and not IsFunctionsOK() then
+    Print("Error, ACEReadResearchExample: functions not initialised.\n",
+          "Please type: 'ACEReadResearchExample();'\n",
+          "and try again.\n");
+  elif ACEResExample.filename = "doGrp.g" and
+       not(IsGroupOK() and IsnOK() and IsNewgensOK()) then
+    RequirePackage("ace", "3.0");
+    ACEReadResearchExample("pgrelfind.g");
+    ACEResExample := saved;
+    Print("Error, \"grp\" and \"newgens\" options must have values.\n",
+          "Usage: ACEReadResearchExample(\"doGrp.g\"\n",
+          "                              : grp := <grp>,\n",
+          "                                [n := <int>,]\n",
+          "                                newgens := [<w1>, <w2>]\n",
+          "                                [, opt := <val>, ...]);\n",
+          "where <grp> must be a string in the following list:\n",
+          RecNames(presentations),"\n",
+          "and <w1>, <w2> must be words in `a' and `b'.\n");
+  elif head <> fail and not(IsBound(x) and IsBound(y) and IsGensOK(x, y)) then
+    Print("Error, `x' and `y' do not have correct values.\n",
+          "Please type: 'ACEReadResearchExample();'\n",
+          "to (re-)initialise `x' and `y' and try your call of\n",
+          "'ACEReadResearchExample(", ACEResExample.filename, ");' again.\n");
+  else
+    ok := true;
+  fi;
+  if ok then
+    if ACEResExample.filename = "doGrp.g" then
+      if grp[ Length(grp) ] = 's' then
+        ACEResExample.grp := presentations.(grp)[n];
+      else
+        ACEResExample.grp := presentations.(grp);
+      fi;
+      ACEResExample.newgens := newgens;
+    elif not(IsFunctionsOK() and IsBound(a) and IsBound(b) and 
+             IsGensOK(a, b)) then
+      RequirePackage("ace", "3.0");
+      ACEReadResearchExample("pgrelfind.g");
+      ACEResExample := saved;
+    fi;
+  fi;
+  return ok;
+end;
+
 ## End
 for s in ["The following are now defined:",
           "",
           "Functions:",
-          "  PGRelFind, ClassesGenPairs, TranslatePresentation",
+          "  PGRelFind, ClassesGenPairs, TranslatePresentation,",
+          "  IsACEResExampleOK",
           "Variables:",
-          "  ALLRELS, newrels, L2_8, L2_16, L3_3s, U3_3s, M11,",
-          "  L2_32, U3_4s, J1s, L3_5s, PSp4_4s, presentations",
+          "  ACEResExample, ALLRELS, newrels, F, a, b, newF, x, y,",
+          "  L2_8, L2_16, L3_3s, U3_3s, M11, L2_32,",
+          "  U3_4s, J1s, L3_5s, PSp4_4s, presentations",
           "",
           "Also:",
           "",
           "TCENUM = ACETCENUM  (Todd-Coxeter Enumerator is now ACE)",
           "",
           "For an example of their application, you might like to try:",
-          "gap> ACEReadResearchExample(\"doL28.g\");"
+          "gap> ACEReadResearchExample(\"doL28.g\" : optex := [1,2,4]);",
+          "(the output is 90 lines followed by a 'gap> ' prompt)",
+          "",
+          "For information type: ?Using ACEReadResearchExample"
          ] 
 do
   Info(InfoACE, 1, s);

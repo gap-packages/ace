@@ -503,10 +503,11 @@ local outstream, print, file, instream, line;
   repeat
     line := ReadLine(instream);
   until IS_ACE_MATCH(line, "## Begin");
-  repeat
-    line := ReadLine(instream);
+  line := ReadLine(instream);
+  while not IS_ACE_MATCH(line, "## End") do
     print(line);
-  until IS_ACE_MATCH(line, "## End");
+    line := ReadLine(instream);
+  od;
   CloseStream(instream);
 
   if print <> Print then
