@@ -9,7 +9,7 @@ will also work (after the  ACE  Share  Package  has  been  loaded  via
 
 (In the above example, one may of course substitute for "A5",  one  of
 the other example filenames in this directory, and one may  substitute
-ACEStats or StartACE for ACECosetTableFromGensAndRels.)
+ACEStats or ACEStart for ACECosetTableFromGensAndRels.)
 
 The `magic' behind ACEExample depends on the example files having  the
 following properties:
