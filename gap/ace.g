@@ -120,6 +120,8 @@ IS_INC_POS_INT_LIST
 KnownACEoptions := rec(
   ACEinfile := [9, IsString], # This is a GAP4-introduced option 
                               # (not an ACE binary option)
+  nowarn := [6, [0,1]],       # This is a GAP4-introduced option 
+                              # (not an ACE binary option)
   #sg := [2, <word list>],
   #rl := [2, <relation list>],
   aep  := [3, [1..7]],
@@ -223,7 +225,7 @@ KnownACEoptions := rec(
 ##  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . binary options.
 ##
 
-NonACEbinOptions := [ "ACEinfile", "echo", "ACEoutfile", "silent" ];
+NonACEbinOptions := [ "ACEinfile", "nowarn", "echo", "ACEoutfile", "silent" ];
 
 #############################################################################
 ####
@@ -422,7 +424,7 @@ local fgens,rels,sgens,a,i,j,k,n,nums,fullopt,opt,optval,options,known,
          LowercaseString(opt{[1..2]}) = "gr" then
         Print(" #Warning: ", opt, 
               ": should be passed as an argument, NOT an option.\n");
-      else
+      elif not GetOptionValue(false, ["nowarn"]) then
         Print(" #Warning: ", opt, ": unknown (maybe new) or bad option.\n");
       fi;
     fi;

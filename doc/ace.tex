@@ -587,15 +587,16 @@ indicates that there is essentially no abbreviation of `ct' (since its
 shortest abbreviation is of length 2),  and a value of  `ct' is  known
 to be valid if `IsInt' returns true for that value.
 
-*All* options (except `silent', `messfile', `outfile' and  `echo')  on
-the `OptionsStack', when the {\ACE} interface is called via `CallACE',
-are passed to the {\ACE} binary. Even options flagged as  \lq{}unknown
-or possibly bad' (such warnings are issued when the `echo'  option  is
-used) are  passed  to  the  {\ACE}  binary.  When  the  {\ACE}  binary
-encounters an option that it doesn't understand it issues a warning to
-`stderr' and simply ignores it;  so  options  accidentally  passed  to
-{\ACE} are unlikely to pose problems. The options `silent', `messfile'
-(which is translated to  `ao'  for  the  binary)  and  `outfile'  were
+*All* options (except `silent',  `ACEinfile',  `ACEoutfile',  `nowarn'
+and `echo') on the `OptionsStack', when the {\ACE} interface is called
+via `CallACE', are passed to the {\ACE} binary. Even  options  flagged
+as \lq{}`unknown (maybe new) or bad'', are passed to the {\ACE}  binary,
+except that the options `purer' and `purec' are  first  translated  to
+`pure r' and `pure c', respectively. When the {\ACE} binary encounters
+an option that it doesn't understand it issues a warning  to  `stderr'
+and simply ignores it; so options accidentally passed  to  {\ACE}  are
+unlikely to pose problems. The options `silent',  `ACEoutfile'  (which
+is translated to `ao' for the binary) `ACEinfile'  and  `nowarn'  were
 introduced for {\GAP} use; and `echo', though  an  {\ACE}  option,  is
 actually handled by `CallACE' and not passed to the binary.
 
@@ -606,23 +607,20 @@ workspace to $10^7$ words for the example given above, one could call:
 gap> CallACE(fgens,rels,[c]:hard,workspace:=10^7);;
 \endtt
 
-Except for a few additional  option  synonyms  (e.g.~`messfile'  is  a
-{\GAP}-introduced synonym for the `ao' {\ACE} option),  and  just  two
-multiple-word {\ACE} options (the `pure r'  and  `pure  c'  strategies
-have  become  `purer'  and  `purec',  respectively,  for  the   {\GAP}
-interface), and  a  small  number  of  additional  non-{\ACE}  options
-(e.g.~`silent' and `outfile'), all option names for the interface  are
-the same as for the {\ACE} standalone.  The  {\ACE}  binary  has  many
-multiple-word options but all  except  `pure  r'  and  `pure  c'  have
-single-word  alternatives;  only  the  single-word  option  names  are
-available via  the  {\GAP}  interface.  Some  abbreviations  that  are
-possible for the {\ACE} binary (e.g.~`fi' for `fill',  and  `rec'  for
-`recover') are *not* allowed via  the  {\GAP}  interface,  since  they
-clash with {\GAP} keywords. Again, most  of  the  preceding  paragraph
-will not be of importance to the {\GAP} user; these comments have been
-made merely for the user who wishes to reconcile  what  the  interface
-does with how the {\ACE} binary  performs,  and  is  of  most  use  to
-standalone users.
+The options for  the  {\ACE}  interface  `CallACE'  comprise  the  few
+exceptional options (`silent', `ACEinfile', `ACEoutfile', `nowarn' and
+`echo')  mentioned  above,  (almost)  all  single-word  {\ACE}  binary
+options and `purer' and  `purec'.  As  mentioned  above,  `purer'  and
+`purec' give  the  {\ACE}  binary  options  `pure  r'  and  `pure  c',
+respectively (these being the only multiple-word {\ACE} binary options
+that do not have a single word alternative).  The  *only*  single-word
+{\ACE}  binary  options  that  are  *not*  available  via  the  {\ACE}
+interface are abbreviations that clash with {\GAP} keywords (e.g.~`fi'
+for `fill', and `rec'  for  `recover').  Much  of  the  preceding  few
+paragraphs will not be of little importance to the {\GAP} user;  these
+comments have been made merely for the user who  wishes  to  reconcile
+the respective functionalities of  {\ACE}  interface  and  the  {\ACE}
+standalone, and is of most use to standalone users.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{General Options that Modify the Enumeration Process}
@@ -1063,6 +1061,10 @@ error is raised by the interface to {\GAP}, unless the option `silent'
 has been set, in which case `fail' is returned. Note that `silent'  is
 a feature of the {\GAP} interface only, it has no counterpart  in  the
 {\ACE} standalone.
+
+\>`nowarn'{Option nowarn}& 
+Inhibits the warning message \lq{}`unknown (maybe new) or bad option''
+for options not listed in `KnownACEoptions'.
 
 \>`ACEinfile:=<filename>'{Option ACEinfile}&
 Creates an {\ACE} input file <filename> for use with  the  standalone,
