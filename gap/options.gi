@@ -141,7 +141,7 @@ InstallValue(KnownACEOptions, rec(
   pmode := [4, [0..3]],
   psize := [4, x -> x = 0 or 
                     (IsInt(x) and IsEvenInt(x) and IsPrimePowerInt(x))],
-  sr := [2, ["",0,1]],
+  sr := [2, ["",0,1,2,3,4,5]],
   print := [2, x -> x = "" or IsInt(x) or
                     (IsList(x) and Length(x) <= 3 and IsInt(x[1]) and
                      ForAll(x{[2..Length(x)]}, IsPosInt)) ],

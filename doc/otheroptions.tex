@@ -547,14 +547,17 @@ the printing of the orders (modulo the subgroup) of all coset numbers.
 
 \>`sr'{option sr}@{option `sr'}
 \>`sr:=<val>'{option sr}@{option `sr'}&
-Print out parameters of the current presentation; <val> must be  0  or
-1.
+Print out parameters of the current presentation;  <val>  must  be  an
+integer in the range 0 to 5.
 
-No argument, or `<val> = 0', prints out the  `Group  Name',  `Subgroup
-Name', the group's `relators'  and  the  subgroup's  `generators'.  If
-`<val> = 1', then the current setting of  the  ``run  parameters''  is
-also printed. The printout is the same as that produced at  the  start
-of a run when option `messages' (see~"option messages") is non-zero.
+No argument, or `<val> = 0', prints out the `Group Name', the  group's
+`relators', `Subgroup Name' and the subgroup's `generators'. If `<val>
+= 1', then the `Group Generators' and the current setting of the ``run
+parameters'' is also  printed.  The  printout  is  the  same  as  that
+produced at the start of a run  when  option  `messages'  (see~"option
+messages") is non-zero. Also, <val> equal to 2, 3, 4, or 5  print  out
+just the `Group Name', just the group's `relators', just the `Subgroup
+Name', or just the subgroup's `generators', respectively.
 
 *Notes:*
 The `sr' option should  only  be  used  *after*  an  enumeration  run;
