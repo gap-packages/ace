@@ -2396,14 +2396,27 @@ Prints the possible enumeration  `mode's  (i.e.~which  of  `continue',
 \>`nc:=<val>'{Option `nc'}
 \>`normal'{Option `normal'}
 \>`normal:=<val>'{Option `normal'}&
-Check or enforce normal closure; <val> must be 0 or 1.
+Check or attempt to enforce normal closure; <val> must be 0 or 1.
 
-With no argument or if `<val> = 0', {\ACE} tests for  normal  closure.
-If a subgroup generator does not normalise a generator, then  this  is
-printed out. If `<val> = 1', then any non-normalising  conjugates  are
-also added to the subgroup generators.
+This option tests the subgroup for normal closure within the group. If
+a conjugate of a subgroup generator by a generator, is  determined  to
+belong to a coset other than coset 1, it is printed out, and if `<val>
+=  1',  then  any  such  conjugate  is  also  added  to  the  subgroup
+generators. With no argument or if `<val> = 0', {\ACE}  does  not  add
+any new subgroup generators.
 
-Interactively, use `ACENormalClosure' (see~"ACENormalClosure").
+*Notes:*
+The method of determination of  whether  a  conjugate  of  a  subgroup
+generator is in the subgroup, is by testing whether it can  be  traced
+from coset 1 to coset 1  (see  `trace':~"Option `trace'").
+
+The resultant subgroup need not be  normally  closed  after  executing
+option `nc'  with  the  value  1.  It  is  still  possible  that  some
+conjugates of the newly added subgroup generators will not be elements
+of the subgroup.
+
+Interactively,       use       `ACEConjugatesForSubgroupNormalClosure'
+(see~"ACEConjugatesForSubgroupNormalClosure").
 
 \>`options'{Option `options'}&
 Dump version information of the {\ACE} binary.
@@ -2526,16 +2539,19 @@ Interactively, use `ACERecover' (see~"ACERecover").
 
 \>`sc:=<val>'{Option `sc'}
 \>`stabilising:=<val>'{Option `stabilising'}&
-Print out the stabilising coset numbers of the subgroup; <val> must be
-an integer. (Shortest abbreviation of `stabilising' is `stabil'.)
+Print out the coset numbers whose elements stabilise  (i.e.~normalise)
+the subgroup; <val> must be an integer.
+(Shortest abbreviation of `stabilising' is `stabil'.)
 
-This option prints out the stabilising  cosets  of  the  subgroup.  If
-`<val> > 0', the first `<val>'  stabilising  cosets  are  printed.  If
-`<val>  =  0',   all   of   the   stabilising   cosets,   plus   their
-representatives, are printed. If `<val> \<  0',  the  first  `|<val>|'
-stabilising cosets, plus their representatives, are printed.
+If `<val> > 0', the first `<val>' non-trivial (i.e.~other  than  coset
+1) coset numbers whose elements stabilise the subgroup are printed. If
+`<val> = 0', all non-trivial coset numbers  whose  elements  stabilise
+the subgroup, plus their representatives, are printed.  If  `<val>  \<
+0', the first  `|<val>|'  non-trivial  coset  numbers  whose  elements
+stabilise the subgroup, plus their representatives, are printed.
 
-Interactively, use `ACEStabilisingCosets' (see~"ACEStabilisingCosets").
+Interactively,          use           `ACECosetsThatStabiliseSubgroup'
+(see~"ACECosetsThatStabiliseSubgroup").
 
 \>`standard'{Option `standard'}&
 Compacts {\ACE}'s  coset  table  and  standardises  the  numbering  of
@@ -3408,18 +3424,83 @@ the integer identifying the coset $Hxg$.
 *Notes:*
 You may wish to compact {\ACE}'s coset table first, either  explicitly
 via `ACERecover' (see~"ACERecover"), or, implicitly, via any  function
-call that invokes {\ACE}'s `print' option (see~"Option `print'")  will
-do       this,       e.g.~`ACECosetTable'       (see~"ACECosetTable"),
-`ACEDisplayCosetTable'                   (see~"ACEDisplayCosetTable"),
-`ACECosetRepresentative' (see~"ACECosetRepresentative"). One can check
-whether a function invokes {\ACE}'s  `print'  option,  by  trying  the
-function after setting  the  `InfoLevel'  of  `InfoACE'  to  4.  Also,
-`ACECycles'  (see~"ACECycles"),   among   others,   invokes   {\ACE}'s
-compaction routine.
+call that invokes {\ACE}'s compaction routine (see~"ACERecover" note).
 
 If you actually wanted {\ACE}'s  coset  representative,  then,  for  a
 *compact*   table,   feed   the   output    of    `ACETraceWord'    to
 `ACECosetRepresentative' (see~"ACECosetRepresentative").
+
+\>ACEOrders( <i> ) F
+\>ACEOrders() F
+\>ACEOrders( <i> : suborder := <suborder> ) F
+\>ACEOrders(: suborder := <suborder> ) F
+
+for the <i>th (or  default)  interactive  {\ACE}  process  started  by
+`ACEStart', search for coset  numbers  whose  representatives'  orders
+(modulo the subgroup) are either  finite,  or,  if  invoked  with  the
+`suborder' option,  are  multiples  of  <suborder>,  where  <suborder>
+should be a positive integer. `ACEOrders' returns a  (possibly  empty)
+list of records, each with fields `coset', `order'  and  `rep',  which
+are respectively, the coset number, its order modulo the subgroup, and
+a representative for each coset number satisfying the criteria of  the
+search. 
+
+*Note:*
+You may wish to compact {\ACE}'s coset table first, either  explicitly
+via `ACERecover' (see~"ACERecover"), or, implicitly, via any  function
+call that invokes {\ACE}'s compaction routine (see~"ACERecover" note).
+
+\>ACEOrder( <i>, <suborder> ) F
+\>ACEOrder( <suborder> ) F
+
+for the <i>th (or  default)  interactive  {\ACE}  process  started  by
+`ACEStart', search for coset numbers whose coset representatives  have
+order modulo the subgroup a multiple of <suborder>. When <suborder> is
+a positive integer, `ACEOrder' returns a record with  fields  `coset',
+`order' and `rep', which are respectively, the coset number, its order
+modulo the subgroup, and a representative for the first  coset  number
+satisfying the criteria of the search, or `fail' if there is  no  such
+coset number. The value of <suborder> may also be a negative  integer,
+in  which  case,  `ACEOrder(  <i>,  <suborder>  )'  is  equivalent  to
+`ACEOrders( <i> : suborder := |<suborder>|)';  or  <suborder>  may  be
+zero, in which case, `ACEOrder( <i>, 0 )' is equivalent to `ACEOrders(
+<i> )'.
+
+*Note:*
+You may wish to compact {\ACE}'s coset table first, either  explicitly
+via `ACERecover' (see~"ACERecover"), or, implicitly, via any  function
+call that invokes {\ACE}'s compaction routine (see~"ACERecover" note).
+
+\>ACECosetsThatStabiliseSubgroup( <i>, <n> ) F
+\>ACECosetsThatStabiliseSubgroup( <n> ) F
+\>ACECosetsThatNormaliseSubgroup( <i>, <n> ) F
+\>ACECosetsThatNormaliseSubgroup( <n> ) F
+
+for the <i>th (or  default)  interactive  {\ACE}  process  started  by
+`ACEStart', determine non-trivial  (i.e.~other  than  coset  1)  coset
+numbers whose representatives stabilise (i.e.~normalise) the subgroup.
+
+\beginlist
+
+\item{--} If <n> $> 0$, the list of the first  <n>  non-trivial  coset
+numbers whose representatives normalise the subgroup is returned.
+
+\item{--} If <n> $\< 0$, a list of records  with  fields  `coset'  and
+`rep'  which  represent  the  coset  number  and   a   representative,
+respectively,  of  the  first  <n>  non-trivial  coset  numbers  whose
+representatives normalise the subgroup is returned.
+
+\item{--} If <n> $= 0$, a list of  records  with  fields  `coset'  and
+`rep'  which  represent  the  coset  number  and   a   representative,
+respectively, of all non-trivial coset numbers  whose  representatives
+normalise the subgroup is returned.
+
+\endlist
+
+*Note:*
+You may wish to compact {\ACE}'s coset table first, either  explicitly
+via `ACERecover' (see~"ACERecover"), or, implicitly, via any  function
+call that invokes {\ACE}'s compaction routine (see~"ACERecover" note).
 
 \enditems
 
@@ -3475,11 +3556,16 @@ is printed if any rows of the coset table were recovered, and  a  `co'
 line  if  none  were.  (See  Chapter~"The  Meanings  of  ACE's  output
 messages" for the meanings of these messages.)
 
-The compaction routine is called automatically when any of `ACECycles'
-(see~"ACECycles"),    `ACENormalClosure'     (see~"ACENormalClosure"),
-`ACEDisplayTable'              (see~"ACEDisplayTable")              or
-`ACEStandardCosetNumbering'    (see~"ACEStandardCosetNumbering")    is
-invoked.
+*Note:*
+The  compaction  routine  is  called   automatically   when   any   of
+`ACEDisplayCosetTable'                   (see~"ACEDisplayCosetTable"),
+`ACECosetRepresentative'               (see~"ACECosetRepresentative"),
+`ACECosetRepresentatives'             (see~"ACECosetRepresentatives"),
+`ACETransversal'          (see~"ACETransversal"),          `ACECycles'
+(see~"ACECycles"),                         `ACEStandardCosetNumbering'
+(see~"ACEStandardCosetNumbering"),                     `ACECosetTable'
+(see~"ACECosetTable")    or    `ACEConjugatesForSubgroupNormalClosure'
+(see~"ACEConjugatesForSubgroupNormalClosure"), is invoked.
 
 \>ACEStandardCosetNumbering( <i> ) F
 \>ACEStandardCosetNumbering() F
@@ -3617,59 +3703,29 @@ Consider              running              `ACEStandardCosetNumbering'
 (see~"ACEStandardCosetNumbering") before  `ACERandomCoincidences',  to
 canonicise the table and the representatives.
 
-\enditems
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\Section{Operations with ACE's Coset Table}
-
-\beginitems
-
-\>ACENormalClosure( <i> ) F
-\>ACENormalClosure() F
-\>ACENormalClosure( <i>, <add> ) F
-\>ACENormalClosure( <add> ) F
+\>ACEConjugatesForSubgroupNormalClosure( <i> ) F
+\>ACEConjugatesForSubgroupNormalClosure() F
+\>ACEConjugatesForSubgroupNormalClosure( <i> : add ) F
+\>ACEConjugatesForSubgroupNormalClosure(: add ) F
 
 for the <i>th (or  default)  interactive  {\ACE}  process  started  by
-`ACEStart', if <add> (which *must* be boolean) is missing or  `false',
-test for normal closure. If a subgroup generator does not normalise  a
-generator, then  this  is  returned.  If  `<add>  =  true',  then  any
-non-normalising conjugates are also added to the subgroup generators.
+`ACEStart', tests each conjugate of a subgroup generator  by  a  group
+generator for membership of the subgroup, and  returns  the  (possibly
+empty) list of conjugates that were determined  to  belong  to  cosets
+other than coset 1 (the subgroup);  and,  if  called  with  the  `add'
+option, these conjugates are  also  added  to  the  existing  list  of
+subgroup generators.
 
-\>ACEOrders( <i> ) F
-\>ACEOrders() F
+*Notes:* A conjugate of a subgroup generator is tested for  membership
+of the subgroup, by checking whether it can be traced from coset 1  to
+coset 1  (see  `ACETraceWord':~"ACETraceWord").  For  an  *incomplete*
+coset  table,  such  a  trace  may  not  complete,   in   which   case
+`ACEConjugatesForSubgroupNormalClosure' may return an empty list  even
+though the subgroup is *not* normally closed within the group.
 
-return, for the <i>th (or default) interactive {\ACE} process  started
-by `ACEStart', the list of orders (modulo the subgroup) of  all  coset
-numbers.
-
-\>ACEOrder( <i>, <int> ) F
-\>ACEOrder( <int> ) F
-
-for the <i>th (or  default)  interactive  {\ACE}  process  started  by
-`ACEStart', search for coset numbers with coset  representative  order
-modulo the subgroup a multiple of the absolute value  of  the  integer
-<int>. If <int> is negative then the list of all coset numbers meeting
-the requirement is returned. If <int> is positive then the first coset
-number meeting the requirement is returned  if  such  a  coset  number
-exists, and `fail' otherwise.
-
-\>ACEStabilisingCosets( <i>, <int> ) F
-\>ACEStabilisingCosets( <int> ) F
-
-return, for the <i>th (or default) interactive {\ACE} process  started
-by `ACEStart', coset numbers of stabilising cosets of the subgroup.
-
-\beginlist
-\item{--} If <int> $> 0$, the list of the first <int> coset numbers of
-stabilising cosets is returned.
-
-\item{--} If <int> $\< 0$, the list of pairs of the first <int>  coset
-numbers  of  stabilising  cosets,  plus  their   representatives,   is
-returned.
-
-\item{--} If <int> = $0$, the list  of  pairs  of  all  of  the  coset
-numbers of stabilising cosets, plus their  coset  representatives,  is
-returned. \endlist
+The `add' option does *not* guarantee that the resultant  subgroup  is
+normally closed. It is still possible  that  some  conjugates  of  the
+newly added subgroup generators will not be elements of the subgroup.
 
 \enditems
 

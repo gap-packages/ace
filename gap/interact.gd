@@ -69,6 +69,13 @@ DeclareGlobalFunction("ACECosetRepresentatives");
 DeclareGlobalFunction("ACETransversal");
 DeclareGlobalFunction("ACECycles");
 DeclareSynonym("ACEPermutationRepresentation", ACECycles);
+DeclareGlobalFunction("ACETraceWord");
+DeclareGlobalFunction("ACE_ORDER");
+DeclareGlobalFunction("ACEOrders");
+DeclareGlobalFunction("ACEOrder");
+DeclareGlobalFunction("ACECosetsThatStabiliseSubgroup");
+DeclareSynonym("ACECosetsThatNormaliseSubgroup", 
+               ACECosetsThatStabiliseSubgroup);
 DeclareGlobalFunction("ACECosetTable");
 DeclareGlobalFunction("ACEStats");
 DeclareGlobalFunction("ACERecover");
@@ -80,10 +87,6 @@ DeclareGlobalFunction("ACEDeleteRelators");
 DeclareGlobalFunction("ACEDeleteSubgroupGenerators");
 DeclareGlobalFunction("ACECosetCoincidence");
 DeclareGlobalFunction("ACERandomCoincidences");
-DeclareGlobalFunction("ACENormalClosure");
-DeclareGlobalFunction("ACEOrders");
-DeclareGlobalFunction("ACEOrder");
-DeclareGlobalFunction("ACEStabilisingCosets");
-DeclareGlobalFunction("ACETraceWord");
+DeclareGlobalFunction("ACEConjugatesForSubgroupNormalClosure");
 
 #E  interact.gd . . . . . . . . . . . . . . . . . . . . . . . . .  ends here 
