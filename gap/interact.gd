@@ -23,17 +23,13 @@ DeclareInfoClass("InfoACE");
 ##
 #D  Declare functions for using ACE interactively via IO Streams.
 ##
-DeclareGlobalFunction("InfoACELevel");
-DeclareGlobalFunction("SetInfoACELevel");
 DeclareGlobalFunction("ACE_STREAM");
-DeclareGlobalFunction("CHOMP");
-DeclareGlobalFunction("READ_ALL_LINE");
-DeclareGlobalFunction("READ_NEXT_LINE");
 DeclareGlobalFunction("FLUSH_ACE_STREAM_UNTIL");
 DeclareGlobalFunction("ACE_ENUMERATION_RESULT");
 DeclareGlobalFunction("ACE_STATS");
-DeclareGlobalFunction("ACE_STATS_INDEX");
 DeclareGlobalFunction("ACE_COSET_TABLE");
+DeclareGlobalFunction("START_ACE");
+DeclareGlobalFunction("SET_ACE_OPTIONS");
 DeclareGlobalFunction("StartACE");
 DeclareGlobalFunction("QuitACE");
 DeclareGlobalFunction("QuitAllACE");
