@@ -11,7 +11,7 @@ Gamble.
 
 The package interfaces to an external binary  and  therefore  is  only
 usable under UNIX or a UNIX-like environment.  It  will  not  work  on
-Windows or the Macintosh. It requires GAP 4.
+Windows or the Macintosh. It requires at least GAP 4.2.
 
 
                    Installing the ACE share package
@@ -61,4 +61,29 @@ The `src' subdirectory contains a  copy  of  the  original  source  of
 `ACE'. (The only modification  is  that  a  make-file  was  copied  to
 `Makefile'.) You can replace it by a newer version before compiling.
 
-If you encounter problems, please write to `ahulpke@dcs.st-and.ac.uk'.
+The only known problems with  compilation  of  `ACE'  occur  with  old
+versions of gcc (gcc 2.7.2.1 and gcc 2.7.2.3 under Linux are known  to
+produce  a   buggy   `ACE'   whereby   options   that   output   coset
+representatives may cause  a  segmentation  fault).  The  following  C
+compilers are known to be ok:
+
+   compiler             platform              comments
+   --------             --------              --------
+   gcc 2.8.1            Solaris 2.51/IRIX 6.5 
+   cc MIPSpro 7.3.1.1m  IRIX 6.5              (compiled with -64 = 64bit)
+   gcc 2.91.66 19990314 Linux                 (egcs 1.1.2 release)
+   gcc 2.95.2 19990906  Linux                 (prerelease)
+   gcc 2.95.2 19991024  Solaris 2.51          (release)
+
+(Since April 1999, egcs has been the official Gnu cc supplier. This is
+why the numbering now follows egcs' numbering.)
+
+If you encounter problems with the `ACE' binary, please contact one of
+the C code  authors:  George  Havas  <havas@csee.uq.edu.au>  or  Colin
+Ramsay <cram@csee.uq.edu.au>.
+
+If you encounter problems at the `GAP' level, please  contact  one  of
+the `ACE' Share Package authors: Greg Gamble <gregg@csee.uq.edu.au> or
+Alexander Hulpke <ahulpke@math.ohio-state.edu>.
+
+  - Greg Gamble -- 15 August, 2000.
