@@ -31,7 +31,7 @@ requires {\GAP}~4.2.
 {\ACE} can be used through this interface in a variety  of  ways  (see
 Sections~"Using ACE as a Default for Coset Enumerations",  "Using  ACE
 Directly to Generate a Coset  Table",  "Using  ACE  Directly  to  Test
-Whether a Coset Enumeration Terminates", "Writing ACE Standalone Input
+whether a Coset Enumeration Terminates", "Writing ACE Standalone Input
 Files to Generate a Coset Table" and~"Using ACE Interactively").  Each
 of these ways gives the user access to a welter of options, which  are
 discussed in full in Chapters~"Options for ACE" and~"Strategy  Options
@@ -141,7 +141,7 @@ gap> ACECosetTable(fgens, rels, [c]);;
 \endtt
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\Section{Using ACE  Directly  to  Test  Whether  a  Coset  Enumeration
+\Section{Using ACE  Directly  to  Test  whether  a  Coset  Enumeration
 Terminates}
 
 If you only want to  test, whether a coset enumeration terminates, and
@@ -177,14 +177,14 @@ interactive work in the standalone.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{Using ACE Interactively}
 
-An interactive {\ACE} session is initiated with the command
+An interactive {\ACE} process is initiated with the command
 
 \>StartACE( <fgens>, <rels>, <sgens> [:<options>] ) F
 
 whose    arguments    and    options    are     exactly     as     for
 `ACECosetTableFromGensAndRels'  and  `ACEStats',   as   discussed   in
 Sections~"Using ACE Directly to Generate a Coset Table" and~"Using ACE
-Directly to Test Whether a Coset Enumeration  Terminates".  The  usual
+Directly to Test whether a Coset Enumeration  Terminates".  The  usual
 warnings  regarding  options  apply  (see  Section~"General   Warnings
 regarding the Use of Options").
 
@@ -194,17 +194,75 @@ process running at once.) The integer returned may be  used  to  index
 which of these  processes  an  interactive  function  {\ACE}  function
 should be applied to.
 
-An interactive{\ACE} session is terminated with the command
+An interactive{\ACE} process is terminated with the command
 
 \>QuitACE(<i>) F
 
-where <i> is the integer returned by `StartACE' when the  session  was
+where <i> is the integer returned by `StartACE' when the  process  was
 begun.
 
 We discuss each of these commands, as well as the range  of  functions
 which enable one to access  features  of  the  {\ACE}  standalone  not
 available non-interactively, in depth in Chapter~"Functions for  Using
 ACE interactively".
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{Accessing ACE Examples with ACEExample}
+
+There are a number of examples available in the `examples'  directory,
+which may be accessed via
+
+\>ACEExample() F
+\>ACEExample( <examplename> ) F
+\>ACEExample( <examplename>, <ACEfunc> ) F
+
+where  <examplename>  is  a  string,  the  name  of  an  example  (and
+corresponding file in the `examples' directory); and <ACEfunc> is  the
+{\ACE} function with which the example is to be executed.
+
+If `ACEExample' is called with no arguments,  or  with  the  argument:
+`"index"', or with a non-existent example name, an index of  available
+examples is displayed.
+
+By default, examples are executed via  `ACECosetTableFromGensAndRels'.
+However, if `ACEExample' is called with a second argument (choose from
+the (other) alternatives: `ACEStats', or `StartACE'), the  example  is
+executed using that function, instead. Note that,  whereas  the  first
+argument appears in double quotes (since it's a  string),  the  second
+argument does not (since it's a function).
+
+Considering the example `"A5"', the effect of running
+
+\begintt
+gap> ACEExample("A5", ACEStats);
+\endtt
+
+is essentially equivalent to executing:
+
+\begintt
+file := Filename(DirectoriesPackageLibrary("ace", "examples"), "A5");
+ACEfunc := ACEStats;
+ReadAsFunction(file)();
+\endtt
+
+except that  some  internal  \lq{}magic'  of  `ACEExample'  edits  the
+example file and  displays  equivalent  commands  a  user  \lq{}would'
+execute.
+
+*Notes*
+
+Most examples use the `mess'  ($=  `messages'$)  option.  To  see  the
+effect of this, it is recommended to do: `SetInfoACELevel(2);'  before
+calling `ACEExample', with an example.
+
+The coset table output from `ACEExample', when called with many of the
+examples     and     with     the     default     {\ACE}      function
+`ACECosetTableFromGensAndRels' is often quite long.  Recall  that  the
+output may be suppressed by following the (`ACEExample') command  with
+a double semicolon (`;;').
+
+Also, try `SetInfoACELevel(1);' before  calling `ACEExample', with  an
+example.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{General Warnings regarding the Use of Options}
@@ -255,7 +313,7 @@ recorded in the record fields `ACEData.infile' and  `ACEData.outfile',
 respectively.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\Section{The ACEData record}
+\Section{The ACEData Record}
 
 Essential data for an {\ACE} session within {\GAP} is  stored  in  the
 `ACEData'{\undoquotes\atindex{ACEData}{@`ACEData'   record}}   record,
@@ -281,29 +339,38 @@ file; and
 
 \enditems
 
-Each time an interactive {\ACE} session is  initiated  via  `StartACE'
+Each time an interactive {\ACE} process is  initiated  via  `StartACE'
 (see~"StartACE"), an identifying number <ioIndex> is generated for the
 interactive process and  a  record  `ACEData.io[<ioIndex>]'  with  the
 following fields is created:
 
 \beginitems
 
-\quad`gens'   & a list of strings representing the generators used  by
+\quad`args'   & a record with fields: `fgens', `rels',  `sgens'  whose
+values  are  the  corresponding   arguments   passed   originally   to
+`StartACE';
+
+\quad`options'& the current options record of the interactive process;
+
+\quad`acegens'& a list of strings representing the generators used  by
 {\ACE} (if the names of the generators passed via the  first  argument
 <fgens> of `StartACE' were all lowercase alphabetic  characters,  then
-`gens'  is  the  `String'  equivalent  of  <fgens>,  i.e.~`gens[1]   =
+`acegens' is the `String' equivalent of <fgens>,  i.e.~`acegens[1]   =
 String(<fgens>[1])' etc.);
 
-
-\quad`stream' & the IOStream opened  for  interactive  {\ACE}  session
+\quad`stream' & the IOStream opened for an interactive {\ACE}  process
 initiated via `StartACE'; and
+
+\quad`enumResult' 
+              & the enumeration result (string) without  the  trailing
+newline, output from {\ACE};
 
 \quad`stats'  & a record as output by the function `ACEStats'.
 
 \enditems
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\Section{Setting the Verbosity of ACE : InfoACE}
+\Section{Setting the Verbosity of ACE via Info and InfoACE}
 
 The output of the {\ACE} binary is, by default, not displayed. However
 the user may choose to see some, or all, of this output. This is  done
@@ -349,7 +416,10 @@ enables the display of *all* of the output from {\ACE}.
 Large parts of this manual,  in  particular  the  description  of  the
 options for running {\ACE}, are directly copied  from  the  respective
 description in the manual~\cite{Ram99} for the standalone  version  of
-{\ACE} by Colin Ramsay.
+{\ACE} by Colin Ramsay.  Most  of  the  examples,  in  the  `examples'
+directory, and accessed  via  the  `ACEExample'  function  are  direct
+translations  of  Colin  Ramsay's `test\#\#\#.in' files  in  the `src'
+directory.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{Changes from earlier versions}
@@ -558,9 +628,9 @@ proofs that coset enumeration eventually terminates  in  the  case  of
 finite index (see~\cite{Neu82}).
 
 \item{--} In *R-style definition* (for *R*elator Based definition) the
-order  in which  cosets are  defined is  explicitly prescribed  by the
-order in which rows of (the subgroup generator tables and) the relator
-tables are filled by making definitions.
+order in which coset numbers are defined is explicitly  prescribed  by
+the order in which rows of (the subgroup  generator  tables  and)  the
+relator tables are filled by making definitions.
 
 \item{--} One may choose  definitions  from  a  *Preferred  Definition
 Stack*. In this stack possibilities for definition  of  coset  numbers
@@ -740,20 +810,53 @@ will make the appropriate translation to the  value  expected  by  the
 binary: no value, 0, or 1. In general, this  should  not  concern  the
 user since  the  {\ACE}  interface  will  take  care  of  it.  Options
 announced as unknown (options are echoed to the screen, if the  `echo'
-option is passed) will  *always*  be  passed  to  {\ACE}  as  no-value
-options; the user can over-ride this behaviour simply by assigning the
-intended value. The reason for passing unknown options in this way, is
-that the {\ACE} interface should still  work,  albeit  with  erroneous
-warning messages, with an updated binary. The {\ACE} options known  to
-the {\ACE} interface are the fields of the  record  `KnownACEoptions';
-each field (known {\ACE} option) is assigned to a  list  of  the  form
-`[<i>, <ListOrFunction>]', where `<i>' is an integer representing  the
-shortest abbreviation of the option and `<ListOrFunction>' is either a
-list of (known) allowed values or a boolean function that may be  used
-to determine if the given value is a (known) valid value e.g.
+option is passed) that are passed to the {\ACE} binary, will  *always*
+be passed to {\ACE} as no-value options; the user can  over-ride  this
+behaviour simply by assigning  the  intended  value.  The  reason  for
+passing unknown options in this way,  is  that  the  {\ACE}  interface
+should still work, albeit with erroneous  warning  messages,  with  an
+updated {\ACE} binary.
+
+Continuing with the example of Section~"Using ACE Directly to Generate
+a Coset Table", one could use the `hard' strategy option and  increase
+the workspace to $10^7$ words, as follows:
 
 \begintt
-gap> KnownACEoptions.compaction;
+gap> ACECosetTable(fgens, rels, [c] : hard, workspace:=10^7);;
+\endtt
+
+Options      for      the       {\ACE}       interface       functions
+`ACECosetTableFromGensAndRels',   `ACECosetTable',   `ACEStats'    and
+`StartACE' (see  Chapter~"Functions  for  Using  ACE  Interactively"),
+comprise the few  non-{\ACE}-binary  options  (`silent',  `aceinfile',
+`aceoutfile',  `aceignore',  `aceignoreunknown',  `acenowarnings'  and
+`echo') discussed in Section~"Non-ACE-binary  Options",  (almost)  all
+single-word {\ACE} binary options and `purer' and `purec'. The options
+`purer' and `purec' give the {\ACE} binary options `pure r' and  `pure
+c', respectively; (they  are  the  only  multiple-word  {\ACE}  binary
+options that do not  have  a  single  word  alternative).  The  *only*
+single-word {\ACE} binary options that are  *not*  available  via  the
+{\ACE} interface are abbreviations that  clash  with  {\GAP}  keywords
+(e.g.~`fi' for `fill', and `rec' for `recover'). The  detail  of  this
+paragraph is probably of little importance to the {\GAP}  user;  these
+comments have been included for the user who wishes to  reconcile  the
+respective functionalities of the  {\ACE}  interface  and  the  {\ACE}
+standalone, and are probably of most value to standalone users.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{The KnownACEOptions Record}
+
+The {\ACE} options known to the {\ACE} interface are the fields of the
+record          `KnownACEOptions'{\undoquotes\atindex{KnownACEOptions}
+{@`KnownACEOptions'}}; each field (known {\ACE} option) is assigned to
+a list of the  form  `[<i>,  <ListOrFunction>]',  where  `<i>'  is  an
+integer representing the  shortest  abbreviation  of  the  option  and
+`<ListOrFunction>' is either a list of (known)  allowed  values  or  a
+boolean function that may be used to determine if the given value is a
+(known) valid value e.g.
+
+\begintt
+gap> KnownACEOptions.compaction;
 [ 3, [ 0 .. 100 ] ]
 \endtt
 
@@ -761,7 +864,7 @@ indicates that the option `compaction' may be  abbreviated  to  `com'
 and the (known) valid values are in the (integer) range 0 to 100; and
 
 \begintt
-gap> KnownACEoptions.ct;
+gap> KnownACEOptions.ct;
 [ 2, <Operation "IS_INT"> ]
 \endtt
 
@@ -769,43 +872,106 @@ indicates that there is essentially no abbreviation of `ct' (since its
 shortest abbreviation is of length 2),  and a value of  `ct' is  known
 to be valid if `IsInt' returns true for that value.
 
-*All* options (except `silent',  `aceinfile',  `aceoutfile',  `nowarn'
-and `echo') on the `OptionsStack', when an {\ACE} interface is  called
-are passed to the {\ACE} binary. Even options flagged as \lq{}`unknown
-(maybe new) or bad'', are passed to the {\ACE} binary, except that the
-options `purer' and `purec' are first translated to `pure r' and `pure
-c', respectively. When the {\ACE} binary encounters an option that  it
-doesn't understand it issues a warning to `stderr' and simply  ignores
-it; so options accidentally passed to  {\ACE}  are  unlikely  to  pose
-problems. The options `silent', `aceoutfile' (which is  translated  to
-`ao' for the binary), `aceinfile' and  `nowarn'  were  introduced  for
-{\GAP} use; and `echo', though an {\ACE} option, is  actually  handled
-by the {\ACE} interface and not passed to the binary.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{Non-ACE-binary Options}
 
-So  for example to  use the  `hard' strategy  option and  increase the
-workspace to $10^7$ words for the example given above, one could call:
+*All* options except the one listed in this section (which  appear  as
+elements of the global  variable  list  `NonACEbinOptions'{\undoquotes
+\atindex{NonACEbinOptions}{@`NonACEbinOptions'}}) and  those  excluded
+via the `aceignore' and `aceignoreunknown' options (described  below),
+that are on the `OptionsStack' when an {\ACE} interface is called, are
+passed to the {\ACE} binary. Even options  that  produce  the  warning
+message: \lq{}`unknown (maybe new) or bad'', by virtue of not being  a
+field of `KnownACEOptions', are passed to the  {\ACE}  binary  (except
+that the options `purer' and `purec' are first translated to `pure  r'
+and `pure c', respectively). When  the  {\ACE}  binary  encounters  an
+option that it doesn't understand it issues a warning to `stderr'  and
+simply ignores it;  so  options  accidentally  passed  to  {\ACE}  are
+unlikely to pose problems.
 
-\begintt
-gap> ACEStats(fgens,rels,[c]:hard,workspace:=10^7);;
-\endtt
+Here now, are the  few  options  that  are  available  to  the  {\GAP}
+interface to {\ACE} that have no counterpart in the {\ACE} standalone:
 
-Options      for      the       {\ACE}       interface       functions
-`ACECosetTableFromGensAndRels',   `ACECosetTable',   `ACEStats'    and
-`StartACE' (see  Chapter~"Functions  for  Using  ACE  Interactively"),
-comprise  the  few   exceptional   options   (`silent',   `aceinfile',
-`aceoutfile', `nowarn'  and  `echo')  mentioned  above,  (almost)  all
-single-word  {\ACE}  binary  options  and  `purer'  and  `purec'.   As
-mentioned above, `purer' and `purec' give the  {\ACE}  binary  options
-`pure  r'  and  `pure  c',  respectively   (these   being   the   only
-multiple-word {\ACE} binary options that do not  have  a  single  word
-alternative). The *only* single-word {\ACE} binary  options  that  are
-*not* available via the {\ACE} interface are abbreviations that  clash
-with {\GAP} keywords (e.g.~`fi' for `fill', and `rec' for  `recover').
-Much of the preceding few paragraphs will not be of little  importance
-to the {\GAP} user; these comments have been made merely for the  user
-who wishes to  reconcile  the  respective  functionalities  of  {\ACE}
-interface and the {\ACE} standalone, and is of most use to  standalone
-users.
+\beginitems
+
+\>`silent'{Option `silent'}& 
+Inhibits an error return.
+
+If a coset  enumeration  that  invokes  `ACECosetTableFromGensAndRels'
+does not finish within the preset limits, an error is  raised  by  the
+interface to {\GAP}, unless the option `silent' has been set, in which
+case `fail' is returned. This option is included to make the behaviour
+of `ACECosetTableFromGensAndRels' compatible with that of the function
+`CosetTableFromGensAndRels' it replaces.
+
+\>`aceinfile:=<filename>'{Option `aceinfile'}&
+Creates an {\ACE} input file <filename> for use with  the  standalone,
+only;  <filename>  should  be  a  string.  (Shortest  abbreviation  of
+`aceinfile' is `acein'.)
+
+This option is only relevant to `ACECosetTableFromGensAndRels' and  is
+ignored if included as an option for  invocations  of  `ACEStats'  and
+`StartACE'. If this option is used, {\GAP} creates an input file  with
+filename <filename> only, and then exits (i.e.~the  {\ACE}  binary  is
+not called). This option is  provided  for  users  who  wish  to  work
+directly (and interactively) with the {\ACE} standalone. The full path
+to  the  input  file  normally  used  by  {\ACE}   (i.e.~when   option
+`aceinfile' is not used) is stored in `ACEData.infile'.
+
+
+\>`aceoutfile:=<filename>'{Option `aceoutfile'}&
+Redirects {\ACE} output to file <filename>;  <filename>  should  be  a
+string. (Shortest abbreviation  of `aceoutfile' is `aceo'.)
+
+This  is  actually  a  synonym  for  the  `ao'  option.  Please  refer
+to~"Option `ao'", for further discussion of this option.
+
+\>`aceignore:=<optionList>'{Option `aceignore'}&
+Directs an {\ACE} function to  ignore  the  options  in  <optionList>;
+<optionList> should be a list of strings.
+(Shortest abbreviation  of `aceignore' is `aceig'.)
+
+If a function called with its own options, in  turn  calls  an  {\ACE}
+function for which those options are not intended, the {\ACE} function
+will pass those options to the {\ACE} binary.  If  those  options  are
+unknown to the {\ACE} interface a warning is issued. Options that  are
+unknown to the {\ACE} binary are  simply  ignored  by  {\ACE}  (and  a
+warning that the option was ignored  appears  in  the  {\ACE}  output,
+which the user will not see unless the `InfoLevel' of `InfoACE' is set
+to 2). This option enables the user to avoid such options being passed
+at all, thus avoiding the warning messages and also any  options  that
+coincidentally are {\ACE} options but are not intended for the  {\ACE}
+function being called.
+
+\>`aceignoreunknown'{Option `aceignoreu'}&
+Directs an {\ACE} function to  ignore  any  options  not known to the
+{\ACE} interface.
+(Shortest abbreviation  of `aceignoreunknown' is `aceignoreu'.)
+
+This option is provided for similar reasons to `aceignore'.  Normally,
+it is safe to include it, to avoid aberrant warning messages from  the
+{\ACE} interface. However, fairly obviously, it should not be used  in
+the situation where a new {\ACE} binary has been  installed  with  new
+options that are not listed among  the  fields  of  `KnownACEOptions',
+which you intend to use.
+
+\>`acenowarnings'{Option `acenowarnings'}& 
+Inhibits the warning message \lq{}`unknown (maybe new) or bad option''
+for options not listed in `KnownACEOptions'.
+(Shortest abbreviation  of `acenowarnings' is `acenow'.)
+
+This option suppresses the warning messages for  unknown  options  (to
+the {\ACE} interface), but unlike `aceignore'  and  `aceignoreunknown'
+still allows them to be passed to the {\ACE} binary.
+
+\>`echo'{Option `echo'}& 
+Echoes arguments and options (and indicates how options were handled).
+
+Unlike the previous options of this  section,  there  *is*  an  {\ACE}
+binary option `echo'. However, the `echo' option  is  handled  by  the
+{\ACE} interface and is not passed to the {\ACE} binary.
+
+\enditems
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{General Options that Modify the Enumeration Process}
@@ -870,9 +1036,9 @@ scanned only from  the  start  (and  end)  of  a  relator.  Mendelsohn
 \lq{}on' means that all (different) cyclic permutations of  a  relator
 are scanned.
 
-The effect  of Mendelsohn style  processing is case-specific.   It can
-mean the difference  between success or failure, or  it can impact the
-number  of  cosets   required,  or  it  can  have   no  effect  on  an
+The effect of Mendelsohn style processing  is  case-specific.  It  can
+mean the difference between success or failure, or it can  impact  the
+number of coset numbers required, or it  can  have  no  effect  on  an
 enumeration's statistics.
 
 *Note:* Processing all cyclic permutations of the relators can be very
@@ -972,17 +1138,17 @@ overflow.
 Lookahead; `<val>' should be in the integer range 0 to 4.
 (Shortest abbreviation: `look'.)
   
-Although HLT-style strategies  are fast, they are local,  in the sense
-that  the  implications   of  any  definitions/deductions  made  while
-applying cosets may not become  apparent until much later.  One way to
-alleviate this problem is to perform lookaheads occasionally; that is,
-to  test the  information  in  the table,  looking  for deductions  or
-concidences.  {\ACE} can perform a lookahead when the table overflows,
-before the compaction routine is  called.  Lookahead can be done using
-the entire  table or  only that  part of the  table above  the current
-coset, and  it can  be done R-style  (scanning coset numbers  from the
-beginning  of relators)  or C-style  (testing all  definitions  in all
-essentially different positions).
+Although HLT-style strategies are fast, they are local, in  the  sense
+that  the  implications  of  any  definitions/deductions  made   while
+applying coset numbers may not become apparent until much  later.  One
+way to alleviate this problem is to perform  lookaheads  occasionally;
+that is, to test the information in the table, looking for  deductions
+or  concidences.  {\ACE}  can  perform  a  lookahead  when  the  table
+overflows, before the compaction routine is called. Lookahead  can  be
+done using the entire table or only that part of the table  above  the
+current coset number, and it  can  be  done  R-style  (scanning  coset
+numbers from the  beginning  of  relators)  or  C-style  (testing  all
+definitions in all essentially different positions).
 
 The following are the effects of the possible values of `lookahead':
 
@@ -1129,10 +1295,10 @@ Loop limit; `<val>' should be a non-negative integer.
 
 The core enumerator is organised as a state machine,  with  each  step
 performing an \lq{}action' (i.e., lookahead, compaction) or a block of
-actions   (i.e.,   $|`ct'|$   coset   definitions,   $|`rt'|$    coset
-applications). The number of  passes  through  the  main  loop  (i.e.,
-steps) is counted, and the enumerator can make an  early  return  when
-this count hits the value of `loop'. A  value  of  $0$,  the  default,
+actions (i.e.,  $|`ct'|$  coset  number  definitions,  $|`rt'|$  coset
+number applications). The number  of  passes  through  the  main  loop
+(i.e., steps) is counted, and the enumerator can make an early  return
+when this count hits the value of `loop'. A value of $0$, the default,
 turns this feature off.
 
 *Guru Notes:*
@@ -1162,30 +1328,30 @@ coincidence processing at the expense of having to trace the paths and
 compress them.  In general, it does not seem to be worthwhile.
 
 \>`compaction:=<val>'{Option `compaction'}&
-Percentage of dead cosets to trigger compaction;
+Percentage of dead coset numbers to trigger compaction;
 `<val>' should be an integer (percentage) in the integer range 0 to 100.
 (Shortest abbreviation: `com'.)
 
 The option `compaction'  sets  the  percentage  of  *dead*~\index{dead
 coset (number)} coset numbers needed  to  trigger  compaction  of  the
 coset table, during an enumeration. A *dead* coset (number) is a coset
-found to be coincident with a lower numbered coset. The default is  10
-or 100, depending on the strategy used (see Section~"Strategy  Options
-for ACE").
+number found to be coincident with a lower numbered coset number.  The
+default  is  10  or  100,  depending  on  the   strategy   used   (see
+Section~"Strategy Options for ACE").
 
 Compaction recovers the space allocated to  coset  numbers  which  are
-flagged as dead. It results in a table where all the active cosets are
-numbered contiguously from \#1, and with the remainder  of  the  table
-available for new cosets.
+flagged as dead. It results in a table  where  all  the  active  coset
+numbers are numbered contiguously from \#1, and with the remainder  of
+the table available for new coset numbers.
 
 The coset table is compacted when a definition of a  coset  number  is
 required, there is no space for a  new  coset  number  available,  and
 provided that the given percentage of the coset  table  contains  dead
 coset numbers. For example, if `compaction'  =  $20$  then  compaction
-will occur only if 20\% or more of the cosets in the table  are  dead.
-An argument of 100 means that compaction is never performed, while  an
-argument of 0 means always compact,  no  matter  how  few  dead  coset
-numbers there are (provided there is at least one, of course).
+will occur only if 20\% or more of the coset numbers in the table  are
+dead. An argument of 100 means that  compaction  is  never  performed,
+while an argument of 0 means always compact, no matter  how  few  dead
+coset numbers there are (provided there is at least one, of course).
 
 Compaction may be performed  multiple times during an enumeration, and
 the table that results from an  enumeration may or may not be compact,
@@ -1202,23 +1368,10 @@ phase will (automatically) be performed.
 
 Compacting a table \lq{}destroys'  information  and  history,  in  the
 sense that the coincidence list is deleted, and the table entries  for
-any dead cosets are deleted.
-
-%??????????????????????????????????????????????????????????????????????
-%
-%*GREG:
-%WILL THIS BE RELEVANT FOR INTERACTIVE USE?*
-%
-%If messaging is enabled 
-%(see~"Options controlling Input and Output"),
-%then a progress  message (labelled {\tt CO}) is  printed each time the
-%compaction routine is  actually called (as opposed to  each time it is
-%potentially called).
-%
-%??????????????????????????????????????????????????????????????????????
+any dead coset numbers are deleted.
 
 \>`max:=<val>'{Option `max'}&
-Maximum number of cosets to be defined;
+Maximum number of coset numbers to be defined;
 `<val>' should be $0$ or an integer greater than or equal to 2.
 
 Sets the maximum  number of coset numbers to  be defined.  By default,
@@ -1234,35 +1387,9 @@ selects all of the workspace.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\Section{Options controlling Input and Output}
+\Section{Options controlling ACE Output}
 
 \beginitems
-
-\>`silent'{Option `silent'}& 
-Inhibits an error return.
-
-If the coset enumeration does not finish within the preset limits,  an
-error is raised by the interface to {\GAP}, unless the option `silent'
-has been set, in which case `fail' is returned. Note that `silent'  is
-a feature of the {\GAP} interface only, it has no counterpart  in  the
-{\ACE} standalone.
-
-\>`nowarn'{Option `nowarn'}& 
-Inhibits the warning message \lq{}`unknown (maybe new) or bad option''
-for options not listed in `KnownACEoptions'.
-
-\>`aceinfile:=<filename>'{Option `aceinfile'}&
-Creates an {\ACE} input file <filename> for use with  the  standalone,
-only; <filename> should be a string.
-
-If this option is used, {\GAP} creates an  input  file  with  filename
-<filename> only,  and  then  exits  (i.e.~the  {\ACE}  binary  is  not
-called). This option is provided for users who wish to  work  directly
-(and interactively) with the {\ACE} standalone; and is, of  course,  a
-feature of the interface only, that has no counterpart in  the  {\ACE}
-standalone. The full path to the input file normally  used  by  {\ACE}
-(i.e.~when  option   `aceinfile'   is   not   used)   is   stored   in
-`ACEData.infile'.
 
 \>`messages:=<val>'{Option `messages'}
 \>`monitor:=<val>'{Option `monitor'}&
@@ -1352,8 +1479,9 @@ coset numbers defines at any stage) and `t' (the total number of coset
 numbers defined) are tracked, and each  time  a  new  \lq{}record'  is
 found, the relators used and the summary result line is  printed.  See
 the previous section for a discussion of the statistics `m'  and  `t'.
-To observe these messages you will probably want  to  set  the  option
-`aceoutfile' (see~"Option `aceoutfile'").
+To observe these messages either set the `InfoLevel' of `InfoACE' to 2
+or  non-interactively  you  can  peruse   the   {\ACE}   output   file
+(see~"Option `aceoutfile'").
 
 The order in which the  equivalent  presentations  are  generated  and
 tested has no particular significance, but note that the  presentation
@@ -1364,8 +1492,8 @@ user cares).
 
 As discussed by Cannon, Dimino, Havas  and  Watson  \cite{CDHW73}  and
 Havas and Ramsay \cite{HR99b} such equivalent presentations can  yield
-large variations in the number of cosets required in  an  enumeration.
-For this command, we are interested in this variation.
+large variations in  the  number  of  coset  numbers  required  in  an
+enumeration. For this command, we are interested in this variation.
 
 After  the  final  presentation  is  run,   some   additional   status
 information messages are printed to the {\ACE} output file:
@@ -1377,8 +1505,8 @@ information messages are printed to the {\ACE} output file:
 \endlist
 
 As an example (drawn from the discussion in \cite{HR99a}) consider the
-enumeration of the  $448$  cosets  of  the  subgroup  $\langle  a^2,Ab
-\rangle$ of the group
+enumeration   of   the   $448$   coset   numbers   of   the   subgroup
+$\langle  a^2,Ab \rangle$ of the group
 $$ (8,7 \mid 2,3) 
     = \langle a,b \mid a^8 = b^7 = (ab)^2 = (Ab)^3 = 1 \rangle. $$
 There are $4!=24$  relator  orderings  and  $2^4=16$  combinations  of
@@ -1394,9 +1522,9 @@ other than killing the task. So do a reality check beforehand  on  the
 size of the search space and the time for each enumeration. If you are
 interested in  finding  a  \lq{}good'  enumeration,  it  can  be  very
 helpful, in terms of running time, to put a tight limit on the  number
-of cosets via the `max' option. You may also have to set  `compaction'
-=  $100$  to  prevent  time-wasting  attempts  to  recover  space  via
-compaction.  This  maximises  throughput  by  causing  the   \lq{}bad'
+of coset numbers via the `max'  option.  You  may  also  have  to  set
+`compaction' = $100$ to prevent time-wasting attempts to recover space
+via compaction. This maximises throughput  by  causing  the  \lq{}bad'
 enumerations, which are in  the  majority,  to  overflow  quickly  and
 abort. If you wish to explore  a  very  large  search-space,  consider
 firing up many copies of {\ACE}, and starting each with a \lq{}random'
@@ -1422,10 +1550,11 @@ used (by default, eight  are  used),  by  using  the  extended  syntax
 
 The routine first  turns  `asis'  on  and  `messages'  off  (i.e.~sets
 `messages' to 0), and then generates and tests the requested number of
-random equivalent presentations. For each  presentation, the  relators
+random equivalent presentations. For each presentation,  the  relators
 used and the  summary  result  line  are  printed.  To  observe  these
-messages you  will  probably  want  to  set  the  option  `aceoutfile'
-(see~"Option `aceoutfile'").
+messages  either  set  the  `InfoLevel'   of   `InfoACE'   to   2   or
+non-interactively you can peruse the {\ACE} output  file  (see~"Option
+`aceoutfile'").
 
 *Notes:*
 The relator inversions and rotations are \lq{}genuinely'  random.  The
@@ -1602,16 +1731,17 @@ definitions, all tested in all  essentially  different  positions,  is
 appropriate. This option selects such a mixed strategy. The idea  here
 is that most of the work is done C-style (with  the  relators  in  the
 subgroup (`no = -1') and with gap-`fill'ing active),  but  that  every
-$1000$ C-style definitions a further coset is applied to all relators.
+$1000$ C-style definitions a further coset number is  applied  to  all
+relators.
 
 *Guru  Notes:*
 The $1000/1$ mix is not necessarily optimal, and some  experimentation
 may be needed  to  find  an  acceptable  balance  (see,  for  example,
 \cite{HR99b}). Note also that, the longer  the  total  length  of  the
-presentation,  the  more  work  needs  to  be  done  for  each   coset
-application to the relators; one coset application can result in  more
-than $1000$ definitions, reversing the  balance  between  R-style  and
-C-style definitions.
+presentation, the more work needs to be done  for  each  coset  number
+application to the relators; one coset number application  can  result
+in more than $1000$ definitions, reversing the balance between R-style
+and C-style definitions.
 
 \>`hlt'{Option `hlt'}&
 Selects the standard HLT strategy.
@@ -1643,39 +1773,52 @@ of~\cite{Sim94}).  With  care,  it  is  possible  to   duplicate   the
 statistics  given  in~\cite{Sim94};  some  examples   are   given   in
 Chapter~"Examples". % again, in the appendix ...
 
+\enditems
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Chapter{Functions for Using ACE Interactively}
 
 The user will probably benefit most from interactive use of {\ACE}  by
 setting the `InfoLevel' of  `InfoACE'  to  2  (see~"SetInfoACELevel"),
-particularly if she use the `messages' option with a non-zero value.
+particularly if she uses the `messages' option with a non-zero value.
 
-All functions that manipulate an interactive session  (that  has  been
+All functions that manipulate an interactive process  (that  has  been
 initiated by `StartACE', with three arguments), have a form where  the
 first  argument  is  the  integer  <i>  returned  by  the   initiating
 `StartACE' command, and a second form with one fewer arguments  (where
 the integer <i> is  discovered  by  a  default  mechanism,  namely  by
 determining the least integer <i>  for  which  there  is  a  currently
-active interactive {\ACE} process).
+active interactive {\ACE} process). In each case, it is an  error,  if
+<i> is not the index of an active interactive process, or there are no
+current active interactive processes.
 
-*Note*: It is  important  to  terminate  interactive  {\ACE}  sessions
-explicitly; they will *not* be terminated automatically on  `quit'ting
-{\GAP}. What will result if {\GAP} is `quit'  before  all  interactive
-{\ACE} sessions are terminated, are *zombie* processes  (still  living
-*child* processes whose *parents* have died). Perhaps, one should make
-a point of executing `QuitAllACE();' (see below) just prior to exiting
-{\GAP}, if one has been using {\ACE} interactively. (If all  processes
-are already dead, `QuitAllACE();' simply does nothing.)
+*Notes*: 
+
+The global method of passing options (via `PushOptions'),  should  not
+be  used  with  any  of  the  interactive  functions.  In  fact,   the
+`OptionsStack' should be empty at the  time  any  of  the  interactive
+functions is called.
+
+On `quit'ting {\GAP}, `QuitAllACE();' is  executed,  which  terminates
+all active interactive {\ACE} processes. If {\GAP} is  killed  without
+`quit'ting, before all interactive {\ACE}  processes  are  terminated,
+*zombie* processes (still living  *child*  processes  whose  *parents*
+have died), will result. Since zombie processes do consume  resources,
+in such an event, the responsible computer user should  seek  out  and
+kill the still living `ace' children (e.g.~by piping the output  of  a
+`ps' with appropriate options, usually `aux' or `ef', to  `grep  ace',
+to find the process ids, and then using `kill'; try `man ps' and  `man
+kill' if these hints are unhelpful).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\Section{Starting and Stopping Interactive ACE Sessions}
+\Section{Starting and Stopping Interactive ACE Processes}
 
 \>StartACE( <fgens>, <rels>, <sgens> [:<options>] ) F
-\>StartACE( <i> ) F
-\>StartACE() F
+\>StartACE( <i> [:<options>] ) F
+\>StartACE( [:<options>] ) F
 
-The first form of `StartACE' (on there arguments) is used to start  an
-interactive session; here <fgens> is a list of free generators, <rels>
+The first form of `StartACE' (on three arguments) is used to start  an
+interactive process; here <fgens> is a list of free generators, <rels>
 a list of words in these generators giving  relators  for  a  finitely
 presented group, and <sgens> the list of  subgroup  generators,  again
 expressed as words in the free generators. All these are given in  the
@@ -1690,7 +1833,9 @@ be used e.g.~to preset limits of space and time to be used, to  modify
 input and output and to modify the enumeration procedure.  Please  see
 Section~"General  Warnings  regarding  the  Use  of  Options"  for   a
 discussion regarding global and local  passing  of  options,  and  the
-non-orthogonal nature of {\ACE}'s options.
+non-orthogonal  nature  of  {\ACE}'s  options.  However,  the   global
+mechanism (`PushOptions') should *not* be  used  to  include  options;
+please ensure the `OptionsStack' is empty before calling `StartACE'.
 
 The return value (for all three forms of  `StartACE')  is  an  integer
 (numbering from  1)  which  represents  the  running  process.  It  is
@@ -1701,16 +1846,17 @@ interactive function {\ACE} function should be applied to.
 When `StartACE' is called with  one  argument  <i>  it  starts  a  new
 enumeration on the <i>th running process, i.e.~it scrubs a  previously
 generated table and starts  from  scratch  with  the  same  parameters
-(i.e.~the same arguments and options). The only reason for doing  such
-a thing is to perhaps compare timings of runs (a second run is quicker
-because memory has already been allocated). If you are  interested  in
-this sort of information, however,  you  may  be  better  off  dealing
-directly with the standalone.
+(i.e.~the same arguments and options); except that if new options  are
+included these will modify those given previously. The only reason for
+doing such a thing, without new options, is to perhaps compare timings
+of runs (a second run is  quicker  because  memory  has  already  been
+allocated). If  you  are  interested  in  this  sort  of  information,
+however, you may be better off dealing directly with the standalone.
 
 When `StartACE' is  called  with  no  arguments  it  finds  the  least
-positive integer <i> for which an interactive session is  running  and
+positive integer <i> for which an interactive process is  running  and
 applies `StartACE(<i>)'. (Most users will  only  run  one  interactive
-session at a time. Hence, `StartACE()' will be a useful  shortcut  for
+process at a time. Hence, `StartACE()' will be a useful  shortcut  for
 `StartACE(1)'.)
 
 Each of
@@ -1718,31 +1864,49 @@ Each of
 \>QuitACE( <i> ) F
 \>QuitACE() F
 
-terminates an interactive {\ACE} session, where  <i>  is  the  integer
-returned by `StartACE' when the session was  started.  If  the  second
+terminates an interactive {\ACE} process, where  <i>  is  the  integer
+returned by `StartACE' when the process was  started.  If  the  second
 form is used (i.e.~without arguments) then the interactive process  of
 least index that is still running is terminated.
 
-As a convenience, to terminate all active interactive {\ACE}  sessions
+As a convenience, to terminate all active interactive {\ACE} processes
 at once, we provide:
 
 \>QuitAllACE() F
 
 %T return an exit status if possible?
 %  Hmm! ... CloseStream doesn't give an exit status? ... suggestions?
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{Viewing and Setting Options of an Interactive Process}
+
+\>CurrentACEOptions( <i> ) F
+\>CurrentACEOptions() F
+
+display the options of the  <i>th  (or  default)  process  started  by
+`StartACE'. In fact, `CurrentACEOptions(<i>)' is just a pretty-printer
+of the `ACEData.io[<i>].options' record.
+
+\>SetACEOptions( <i> [:<options>] ) F
+\>SetACEOptions( [:<options>] ) F
+
+modify the current options of the <i>th (or default)  process  started
+by `StartACE'. Please ensure that the `OptionsStack' is  empty  before
+calling  `SetACEOptions'  (or  any  interactive  function  that  calls
+`SetACEOptions'; any interactive function  that  accepts  new  options
+actually calls `SetACEOptions').
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{Interactive Versions of Non-interactive ACE Functions}
 
-\>ACECosetTable( <i> ) F
-\>ACECosetTable() F
+\>ACECosetTable( <i> [:<options>] ) F
+\>ACECosetTable( [:<options>] ) F
 
 perform  the  same  function  as  `ACECosetTableFromGensAndRels'   and
 `ACECosetTable' on three arguments, albeit interactively, on the <i>th
 (or default) process started by `StartACE'.
 
-\>ACEStats( <i> ) F
-\>ACEStats() F
+\>ACEStats( <i> [:<options>] ) F
+\>ACEStats( [:<options>] ) F
 
 perform the same function as `ACEStats'  on  three  arguments,  albeit
 interactively,  on  the  <i>th  (or  default)   process   started   by
@@ -1750,7 +1914,7 @@ interactively,  on  the  <i>th  (or  default)   process   started   by
 
 See Section~"Example of Using ACE Interactively (Using StartACE)"  for
 an example demonstrating both these functions  within  an  interactive
-session.
+process.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{Steering ACE Interactively}
@@ -2039,9 +2203,9 @@ following is a sample results message:
 INDEX = 12 (a=12 r=16 h=1 n=16; l=3 c=0.01; m=14 t=15)
 \endtt
 
-which, in this case, declares a successful enumeration of  the  cosets
-of a subgroup of index 12 within a group, and, as it turns out, values
-for the same statistics as the sample progress message.
+which, in this case, declares a successful enumeration  of  the  coset
+numbers of a subgroup of index 12 within a group,  and,  as  it  turns
+out, values for the same statistics as the sample progress message.
 
 In the following table we  list  the  statistics  that  can  follow  a
 progress or results message tag, in order:
@@ -2050,15 +2214,15 @@ progress or results message tag, in order:
 --------------------------------------------------------------------
 statistic   meaning
 --------------------------------------------------------------------
-a           number of active cosets
-r           number of applied cosets
+a           number of active coset numbers
+r           number of applied coset numbers
 h           first (potentially) incomplete row
-n           next coset definition number
+n           next coset number definition
 h           percentage of holes in the table (if `messages'$ \< 0$) 
 l           number of main loop passes
 c           total CPU time
-m           maximum number of active cosets
-t           total number of cosets defined
+m           maximum number of active coset numbers
+t           total number of coset numbers defined
 s           new deduction stack size (with DS tag)
 d           current deduction stack size, or
               no. of non-redundant deductions retained (with DS tag)
@@ -2102,7 +2266,7 @@ Lx         n      lookahead performed (type `x')
 CO         n      table compacted
 CL         n      complete lookahead (table as deduction stack)
 UH         n      updated completed-row counter
-RA         n      remaining cosets applied to relators
+RA         n      remaining coset numbers applied to relators
 SG         n      subgroup generator phase
 RS         n      relators in subgroup phase
 DS         n      stack overflowed (compacted and doubled)
@@ -2158,7 +2322,7 @@ SG PHASE OVERFLOW    out of space (processing subgroup generators)
 ITERATION LIMIT      `loop' limit triggered
 TIME LIMT            `ti' limit triggered
 HOLE LIMIT           `ho' limit triggered
-INCOMPLETE TABLE     all cosets applied, but table has holes
+INCOMPLETE TABLE     all coset numbers applied, but table has holes
 MEMORY PROBLEM       out of memory (building data structures)
 ---------------------------------------------------------------------
 \endtt
@@ -2203,10 +2367,11 @@ output files.
 
 In this chapter  we  collect  together  a  number  of  examples  which
 illustrate the various ways in which the {\ACE} Share Package  may  be
-used. In the first few cases, we have set the `InfoLevel' of `InfoACE'
-to 2, so that (except for {\ACE}'s banner in non-interactive use), all
-output from {\ACE} is displayed, prepended by \lq{}`\#I  ''.  We  have
-omitted the line
+used, and give some interactions with the  `ACEExample'  function.  In
+the first few cases, we have set the `InfoLevel' of `InfoACE' to 2, so
+that (except for {\ACE}'s banner in non-interactive use),  all  output
+from {\ACE} is displayed, prepended by \lq{}`\#I ''. We  have  omitted
+the line
 
 \begintt
 gap> RequirePackage("ace");
@@ -2287,20 +2452,23 @@ gap> Order(G);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{Example of Using ACECosetTableFromGensAndRels}
 
-The following  example  calls  {\ACE}  for  up  to  800  cosets  using
+The following example calls {\ACE} for up to 800 coset  numbers  using
 Mendelsohn style relator processing and sets the message level to 500.
 The value of `table', i.e.~the {\GAP} coset table, immediately follows
 the last {\ACE} message (\lq{}`\#I '') line, but both the coset  table
-from {\ACE} and the {\GAP} coset table have been abbreviated.
+from {\ACE} and the  {\GAP}  coset  table  have  been  abbreviated.  A
+slightly modified version of this example, which includes  the  `echo'
+option is available on-line via `table  :=  ACEExample("perf602p5");'.
+You may wish to peruse the notes  in  the  `ACEExample'  index  first,
+however, by executing `ACEExample();'.
 
 \begintt
-gap> RequirePackage("ace");;
 gap> SetInfoACELevel(2);
 gap> G := PerfectGroup(2^5*60, 2);;
 gap> fgens := FreeGeneratorsOfFpGroup(G);;
 gap> table := ACECosetTableFromGensAndRels(
 >                 # arguments
->                 fgens, RelatorsOfFpGroup(g), fgens{[1]}
+>                 fgens, RelatorsOfFpGroup(G), fgens{[1]}
 >                 # options
 >                 : mendelsohn, max:=800, mess:=500);
 #I    #-- ACE 3.000: Run Parameters ---
@@ -2355,14 +2523,16 @@ gap> table := ACECosetTableFromGensAndRels(
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{Example of Using ACE Interactively (Using StartACE)}
 
-Now we illustrate a simple interactive session, with an enumeration of
+Now we illustrate a simple interactive process, with an enumeration of
 an index 12 subgroup (isomorphic to $C_5$) within $A_5$. Observe  that
 we  have  relied  on  the  default  level  of  messaging  from  {\ACE}
 (`messages' = 0) which gives a result  line  only,  without  parameter
 information. Interactively, {\ACE}'s banner is not redirected  and  so
 it is observed when the `InfoLevel' of `InfoACE' is 2. We have however
 used the option `echo', so that we can see how the  interface  handled
-the arguments and options.
+the  arguments  and   options.   On-line   try:   `SetInfoACELevel(2);
+ACEExample("A5-C5", StartACE);' to emulate the session  prior  to  the
+`QuitACE' command.
 
 \begintt
 gap> SetInfoACELevel(2);
@@ -2420,9 +2590,7 @@ gap> ACECosetTable(); # Interactive version of ACECosetTableFromGensAndRels()
   [ 2, 1, 4, 3, 6, 5, 8, 7, 10, 9, 12, 11 ], 
   [ 3, 1, 2, 5, 7, 8, 4, 9, 6, 11, 12, 10 ], 
   [ 2, 3, 1, 7, 4, 9, 5, 6, 8, 12, 10, 11 ] ]
-gap> # It is important to end the interactive session (failing to do so
-gap> # before exiting GAP, will create a `zombie' process ... a process
-gap> # that hasn't died before its parent process):
+gap> # To terminate the interactive process we do:
 gap> QuitACE(1); # Again, we could have omitted the 1
 gap> # If we had more than one interactive process we could have 
 gap> # terminated them all in one go with:
