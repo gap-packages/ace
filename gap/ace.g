@@ -69,7 +69,7 @@ Info(InfoWarning,1,"  C code by George Havas <havas@csee.uq.edu.au> and");
 Info(InfoWarning,1,"            Colin Ramsay <cram@csee.uq.edu.au>");
 Info(InfoWarning,1,"                 ACE binary version: ", ACEData.version);
 Info(InfoWarning,1,"  GAP code by Greg Gamble <gregg@csee.uq.edu.au> and");
-Info(InfoWarning,1,"         Alexander Hulpke <ahulpke@math.ohio-state.edu>");
+Info(InfoWarning,1,"         Alexander Hulpke <hulpke@math.colostate.edu>");
 Info(InfoWarning,1,"                 ACE package version: ", 
                                      PACKAGES_VERSIONS.ace);
 Info(InfoWarning,1,"");

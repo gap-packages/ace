@@ -11,8 +11,8 @@ from within GAP 4.
 
 The GAP interface (share package) has been written by Alexander Hulpke
 and Greg Gamble. In order to install the ACE share  package  you  must
-get the archive file `ace.zoo' (which includes the C  source  code  of
-Havas and Ramsay).
+get the archive file `ace-XXX.zoo', for  some  version  number  `XXX',
+(which includes the C source code of Havas and Ramsay).
 
 The ACE share package provides a  mechanism  to  replace  GAP's  usual
 Todd-Coxeter coset enumerator by ACE, so that  functions  that  behind
@@ -24,15 +24,15 @@ coset  enumerations.  The  interactive  functions  provided  use   the
 IOStream functionality first introduced in GAP 4.2.  (Hence,  the  ACE
 share package requires at least GAP 4.2.)
 
-You can download `ace.zoo' from the same places as GAP. The  main  FTP
-servers are:
+You can download `ace-XXX.zoo' (where `XXX'  is  the  package  version
+number) from the same places as GAP. The main FTP servers are:
 
 ftp://ftp-gap.dcs.st-and.ac.uk/pub/gap/gap4/share/
 ftp://ftp.math.rwth-aachen.de/pub/gap4/share/
 ftp://ftp.ccs.neu.edu/pub/mirrors/ftp-gap.dcs.st-and.ac.uk/pub/gap/gap4/share/
 ftp://pell.anu.edu.au/pub/algebra/gap4/share/
 
-`ace.zoo' is also available via the GAP www page at
+`ace-XXX.zoo' is also available via the GAP www page at
 
 http://www-gap.dcs.st-and.ac.uk/~gap/Info4/share.html
 http://aldebaran.math.rwth-aachen.de/~GAP/Info4/share.html
@@ -50,16 +50,16 @@ Windows or the Macintosh.
 
                    Installing the ACE share package
 
-To install the ACE share package, move the  file  `ace.zoo'  into  the
+To install the ACE share package, move the file `ace-XXX.zoo' into the
 `pkg' directory in which you plan to install ACE. Usually,  this  will
 be the directory `pkg' in the hierarchy of  your  version  of  GAP  4.
 (However, it is also possible to keep an additional `pkg' directory in
 your private directories, see section "ref:Installing Share  Packages"
 of the GAP 4 reference manual for details on how to do this.)
 
-Then unzoo `ace.zoo' by
+Then unzoo `ace-XXX.zoo' by
 
-  unzoo -x ace
+  unzoo -x ace-XXX
 
 Go to the newly created `ace' directory and  call  `configure  <path>'
 where <path> is the path to the GAP home directory. So for example  if
@@ -136,7 +136,7 @@ Ramsay <cram@csee.uq.edu.au>.
 
 If you encounter problems at the GAP level, please contact one of  the
 ACE share  package  authors:  Greg  Gamble  <gregg@csee.uq.edu.au>  or
-Alexander Hulpke <ahulpke@math.ohio-state.edu>.
+Alexander Hulpke <hulpke@math.colostate.edu>.
 
 When sending a bug report,  remember  we  will  need  to  be  able  to
 reproduce the problem; so please include:
@@ -161,4 +161,4 @@ reproduce the problem; so please include:
     Australia
     e-mail: gregg@csee.uq.edu.au
     www:    http://www.csee.uq.edu.au/~gregg
-  -- 1 April, 2001.
+  -- 20 August, 2001.

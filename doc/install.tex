@@ -17,15 +17,17 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{Installing the ACE Share Package}
 
-To install, unpack the archive file as a sub-directory  in  the  `pkg'
-hierarchy of your  version  of  {\GAP}~4.  This  might  be  the  `pkg'
-directory of the {\GAP}~4 home directory; it is however also  possible
-to keep an additional `pkg' directory in your private directories, see
-Section~"ref:Installing a Share Package in your home directory".  (The
-only essential difference with installing {\ACE} in a `pkg'  directory
-different to the {\GAP}~4 home directory is that one must start {\GAP}
-with the `-l' switch,  e.g.~if  your  private  `pkg'  directory  is  a
-subdirectory of `mygap' in your home directory you might type:
+To install, unpack the archive file, which should have a name of  form
+`ace-<XXX>.zoo'  for  some  package  version  number   <XXX>,   as   a
+sub-directory in the `pkg' hierarchy of your version of {\GAP}~4. This
+might be the `pkg' directory of the {\GAP}~4  home  directory;  it  is
+however also possible to keep an additional `pkg'  directory  in  your
+private directories, see Section~"ref:Installing a  Share  Package  in
+your home directory". (The only essential difference  with  installing
+{\ACE} in a `pkg' directory different to the {\GAP}~4  home  directory
+is that one must start {\GAP}  with  the  `-l'  switch,  e.g.~if  your
+private `pkg' directory is a subdirectory  of  `mygap'  in  your  home
+directory you might type:
 
 %begintt
 \){\kernttindent}gap -l ";<myhomedir>/mygap"
@@ -35,10 +37,10 @@ where <myhomedir> is the path to your home  directory,  which  may  be
 replaced by a tilde in {\GAP}~4.3. The empty path before the semicolon
 is filled in by the default path of the {\GAP}~4 home directory.)
 
-After unpacking the archive, go to the newly  created  `ace'
-directory and call `./configure <path>' where <path> is  the  path  to
-the {\GAP} home directory. So for example if you install  the  package
-in the main `pkg' directory call
+After unpacking the archive, go to the newly created  `ace'  directory
+and call `./configure <path>' where <path> is the path to  the  {\GAP}
+home directory. So for example if you install the package in the  main
+`pkg' directory call
 
 \begintt
 ./configure ../..
@@ -106,7 +108,7 @@ This is done by calling
 #I              Colin Ramsay <cram@csee.uq.edu.au>
 #I                   ACE binary version: 3.001
 #I    GAP code by Greg Gamble <gregg@csee.uq.edu.au> and
-#I           Alexander Hulpke <ahulpke@math.ohio-state.edu>
+#I           Alexander Hulpke <hulpke@math.colostate.edu>
 #I                   ACE package version: 3.002
 #I  
 #I                   For help, type: ?ACE
