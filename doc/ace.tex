@@ -45,16 +45,16 @@ gap> TCENUM:=ACETCENUM;;
 \endtt
 
 This sets the function `CosetTableFromGensAndRels' (see 
-Section~"ref:Coset Tables and Coset Enumeration")  to be the  function
-`CallACE'  (described in Section~"CallACE"),  which then can be called 
-with all the options defined for the {\ACE} interface,  not  just  the
-options `max' and `silent'. If `TCENUM' is set to `ACETCENUM'  without
-any further action,  the  `default' strategy of the {\ACE}  enumerator 
-will be used (see Chapter~"Predefined Strategies"). An {\ACE} strategy
-is merely a special option of {\ACE} that sets a number of the options
-described in Chapter~"Options for the ACE Enumerator" all at once. You
-can  set  options  globally  using  the  function  `PushOptions'  (see
-Chapter~"ref:Options Stack" in the {\GAP} Reference  Manual);  options
+Section~"ref:Coset Tables and Coset Enumeration" in the {\GAP} Reference  
+Manual) to be the function `CallACE' (described in Section~"CallACE"),
+which then can be called with all the options defined for the   {\ACE}
+interface, not just the options `max' and `silent'. If `TCENUM' is set
+to `ACETCENUM' without any further action,  the  `default' strategy of
+the {\ACE} enumerator will be used (see Chapter~"Predefined Strategies"). 
+An {\ACE} strategy is merely a special option of  {\ACE} that  sets  a
+number of the options described in Chapter~"Options for the ACE Enumerator"
+all at once. One can set options globally using the function `PushOptions'  
+(see Chapter~"ref:Options Stack" in the {\GAP} Reference  Manual); options
 pushed onto `OptionsStack'  this way,  remain there until an  explicit
 `PopOptions()' call is made.  However,  the  usual way to pass options 
 is behind a colon following a function's arguments   (as described for
@@ -65,10 +65,10 @@ see any other options on the `OptionsStack' (in particular, any pushed
 there via `PushOptions', prior to the function call), unless over-ridden 
 by an option passed via the function.  Also  note that duplication  of
 option  names  for  different programs may lead to misinterpretations. 
-You can use `DisplayOptionsStack' (see Chapter~"ref:DisplayOptionsStack") 
-to ensure that there is no such danger. However, considering how much
-of a potential mine-field a non-empty `OptionsStack' might be for the
-unwary user, we provide
+You can use `DisplayOptionsStack' (see Chapter~"ref:DisplayOptionsStack"
+in the {\GAP} Reference Manual) to ensure that there is no such danger. 
+However, considering how much of a potential mine-field a non-empty 
+`OptionsStack' might be for the unwary user, we provide
 
 \>FlushOptionsStack()
 
@@ -112,7 +112,7 @@ with  your input  data in  {\ACE} readable  format will  be  handed to
 moment however the {\ACE} job  is terminated, that is, you cannot send
 any  further questions or  requests about  the result  of that  job to
 {\ACE}; you  are not using  {\ACE} interactively.  For  an interactive
-use of {\ACE} from {\GAP} see Section "Using ACE Interactively".
+use of {\ACE} from {\GAP} see Chapter~"Using ACE Interactively".
 
 Calling the {\ACE} interface directly is done by
 
@@ -125,14 +125,14 @@ the free generators. All these are given in the standard {\GAP} format
 (See Chapter~"ref:Finitely  Presented Groups" of  the {\GAP} Reference
 Manual).
 
-Behind  the colon  any  selection  of the  options  available for  the
-interface     (see    Chapter~"Options for the ACE Enumerator"     and
-Chapter~"Predefined Strategies")  can  be given,  separated  by commas 
-like  record  components.  Note  that  strategies  are simply  special 
-options   that   set   a   number   of   the   options,  detailed   in
-Chapter~"Options for the ACE Enumerator",  all at once.  These  can be 
-used e.g.~to preset limits of space and time  to be  used,  to  modify
-input and output and to modify the enumeration procedure.
+Behind the colon any selection of the options available for the interface
+(see Chapters~"Options for the ACE Enumerator" and~"Predefined Strategies")
+can be given, separated by commas like record components. Note that
+strategies  are simply  special options   that set   a   number   of
+the   options,  detailed   in Chapter~"Options for the ACE Enumerator",
+all at once.  These  can be used e.g.~to preset limits of space and time
+to be  used,  to  modify input and output and to modify the enumeration
+procedure.
 
 Please  see Section~"Using ACE as a Default for Coset Enumerations and 
 some General Warnings" for a discussion  regarding  global  and  local
@@ -142,8 +142,8 @@ The  function   calls the  {\ACE}  coset  enumerator  and returns  the
 (standardized) coset table obtained.
 
 If the coset enumeration does not finish in the preset limits it raises
-an error, unless the  `silent' option (see~"parameter silent") is set,
-in which case it  returns  `fail'.  
+an error, unless the  `silent' option (see Section~"parameter silent") 
+is set, in which case it  returns  `fail'.  
 
 The  example  given  below is  the  call  for  a presentation  of  the
 Fibonacci  group F(2,7)  for  which  we shall  discuss  the impact  of
@@ -188,10 +188,10 @@ General Warnings", regarding options, apply.
 
 If you want  to use ACE as  a standalone with its own  syntax, you can
 write  a  {\GAP}   input  and  can  use  `CallACE'   with  the  option
-`outfile:=<filename>' (see~"parameter  outfile").  This will  keep the
-input file for the {\ACE}  standalone produced by the {\GAP} interface
-under the  file name <filename> (and  just return `fail')  so that you
-can perform  interactive work in the standalone.
+`outfile:=<filename>' (see Section~"parameter  outfile").  This   will
+keep the input file for the {\ACE}  standalone produced by the  {\GAP}
+interface under the file name <filename> (and  just return `fail')  so
+that you can perform  interactive work in the standalone.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{Calling ACE Interactively}
@@ -233,7 +233,7 @@ To  install, unpack  the  archive file  in  a directory  in the  `pkg'
 hierarchy  of your  version  of  {\GAP}~4. (This  might  be the  `pkg'
 directory of the {\GAP}~4 home  directory; it is however also possible
 to keep an additional `pkg' directory in your private directories, see
-section  "ref:Installing  Share Packages"  of  the {\GAP}~4  Reference
+Section~"ref:Installing  Share Packages"  of  the {\GAP}~4   Reference
 Manual for details  on how to do this.) Go to  the newly created `ACE'
 directory and  call `./configure <path>'  where <path> is the  path to
 the {\GAP} home  directory. So for example if  you install the package
@@ -288,14 +288,14 @@ done by calling
 \begintt
 gap> RequirePackage( "ace" );
 \endtt
-See~"ref:RequirePackage" in the {\GAP} Reference Manual.
+See Section~"ref:RequirePackage" in the {\GAP} Reference Manual.
 
 If {\GAP} cannot find a working binary, the call to `RequirePackage' will
 fail.
 
 If you want to load the {\ACE} package by default, you can put this
 `RequirePackage' command into your `gaprc' file
-(see~"ref:The .gaprc file" in the {\GAP} Reference Manual).
+(see Section~"ref:The .gaprc file" in the {\GAP} Reference Manual).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Chapter{Some Basics}
@@ -393,7 +393,7 @@ obtains this \lq preferred definition stack'.
 
 The *enumeration  style* is mainly  determined by the  balance between
 C-style definitions  and R-style  definitions, which is  controlled by
-the  values  of  the  `ct'  and `rt'  parameters  (see~"parameter  ct"
+the values of the `ct' and `rt' parameters (see Sections~"parameter ct"
 and~"parameter rt").
 
 However this still leaves us with  plenty of freedom for the design of
@@ -567,7 +567,7 @@ interface are the fields of the record `KnownACEoptions';  each field
 `[<i>, <ListOrFunction>]', where `<i>' is an integer representing the
 shortest abbreviation of the option and `<ListOrFunction>' is  either
 a list of (known) allowed values or a boolean function that  may   be 
-used to determine if given value is a (known) valid value e.g.
+used to determine if the given value is a (known) valid value e.g.
 
 \begintt
 gap> KnownACEoptions.compaction;
@@ -586,9 +586,13 @@ indicates that there is essentially no abbreviation of `ct' (since its
 shortest abbreviation is of length 2),  and a value of  `ct' is  known
 to be valid if `IsInt' returns true for that value.
 
-*All* options on the `OptionsStack' when the {\ACE} interface is called
-via `CallACE' are passed to the {\ACE} binary, even those flagged   as
-unknown or bad (when the `echo' option is passed).
+*All* options (except `silent', `messfile', `outfile' and `echo')   on
+the `OptionsStack', when the {\ACE} interface is called via `CallACE',
+are passed to the {\ACE} binary, even those flagged  as unknown or bad
+(when the `echo' option is passed). The options `silent',   `messfile'
+(which  is  translated  to  `ao'  for  the  binary) and `outfile' were
+introduced for {\GAP} use;  and `echo',  though an {\ACE} option,   is 
+actually handled by `CallACE' and not passed to the binary.
 
 So  for example to  use the  `hard' strategy  option and  increase the
 workspace to $10^7$ words for the example given above, one could call:
