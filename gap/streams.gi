@@ -139,7 +139,7 @@ local string;
   if not IsOutputTextStream(stream) and IsEndOfStream(stream) then
     Info(InfoACE + InfoWarning, 1, "Sorry. Process stream has died!");
     Info(InfoACE + InfoWarning, 1, 
-         "You might like to try using 'ACEResurrect(<i>);'");
+         "You might like to try using 'ACEResurrectProcess(<i>);'");
     return fail;
   fi;
   string := Concatenation( List(list, x -> String(x)) );

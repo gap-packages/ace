@@ -284,7 +284,7 @@ end);
 ##
 ##
 InstallGlobalFunction(ACE_READ_AS_FUNC, function(file, ACEfunc)
-  local line, instream, rest;
+local line, instream, rest;
 
   instream := InputTextFile(file);
   # We don't want the user to see this ... so we flush at InfoACE level 10.
@@ -311,79 +311,157 @@ end);
 ##  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . is displayed.
 ##
 InstallGlobalFunction(ACEExample, function(arg)
-    local name, file, instream, line, ACEfunc,
-          EnquoteIfString, optnames, lastoptname, optname;
+local name, file, instream, line, ACEfunc,
+      EnquoteIfString, optnames, lastoptname, optname;
 
-    if IsEmpty(arg) then
-      name := "index";
+  if IsEmpty(arg) then
+    name := "index";
+  else
+    name := arg[1];
+    if Length(arg) > 1 then
+      ACEfunc := arg[2];
     else
-      name := arg[1];
-      if Length(arg) > 1 then
-        ACEfunc := arg[2];
-      else
-        ACEfunc := ACECosetTableFromGensAndRels;
-      fi;
-      if not IsEmpty(OptionsStack) then
-        ACEData.aceexampleoptions := OptionsStack[ Length(OptionsStack) ];
-        PopOptions();
-        PushOptions( rec(aceexampleoptions := true) );
-      fi;
+      ACEfunc := ACECosetTableFromGensAndRels;
     fi;
-    file := Filename( DirectoriesPackageLibrary( "ace", "examples"), name );
-    if file = fail then
-      Info(InfoACE + InfoWarning, 1,
-           "Sorry! There is no ACE example file with name `", name, "'");
-      name := "index";
-      file := Filename( DirectoriesPackageLibrary("ace", "examples"), name );
+    if not IsEmpty(OptionsStack) then
+      ACEData.aceexampleoptions := OptionsStack[ Length(OptionsStack) ];
+      PopOptions();
+      PushOptions( rec(aceexampleoptions := true) );
     fi;
-    # Display file ... after a few minor modifications
-    instream := InputTextFile(file);
-    if name <> "index" then
-      line := FLUSH_ACE_STREAM_UNTIL( instream, 1, 10, ReadLine,
-                                      line -> line{[1..5]} = "local" );
-      Info(InfoACE, 1,
-           "#", line{[Position(line, ' ')..Position(line, ';') - 1]},
-           " are local to ACEExample");
+  fi;
+  file := Filename( DirectoriesPackageLibrary( "ace", "examples"), name );
+  if file = fail then
+    Info(InfoACE + InfoWarning, 1,
+         "Sorry! There is no ACE example file with name `", name, "'");
+    name := "index";
+    file := Filename( DirectoriesPackageLibrary("ace", "examples"), name );
+  fi;
+  # Display file ... after a few minor modifications
+  instream := InputTextFile(file);
+  if name <> "index" then
+    line := FLUSH_ACE_STREAM_UNTIL( instream, 1, 10, ReadLine,
+                                    line -> line{[1..5]} = "local" );
+    Info(InfoACE, 1,
+         "#", line{[Position(line, ' ')..Position(line, ';') - 1]},
+         " are local to ACEExample");
+    line := FLUSH_ACE_STREAM_UNTIL( instream, 1, 10, ReadLine, 
+                                    line -> line{[1..6]} = "return" );
+    Info(InfoACE, 1, 
+         CHOMP(ReplacedString(line, "return ACEfunc", NameFunction(ACEfunc)))
+         );
+    if IsBound(ACEData.aceexampleoptions) then
       line := FLUSH_ACE_STREAM_UNTIL( instream, 1, 10, ReadLine, 
-                                      line -> line{[1..6]} = "return" );
-      Info(InfoACE, 1, 
-           CHOMP(ReplacedString(line, "return ACEfunc", NameFunction(ACEfunc)))
-           );
-      if IsBound(ACEData.aceexampleoptions) then
-        line := FLUSH_ACE_STREAM_UNTIL( instream, 1, 10, ReadLine, 
-                                        line -> ForAny(
-                                                    [1..Length(line)],
-                                                    i -> line{[i..i+1]} = ");"
-                                                    ) );
-        Info(InfoACE, 1, CHOMP(ReplacedString(line, ");", ", ")));
-        Info(InfoACE, 1, "    # User Options");
-        optnames := ShallowCopy( RecNames(ACEData.aceexampleoptions) );
-        lastoptname := optnames[ Length(optnames) ];
-        Unbind(optnames[ Length(optnames) ]);
+                                      line -> ForAny(
+                                                  [1..Length(line)],
+                                                  i -> line{[i..i+1]} = ");"
+                                                  ) );
+      Info(InfoACE, 1, CHOMP(ReplacedString(line, ");", ", ")));
+      Info(InfoACE, 1, "    # User Options");
+      optnames := ShallowCopy( RecNames(ACEData.aceexampleoptions) );
+      lastoptname := optnames[ Length(optnames) ];
+      Unbind(optnames[ Length(optnames) ]);
 
-        EnquoteIfString := function(optval)
-        # Puts quotes around optval if it's a string
-          if IsString(optval) then
-            return Concatenation(["\"", optval, "\""]);
-          else
-            return optval;
-          fi;
-        end;
+      EnquoteIfString := function(optval)
+      # Puts quotes around optval if it's a string
+        if IsString(optval) then
+          return Concatenation(["\"", optval, "\""]);
+        else
+          return optval;
+        fi;
+      end;
 
-        for optname in optnames do
-          Info(InfoACE, 1, "      ", optname, " := ", 
-                           EnquoteIfString(
-                               ACEData.aceexampleoptions.(optname) ), ",");
-        od;
-        Info(InfoACE, 1, "      ", lastoptname, " := ", 
+      for optname in optnames do
+        Info(InfoACE, 1, "      ", optname, " := ", 
                          EnquoteIfString(
-                             ACEData.aceexampleoptions.(lastoptname) ), ");");
-      fi;
+                             ACEData.aceexampleoptions.(optname) ), ",");
+      od;
+      Info(InfoACE, 1, "      ", lastoptname, " := ", 
+                       EnquoteIfString(
+                           ACEData.aceexampleoptions.(lastoptname) ), ");");
     fi;
-    FLUSH_ACE_STREAM_UNTIL( instream, 1, 10, ReadLine, line -> line = fail );
-    if name <> "index" then
-      return ACE_READ_AS_FUNC(file, ACEfunc);
-    fi;
+  fi;
+  FLUSH_ACE_STREAM_UNTIL( instream, 1, 10, ReadLine, line -> line = fail );
+  if name <> "index" then
+    return ACE_READ_AS_FUNC(file, ACEfunc);
+  fi;
+end);
+
+#############################################################################
+####
+##
+#F  ACEReadResearchExample  . . . . . . . .  Read  an  ACE  research  example 
+##  . . . . . . . . . . . . . . . . . . . .  from the res-examples directory.
+##
+##  Currently,  all  examples  in  the  res-examples  directory   depend   on
+##  pgrelfind.g, which with Info text doubles as an index. This  function  is
+##  essentially equivalent to doing a Read of its argument or  "pgrelfind.g",
+##  if there is no argument.
+##
+InstallGlobalFunction(ACEReadResearchExample, function(arg)
+local name, file;
+
+  if IsEmpty(arg) then
+    name := "pgrelfind.g"; # If there is ever more than one key research
+                           # example, we should replace this with an index
+  else
+    name := arg[1];
+  fi;
+  file := Filename( DirectoriesPackageLibrary( "ace", "res-examples"), name );
+  if file = fail then
+    Error("ACEReadResearchExample: Sorry! There is no ACE research example ",
+          "file with name `", name, "'");
+  else
+    Read(file);
+  fi;
+end);
+
+#############################################################################
+####
+##
+#F  ACEPrintResearchExample . . . . . . . . Print  an  ACE  research  example 
+##  . . . . . . . . . . . . . . . . . . . . from the  res-examples  directory
+##  . . . . . . . . . . . . . . . . . . . . to the terminal  or  to  a  file,
+##  . . . . . . . . . . . . . . . . . . . . . . . minus header and Info text.
+##
+##  ACEPrintResearchExample(examplefile) 
+##      prints examplefile in res-examples directory to the terminal
+##
+##  ACEPrintResearchExample(examplefile, outfile) 
+##      prints examplefile in res-examples directory to outfile
+##
+InstallGlobalFunction(ACEPrintResearchExample, function(arg)
+local outstream, print, file, instream, line;
+
+  if IsEmpty(arg) then
+    Error("Expected 1 or 2 arguments");
+  fi;
+
+  file := Filename( DirectoriesPackageLibrary( "ace", "res-examples"), arg[1] );
+  if file = fail then
+    Error("ACEPrintResearchExample: Sorry! There is no ACE research example ",
+          "file with name `", arg[1], "'");
+  fi;
+
+  if Length(arg) > 1 then
+    outstream := OutputTextFile(arg[2], false);
+    print := function(line) WriteAll(outstream, line); end;
+  else
+    print := Print;
+  fi;
+
+  instream := InputTextFile(file);
+  repeat
+    line := ReadLine(instream);
+  until line{[1 .. 8]} = "## Begin";
+  repeat
+    line := ReadLine(instream);
+    print(line);
+  until line{[1 .. 6]} = "## End";
+  CloseStream(instream);
+
+  if print <> Print then
+    CloseStream(outstream);
+  fi;
 end);
 
 #############################################################################

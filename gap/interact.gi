@@ -198,8 +198,10 @@ local ioIndex, datarec, gens, ToACE, uselist, useone, saved, optname, field;
       do
         Unbind( datarec.options.(optname) );
       od;
-      saved := rec(options := datarec.options, 
-                   parameters := datarec.parameters);
+      saved := rec(options := datarec.options);
+      if IsBound(datarec.parameters) then
+        saved.parameters := datarec.parameters;
+      fi;
     else
       saved := rec( parameters := ShallowCopy(datarec.parameters) );
       if IsBound(datarec.options) then
