@@ -16,7 +16,7 @@ by George Havas and Colin Ramsay from within GAP.
 
 \begintt
 ACE coset enumerator (C) 1995-1998 by George Havas and Colin Ramsay
-    http://www.it.uq.edu.au/~cram/ace2.tar
+    http://www.it.uq.edu.au/~havas/ace2.tar.gz
 \endtt
 
 The {\GAP} interface has been written by Alexander Hulpke.
@@ -51,14 +51,16 @@ If you use this installation of GAP on different hardware platforms you will
 have to compile the binary for each platform separately. This is done by
 calling `configure' and `make' for the package anew immediately after
 compiling GAP itself for the respective architecture.
-If your version of GAP is already compiled you do not need to compile GAP
+If your version of GAP is already compiled (and has last been compiled on
+the same architecture) you do not need to compile GAP
 again, it is sufficient to call the `configure' script in the GAP home
 directory.
 
 For details on how to use the `ACE' package see the documentation in the
 `doc' subdirectory.
 
-The `src' subdirectory contains the original source of `ACE'. You can simply
+The `src' subdirectory contains a copy of the original source of `ACE'. (The
+only modification is that a make-file was copied to `Makefile'.) You can
 replace it by a newer version before compiling.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -68,9 +70,12 @@ To use the `ACE' package you have to request it explicitly. This is done by
 calling 
 \begintt
 gap> RequirePackage("ace");
-  Loading the `ACE' share package
-  Using ACE binary version 1.1
+  Loading the `ACE' share package version 1.0
+  Using ACE binary version 2.000
 \endtt
+
+If {\GAP} cannot find a working binary, the call to `RequirePackage' will
+fail.
 
 If you want to load the `ACE' package by default, you can put this
 `RequirePackage' command in your `gaprc' file.
@@ -185,6 +190,7 @@ enumerations. As an example we use the `ACE' enumerator to compute the
 permutation representation of a perfect group from the data library:
 
 \begintt
+gap> TCENUM:=ACETCENUM;;
 gap> PerfectGroup(IsPermGroup,16*60,1:max:=[50,500,40],mess);
 Start ACE 2.000 on Fri Oct 23 10:09:53 1998
 host name: muir
