@@ -122,15 +122,8 @@ Section~"ref:RequirePackage" in the {\GAP} Reference Manual.
 If {\GAP} cannot find a working binary, the call  to  `RequirePackage'
 will fail.
 
-If you know you have a working {\ACE} binary, as well as  a  correctly
-installed {\ACE} Package,  it  is  possible  to  suppress  the  `Info'
-messages by temporarily setting the `InfoLevel' of `InfoWarning' to 0,
-and a duplicated semicolon will suppress the `true' result:
-
-\beginexample
-gap> SetInfoLevel(InfoWarning, 0); RequirePackage( "ace" );;
-gap> SetInfoLevel(InfoWarning, 1);
-\endexample
+Since {\ACE}'s banner is `Info'-ed at `InfoWarning' level 1,  it  will
+not be observed if the `InfoLevel' of `InfoWarning' is 0.
 
 \index{banner!suppression}
 The banner is also suppressed if the global {\GAP} variable `QUIET' is
@@ -139,6 +132,26 @@ invoked with the `-q' or `-b' command line switches, respectively). If
 you want to load the {\ACE}  package  by  default,  you  can  put  the
 `RequirePackage' command into your `.gaprc' file (see Section~"ref:The
 .gaprc file" in the {\GAP} Reference Manual).
+
+\atindex{option pkgbanner}{@option \noexpand`pkgbanner'}
+Yet one more way of suppressing  {\ACE}'s  banner  is  to  supply  the
+option  `pkgbanner'  with  value  `"none"'  to  the   `RequirePackage'
+command:
+
+\beginexample
+gap> RequirePackage( "ace" : pkgbanner := "none" );
+true
+\endexample
+
+Finally, the full banner is replaced by  a  ``short''  1-line  loading
+message (`Info'-ed at `InfoWarning' level 1) if, instead,  `pkgbanner'
+has the value `"short"':
+
+\begintt
+gap> RequirePackage( "ace" : pkgbanner := "short" );
+#I  Loading ACE Package Version 3.003
+true
+\endtt
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%

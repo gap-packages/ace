@@ -66,16 +66,26 @@ SetInfoLevel(InfoACE, 1);
 ##
 if not QUIET and BANNER then
 
-Info(InfoWarning,1,"    The ACE (Advanced Coset Enumerator) Package");
-Info(InfoWarning,1,"  C code by George Havas <havas@itee.uq.edu.au> and");
-Info(InfoWarning,1,"            Colin Ramsay <cram@itee.uq.edu.au>");
-Info(InfoWarning,1,"                 ACE binary version: ", ACEData.version);
-Info(InfoWarning,1,"  GAP code by Greg Gamble <gregg@itee.uq.edu.au> and");
-Info(InfoWarning,1,"         Alexander Hulpke <hulpke@math.colostate.edu>");
-Info(InfoWarning,1,"                 ACE package version: ", 
-                                     PACKAGES_VERSIONS.ace);
-Info(InfoWarning,1,"");
-Info(InfoWarning,1,"                 For help, type: ?ACE");
+  ACEData.banner := ValueOption("pkgbanner");
+  if ACEData.banner = "short" then
+
+    Info(InfoWarning,1,"Loading ACE Package Version ", PACKAGES_VERSIONS.ace);
+
+  elif ACEData.banner <> "none" then
+
+    Info(InfoWarning,1,"    The ACE (Advanced Coset Enumerator) Package");
+    Info(InfoWarning,1,"  C code by George Havas <havas@itee.uq.edu.au> and");
+    Info(InfoWarning,1,"            Colin Ramsay <cram@itee.uq.edu.au>");
+    Info(InfoWarning,1,"                 ACE binary version: ",ACEData.version);
+    Info(InfoWarning,1,"  GAP code by Greg Gamble <gregg@itee.uq.edu.au> and");
+    Info(InfoWarning,1,"         Alexander Hulpke <hulpke@math.colostate.edu>");
+    Info(InfoWarning,1,"                 ACE package version: ", 
+                                         PACKAGES_VERSIONS.ace);
+    Info(InfoWarning,1,"");
+    Info(InfoWarning,1,"                 For help, type: ?ACE");
+
+  fi;
+  Unbind(ACEData.banner);
 
 fi;
 
