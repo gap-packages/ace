@@ -40,8 +40,8 @@ or, alternatively, from one of the authors' home page at
 
 http://www.itee.uq.edu.au/~gregg/ACE/home.html
 
-Since the ACE share package interfaces to an external  binary,  it  is
-only usable under UNIX or a UNIX-like environment. It will not work on
+Since the ACE package interfaces to an external  binary,  it  is  only
+usable under UNIX or a UNIX-like environment.  It  will  not  work  on
 Windows or the Macintosh.
 
 
