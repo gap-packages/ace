@@ -104,21 +104,21 @@ gap> TCENUM:=GAPTCENUM;;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{Calling ACE Directly}
 
-If on  the other hand you  do not want  to set up {\ACE}  globally for
-your coset  enumerations, you may call the  {\ACE} interface directly,
+If on the other hand you do not want to set  up  {\ACE}  globally  for
+your coset enumerations, you may call the {\ACE}  interface  directly,
 which will allow you to decide for yourself, for each such call, which
-options you  want to use for running {\ACE}. (Please note the warnings
-regarding options in the preceding section.)  By such a call,  a  file
-with  your input  data in  {\ACE} readable  format will  be  handed to
+options you want to use for running {\ACE}. Please note  the  warnings
+regarding options in the preceding section. By such  a  call,  a  file
+with your input data in {\ACE}  readable  format  will  be  handed  to
 {\ACE} and you will get the answer back in some {\GAP} format. At that
-moment however the {\ACE} job  is terminated, that is, you cannot send
-any  further questions or  requests about  the result  of that  job to
-{\ACE}; you  are not using  {\ACE} interactively.  For  an interactive
-use of {\ACE} from {\GAP} see Chapter~"Using ACE Interactively".
+moment however the {\ACE} job is terminated, that is, you cannot  send
+any further questions or requests about the  result  of  that  job  to
+{\ACE}; you are not using {\ACE} interactively. For an interactive use
+of {\ACE} from {\GAP} see Chapter~"Using ACE Interactively".
 
 Calling the {\ACE} interface directly is done by
 
-\>CallACE( <fgens>, <rels>, <sgens> :<options> )
+\>CallACE( <fgens>, <rels>, <sgens> : <options> )
 
 Here <fgens> is  a list of free generators, <rels> a  list of words in
 these generators  giving relators for a finitely  presented group, and
@@ -128,13 +128,12 @@ the free generators. All these are given in the standard {\GAP} format
 Manual).
 
 Behind the colon any  selection  of  the  options  available  for  the
-interface (see Chapters~"Options for ACE" and~"Strategy
-Options for ACE") can be  given,  separated  by  commas
-like record  components.  Note  that  strategies  are  simply  special
-options that set a number of the options, detailed in Chapter~"Options
-for ACE", all at once. These can be used e.g.~to preset
-limits of space and time to be used, to modify input and output and to
-modify the enumeration procedure.
+interface (see Chapters~"Options for ACE"  and~"Strategy  Options  for
+ACE") can be given, separated by commas like record  components.  Note
+that strategies are simply special options that set a  number  of  the
+options, detailed in Chapter~"Options for ACE", all at once. These can
+be used e.g.~to preset limits of space and time to be used, to  modify
+input and output and to modify the enumeration procedure.
 
 Please  see Section~"Using ACE as a Default for Coset Enumerations and 
 some General Warnings" for a discussion  regarding  global  and  local
@@ -147,9 +146,11 @@ If the coset enumeration does not  finish  in  the  preset  limits  it
 raises an error, unless the `silent' option (see~"Option  silent")  is
 set, in which case it returns `fail'.
 
-The  example  given  below is  the  call  for  a presentation  of  the
-Fibonacci  group F(2,7)  for  which  we shall  discuss  the impact  of
-various options in Chapter~"Examples".
+The example given  below  is  the  call  for  a  presentation  of  the
+Fibonacci group F(2,7) for  which  we  shall  discuss  the  impact  of
+various options in Chapter~"Examples". Observe  that  in  the  example
+below, no options  are  passed,  which  means  that  {\ACE}  uses  the
+`default' strategy (see Chapter~"Strategy Options for ACE").
 
 \begintt
 gap> F:= FreeGroup( "a", "b", "c", "d", "e", "f", "g");;
@@ -173,24 +174,27 @@ If you only want to  test, whether a coset enumeration terminates, and
 don't want to  transfer the whole coset table  to {\GAP}. Instead, you
 can call
 
-\>ACEStats(<fgens>,<rels>,<sgens>:<options>)
+\>ACEStats( <fgens>, <rels>, <sgens> : <options> )
 
-which   calls   the    {\ACE}    binary    and    returns    a    list
-`[<index>,<c>,<m>,<t>]' where <index> is the  index  of  the  subgroup
-(and $0$, if the enumeration does not succeed), <c> gives you the time
-used for the enumeration, <m> is the  maximum  number  of  \lq{}alive'
-coset numbers at any time in the enumeration , while <t> is the  total
-number of coset numbers that were defined in the enumeration. See also
-Section~"Options controlling Input  and  Output".  The  same  warnings
-noted in Section~"Using ACE as a Default for  Coset  Enumerations  and
-some General Warnings", regarding options, apply.
+which returns a record `rec(index=<i>,  cputimeStr=<cs>,  cputime=<c>,
+maxcosets=<m>, totcosets=<t>]' where <i> is the index of the  subgroup
+$\langle <sgens> \rangle$ in $\langle <fgens> \mid <rels> \rangle$ (or
+$0$, whenever the enumeration does not succeed); <cs> is the total CPU
+time used for the enumeration (in seconds) as a string;  <c>  is  also
+the total CPU time, but as a  rational  number;  <m>  is  the  maximum
+number  of  \lq{}alive'  coset  numbers  at  any  one  time   in   the
+enumeration; and <t> is the total number of coset  numbers  that  were
+defined in the  enumeration.  See  also  Section~"Options  controlling
+Input and Output". The same warnings noted in Section~"Using ACE as  a
+Default for Coset Enumerations and some General  Warnings",  regarding
+options, apply.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{Writing ACE Standalone Input Files}
 
-If you want  to use ACE as  a standalone with its own  syntax, you can
-write  a  {\GAP}   input  and  can  use  `CallACE'   with  the  option
-`outfile:=<filename>' (see~"Option outfile"). This  will  keep  the
+If you want to use ACE as a standalone with its own  syntax,  you  can
+write  a  {\GAP}  input  and  can  use  `CallACE'  with   the   option
+`ACEinfile:=<filename>' (see~"Option ACEinfile"). This will  keep  the
 input file for the {\ACE} standalone produced by the {\GAP}  interface
 under the file name <filename> (and just return `fail')  so  that  you
 can perform interactive work in the standalone.
