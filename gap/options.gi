@@ -1031,7 +1031,8 @@ local IsValidOptionValue, CheckValidOption, ProcessOption,
   fi;
 
   nowarnings := VALUE_ACE_OPTION(optnames, false, "acenowarnings");
-  ignoreunknown := VALUE_ACE_OPTION(optnames, false, "aceignoreunknown");
+  ignoreunknown := VALUE_ACE_OPTION(optnames, ACEIgnoreUnknownDefault,
+                                    "aceignoreunknown");
   AddIgnoreOptionsToIgnored();
 
   for optname in newoptnames do

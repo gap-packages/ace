@@ -121,6 +121,7 @@ S 4.10. ACE Option Synonyms
 F 4.10. ACEOptionSynonyms
 S 4.11. Non-ACE-binary Options
 F 4.11. NonACEbinOptions
+F 4.11. ACEIgnoreUnknownDefault
 F 4.11. option silent
 F 4.11. option lenlex
 F 4.11. option semilenlex

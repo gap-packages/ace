@@ -27,7 +27,7 @@ Revision.ace_g :=
 ##
 ##    "binary"  . . the path of the ACE binary
 ##    "tmpdir"  . . the path of the temporary directory for ACE i/o files
-##    "io . . . . . list of data records for ACEStart IO Streams
+##    "io"  . . . . list of data records for ACEStart IO Streams
 ##    "infile"  . . the path of the ACE input file
 ##    "outfile" . . the path of the ACE output file
 ##    "version" . . the version of the current ACE binary
@@ -82,6 +82,14 @@ Info(InfoWarning,1,"                 For help, type: ?ACE");
 if not( "OnBreakMessage" in NamesGVars() ) then
   OnBreakMessage := "";
 fi;
+
+#############################################################################
+####
+##
+#V  ACEIgnoreUnknownDefault . . . . . . . . . . . .  the default value of the 
+##  . . . . . . . . . . . . . . . . . . . . . . . . `aceignoreunknown' option
+##
+ACEIgnoreUnknownDefault := false;
 
 #############################################################################
 ####
