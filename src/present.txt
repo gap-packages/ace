@@ -1,0 +1,147 @@
+
+This file lists all the (ACE formatted/reduced) presentations of the 
+  Lyons group that we use.
+
+1)
+This is the original presentation from George; it is (effectively) the
+  one in the Havas & Sims paper.
+Subgroup is G_2(5) and has index 8,835,156.
+#gen = 6; #rel = 54; tot len = 984.
+
+Enumeration: Lyons #1 (original);
+Group Generators: abcdez;
+Group Relators: (e)^2, BDbd, zzAA, (b)^5, (c)^5, AABaab, ddAAAA, DadAAA, 
+  Zazaaa, AAcaacc, ececBBC, (a)^8, (ab)^4, ZbaBzaabaB, ebebccBBcbC, 
+  ebcBebCBBcB, ACabCBAcabcB, (ABab)^3, BBcbccbbCBCC, ZBcbzABACaba, 
+  ZbcBzBAbCBab, ABcbabCBCBccb, ZczABcAbcBaba, ZAcazBCBaCAbb, 
+  eBcbeabcBcACBB, BCbAcaBcbCACac, ZbbaBBzabbABBA, CaCAcacAcaCACacA, 
+  CACaCAcacACacAca, BAcabbcBcbcBBCbACa, BACaCAcacbCACacAca, 
+  eCACacAcaebcBCBcbC, eDCDbABCDACaCAcabb, eaaebcBACaCAcbABBA, 
+  eabbaBaebcBACaCAcA, AbcBabCBCbCBBcbAcaC, BCbbCBBcbbcBCACacAca, 
+  BBabbzBBabbzBBabbzaa, (aabaBab)^3, ZCACacAcazcbbCABCbaBB, 
+  bCBACaCAcacbcBCACacAca, bCBcbcBACaCAcacACaCAca, eAcaeACaeAcabCBaBcbaaa, 
+  BCbACaCAcacBcbCACacAca, CBCbcBcbCACacAcaCACacAca, 
+  ACACacAcaCaCAcacACaCAcac, dEBAcEAEACACacAcabcBcbaBBA, 
+  dCACacAcadACaCAcacdCACacAcA, (CACacAca)^5, 
+  zbdzbbABAbbCacACdCbbAcbZDBZCAcbCDcAcacBABAb, (dCACacAca)^5, 
+  ZDZACDbABCDbABCBaBBaBzdzabAbbAbbCacbcBdcBBdcbc, 
+  CDACAbCDzAdBCAbCDbCBACaBabaBzACDaCBaCDACacBBCBABBz, 
+  zbaBABBABcbbcbdcBBdcbczaBBAcbCbACCdcacAcBDZCBCDbbCDBCBBCbabbabABZDacbcACDaBAcABBAbA;
+Subgroup name: G_2(5);
+Subgroup Generators: a, b, c, d, e;
+
+2)
+As (1), where the transformation Zazaaa ==> azaz has been done by hand.
+#gen = 6; #rel = 54; tot len = 982.
+
+Enumeration: Lyons #2 (original + Zazaaa ==> azaz);
+Group Generators: abcdez;
+Group Relators: (e)^2, BDbd, zzAA, (az)^2, (b)^5, (c)^5, AABaab, ddAAAA, 
+  DadAAA, AAcaacc, ececBBC, (a)^8, (ab)^4, ZbaBzaabaB, ebebccBBcbC, 
+  ebcBebCBBcB, ACabCBAcabcB, (ABab)^3, BBcbccbbCBCC, ZBcbzABACaba, 
+  ZbcBzBAbCBab, ABcbabCBCBccb, ZczABcAbcBaba, ZAcazBCBaCAbb, 
+  eBcbeabcBcACBB, BCbAcaBcbCACac, ZbbaBBzabbABBA, CaCAcacAcaCACacA, 
+  CACaCAcacACacAca, BAcabbcBcbcBBCbACa, BACaCAcacbCACacAca, 
+  eCACacAcaebcBCBcbC, eDCDbABCDACaCAcabb, eaaebcBACaCAcbABBA, 
+  eabbaBaebcBACaCAcA, AbcBabCBCbCBBcbAcaC, BCbbCBBcbbcBCACacAca, 
+  BBabbzBBabbzBBabbzaa, (aabaBab)^3, ZCACacAcazcbbCABCbaBB, 
+  bCBACaCAcacbcBCACacAca, bCBcbcBACaCAcacACaCAca, eAcaeACaeAcabCBaBcbaaa, 
+  BCbACaCAcacBcbCACacAca, CBCbcBcbCACacAcaCACacAca, 
+  ACACacAcaCaCAcacACaCAcac, dEBAcEAEACACacAcabcBcbaBBA, 
+  dCACacAcadACaCAcacdCACacAcA, (CACacAca)^5, 
+  zbdzbbABAbbCacACdCbbAcbZDBZCAcbCDcAcacBABAb, (dCACacAca)^5, 
+  ZDZACDbABCDbABCBaBBaBzdzabAbbAbbCacbcBdcBBdcbc, 
+  CDACAbCDzAdBCAbCDbCBACaBabaBzACDaCBaCDACacBBCBABBz, 
+  zbaBABBABcbbcbdcBBdcbczaBBAcbCbACCdcacAcBDZCBCDbbCDBCBBCbabbabABZDacbcACDaBAcABBAbA;
+Subgroup name: G_2(5);
+Subgroup Generators: a, b, c, d, e;
+
+3)
+This is (1), after it has been Tietze'd by GAP.
+We allowed substitutions, but disallowed (generator) eliminations.
+#gen = 6; #rel = 53; tot len = 887.
+
+Enumeration: Lyons #3 (original + Tietze substitutions);
+Group Generators: abcdez;
+Group Relators: (e)^2, (Da)^2, (az)^2, (d)^4, BDbd, zzAA, (c)^5, (b)^5, 
+  AABaab, ddAAAA, AAcaacc, ececBBC, (ab)^4, ZbaBzaabaB, BBcbceceBCC, 
+  ebcBebCBBcB, ebebccBBcbC, ACabCBAcabcB, (ABab)^3, ZBcbzABACaba, 
+  ZbcBzBAbCBab, CACaCaCAccaCA, ABcbabCBCBccb, ZAcazBCBaCAbb, ZczABcAbcBaba, 
+  BCbcACaCBcbAca, (eabbaBA)^2, eBcbeabcBcACBB, ZbbaBBzabbABBA, 
+  BCbAcaBcbCACac, CACacaCAcACaCACa, CAcacbcBCACacbCB, CaCAcacAcaCACacA, 
+  cacbcBACCaCbCBAc, CBCbcBcbCCACACaca, BAcabbcBcbeCebACa, 
+  ACacAcaebcBCBcBCe, eDCDbABCDACaCAcabb, BCbbCBBcbbACacAcaB, 
+  eaaebcBACaCAcbABBA, BACaCAcacbCACacAca, AbcBabCBCbCBBcbAcaC, 
+  ZCACacAcazeceABCbaBB, BBabbzBBabbzBBabbzaa, (aabaBab)^3, 
+  eAcaeACaeAcabCBaBcbaaa, deBAceAeACACacAcabcBcbaBBA, 
+  dCACacAcadACaCAcacdCACacAcA, zbdzbbABAbbCacACdCbbAcbZDBZCAcbCDcAcacBABAb, 
+  (dCACacAca)^5, ZDZACDbABCDbABCBaBBaBzdzabAbbAbbCacbcBdcBBdcbc, 
+  CDACAbCDzAdBCAbCDbCBACaBabaBzACDaCBaCDACaeCeBABBz, 
+  zbaBABBABcbbcbdcBBdcbczaBBAcbCbACCdcacAcBDZCBCDbbCDBCBBCbabbabABZDacbcACDaBAcABBAbA;
+Subgroup name: G_2(5);
+Subgroup Generators: a, b, c, d, e;
+
+4)
+This is (1), with e eliminated using eDCDbABCDACaCAcabb.
+Then it's run through GAP's Tietze, with substitutions but no eliminations.
+#gen = 5; #rel = 52; tot len = 1193.
+(In general, the eliminated generator should be replaced in the subgroup generators
+  with the substituted string; however, if this string contains only of the other
+  subgroup generators, then it can just be dropped.)
+
+Enumeration: Lyons #4 (original - e + Tietze substitutions);
+Group Generators: abcdz;
+Group Relators: (az)^2, (d)^4, (Da)^2, zzAA, BDbd, (c)^5, (b)^5, AABaab, 
+  ddAAAA, AAcaacc, (ab)^4, ZbaBzaabaB, BBcbccbbCBCC, (ABab)^3, 
+  ZBcbzABACaba, ACabCBAcabcB, ZbcBzBAbCBab, cacACCacAcAca, ACacaCACCaCAc, 
+  ABcbabCBCBccb, ZczABcAbcBaba, ZAcazBCBaCAbb, BCbcACaCBcbAca, 
+  ZbbaBBzabbABBA, BCbAcaBcbCACac, bCBcbcBcACAcaca, CAcacbcBCACacbCB, 
+  CAcacACaCACacAca, CBCbcACaBcbcAcaC, BCbbCBBcbbACacAcaB, 
+  BAcabbcBcbcBBCbACa, BACaCAcacbCACacAca, AbcBabCBCbCBBcbAcaC, 
+  BBabbzBBabbzBBabbzaa, ZCACacAcazcbbCABCbaBB, (aabaBab)^3, 
+  dCACacAcadACaCAcacdCACacAcA, dcbaBdcdBBcBBcbbdcbaBdcdBcbb, 
+  (BBACacAcadcbaBdcd)^2, ACacAcadcbaBdcdbccBBcbCDCDbABCDACaCAcab, 
+  BBACacAcadcbaBdcdcBBACacAcadcbaBdcdcBBC, 
+  ACacAcadcbaBdcdBcBACacAcadcbaBdcdabcBcACb, 
+  zbdzbbABAbbCacACdCbbAcbZDBZCAcbCDcAcacBABAb, (dCACacAca)^5, 
+  ZDZACDbABCDbABCBaBBaBzdzabAbbAbbCacbcBdcBBdcbc, 
+  BBACacAcadcbaBdcdabbaBADCDbABCDACaCAcabbabbaBA, 
+  BBACacAcadcbaBdcdaaBBACacAcadcbaBdcdbcBACaCAcbABBA, 
+  BBACacAcadcbaBdcdCACacAcaBBACacAcadcbaBdcdbcBCBcbC, 
+  CDACAbCDzAdBCAbCDbCBACaBabaBzACDaCBaCDACacBBCBABBz, 
+  CDbABCDACaCAcabAcDCDbABCDACaCAcabbADCDbABCDACaCAcabbACACacAcabcBcbaBBA, 
+  BBACacAcadcbaBdcdAcaBBACacAcadcbaBdcdACaBBACacAcadcbaBdcdAcabCBaBcbaaa, 
+  zbaBABBABcbbcbdcBBdcbczaBBAcbCbACCdcacAcBDZCBCDbbCDBCBBCbabbabABZDacbcACDaBAcABBAbA;
+Subgroup name: G_2(5);
+#Subgroup Generators: a, b, c, d, BBACacAcadcbaBdcd;
+Subgroup Generators: a, b, c, d;
+
+5)
+This is (1), with d eliminated using dEBAcEAEACACacAcabcBcbaBBA.
+Then it's run through GAP's Tietze, with substitutions but no eliminations.
+#gen = 5; #rel = 52; tot len = 1730.
+
+Enumeration: Lyons #5 (original - d + Tietze substitutions);
+Group Generators: abcez;
+Group Relators: (e)^2, (az)^2, zzAA, (b)^5, (c)^5, AABaab, AAcaacc, 
+  ececBBC, (a)^8, (ab)^4, ZbaBzaabaB, BBcbceceBCC, ebcBebCBBcB, 
+  ebebccBBcbC, ZBcbzABACaba, ZbcBzBAbCBab, ACabCBAcabcB, (ABab)^3, 
+  cacACCacAcAca, ACacaCACCaCAc, ZczABcAbcBaba, ZAcazBCBaCAbb, 
+  ABcbabCBCBccb, ZbbaBBzabbABBA, BCbcACaCBcbAca, BCbAcaBcbCACac, 
+  eBcbeabcBcACBB, (eabbaBA)^2, bCBcbcBcACAcaca, CBCbcACaBcbcAcaC, 
+  CAcacACaCACacAca, CAcacbcBCACacbCB, BAcabbcBcbeCebACa, ACacAcaebcBCBcBCe, 
+  eaaebcBACaCAcbABBA, BACaCAcacbCACacAca, BCbbCBBcbbACacAcaB, 
+  AbcBabCBCbCBBcbAcaC, BBabbzBBabbzBBabbzaa, ZCACacAcazeceABCbaBB, 
+  (aabaBab)^3, eAcaeACaeAcabCBaBcbaaa, (bbABCbCBACaCAcacaeaeCabe)^2, 
+  AbaeBAceAeACACacAcabcBcbaBABCbCBACaCAcacaeaeCabe, 
+  eBAceAeACACacAcabcBcbaBBabbABCbCBACaCAcacaeaeCabeAAA, 
+  AceAeACACacAcabcBcbaBBACeBAceAeACACacAcabcBcbaBBAbABCeBAceAeACACacAcabcBcbaBBccACAcab, 
+  bbABCbCBACaCAcacaeaeCabeCACacaCCbbABCbCBACaCAcacaeaeCabeACaCAcacabbABCbCBACaCAcacaeaeCabeCACacAc, 
+  CacaccaCAcaceBAceAeACACacAcabcBcbaBBCCACACCacaCCbbABCbCBACaCAcacaeaeCabeCACacaccaCAcaceBAceAeACACacAcabcBcbaBBCCACAC, 
+  zbabbABCbCBACaCAcacaeaeCabezbbABAbbCacACabbABCbCBACaCAcacaeaeCabeCbbAcbZeBAceAeACACacAcabcBcbaBBABZCAcbCeBAceAeACACacAcabcBcbaBBAcAcacBABAb, 
+  ZeBAceAeACACacAcabcBcBzabCbCBACaCAcacaeaeCaBACacAcabABCBaBBaBzabbABCbCBACaCAcacaeaeCabezabAbbAbbCacbcBabbABCbCBACaCAcacaeaeCabCecabbABCbCBACaCAcacaeaeCabecbc, 
+  CeBAceAeACACacAcabcBcbaBBAACAbCeBAceAeACACacAcabcBcbaBBAzbbABCbCBACaCAcacaeaeCabeBCAbCeBAceAeACACacAcabcBcbaBBAbCBACaBabaBzACeBAceAeACACacAcabcBcbaBBCBaCeBAceAeACACacAcabcBcbaBBccAeCeBABBz, 
+  zbaBABBABcbbcbabbABCbCBACaCAcacaeaeCabCecabbABCbCBACaCAcacaeaeCabecbczaBBAcbCbACCabbABCbCBACaCAcacaeaeCabecacAcbABCbCBACaCAcacaeaeCabeAZCBCeBAceAeACACacAcabcBcbaBBACecBAceAeACACacAcabcBcbaBBABCBBCbabbabABZeBAceAeACACacAcabcBcbaBBcbcACeBAceAeACACacAcabcBcbabbAcABBAbA;
+Subgroup name: G_2(5);
+#Subgroup Generators: a, b, c, abbABCbCBACaCAcacaeaeCabe, e;
+Subgroup Generators: a, b, c, e;

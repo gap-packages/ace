@@ -1,0 +1,57 @@
+# This is example #11 from Havas, Newman & O'Brien
+
+# rels9 := [ c*a*c^-1*b^-1*a*b*a, b*a*c*b*a^-1*c^-1*b, 
+#   c*b^-1*a*c*b*c*a^-1, a*b*c*c*a^-1*b^-1*c, a*a*c*b*c^-1*a*b*b,
+#   b*b*b*c^-1*a*c^-1*a^-1*c^-1, b^-1*a*c*a*b*a*c*c,  
+#   b^-1*a*b^-1*c*a*b^-1*a*c^-1, b*b*c*c*a^-1*b*a*c ];
+
+wo: 2500M;
+mess: -5000000;
+ct: 1000;
+rt: 1; 
+ 
+gr: a,b,c;
+
+enum: G1234;
+rel: caCBaba, bacbACb, cBacbcA, abccABc;
+ai: g11.big;
+
+enum: G167;
+rel: caCBaba, bbbCaCAC, Bacabacc; 
+ai: g11.big;
+
+enum: G126;
+rel: caCBaba, bacbACb, bbbCaCAC; 
+ai: g11.big;
+
+enum: G136;
+rel: caCBaba, cBacbcA, bbbCaCAC; 
+ai: g11.big;
+
+enum: G168;
+rel: caCBaba, bbbCaCAC, BaBcaBaC; 
+ai: g11.big;
+
+enum: G267;
+rel: bacbACb, bbbCaCAC, Bacabacc; 
+ai: g11.big;
+
+enum: G268;
+rel: caCBaba, bbbCaCAC, BaBcaBaC; 
+ai: g11.big;
+
+enum: G367;
+rel: cBacbcA, bbbCaCAC, Bacabacc; 
+ai: g11.big;
+
+enum: G368;
+rel: cBacbcA, bbbCaCAC, BaBcaBaC; 
+ai: g11.big;
+
+enum: G378;
+rel: cBacbcA, aacbCabb, bbbCaCAC; 
+ai: g11.big;
+
+enum: G123;
+rel: caCBaba, bacbACb, cBacbcA; 
+ai: g11.big;

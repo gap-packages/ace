@@ -1,0 +1,41 @@
+
+# ACE version 2, on ozone (IP27/R10000)
+#
+# The optimised versions all seem to have much the same speed.
+# However, ace.o32 is a good bit faster than ace.n32/ace.64.
+# For 64-bit addresses, use ace.64/ace.64.O2.
+
+#CC = cc -fullwarn -pedantic -ansi
+CC = cc -ansi
+
+FLAGS = -D__UNIX
+
+SRC = aceutils.c coinc.c control.c enum.c parser.c postproc.c
+
+# Non-optimised versions
+
+ace.64: $(SRC) tc.h
+        $(CC) $(FLAGS) -64 -o ace.64 $(SRC)
+
+ace.n32: $(SRC) tc.h
+        $(CC) $(FLAGS) -n32 -o ace.n32 $(SRC)
+
+ace.o32: $(SRC) tc.h
+        $(CC) $(FLAGS) -o32 -o ace.o32 $(SRC)
+
+# Optimised versions
+
+ace.64.O2: $(SRC) tc.h
+        $(CC) $(FLAGS) -64 -O2 -o ace.64.O2 $(SRC)
+
+ace.n32.O2: $(SRC) tc.h
+        $(CC) $(FLAGS) -n32 -O2 -o ace.n32.O2 $(SRC)
+
+ace.o32.O2: $(SRC) tc.h
+        $(CC) $(FLAGS) -o32 -O2 -o ace.o32.O2 $(SRC)
+
+# Version with tracing enabled (everything defaulted)
+
+ace.T: $(SRC) tc.h
+        $(CC) $(FLAGS) -D__DI -o ace.T $(SRC)
+

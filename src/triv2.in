@@ -1,0 +1,51 @@
+
+# The `hard' trivial group - try again (again).
+
+enum: E2;
+gr: r,s,t;
+rel: (r^s RR)^(s^t SS)=(r^s RR)^2, (s^t SS)^(t^r TT)=(s^t SS)^2,
+     (t^r TT)^(r^s RR)=(t^r TT)^2;
+
+wo:2000M;
+mess:-25000000;
+hard;
+
+gen:rs;      end;
+gen:r,rs;    end;
+gen:s,rs;    end;
+gen:r,s,rs;  end;
+gen:rt;      end;
+gen:r,rt;    end;
+gen:t,rt;    end;
+gen:r,t,rt;  end;
+gen:st;      end;
+gen:s,st;    end;
+gen:t,st;    end;
+gen:s,t,st;  end;
+
+gen:sr;      end;
+gen:r,sr;    end;
+gen:s,sr;    end;
+gen:r,s,sr;  end;
+gen:tr;      end;
+gen:r,tr;    end;
+gen:t,tr;    end;
+gen:r,t,tr;  end;
+gen:ts;      end;
+gen:s,ts;    end;
+gen:t,ts;    end;
+gen:s,t,ts;  end;
+
+gen:rs,sr;      end;
+gen:r,rs,sr;    end;
+gen:s,rs,sr;    end;
+gen:r,s,rs,sr;  end;
+gen:rt,tr;      end;
+gen:r,rt,tr;    end;
+gen:t,rt,tr;    end;
+gen:r,t,rt,tr;  end;
+gen:st,ts;      end;
+gen:s,st,st;    end;
+gen:t,st,ts;    end;
+gen:s,t,st,ts;  end;
+

@@ -1,0 +1,119 @@
+
+wo:250M;
+Message: -250000;
+
+# Original presentation from George
+
+Enumeration: Lyons;
+Group Generators: a,b,c,d,e,z;
+Group Relators: (e)^2, BDbd, zzAA, (b)^5, (c)^5, AABaab, ddAAAA, DadAAA, 
+  Zazaaa, AAcaacc, ececBBC, (a)^8, (ab)^4, ZbaBzaabaB, ebebccBBcbC, 
+  ebcBebCBBcB, ACabCBAcabcB, (ABab)^3, BBcbccbbCBCC, ZBcbzABACaba, 
+  ZbcBzBAbCBab, ABcbabCBCBccb, ZczABcAbcBaba, ZAcazBCBaCAbb, 
+  eBcbeabcBcACBB, BCbAcaBcbCACac, ZbbaBBzabbABBA, CaCAcacAcaCACacA, 
+  CACaCAcacACacAca, BAcabbcBcbcBBCbACa, BACaCAcacbCACacAca, 
+  eCACacAcaebcBCBcbC, eDCDbABCDACaCAcabb, eaaebcBACaCAcbABBA, 
+  eabbaBaebcBACaCAcA, AbcBabCBCbCBBcbAcaC, BCbbCBBcbbcBCACacAca, 
+  BBabbzBBabbzBBabbzaa, (aabaBab)^3, ZCACacAcazcbbCABCbaBB, 
+  bCBACaCAcacbcBCACacAca, bCBcbcBACaCAcacACaCAca, eAcaeACaeAcabCBaBcbaaa, 
+  BCbACaCAcacBcbCACacAca, CBCbcBcbCACacAcaCACacAca, 
+  ACACacAcaCaCAcacACaCAcac, dEBAcEAEACACacAcabcBcbaBBA, 
+  dCACacAcadACaCAcacdCACacAcA, (CACacAca)^5, 
+  zbdzbbABAbbCacACdCbbAcbZDBZCAcbCDcAcacBABAb, (dCACacAca)^5, 
+  ZDZACDbABCDbABCBaBBaBzdzabAbbAbbCacbcBdcBBdcbc, 
+  CDACAbCDzAdBCAbCDbCBACaBabaBzACDaCBaCDACacBBCBABBz, 
+  zbaBABBABcbbcbdcBBdcbczaBBAcbCbACCdcacAcBDZCBCDbbCDBCBBCbabbabABZDacbcACDaBAcABBAbA;
+Subgroup name: H;
+Subgroup Generators: a, b, c, d, e;
+
+## def; end;
+hard; end;
+fel; end;
+## hlt; end;
+
+# On noting that Zazaaa (+zzAA) ==> azaz
+
+Group Relators: (e)^2, BDbd, zzAA, (b)^5, (c)^5, AABaab, ddAAAA, DadAAA, 
+  azaz, AAcaacc, ececBBC, (a)^8, (ab)^4, ZbaBzaabaB, ebebccBBcbC, 
+  ebcBebCBBcB, ACabCBAcabcB, (ABab)^3, BBcbccbbCBCC, ZBcbzABACaba, 
+  ZbcBzBAbCBab, ABcbabCBCBccb, ZczABcAbcBaba, ZAcazBCBaCAbb, 
+  eBcbeabcBcACBB, BCbAcaBcbCACac, ZbbaBBzabbABBA, CaCAcacAcaCACacA, 
+  CACaCAcacACacAca, BAcabbcBcbcBBCbACa, BACaCAcacbCACacAca, 
+  eCACacAcaebcBCBcbC, eDCDbABCDACaCAcabb, eaaebcBACaCAcbABBA, 
+  eabbaBaebcBACaCAcA, AbcBabCBCbCBBcbAcaC, BCbbCBBcbbcBCACacAca, 
+  BBabbzBBabbzBBabbzaa, (aabaBab)^3, ZCACacAcazcbbCABCbaBB, 
+  bCBACaCAcacbcBCACacAca, bCBcbcBACaCAcacACaCAca, eAcaeACaeAcabCBaBcbaaa, 
+  BCbACaCAcacBcbCACacAca, CBCbcBcbCACacAcaCACacAca, 
+  ACACacAcaCaCAcacACaCAcac, dEBAcEAEACACacAcabcBcbaBBA, 
+  dCACacAcadACaCAcacdCACacAcA, (CACacAca)^5, 
+  zbdzbbABAbbCacACdCbbAcbZDBZCAcbCDcAcacBABAb, (dCACacAca)^5, 
+  ZDZACDbABCDbABCBaBBaBzdzabAbbAbbCacbcBdcBBdcbc, 
+  CDACAbCDzAdBCAbCDbCBACaBabaBzACDaCBaCDACacBBCBABBz, 
+  zbaBABBABcbbcbdcBBdcbczaBBAcbCbACCdcacAcBDZCBCDbbCDBCBBCbabbabABZDacbcACDaBAcABBAbA;
+
+## def; end;
+hard; end;
+fel; end;
+## hlt; end;
+
+# GAP Tietze'd (TzSearch() only)
+
+Group Relators:
+  ee,
+  DaDa,
+  azaz,
+  dddd,
+  BDbd,
+  zzAA,
+  ccccc,
+  bbbbb,
+  AABaab,
+  ddAAAA,
+  AAcaacc,
+  ececBBC,
+  abababab,
+  ZbaBzaabaB,
+  BBcbceceBCC,
+  ebcBebCBBcB,
+  ebebccBBcbC,
+  ACabCBAcabcB,
+  ABabABabABab,
+  ZBcbzABACaba,
+  ZbcBzBAbCBab,
+  CACaCaCAccaCA,
+  ABcbabCBCBccb,
+  ZAcazBCBaCAbb,
+  ZczABcAbcBaba,
+  BCbcACaCBcbAca,
+  eabbaBAeabbaBA,
+  eBcbeabcBcACBB,
+  ZbbaBBzabbABBA,
+  BCbAcaBcbCACac,
+  CACacaCAcACaCACa,
+  CAcacbcBCACacbCB,
+  CaCAcacAcaCACacA,
+  cacbcBACCaCbCBAc,
+  CBCbcBcbCCACACaca,
+  BAcabbcBcbeCebACa,
+  ACacAcaebcBCBcBCe,
+  eDCDbABCDACaCAcabb,
+  BCbbCBBcbbACacAcaB,
+  eaaebcBACaCAcbABBA,
+  BACaCAcacbCACacAca,
+  AbcBabCBCbCBBcbAcaC,
+  ZCACacAcazeceABCbaBB,
+  BBabbzBBabbzBBabbzaa,
+  aabaBabaabaBabaabaBab,
+  eAcaeACaeAcabCBaBcbaaa,
+  deBAceAeACACacAcabcBcbaBBA,
+  dCACacAcadACaCAcacdCACacAcA,
+  zbdzbbABAbbCacACdCbbAcbZDBZCAcbCDcAcacBABAb,
+  dCACacAcadCACacAcadCACacAcadCACacAcadCACacAca,
+  ZDZACDbABCDbABCBaBBaBzdzabAbbAbbCacbcBdcBBdcbc,
+  CDACAbCDzAdBCAbCDbCBACaBabaBzACDaCBaCDACaeCeBABBz,
+  zbaBABBABcbbcbdcBBdcbczaBBAcbCbACCdcacAcBDZCBCDbbCDBCBBCbabbabABZDacbcACDaBAcABBAbA;
+
+## def; end;
+hard; end;
+fel; end;
+## hlt; end;

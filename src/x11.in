@@ -1,0 +1,7 @@
+
+Enumeration: x11
+Group Generators: ab;
+Group Relators: (a)^2, (b)^6, ababababbbbabababbbbbababAbbbbb;
+Subgroup name: h
+Subgroup Generators: b;
+

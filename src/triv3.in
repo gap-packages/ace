@@ -1,0 +1,132 @@
+
+# The `hard' trivial group - try again (again (again)).
+
+enum: E2;
+gr: r,s,t;
+rel: (r^s RR)^(s^t SS)=(r^s RR)^2, (s^t SS)^(t^r TT)=(s^t SS)^2,
+     (t^r TT)^(r^s RR)=(t^r TT)^2;
+
+wo:2000M;
+mess:-25000000;
+hard;
+
+#gen:rs,rr;    end;
+#gen:rs,rr,s;  end;
+#gen:rs,ss;    end;
+#gen:rs,ss,s;  end;
+#gen:rs,ss,rr; end;
+
+#gen:sr,rr;    end;
+#gen:sr,rr,s;  end;
+#gen:sr,ss;    end;
+#gen:sr,ss,r;  end;
+#gen:sr,ss,rr; end;
+
+#gen:rs,sr,rr;    end;
+#gen:rs,sr,rr,s;  end;
+#gen:rs,sr,ss;    end;
+#gen:rs,sr,ss,r;  end;
+#gen:rs,sr,ss,rr; end;
+
+#gen:[r,s];       end;
+
+#gen:[r,s],r;     end;
+#gen:[r,s],s;     end;
+#gen:[r,s],r,s;   end;
+
+#gen:[r,s],rr;    end;
+#gen:[r,s],rr,s;  end;
+#gen:[r,s],ss;    end;
+#gen:[r,s],ss,r;  end;
+#gen:[r,s],rr,ss; end;
+
+#gen:[r,s],rs;        end;
+#gen:[r,s],rs,s;      end;
+#gen:[r,s],rs,r;      end;
+#gen:[r,s],rs,r,s;    end;
+#gen:[r,s],sr;        end;
+#gen:[r,s],sr,s;      end;
+#gen:[r,s],sr,r;      end;
+#gen:[r,s],sr,s,r;    end;
+#gen:[r,s],rs,sr;     end;
+#gen:[r,s],rs,sr,s;   end;
+#gen:[r,s],rs,sr,r;   end;
+#gen:[r,s],rs,sr,r,s; end;
+
+#gen:[s,r];       end;
+
+#gen:[s,r],r;     end;
+#gen:[s,r],s;     end;
+#gen:[s,r],r,s;   end;
+
+#gen:[s,r],rr;    end;
+#gen:[s,r],rr,s;  end;
+#gen:[s,r],ss;    end;
+#gen:[s,r],ss,r;  end;
+#gen:[s,r],rr,ss; end;
+
+#gen:[s,r],rs;        end;
+#gen:[s,r],rs,s;      end;
+#gen:[s,r],rs,r;      end;
+#gen:[s,r],rs,r,s;    end;
+#gen:[s,r],sr;        end;
+#gen:[s,r],sr,s;      end;
+#gen:[s,r],sr,r;      end;
+#gen:[s,r],sr,s,r;    end;
+#gen:[s,r],rs,sr;     end;
+#gen:[s,r],rs,sr,s;   end;
+#gen:[s,r],rs,sr,r;   end;
+#gen:[s,r],rs,sr,r,s; end;
+
+#gen:[r,s],[s,r];       end;
+
+#gen:[r,s],[s,r],r;     end;
+#gen:[r,s],[s,r],s;     end;
+#gen:[r,s],[s,r],r,s;   end;
+
+#gen:[r,s],[s,r],rr;    end;
+#gen:[r,s],[s,r],rr,s;  end;
+#gen:[r,s],[s,r],ss;    end;
+#gen:[r,s],[s,r],ss,r;  end;
+#gen:[r,s],[s,r],rr,ss; end;
+
+#gen:[r,s],[s,r],rs;        end;
+#gen:[r,s],[s,r],rs,s;      end;
+#gen:[r,s],[s,r],rs,r;      end;
+#gen:[r,s],[s,r],rs,r,s;    end;
+#gen:[r,s],[s,r],sr;        end;
+#gen:[r,s],[s,r],sr,s;      end;
+#gen:[r,s],[s,r],sr,r;      end;
+#gen:[r,s],[s,r],sr,s,r;    end;
+#gen:[r,s],[s,r],rs,sr;     end;
+#gen:[r,s],[s,r],rs,sr,s;   end;
+#gen:[r,s],[s,r],rs,sr,r;   end;
+#gen:[r,s],[s,r],rs,sr,r,s; end;
+
+gen:[r,s],[s,r],r^s,s^r,rs,sr,rr,ss,r,s; end;
+
+gen:[r,s],[s,r],r^s,s^r,rs,sr,rr,ss,r,s, [r,s],[s,t],[r,t]; end;
+
+gen: r,s,  rr,RR,rs,rS,Rs,RS,sr,sR,Sr,SR,ss,SS,
+  rrr,rsr,rSr,Rsr,RSr,srr,Srr,ssr,SSr,
+  RRR,rsR,rSR,RsR,RSR,sRR,SRR,ssR,SSR,
+  rrs,RRs,rss,Rss,srs,sRs,Srs,SRs,sss,
+  rrS,RRS,rSS,RSS,srS,sRS,SrS,SRS,SSS;
+end;
+
+gen: r,s,  rr,RR,rs,rS,Rs,RS,sr,sR,Sr,SR,ss,SS,
+  rrr,rsr,rSr,Rsr,RSr,srr,Srr,ssr,SSr,
+  RRR,rsR,rSR,RsR,RSR,sRR,SRR,ssR,SSR,
+  rrs,RRs,rss,Rss,srs,sRs,Srs,SRs,sss,
+  rrS,RRS,rSS,RSS,srS,sRS,SrS,SRS,SSS,
+  [r,s],[r,S],[R,s],[R,S],  [s,r],[s,R],[S,r],[S,R];
+end;
+
+gen: r,s,  rr,RR,rs,rS,Rs,RS,sr,sR,Sr,SR,ss,SS,
+  rrr,rsr,rSr,Rsr,RSr,srr,Srr,ssr,SSr,
+  RRR,rsR,rSR,RsR,RSR,sRR,SRR,ssR,SSR,
+  rrs,RRs,rss,Rss,srs,sRs,Srs,SRs,sss,
+  rrS,RRS,rSS,RSS,srS,sRS,SrS,SRS,SSS,
+  [r,s],[r,S],[R,s],[R,S],  [s,r],[s,R],[S,r],[S,R],
+  [r,s],[s,t],[r,t];
+end;

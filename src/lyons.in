@@ -1,0 +1,54 @@
+
+wo:250M;
+Message: -250000;
+
+Enumeration: Lyons;
+Group Generators: a,b,c,d,e,z;
+Group Relators: (e)^2, BDbd, zzAA, (b)^5, (c)^5, AABaab, ddAAAA, DadAAA, 
+  Zazaaa, AAcaacc, ececBBC, (a)^8, (ab)^4, ZbaBzaabaB, ebebccBBcbC, 
+  ebcBebCBBcB, ACabCBAcabcB, (ABab)^3, BBcbccbbCBCC, ZBcbzABACaba, 
+  ZbcBzBAbCBab, ABcbabCBCBccb, ZczABcAbcBaba, ZAcazBCBaCAbb, 
+  eBcbeabcBcACBB, BCbAcaBcbCACac, ZbbaBBzabbABBA, CaCAcacAcaCACacA, 
+  CACaCAcacACacAca, BAcabbcBcbcBBCbACa, BACaCAcacbCACacAca, 
+  eCACacAcaebcBCBcbC, eDCDbABCDACaCAcabb, eaaebcBACaCAcbABBA, 
+  eabbaBaebcBACaCAcA, AbcBabCBCbCBBcbAcaC, BCbbCBBcbbcBCACacAca, 
+  BBabbzBBabbzBBabbzaa, (aabaBab)^3, ZCACacAcazcbbCABCbaBB, 
+  bCBACaCAcacbcBCACacAca, bCBcbcBACaCAcacACaCAca, eAcaeACaeAcabCBaBcbaaa, 
+  BCbACaCAcacBcbCACacAca, CBCbcBcbCACacAcaCACacAca, 
+  ACACacAcaCaCAcacACaCAcac, dEBAcEAEACACacAcabcBcbaBBA, 
+  dCACacAcadACaCAcacdCACacAcA, (CACacAca)^5, 
+  zbdzbbABAbbCacACdCbbAcbZDBZCAcbCDcAcacBABAb, (dCACacAca)^5, 
+  ZDZACDbABCDbABCBaBBaBzdzabAbbAbbCacbcBdcBBdcbc, 
+  CDACAbCDzAdBCAbCDbCBACaBabaBzACDaCBaCDACacBBCBABBz, 
+  zbaBABBABcbbcbdcBBdcbczaBBAcbCbACCdcacAcBDZCBCDbbCDBCBBCbabbabABZDacbcACDaBAcABBAbA;
+Subgroup name: H;
+Subgroup Generators: a, b, c, d, e;
+
+def; end;
+hard; end;
+fel; end;
+hlt; end;
+
+Group Relators: (e)^2, BDbd, zzAA, (b)^5, (c)^5, AABaab, ddAAAA, DadAAA, 
+  azaz, AAcaacc, ececBBC, (a)^8, (ab)^4, ZbaBzaabaB, ebebccBBcbC, 
+  ebcBebCBBcB, ACabCBAcabcB, (ABab)^3, BBcbccbbCBCC, ZBcbzABACaba, 
+  ZbcBzBAbCBab, ABcbabCBCBccb, ZczABcAbcBaba, ZAcazBCBaCAbb, 
+  eBcbeabcBcACBB, BCbAcaBcbCACac, ZbbaBBzabbABBA, CaCAcacAcaCACacA, 
+  CACaCAcacACacAca, BAcabbcBcbcBBCbACa, BACaCAcacbCACacAca, 
+  eCACacAcaebcBCBcbC, eDCDbABCDACaCAcabb, eaaebcBACaCAcbABBA, 
+  eabbaBaebcBACaCAcA, AbcBabCBCbCBBcbAcaC, BCbbCBBcbbcBCACacAca, 
+  BBabbzBBabbzBBabbzaa, (aabaBab)^3, ZCACacAcazcbbCABCbaBB, 
+  bCBACaCAcacbcBCACacAca, bCBcbcBACaCAcacACaCAca, eAcaeACaeAcabCBaBcbaaa, 
+  BCbACaCAcacBcbCACacAca, CBCbcBcbCACacAcaCACacAca, 
+  ACACacAcaCaCAcacACaCAcac, dEBAcEAEACACacAcabcBcbaBBA, 
+  dCACacAcadACaCAcacdCACacAcA, (CACacAca)^5, 
+  zbdzbbABAbbCacACdCbbAcbZDBZCAcbCDcAcacBABAb, (dCACacAca)^5, 
+  ZDZACDbABCDbABCBaBBaBzdzabAbbAbbCacbcBdcBBdcbc, 
+  CDACAbCDzAdBCAbCDbCBACaBabaBzACDaCBaCDACacBBCBABBz, 
+  zbaBABBABcbbcbdcBBdcbczaBBAcbCbACCdcacAcBDZCBCDbbCDBCBBCbabbabABZDacbcACDaBAcABBAbA;
+
+def; end;
+hard; end;
+fel; end;
+hlt; end;
+

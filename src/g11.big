@@ -1,0 +1,11 @@
+# control file for g11
+
+gen: a,b;  end;
+gen: b,c;  end;
+gen: a,c;  end;
+gen: (b,a), (c,a), (C,b);  end;
+gen: a;  end;
+gen: b;  end;
+gen: c;  end;
+
+ai:stdin;

@@ -1,0 +1,136 @@
+
+# This is the first pass at testing (properly) all the presentations
+
+wo: 250M;
+Message: -250000;
+
+Enumeration: Lyons #1 (original);
+Group Generators: abcdez;
+Group Relators: (e)^2, BDbd, zzAA, (b)^5, (c)^5, AABaab, ddAAAA, DadAAA, 
+  Zazaaa, AAcaacc, ececBBC, (a)^8, (ab)^4, ZbaBzaabaB, ebebccBBcbC, 
+  ebcBebCBBcB, ACabCBAcabcB, (ABab)^3, BBcbccbbCBCC, ZBcbzABACaba, 
+  ZbcBzBAbCBab, ABcbabCBCBccb, ZczABcAbcBaba, ZAcazBCBaCAbb, 
+  eBcbeabcBcACBB, BCbAcaBcbCACac, ZbbaBBzabbABBA, CaCAcacAcaCACacA, 
+  CACaCAcacACacAca, BAcabbcBcbcBBCbACa, BACaCAcacbCACacAca, 
+  eCACacAcaebcBCBcbC, eDCDbABCDACaCAcabb, eaaebcBACaCAcbABBA, 
+  eabbaBaebcBACaCAcA, AbcBabCBCbCBBcbAcaC, BCbbCBBcbbcBCACacAca, 
+  BBabbzBBabbzBBabbzaa, (aabaBab)^3, ZCACacAcazcbbCABCbaBB, 
+  bCBACaCAcacbcBCACacAca, bCBcbcBACaCAcacACaCAca, eAcaeACaeAcabCBaBcbaaa, 
+  BCbACaCAcacBcbCACacAca, CBCbcBcbCACacAcaCACacAca, 
+  ACACacAcaCaCAcacACaCAcac, dEBAcEAEACACacAcabcBcbaBBA, 
+  dCACacAcadACaCAcacdCACacAcA, (CACacAca)^5, 
+  zbdzbbABAbbCacACdCbbAcbZDBZCAcbCDcAcacBABAb, (dCACacAca)^5, 
+  ZDZACDbABCDbABCBaBBaBzdzabAbbAbbCacbcBdcBBdcbc, 
+  CDACAbCDzAdBCAbCDbCBACaBabaBzACDaCBaCDACacBBCBABBz, 
+  zbaBABBABcbbcbdcBBdcbczaBBAcbCbACCdcacAcBDZCBCDbbCDBCBBCbabbabABZDacbcACDaBAcABBAbA;
+Subgroup name: G_2(5);
+Subgroup Generators: a, b, c, d, e;
+
+hard; no:-1; fi:0; end;
+hard; no:-1; fi:1; end;
+hard; no:0;  fi:0; end;
+hard; no:0;  fi:1; end;
+fel;  no:-1; fi:0; end;
+fel;  no:-1; fi:1; end;
+fel;  no:0;  fi:0; end;
+fel;  no:0;  fi:1; end;
+
+Enumeration: Lyons #3 (original + Tietze substitutions);
+Group Generators: abcdez;
+Group Relators: (e)^2, (Da)^2, (az)^2, (d)^4, BDbd, zzAA, (c)^5, (b)^5, 
+  AABaab, ddAAAA, AAcaacc, ececBBC, (ab)^4, ZbaBzaabaB, BBcbceceBCC, 
+  ebcBebCBBcB, ebebccBBcbC, ACabCBAcabcB, (ABab)^3, ZBcbzABACaba, 
+  ZbcBzBAbCBab, CACaCaCAccaCA, ABcbabCBCBccb, ZAcazBCBaCAbb, ZczABcAbcBaba, 
+  BCbcACaCBcbAca, (eabbaBA)^2, eBcbeabcBcACBB, ZbbaBBzabbABBA, 
+  BCbAcaBcbCACac, CACacaCAcACaCACa, CAcacbcBCACacbCB, CaCAcacAcaCACacA, 
+  cacbcBACCaCbCBAc, CBCbcBcbCCACACaca, BAcabbcBcbeCebACa, 
+  ACacAcaebcBCBcBCe, eDCDbABCDACaCAcabb, BCbbCBBcbbACacAcaB, 
+  eaaebcBACaCAcbABBA, BACaCAcacbCACacAca, AbcBabCBCbCBBcbAcaC, 
+  ZCACacAcazeceABCbaBB, BBabbzBBabbzBBabbzaa, (aabaBab)^3, 
+  eAcaeACaeAcabCBaBcbaaa, deBAceAeACACacAcabcBcbaBBA, 
+  dCACacAcadACaCAcacdCACacAcA, zbdzbbABAbbCacACdCbbAcbZDBZCAcbCDcAcacBABAb, 
+  (dCACacAca)^5, ZDZACDbABCDbABCBaBBaBzdzabAbbAbbCacbcBdcBBdcbc, 
+  CDACAbCDzAdBCAbCDbCBACaBabaBzACDaCBaCDACaeCeBABBz, 
+  zbaBABBABcbbcbdcBBdcbczaBBAcbCbACCdcacAcBDZCBCDbbCDBCBBCbabbabABZDacbcACDaBAcABBAbA;
+Subgroup name: G_2(5);
+Subgroup Generators: a, b, c, d, e;
+
+hard; no:-1; fi:0; end;
+hard; no:-1; fi:1; end;
+hard; no:0;  fi:0; end;
+hard; no:0;  fi:1; end;
+fel;  no:-1; fi:0; end;
+fel;  no:-1; fi:1; end;
+fel;  no:0;  fi:0; end;
+fel;  no:0;  fi:1; end;
+
+Enumeration: Lyons #4 (original - e + Tietze substitutions);
+Group Generators: abcdz;
+Group Relators: (az)^2, (d)^4, (Da)^2, zzAA, BDbd, (c)^5, (b)^5, AABaab, 
+  ddAAAA, AAcaacc, (ab)^4, ZbaBzaabaB, BBcbccbbCBCC, (ABab)^3, 
+  ZBcbzABACaba, ACabCBAcabcB, ZbcBzBAbCBab, cacACCacAcAca, ACacaCACCaCAc, 
+  ABcbabCBCBccb, ZczABcAbcBaba, ZAcazBCBaCAbb, BCbcACaCBcbAca, 
+  ZbbaBBzabbABBA, BCbAcaBcbCACac, bCBcbcBcACAcaca, CAcacbcBCACacbCB, 
+  CAcacACaCACacAca, CBCbcACaBcbcAcaC, BCbbCBBcbbACacAcaB, 
+  BAcabbcBcbcBBCbACa, BACaCAcacbCACacAca, AbcBabCBCbCBBcbAcaC, 
+  BBabbzBBabbzBBabbzaa, ZCACacAcazcbbCABCbaBB, (aabaBab)^3, 
+  dCACacAcadACaCAcacdCACacAcA, dcbaBdcdBBcBBcbbdcbaBdcdBcbb, 
+  (BBACacAcadcbaBdcd)^2, ACacAcadcbaBdcdbccBBcbCDCDbABCDACaCAcab, 
+  BBACacAcadcbaBdcdcBBACacAcadcbaBdcdcBBC, 
+  ACacAcadcbaBdcdBcBACacAcadcbaBdcdabcBcACb, 
+  zbdzbbABAbbCacACdCbbAcbZDBZCAcbCDcAcacBABAb, (dCACacAca)^5, 
+  ZDZACDbABCDbABCBaBBaBzdzabAbbAbbCacbcBdcBBdcbc, 
+  BBACacAcadcbaBdcdabbaBADCDbABCDACaCAcabbabbaBA, 
+  BBACacAcadcbaBdcdaaBBACacAcadcbaBdcdbcBACaCAcbABBA, 
+  BBACacAcadcbaBdcdCACacAcaBBACacAcadcbaBdcdbcBCBcbC, 
+  CDACAbCDzAdBCAbCDbCBACaBabaBzACDaCBaCDACacBBCBABBz, 
+  CDbABCDACaCAcabAcDCDbABCDACaCAcabbADCDbABCDACaCAcabbACACacAcabcBcbaBBA, 
+  BBACacAcadcbaBdcdAcaBBACacAcadcbaBdcdACaBBACacAcadcbaBdcdAcabCBaBcbaaa, 
+  zbaBABBABcbbcbdcBBdcbczaBBAcbCbACCdcacAcBDZCBCDbbCDBCBBCbabbabABZDacbcACDaBAcABBAbA;
+Subgroup name: G_2(5);
+#Subgroup Generators: a, b, c, d, BBACacAcadcbaBdcd;
+Subgroup Generators: a, b, c, d;
+
+hard; no:-1; fi:0; end;
+hard; no:-1; fi:1; end;
+hard; no:0;  fi:0; end;
+hard; no:0;  fi:1; end;
+fel;  no:-1; fi:0; end;
+fel;  no:-1; fi:1; end;
+fel;  no:0;  fi:0; end;
+fel;  no:0;  fi:1; end;
+
+Enumeration: Lyons #5 (original - d + Tietze substitutions);
+Group Generators: abcez;
+Group Relators: (e)^2, (az)^2, zzAA, (b)^5, (c)^5, AABaab, AAcaacc, 
+  ececBBC, (a)^8, (ab)^4, ZbaBzaabaB, BBcbceceBCC, ebcBebCBBcB, 
+  ebebccBBcbC, ZBcbzABACaba, ZbcBzBAbCBab, ACabCBAcabcB, (ABab)^3, 
+  cacACCacAcAca, ACacaCACCaCAc, ZczABcAbcBaba, ZAcazBCBaCAbb, 
+  ABcbabCBCBccb, ZbbaBBzabbABBA, BCbcACaCBcbAca, BCbAcaBcbCACac, 
+  eBcbeabcBcACBB, (eabbaBA)^2, bCBcbcBcACAcaca, CBCbcACaBcbcAcaC, 
+  CAcacACaCACacAca, CAcacbcBCACacbCB, BAcabbcBcbeCebACa, ACacAcaebcBCBcBCe, 
+  eaaebcBACaCAcbABBA, BACaCAcacbCACacAca, BCbbCBBcbbACacAcaB, 
+  AbcBabCBCbCBBcbAcaC, BBabbzBBabbzBBabbzaa, ZCACacAcazeceABCbaBB, 
+  (aabaBab)^3, eAcaeACaeAcabCBaBcbaaa, (bbABCbCBACaCAcacaeaeCabe)^2, 
+  AbaeBAceAeACACacAcabcBcbaBABCbCBACaCAcacaeaeCabe, 
+  eBAceAeACACacAcabcBcbaBBabbABCbCBACaCAcacaeaeCabeAAA, 
+  AceAeACACacAcabcBcbaBBACeBAceAeACACacAcabcBcbaBBAbABCeBAceAeACACacAcabcBcbaBBccACAcab, 
+  bbABCbCBACaCAcacaeaeCabeCACacaCCbbABCbCBACaCAcacaeaeCabeACaCAcacabbABCbCBACaCAcacaeaeCabeCACacAc, 
+  CacaccaCAcaceBAceAeACACacAcabcBcbaBBCCACACCacaCCbbABCbCBACaCAcacaeaeCabeCACacaccaCAcaceBAceAeACACacAcabcBcbaBBCCACAC, 
+  zbabbABCbCBACaCAcacaeaeCabezbbABAbbCacACabbABCbCBACaCAcacaeaeCabeCbbAcbZeBAceAeACACacAcabcBcbaBBABZCAcbCeBAceAeACACacAcabcBcbaBBAcAcacBABAb, 
+  ZeBAceAeACACacAcabcBcBzabCbCBACaCAcacaeaeCaBACacAcabABCBaBBaBzabbABCbCBACaCAcacaeaeCabezabAbbAbbCacbcBabbABCbCBACaCAcacaeaeCabCecabbABCbCBACaCAcacaeaeCabecbc, 
+  CeBAceAeACACacAcabcBcbaBBAACAbCeBAceAeACACacAcabcBcbaBBAzbbABCbCBACaCAcacaeaeCabeBCAbCeBAceAeACACacAcabcBcbaBBAbCBACaBabaBzACeBAceAeACACacAcabcBcbaBBCBaCeBAceAeACACacAcabcBcbaBBccAeCeBABBz, 
+  zbaBABBABcbbcbabbABCbCBACaCAcacaeaeCabCecabbABCbCBACaCAcacaeaeCabecbczaBBAcbCbACCabbABCbCBACaCAcacaeaeCabecacAcbABCbCBACaCAcacaeaeCabeAZCBCeBAceAeACACacAcabcBcbaBBACecBAceAeACACacAcabcBcbaBBABCBBCbabbabABZeBAceAeACACacAcabcBcbaBBcbcACeBAceAeACACacAcabcBcbabbAcABBAbA;
+Subgroup name: G_2(5);
+#Subgroup Generators: a, b, c, abbABCbCBACaCAcacaeaeCabe, e;
+Subgroup Generators: a, b, c, e;
+
+hard; no:-1; fi:0; end;
+hard; no:-1; fi:1; end;
+hard; no:0;  fi:0; end;
+hard; no:0;  fi:1; end;
+fel;  no:-1; fi:0; end;
+fel;  no:-1; fi:1; end;
+fel;  no:0;  fi:0; end;
+fel;  no:0;  fi:1; end;
+

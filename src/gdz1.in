@@ -1,0 +1,65 @@
+
+# This attempt index #0 to do the 14 examples in Havas, Newman & O'Brien
+
+wo:2000M;
+mess: -10000000;
+hard;
+
+gr: a,b,c;
+
+enum: g1;
+rel: bbCbc, aaBab, cABcabc;
+gen:a; end;  gen:b; end;  gen:c; end; 
+
+enum: g2;
+rel: bbCbc, aaBab, BabccAc;
+gen:a; end;  gen:b; end;  gen:c; end; 
+
+enum: g3;
+rel: bbCbc, aaBab, cAccBab;
+gen:a; end;  gen:b; end;  gen:c; end; 
+
+enum: g4;
+rel: bbCbc, aaBab, caBcbcA;
+gen:a; end;  gen:b; end;  gen:c; end; 
+
+enum: g5;
+rel: bbCbc, aaCac, ABabccc;
+gen:a; end;  gen:b; end;  gen:c; end; 
+
+enum: g6;
+rel: aaCac, bcaCbbA, cbaccBA;
+gen:a; end;  gen:b; end;  gen:c; end; 
+
+enum: g7;
+rel: aaBab, abbcbAC, cBacbcA;
+gen:a; end;  gen:b; end;  gen:c; end; 
+
+enum: g8;
+rel: aaCac, acbbACb, ABabccc;
+gen:a; end;  gen:b; end;  gen:c; end; 
+
+enum: g9;
+rel: BabcaaC, acbbCAb, cBacbcA;
+gen:a; end;  gen:b; end;  gen:c; end; 
+
+enum: g10;
+rel: aaBab, AbbbCac, AbccaBc;
+gen:a; end;  gen:b; end;  gen:c; end; 
+
+enum: g11;
+rel: caCBaba, bacbACb, cBacbcA;
+gen:a; end;  gen:b; end;  gen:c; end; 
+
+enum: g12;
+rel: acaBCab, bbACacb, cABcabc;
+gen:a; end;  gen:b; end;  gen:c; end; 
+
+enum: g13;
+rel: acaBCab, acbCbAb, BabccAc;
+gen:a; end;  gen:b; end;  gen:c; end; 
+
+enum: g14;
+rel: a^3=[C,b], b^3=AcabCB, c^3=[A,B][A,c][b,c];
+gen:a; end;  gen:b; end;  gen:c; end;
+
