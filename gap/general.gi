@@ -14,7 +14,7 @@
 #Y                      Department of Computer Science & Electrical Eng.
 #Y                      University of Queensland, Australia.
 ##
-Revision.general_gi :=
+Revision.ace_general_gi :=
     "@(#)$Id$";
 
 
@@ -66,35 +66,6 @@ InstallGlobalFunction(ACEPackageVersion, function()
 end);
 
 #############################################################################
-##
-#M  IS_ACE_MATCH( <list>, <sub>[, <ind>] )
-##
-InstallMethod( IS_ACE_MATCH,"list, sub, pos",IsFamFamX,
-  [IsList,IsList,IS_INT], 0,
-function( list,sub,first )
-local last;
-
-  last:=first+Length(sub)-1;
-  return Length(list) >= last and list{[first..last]} = sub;
-end);
-
-# no installation restrictions to avoid extra installations for empty list
-InstallOtherMethod( IS_ACE_MATCH,"list, sub",true,
-  [IsObject,IsObject], 0,
-function( list, sub )
-  return IS_ACE_MATCH(list, sub, 1);
-end);
-
-InstallOtherMethod( IS_ACE_MATCH,"empty list, sub, pos",true,
-  [IsEmpty,IsList,IS_INT], 0,
-function(list,sub,first )
-  return not IsEmpty(sub);
-end);
-
-InstallOtherMethod( IS_ACE_MATCH,"list, empty list, pos",true,
-  [IsList,IsEmpty,IS_INT], 0, ReturnTrue);
-
-#############################################################################
 ####
 ##
 #F  CALL_ACE . . . . . . . . . Called by ACECosetTable, ACEStats and ACEStart
@@ -141,8 +112,8 @@ local optnames, echo, errmsg, onbreakmsg, infile, instream, outfile,
     if instream = fail then
       Error("sorry! Run out of pseudo-ttys. Can't initiate stream.\n");
     fi;
-    FLUSH_ACE_STREAM_UNTIL(instream, 3, 3, READ_NEXT_LINE, 
-                           line -> IS_ACE_MATCH(line, "name", 3));
+    FLUSH_ACE_STREAM_UNTIL(instream, 3, 3, ACE_READ_NEXT_LINE, 
+                           line -> IsMatchingSublist(line, "name", 3));
     ToACE := function(list) INTERACT_TO_ACE_WITH_ERRCHK(instream, list); end;
   else 
     if ACEfname = "ACECosetTableFromGensAndRels" then
@@ -345,7 +316,7 @@ local line, instream, rest;
   instream := InputTextFile(file);
   # We don't want the user to see this ... so we flush at InfoACE level 10.
   line := FLUSH_ACE_STREAM_UNTIL( instream, 10, 10, ReadLine,
-                                  line -> IS_ACE_MATCH(line, "local") );
+                                  line -> IsMatchingSublist(line, "local") );
   rest := ReadAll(instream);
   CloseStream(instream);
   return ReadAsFunction(
@@ -403,20 +374,20 @@ local name, file, instream, line, ACEfunc,
   instream := InputTextFile(file);
   if name <> "index" then
     line := FLUSH_ACE_STREAM_UNTIL( instream, 1, 10, ReadLine,
-                                    line -> IS_ACE_MATCH(line, "local") );
+                                    line -> IsMatchingSublist(line, "local") );
     Info(InfoACE, 1,
          "#", line{[Position(line, ' ')..Position(line, ';') - 1]},
          " are local to ACEExample");
     line := FLUSH_ACE_STREAM_UNTIL( instream, 1, 10, ReadLine, 
-                                    line -> IS_ACE_MATCH(line, "return") );
+                                    line -> IsMatchingSublist(line, "return") );
     Info(InfoACE, 1, 
-         CHOMP(ReplacedString(line, "return ACEfunc", NameFunction(ACEfunc)))
+         Chomp(ReplacedString(line, "return ACEfunc", NameFunction(ACEfunc)))
          );
     if IsBound(ACEData.aceexampleoptions) then
       line := FLUSH_ACE_STREAM_UNTIL(
                   instream, 1, 10, ReadLine, 
                   line -> PositionSublist(line, ");") <> fail );
-      Info(InfoACE, 1, CHOMP(ReplacedString(line, ");", ", ")));
+      Info(InfoACE, 1, Chomp(ReplacedString(line, ");", ", ")));
       Info(InfoACE, 1, "    # User Options");
       optnames := ShallowCopy( RecNames(ACEData.aceexampleoptions) );
       lastoptname := optnames[ Length(optnames) ];
@@ -514,9 +485,9 @@ local outstream, print, file, instream, line;
   instream := InputTextFile(file);
   repeat
     line := ReadLine(instream);
-  until IS_ACE_MATCH(line, "## Begin");
+  until IsMatchingSublist(line, "## Begin");
   line := ReadLine(instream);
-  while not IS_ACE_MATCH(line, "## End") do
+  while not IsMatchingSublist(line, "## End") do
     print(line);
     line := ReadLine(instream);
   od;
@@ -579,7 +550,7 @@ end);
 InstallGlobalFunction(ACE_ERROR, function(errmsg, onbreakmsg)
 local NormalOnBreak, NormalOnBreakMessage;
 
-  errmsg := ACE_JOIN(errmsg, "\n ");
+  errmsg := JoinStringsWithSeparator(errmsg, "\n ");
   if IsFunction(OnBreakMessage) then
     # what we do in GAP 4.3+
     NormalOnBreakMessage := OnBreakMessage;

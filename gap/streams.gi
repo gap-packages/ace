@@ -11,59 +11,9 @@
 #Y                      Department of Computer Science & Electrical Eng.
 #Y                      University of Queensland, Australia.
 ##
-Revision.streams_gi :=
+Revision.ace_streams_gi :=
     "@(#)$Id$";
 
-
-#############################################################################
-####
-##
-#F  ACE_JOIN( <strings>, <separator> )  . . . join <strings> with <separator>
-##
-##  joins <strings> (a list of strings) by inserting the  string  <separator>
-##  between each adjacent pair of strings in  <strings>  e.g.  ACE_JOIN(["a",
-##  "b", "c"], ", ") gives "a, b, c".
-##
-InstallGlobalFunction(ACE_JOIN, function(strings, separator)
-  if IsEmpty(strings) then
-    return "";
-  else
-    return Concatenation(
-               Concatenation(
-                   Concatenation(
-                       List(strings{[1 .. Length(strings) - 1]},
-                            s -> [ s, separator ])
-                       ),
-                   [ strings[ Length(strings) ] ]
-                   )
-               );
-  fi;
-end);
-
-#############################################################################
-####
-##
-#F  ACE_STRINGS . . . . . . . . . . . . . . . . . . . . . . Internal function
-##  . . . . . . . . . . . . . . . . . . . . returns list as a list of strings 
-##
-InstallGlobalFunction(ACE_STRINGS, 
-  list -> List(list, x -> String(x))
-);
-
-#############################################################################
-####
-##
-#F  ACE_EVAL_STRING_EXPR( <expr> )  . . . . . . . . . . . . evaluate a string
-##
-##  passes <expr> (a string) through  an  `InputTextStream'  so  that  {\GAP}
-##  interprets it, and returns the result.
-##
-InstallGlobalFunction(ACE_EVAL_STRING_EXPR, function(expr)
-local temp;
-
-   temp := Concatenation( "return ", expr, ";" );
-   return ReadAsFunction( InputTextString( temp ) )();
-end);
 
 #############################################################################
 ####
@@ -77,7 +27,7 @@ end);
 InstallGlobalFunction(ACE_PRINT_AND_EVAL, function(varname, expr)
 
   Print("gap> ", varname, " := ", ReplacedString(expr, "\n ", "\n>"), ";\n");
-  expr := ACE_EVAL_STRING_EXPR(expr);
+  expr := EvalString(expr);
   Print(expr, "\n");
   return expr;
 end);
@@ -85,70 +35,23 @@ end);
 #############################################################################
 ####
 ##
-#F  CHOMP . . . . . . . . . Return string minus a trailing '\n' if it has one
-##  . . . . . . . . . . . . . . . . . . . . . (named after the Perl function)
+#F  ACE_READ_NEXT_LINE(<iostream>) . read complete line but never return fail
 ##
-InstallGlobalFunction(CHOMP, function(string)
-
-  if string<>fail and string <> "" and string[Length(string)] = '\n' then
-    return string{[1 .. Length(string) - 1]};
-  else
-    return string;
-  fi;
+##  We know there is a complete line to be got; so we  wait  for  it,  before
+##  returning.
+##
+InstallGlobalFunction(ACE_READ_NEXT_LINE, function(iostream)
+  return ReadAllLine(iostream, true);
 end);
 
 #############################################################################
 ####
 ##
-#F  READ_ALL_LINE . . . . . . . . .  Read a complete line (i.e. until a '\n')
-##  . . . . . . . . . . . . . . . . . . . . . . . . . . . . .  or return fail 
+#F  WRITE_LIST_TO_ACE_STREAM( <stream>, <list> ) . . . write to an ACE stream
 ##
-##  Essentially, like ReadLine but does not return a line fragment ... if the
-##  initial ReadLine call doesn't return fail, it waits until it has all  the
-##  line before returning.
-##
-InstallGlobalFunction(READ_ALL_LINE, function(iostream)
-local line, moreOfline;
-
-  line := ReadLine(iostream); # If we get fail here, we just return
-  if line <> fail then
-    while line[Length(line)] <> '\n' do
-      Sleep(1);
-      moreOfline := ReadLine(iostream);
-      if moreOfline <> fail then
-        Append(line, moreOfline);
-      fi;
-    od;
-  fi;
-  return line;
-end);
-
-#############################################################################
-####
-##
-#F  READ_NEXT_LINE . . . . . . . . Read a complete line but never return fail
-##
-##  Essentially, like  READ_ALL_LINE  but we know there is a complete line to 
-##  be got ... so we wait for it, before returning.
-##
-InstallGlobalFunction(READ_NEXT_LINE, function(iostream)
-local line;
-
-  line := READ_ALL_LINE(iostream);
-  while line = fail do
-    Sleep(1);
-    line := READ_ALL_LINE(iostream);
-  od;
-  return line;
-end);
-
-#############################################################################
-####
-##
-#F  WRITE_LIST_TO_ACE_STREAM . . . . . . . . . . . . . . .  Internal function
-##
-##  Writes list to stream and with a `ToACE> '  prompt  to  Info  at  InfoACE
-##  level 4 and returns true if successful and fail otherwise.
+##  writes the list <list> to the iostream <stream>, `Info's <list> following
+##  a `ToACE> ' ``prompt'' at `InfoACE' level 4, returns `true' if successful
+##  or `fail' otherwise.
 ##
 InstallGlobalFunction(WRITE_LIST_TO_ACE_STREAM, function(stream, list)
 local string;
@@ -159,7 +62,7 @@ local string;
          "You might like to try using 'ACEResurrectProcess(<i>);'");
     return fail;
   fi;
-  string := Concatenation( List(list, x -> String(x)) );
+  string := Concatenation( List(list, String) );
   Info(InfoACE, 4, "ToACE> ", string);
   return WriteLine(stream, string);
 end);

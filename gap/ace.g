@@ -32,10 +32,15 @@ Revision.ace_g :=
 ##    "outfile" . . the path of the ACE output file
 ##    "version" . . the version of the current ACE binary
 ##
-ACEData := rec( binary := Filename(DirectoriesPackagePrograms("ace"), "ace"),
-                tmpdir := DirectoryTemporary(),
-                io := [] # Initially no ACEStart IO Streams
-              );
+DeclareGlobalVariable( "ACEData",
+  "A record containing various data associated with the ACE share package."
+  );
+InstallValue( ACEData,
+  rec( binary := Filename(DirectoriesPackagePrograms("ace"), "ace"),
+       tmpdir := DirectoryTemporary(),
+       io     := [] # Initially no ACEStart IO Streams
+       )
+);
 ACEData.infile  := Filename(ACEData.tmpdir, "in"); 
 ACEData.outfile := Filename(ACEData.tmpdir, "out");
 
@@ -43,13 +48,7 @@ PrintTo(ACEData.infile, "\n");
 # Fire up ACE with a null input (ACEData.infile contains only a "\n")
 # ... to generate a banner (which has ACE's current version)
 Exec(Concatenation(ACEData.binary, "<", ACEData.infile, ">", ACEData.outfile));
-# For now use ACEData.scratch for an input stream
-ACEData.scratch := InputTextFile(ACEData.outfile);
-# Grab the first line of outfile, which begins like: "ACE N.nnn   "
-ACEData.version := ReadLine(ACEData.scratch);
-CloseStream(ACEData.scratch);
-# We just want the N.nnn part of the first line of outfile
-# ... ACEData.scratch now records where N.nnn starts
+ACEData.version := StringFile( ACEData.outfile );
 ACEData.scratch := PositionSublist(ACEData.version, "ACE") + 4;
 ACEData.version := ACEData.version{[ACEData.scratch ..
                                     Position(ACEData.version, ' ', 
@@ -63,6 +62,8 @@ SetInfoLevel(InfoACE, 1);
 ####
 ##  Print a banner . . . . . .  using InfoWarning (so a user can turn it off)
 ##
+if not QUIET and BANNER then
+
 Info(InfoWarning,1,"  The ACE (Advanced Coset Enumerator) share package");
 Info(InfoWarning,1,"  C code by George Havas <havas@csee.uq.edu.au> and");
 Info(InfoWarning,1,"            Colin Ramsay <cram@csee.uq.edu.au>");
@@ -74,13 +75,6 @@ Info(InfoWarning,1,"                 ACE package version: ",
 Info(InfoWarning,1,"");
 Info(InfoWarning,1,"                 For help, type: ?ACE");
 
-#############################################################################
-####
-##  For backward compatibility with  GAP  4.2  we  ensure  OnBreakMessage  is
-##  defined, but with a non-function definition.
-##
-if not( "OnBreakMessage" in NamesGVars() ) then
-  OnBreakMessage := "";
 fi;
 
 #############################################################################

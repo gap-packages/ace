@@ -11,7 +11,7 @@
 #Y                      Department of Computer Science & Electrical Eng.
 #Y                      University of Queensland, Australia.
 ##
-Revision.streams_gd :=
+Revision.ace_streams_gd :=
     "@(#)$Id$";
 
 
@@ -20,13 +20,8 @@ Revision.streams_gd :=
 #D  Declare functions.
 ##
 
-DeclareGlobalFunction("ACE_JOIN");
-DeclareGlobalFunction("ACE_STRINGS");
-DeclareGlobalFunction("ACE_EVAL_STRING_EXPR");
 DeclareGlobalFunction("ACE_PRINT_AND_EVAL");
-DeclareGlobalFunction("CHOMP");
-DeclareGlobalFunction("READ_ALL_LINE");
-DeclareGlobalFunction("READ_NEXT_LINE");
+DeclareGlobalFunction("ACE_READ_NEXT_LINE");
 DeclareGlobalFunction("WRITE_LIST_TO_ACE_STREAM");
 
 #E  streams.gd  . . . . . . . . . . . . . . . . . . . . . . . . . . ends here 

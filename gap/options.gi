@@ -11,7 +11,7 @@
 #Y                      Department of Computer Science & Electrical Eng.
 #Y                      University of Queensland, Australia.
 ##
-Revision.options_gi :=
+Revision.ace_options_gi :=
     "@(#)$Id$";
 
 
@@ -90,7 +90,7 @@ InstallValue(KnownACEOptions, rec(
   check := [5, [""]],
   redo := [4, [""]],
   compaction := [3, [0..100]],
-  continue := [4, [""]],
+  continu := [4, [""]],       # "continue" is a GAP 4.3+ keyword
   cycles := [2, [""]],
   dmode := [4, [0..4]],
   dsize := [4, x -> x = 0 or IsPosInt(x)],
@@ -455,7 +455,7 @@ end);
 ##
 InstallGlobalFunction(MATCHES_KNOWN_ACE_OPT_NAME, 
 function(knownoptname, optname)
-  return IS_ACE_MATCH(knownoptname, optname) and
+  return IsMatchingSublist(knownoptname, optname) and
          KnownACEOptions.(knownoptname)[1] <= Length(optname);
 end);
 
@@ -674,7 +674,7 @@ local optname;
     fi;
   od;
   if "CosetTableStandard" in NamesGVars() then
-    return Flat(["GAP", ACE_EVAL_STRING_EXPR("CosetTableStandard")]);
+    return Flat(["GAP", EvalString("CosetTableStandard")]);
   else
     return "GAPsemilenlex";
   fi;
@@ -750,14 +750,12 @@ end);
 ##
 InstallGlobalFunction(ACE_WORDS, function(words, fgens, ACEgens)
   words := ACE_WORDS_ARG_CHK(fgens, words, "");
-  return ACE_JOIN( ACE_STRINGS( 
-                       List(words, w -> MappedWord(w,
-                                                   fgens,
-                                                   GeneratorsOfGroup(
-                                                       FreeGroup(ACEgens)
-                                                       )))
-                       ),
-                   ","); # Words separated by commas
+  return JoinStringsWithSeparator(
+             List(words, w -> String( MappedWord( w,
+                                                  fgens,
+                                                  GeneratorsOfGroup(
+                                                      FreeGroup(ACEgens)
+                                                      ) ) ) ) );
 end);
 
 #############################################################################
@@ -1001,7 +999,7 @@ local IsValidOptionValue, CheckValidOption, ProcessOption,
       fi;
       if opt.list then
         ToACE([ opt.ace,":", 
-                ACE_JOIN( ACE_STRINGS(val), "," ), ";" ]);
+                JoinStringsWithSeparator( List(val, String) ), ";" ]);
       elif val = "" then
         ToACE([ opt.ace, ";" ]);
       elif opt.fullname = "aceincomment" then
@@ -1140,7 +1138,8 @@ local aceoptname, error;
     WRITE_LIST_TO_ACE_STREAM(stream, [ aceoptname, ";" ]);
   elif not IsString(optval) and IsList(optval) then
     WRITE_LIST_TO_ACE_STREAM(
-        stream, [ aceoptname,":", ACE_JOIN( ACE_STRINGS(optval), "," ), ";" ]
+        stream, [ aceoptname,":", 
+                  JoinStringsWithSeparator( List(optval, String) ), ";" ]
         );
   else
     WRITE_LIST_TO_ACE_STREAM(stream, [ aceoptname, ":", optval, ";" ]);
@@ -1211,7 +1210,7 @@ end);
 #############################################################################
 ####
 ##
-#F  NEW_ACE_OPTIONS
+#F  NEW_ACE_OPTIONS()
 ##
 ##  Looks at OptionsStack and returns the new options.
 ##
@@ -1233,18 +1232,6 @@ local newoptions, oldoptions, oldnames, optname;
       od;
       return newoptions;
     fi;
-end);
-
-#############################################################################
-####
-##
-#F  FlushOptionsStack . . . . . . . . . . . Pops all options off OptionsStack
-##
-##
-InstallGlobalFunction(FlushOptionsStack, function()
-  while not(IsEmpty(OptionsStack)) do
-    PopOptions();
-  od;
 end);
 
 #E  options.gi  . . . . . . . . . . . . . . . . . . . . . . . . . . ends here 

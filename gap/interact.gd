@@ -10,7 +10,7 @@
 #Y                      Department of Computer Science & Electrical Eng.
 #Y                      University of Queensland, Australia.
 ##
-Revision.interact_gd :=
+Revision.ace_interact_gd :=
     "@(#)$Id$";
 
 #############################################################################

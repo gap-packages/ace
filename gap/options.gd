@@ -11,7 +11,7 @@
 #Y                      Department of Computer Science & Electrical Eng.
 #Y                      University of Queensland, Australia.
 ##
-Revision.options_gd :=
+Revision.ace_options_gd :=
     "@(#)$Id$";
 
 
@@ -105,6 +105,7 @@ DeclareGlobalFunction("PROCESS_ACE_OPTION");
 DeclareGlobalFunction("ACEOptionData");
 DeclareGlobalFunction("SANITISE_ACE_OPTIONS");
 DeclareGlobalFunction("NEW_ACE_OPTIONS");
-DeclareGlobalFunction("FlushOptionsStack");
+# For backward compatibility.
+DeclareSynonym("FlushOptionsStack", ResetOptionsStack);
 
 #E  options.gd  . . . . . . . . . . . . . . . . . . . . . . . . . . ends here 
