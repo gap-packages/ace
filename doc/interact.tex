@@ -61,8 +61,7 @@ kill' if these hints are unhelpful).
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{Starting and Stopping Interactive ACE Processes}
 
-\atindex{ACEStart}{@\noexpand`ACEStart'!details}
-\>ACEStart( <fgens>, <rels>, <sgens> [:<options>] ) F
+\>ACEStart( <fgens>, <rels>, <sgens> [:<options>] )!{details} F
 \>ACEStart( <i> [:<options>] ) F
 \>ACEStart( [:<options>] ) F
 \>ACEStart( <i>, <fgens>, <rels>, <sgens> [:<options>] ) F
@@ -177,8 +176,7 @@ interactive {\ACE} process, with a new presentation. There is no  form
 of `ACEStart' with the same functionality as this form, where the  <i>
 argument is omitted.
 
-\atindex{ACEQuit}{@\noexpand`ACEQuit'!details}
-\>ACEQuit( <i> ) F
+\>ACEQuit( <i> )!{details} F
 \>ACEQuit() F
 
 terminate an interactive {\ACE} process,  where  <i>  is  the  integer
@@ -706,10 +704,10 @@ gap> SetACEOptions( : hlt);
 
 \atindex{break-loop}{@\noexpand`break'-loop}
 When    `ACECosetTableFromGensAndRels'    enters    a     `break'-loop
-(see~"ACECosetTable!non-interactive"), local versions  of  the  second
-form  of  each  of  `DisplayACEOptions'  and  `SetACEOptions'   become
-available. (Even though the names are similar and  their  function  is
-analogous they are in fact different functions.)
+(see~"ACECosetTable"), local versions of the second form  of  each  of
+`DisplayACEOptions' and `SetACEOptions' become available. (Even though
+the names are similar and their function is analogous they are in fact
+different functions.)
 
 \>ACEParameters( <i> ) F
 \>ACEParameters() F
@@ -1001,25 +999,25 @@ from the {\ACE} binary.
 return a coset table  as  a  {\GAP}  object,  in  standard  form  (for
 {\GAP}).   These   functions   perform   the    same    function    as
 `ACECosetTableFromGensAndRels' and `ACECosetTable' on three  arguments
-(see~"ACECosetTable!non-interactive"), albeit  interactively,  on  the
-<i>th (or default) process  started  by  `ACEStart'.  If  options  are
-passed then an internal version of  `ACEModes'  is  run  to  determine
-which of the general {\ACE} modes (see  Section~"General  ACE  Modes")
-`ACEContinue', `ACERedo' or `ACEStart' is possible; and  (an  internal
-version of) the first mode of these that is allowed  is  executed,  to
-ensure the resultant table is correct for the current options.
+(see~"ACECosetTable"), albeit interactively, on the <i>th (or default)
+process started by `ACEStart'. If options are passed then an  internal
+version of `ACEModes' is run to determine which of the general  {\ACE}
+modes (see Section~"General ACE Modes")  `ACEContinue',  `ACERedo'  or
+`ACEStart' is possible; and (an internal version of) the first mode of
+these that is allowed is executed, to ensure the  resultant  table  is
+correct for the current options.
 
 \>ACEStats( <i> [:<options>] )!{interactive} F
 \>ACEStats( [:<options>] )!{interactive} F
 
 perform  the  same  function  as   `ACEStats'   on   three   arguments
-(see~"ACEStats!non-interactive"), albeit interactively, on  the  <i>th
-(or default) process started by `ACEStart'. If options are passed then
-an internal version of `ACEModes' is run to  determine  which  of  the
-general {\ACE} modes (see Section~"General ACE Modes")  `ACEContinue',
-`ACERedo' or `ACEStart' is possible; and (an internal version of)  the
-first mode of these  that  is  allowed  is  executed,  to  ensure  the
-resultant statistics are correct for the current options.
+(see~"ACEStats" --- non-interactive version), albeit interactively, on
+the <i>th (or default) process started by `ACEStart'. If  options  are
+passed then an internal version of  `ACEModes'  is  run  to  determine
+which of the general {\ACE} modes (see  Section~"General  ACE  Modes")
+`ACEContinue', `ACERedo' or `ACEStart' is possible; and  (an  internal
+version of) the first mode of these that is allowed  is  executed,  to
+ensure the resultant statistics are correct for the current options.
 
 See Section~"Example of Using ACE Interactively (Using ACEStart)"  for
 an example demonstrating both these functions  within  an  interactive
@@ -1035,8 +1033,8 @@ This function has greatest relevance to users who call `ACECosetTable'
 (see~"ACECosetTable!interactive"),   with    the    `lenlex'    option
 (see~"option lenlex"). For more details, see the  discussion  for  the
 non-interactive    version    of     `IsACEGeneratorsInPreferredOrder'
-("IsACEGeneratorsInPreferredOrder!non-interactive"), which  is  called
-with two arguments.
+("IsACEGeneratorsInPreferredOrder"),  which   is   called   with   two
+arguments.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{Steering ACE Interactively}

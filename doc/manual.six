@@ -203,7 +203,7 @@ F 5.1. option purer
 F 5.1. option sims
 C interact.tex 6. Functions for Using ACE Interactively
 S 6.1. Starting and Stopping Interactive ACE Processes
-I 6.1. ACEStart
+F 6.1. ACEStart!details
 F 6.1. ACEStart
 F 6.1. ACEStart
 F 6.1. ACEStart
@@ -211,9 +211,7 @@ F 6.1. ACEStart
 F 6.1. ACEStart
 F 6.1. ACEStart
 F 6.1. ACEStart
-F 6.1. ACEStart
-I 6.1. ACEQuit
-F 6.1. ACEQuit
+F 6.1. ACEQuit!details
 F 6.1. ACEQuit
 F 6.1. ACEQuitAll
 S 6.2. General ACE Modes
