@@ -1418,8 +1418,8 @@ local GAPWord;
     else
       power := 1;
     fi;
-    if IsDigitChar(word[1]) then
-      elements := SplitString(word, " ");
+    if IsDigitChar(word[1]) or word[1] = '-' then
+      elements := List(SplitString(word, " "), Int);
       # Convert to GAP elements
       elements := List(elements, 
                        function(element)
