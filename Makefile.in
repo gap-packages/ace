@@ -17,3 +17,11 @@ default: bindir src/Makefile.in
 
 clean:	
 	rm -rf bin sedfile src/Makefile Makefile
+
+# use this target only if you want to build the manual from scratch.
+builddoc:
+	(cd doc;tex manual;bibtex manual;tex manual;dvips manual)
+	if test ! -d htm;  then mkdir htm;  fi
+	../../etc/convert.pl -c -i -t -n ace doc htm
+	(cd doc;rm manual.{blg,lab,log})
+
