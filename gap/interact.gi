@@ -249,12 +249,13 @@ end);
 ##
 InstallGlobalFunction(ACECosetTable, function(arg)
 local ioIndex, enumIndex, ACEout, iostream, infoACElevel, datarec,
-      cosettable;
+      cosettable, ACEOnBreak, NormalOnBreak;
 
   if Length(arg) = 2 or Length(arg) > 3 then
     Error("Expected 0, 1 or 3 arguments ... not ", Length(arg), " arguments\n");
   else
-    OnBreak := function()
+    NormalOnBreak := OnBreak;
+    ACEOnBreak := function()
       local infoACElevel;
 
       infoACElevel := InfoACELevel();
@@ -270,6 +271,7 @@ local ioIndex, enumIndex, ACEout, iostream, infoACElevel, datarec,
       Info(InfoACE, 1, "... and then, type: 'return;' to continue.");
       Info(InfoACE, 1, "Otherwise, type: 'quit;' to quit the enumeration.");
       SetInfoACELevel(infoACElevel);
+      OnBreak := NormalOnBreak;
     end;
     if Length(arg) <= 1 then
       # Called as an interactive ACE command
@@ -311,6 +313,7 @@ local ioIndex, enumIndex, ACEout, iostream, infoACElevel, datarec,
               # We pop options here, in case the user decides to quit
               PopOptions();
             fi;
+            OnBreak := ACEOnBreak;
             Error(": No coset table ...");
             if datarec.options <> rec() then
               PushOptions(datarec.options);

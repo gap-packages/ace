@@ -30,8 +30,24 @@ DeclareGlobalVariable("KnownACEOptions",
     "value of an option is valid."])
   );
 
+DeclareGlobalVariable("ACEOptionSynonyms",
+  Concatenation([
+    "A record whose fields are known `preferred' ACE (interface) options\n",
+    "that have synonyms. The values are lists of synonymous alternatives."])
+  );
+
 DeclareGlobalVariable("NonACEbinOptions",
   "A list of known ACE (interface) options that are not ACE binary options"
+  );
+
+DeclareGlobalVariable("ACEParameterOptions",
+  Concatenation([
+    "A record whose fields are the known ACE (interface) options for which\n",
+    "the ACE binary has a default value."])
+  );
+
+DeclareGlobalVariable("ACEStrategyOptions",
+  "A list of known ACE (interface) options that are strategy options"
   );
 
 DeclareGlobalVariable("ACE_ERRORS",
@@ -48,9 +64,11 @@ DeclareGlobalFunction("ACE_OPTIONS");
 DeclareGlobalFunction("ACE_OPT_NAMES");
 DeclareGlobalFunction("MATCHES_KNOWN_ACE_OPT_NAME");
 DeclareGlobalFunction("FULL_ACE_OPT_NAME");
+DeclareGlobalFunction("ACE_OPTION_SYNONYMS");
 DeclareGlobalFunction("VALUE_ACE_OPTION");
 DeclareGlobalFunction("ACE_WORDS");
 DeclareGlobalFunction("PROCESS_ACE_OPTIONS");
+DeclareGlobalFunction("ACEOptionData");
 DeclareGlobalFunction("CurrentACEOptions");
 DeclareGlobalFunction("SetACEOptions");
 DeclareGlobalFunction("FlushOptionsStack");

@@ -64,39 +64,46 @@ InstallValue(KnownACEOptions, rec(
   aceignore := [5, x -> IsList(x) and ForAll(x, xi -> IsString(xi))],
   aceignoreunknown := [10, x -> IsList(x) and ForAll(x, xi -> IsString(xi))],
   acenowarnings := [6, [0,1]],
+  aceecho := [7, [0,1]],
+  aceincomment := [6, IsString],
   silent := [6, [0,1]],
-  #sg := [2, <word list>],
-  #rl := [2, <relation list>],
+  sg := [2, x -> IsList(x) and ForAll(x, xi -> IsWord(xi)) ],
+  rl := [2, x -> IsList(x) and ForAll(x, xi -> IsWord(xi)) ],
   aep  := [3, [1..7]],
-  #ai := [2, <filename>],
-  ao   := [2, IsString],      # "ACEoutfile" is a GAP-introduced 
-  aceoutfile := [4, IsString],# `synonym' for "ao"
+  ai := [2, IsString],
+  ao   := [2, IsString],      # "aceoutfile" is a GAP-introduced 
+  aceoutfile := [4, IsString],# synonym for "ao"
   asis := [2, [0,1]],
-  #begin := [3, [""]], start := [5, [""]], end := [3, [""]],
-  #bye := [3, [""]], exit := [4, [""]], quit := [1, [""]],
+  begin := [3, [""]],         # "begin" and "start" are synomyms
+  start := [5, [""]],         # ... "end" synonym omitted (it is a GAP keyword)
+  bye := [3, [""]],           # "bye", "exit" and "qui" are synonyms
+  exit := [4, [""]],
+  qui := [1, [""]],           # the "quit" form is not available since
+                              # it's a GAP keyword
   cc   := [2, x -> IsInt(x) and x > 1],
   cfactor := [1, IsInt],      # "cfactor" and "ct" are synonyms
   ct   := [2, IsInt],
-  #check := [5, [""]], redo := [4, [""]],
+  check := [5, [""]],
+  redo := [4, [""]],
   compaction := [3, [0..100]],
-  #continue := [4, [""]],
+  continue := [4, [""]],
   cycles := [2, [""]],
   dmode := [4, [0..4]],
-  dsize := [4, x -> IsZero(x) or IsPosInt(x)],
+  dsize := [4, x -> x = 0 or IsPosInt(x)],
   default := [3, [""]],
   ds := [2, IS_INC_POS_INT_LIST],
   dr := [2, IS_INC_POS_INT_LIST],
-  #dump := [1, x -> (IsList(x) and x[1] in [0..2] and
-  #                  (Length(x) = 1 or (Length(x) = 2 and x[2] in [0,1])) or
-  #                 x in [0..2]],
+  dump := [1, x -> (IsList(x) and x[1] in [0..2] and
+                    (Length(x) = 1 or (Length(x) = 2 and x[2] in [0,1]))) or
+                   x in [0..2]],
   easy := [4, [""]],
-  echo := [4, [0,1]],         # hijacked! ... we don't pass this to ACE
+  echo := [4, [0,1,2]],       # hijacked! ... we don't pass this to ACE
   enumeration := [4, IsString],
   felsch := [3, ["",0,1]],
-  ffactor := [1, x -> IsZero(x) or IsPosInt(x)],# "ffactor" and "fill"
-  fill := [3, x -> IsZero(x) or IsPosInt(x)],   # are synonyms ... there is
-                                                # no "fi" since it's a GAP
-                                                # keyword
+  ffactor := [1, x -> x = 0 or IsPosInt(x)],# "ffactor" and "fill"
+  fill := [3, x -> x = 0 or IsPosInt(x)],   # are synonyms ... there is
+                                            # no "fi" since it's a GAP
+                                            # keyword
   ## Most interface functions require the next 3 ACE options to be
   ## passed as arguments rather than options
   group := [2, x -> IsInt(x) or IsString(x) ],  # For group generators
@@ -105,30 +112,30 @@ InstallValue(KnownACEOptions, rec(
   relators := [3, x -> IsList(x) and ForAll(x, xi -> IsWord(xi)) ],
                                                 # For group relators
   hard := [2, [""]],
-  #help := [4, [""]],
+  help := [1, [""]],
   hlt  := [3, [""]],
   hole := [4, [-1..100]],
   lookahead := [4, [0..4]],
-  loop := [4, x -> IsZero(x) or IsPosInt(x)],
-  max  := [3, x -> IsZero(x) or (IsInt(x) and x >= 2)],
+  loop := [4, x -> x = 0 or IsPosInt(x)],
+  max  := [3, x -> x = 0 or (IsInt(x) and x >= 2)],
   mendelsohn := [4, [0,1]],
   messages := [4, IsInt],   # "messages" and "monitor" are synonyms
   monitor := [3, IsInt],
-  #mode := [2, [""]],
+  mode := [2, [""]],
   nc   := [2, ["",0,1]],    # "nc" and "normal" are synonyms
-  normal := [6, [0,1]],
+  normal := [6, ["",0,1]],
   no   := [2, x -> IsInt(x) and x >= -1],
-  #options := [3, [""]],
+  options := [3, [""]],
   oo   := [2, IsInt],       # "oo" and "order" are synonyms
-  order := [2, IsInt],
+  order := [5, IsInt],
   #parameters := [3, [""]], # decommissioned ACE option
   path := [4, [0,1]],
   pmode := [4, [0..3]],
-  psize := [4, x -> IsZero(x) or 
-                   (IsEvenInt(x) and IsPrimePowerInt(x))],
-  #sr := [2, [0,1]],
-  #print := [2, x -> (IsList(x) and Length(x) <= 3 and
-  #                  ForAll(x, IsInt)) or IsInt(x)],
+  psize := [4, x -> x = 0 or 
+                    (IsInt(x) and IsEvenInt(x) and IsPrimePowerInt(x))],
+  sr := [2, [0,1]],
+  print := [2, x -> (IsList(x) and Length(x) <= 3 and
+                    ForAll(x, IsInt)) or IsInt(x)],
   purec := [5, [""]],       # the ACE option is "pure c"
   purer := [5, [""]],       # the ACE option is "pure r"
   rc   := [2, x -> (IsList(x) and Length(x) <= 2 and
@@ -150,16 +157,45 @@ InstallValue(KnownACEOptions, rec(
   standard := [2, [""]],
   statistics := [4, [""]],  # "statistics" and "stats" are synonyms
   stats := [5, [""]],
-  #style := [5, [""]],
+  style := [5, [""]],
   subgroup := [4, IsString],
   system := [3, IsString],
   text := [4, IsString],
   time := [2, x -> IsInt(x) and x >= -1],
-  #tw := [2, [int,<word>]], trace := [5, [int,<word>]],
+  tw   := [2, x -> IsList(x) and Length(x) = 2 and 
+                   IsInt(x[1]) and IsWord(x[2])],
+  trace := [2, x -> IsList(x) and Length(x) = 2 and 
+                    IsInt(x[1]) and IsWord(x[2])],
   workspace := [2, x -> IsInt(x) or 
                         (IsString(x) and 
                          x[Length(x)] 
                              in "0123456789kmgKMG")]
+));
+
+#############################################################################
+####
+##
+#V  ACEOptionSynonyms . . . . . record whose fields are `preferred' known ACE
+##  . . . . . . . . . . . . . . options that have synonyms.  The  values  are
+##  . . . . . . . . . . . . . . . . . . . . lists of synonymous alternatives.
+##
+##
+
+InstallValue(ACEOptionSynonyms, rec(
+  ao   := ["aceoutfile"],
+  ct   := ["cfactor"],
+  fill := ["ffactor"],
+  messages := ["monitor"],
+  nc   := ["normal"],
+  order := ["oo"],
+  recover := ["contiguous"],
+  rt   := ["rfactor"],
+  sc   := ["stabilising"],
+  tw   := ["trace"],
+  stats := ["statistics"],
+  start := ["begin"],
+  bye  := ["exit", "qui"],
+  redo := ["check"]
 ));
 
 #############################################################################
@@ -170,8 +206,76 @@ InstallValue(KnownACEOptions, rec(
 ##
 
 InstallValue(NonACEbinOptions,
-  [ "aceinfile",     "aceoutfile", "aceignore", "aceignoreunknown",
-    "acenowarnings", "echo",       "silent" ]
+  [ "aceinfile",     "aceoutfile", "aceignore",    "aceignoreunknown",
+    "acenowarnings", "aceecho"   , "aceincomment", "echo",       "silent" ]
+);
+
+#############################################################################
+####
+##
+#V  ACEParameterOptions . .  record whose fields are the known ACE  parameter
+##  . . . . . . . . . . . .  options.  Each  field is  assigned   the   known 
+##  . . . . . . . . . . . .  default value, or is a record of default values.
+##
+##  An ACE `parameter' option, is a known ACE option for which the ACE binary
+##  has a default value.  These are the `Run Parameters' that ACE lists  with 
+##  the `sr: 1' command,  except for  `group',  `relators'  and  `generators'
+##  (which the user provides a value for via arguments rather than options).
+##
+##  For the case that the value of a field of the ACEParameterOptions  record
+##  is itself  a  record,  the  fields  of  that  record  are  `default'  and 
+##  strategies for which the value assigned by that strategy differs from the
+##  `default' strategy. A strategy here means a strategy option  concatenated
+##  with any of its possible values (as strings).
+##
+
+InstallValue(ACEParameterOptions, rec(
+  asis := 0,
+  # `ct' is synonymous with `cfactor' but here we list just once.
+  ct   := rec(default := 0, felsch0 := 1000, felsch1 := 1000, 
+              hard := 1000, purec := 1000,   sims9 := 1000),
+  compaction := rec(default := 10, easy := 100, purec := 100, purer := 100),
+  dmode := rec(default := 4, easy := 0,  hlt := 0,
+               purer := 0,   sims1 := 0, sims5 := 0),
+  dsize := rec(default := 1000),
+  enumeration := "G",
+  # `fill' is synonymous with `ffactor' but here we list just once.
+  fill := rec(default := 0, easy := 1,  felsch0 := 1, hlt := 1,
+              purec := 1,   purer := 1, sims1 := 1,   sims3 := 1,
+              sims5 := 1,   sims7 := 1, sims9 := 1),
+  hole := -1,
+  lookahead := rec(default := 0, hlt := 1),
+  loop := 0,
+  max  := 0,
+  mendelsohn := rec(default := 0, sims5 := 1, sims7 := 1),
+  messages := 0, # Synonymous with `monitor' but here we list just once.
+  no   := rec(default := -1, easy := 0,  felsch0 := 0, hlt := 0,
+              purec := 0,    purer := 0, sims1 := 0,   sims3 := 0,
+              sims5 := 0,    sims7 := 0, sims9 := 0),
+  path := rec(default := 0),
+  pmode := rec(default := 3, easy := 0,  felsch0 := 0, hlt := 0,
+               purec := 0,   purer := 0, sims1 := 0,   sims3 := 0,
+               sims5 := 0,   sims7 := 0, sims9 := 0),
+  psize := rec(default := 256),
+  # `rt' is synonymous with `rfactor' but here we list just once.
+  rt   := rec(default := 0,   easy := 1000,  hard := 1, 
+              hlt := 1000,    purer := 1000, sims1 := 1000,
+              sims3 := -1000, sims5 := 1000, sims7 := -1000),
+  row  := rec(default := 1, felsch0 := 0, felsch1 := 0, 
+              purec := 0,   purer := 0,   sims9 := 0),
+  subgroup := "H",
+  time := -1,
+  workspace := 1000000
+));
+
+#############################################################################
+####
+##
+#V  ACEStrategyOptions  . list of known ACE options that are strategy options
+##
+
+InstallValue(ACEStrategyOptions,
+  [ "default", "easy", "felsch", "hard", "hlt", "purec", "purer", "sims" ]
 );
 
 #############################################################################
@@ -221,7 +325,7 @@ end);
 InstallGlobalFunction(ACE_OPT_NAMES, function()
 local optnames;
   optnames := RecNames(ACE_OPTIONS());
-  if not VALUE_ACE_OPTION(optnames, false, [ "acenowarnings" ]) then
+  if not VALUE_ACE_OPTION(optnames, false, "acenowarnings") then
     if "messfile" in optnames then
       Info(InfoACE + InfoWarning, 1,
            "ACE Warning: ", 
@@ -274,17 +378,36 @@ end);
 #############################################################################
 ####
 ##
-#F  VALUE_ACE_OPTION  . . . . . . . . . . . . . . . . . . . Internal function
-##  . . . . . . .  checks among optnames for any settings of the known option
-##  . . . . . . .  synonyms in list. The latest such optname in optnames will
-##  . . . . . . .  prevail  and  its value will be  returned.  Otherwise,  if
-##  . . . . . . . . . .  there isn't such an optname, defaultval is returned.
+#F  ACE_OPTION_SYNONYMS . . . . . . . . . . . . . . . . . . Internal function
+##  . . . . . . . . . . . . . . . . . . returns a list of synonyms of optname
 ##
-InstallGlobalFunction(VALUE_ACE_OPTION, function(optnames, defaultval, list)
+##
+InstallGlobalFunction(ACE_OPTION_SYNONYMS, function(optname)
+local list, recname;
+  list := [ optname ];
+  for recname in RecNames(ACEOptionSynonyms) do
+    if recname = optname or optname in ACEOptionSynonyms.(recname) then
+      list := Concatenation( [ recname ], ACEOptionSynonyms.(recname) );
+      break;
+    fi;
+  od;
+  return list;
+end);
+
+#############################################################################
+####
+##
+#F  VALUE_ACE_OPTION  . . . . . . . . . . . . . . . . . . . Internal function
+##  . . . . . . . checks among optnames for any settings of synonyms of optnm
+##  . . . . . . . The latest such optname in optnames will  prevail  and  its
+##  . . . . . . . value will be  returned.  Otherwise, if there isn't such an
+##  . . . . . . . . . . . . . . . . . . . .  optname, defaultval is returned.
+##
+InstallGlobalFunction(VALUE_ACE_OPTION, function(optnames, defaultval, optnm)
 local optname, optval;
   optval := defaultval;
   for optname in Filtered(optnames, 
-                          optname -> ForAny(list, 
+                          optname -> ForAny(ACE_OPTION_SYNONYMS(optnm), 
                                             s ->
                                             MATCHES_KNOWN_ACE_OPT_NAME(
                                                 s, 
@@ -333,7 +456,8 @@ end);
 InstallGlobalFunction(PROCESS_ACE_OPTIONS, 
 function(ACEfname, optnames, echo, ToACE, disallowed, ignored)
 local IsValidOptionValue, CheckValidOption, ProcessOption, 
-      AddIgnoreOptionsToIgnored, nowarnings, ignoreunknown, opt, optname;
+      AddIgnoreOptionsToIgnored, nowarnings, ignoreunknown, 
+      paramoptnames, strategy, opt, optname;
 
   IsValidOptionValue := function(val)
     # Check that val is a valid value of opt.fullname.
@@ -390,7 +514,7 @@ local IsValidOptionValue, CheckValidOption, ProcessOption,
         ToACE([ opt.ace, ":", val, ";\n" ]);
       fi;
     fi;
-    if echo then
+    if echo > 0 then
       if opt.ignore then
         Print(" ", opt.name, " := ", opt.value, " (ignored)\n");
       elif opt.fullname in NonACEbinOptions then
@@ -412,7 +536,7 @@ local IsValidOptionValue, CheckValidOption, ProcessOption,
 
   AddIgnoreOptionsToIgnored := function()
   local ignore, optname, opt;
-    ignore := VALUE_ACE_OPTION(optnames, [], ["aceignore"]);
+    ignore := VALUE_ACE_OPTION(optnames, [], "aceignore");
     for optname in ignore do
       opt := rec(name := optname);
       FULL_ACE_OPT_NAME(opt); # sets opt.known and opt.fullname
@@ -426,17 +550,37 @@ local IsValidOptionValue, CheckValidOption, ProcessOption,
     od;
   end;
 
-  if echo then
+  if echo > 0 then
     Print(ACEfname, " called with the following options:\n");
+    if echo = 2 then
+      paramoptnames := RecNames(ACEParameterOptions);
+      strategy := "default";
+    fi;
   fi;
 
-  nowarnings := VALUE_ACE_OPTION(optnames, false, ["acenowarnings"]);
-  ignoreunknown := VALUE_ACE_OPTION(optnames, false, ["aceignoreunknown"]);
+  nowarnings := VALUE_ACE_OPTION(optnames, false, "acenowarnings");
+  ignoreunknown := VALUE_ACE_OPTION(optnames, false, "aceignoreunknown");
   AddIgnoreOptionsToIgnored();
 
   for optname in optnames do
-    opt := rec(name := optname);
-    FULL_ACE_OPT_NAME(opt); # sets opt.known and opt.fullname
+    if echo = 2 then
+      opt := ACEOptionData(optname); # sets opt.name, opt.known, opt.fullname
+                                     # and opt.synonyms
+      paramoptnames := Difference(paramoptnames, opt.synonyms);
+      opt.value := ValueOption(opt.name);
+      if opt.fullname in ACEStrategyOptions then
+        strategy := opt.fullname;
+        if IsInt(opt.value) then
+          strategy := Concatenation(strategy, String(opt.value));
+        elif opt.value and (opt.fullname = "felsch") then
+          strategy := "felsch0";     # Hmm! I'd like to do this differently!!
+        fi;
+      fi;
+    else
+      opt := rec(name := optname);
+      FULL_ACE_OPT_NAME(opt); # sets opt.known and opt.fullname
+      opt.value := ValueOption(opt.name);
+    fi;
     # We don't pass the options in the RHS list following to ACE, here
     # (i.e. within this `for' loop). The NonACEbinOptions "echo", 
     # "aceinfile" and "silent" are not passed to ACE at all, and 
@@ -447,7 +591,6 @@ local IsValidOptionValue, CheckValidOption, ProcessOption,
     opt.ignore := opt.fullname in RecNames(disallowed) or
                   opt.fullname in ignored or
                   (ignoreunknown and not opt.known);
-    opt.value := ValueOption(opt.name);
     if opt.value = true then
       # An option detected by GAP as boolean may in fact be a no-value
       # option of ACE ... unknown ACE options detected as being true are
@@ -468,7 +611,7 @@ local IsValidOptionValue, CheckValidOption, ProcessOption,
         ToACE([ opt.name,":", 
                 ACE_JOIN( ACE_STRINGS(opt.value), "," ), ";\n" ]);
       fi;
-      if echo then 
+      if echo > 0 then 
         Print(" ", opt.name, " := ", opt.value, 
               " (brackets are not passed to ACE)\n");
       fi;
@@ -477,6 +620,54 @@ local IsValidOptionValue, CheckValidOption, ProcessOption,
       ProcessOption(opt.value);
     fi;
   od;
+
+  if echo = 2 then
+    Print("Other options set via ACE defaults:\n");
+    for optname in paramoptnames do
+      Print(" ", optname, " := "); 
+      if IsRecord(ACEParameterOptions.(optname)) then
+        if IsBound(ACEParameterOptions.(optname).(strategy)) then
+          Print(ACEParameterOptions.(optname).(strategy), "\n");
+        else
+          Print(ACEParameterOptions.(optname).default, "\n");
+        fi;
+      else
+        Print(ACEParameterOptions.(optname), "\n");
+      fi;
+    od;
+  fi;
+
+end);
+
+#############################################################################
+####
+##
+#F  ACEOptionData . . .  returns a record of the known data of an option name
+##
+##  For argument optname the fields of the returned record are:
+##    name  . . . .  optname (unchanged);
+##    known . . . .  true iff optname is a valid mixed case abbreviation of a 
+##                   KnownACEOption field;
+##    fullname  . .  the lower case unabbreviated  form  of  optname  if  the
+##                   `known' field is set `true', or optname otherwise;
+##    synonyms  . .  a list of KnownACEOptions fields that are  option  names
+##                   synonymous with optname, if the  `known'  field  is  set
+##                   set `true', or `[ optname ]' otherwise;
+##    abbrev  . . .  the shortest lowercase abbreviation of  optname  if  the 
+##                   `known' field is set `true', or optname otherwise.
+##
+InstallGlobalFunction(ACEOptionData, function(optname)
+local opt;
+  opt := rec(name := optname);
+  FULL_ACE_OPT_NAME(opt); # Sets the `known' and `fullname' fields
+  if opt.known then
+    opt.synonyms := ACE_OPTION_SYNONYMS(opt.fullname);
+    opt.abbrev := opt.fullname{[1 ..  KnownACEOptions.(opt.fullname)[1]]};
+  else
+    opt.synonyms := [ optname ];
+    opt.abbrev := optname;
+  fi;
+  return opt;
 end);
 
 #############################################################################

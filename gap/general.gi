@@ -61,14 +61,14 @@ local optnames, echo, n, infile, instream, outfile, ToACE,
 
   optnames := ACE_OPT_NAMES();
   # We have hijacked ACE's echo option ... we don't actually pass it to ACE
-  echo := ValueOption("echo") = true;
+  echo := VALUE_ACE_OPTION(optnames, 0, "echo");
 
   n := Length(fgens);
   if ForAny(fgens, i -> NumberSyllables(i)<>1 or ExponentSyllable(i, 1)<>1) then
     Error("first argument not a valid list of group generators");
   fi;
 
-  if echo then
+  if echo > 0 then
     Print(ACEfname, " called with the following arguments:\n");
     Print(" Group generators : ", fgens, "\n");
     Print(" Group relators : ", rels, "\n");
@@ -80,19 +80,19 @@ local optnames, echo, n, infile, instream, outfile, ToACE,
   else 
     if ACEfname = "ACECosetTableFromGensAndRels" then
       # If option "aceinfile" is set we only want to produce an ACE input file
-      infile := VALUE_ACE_OPTION(optnames, ACEData.infile, [ "aceinfile" ]);
+      infile := VALUE_ACE_OPTION(optnames, ACEData.infile, "aceinfile");
     elif ACEfname = "ACEStats" then
       infile := ACEData.infile; # If option "aceinfile" is set ... we ignore it
     fi;
     instream := OutputTextFile(infile, false);
   fi;
   ToACE := function(list) WRITE_LIST_TO_STREAM(instream, list); end;
-  outfile := VALUE_ACE_OPTION(optnames, ACEData.outfile, ["ao", "aceoutfile"]);
+  outfile := VALUE_ACE_OPTION(optnames, ACEData.outfile, "aceoutfile");
 
   # Give a name to the group ACE will be dealing with (this is not
   # actually necessary ... ACE essentially treats it as a comment)
   ToACE([ "Group Name: ", 
-          VALUE_ACE_OPTION(optnames, "G", ["enumeration"]), ";\n" ]);
+          VALUE_ACE_OPTION(optnames, "G", "enumeration"), ";\n" ]);
   
   IsLowercaseOneCharGen := function(g)
     local gstring;
@@ -123,7 +123,7 @@ local optnames, echo, n, infile, instream, outfile, ToACE,
   # Give a name to the subgroup ACE will be dealing with (this is not
   # actually necessary ... ACE essentially treats it as a comment)
   ToACE([ "Subgroup Name: ", 
-          VALUE_ACE_OPTION(optnames, "H", ["subgroup"]), ";\n" ]);
+          VALUE_ACE_OPTION(optnames, "H", "subgroup"), ";\n" ]);
   
   # Define the subgroup generators ACE will use
   ToACE([ "Subgroup Generators: ", ACE_WORDS(sgens, fgens, acegens), ";\n" ]);
@@ -168,7 +168,7 @@ local optnames, echo, n, infile, instream, outfile, ToACE,
     return rec(acegens := acegens, 
                infile := infile, 
                outfile := outfile,
-               silent := VALUE_ACE_OPTION(optnames, false, ["silent"]));
+               silent := VALUE_ACE_OPTION(optnames, false, "silent"));
   elif ACEfname = "ACEStats" then
     return outfile;
   else # ACEfname = "StartACE"
