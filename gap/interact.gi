@@ -2282,7 +2282,10 @@ local ioIndex, ACEout, iostream, datarec, fgens, standard, incomplete,
   else
     # Called non-interactively
 
-    onbreakmsg := ["Try relaxing any restrictive options:",
+    onbreakmsg := ["Try relaxing any restrictive options",
+                   "e.g. try the `hard' strategy or increasing `workspace'",
+                   "type: '?strategy options' for info on strategies",
+                   "type: '?options for ACE' for info on options",
                    "type: 'DisplayACEOptions();' to see current ACE options;",
                    "type: 'SetACEOptions(:<option1> := <value1>, ...);'",
                    "to set <option1> to <value1> etc.",
