@@ -1,0 +1,285 @@
+C ace.tex 1. The ACE Share Package
+S 1.1. Using ACE as a Default for Coset Enumerations
+S 1.2. Using ACE Directly to Generate a Coset Table
+F 1.2. ACECosetTableFromGensAndRels
+F 1.2. ACECosetTable
+I 1.2. break-loop
+S 1.3. Using ACE Directly to Test whether a Coset Enumeration Terminates
+F 1.3. ACEStats
+S 1.4. Writing ACE Standalone Input Files to Generate a Coset Table
+S 1.5. Using ACE Interactively
+F 1.5. ACEStart
+F 1.5. ACEQuit
+I 1.5. coincidences
+S 1.6. Accessing ACE Examples with ACEExample
+F 1.6. ACEExample
+F 1.6. ACEExample
+F 1.6. ACEExample
+S 1.7. General Warnings regarding the Use of Options
+F 1.7. FlushOptionsStack
+S 1.8. The ACEData Record
+I 1.8. ACEData
+S 1.9. Setting the Verbosity of ACE via Info and InfoACE
+F 1.9. InfoACELevel
+F 1.9. SetInfoACELevel
+F 1.9. SetInfoACELevel
+S 1.10. Acknowledgement
+S 1.11. Changes from earlier versions
+I 1.11. CallACE
+I 1.11. Option `outfile'
+I 1.11. Option `messfile'
+I 1.11. ACEinfo
+C ace.tex 2. Installing and Loading the ACE Share Package
+S 2.1. Installing the ACE Share Package
+S 2.2. Loading the ACE Share Package
+C ace.tex 3. Some Basics
+I 3.0. strategy
+I 3.0. Felsch strategy
+I 3.0. HLT strategy
+I 3.0. coset numbers
+I 3.0. coset table
+I 3.0. holes
+I 3.0. cosets
+I 3.0. coset application
+I 3.0. deduction
+I 3.0. deduction stack
+I 3.0. coincidence
+I 3.0. coincidence queue
+I 3.0. preferred definitions
+I 3.0. preferred definition stack
+S 3.1. Enumeration Style
+I 3.1. C-style definition
+I 3.1. R-style definition
+I 3.1. preferred definition stack
+I 3.1. preferred definitions
+I 3.1. strategy, minimal gaps
+I 3.1. C-style
+I 3.1. Cr-style
+I 3.1. CR-style
+I 3.1. R-style
+I 3.1. R\*-style
+I 3.1. Rc-style
+I 3.1. R/C-style
+I 3.1. Defaulted R/C-style
+S 3.2. Finding Deductions, Coincidences, and Preferred Definitions
+I 3.2. definition
+I 3.2. deduction
+I 3.2. coincidence
+I 3.2. dead coset (number)
+I 3.2. preferred definition stack
+S 3.3. Finding Subgroups
+I 3.3. coincidences
+C ace.tex 4. Options for ACE
+S 4.1. Passing ACE Options
+S 4.2. Warnings regarding Options
+F 4.2. FlushOptionsStack
+S 4.3. Abbreviations and mixed case for ACE Options
+S 4.4. Honouring of the order in which ACE Options are passed
+S 4.5. What happens if no ACE Strategy Option or if no ACE Option is passed
+S 4.6. Interpretation of ACE Options
+S 4.7. An Example of passing Options
+S 4.8. The KnownACEOptions Record
+I 4.8. KnownACEOptions
+F 4.8. ACEOptionData
+S 4.9. The ACEStrategyOptions list
+I 4.9. ACEStrategyOptions
+S 4.10. ACE Option Synonyms
+I 4.10. ACEOptionSynonyms
+S 4.11. Non-ACE-binary Options
+I 4.11. NonACEbinOptions
+F 4.11. Option `silent'
+F 4.11. Option `aceinfile'
+F 4.11. Option `aceoutfile'
+F 4.11. Option `aceignore'
+F 4.11. Option `aceignoreunknown'
+F 4.11. Option `acenowarnings'
+F 4.11. Option `echo'
+F 4.11. Option `echo'
+F 4.11. Option `aceecho'
+F 4.11. Option `aceincomment'
+F 4.11. Option `aceexampleoptions'
+S 4.12. ACE Parameter Options
+I 4.12. ACEParameterOptions
+S 4.13. General ACE Parameter Options that Modify the Enumeration Process
+F 4.13. Option `asis'
+F 4.13. Option `ct'
+F 4.13. Option `cfactor'
+F 4.13. Option `rt'
+F 4.13. Option `rfactor'
+F 4.13. Option `no'
+F 4.13. Option `mendelsohn'
+S 4.14. ACE Parameter Options Modifying C-Style Definitions
+F 4.14. Option `fill'
+F 4.14. Option `ffactor'
+F 4.14. Option `pmode'
+F 4.14. Option `psize'
+S 4.15. ACE Parameter Options for R-Style Definitions
+F 4.15. Option `row'
+F 4.15. Option `lookahead'
+S 4.16. ACE Parameter Options for Deduction Handling
+F 4.16. Option `dmode'
+F 4.16. Option `dsize'
+S 4.17. Technical ACE Parameter Options
+F 4.17. Option `workspace'
+F 4.17. Option `time'
+F 4.17. Option `loop'
+F 4.17. Option `path'
+F 4.17. Option `compaction'
+I 4.17. dead coset (number)
+I 4.17. dead coset (number)
+I 4.17. dead coset (number)
+F 4.17. Option `max'
+F 4.17. Option `hole'
+S 4.18. ACE Parameter Options controlling ACE Output
+F 4.18. Option `messages'
+F 4.18. Option `monitor'
+S 4.19. ACE Parameter Options that gives Names to the Group and Subgroup
+F 4.19. Option `enumeration'
+F 4.19. Option `subgroup'
+S 4.20. Options for redirection of ACE Output
+F 4.20. Option `ao'
+F 4.20. Option `aceoutfile'
+S 4.21. Other Options
+C ace.tex 5. Strategy Options for ACE
+S 5.1. The Strategies in Detail
+F 5.1. Option `default'
+F 5.1. Option `easy'
+F 5.1. Option `felsch'
+F 5.1. Option `felsch'
+F 5.1. Option `hard'
+F 5.1. Option `hlt'
+F 5.1. Option `purec'
+F 5.1. Option `purer'
+F 5.1. Option `sims'
+C ace.tex 6. Functions for Using ACE Interactively
+S 6.1. Starting and Stopping Interactive ACE Processes
+F 6.1. ACEStart
+F 6.1. ACEStart
+F 6.1. ACEStart
+F 6.1. ACEStart
+F 6.1. ACEQuit
+F 6.1. ACEQuit
+F 6.1. ACEQuitAll
+S 6.2. Primitive ACE Read/Write Functions
+F 6.2. ACEWrite
+F 6.2. ACEWrite
+F 6.2. ACERead
+F 6.2. ACERead
+F 6.2. ACEReadAll
+F 6.2. ACEReadAll
+F 6.2. ACEReadUntil
+F 6.2. ACEReadUntil
+F 6.2. ACEReadUntil
+F 6.2. ACEReadUntil
+S 6.3. Some Interactive ACE Process Utilities
+F 6.3. ACEProcessIndex
+F 6.3. ACEProcessIndex
+F 6.3. ACEProcessIndices
+S 6.4. General and Experimentation ACE Modes
+F 6.4. ACEModes
+F 6.4. ACEModes
+F 6.4. ACEContinue
+F 6.4. ACEContinue
+F 6.4. ACERedo
+F 6.4. ACERedo
+F 6.4. ACEAllEquivPresentations
+F 6.4. ACEAllEquivPresentations
+F 6.4. ACERandomEquivPresentations
+F 6.4. ACERandomEquivPresentations
+F 6.4. ACERandomEquivPresentations
+F 6.4. ACERandomEquivPresentations
+F 6.4. ACERandomEquivPresentations
+F 6.4. ACERandomEquivPresentations
+S 6.5. Interactive Query Functions and an Option Setting Function
+F 6.5. ACEGroupGenerators
+F 6.5. ACEGroupGenerators
+F 6.5. ACERelators
+F 6.5. ACERelators
+F 6.5. ACESubgroupGenerators
+F 6.5. ACESubgroupGenerators
+F 6.5. DisplayACEOptions
+F 6.5. DisplayACEOptions
+F 6.5. GetACEOptions
+F 6.5. GetACEOptions
+F 6.5. SetACEOptions
+F 6.5. SetACEOptions
+F 6.5. SetACEOptions
+F 6.5. SetACEOptions
+I 6.5. break-loop
+F 6.5. ACEParameters
+F 6.5. ACEParameters
+F 6.5. ACEVersion
+F 6.5. ACEVersion
+F 6.5. ACEDumpVariables
+F 6.5. ACEDumpVariables
+F 6.5. ACEDumpVariables
+F 6.5. ACEDumpVariables
+F 6.5. ACEDumpVariables
+F 6.5. ACEDumpVariables
+F 6.5. ACEDumpStatistics
+F 6.5. ACEDumpStatistics
+F 6.5. ACEStyle
+F 6.5. ACEStyle
+F 6.5. ACEDisplayCosetTable
+F 6.5. ACEDisplayCosetTable
+F 6.5. ACEDisplayCosetTable
+F 6.5. ACEDisplayCosetTable
+F 6.5. ACEDisplayCosetTable
+F 6.5. ACEDisplayCosetTable
+F 6.5. ACEDisplayCosetTable
+F 6.5. ACEDisplayCosetTable
+F 6.5. IsCompleteACECosetTable
+F 6.5. IsCompleteACECosetTable
+F 6.5. ACECosetRepresentative
+F 6.5. ACECosetRepresentative
+F 6.5. ACECosetRepresentatives
+F 6.5. ACECosetRepresentatives
+F 6.5. ACETransversal
+F 6.5. ACETransversal
+F 6.5. ACECycles
+F 6.5. ACECycles
+F 6.5. ACEPermutationRepresentation
+F 6.5. ACEPermutationRepresentation
+F 6.5. ACETraceWord
+F 6.5. ACETraceWord
+F 6.5. ACEOrders
+F 6.5. ACEOrders
+F 6.5. ACEOrders
+F 6.5. ACEOrders
+F 6.5. ACEOrder
+F 6.5. ACEOrder
+F 6.5. ACECosetsThatStabiliseSubgroup
+F 6.5. ACECosetsThatStabiliseSubgroup
+F 6.5. ACECosetsThatNormaliseSubgroup
+F 6.5. ACECosetsThatNormaliseSubgroup
+S 6.6. Interactive Versions of Non-interactive ACE Functions
+F 6.6. ACECosetTable
+F 6.6. ACECosetTable
+F 6.6. ACEStats
+F 6.6. ACEStats
+S 6.7. Steering ACE Interactively
+F 6.7. ACERecover
+F 6.7. ACERecover
+I 6.7. dead coset (number)
+F 6.7. ACEStandardCosetNumbering
+F 6.7. ACEStandardCosetNumbering
+F 6.7. ACEAddRelators
+F 6.7. ACEAddRelators
+F 6.7. ACEAddSubgroupGenerators
+F 6.7. ACEAddSubgroupGenerators
+F 6.7. ACEDeleteRelators
+F 6.7. ACEDeleteRelators
+F 6.7. ACEDeleteSubgroupGenerators
+F 6.7. ACEDeleteSubgroupGenerators
+F 6.7. ACECosetCoincidence
+F 6.7. ACECosetCoincidence
+F 6.7. ACERandomCoincidences
+F 6.7. ACERandomCoincidences
+F 6.7. ACERandomCoincidences
+F 6.7. ACERandomCoincidences
+F 6.7. ACERandomCoincidences
+F 6.7. ACERandomCoincidences
+F 6.7. ACEConjugatesForSubgroupNormalClosure
+F 6.7. ACEConjugatesForSubgroupNormalClosure
+F 6.7. ACEConjugatesForSubgroupNormalClosure
+F 6.7. ACEConjugatesForSubgroupNormalClosure
