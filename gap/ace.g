@@ -140,6 +140,7 @@ local fgens,grels,fsgens,j,k,n,nums,i,DoWords,ParseValueOption,
   ParseValueOption("rt");
   ParseValueOption("number");
   ParseBooleanOption("mendelsohn","mend:1","mend:0");
+  ParseBooleanOption("mend","mend:1","mend:0");
   ParseValueOption("fill");
   ParseValueOption("pmode");
   ParseValueOption("psize");
