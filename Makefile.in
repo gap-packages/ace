@@ -1,0 +1,14 @@
+# sample makefile
+CC=cc
+
+targets: default
+
+# this target creates a bin-directory
+bindir:
+	if test ! -d bin;  then mkdir bin;  fi
+	if test ! -d bin/@GAPARCH@;  then mkdir bin/@GAPARCH@;  fi
+
+
+default: bindir src/Makefile
+	(cd src; make)
+	mv src/ace bin/@GAPARCH@/ace

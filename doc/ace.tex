@@ -1,0 +1,181 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%W  ace.tex                GAP documentation             Alexander Hulpke
+%%
+%H  $Id$
+%%
+%Y  Copyright (C) 1998, School of Math & Comp. Sci., St Andrews, Scotland
+%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Chapter{The ACE share package}
+
+The ACE share package permits to call the Adaptive Coset Enumerator written
+by George Havas and Colin Ramsay from within GAP. 
+\index{ace}
+
+\begintt
+ACE coset enumerator (C) 1995-1998 by George Havas and Colin Ramsay
+    http://www.it.uq.edu.au/~cram/ace2.tar
+\endtt
+
+The {\GAP} interface has been written by Alexander Hulpke.
+
+The package interfaces to an external binary and therefore is only usable
+under UNIX. It will not work on Windows or the Macintosh. It requires
+{\GAP}4 in at least beta version 5.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{Installing the ACE share package}
+
+To install unpack the archive file in a directory in the `pkg' hierarchy of
+your version of {\GAP}4. (This might be the `pkg' directory of the
+GAP4 home directory; it is however also possible to keep an additional `pkg'
+directory in you private directories, see section "ref:Installing Share
+Packages" of the {\GAP}4 reference manual for details on how to do this.)
+Go to the newly created `ACE' directory and call `configure <path>' where
+<path> is the path to the GAP home directory. So for example if you install
+the package in the main `pkg' directory call
+\begintt
+configure ../..
+\endtt
+This will fetch the architecture type for which GAP has been compiled last
+and create a `Makefile'. 
+Now simply call
+\begintt
+make
+\endtt
+to compile the binary and to install it in the appropriate place.
+
+If you use this installation of GAP on different hardware platforms you will
+have to compile the binary for each platform separately. This is done by
+calling `configure' and `make' for the package anew immediately after
+compiling GAP itself for the respective architecture.
+If your version of GAP is already compiled you do not need to compile GAP
+again, it is sufficient to call the `configure' script in the GAP home
+directory.
+
+For details on how to use the `ACE' package see the documentation in the
+`doc' subdirectory.
+
+The `src' subdirectory contains the original source of `ACE'. You can simply
+replace it by a newer version before compiling.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{Loading the ACE share package}
+
+To use the `ACE' package you have to request it explicitly. This is done by
+calling 
+\begintt
+gap> RequirePackage("ace");
+  Loading the `ACE' share package
+  Using ACE binary version 1.1
+\endtt
+
+If you want to load the `ACE' package by default, you can put this
+`RequirePackage' command in your `gaprc' file.
+
+If you want to use the `ACE' coset enumerator as a default for all coset
+enumerations done by GAP, you can achieve this by setting the global
+variable `TCENUM' to `ACETCENUM'.
+\begintt
+gap> TCENUM:=ACETCENUM;;
+\endtt
+
+You
+can switch back to the coset enumerator built into the GAP library by
+assining `TCENUM' to `GAPTCENUM'.
+\begintt
+gap> TCENUM:=GAPTCENUM;
+\endtt
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{The ACE interface}
+
+To call the `ACE' binary directly, you may call
+
+\>ACETC.CosetTableFromGensAndRels(<fgens>,<rels>,<sgens>)
+
+where <fgens> is a list of free generators, <rels> a list of words in these
+generators giving relators for a finitely presented group and <sgens>
+subgroup generators, again expressed as words in the free generators. The
+operation calls the ACE coset enumerator and returns the coset table
+obtaines or `fail' if the coset enumeration did not finish in the preset
+limits. (See section "Options for the ACE enumerator" on how to extend these
+limits and how to set enumeration options.)
+
+\begintt
+gap> g:=PerfectGroup(2^5*60,2);;
+gap> f:=FreeGeneratorsOfFpGroup(g);;
+gap> CallACE(f,RelatorsOfFpGroup(g),f{[1,2]});;
+\endtt
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{Options for the ACE enumerator}
+
+The `ACE' program offers a wide variety of options to direct and guide a
+coset enumeration. You can use the option mechanism of GAP (see
+chapter~"ref:Options Stack" in the reference manual) to pass such options to
+the C standalone.
+
+The options currently supported are:
+
+\beginitems
+`com:=<val>'&Sets the percentage of dead cosets needed to trigger
+compaction. The default is 20.
+
+`workspace:=<val>'&Sets the size of the workspace in words.
+The default is 200000.
+
+`max:=<val>'&Sets the maximum number of cosets to be defined. The syntax
+`max:=[<val1>,<val2>,<val3>]' is also permitted.
+
+`rt:=<val>'&Sets the RT factor. The syntax
+`rt:=[<val1>,<val2>,<val3>]' is also permitted.
+
+`ct:=<val>'&Sets the CT factor. The syntax
+`ct:=[<val1>,<val2>,<val3>]' is also permitted.
+
+`time:=<val>'&Sets maximum execution time in seconds.
+The default is 0 which is no time limit.
+
+`fill:=<val>'&Sets the fill factor. The syntax
+`fill:=[<val1>,<val2>,<val3>]' is also permitted.
+
+`mendelsohn'&Turns on Mendelsohn style relator processing.
+
+`asis'&Turns off cyclic reduction and sorting of relators.
+
+`mess'&Displays the output of `ACE' on screen. By assigning `mess' to
+integers, the internal message level of `ACE' is changed.
+
+\enditems
+
+See the `ACE' manual for a more detailled description of the function of
+these options.
+
+The following example calls ACE for up to 500 cosets using
+Mendelsohn style relator processing and sets the message level to 200
+\begintt
+gap> CallACE(f,RelatorsOfFpGroup(g),f{[1]}:mendelsohn,max:=500,mess:=200);;
+Start ACE v1.1 on Fri Oct  9 14:55:49 1998
+
+Enumeration: G
+Group Generators: abcdefg;
+Group Relators: (c)^2, (d)^2, (e)^2, (f)^2, (g)^2, aaG, (b)^3, (CD)^2, 
+  (EF)^2, (CE)^2, (CF)^2, (DE)^2, (DF)^2, AcaE, AdaF, AeaC, AfaD, BfbE, 
+  GAga, GBgb, (GC)^2, (GD)^2, (GE)^2, (GF)^2, BebFE, BcbGFD, BdbFEDC, 
+  (ab)^5;
+Subgroup name: H
+Subgroup Generators: a;
+Max=500 CTF=0 RTF=0 FillF=13 NRinS=0 Mendel=1 Adapt=0
+RD a=200 m=200 t=234 knr=29 knc=1 cpu=0.00
+RD a=400 m=400 t=486 knr=68 knc=1 cpu=0.01
+CO a=296 m=407 t=500 knr=67 knc=158 cpu=0.03
+INDEX = 480  (MAX=480 TOT=684 KNR=67 KNC=481 CPU=0.06)
+#DEF: gap=183 knc=1 ff=0 dead pdl=0; knr=499 fill=0 (sg=46)
+#GAP: tot=2714 full=1082 #DED: CT=811 RT=605 LA=366 discarded=23***
+#COINC: CT=0 RT=74 LA=65 ap=1
+\endtt
+
