@@ -1,6 +1,6 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
-%W  ace.tex                GAP documentation             Alexander Hulpke
+%W  ace.tex                ACE documentation             Alexander Hulpke
 %%
 %H  $Id$
 %%
@@ -11,7 +11,7 @@
 \Chapter{The ACE share package}
 
 The ACE share package permits to call the Adaptive Coset Enumerator written
-by George Havas and Colin Ramsay from within GAP. 
+by George Havas and Colin Ramsay from within {\GAP}. 
 \index{ace}
 
 \begintt
@@ -23,23 +23,23 @@ The {\GAP} interface has been written by Alexander Hulpke.
 
 The package interfaces to an external binary and therefore is only usable
 under UNIX. It will not work on Windows or the Macintosh. It requires
-{\GAP}4 in at least beta version 5.
+{\GAP}~4 in at least beta version 5.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{Installing the ACE share package}
 
 To install unpack the archive file in a directory in the `pkg' hierarchy of
-your version of {\GAP}4. (This might be the `pkg' directory of the
-GAP4 home directory; it is however also possible to keep an additional `pkg'
-directory in you private directories, see section "ref:Installing Share
-Packages" of the {\GAP}4 reference manual for details on how to do this.)
-Go to the newly created `ACE' directory and call `configure <path>' where
-<path> is the path to the GAP home directory. So for example if you install
-the package in the main `pkg' directory call
+your version of {\GAP}~4. (This might be the `pkg' directory of the
+{\GAP}~4 home directory; it is however also possible to keep an additional
+`pkg' directory in you private directories, see section "ref:Installing
+Share Packages" of the {\GAP}~4 reference manual for details on how to do
+this.) Go to the newly created `ACE' directory and call `configure <path>'
+where <path> is the path to the {\GAP} home directory. So for example if you
+install the package in the main `pkg' directory call
 \begintt
 configure ../..
 \endtt
-This will fetch the architecture type for which GAP has been compiled last
+This will fetch the architecture type for which {\GAP} has been compiled last
 and create a `Makefile'. 
 Now simply call
 \begintt
@@ -47,13 +47,13 @@ make
 \endtt
 to compile the binary and to install it in the appropriate place.
 
-If you use this installation of GAP on different hardware platforms you will
+If you use this installation of {\GAP} on different hardware platforms you will
 have to compile the binary for each platform separately. This is done by
 calling `configure' and `make' for the package anew immediately after
-compiling GAP itself for the respective architecture.
-If your version of GAP is already compiled (and has last been compiled on
-the same architecture) you do not need to compile GAP
-again, it is sufficient to call the `configure' script in the GAP home
+compiling {\GAP} itself for the respective architecture.
+If your version of {\GAP} is already compiled (and has last been compiled on
+the same architecture) you do not need to compile {\GAP}
+again, it is sufficient to call the `configure' script in the {\GAP} home
 directory.
 
 For details on how to use the `ACE' package see the documentation in the
@@ -81,14 +81,14 @@ If you want to load the `ACE' package by default, you can put this
 `RequirePackage' command in your `gaprc' file.
 
 If you want to use the `ACE' coset enumerator as a default for all coset
-enumerations done by GAP, you can achieve this by setting the global
+enumerations done by {\GAP}, you can achieve this by setting the global
 variable `TCENUM' to `ACETCENUM'.
 \begintt
 gap> TCENUM:=ACETCENUM;;
 \endtt
 
 You
-can switch back to the coset enumerator built into the GAP library by
+can switch back to the coset enumerator built into the {\GAP} library by
 assining `TCENUM' to `GAPTCENUM'.
 \begintt
 gap> TCENUM:=GAPTCENUM;
@@ -120,7 +120,7 @@ gap> CallACE(f,RelatorsOfFpGroup(g),f{[1,2]});;
 \Section{Options for the ACE enumerator}
 
 The `ACE' program offers a wide variety of options to direct and guide a
-coset enumeration. You can use the option mechanism of GAP (see
+coset enumeration. You can use the option mechanism of {\GAP} (see
 chapter~"ref:Options Stack" in the reference manual) to pass such options to
 the C standalone.
 
