@@ -11,7 +11,9 @@
 ##
 ##  Read the installation files.
 
+ReadPkg("ace", "gap/options.gi");
+ReadPkg("ace", "gap/streams.gi");
+ReadPkg("ace", "gap/general.gi");
 ReadPkg("ace", "gap/interact.gi");
-ReadPkg("ace", "gap/example.gi");
 
 #E  read.g  . . . . . . . . . . . . . . . . . . . . . . . . . . .  ends here 

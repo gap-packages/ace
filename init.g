@@ -26,8 +26,10 @@ DeclarePackageAutoDocumentation( "ace", "doc" );
 ##
 #R  Read the actual code.
 ##
+ReadPkg( "ace", "gap/options.gd" );
+ReadPkg( "ace", "gap/streams.gd" );
+ReadPkg( "ace", "gap/general.gd" );
 ReadPkg( "ace", "gap/interact.gd" );
 ReadPkg( "ace", "gap/ace.g" );
-ReadPkg( "ace", "gap/example.gd" );
 
 #E init.g . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ends here
