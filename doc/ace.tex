@@ -531,8 +531,8 @@ gap> ACEExample("A5", ACEStart);
 is essentially equivalent to executing:
 
 \beginexample
-gap> file := Filename(DirectoriesPackageLibrary("ace", "examples"), "A5");
-gap> ACEfunc := ACEStart;
+gap> file := Filename(DirectoriesPackageLibrary("ace", "examples"), "A5");;
+gap> ACEfunc := ACEStart;;
 gap> ReadAsFunction(file)();
 \endexample
 

@@ -111,7 +111,7 @@ presentation and parameters:
 \beginexample
 gap> SetInfoACELevel(3);
 gap> ACEStats(fgens, [], [] : start, sr := 1);
-#I  ACE 3.001        Sun Apr  1 16:55:54 2001
+#I  ACE 3.001        Tue Aug 21 13:45:15 2001
 #I  =========================================
 #I  Host information:
 #I    name = hamal
@@ -141,7 +141,7 @@ level set to 3):
 
 \beginexample
 gap> ACEStats(fgens, [], [] : print := [-1, 12]);
-#I  ACE 3.001        Sun Apr  1 16:55:55 2001
+#I  ACE 3.001        Tue Aug 21 13:45:59 2001
 #I  =========================================
 #I  Host information:
 #I    name = hamal
@@ -166,7 +166,7 @@ of the coset table), namely, insert  the  `start'  option  before  the
 
 \beginexample
 gap> ACEStats(fgens, [], [] : start, print := [-1, 12]);
-#I  ACE 3.001        Sun Apr  1 16:55:56 2001
+#I  ACE 3.001        Tue Aug 21 13:47:09 2001
 #I  =========================================
 #I  Host information:
 #I    name = hamal
@@ -230,7 +230,7 @@ include the `silent' option. (We still have the `InfoACE' level set at
 \beginexample
 gap> ACECosetTableFromGensAndRels(fgens, [], [] : start, print := [-1, 12],
 >                                                 silent);
-#I  ACE 3.001        Sun Apr  1 16:55:56 2001
+#I  ACE 3.001        Tue Aug 21 13:48:28 2001
 #I  =========================================
 #I  Host information:
 #I    name = hamal
@@ -277,7 +277,7 @@ standard form; so despite the differences in the {\GAP} versions, both
 gap> ACECosetTableFromGensAndRels(fgens, [], [] : max := 12,
 >                                                 start, print := -12,
 >                                                 incomplete);
-#I  ACE 3.001        Sun Apr  1 16:56:05 2001
+#I  ACE 3.001        Tue Aug 21 13:49:14 2001
 #I  =========================================
 #I  Host information:
 #I    name = hamal
@@ -360,7 +360,7 @@ the `InfoACE' level is still 3):
 
 \beginexample
 gap> ACEStart(fgens, [], []);
-#I  ACE 3.001        Sun Apr  1 16:56:06 2001
+#I  ACE 3.001        Tue Aug 21 13:50:33 2001
 #I  =========================================
 #I  Host information:
 #I    name = hamal
@@ -966,7 +966,7 @@ gap> ACEEvenSims := function(fgens, rels, sgens, i, maxstart, maxstep)
 >        ACEContinue(j : max := ACEParameters(j).max + maxstep);
 >      od;
 >      return ACEStats(j);
->    end;
+>    end;;
 \endexample
 
 It turns out that one can duplicate the Sims' strategy 4 statistics in
@@ -974,8 +974,8 @@ Table~5.5.3 of \cite{Sim94}, with `<i> = 3' (so that `<i> + 1  =  4'),
 `<maxstart> = 14' and `<maxstep> = 50':
 
 \beginexample
-gap> ACEEvenSims([r, s, t], [(r^t*r^-2)^-1, (s^r*s^-2)^-1, (t^s*t^-2)^-1], [],
->                3, 14, 50);
+gap> ACEEvenSims([r, s, t], [(r^t*r^-2)^-1, (s^r*s^-2)^-1, (t^s*t^-2)^-1],
+>                [], 3, 14, 50);
 rec( index := 1, cputime := 0, cputimeUnits := "10^-2 seconds", 
   activecosets := 1, maxcosets := 393, totcosets := 393 )
 \endexample
@@ -985,8 +985,8 @@ also gives Sims' statistics, but `<maxstart> = 64' with  `<maxstep>  =
 80' does better:
 
 \beginexample
-gap> ACEEvenSims([r, s, t], [(r^t*r^-2)^-1, (s^r*s^-2)^-1, (t^s*t^-2)^-1], [],
->                3, 64, 80);
+gap> ACEEvenSims([r, s, t], [(r^t*r^-2)^-1, (s^r*s^-2)^-1, (t^s*t^-2)^-1],
+>                [], 3, 64, 80);
 rec( index := 1, cputime := 0, cputimeUnits := "10^-2 seconds", 
   activecosets := 1, maxcosets := 352, totcosets := 352 )
 \endexample
