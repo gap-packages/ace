@@ -1,0 +1,30 @@
+
+# test000.in - Colin Ramsay - 26 Feb 99
+
+# M_{12} has order 95040
+# 
+# The first run is for speed, while the second is for memory; notice 
+#   how the faster run (~4s vs ~6s) uses much more memory (289010 vs
+#   100336).
+# Note the 1st 1st run is slower than the 2nd 1st run, due to all the
+#   `untouched' workspace floating around.
+ 
+enum: M_{12}
+gr:   a,b,c;
+rel:  a^11,b^2,c^2,(ab)^3,(ac)^3,(bc)^10,cbcbabcbc=a^5;
+subg: Id;
+gen:  ;
+
+mess:25000;
+
+hlt;
+wo:1250k;		# Lookahead never needed
+end;
+end;
+
+fel:1;
+pmod:2;
+fi:4;
+dsiz:2000;		# DS phase never needed
+end; 
+

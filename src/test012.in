@@ -1,0 +1,50 @@
+
+# test012.in - Colin Ramsay - 26 Feb 99
+#
+# A non-trivial presentation of C_11, by M. Wicks.
+# Note how the powers of "y" add up to 11, and those for "x" add up to
+#   8 & 9 (which are co-prime); so "y" generates & "x" is trivial.
+# See the paper by Havas, Holt, Keene & Rees.
+# These are attempts to find `good' parameters; "hard" with knr/knh `balanced'
+#   & mendel on seems to work well, and the "Sims" modes are sometimes
+#   successful.
+# Note that the enumerations with pmod:2 & v. large fill-factors allow lots of
+#   the gaps of length one (of which there are some, but not an enormous
+#   number) to be filled immediately.
+#
+# Note: we can actually do this with t<8000000.
+# In fact, we can do this with "Gen: ;"!
+# See the ~/grp/c11 directory.
+
+Enumeration: C_11;
+Group Generators: x,y;
+Group Relators: x^3y^4x^5y^7, x^2y^3x^7y^8;
+
+Workspace: 100M;			# ie, max:24999998
+Message: 1000000;
+
+text: ;
+text: ** Generator ...;
+text: ************;
+
+Subgroup name: generator;
+Subgroup Generators: y;
+
+#hard;  mend:1;  r:100;  end;			# t=21474124
+#hard;  mend:1;  r:100;  pmod:2;  end;		# t=21474124
+#hard;  mend:1;  c:250;  r:100;   end;		# overflow
+#sims:7;  end;					# overflow
+hard;   mend:1;  r:100;  pmod:2;  fi:250;	# t=21422635
+
+text: ;
+text: ** Trivial ...;
+text: **********;
+
+Subgroup name: trivial;
+Subgroup Generators: x;
+
+#hard;  mend:1;  c:4;   r:90;   end;			# t=14241365
+#hard;  mend:1;  c:10;  r:100;  end;			# t=14243222
+#hard;  mend:1;  c:4;   r:90;   pmod:2;  fi:500;  end;	# t=14248946
+sims:7;  end;						# t=14201094
+

@@ -1,0 +1,168 @@
+
+# test013.in - 26 Feb 99 - Colin Ramsay
+#
+# This is a serious version of test010 (on ozone).
+# We're interested in seeing precisely how well we can actually do this,
+#   and how it depends on the presentation used / subgroup generator.
+# See ~/grp/triv/ for equivalent presentations which are doable.
+
+wo:1500M;			# ie, max:249999998
+mess:1000000;			# needed to monitor the collapses well
+
+sims:3;
+
+gr: r,s,t;
+rel: (r^t R^2)^(t^s T^2)=(r^t R^2)^2,
+     (s^r S^2)^(r^t R^2)=(s^r S^2)^2,
+     (t^s T^2)^(s^r S^2)=(t^s T^2)^2;
+
+gen:r; end;			# c=1413.08; t=122400832
+gen:s; end;			# c=1875.56; t=166476400
+gen:t; end;			# c=1139.19; t=102965293
+
+rel: (r^s R^2)^(s^t S^2)=(r^s R^2)^2,
+     (s^t S^2)^(t^r T^2)=(s^t S^2)^2,
+     (t^r T^2)^(r^s R^2)=(t^r T^2)^2;
+
+gen:r; end;			# c=1376.16; t=122078184
+gen:s; end;			# c=1986.02; t=170455932
+gen:t; end;			# c=1949.78; t=166907903
+
+# Now try to do it using some variant of the "hard" strategy.
+# There are some interesting variations on mini/partial collapses in 
+#   here.
+# The `collapsing by stages' (after the 1st CO phase & before the 2nd)
+#   in the "hard" case is v. interesting.
+
+rel: (r^t R^2)^(t^s T^2)=(r^t R^2)^2,
+     (s^r S^2)^(r^t R^2)=(s^r S^2)^2,
+     (t^s T^2)^(s^r S^2)=(t^s T^2)^2;
+gen:t;
+
+		# o/flow: c=5236.17; m=249999998 t=443124735
+hard; end;
+		# o/flow: c=5443.89; m=249999986 t=441449496
+hard; c:250; r:10; mendel:0; end;
+		# Poor man's "sims:3", works just like the real thing!
+		# c=1217.98; m=43278575 t=102985597
+hard; c:1; r:25; mendel:0; end;
+
+# Now try Felsch (ie, pure C + fill).
+
+fel:1;  end;		# aborted after 110M+ cosets, with _no_ coincs
+
+# Having found a `normal' mode that works, we now try to see if we can
+#   squeeze down the total coset (ie, "t") count.
+# We `set' max so that we'll drop out of `uninteresting' runs; we do 
+#   the right thing, and give back the unneeded workspace.
+
+wo:750M;			# ie, max:124999998
+mess:10000000;
+
+hard; c:1; r:25; mendel:0;
+
+# Try pref defn stuff.
+# None of this has _any_ effect; gaps of 1 are rare & n/h tends to be 
+#   large.
+
+pmod:0; end;
+
+pmod:1;
+fi:4; end;
+fi:6; end;
+fi:8; end;
+fi:10; end;
+fi:12; end;
+fi:14; end;
+fi:16; end;
+
+pmod:2;
+fi:4; end;
+fi:6; end;
+fi:8; end;
+fi:10; end;
+fi:12; end;
+fi:14; end;
+fi:16; end;
+
+pmod:3;
+fi:4; end;
+fi:6; end;
+fi:8; end;
+fi:10; end;
+fi:12; end;
+fi:14; end;
+fi:16; end;
+
+# Now try varying Ct/Rt; t values obtained ...
+# Note that m << t, so we can get t values much larger than max; ie, with many
+#   CO phases.
+# 
+# c \ r | 1         2         4         8         16        32        64
+# ------+----------------------------------------------------------------------
+#   1   | 104772151 103859118 103531221	103257828 103251728 103262153 103004391
+#   2   | 104979346 103121425 103317737 102999929 102982565 102989872 102732142
+#   4   | 175934619 104984960 104256412 103657477 103609591 103548894 103016773
+#   8   | 272305921 178627690 104822631 103747467 103285907 103274598 102736273
+#  16   | overflow  273140150 179690524 105041040 103989257 103645977 102777641
+
+hard;
+
+c:1;
+r:1; end;
+r:2; end;
+r:4; end;
+r:8; end;
+r:16; end;
+r:32; end;
+r:64; end;
+
+c:2;
+r:1; end;
+r:2; end;
+r:4; end;
+r:8; end;
+r:16; end;
+r:32; end;
+r:64; end;
+
+c:4;
+r:1; end;
+r:2; end;
+r:4; end;
+r:8; end;
+r:16; end;
+r:32; end;
+r:64; end;
+
+c:8;
+r:1; end;
+r:2; end;
+r:4; end;
+r:8; end;
+r:16; end;
+r:32; end;
+r:64; end;
+
+c:16;
+r:1; end;
+r:2; end;
+r:4; end;
+r:8; end;
+r:16; end;
+r:32; end;
+r:64; end;
+
+# Having found a good set of parameters, now try the trivial subgroup!
+# After 5 CO phases, we overflow with: c=9822.81; m=320251607 t=761872508.
+
+wo:2G;				# max:333333331;
+mess:10000000;
+
+gen:;
+
+hard;
+com:5; no:0;
+c:2; r:64;
+end;
+

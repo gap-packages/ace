@@ -1,0 +1,36 @@
+
+# test014.in - Colin Ramsay - 24 Feb 99
+#
+# F(2,5) ~ C_11 is interesting as a possible test case for our `minimal
+#   length proof' stuff.
+
+gr:a,b,c,d,e;
+rel:ab=c,bc=d,cd=e,de=a,ea=b;
+
+pure r; end;			# t=70
+pure r; row:1; end;		# t=171 (aka HLT)
+pure r; mend:1; end;		# t=58  (aka HLT+Mendel)
+
+sims:1; end;			# t=171 (aka HLT)
+sims:3; end;			# t=43
+sims:5; end;			# t=58  (aka HLT+Mendel)
+sims:7; end;			# t=43
+sims:9; end;			# t=42  (aka pure C)
+
+pure c; end;			# t=42
+fel:1; pmod:1; end;		# t=31
+fel:1; pmod:1; fi:13; end;	# t=27
+
+# Try some of the 5! * 2^5 * 3^5 = 933120 equivalent presentations?
+# Put a hard limit, of 50, on t.
+# PMod:1 or 2 definately seems the way to go here!
+# Can't seem to shave it below 27.
+
+Fel:1;
+Max:50;
+Com:100;
+PMod:2;
+
+Fi:13;  Aep:3;			# maxcos=27..40, totcos=27..40
+Fi:13;  Aep:5;			# maxcos=27..50, totcos=27..50
+Fi:13;  Aep:6;			# maxcos=27..50, totcos=27..50

@@ -1,0 +1,75 @@
+
+# test004.in - Colin Ramsay - 26 Feb 99
+#
+# Input file for test002.in; runs through "fi:x" values.
+# Can also be used with anything which requires a range of fill values,
+#  with some adjustment of the range.
+
+#fi:1;   fi;  end;
+#fi:2;   fi;  end;
+#fi:3;   fi;  end;
+fi:4;   fi;  end;
+fi:5;   fi;  end;
+fi:6;   fi;  end;
+fi:7;   fi;  end;
+fi:8;   fi;  end;
+fi:9;   fi;  end;
+fi:10;  fi;  end;
+fi:11;  fi;  end;
+fi:12;  fi;  end;
+fi:13;  fi;  end;
+fi:14;  fi;  end;
+fi:15;  fi;  end;
+fi:16;  fi;  end;
+fi:17;  fi;  end;
+fi:18;  fi;  end;
+fi:19;  fi;  end;
+fi:20;  fi;  end;
+fi:21;  fi;  end;
+fi:22;  fi;  end;
+fi:23;  fi;  end;
+fi:24;  fi;  end;
+fi:25;  fi;  end;
+fi:26;  fi;  end;
+fi:27;  fi;  end;
+fi:28;  fi;  end;
+fi:29;  fi;  end;
+fi:30;  fi;  end;
+fi:31;  fi;  end;
+fi:32;  fi;  end;
+fi:33;  fi;  end;
+fi:34;  fi;  end;
+fi:35;  fi;  end;
+fi:36;  fi;  end;
+fi:37;  fi;  end;
+fi:38;  fi;  end;
+fi:39;  fi;  end;
+fi:40;  fi;  end;
+fi:41;  fi;  end;
+fi:42;  fi;  end;
+fi:43;  fi;  end;
+fi:44;  fi;  end;
+fi:45;  fi;  end;
+fi:46;  fi;  end;
+fi:47;  fi;  end;
+fi:48;  fi;  end;
+#fi:49;  fi;  end;
+#fi:50;  fi;  end;
+#fi:51;  fi;  end;
+#fi:52;  fi;  end;
+#fi:53;  fi;  end;
+#fi:54;  fi;  end;
+#fi:55;  fi;  end;
+#fi:56;  fi;  end;
+#fi:57;  fi;  end;
+#fi:58;  fi;  end;
+#fi:59;  fi;  end;
+#fi:60;  fi;  end;
+#fi:61;  fi;  end;
+#fi:62;  fi;  end;
+#fi:63;  fi;  end;
+#fi:64;  fi;  end;
+
+ai;
+
+

@@ -1,0 +1,39 @@
+
+# test008.in - Colin Ramsay - 26 Feb 99
+#
+# This extends the tests in test007.in regarding doing an enumeration
+#   in `pieces'.
+# Note that the first two `loops' are the SG & RS ones.
+
+Enumeration: cfd0R7 (order 2^17 = 131072);
+Group Generators: abc;
+Group Relators: aBCbac, bACbaacA, accAABab;
+Subgroup Name: Id;
+Subgroup Generators: ;
+
+wo:6m;
+hard;
+mend:1;
+
+mess:100000
+end;			# base-line case
+
+mess:0;
+
+loop:1;   loop;  begin;  st;  loop:0;  continue;
+loop:2;   loop;  begin;  st;  loop:0;  continue;
+loop:3;   loop;  begin;  st;  loop:0;  continue;
+loop:4;   loop;  begin;  st;  loop:0;  continue;
+loop:5;   loop;  begin;  st;  loop:0;  continue;
+loop:6;   loop;  begin;  st;  loop:0;  continue;
+loop:7;   loop;  begin;  st;  loop:0;  continue;
+loop:8;   loop;  begin;  st;  loop:0;  continue;
+loop:9;   loop;  begin;  st;  loop:0;  continue;
+loop:10;  loop;  begin;  st;  loop:0;  continue;
+loop:11;  loop;  begin;  st;  loop:0;  continue;
+loop:12;  loop;  begin;  st;  loop:0;  continue;
+loop:13;  loop;  begin;  st;  loop:0;  continue;
+loop:14;  loop;  begin;  st;  loop:0;  continue;
+loop:15;  loop;  begin;  st;  loop:0;  continue;
+loop:16;  loop;  begin;  st;  loop:0;  continue;
+

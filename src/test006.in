@@ -1,0 +1,28 @@
+
+# test006.in - Colin Ramsay - 26 Feb 99
+#
+# An example extracted from some mail from GH, which should give index 180.
+# It almost has deficiency zero, apart from the `long' relator.
+# This is an example where "pmod:2" seems appropriate; note how stable
+#   things are as fi is varied.
+
+Group Name: SL(2,19);
+Group Generators: xy;
+Group Relators: xYXYXY, YXXyxx, 
+  xyyyyxyyyyyyyyyyxyyyyxyyyyyyyyyyyyyyyyyyyyyyyyyyyyyxxxxxxxxxxxx;
+Subgroup Name: H (index 180);
+Subgroup Generators: y;
+
+mess:50000; 
+hard;
+mend:1;			# Seems to be needed here!
+
+pmod:0;  end;
+pmod:1;  end;
+pmod:2;  end;
+pmod:3;  end;
+
+mess:0;
+pmod:2;
+ai:test004.in;
+

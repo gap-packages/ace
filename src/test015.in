@@ -1,0 +1,126 @@
+
+# test015.in - Colin Ramsay - 29 Jan 99
+#
+# The paper by Havas, Newman & O'Brien lists 14 examples (1--14) of
+#   3-generator 3-relator (ie, deficiency zero) presentations which are
+#   potentially 3-groups of order 3^8=6561.
+# 1--10 are known to have order 6561 & 14 is known to be infinite;
+#   see Havas, Holt, Kenne & Rees.
+# We try to see what's the best we can do.
+
+wo:200M;
+
+gr: a,b,c;
+
+# t = 12312
+enum: Example 1;
+rel: bbCbc, aaBab, cABcabc;
+fel:1; no:0; fi:7;
+mess:2500; end;
+
+# t = 6887
+enum: Example 2;
+rel: bbCbc, aaBab, BabccAc;
+fel:1; fi:13;
+mess:2500; end;
+
+# t = 6825
+enum: Example 3;
+rel: bbCbc, aaBab, cAccBab;
+fel:1; fi:9;
+mess:2500; end;
+
+# t = 10090
+enum: Example 4;
+rel: bbCbc, aaBab, caBcbcA;
+fel:1; fi:9;
+mess:2500; end;
+
+# t = 3493138
+enum: Example 5;
+rel: bbCbc, aaCac, ABabccc;
+fel:1; fi:7;
+mess:1000000; end;
+
+# t = 72111
+enum: Example 6;
+rel: aaCac, bcaCbbA, cbaccBA;
+fel:1; no:0; fi:6;
+mess:20000; end;
+
+# t = 9638
+enum: Example 7;
+rel: aaBab, abbcbAC, cBacbcA;
+fel:1; fi:8;
+mess:2500; end;
+
+# t = 29642415
+enum: Example 8;
+rel: aaCac, acbbACb, ABabccc;
+fel:1;
+mess:2000000; end;
+
+# From here on, they get `difficult'!
+
+wo:1200M;		# ie, max:199999998
+mess:10000000;
+fel:1;
+
+enum: Example 9;
+rel: BabcaaC, acbbCAb, cBacbcA;
+gen:a; end;		# o/flow
+gen:b; end;		# index = 243, t = 432154 (with Mend:1)
+gen:c; end;		# o/flow
+
+enum: Example 10;
+rel: aaBab, AbbbCac, AbccaBc;
+gen:a; end;		# index = 243, t = 15751965
+gen:b; end;		# o/flow
+gen:c; end;		# o/flow
+
+wo:2G;			# ie, max:333333331
+mess:25000000;
+hard;
+
+enum: Example 11;
+rel: caCBaba, bacbACb, cBacbcA;
+gen:a; end;		# o/flow
+gen:b; end;		#  -"- 
+gen:c; end;		#  -"- 
+gen:ab; end;		#  -"- 
+gen:ac; end;		#  -"- 
+gen:bc; end;		#  -"- 
+gen:abc; end;		#  -"- 
+
+enum: Example 12;
+rel: acaBCab, bbACacb, cABcabc;
+gen:a; end;		# o/flow (NO coincs!)
+gen:b; end;		#  -"- 
+gen:c; end;		#  -"- 
+gen:ab; end;		#  -"- 
+gen:ac; end;		#  -"- 
+gen:bc; end;		#  -"- 
+gen:abc; end;		#  -"- 
+
+enum: Example 13;
+rel: acaBCab, acbCbAb, BabccAc;
+gen:a; end;		# o/flow (NO coincs!)
+gen:b; end;		#  -"- 
+gen:c; end;		#  -"- 
+gen:ab; end;		#  -"- 
+gen:ac; end;		#  -"- 
+gen:bc; end;		#  -"- 
+gen:abc; end;		#  -"- 
+
+# Not much point really, since it's infinite, but it _does_ have 
+#   subgroups with finite index.
+enum: Example 14;
+rel: a^3=[C,b], b^3=AcabCB, c^3=[A,B][A,c][b,c];
+gen:a; end;		# o/flow
+gen:b; end;		#  -"- 
+gen:c; end;		#  -"- 
+gen:ab; end;		#  -"- 
+gen:ac; end;		#  -"- 
+gen:bc; end;		#  -"- 
+gen:abc; end;		#  -"- 
+

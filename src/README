@@ -1,0 +1,60 @@
+
+This is ACE 3.000.
+It's intended to be the first (officially/formally) released version of ACE;
+  which will be called ACE 3.
+(Or maybe it'll be called MACE, ACE for the new/next millenium!)
+This is intended to be the new `standard' version, replacing all others & 
+  forming the baseline for further developments.
+In (broad) functional terms & user interface it's the `same' as ACE 2 but:
+
+(I) It has been organised `properly' into levels, and all (well, most) of
+  the crap's been tidied up, etc, etc.
+(II) The enumerator has been organised as a state machine.  So the control
+  of the enumerator is more readily visible, and changes/additions are
+  easier.
+(III) The stuff on relation proving, coincidence logging, definition
+  sequence forcing, canonic/minimal spanning trees will be grafted on (real 
+  soon now); as the PT (proof table) package.
+(IV) There are a large number of extra features in the core enumerator and
+  the interactive interface.  The Level 2/1 interfaces are written to (try
+  to) prevent the user from ever obtaining an incorrect answer.  So they may
+  not drive the enumerator to its full potential.  Use the "help" feature for
+  a brief list of the interactive commands.
+(V) There is (real soon now) a LaTeX2e source file for a Technical Report 
+  describing all this somewhere; try ~cram/grp/doco/ace3.tex.
+
+ACE Level 0 - the enumerator & core utilities/routines
+-----------
+
+al0.h			header
+util0.c			utilities
+enum.c			core enumerator routines
+enumXX.c		`include' files for enum.c
+coinc.c			coincidence processing
+ex0a.c, ex0b.c, ...	example programme(s)
+
+ACE Level 1 - a fancy wrapper for Level 0
+-----------
+
+al1.h			header
+util1.c			utilities
+control.c		wrapper routines
+ex1a.c, ex1b.c, ...	example programme(s)
+
+ACE Level 2 - stand-alone ACE
+-----------
+
+al2.h			header
+util2.c			utilities
+parser.c		input parser
+postproc.c		ACE's functionality
+ace.c			ACE's main control loop
+
+testXXX.in & testXXX.out
+------------------------
+
+Various input files (.in) for ACE Level 2, with their outputs (.out).
+These include: demos, test cases, illustrations, etc., etc.
+The various subdirectories under ~cram/grp (eg, triv, gdz, ...) include
+  many `real' enumerations.
+

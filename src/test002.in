@@ -1,0 +1,54 @@
+
+# test002.in - Colin Ramsay - 23 Jan 99
+#
+# F(2,7) is a good test of the pref defn _code_, since all its relators
+#   are of length 3.
+# It is not a good demo of the _effect_ of pref defn (in general), since 
+#   the results vary erratically for various parameter values.
+# We demo/test these (& no. relators in subgroup) here, making use of
+#   the "ai:" feature to run through a list of values.
+
+Enumeration:      F(2,7), aka C_29; 
+Group Generators: abcdefg;
+Group Relators:   ab=c, bc=d, cd=e, de=f, ef=g, fg=a, ga=b;
+Subgroup name:    Id; 
+Subgroup Generators: ;
+
+wo:2m;
+mess:25000;
+
+# The first runs demonstrates "pure C"/"Felsch" styles; these are the
+#   same apart from "Com", which is not activated here.
+# It also demonstrates the `default' Felsch mode, where we activate "No"
+#   & "Fi" (the default values of these are not good here).
+
+pure c;  end;  stat;
+fel;     end;  stat;
+fel:1;   end;  stat;
+
+# This set of runs demonstrates the effect of including various numbers
+#   of relators in the subgroup.
+# The "no:2" run is particularly interesting!
+
+mess:0;
+ai:test003.in;
+
+# This set of runs demonstrates "fi:x", in "pmod:3" (default)
+
+fel:1;  pmod;
+ai:test004.in;
+
+# This set of runs demonstrates "fi:x", in "pmod:2" (immediate+dedn)
+
+pmod:2;  pmod;
+ai:test004.in;
+
+# This set of runs demonstrates "fi:x", in "pmod:1" (immediate)
+
+pmod:1;  pmod;
+ai:test004.in;
+
+## This run was found using the "aep:2" feature, with mode "Fel:1;"
+#
+#Group Relators: cBA, dCB, eDC, fED, efG, aGF, bAG;
+#INDEX = 29 (a=29 r=1 h=12131 n=12131; l=16 c=0.48; m=12101 t=12130)

@@ -1,0 +1,99 @@
+
+# test007.in - Colin Ramsay - 25 Jan 99
+#
+# This is a 3-generator deficiency 0 group from GH.
+# It has order 2^17 (131072), and is a nice little test case.
+# The first run here is one of the best I can find.
+
+text: ********;
+text: ** Initial run ...;
+text: ********;
+
+Enumeration: cfd0R7 (order 2^17 = 131072);
+Group Generators: abc;
+Group Relators: aBCbac, bACbaacA, accAABab;
+Subgroup Name: Id;
+Subgroup Generators: ;
+
+wo:6m;
+fel:1;
+mend:1;
+dmod:3;
+dsiz:1000;
+psiz:2;
+fi:5;
+
+mess:100000;
+end;
+
+# Some subgroups ...
+
+text: ********;
+text: ** Subgroup runs ...;
+text: ********;
+
+subgr: index 2^14;
+gen: bc;
+mess:50000;
+end;
+
+subgr: index 2^3;
+gen: bc, ABAAbcabC;
+mess:50000;
+end;
+
+subgr: index 2^0 (aka 1);
+gen: bc, ABAAbcabC, AcccacBcA;
+mess:20000
+end;
+
+# Play some games with the index 1 enumeration ...
+
+# Do only the SG phase; you should be able to match up the table entries
+#   with their order of definition as the 3 subgroup generators are
+#   applied to coset 1.
+# Note how the table has 38 non-blank entries, and how there are thus
+#   19 defns/dedns stacked (indexed 0..18).
+# The apply routine was called 3 times (once for each subgr gen), and
+#   made 16 defns & 3 dedns.
+
+text: ********;
+text: ** Pausing, with ST phase ...;
+text: ********;
+
+loop:1;
+end;
+stat;
+pr:-100;
+d;
+
+# Standardising the table neatens the reps up some, but destroys the
+#   `history' contained in the table.
+
+st;
+pr:-100;
+
+# Now complete the enumeration.
+# Note how continuing starts at the CD phase, skipping the RS phase.
+# In this particular case, this has a `beneficial' effect (much smaller
+#   t value).
+
+loop:0;
+cont;
+
+# Now repeat the above, but _without_ the ST phase.
+# Note the change in behaviour; ie, the definition sequence is changed.
+
+text: ********;
+text: ** Pausing, without ST phase ...;
+text: ********;
+
+loop:1;
+end;
+loop:0;
+cont;
+
+# The above demonstrates that it can be faster to do an enumeration in 
+#   `bits', using the continue feature, and to manipulate the table 
+#   during the pauses!
+

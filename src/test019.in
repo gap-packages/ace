@@ -1,0 +1,75 @@
+
+# test019.in - Colin Ramsay - 27 Feb 99
+#
+# The record for F(2,7)/<x> is totcos=50.
+# Can we do better, or even come close?
+# There are 14! possible group generator orderings, 7!*2^7*3^7 = 
+#   1,410,877,440 equivalent presentations, and 14 possible subgroup 
+#  generators.
+
+Mess:1000000;
+
+Enumeration:      F(2,7), aka C_29; 
+Group Generators: abcdefg;
+Group Relators:   ab=c, bc=d, cd=e, de=f, ef=g, fg=a, ga=b;
+Subgroup name:    Self; 
+
+# With straight Felsch mode, altering the presentation seems to have no
+#   effect; however, we do record the effect of the subgroup generator.
+# Note that <x> & <X> yield the same results here.
+
+Felsch;
+
+Gen:a;  Begin;		# t=404
+Gen:b;  Begin;		# t=615
+Gen:c;  Begin;		# t=332
+Gen:d;  Begin;		# t=742
+Gen:e;  Begin;		# t=336
+Gen:f;  Begin;		# t=327
+Gen:g;  Begin;		# t=366
+
+# Set your favourite Fi/PSiz/Gen values here ...
+
+Fi:0;
+PSiz:0;
+Gen: a;
+
+# We know it can be done in totcos << 500!
+
+Max:500;
+Com:100;
+
+# And away we go ...
+
+PMod:1;
+No:0;  Aep:1;  Aep:2;	Aep:4;
+No:1;  Aep:1;  Aep:2;	Aep:4;
+No:2;  Aep:1;  Aep:2;	Aep:4;
+No:3;  Aep:1;  Aep:2;	Aep:4;
+No:4;  Aep:1;  Aep:2;	Aep:4;
+No:5;  Aep:1;  Aep:2;	Aep:4;
+No:6;  Aep:1;  Aep:2;	Aep:4;
+No:7;  Aep:1;  Aep:2;	Aep:4;
+
+PMod:2;
+No:0;  Aep:1;  Aep:2;	Aep:4;
+No:1;  Aep:1;  Aep:2;	Aep:4;
+No:2;  Aep:1;  Aep:2;	Aep:4;
+No:3;  Aep:1;  Aep:2;	Aep:4;
+No:4;  Aep:1;  Aep:2;	Aep:4;
+No:5;  Aep:1;  Aep:2;	Aep:4;
+No:6;  Aep:1;  Aep:2;	Aep:4;
+No:7;  Aep:1;  Aep:2;	Aep:4;
+
+PMod:3;
+No:0;  Aep:1;  Aep:2;	Aep:4;
+No:1;  Aep:1;  Aep:2;	Aep:4;
+No:2;  Aep:1;  Aep:2;	Aep:4;
+No:3;  Aep:1;  Aep:2;	Aep:4;
+No:4;  Aep:1;  Aep:2;	Aep:4;
+No:5;  Aep:1;  Aep:2;	Aep:4;
+No:6;  Aep:1;  Aep:2;	Aep:4;
+No:7;  Aep:1;  Aep:2;	Aep:4;		# totcos down to 172
+
+# "PMod:3" & "No:7" (ie, "Fel:1") seems best, for "Gen:a".
+

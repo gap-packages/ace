@@ -1,0 +1,47 @@
+
+# test018.in - Colin Ramsay - 27 Feb 99
+#
+# How well can we do E8723/<aa,Ab>?
+# Try all (4!) * (2^4) * (1*1*2*2) = 1536 times.
+
+Enum: E8732;
+Gr: a,b;
+Rel: a^8,b^7,(ab)^2,(Ab)^3;
+Subgr: Index 448;
+Gen: a^2,Ab;
+
+Mess:1000000;
+
+# Note, we'll use default fi (ie, 7) throughout (if fill is active), and
+#   we don't use Mend.
+
+Fel:1;
+
+PMod:0;
+No:0;	aep:7;		# maxcos=1302..1302, totcos=1306..1306
+No:1;	aep:7;		# maxcos=1236..1322, totcos=1242..1325
+No:2;	aep:7;		# maxcos=1236..1322, totcos=1242..1325
+No:3;	aep:7;		# maxcos=1236..1322, totcos=1242..1325
+No:4;	aep:7;		# maxcos=1271..1302, totcos=1273..1305
+
+PMod:1;
+No:0;	aep:7;		# maxcos=849..881, totcos=881..924
+No:1;	aep:7;		# maxcos=849..881, totcos=883..924
+No:2;	aep:7;		# maxcos=759..1046, totcos=810..1103
+No:3;	aep:7;		# maxcos=759..1046, totcos=810..1103
+No:4;	aep:7;		# maxcos=759..1046, totcos=810..1103
+
+PMod:2;
+No:0;	aep:7;		# maxcos=845..880, totcos=861..897
+No:1;	aep:7;		# maxcos=845..880, totcos=861..896
+No:2;	aep:7;		# maxcos=760..1046, totcos=790..1058
+No:3;	aep:7;		# maxcos=760..1046, totcos=790..1058
+No:4;	aep:7;		# maxcos=760..1046, totcos=790..1058
+
+PMod:3
+No:0;	aep:7;		# maxcos=848..875, totcos=864..891
+No:1;	aep:7;		# maxcos=848..875, totcos=864..891
+No:2;	aep:7;		# maxcos=848..875, totcos=864..891
+No:3;	aep:7;		# maxcos=848..875, totcos=864..891
+No:4;	aep:7;		# maxcos=848..875, totcos=864..891
+

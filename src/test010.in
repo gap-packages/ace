@@ -1,0 +1,65 @@
+
+# test010.in - 26 Feb 99 - Colin Ramsay
+#
+# The trivial group when there's lots of memory (be warned!).
+# Note the `false alarm' collapse, and how it leaves the % of holes
+#   unchanged at ~2/3; ie, 4 of the 6 cols are unoccupied.
+# These mini-collapses are common with this presentation.
+
+gr: r,s,t;
+rel: (r^t R^2)^(t^s T^2)=(r^t R^2)^2, 
+  (s^r S^2)^(r^t R^2)=(s^r S^2)^2, (t^s T^2)^(s^r S^2)=(t^s T^2)^2;
+
+gen: r,s,  rr,RR,rs,rS,Rs,RS,sr,sR,Sr,SR,ss,SS,
+  rrr,rsr,rSr,Rsr,RSr,srr,Srr,ssr,SSr,
+  RRR,rsR,rSR,RsR,RSR,sRR,SRR,ssR,SSR,
+  rrs,RRs,rss,Rss,srs,sRs,Srs,SRs,sss,
+  rrS,RRS,rSS,RSS,srS,sRS,SrS,SRS,SSS,
+  [r,s],[r,S],[R,s],[R,S],  [s,r],[s,R],[S,r],[S,R];
+
+wo:500M;
+mess:-1000000;
+
+hard;
+c:250;
+r:25;
+end;
+
+# The C/R values suggest that the R*-style (which keeps knr & knh `balanced')
+#   is the way to go here; ie, the sims:x modes.
+# After some experimentation, it was found that mend off (ie, sims:3) worked
+#   well, and that most of the subgroup generators could be thrown away.
+
+mess:1000000;
+sims:3;
+
+# On ozone: c(pu)~116; t=11368023
+gen: r,s;
+end;
+
+# c~116; t=11368023
+gen: r,rs;
+end;
+
+# c=143.88; t=14080253
+gen: r,ss;
+end;
+
+# Trying to move to a single gen'r needs more memory, but does complete.
+# Interestingly, there are repeated mini-collapses, and they seem to happen
+#   at regular intervals & to be of similar sizes!
+
+wo:1G;
+
+# c=1393.23; t=122400832
+gen: r;
+end;
+
+# c=1875.34; t=166476400 (almost overflows!)
+gen: s;
+end;
+
+# c=1139.50; t=102965293
+gen: t;
+end;
+

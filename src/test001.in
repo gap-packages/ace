@@ -1,0 +1,63 @@
+
+# test001.in - Colin Ramsay - 26 Feb 99
+
+# Test cases which collapse to 1 are nice but: they may not have the
+#   `right' behaviour for what's being tested; mistakes in the code
+#   commonly cause a collapse to 1.
+# So, we'd like test cases where we can control the index & the `degree'
+#   of difficulty.
+# Recipe: take your favourite collapse to one; add extra generators; add
+#  appropriate powers of these to the relators; abelianise all the extra
+#  generators wrt everything else.
+# The collapse will now be to the product of the powers of the extra 
+#   generators (ie, product of cyclic groups).
+# There are many variations on this; have fun ...
+
+wo:2500K;
+
+fel:1;
+
+Group Name: G (order 2^17 = 131072);
+Group Generators: a,b,c;
+Group Relators: aBCbac, bACbaacA, accAABab;
+Subgroup Name: H (index 1);
+Subgroup Generators: bc, ABAAbcabC, AcccacBcA;
+
+mess:10000;
+end;
+
+Group Name: G (order 2.2^17);
+Group Generators: a,b,c,x;
+Group Relators: aBCbac, bACbaacA, accAABab, 
+	x^2, [a,x], [b,x], [c,x];
+Subgroup Name: H (index 2);
+Subgroup Generators: bc, ABAAbcabC, AcccacBcA;
+
+mess:50000;
+end;
+
+Group Name: G (order 2.3.2^17);
+Group Generators: a,b,c,x,y;
+Group Relators: aBCbac, bACbaacA, accAABab, 
+	x^2, [a,x], [b,x], [c,x], y^3, [a,y], [b,y], [c,y], [x,y];
+Subgroup Name: H (index 6);
+Subgroup Generators: bc, ABAAbcabC, AcccacBcA;
+
+mess:100000;
+end;
+
+# Further games (run these all, in order) ...
+#
+#mess:0;
+#pmod:0;   end;			# overflow
+#pmod:1;   end;			# overflow
+#pmod:2;   end;			# index=6, t=246762
+#pmod:3;   end;			# index=6, t=273954 (default, as above)
+#fi:5;     end;			# index=6, t=217105
+#psiz:512; end;			# index=6, t=208506
+
+# The `best' parameters I can find (t=128586) ...
+#
+#hard; mend:1; c:2000; no:11; pmod:2; fi:2; dsiz:15000;
+#end;
+

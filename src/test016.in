@@ -1,0 +1,101 @@
+
+# test016.in - Colin Ramsay - 6 Feb 99
+#
+# Guided by ex1b.c, we can now do the trivial group over the
+#   trivial subgroup, on ozone.
+# The "sims:3;" mode works nicely; here we try to find a really
+#   good set of parameters, using a modified "hard" that is very 
+#   like "sims:3;" (note, however, that we do _not_ set "no:0").
+
+Wo:250M;			# max:41666664
+Mess:5000000;
+
+Group Name: Trivial;
+Group Generators: rst;
+Group Relators: rrTRtRsrSSTrtRRssRSrssRSr, ssRSrttSTsRsrSSStsTTStsTT, 
+  TrtRRTrtRRttSTsrrTRtStsTT;
+Subgroup Name: Identity;
+Subgroup Generators: ;
+
+sims:3; end;			# c=380.10; m=4921077 t=37324099
+
+hard; 
+mend:0;				# doesn't improve things
+pmod:0;				# doesn't seem to help
+com:100;			# no CO, since possible within "max"
+
+c:1;
+r:1; end; 
+r:2; end;
+r:4; end;
+r:8; end;
+r:16; end;
+r:32; end;
+r:64; end;
+
+c:2;
+r:1; end;
+r:2; end;
+r:4; end;
+r:8; end;
+r:16; end;
+r:32; end;
+r:64; end;
+
+c:4;
+r:1; end;
+r:2; end;
+r:4; end;
+r:8; end;
+r:16; end;
+r:32; end;
+r:64; end;
+
+c:8;
+r:1; end;
+r:2; end;
+r:4; end;
+r:8; end;
+r:16; end;
+r:32; end;
+r:64; end;
+
+c:16;
+r:1; end;
+r:2; end;
+r:4; end;
+r:8; end;
+r:16; end;
+r:32; end;
+r:64; end;
+
+# c (cpu time) values:
+#
+# c \ r | 1         2         4         8         16        32        64
+# ------+---------------------------------------------------------------------
+#   1   | 406.81    403.14    406.51    408.15    408.52    408.08    405.07
+#   2   | 419.85    408.37    406.91    406.98    409.27    408.89    405.49
+#   4   | 431.87    411.40    408.38    408.11    409.52    408.93    405.87
+#   8   | 453.32    435.78    410.87    411.46    409.96    408.99    406.39
+#  16   | 443.74    448.66    435.39    415.72    408.62    407.72    404.62
+#
+# m (max coset) values:
+#
+# c \ r | 1         2         4         8         16        32        64
+# ------+---------------------------------------------------------------------
+#   1   | 4921180   4921245   4921244   4921244   4921244   4922213   4922213
+#   2   | 5040197   4939694   4921244   4921244   4921244   4922213   4922213
+#   4   | 4898994   4940258   4925145   4925145   4921244   4922213   4922213
+#   8   | 7936088   4954100   4932716   4932973   4921244   4922213   4922213
+#  16   |14321670   7941030   4953839   4913821   4879087   4880056   4880056
+#
+# t (total coset) values:
+#
+# c \ r | 1         2         4         8         16        32        64
+# ------+---------------------------------------------------------------------
+#   1   | 37575454  37452302  37417873  37437508  37507919  37558817  37558817
+#   2   | 39030016  37804162  37549582  37488446  37544265  37544265  37574489
+#   4   | 39681946  38227135  37724721  37610510  37612717  37625299  37621375
+#   8   | overflow  40131141  38153748  37883697  37689276  37648826  37652744
+#  16   | overflow  overflow  40184587  38442336  37671100  37574307  37570316
+

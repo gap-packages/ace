@@ -1,0 +1,17 @@
+
+# test003.in - Colin Ramsay - 23 Jan 99
+#
+# Input file for test002.in; runs through "no:x" values.
+# Note the switch back to `stdin', since we want to continue
+#   this test.
+
+no:1;  no;  end;
+no:2;  no;  end;
+no:3;  no;  end;
+no:4;  no;  end;
+no:5;  no;  end;
+no:6;  no;  end;
+no:7;  no;  end;
+
+ai;
+

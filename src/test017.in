@@ -1,0 +1,32 @@
+
+# test017.in - Colin Ramsay - 27 Feb 99
+
+# M_{12} has order 95040.  What's the best/worst we can do it in, 
+#   using HLT (with no Lx/CO phases)?
+
+Wo:2M;
+
+enum: M_{12}
+gr:   a,b,c;
+rel:  a^11,b^2,c^2,(ab)^3,(ac)^3,(bc)^10,a^(bcbc)=a^5;
+subg: Id;
+gen:  ;
+
+HLT;
+Look:0;
+Com:100;
+
+# `baseline' run (totcos=289010)
+
+Mess:35000;
+end;
+
+# 100 random runs, with a (hard) cap on totcos, for speed
+
+Max:350000;
+rep:7,100;
+
+#Group Relators: (A)^11, (b)^2, Abcbcaaaaacbcb, (ca)^3, (c)^2, (bA)^3, 
+#  (cb)^10;
+#INDEX = 95040 (a=95040 r=223337 h=1 n=223337; l=98 c=3.44; m=109923 t=223336)
+

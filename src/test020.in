@@ -1,0 +1,57 @@
+
+# test020.in - Colin Ramsay - 26 Feb 99
+#
+# See test019.in; this is a test-bed, where we try lots of
+#   different things to find the `best' (computer) enumeration.
+
+Mess:1000000;
+
+Enumeration: F(2,7), aka C_29;
+Subgroup name: Self; 
+Felsch:1;
+Max:200;		# Maximise speed
+Com:100;		# ditto!
+	
+# All of the following can be altered to investigate the
+#   parameter space.
+
+#Group Generators: abcdefg;
+#Group Relators: ab=c, bc=d, cd=e, de=f, ef=g, fg=a, ga=b;
+#Gen: a;
+
+Group Generators: fgaecdb;
+Group Relators: de=f, bc=d, ef=g, cd=e, a=fg, ga=b, c=ab;
+Gen: b;
+
+#No:-1;  Fi:0;  PMod:3;  PSiz:0;
+
+No:-1;  Fi:16;  PMod:3;  PSiz:0;
+
+aep:7;			# Space too big to completely search!
+
+## Some good (ie, t < 129) results are ...
+#
+# No:-1/Fi:18/PMod:3/PSiz:0 (abcdefg, over <a>) ...
+#Group Relators: EDf, fgA, FEg, CeD, bAG, bcD, abC;
+#INDEX = 1 (a=1 r=2 h=2 n=2; l=4 c=0.00; m=126 t=126)
+#
+# No:-1/Fi:24/PMod:3/PSiz:0 (fecdgab, over <C>?) ...
+#Group Relators: bcD, Cab, GbA, aGF, fGe, fED, Ecd;
+#INDEX = 1 (a=1 r=2 h=2 n=2; l=4 c=0.01; m=122 t=127)
+#Group Relators: CeD, Bga, CBd, BAc, GFa, fGe, EDf;
+#INDEX = 1 (a=1 r=2 h=2 n=2; l=4 c=0.00; m=126 t=126)
+#
+# No:-1/Fi:12/PMod:3/PSiz:0 (fecadgb, over <C>) ...
+#Group Relators: CBd, CeD, AcB, GbA, Afg, Gef, fED;
+#INDEX = 1 (a=1 r=2 h=2 n=2; l=4 c=0.01; m=124 t=125)
+#Group Relators: BAc, bcD, Ecd, aBg, gAf, FEg, EDf;
+#INDEX = 1 (a=1 r=2 h=2 n=2; l=4 c=0.00; m=123 t=125)
+#
+# No:-1/Fi:16/PMod:3/PSiz:0 (fceadgb, over <g>) ...
+#Group Relators: cBA, aBg, gAf, Gef, Ecd, BdC, eFd;
+#INDEX = 1 (a=1 r=2 h=2 n=2; l=4 c=0.01; m=120 t=121)
+#
+# No:-1/Fi:16/PMod:3/PSiz:0 (fgaecdb, over <b>) ...
+#Group Relators: Afg, eDC, cBA, AGb, Gef, CBd, Fde;
+#INDEX = 1 (a=1 r=2 h=2 n=2; l=4 c=0.00; m=124 t=125)
+

@@ -1,0 +1,27 @@
+
+# make.temp - Colin Ramsay - 26 Feb 99
+#
+# These are bits that you can tag onto the end of the current 
+# Makefile to build the various utilities used to investigate
+# specific problems.  See the various *.c files in such directories
+# as ~/grp/triv, ~/grp/gdz, ...  Note the omissions of most of the
+# various flags (they're usually not relevant here).
+
+e1: e1.c al1.h $(SRC1) al0.h $(SRC0) $(SRC0A)
+        $(CC) $(FLAGS) -o e1 e1.c $(SRC1) $(SRC0)
+
+e1a: e1a.c al1.h $(SRC1) al0.h $(SRC0) $(SRC0A)
+        $(CC) -o e1a e1a.c $(SRC1) $(SRC0)
+
+g9: g9.c al1.h $(SRC1) al0.h $(SRC0) $(SRC0A)
+        $(CC) -o g9 g9.c $(SRC1) $(SRC0)
+
+g9p: g9p.c al1.h $(SRC1) al0.h $(SRC0) $(SRC0A)
+        $(CC) -o g9p g9p.c $(SRC1) $(SRC0)
+
+c11: c11.c al1.h $(SRC1) al0.h $(SRC0) $(SRC0A)
+        $(CC) -o c11 c11.c $(SRC1) $(SRC0)
+
+g11: g11.c al1.h $(SRC1) al0.h $(SRC0) $(SRC0A)
+        $(CC) -o g11 g11.c $(SRC1) $(SRC0)
+

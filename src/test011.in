@@ -1,0 +1,35 @@
+
+# test011.in - Colin Ramsay - 26 Feb 1999
+#
+# Email from C.C. Sims to G. Havas, re importance of stacking _all_ 
+#   deductions.
+# Note how all the table bar one entry (& its inverse) is full after the
+#   SG phase, and how, after the 1st DD is pulled off it causes a coinc &
+#   a full table.
+# (The top of the dedn stack contains 6.5, ie, 6c=3, and tracing this on
+#   c^3 causes the coinc 3=6.
+# Folding row #6 into #3 gives a full table.)
+# If subsequent dedns are missed, then an index of 5 is returned, instead 
+#   of 1.
+# Note: the mode ("pure C", or "Felsch") & the "asis" are important here!
+# Also, note the "loop:2", to allow the final result checking phase to
+#   be run!
+ 
+Group Generators: abc;
+Group Relators: (c)^3, (ab)^11;
+Subgroup Generators: (a)^5, aB, aab, Aba, AAbbaa, aaBA, c, Aca, acA, 
+  aacAA, AAcbaa, AACbaa;
+
+Pure C;
+Asis:1;
+
+Monitor: -1;
+
+Loop:1;
+Start;
+Print Table;
+Dump;
+
+Loop:2;
+Continue;
+

@@ -1,0 +1,28 @@
+
+# test005.in - Colin Ramsay - 26 Feb 99
+#
+# ACE 2002 fails this test; since relators of length one are not
+#   processed properly during CT deductions/definitions!
+# ACE3 does the business; we illustrate the entire definition sequence,
+#   with hole %'s.
+# We also illustrate table printing & compacting/standardising; note that
+#   Felsch mode produces a standardised table. 
+
+Enumeration:      G (aka C_5);
+Group Generators: ab;
+Group Relators:   (a)^5, b;
+Subgroup name:    H (aka Id);
+Subgroup Generators: ;
+
+Felsch;
+Messages: -1;
+Begin;
+
+# Invokes a CO phase, which does something; ie, get "CO"
+Print Table: -5;
+
+# Invokes both CO & ST, neither of which do any (real) work; 
+#   ie, get "co" & "st"
+Standard Table;
+Print Table: -5;
+
