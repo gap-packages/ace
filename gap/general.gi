@@ -114,13 +114,6 @@ local optnames, echo, errmsg, onbreakmsg, infile, datarec, ToACE, gens,
         outfile := VALUE_ACE_OPTION(optnames, ACEData.outfile, "aceoutfile"),
         stream  := OutputTextFile(infile, false) );
     ToACE := function(list) WRITE_LIST_TO_ACE_STREAM(datarec.stream, list); end;
-  elif ACEfname = "ACEStats" then
-    infile := ACEData.infile; # If option "aceinfile" is set ... we ignore it
-    datarec := rec( 
-        stream := OutputTextFile(infile, false),
-        outfile := VALUE_ACE_OPTION(optnames, ACEData.outfile, "aceoutfile") );
-    ACEData.ni := datarec;
-    ToACE := function(list) WRITE_LIST_TO_ACE_STREAM(datarec.stream, list); end;
   else
     datarec := rec(
         stream := InputOutputLocalProcess(ACEData.tmpdir, ACEData.binary, []) );
@@ -191,14 +184,6 @@ local optnames, echo, errmsg, onbreakmsg, infile, datarec, ToACE, gens,
       ToACE([ "Print Table;" ]);
     fi;
     CloseStream(datarec.stream);
-    if ACEfname = "ACEStats" then
-      # Run ACE on the constructed infile
-      Exec(Concatenation(ACEData.binary, "<", infile, ">", datarec.outfile));
-      datarec.stream := InputTextFile( datarec.outfile );
-      datarec.enumResult := ACE_ENUMERATION_RESULT( datarec.stream, ReadLine );
-      CloseStream(datarec.stream);
-      datarec.stats := ACE_STATS( datarec.enumResult );
-    fi;
   elif ACEfname <> "ACEStart" then
     if VALUE_ACE_OPTION(optnames, fail, ["start", "aep", "rep"]) = fail then
       ACE_MODE( "Start", datarec );
