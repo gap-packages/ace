@@ -1,6 +1,6 @@
 #############################################################################
 ##
-#W  interact.gi             ACE Share Package                     Greg Gamble
+#W  interact.gi                ACE Package                        Greg Gamble
 ##
 ##  This file  installs  commands for using ACE interactively via IO Streams.
 ##    
@@ -247,6 +247,10 @@ local line;
 
   line := ReadAllLine(stream);
   while line <> fail do
+    if Length(line) > 1 and line[ Length(line) - 1 ] = ')' then
+      #a `start', `aep' or `rep' option was slipped in
+      ACEData.enumResult := Chomp(line);
+    fi;
     Info(InfoACE + InfoWarning, 1, Chomp(line));
     line := ReadAllLine(stream);
   od;
@@ -286,33 +290,6 @@ InstallGlobalFunction(INTERACT_TO_ACE_WITH_ERRCHK, function(stream, list)
 
   WRITE_LIST_TO_ACE_STREAM(stream, list);
   READ_ACE_ERRORS(stream);
-end);
-
-#############################################################################
-####
-##
-#F  FLUSH_ACE_STREAM_UNTIL  . . . . . . . . . . . . . . . . Internal function
-##  . . . . . . . . . . . . reads lines in iostream via function readline and
-##  . . . . . . . . . . . . prints   them   via    Info    at    InfoACELevel
-##  . . . . . . . . . . . . infoLevelFlushed until  IsMyLine(line)  is  true,
-##  . . . . . . . . . . . . prints line for which IsMyLine(line) is true  via
-##  . . . . . . . . . . . . Info at InfoACELevel infoLevelMyLine and  returns
-##  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .  that line.
-##
-##
-InstallGlobalFunction(FLUSH_ACE_STREAM_UNTIL, 
-function(iostream, infoLevelFlushed, infoLevelMyLine, readline, IsMyLine)
-local line;
-
-  line := readline(iostream);
-  while not IsMyLine(line) do
-    Info(InfoACE, infoLevelFlushed, Chomp(line));
-    line := readline(iostream);
-  od;
-  if line <> fail and infoLevelMyLine < 10 then
-    Info(InfoACE, infoLevelMyLine, Chomp(line));
-  fi;
-  return line;
 end);
 
 #############################################################################
@@ -2261,7 +2238,7 @@ end);
 #F  ACECosetTable  . . . . . . . . . . . .  Extracts the coset table from ACE
 ##
 InstallGlobalFunction(ACECosetTable, function(arg)
-local ioIndex, ACEout, iostream, datarec, fgens, standard, incomplete,
+local ioIndex, iostream, datarec, fgens, standard, incomplete,
       cosettable, errmsg, onbreakmsg, SetACEOptions, DisplayACEOptions;
 
   if Length(arg) = 2 or Length(arg) > 3 then
@@ -2295,6 +2272,7 @@ local ioIndex, ACEout, iostream, datarec, fgens, standard, incomplete,
     fi;
   else
     # Called non-interactively
+    ACEData.ni := rec();
 
     onbreakmsg := ["Try relaxing any restrictive options",
                    "e.g. try the `hard' strategy or increasing `workspace'",
@@ -2309,65 +2287,64 @@ local ioIndex, ACEout, iostream, datarec, fgens, standard, incomplete,
 
     SetACEOptions := function()
       if not IsEmpty(OptionsStack) and 
-         ACEData.optionsStackDepth in [0, Length(OptionsStack)] then
-        SET_ACE_OPTIONS(ACEData);
+         datarec.optionsStackDepth in [0, Length(OptionsStack)] then
+        SET_ACE_OPTIONS(datarec);
       fi;
     end;
 
     DisplayACEOptions := function()
-      DISPLAY_ACE_REC_FIELD( ACEData, "options" );
+      DISPLAY_ACE_REC_FIELD( datarec, "options" );
     end;
 
-    Unbind(ACEData.origOptionsStackDepth);
     repeat
-      ACEout := CALL_ACE(        # args are:         fgens,   rels,  sgens
-                    "ACECosetTableFromGensAndRels", arg[1], arg[2], arg[3] );
+      datarec :=
+          CALL_ACE( "ACECosetTableFromGensAndRels", arg[1], arg[2], arg[3] );
       standard := ACE_COSET_TABLE_STANDARD( ACE_OPTIONS() );
-      if ACEout.infile <> ACEData.infile then
+      if IsBound(datarec.infile) then
         # User only wanted an ACE input file to use directly with standalone
-        Info(InfoACE, 1, "ACE standalone input file: ", ACEout.infile);
+        Info(InfoACE, 1, "ACE standalone input file: ", datarec.infile);
         return;
       fi;
-      iostream := InputTextFile(ACEout.outfile);
-      ACEData.enumResult := LAST_ACE_ENUM_RESULT(iostream, ReadLine, false);
-      ACEData.stats := ACE_STATS(ACEData.enumResult);
-      incomplete := ACEData.stats.index = 0 and
+      incomplete := datarec.stats.index = 0 and
                     VALUE_ACE_OPTION(ACE_OPT_NAMES(), false, "incomplete");
-      if not incomplete and ACEData.stats.index = 0 then
-        CloseStream(iostream);
-        if ACEout.silent then
+      if not incomplete and datarec.stats.index = 0 then
+        CloseStream(datarec.stream);
+        if datarec.silent then
           return fail;
         else
-          ACEData.options := ACE_OPTIONS();
-          ACEData.optionsStackDepth := Length(OptionsStack);
-          if not IsBound(ACEData.origOptionsStackDepth) then
-            ACEData.origOptionsStackDepth := ACEData.optionsStackDepth;
+          datarec.options := ACE_OPTIONS();
+          datarec.optionsStackDepth := Length(OptionsStack);
+          if not IsBound(datarec.origOptionsStackDepth) then
+            datarec.origOptionsStackDepth := datarec.optionsStackDepth;
           fi;
-          if ACEData.optionsStackDepth > 0 then
+          if datarec.optionsStackDepth > 0 then
             # We pop options here, in case the user decides to quit
             PopOptions();
           fi;
           errmsg := ["no coset table ...",
                      "the `ACE' coset enumeration failed with the result:",
-                      ACEData.enumResult];
+                      datarec.enumResult];
           Error(ACE_ERROR(errmsg, onbreakmsg), "\n");
-          if ACEData.options <> rec() then
-            Add(OptionsStack, ACEData.options);
-            Unbind(ACEData.options);
+          if datarec.options <> rec() then
+            Add(OptionsStack, datarec.options);
+            Unbind(datarec.options);
           fi;
         fi;
       else
-        cosettable := ACE_COSET_TABLE(ACEData.stats.activecosets,
-                                      ACEout.acegens, iostream, ReadLine);
-        CloseStream(iostream);
-        if IsBound(ACEData.origOptionsStackDepth) and
-           (ACEData.origOptionsStackDepth = 0) and 
+        WRITE_LIST_TO_ACE_STREAM(datarec.stream, [ "Print Table;" ]);
+        cosettable := ACE_COSET_TABLE(datarec.stats.activecosets,
+                                      datarec.acegens, 
+                                      datarec.stream, 
+                                      ACE_READ_NEXT_LINE);
+        CloseStream(datarec.stream);
+        if IsBound(datarec.origOptionsStackDepth) and
+           (datarec.origOptionsStackDepth = 0) and 
            not IsEmpty(OptionsStack) 
         then
           PopOptions();
         fi;
-        Unbind(ACEData.optionsStackDepth);
-        Unbind(ACEData.origOptionsStackDepth);
+        Unbind(datarec.optionsStackDepth);
+        Unbind(datarec.origOptionsStackDepth);
         break;
       fi;
     until false;
@@ -2409,10 +2386,7 @@ local datarec, iostream, line, stats;
     return datarec.stats;
   elif Length(arg) = 3 then              # args are: fgens,   rels,  sgens
     # Called non-interactively
-    iostream := InputTextFile( CALL_ACE("ACEStats", arg[1], arg[2], arg[3]) );
-    stats := ACE_STATS( LAST_ACE_ENUM_RESULT(iostream, ReadLine, false) );
-    CloseStream(iostream);
-    return stats;
+    return CALL_ACE("ACEStats", arg[1], arg[2], arg[3]).stats;
   else
     Error("expected 0, 1 or 3 arguments ... not ", Length(arg), " arguments\n");
   fi;

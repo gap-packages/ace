@@ -1,7 +1,7 @@
 #############################################################################
 ####
 ##
-#W  general.gi              ACE Share Package                Alexander Hulpke
+#W  general.gi                 ACE Package                   Alexander Hulpke
 #W                                                                Greg Gamble
 ##
 ##  This file installs mainly non-interactive ACE  variables  and  functions.
@@ -58,7 +58,7 @@ end);
 ##
 #F  ACEPackageVersion() 
 ##
-##  returns the version number of the current ACE share package.
+##  returns the version number of the current ACE package.
 ##
 InstallGlobalFunction(ACEPackageVersion, function()
 
@@ -72,8 +72,8 @@ end);
 ##
 ##
 InstallGlobalFunction(CALL_ACE, function(ACEfname, fgens, rels, sgens)
-local optnames, echo, errmsg, onbreakmsg, infile, instream, outfile,
-      ToACE, gens, acegens, standard, enforceAsis, ignored;
+local optnames, echo, errmsg, onbreakmsg, infile, datarec, ToACE, gens,
+      standard, ignored;
 
   if ValueOption("aceexampleoptions") = true and
      IsBound(ACEData.aceexampleoptions) then
@@ -107,40 +107,44 @@ local optnames, echo, errmsg, onbreakmsg, infile, instream, outfile,
   rels  := ACE_WORDS_ARG_CHK(fgens, rels, "relators");
   sgens := ACE_WORDS_ARG_CHK(fgens, sgens, "subgp gen'rs");
 
-  if ACEfname = "ACEStart" then
-    instream := InputOutputLocalProcess(ACEData.tmpdir, ACEData.binary, []);
-    if instream = fail then
-      Error("sorry! Run out of pseudo-ttys. Can't initiate stream.\n");
+  infile  := VALUE_ACE_OPTION(optnames, fail, "aceinfile");
+  if ACEfname = "ACECosetTableFromGensAndRels" and infile <> fail then
+    datarec := rec(
+        infile  := infile,
+        outfile := VALUE_ACE_OPTION(optnames, ACEData.outfile, "aceoutfile"),
+        stream  := OutputTextFile(infile, false) );
+    ToACE := function(list) WRITE_LIST_TO_ACE_STREAM(datarec.stream, list); end;
+  else
+    datarec := rec(
+        stream := InputOutputLocalProcess(ACEData.tmpdir, ACEData.binary, []) );
+    if datarec.stream = fail then
+      Error("sorry! Run out of pseudo-ttys. Can't initiate stream\n");
     fi;
-    FLUSH_ACE_STREAM_UNTIL(instream, 3, 3, ACE_READ_NEXT_LINE, 
+    FLUSH_ACE_STREAM_UNTIL(datarec.stream, 3, 3, ACE_READ_NEXT_LINE, 
                            line -> IsMatchingSublist(line, "name", 3));
-    ToACE := function(list) INTERACT_TO_ACE_WITH_ERRCHK(instream, list); end;
-  else 
-    if ACEfname = "ACECosetTableFromGensAndRels" then
-      # If option "aceinfile" is set we only want to produce an ACE input file
-      infile := VALUE_ACE_OPTION(optnames, ACEData.infile, "aceinfile");
-    elif ACEfname = "ACEStats" then
-      infile := ACEData.infile; # If option "aceinfile" is set ... we ignore it
-    fi;
-    instream := OutputTextFile(infile, false);
-    ToACE := function(list) WRITE_LIST_TO_ACE_STREAM(instream, list); end;
+    ToACE := function(list) 
+                 INTERACT_TO_ACE_WITH_ERRCHK(datarec.stream, list);
+             end;
   fi;
-  outfile := VALUE_ACE_OPTION(optnames, ACEData.outfile, "aceoutfile");
-  standard := ACE_COSET_TABLE_STANDARD( ACE_OPTIONS() );
+  datarec.args    := rec(fgens := fgens, rels := rels, sgens := sgens);
+  datarec.options := ACE_OPTIONS();
+  standard := ACE_COSET_TABLE_STANDARD( datarec.options );
 
   # Define the group generators ACE will use
   gens := TO_ACE_GENS(fgens);
   ToACE([ "Group Generators: ", gens.toace, ";"]);
-  acegens := gens.acegens;
+  datarec.acegens := gens.acegens;
 
   # Define the group relators ACE will use
-  enforceAsis := (ACEfname <> "ACEStats") and (standard = "lenlex") and
-                 not IsACEGeneratorsInPreferredOrder(fgens, rels, "noargchk");
+  datarec.enforceAsis := 
+      (ACEfname <> "ACEStats") and (standard = "lenlex") and
+      not IsACEGeneratorsInPreferredOrder(fgens, rels, "noargchk");
   ToACE([ "Group Relators: ", 
-          ACE_RELS(rels, fgens, acegens, enforceAsis), ";" ]);
+          ACE_RELS(rels, fgens, datarec.acegens, datarec.enforceAsis), ";" ]);
 
   # Define the subgroup generators ACE will use
-  ToACE([ "Subgroup Generators: ", ACE_WORDS(sgens, fgens, acegens), ";" ]);
+  ToACE([ "Subgroup Generators: ", 
+          ACE_WORDS(sgens, fgens, datarec.acegens), ";" ]);
 
   if ACEfname  = "ACECosetTableFromGensAndRels" then
     ignored := [ ];
@@ -150,7 +154,7 @@ local optnames, echo, errmsg, onbreakmsg, infile, instream, outfile,
   if ACEfname  = "ACEStart" then
     Add(ignored, "aceoutfile");
   fi;
-  if enforceAsis then
+  if datarec.enforceAsis then
     Add(ignored, "asis");
     ToACE([ "Asis: 1;" ]);
   fi;
@@ -163,47 +167,41 @@ local optnames, echo, errmsg, onbreakmsg, infile, instream, outfile,
       ignored
       );
               
-  if ACEfname <> "ACEStart" then
-
+  if not IsInputOutputStream(datarec.stream) then
     if VALUE_ACE_OPTION(optnames, fail, ["start", "aep", "rep"]) = fail then
       # if the user hasn't issued there own enumeration initiation directive
       # ... initiate the enumeration
       ToACE([ "Start;" ]);
     fi;
-
-    ToACE([ "text:***" ]); # We use this as a sentinel
-
     if ACEfname = "ACECosetTableFromGensAndRels" then
       if standard = "lenlex" then
         ToACE([ "Standard;" ]);
       fi;
       ToACE([ "Print Table;" ]);
     fi;
-
-    CloseStream(instream);
-    if ACEfname = "ACEStats" or infile = ACEData.infile then
-      # Run ACE on the constructed infile
-      # ... the ACE output will appear in outfile 
-      Exec(Concatenation(ACEData.binary, "<", infile, ">", outfile));
+    CloseStream(datarec.stream);
+  elif ACEfname <> "ACEStart" then
+    if VALUE_ACE_OPTION(optnames, fail, ["start", "aep", "rep"]) <> fail then
+      # Got to iron out some bugs here!
+      datarec.enumResult := ACEData.enumResult;
+      datarec.stats := ACE_STATS(datarec.enumResult);
+      ToACE([ "text:***" ]);
+    else
+      ACE_MODE( "Start", datarec );
+    fi;
+    if ACEfname = "ACECosetTableFromGensAndRels" and standard = "lenlex" then
+      ToACE([ "Standard;" ]);
     fi;
   fi;
 
-  if ACEfname = "ACECosetTableFromGensAndRels" then
-    return rec(acegens := acegens, 
-               infile := infile, 
-               outfile := outfile,
-               silent := VALUE_ACE_OPTION(optnames, false, "silent"));
-  elif ACEfname = "ACEStats" then
-    return outfile;
-  else # ACEfname = "ACEStart"
-    Add(ACEData.io, 
-        rec(args := rec(fgens := fgens, rels := rels, sgens := sgens),
-            options := ACE_OPTIONS(),
-            acegens := acegens, 
-            enforceAsis := enforceAsis,
-            stream := instream));
+  if ACEfname = "ACEStart" then
+    Add(ACEData.io, datarec);
     return Length(ACEData.io);
+  elif ACEfname = "ACECosetTableFromGensAndRels" then
+    datarec.silent := VALUE_ACE_OPTION(optnames, false, "silent");
   fi;
+  ACEData.ni := datarec;
+  return ACEData.ni;
 end);
 
 #############################################################################

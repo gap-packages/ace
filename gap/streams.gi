@@ -47,6 +47,32 @@ end);
 #############################################################################
 ####
 ##
+#F  FLUSH_ACE_STREAM_UNTIL(<iostream>, <infoLevelFlushed>, <infoLevelMyLine>,
+##    <readline>, <IsMyLine>) . . . . . . flush a stream until a desired line
+##
+##  reads lines in iostream <iostream> via function  <readline>  and  `Info's
+##  those lines at `InfoACELevel' <infoLevelFlushed> until a line <line>  for
+##  which `<IsMyLine>(<line>) is `true'. The line <line> is then `Info'-ed at
+##  `InfoACELevel' <infoLevelMyLine> and returned.
+##
+InstallGlobalFunction(FLUSH_ACE_STREAM_UNTIL, 
+function(iostream, infoLevelFlushed, infoLevelMyLine, readline, IsMyLine)
+local line;
+
+  line := readline(iostream);
+  while not IsMyLine(line) do
+    Info(InfoACE, infoLevelFlushed, Chomp(line));
+    line := readline(iostream);
+  od;
+  if line <> fail and infoLevelMyLine < 10 then
+    Info(InfoACE, infoLevelMyLine, Chomp(line));
+  fi;
+  return line;
+end);
+
+#############################################################################
+####
+##
 #F  WRITE_LIST_TO_ACE_STREAM( <stream>, <list> ) . . . write to an ACE stream
 ##
 ##  writes the list <list> to the iostream <stream>, `Info's <list> following

@@ -22,6 +22,7 @@ Revision.ace_streams_gd :=
 
 DeclareGlobalFunction("ACE_PRINT_AND_EVAL");
 DeclareGlobalFunction("ACE_READ_NEXT_LINE");
+DeclareGlobalFunction("FLUSH_ACE_STREAM_UNTIL");
 DeclareGlobalFunction("WRITE_LIST_TO_ACE_STREAM");
 
 #E  streams.gd  . . . . . . . . . . . . . . . . . . . . . . . . . . ends here 

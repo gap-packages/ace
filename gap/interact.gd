@@ -26,7 +26,6 @@ DeclareGlobalFunction("ACEResurrectProcess");
 DeclareGlobalFunction("READ_ACE_ERRORS");
 DeclareGlobalFunction("ENSURE_NO_ACE_ERRORS");
 DeclareGlobalFunction("INTERACT_TO_ACE_WITH_ERRCHK");
-DeclareGlobalFunction("FLUSH_ACE_STREAM_UNTIL");
 DeclareGlobalFunction("ACE_ENUMERATION_RESULT");
 DeclareGlobalFunction("LAST_ACE_ENUM_RESULT");
 DeclareGlobalFunction("ACEWrite");
