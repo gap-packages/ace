@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
 $version = `cat VERSION`;
 chomp $version;
-system( "( make clean; ".
+system( "( rm -f Makefile src/Makefile; ".
         "  cp README ../README.ace; ".
         "  cd ..; rm -f ace-$version.zoo; ".
         "  find ace -type f | ".
