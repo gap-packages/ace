@@ -38,7 +38,7 @@ local ioIndex;
   elif IsBound(ACEData.io[ arglist[1] ]) then
     return arglist[1];
   else
-    Error("No such interactive ACE session");
+    Error("no such interactive ACE session\n");
   fi;
 end);
 
@@ -365,7 +365,7 @@ local IsLastLine, IsEnumLine, line, enumResult;
     fi;
   until IsLastLine(line);
   if enumResult{[1 .. 8]} = "ACE Enum" and first <> fail then
-    Error(":", enumResult);
+    Error(enumResult, "\n");
   fi;
   return enumResult;
 end);
@@ -389,7 +389,7 @@ local ioIndex, line;
     return WRITE_LIST_TO_ACE_STREAM( ACEData.io[ioIndex].stream,
                                      arg{[Length(arg)..Length(arg)]} );
   else
-    Error("Expected 1 or 2 arguments ... not ", Length(arg), " arguments\n");
+    Error("expected 1 or 2 arguments ... not ", Length(arg), " arguments\n");
   fi;
 end);
 
@@ -458,12 +458,12 @@ local idx1stfn, stream, IsMyLine, Modify, lines, line;
 
   idx1stfn := First([1..Length(arg)], i -> IsFunction(arg[i]));
   if idx1stfn = fail then
-    Error("Expected at least one function argument");
+    Error("expected at least one function argument\n");
   elif Length(arg) > idx1stfn + 1 then
-    Error("Expected 1 or 2 function arguments, not ", 
-          Length(arg) - idx1stfn + 1);
+    Error("expected 1 or 2 function arguments, not ", 
+          Length(arg) - idx1stfn + 1, "\n");
   elif idx1stfn > 2  then
-    Error("Expected 0 or 1 integer arguments, not ", idx1stfn - 1);
+    Error("expected 0 or 1 integer arguments, not ", idx1stfn - 1, "\n");
   else
     stream := ACEData.io[ ACE_IOINDEX(arg{[1..idx1stfn - 1]}) ].stream;
     IsMyLine := arg[idx1stfn];
@@ -605,7 +605,7 @@ local modes, mode;
   modes := ACE_MODES( datarec.stream );
   mode := First( RecNames(modes), ACEmode -> modes.(ACEmode) );
   if mode = fail then
-    Error("None of ACEContinue, ACERedo or ACEStart is possible. Huh???");
+    Error("none of ACEContinue, ACERedo or ACEStart is possible. Huh???\n");
   else
     ACE_MODE(mode{[4..Length(mode)]}, datarec);
   fi;
@@ -732,9 +732,10 @@ InstallGlobalFunction(ACEStart, function(arg)
 local start, ioIndex, stream, datarec, gens;
 
   if Length(arg) > 5 then
-    Error("Expected at most 5 arguments ... not ", Length(arg), " arguments.");
+    Error("expected at most 5 arguments ... not ", Length(arg), 
+          " arguments.\n");
   elif Length(arg) = 2 and arg[1] <> 0 then
-    Error("When called with 2 arguments, first argument should be 0.");
+    Error("when called with 2 arguments, first argument should be 0.\n");
   elif not IsEmpty(arg) and arg[1] = 0 then
     start := false;
     arg := arg{[2..Length(arg)]};
@@ -766,7 +767,7 @@ local start, ioIndex, stream, datarec, gens;
     else
       stream := InputOutputLocalProcess(ACEData.tmpdir, ACEData.binary, []);
       if stream = fail then
-        Error(": Sorry! Run out of pseudo-ttys. Can't initiate stream.");
+        Error("sorry! Run out of pseudo-ttys. Can't initiate stream.\n");
       else
         Add( ACEData.io, rec(stream := stream, options := rec()) );
         ioIndex := Length(ACEData.io);
@@ -1290,7 +1291,7 @@ InstallGlobalFunction(SetACEOptions, function(arg)
 local ioIndex, datarec;
 
   if Length(arg) > 2 then
-    Error("Expected 0, 1 or 2 arguments ... not ", Length(arg), " arguments\n");
+    Error("expected 0, 1 or 2 arguments ... not ", Length(arg), " arguments\n");
   elif Length(arg) in [1, 2] and IsRecord( arg[Length(arg)] ) then
     if not IsEmpty(OptionsStack) then
       Info(InfoACE + InfoWarning, 1,
@@ -1679,8 +1680,30 @@ InstallGlobalFunction(ACE_IOINDEX_AND_ONE_VALUE, function(arglist)
     return [ ACE_IOINDEX(arglist{[1..Length(arglist) - 1]}),
              arglist[Length(arglist)] ];
   else
-    Error("Expected 1 or 2 arguments ... not ", 
+    Error("expected 1 or 2 arguments ... not ", 
           Length(arglist), " arguments\n");
+  fi;
+end);
+
+#############################################################################
+####
+##
+#F  ACE_IOINDEX_AND_ONE_LIST  . . . . . . . . . . . . . . . Internal Function
+##  . . . . . . . . . . . . . . . . . . . .  returns a list [ioIndex, optval]
+##  . . . . . . . . . . . . . . . . . . . .  for a one-value ACE  `directive'
+##  . . . . . . . . . . . . . . . . . . . .  option,  where  that   one-value
+##  . . . . . . . . . . . . . . . . . . . . . . . . . . . . .  must be a list
+##
+InstallGlobalFunction(ACE_IOINDEX_AND_ONE_LIST, function(arglist)
+  if not(Length(arglist) in [1,2]) then
+    Error("expected 1 or 2 arguments ... not ", 
+          Length(arglist), " arguments\n");
+  elif IsString(arglist[ Length(arglist) ]) or 
+       not IsList(arglist[ Length(arglist) ]) then
+    Error("last argument should be a list\n");
+  else
+    return [ ACE_IOINDEX(arglist{[1..Length(arglist) - 1]}),
+             arglist[Length(arglist)] ];
   fi;
 end);
 
@@ -1694,7 +1717,7 @@ end);
 ##
 InstallGlobalFunction(ACE_IOINDEX_AND_LIST, function(arglist)
   if Length(arglist) > 2 then
-    Error("Expected 0, 1 or 2 arguments ... not ", 
+    Error("expected 0, 1 or 2 arguments ... not ", 
           Length(arglist), " arguments\n");
   elif Length(arglist) in [1, 2] and IsList( arglist[Length(arglist)] ) then
     return [ ACE_IOINDEX(arglist{[1..Length(arglist) - 1]}),
@@ -1825,7 +1848,7 @@ local ioIndex, datarec, line, activecosets, cosetreps;
   ioIndex := ACE_IOINDEX(arg);
   datarec := ACEData.io[ ioIndex ];
   if not IsBound(datarec.stats) then
-    Error("ACECosetRepresentatives: No current table?");
+    Error("ACECosetRepresentatives: no current table?\n");
   fi;
   READ_ACE_ERRORS(datarec.stream); # purge any output not yet collected
   PROCESS_ACE_OPTION(datarec.stream, "print", -datarec.stats.activecosets);
@@ -1947,7 +1970,7 @@ local ioIndex, datarec, twArgs, expected, line;
     datarec := ACEData.io[ ioIndex ];
     twArgs := arg{[Length(arg) - 1..Length(arg)]};
   else
-    Error("Expected 2 or 3 arguments ... not ", 
+    Error("expected 2 or 3 arguments ... not ", 
           Length(arg), " arguments\n");
   fi;
   READ_ACE_ERRORS(datarec.stream); # purge any output not yet collected
@@ -1993,7 +2016,7 @@ local lines, line, datarec;
     line := lines[Length(lines) - 1];
     Error(ACEfname, ":", line{[3..Length(line)]}, "\n",
           "(most probably the value passed to ", ACEfname, 
-          " was inappropriate)");
+          "\nwas inappropriate)\n");
   else
     datarec := ACEData.io[ ioIndexAndValue[1] ];
     return List(lines{[First([1..Length(lines)], 
@@ -2099,11 +2122,16 @@ local ACEfname, ioIndexAndValue, lines, line, datarec;
     line := lines[Length(lines) - 1];
     Error(ACEfname, ":", line{[3..Length(line)]}, "\n",
           "(most probably the value passed to ", ACEfname, 
-          " was inappropriate)");
+          "\nwas inappropriate)\n");
   else
-    lines := lines{[First([1..Length(lines)], 
-                          i -> lines[i]{[1..11]} = "Stabilising") + 1 ..
-                    Length(lines) - 1]};
+    if lines[Length(lines) - 1]{[1:15]} = "* Nothing found" then
+      lines := [];
+      Info(InfoACE + InfoWarning, 1, "no nontrivial normalising cosets found");
+    else
+      lines := lines{[First([1..Length(lines)], 
+                            i -> lines[i]{[1..11]} = "Stabilising") + 1 ..
+                      Length(lines) - 1]};
+    fi;
     if ioIndexAndValue[2] > 0 then
       return List(lines, line -> Int( SplitString(line, "", " ")[1] ));
     else
@@ -2127,7 +2155,7 @@ local ioIndex, ACEout, iostream, datarec, fgens, standard, incomplete,
       cosettable, ACEOnBreak, NormalOnBreak, SetACEOptions, DisplayACEOptions;
 
   if Length(arg) = 2 or Length(arg) > 3 then
-    Error("Expected 0, 1 or 3 arguments ... not ", Length(arg), " arguments\n");
+    Error("expected 0, 1 or 3 arguments ... not ", Length(arg), " arguments\n");
   elif Length(arg) <= 1 then
     # Called as an interactive ACE command
     ioIndex := ACE_IOINDEX(arg);
@@ -2218,7 +2246,7 @@ local ioIndex, ACEout, iostream, datarec, fgens, standard, incomplete,
             PopOptions();
           fi;
           OnBreak := ACEOnBreak;
-          Error(": No coset table ...");
+          Error("no coset table ...\n");
           if ACEData.options <> rec() then
             PushOptions(ACEData.options);
             Unbind(ACEData.options);
@@ -2282,7 +2310,7 @@ local datarec, iostream, line, stats;
     CloseStream(iostream);
     return stats;
   else
-    Error("Expected 0, 1 or 3 arguments ... not ", Length(arg), " arguments\n");
+    Error("expected 0, 1 or 3 arguments ... not ", Length(arg), " arguments\n");
   fi;
 end);
 
@@ -2322,11 +2350,22 @@ end);
 ##  the interactive ACE process.
 ##
 InstallGlobalFunction(ACEAddRelators, function(arg)
-local ioIndexAndOptval;
-  ioIndexAndOptval := ACE_IOINDEX_AND_ONE_VALUE(arg);
-  EXEC_ACE_DIRECTIVE_OPTION(ioIndexAndOptval, "rl", 3, "", "", false);
-  CHEAPEST_ACE_MODE(ACEData.io[ ioIndexAndOptval[1] ]);
-  return ACE_ARGS(ioIndexAndOptval[1], "rels");
+local ioIndexAndOptval, ioIndex, datarec;
+  ioIndexAndOptval := ACE_IOINDEX_AND_ONE_LIST(arg);
+  ioIndex := ioIndexAndOptval[1];
+  datarec := ACEData.io[ ioIndex ];
+  if not IsBound(datarec.enforceAsis) then
+    datarec.enforceAsis := false;
+  fi;
+  EXEC_ACE_DIRECTIVE_OPTION(
+      [ ioIndex, ACE_RELS(ioIndexAndOptval[2], # relatorlist
+                          ACEGroupGenerators(ioIndex),
+                          datarec.acegens,
+                          datarec.enforceAsis) ],
+      "rl", 3, "", "", false
+      );
+  CHEAPEST_ACE_MODE(datarec);
+  return ACE_ARGS(ioIndex, "rels");
 end);
 
 #############################################################################
@@ -2340,11 +2379,18 @@ end);
 ##  the interactive ACE process.
 ##
 InstallGlobalFunction(ACEAddSubgroupGenerators, function(arg)
-local ioIndexAndOptval;
-  ioIndexAndOptval := ACE_IOINDEX_AND_ONE_VALUE(arg);
-  EXEC_ACE_DIRECTIVE_OPTION(ioIndexAndOptval, "sg", 3, "", "", false);
-  CHEAPEST_ACE_MODE(ACEData.io[ ioIndexAndOptval[1] ]);
-  return ACE_ARGS(ioIndexAndOptval[1], "sgens");
+local ioIndexAndOptval, ioIndex, datarec;
+  ioIndexAndOptval := ACE_IOINDEX_AND_ONE_LIST(arg);
+  ioIndex := ioIndexAndOptval[1];
+  datarec := ACEData.io[ ioIndex ];
+  EXEC_ACE_DIRECTIVE_OPTION(
+      [ ioIndex, ACE_WORDS(ioIndexAndOptval[2], # generatorlist
+                           ACEGroupGenerators(ioIndex),
+                           datarec.acegens) ],
+      "sg", 3, "", "", false
+      );
+  CHEAPEST_ACE_MODE(datarec);
+  return ACE_ARGS(ioIndex, "sgens");
 end);
 
 #############################################################################
@@ -2367,7 +2413,7 @@ local badwords;
       if IsEmpty(badwords) then
         return SortedList(List(val, w -> Position(goodwords, w)));
       else
-        Error(badwords, " are not ", wordtype);
+        Error(badwords, " are not ", wordtype, "\n");
       fi;
     elif ForAll(val, IsInt) then
       return SortedList(val);
@@ -2389,7 +2435,7 @@ end);
 ##
 InstallGlobalFunction(ACEDeleteRelators, function(arg)
 local ioIndexAndOptval;
-  ioIndexAndOptval := ACE_IOINDEX_AND_ONE_VALUE(arg);
+  ioIndexAndOptval := ACE_IOINDEX_AND_ONE_LIST(arg);
   ioIndexAndOptval[2] := WORDS_OR_UNSORTED(ioIndexAndOptval[2],
                                            ACERelators(ioIndexAndOptval[1]),
                                            "relators");
@@ -2410,7 +2456,7 @@ end);
 ##
 InstallGlobalFunction(ACEDeleteSubgroupGenerators, function(arg)
 local ioIndexAndOptval;
-  ioIndexAndOptval := ACE_IOINDEX_AND_ONE_VALUE(arg);
+  ioIndexAndOptval := ACE_IOINDEX_AND_ONE_LIST(arg);
   ioIndexAndOptval[2] := WORDS_OR_UNSORTED(ioIndexAndOptval[2],
                                            ACESubgroupGenerators(
                                                ioIndexAndOptval[1]
@@ -2478,7 +2524,7 @@ local ioIndexAndOptval, datarec, sgens, lines;
     CHEAPEST_ACE_MODE(datarec);
   fi;
   if datarec.stats.index <> 0 then
-    Error("ACERandomCoincidences: enumeration index is already finite!");
+    Error("ACERandomCoincidences: enumeration index is already finite!\n");
   fi;
   PROCESS_ACE_OPTION(datarec.stream, "rc", ioIndexAndOptval[2]);
   # Perhaps it's wasteful to use ACEReadUntil here ...
@@ -2535,18 +2581,19 @@ local ACEfname, ioIndex, add, lines, line, datarec;
                [ioIndex, add], "nc", 3, "", "---------------------", true);
   if lines[Length(lines) - 1] = "* All (traceable) conjugates in subgroup" then
     Info(InfoACE + InfoWarning, 1, 
-         ACEfname, ": All (traceable) conjugates in subgroup");
+         ACEfname, ": All (traceable) conjugates in subgp");
     return [];
   elif lines[Length(lines) - 2]{[1..8]} = "** ERROR" then
     line := lines[Length(lines) - 1];
     Error(ACEfname, ":", line{[3..Length(line)]}, "\n",
           "(most probably the value passed to ", ACEfname, 
-          " was inappropriate)");
+          "\nwas inappropriate)\n");
   else
+    datarec := ACEData.io[ ioIndex ];
     if add = 1 then
+      CHEAPEST_ACE_MODE(datarec);
       ACE_ARGS(ioIndex, "sgens"); # Update saved subgroup generators
     fi;
-    datarec := ACEData.io[ ioIndex ];
     return List(Filtered(lines, line -> line{[1..3]} = "Grp"),
                 function(line)
                   line := SplitString(line, '"');

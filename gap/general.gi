@@ -83,7 +83,7 @@ local optnames, echo, infile, instream, outfile, ToACE, gens, acegens,
                                      sgens := sgens) );
   # Check arguments are valid
   if IsEmpty(fgens) then
-    Error(": fgens argument defines an empty list of group generators");
+    Error("fgens argument defines an empty list of group generators\n");
   else
     ACE_FGENS_ARG_CHK(fgens, "fgens ");
   fi;
@@ -93,7 +93,7 @@ local optnames, echo, infile, instream, outfile, ToACE, gens, acegens,
   if ACEfname = "ACEStart" then
     instream := InputOutputLocalProcess(ACEData.tmpdir, ACEData.binary, []);
     if instream = fail then
-      Error(": Sorry! Run out of pseudo-ttys. Can't initiate stream.");
+      Error("sorry! Run out of pseudo-ttys. Can't initiate stream.\n");
     fi;
     FLUSH_ACE_STREAM_UNTIL(instream, 3, 3, READ_NEXT_LINE, 
                            line -> line{[3..6]} = "name");
@@ -277,7 +277,7 @@ local ioIndex, gens, rels;
     gens := arg[1];
     rels := arg[2];
   else
-    Error("Expected at most 2 arguments, not ", Length(arg), " arguments.");
+    Error("expected at most 2 arguments, not ", Length(arg), " arguments.\n");
   fi;
 
   if Length(gens) = 1 or not ForAny(rels, rel -> rel = gens[1]^2) then
@@ -422,7 +422,7 @@ local name, file;
   file := Filename( DirectoriesPackageLibrary( "ace", "res-examples"), name );
   if file = fail then
     Error("ACEReadResearchExample: Sorry! There is no ACE research example ",
-          "file with name `", name, "'");
+          "file with name `", name, "'\n");
   else
     Read(file);
   fi;
@@ -446,13 +446,13 @@ InstallGlobalFunction(ACEPrintResearchExample, function(arg)
 local outstream, print, file, instream, line;
 
   if IsEmpty(arg) then
-    Error("Expected 1 or 2 arguments");
+    Error("expected 1 or 2 arguments\n");
   fi;
 
   file := Filename( DirectoriesPackageLibrary( "ace", "res-examples"), arg[1] );
   if file = fail then
     Error("ACEPrintResearchExample: Sorry! There is no ACE research example ",
-          "file with name `", arg[1], "'");
+          "file with name `", arg[1], "'\n");
   fi;
 
   if Length(arg) > 1 then

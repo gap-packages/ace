@@ -780,14 +780,12 @@ InstallGlobalFunction(ACE_FGENS_ARG_CHK, function(fgens, whicharg)
                             (ExponentSyllable(g, 1) = 1))
   then
     if IsList(fgens) and ForAll(fgens, IsElementOfFpGroup) then
-      Error(": ", whicharg, 
-            "argument must be a list of free group generators,\n",
+      Error(whicharg, "argument must be a list of free group generators,\n",
             "        not fp group elements.\n", 
             "        e.g. use 'FreeGeneratorsOfFpGroup' ",
             "rather than 'GeneratorsOfGroup'.\n");
     else
-      Error(": ", whicharg, 
-            "argument must be a list of free group generators.\n");
+      Error(whicharg, "argument must be a list of free group generators.\n");
     fi;
   fi;
 end);
@@ -810,13 +808,13 @@ local one, ones;
                             (MappedWord(w, fgens, ones) = one))
   then
     if IsList(words) and ForAll(words, IsElementOfFpGroup) then
-      Error(": ", whicharg, 
+      Error(whicharg, 
             "argument must be a list of words in the free group generators,\n",
             "        not fp group elements.\n", 
             "        Perhaps use 'UnderlyingElement' to convert each fp\n",
             "        group element to a word in the free group generators.\n");
     else
-      Error(": ", whicharg, 
+      Error(whicharg, 
             "argument must be a list of words in the free group generators.\n");
     fi;
   fi;
