@@ -779,10 +779,16 @@ InstallGlobalFunction(ACE_FGENS_ARG_CHK, function(fgens, whicharg)
                             (NumberSyllables(g) = 1) and
                             (ExponentSyllable(g, 1) = 1))
   then
-    # I'd like to use Error rather than Info here ...
-    # but in GAP 4.2 a word need not satisfy IsAssocWord
-    Info(InfoACE + InfoWarning, 1,
-         whicharg, "argument may not be a valid list of group generators");
+    if IsList(fgens) and ForAll(fgens, IsElementOfFpGroup) then
+      Error(": ", whicharg, 
+            "argument must be a list of free group generators,\n",
+            "        not fp group elements.\n", 
+            "        e.g. use 'FreeGeneratorsOfFpGroup' ",
+            "rather than 'GeneratorsOfGroup'.\n");
+    else
+      Error(": ", whicharg, 
+            "argument must be a list of free group generators.\n");
+    fi;
   fi;
 end);
 
@@ -790,8 +796,8 @@ end);
 ####
 ##
 #F  ACE_WORDS_ARG_CHK . . . . . . . . . . . . . . . . . . . Internal function
-##  . . . . . . . . . . Checks that words is a valid list of word in the free
-##  . . . . . . . . . . group generators fgens.  If  not  produces  an  error
+##  . . . . . . . . . . Checks that words is a valid list  of  words  in  the
+##  . . . . . . . . . . free group generators fgens. If not produces an error
 ##  . . . . . . . . . . . . . . . . . . .  message for the whicharg argument.
 ##
 InstallGlobalFunction(ACE_WORDS_ARG_CHK, function(fgens, words, whicharg)
@@ -799,14 +805,20 @@ local one, ones;
   
   one := One( GroupWithGenerators(fgens) );
   ones := List(fgens, gen -> one);
-  if not IsList(words) or ForAny(words, 
-                                 w -> not IsWord(w) or
-                                      (MappedWord(w, fgens, ones) <> one))
+  if not IsList(words) or 
+     not ForAll(words, w -> IsElementOfFreeGroup(w) and 
+                            (MappedWord(w, fgens, ones) = one))
   then
-    # I'd like to use Error rather than Info here ...
-    # but in GAP 4.2 a word need not satisfy IsWord
-    Info(InfoACE + InfoWarning, 1, whicharg, 
-         "argument may not be a valid list of words in the generators");
+    if IsList(words) and ForAll(words, IsElementOfFpGroup) then
+      Error(": ", whicharg, 
+            "argument must be a list of words in the free group generators,\n",
+            "        not fp group elements.\n", 
+            "        Perhaps use 'UnderlyingElement' to convert each fp\n",
+            "        group element to a word in the free group generators.\n");
+    else
+      Error(": ", whicharg, 
+            "argument must be a list of words in the free group generators.\n");
+    fi;
   fi;
 end);
 

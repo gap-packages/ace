@@ -89,9 +89,7 @@ DeclareGlobalFunction("ACETraceWord");
 DeclareGlobalFunction("ACE_ORDER");
 DeclareGlobalFunction("ACEOrders");
 DeclareGlobalFunction("ACEOrder");
-DeclareGlobalFunction("ACECosetsThatStabiliseSubgroup");
-DeclareSynonym("ACECosetsThatNormaliseSubgroup", 
-               ACECosetsThatStabiliseSubgroup);
+DeclareGlobalFunction("ACECosetsThatNormaliseSubgroup");
 DeclareGlobalFunction("ACECosetTable");
 DeclareGlobalFunction("ACEStats");
 DeclareGlobalFunction("ACERecover");

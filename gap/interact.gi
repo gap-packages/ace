@@ -2071,10 +2071,9 @@ end);
 #############################################################################
 ####
 ##
-#F  ACECosetsThatStabiliseSubgroup  . . . . . . .  Determine  coset   numbers
+#F  ACECosetsThatNormaliseSubgroup  . . . . . . .  Determine  coset   numbers
 ##  . . . . . . . . . . . . . . . . . . . . . . .  whose      representatives
-##  . . . . . . . . . . . . . . . . . . . . . . .  stabilise (i.e. normalise)
-##  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .  the subgroup
+##  . . . . . . . . . . . . . . . . . . . . . . .  normalise   the   subgroup
 ##
 ##  For the i-th interactive ACE process and n, where i and n are  determined
 ##  by arg:
@@ -2090,9 +2089,9 @@ end);
 ##    non-trivial coset numbers whose representatives normalise the  subgroup
 ##    is returned.
 ##
-InstallGlobalFunction(ACECosetsThatStabiliseSubgroup, function(arg)
+InstallGlobalFunction(ACECosetsThatNormaliseSubgroup, function(arg)
 local ACEfname, ioIndexAndValue, lines, line, datarec;
-  ACEfname := "ACECosetsThatStabiliseSubgroup";
+  ACEfname := "ACECosetsThatNormaliseSubgroup";
   ioIndexAndValue := ACE_IOINDEX_AND_ONE_VALUE(arg);
   lines := EXEC_ACE_DIRECTIVE_OPTION(
                ioIndexAndValue, "sc", 3, "", "---------------------", true);
@@ -2242,10 +2241,16 @@ local ioIndex, ACEout, iostream, datarec, fgens, standard, incomplete,
     until false;
   fi;
   if incomplete then
-    Info(InfoACE + InfoWarning, 1, 
-         "ACECosetTable: Warning: Coset table is incomplete.");
-  elif standard = "semilenlex" and 
-       "CosetTableStandard" in NamesGVars() then
+    if "CosetTableStandard" in NamesGVars() then
+      StandardizeTable(cosettable, "lenlex");
+      Info(InfoACE + InfoWarning, 1, 
+           "ACECosetTable: Coset table is incomplete, reduced ",
+           "and lenlex standardised.");
+    else
+      Info(InfoACE + InfoWarning, 1, 
+           "ACECosetTable: Warning: Coset table is incomplete.");
+    fi;
+  elif standard = "semilenlex" and "CosetTableStandard" in NamesGVars() then
     StandardizeTable(cosettable, "semilenlex");
   elif (standard{[1..3]} = "GAP") or (standard = "semilenlex") then
     StandardizeTable(cosettable);
