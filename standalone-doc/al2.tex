@@ -21,7 +21,7 @@ Level 2 of \ace\ is a complete, standalone application for generating and
 It can be used interactively, or can take its input from a script file.
 It is reasonably robust and comprehensive, but no attempt has been made to
   make it `industrial strength' or to give it any of the features of, say,
-  \textsc{Magma} \cite{BCP} or \textsf{GAP} \cite{Sch}.
+  \textsc{Magma} \cite{Magma} or \textsf{GAP} \cite{GAP}.
 Most of its features have been added in response to user requests, and it
   is assumed that the user is `competent'\kern-1.5pt.
 One of the primary goals in developing \ace\ was to demonstrate how to
@@ -118,7 +118,7 @@ For example, the \ttt{fi} value is irrelevant in HLT mode.
 The idea behind this is that, if you later change some parameters
   individually, then the enumeration retains the `flavour' of the last
   selected predefined strategy.
-Note also that other parameters which may effect an enumeration are left
+Note also that other parameters which may affect an enumeration are left
   untouched by setting one of the predefined strategies; for example, the
   values of \ttt{max} \amp \ttt{asis}.
 These parameters have an effect which is independant of the selected 
@@ -236,8 +236,8 @@ The enumeration must be (re)started or redone, it cannot be continued.
 The \ttt{aep} (all equivalent presentations) option runs an enumeration
   for each possible combination of relator ordering, relator rotations,
   and relator inversions.
-As discussed by Cannon, Dimino, Havas \amp Watson \cite{CDHW} and Havas
-  \amp Ramsay \cite{HR1} such equivalent presentations can yield large
+As discussed by Cannon, Dimino, Havas \amp Watson \cite{CDHW73} and Havas
+  \amp Ramsay \cite{HR99b} such equivalent presentations can yield large
   variations in the number of cosets required in an enumeration.
 For this command, we are interested in this variation.
 
@@ -267,7 +267,7 @@ The order in which the equivalent presentations are generated and tested
   presentation to be generated and tested, so that the group's relators are
   left `unchanged' by running the \ttt{aep} option.
 
-As an example (drawn from the discussion in \cite{HR1}) consider the index
+As an example (drawn from the discussion in \cite{HR99b}) consider the index
   $448$ enumeration of the right cosets of $\langle a^2,Ab \rangle$ in
   $(8,7 \mid 2,3)$, where 
   $$ (8,7 \mid 2,3) 
@@ -353,7 +353,7 @@ Any existing information in the table is cleared, and the enumeration
 
 \subsection{\ttt{bye\ /\ exit\ /\ q[uit]\ ;}}
 
-The exits \ace\ nicely, printing the date and the time.
+This exits \ace\ nicely, printing the date and the time.
 An \ttt{EOF} (end-of-file; i.e., \ttt{\^{}d}) has the same effect, so 
   proper termination occurs if \ace\ is taking its input from a script
   file.
@@ -495,7 +495,7 @@ If it turns out not to be easy, then we regard it as `hard'\kern-1.5pt,
   and switch to CR style, after performing a lookahead on the entire
   table.
 
-\subsection{\ttt{del\ gen[erators]\ /\ ds\ :\ <int>\ list>\ ;}}
+\subsection{\ttt{del\ gen[erators]\ /\ ds\ :\ <int\ list>\ ;}}
 
 This command allows subgroup generators to be deleted from the
   presentation.
@@ -503,7 +503,7 @@ If the generators are numbered from one in the output of, say, the
   \ttt{sr} command, then the generators listed in \ttt{<int\ list>} are
   deleted; \ttt{<int\ list>} must be a strictly increasing sequence.
 
-\subsection{\ttt{del\ rel[ators]\ /\ dr\ :\ <int>\ list>\ ;}}
+\subsection{\ttt{del\ rel[ators]\ /\ dr\ :\ <int\ list>\ ;}}
 
 As \ttt{del gen}, but for the group's relators.
 
@@ -547,7 +547,7 @@ An argument of \ttt{0} or no argument selects the Felsch strategy, while
 \subsection{\ttt{f[factor]\ /\ fi[ll\ factor]\ :\ [0/1..]\ ;}}
 
 If gap-filling is on, then gaps of length one found during deduction
-  testing are preferentially filled (see \cite{Hav}).
+  testing are preferentially filled (see \cite{Hav91}).
 However, this potentially violates the formal requirement that all rows
   in the table are eventually filled (and tested against the relators).
 The fill factor is used to ensure that some constant proportion of the
@@ -610,7 +610,7 @@ A valid set of generators is the minimum information necessary before
 The columns of the coset table are allocated in the same order as the 
   generators are listed, insofar as this is possible, given that the first
   two columns must be a generator/inverse pair or a pair of involutions.
-The ordering of the columns can, in some cases, effect the definition
+The ordering of the columns can, in some cases, affect the definition
   sequence of cosets and impact the statistics of an enumeration.
 
 \subsection{\ttt{group\ relators\ /\ rel[ators]\ :\ <relator\ list>\ ;}}
@@ -660,7 +660,7 @@ The idea here is that most of the work is done C-style (with the relators
 \tsc{Guru Notes:}
 The \ttt{1000}/\ttt{1} mix is not necessarily optimal, and some
   experimentation may be needed to find an acceptable balance (see, for
-  example, \cite{HR1}).
+  example, \cite{HR99b}).
 Note also that, the longer the total length of the presentation, the more
   work needs to be done for each coset application to the relators; one
   coset application can result in more than $1000$ definitions, reversing
@@ -758,7 +758,7 @@ Processing all cyclic permutations of the relators can be very
   time-consuming, especially if the presentation if large.
 So, all other things being equal, the Mendelsohm flag should normally be
   left off.
-Note that Mendelsohn's paper \cite{Men} discusses tracing all cyclic 
+Note that Mendelsohn's paper \cite{Men64} discusses tracing all cyclic 
   shifts of both the relators and their formal inverses.
 \ace\ only processes the relators.
 However, since relators are scanned from both the front and the rear, we
@@ -945,14 +945,14 @@ Pre-\acet\ scripts may contain this option, which is quietly ignored
 
 To correctly process multiple concidences, a union-find must be performed.
 If both path compression and weighted union are used, then this can be
-  done in essentially linear time (see, e.g., \cite{CLR}).
+  done in essentially linear time (see, e.g., \cite{CLR90}).
 Weighted union alone, in the worst-case, is worse than linear, but is
   subquadratic.
 In practice, path compression is expensive, since it involves many coset
   table accesses.
 So, by default, path compression is turned off; it can be turned on by
   \ttt{path:1}.
-It has no effect on the result, but may effect the running time and the
+It has no effect on the result, but may affect the running time and the
   internal statistics.
 
 \tsc{Guru Notes:}
@@ -1138,7 +1138,7 @@ If $\ttt{<int>} < 0$, it prints the first $|\ttt{<int>}|$ stabilising cosets,
 
 \subsection{\ttt{sims\ :\ 1/3/5/7/9\ ;}}
 
-In his book \cite{Sim}, Sims discusses ten standard enumeration
+In his book \cite{Sim94}, Sims discusses ten standard enumeration
   strategies.
 These are effectively HLT (with \amp without the \ttt{mend} parameter,
   and with \amp without continuous `lookahead') and Felsch, all either with
@@ -1148,9 +1148,9 @@ These are effectively HLT (with \amp without the \ttt{mend} parameter,
   standardised before the enumeration is continued.
 The other five strategies are implemented, and can be selected by this
   command.
-The argument matches the number given in \cite[\S5.5]{Sim}; see
+The argument matches the number given in \cite[\S5.5]{Sim94}; see
   Section~\ref{sec:strat} for the parameter settings.
-With care, it is possible to duplicate the statistics given in \cite{Sim};
+With care, it is possible to duplicate the statistics given in \cite{Sim94};
   some examples are given in Section~\ref{ex001}.
 
 \subsection{\ttt{st[andard\ table]\ ;}}
@@ -1167,13 +1167,13 @@ In a canonic table, the coset representatives are in length plus (column
 Two tables are equivalent only if their canonic forms are the same.
 
 \tsc{Guru Notes:}
-In half of the ten standard enumeration strategies of Sims \cite{Sim}, the
+In half of the ten standard enumeration strategies of Sims \cite{Sim94}, the
   table is standardised repeatedly.
 This is expensive computationally, but can result in fewer cosets being
   necessary.
 The effect of doing this can be investigated in \ace\ by (repeatedly)
   halting the enumeration, standardising the table, and continuing; see 
-  Section~\ref{ex007} for an example..
+  Section~\ref{ex007} for an example.
 
 \subsection{\ttt{stat[istics]\ /\ stats\ ;}}
 
