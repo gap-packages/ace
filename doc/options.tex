@@ -477,6 +477,21 @@ c', respectively). When the {\ACE} binary encounters an option that it
 doesn't understand it issues a  warning  and  simply  ignores  it;  so
 options accidentally passed to {\ACE} are unlikely to pose problems.
 
+We also mention here, since  it  is  related  to  an  option  of  this
+section, the following.
+
+\>`ACEIgnoreUnknownDefault' V
+
+is a global variable (*not* an option) that is initially  set  by  the
+{\ACE} share package to `false', and is the default action that {\ACE}
+takes for options that are unknown to the {\ACE}  share  package  (but
+may be new options provided in a new version of the {\ACE} binary). If
+the user sets `ACEIgnoreUnknownDefault := true', then for any function
+call requiring {\ACE} for which the user does not want options unknown
+to the share package to be ignored, the user  pass  among  the  option
+list `aceignoreunknown  :=  false'  (see  "option  aceignoreunknown"),
+explicitly (thus reversing the usual behaviour).
+
 Here now, are the  few  options  that  are  available  to  the  {\GAP}
 interface to {\ACE} that have no counterpart in the {\ACE} standalone:
 
@@ -598,7 +613,7 @@ coincidentally are {\ACE} options but are not intended for the  {\ACE}
 function being called.
 
 \>`aceignoreunknown'{option aceignoreunknown}@{option `aceignoreunknown'}&
-Directs an {\ACE} function to  ignore  any  options  not known to the
+Directs an {\ACE} function to ignore any  options  not  known  to  the
 {\ACE} interface.
 (Shortest abbreviation: `aceignoreu'.)
 
@@ -607,7 +622,9 @@ it is safe to include it, to avoid aberrant warning messages from  the
 {\ACE} interface. However, fairly obviously, it should not be used  in
 the situation where a new {\ACE} binary has been  installed  with  new
 options that are not listed among  the  fields  of  `KnownACEOptions',
-which you intend to use.
+which you intend to use. Omitting  the  `aceignoreunknown'  option  is
+equivalent to setting it to  the  value  of  `ACEIgnoreUnknownDefault'
+(see "ACEIgnoreUnknownDefault").
 
 \>`acenowarnings'{option acenowarnings}@{option `acenowarnings'}& 
 Inhibits the warning message ```unknown (maybe new) or bad option'''
