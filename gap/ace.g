@@ -236,7 +236,7 @@ local fgens,rels,sgens,a,i,j,k,n,nums,fullopt,opt,optval,options,known,
       donothing,echo,gens,CheckValidOption,DoWords,FullOptionName,
       GetOptionValue,IsValidOptionValue,MatchesKnownOption,ProcessOption,
       infile,outfile,instream,line,col,ok,p,rowentries,table,cosettable,
-      stats,statval,words,ACEfname;
+      stats,words,ACEfname;
 
   fgens := arg[1];
   rels := arg[2];
@@ -536,19 +536,22 @@ local fgens,rels,sgens,a,i,j,k,n,nums,fullopt,opt,optval,options,known,
   instream := InputTextFile(outfile);
   line := ReadLine(instream);
 
-  # Parse the line for statistics
-  a := Filtered(line,i->i in ". " or i in CHARS_DIGITS);
-  a := SplitString(a, "", " .");
-  if stats then 
-    if line{[1..5]}="INDEX" then
-      statval:=[Int(a[1]),Int(a[7])+Int(a[8])/10^Length(a[8]),
-                Int(a[9]),Int(a[10])];
-    else
-      statval:=[0,Int(a[6])+Int(a[7])/10^Length(a[7]),Int(a[8]),Int(a[9])];
+  if stats then # CALL_ACE called via ACEStats
+    # Parse the line for statistics and return
+    a := Filtered(line,i->i in ". " or i in CHARS_DIGITS);
+    if line{[1..5]}<>"INDEX" then
+      # Enumeration failed so the index is missing 
+      # ... shove a 0 index on the front of a
+      a := Concatenation("0 ", a);
     fi;
+    a := SplitString(a, "", " .");
 
     CloseStream(instream);
-    return statval;
+    return rec(index      := Int(a[1]),
+               cputimeStr := Concatenation(a[7], ".", a[8]),
+               cputime    := Int(a[7])+Int(a[8])/10^Length(a[8]),
+               maxcosets  := Int(a[9]),
+               totcosets  := Int(a[10]));
   fi;
 
   # Skip some header until the ` coset ' line
