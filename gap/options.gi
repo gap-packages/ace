@@ -222,6 +222,22 @@ InstallValue(NonACEbinOptions,
 #############################################################################
 ####
 ##
+#V  ACE_INTERACT_FUNC_OPTIONS . . . . . list of non ACE options that are used
+##  . . . . . . . . . . . . . . . . . . . .  by the interaction ACE functions
+##
+
+InstallValue(ACE_INTERACT_FUNC_OPTIONS,
+  [ # used by: ACEConjugatesForNormalClosure
+    "add",
+    # used by: ACEOrders
+    "suborder", 
+    # used by: ACERandomlyApplyCosetCoincidence
+    "attempts", "hibound", "lobound", "subindex" ]
+);
+
+#############################################################################
+####
+##
 #V  ACEParameterOptions . .  record whose fields are the known ACE  parameter
 ##  . . . . . . . . . . . .  options.  Each  field is  assigned   the   known 
 ##  . . . . . . . . . . . .  default value, or is a record of default values.
@@ -531,6 +547,34 @@ local optval;
     # Ignore all but the first argument
     return optval;
   fi;
+end);
+  
+#############################################################################
+####
+##
+#F  ACE_VALUE_OPTION_ERROR(<optrec>, <optname>, <defaultval>, <IsOK>, <errmsg>)
+##
+##  returns:
+##    `false' if `ValueOption(<option>) = fail' 
+##               (and sets `<optrec>.(<optname>) := <defaultval>') or
+##            if `<IsOK>( ValueOption(<option>) )'
+##               (and sets `<optrec>.(<optname>) := ValueOption(<option>)')
+##    `true'  if `not <IsOK>( ValueOption(<option>) )'
+##               (and sets `<optrec>.errmsg := [<errmsg>]')
+##
+InstallGlobalFunction(ACE_VALUE_OPTION_ERROR, 
+function(optrec, optname, defaultval, IsOK, errmsg)
+local optval;
+  optval := ValueOption(optname);
+  if optval = fail then
+    optrec.(optname) := defaultval;
+  elif IsOK(optval) then
+    optrec.(optname) := optval;
+  else
+    optrec.errmsg := [errmsg];
+    return true;
+  fi;
+  return false;
 end);
   
 #############################################################################
@@ -897,8 +941,9 @@ local IsValidOptionValue, CheckValidOption, ProcessOption,
 
   CheckValidOption := function(val)
     # If opt.fullname is a known allowed optname and val is a valid value,
-    # warn the user of a possible error, if s/he wants to know.
-    if not nowarnings then
+    # warn the user of a possible error, if s/he wants to know and its
+    # not an ignored option.
+    if not(nowarnings or opt.ignore) then
       if opt.fullname in RecNames(disallowed) then
         Info(InfoACE + InfoWarning, 1,
              "ACE Warning: ", opt.name, ": ", disallowed.(opt.fullname));
@@ -973,13 +1018,7 @@ local IsValidOptionValue, CheckValidOption, ProcessOption,
     for optname in ignore do
       opt := rec(name := optname);
       FULL_ACE_OPT_NAME(opt); # sets opt.known and opt.fullname
-      if opt.known then
-        Add(ignored, opt.fullname);
-      elif not nowarnings then
-        Info(InfoACE + InfoWarning, 1,
-             "ACE Warning: ", opt.name, 
-             " (option that user wished ignored) is not a known ACE option");
-      fi;
+      Add(ignored, opt.fullname);
     od;
   end;
 

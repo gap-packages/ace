@@ -1250,13 +1250,23 @@ end);
 ##  stored in datarec.options.
 ##
 InstallGlobalFunction(INTERACT_SET_ACE_OPTIONS, function(ACEfname, datarec)
-local newoptnames, s, optnames, echo;
+local newoptnames, s, optnames, echo, ignored;
   datarec.modereqd := false;
-  if not IsEmpty(OptionsStack) then
-    newoptnames := ShallowCopy(RecNames(OptionsStack[ Length(OptionsStack) ]));
+  if not(IsEmpty(OptionsStack) or
+         ForAll(RecNames(OptionsStack[ Length(OptionsStack) ]),
+                optname -> optname in ACE_INTERACT_FUNC_OPTIONS)) then
+    newoptnames := List(RecNames(OptionsStack[ Length(OptionsStack) ]),
+                        optname -> not(optname in ACE_INTERACT_FUNC_OPTIONS));
+    ignored := List(VALUE_ACE_OPTION(newoptnames, [], "aceignore"),
+                    optname -> ACEPreferredOptionName(optname));
     datarec.modereqd := ForAny(newoptnames, 
-                               optname -> not (ACEPreferredOptionName(optname) 
-                                               in NonACEbinOptions));
+                               function(optname)
+                                 local prefname;
+                                 
+                                 prefname := ACEPreferredOptionName(optname);
+                                 return not(prefname in NonACEbinOptions or
+                                            prefname in ignored);
+                               end);
     if ForAny(newoptnames, 
               optname -> ACEPreferredOptionName(optname)
                          in ["group", "relators", "generators"]) then
@@ -1293,6 +1303,7 @@ local newoptnames, s, optnames, echo;
                         rec(),
                         # ignored
                         Concatenation( [ "aceinfile", "aceoutfile" ],
+                                       ignored,
                                        ACE_IF_EXPR(datarec.enforceAsis,
                                                    [ "asis" ], [], []) ));
   fi;
@@ -1592,10 +1603,12 @@ end);
 #############################################################################
 ####
 ##
-#F  ACEVersion  . . . . . . .  Prints the ACE version and details of packages
-##  . . . . . . . . . . . . . . . . . . . . .  included when ACE was compiled
+#F  ACEBinaryVersion 
 ##
-InstallGlobalFunction(ACEVersion, function(arg)
+##  Infos the version and component compilation details of  the  ACE  binary,
+##  and returns the version of the ACE binary.
+##
+InstallGlobalFunction(ACEBinaryVersion, function(arg)
 local ioIndex, stream;
 
   ACE_IOINDEX_ARG_CHK(arg);
@@ -1609,13 +1622,14 @@ local ioIndex, stream;
   fi;
   READ_ACE_ERRORS(stream); # purge any output not yet collected
                            # e.g. error messages due to unknown options
-  Info(InfoACE, 1, "ACE Version: ", ACEData.version);
+  Info(InfoACE, 1, "ACE Binary Version: ", ACEData.version);
   WRITE_LIST_TO_ACE_STREAM(stream, [ "options;" ]);
   FLUSH_ACE_STREAM_UNTIL(stream, 1, 1, READ_NEXT_LINE,
                          line -> IS_ACE_MATCH(line, "  host info ="));
   if ioIndex = fail then 
     CloseStream(stream);
   fi;
+  return ACEData.version;
 end);
 
 #############################################################################
@@ -2566,17 +2580,28 @@ end);
 #############################################################################
 ####
 ##
-#F  ACERandomCoincidences . . . . . . . . . Force the coincidence  of  random
-##  . . . . . . . . . . . . . . . . . . . . coset numbers with coset  1,  for
-##  . . . . . . . . . . . . . . . . . . . . the  interactive  ACE  process  i
-##  . . . . . . . . . . . . . . . . . . . . upto limit  (or  8)  times  until
-##  . . . . . . . . . . . . . . . . . . . . index is a multiple of  subindex,
-##  . . . . . . . . . . . . . . . . . . . . for i, subindex, limit determined
-##  . . . . . . . . . . . . . . . . . . . . . . . . . . by arg or return fail
+#F  ACERandomCoincidences( <i>, <subindex> )
+#F  ACERandomCoincidences( <subindex>)
+#F  ACERandomCoincidences( <i>, [<subindex>] )
+#F  ACERandomCoincidences( [<subindex>] )
+#F  ACERandomCoincidences( <i>, [<subindex>, <attempts>] )
+#F  ACERandomCoincidences( [<subindex>, <attempts>] )
 ##
-##  Essentially, coset representatives are added to the subgroup  generators,
-##  to try to achieve the objective, and any new coset representatives  added
-##  to the subgroup generators are returned as a (possibly empty) list.
+##  for  the  <i>th  (or  default)  interactive  {\ACE}  process  started  by
+##  `ACEStart', attempt up to <attempts> (or, in the  first  four  forms,  8)
+##  times to find nontrivial subgroups with index a multiple of <subindex> by
+##  repeatedly making random coset numbers coincident with coset 1 and seeing
+##  what happens. The starting coset table must be non-empty, but must  *not*
+##  be        complete        (use         `ACERandomlyApplyCosetCoincidence'
+##  (see~"ACERandomlyApplyCosetCoincidence")  if  your   table   is   already
+##  complete).  For  each   attempt,   we   repeatedly   add   random   coset
+##  representatives to the subgroup and `redo' the enumeration. If the  table
+##  becomes  too  small,  the  attempt  is  aborted,  the  original  subgroup
+##  generators restored, and another attempt made. If  an  attempt  succeeds,
+##  then   the   new   set    of    subgroup    generators    is    retained.
+##  `ACERandomCoincidences' returns  the  list  of  new  subgroup  generators
+##  added.  Use  `ACESubgroupGenerators'   (see~"ACESubgroupGenerators")   to
+##  determine the current subgroup generator list.
 ##
 InstallGlobalFunction(ACERandomCoincidences, function(arg)
 local ioIndexAndOptval, datarec, sgens, lines;
@@ -2605,6 +2630,100 @@ local ioIndexAndOptval, datarec, sgens, lines;
     Info(InfoACE + InfoWarning, 1, "ACERandomCoincidences: Unsuccessful!");
   fi;
   return Difference(ACE_ARGS(ioIndexAndOptval[1], "sgens"), sgens);
+end);
+
+#############################################################################
+####
+##
+#F  ACERandomlyApplyCosetCoincidence( <i> [: subindex := <subindex>, 
+##                                           hibound := <hibound>,
+##                                           lobound := <lobound>,
+##                                           attempts := <attempts>] )
+#F  ACERandomlyApplyCosetCoincidence( [: subindex := <subindex>, 
+##                                       hibound := <hibound>,
+##                                       lobound := <lobound>,
+##                                       attempts := <attempts>] )
+##
+##  for  the  <i>th  (or  default)  interactive  {\ACE}  process  started  by
+##  `ACEStart', attempt up to <attempts> (or, by default, 8) times to find  a
+##  larger proper  subgroup,  by  repeatedly  applying  `ACECosetCoincidence'
+##  (see~"ACECosetCoincidence") and seeing what happens. The  starting  coset
+##  table   must   already   be   complete    (use    `ACERandomCoincidences'
+##  (see~"ACERandomCoincidences") if your table is not already complete).  By
+##  default, `<subindex> = 1', <hibound> is the existing subgroup  index  and
+##  `<lobound> = 1'. If after an attempt the  new  index  is  a  multiple  of
+##  <subindex>, less than <hibound> and greater than <lobound> then  the  the
+##  process terminates and  the  list  of  new  subgroup  representatives  is
+##  returned. Otherwise, if an attempt reaches a  stage  where  the  criteria
+##  cannot be satisfied,  the  attempt  is  aborted,  the  original  subgroup
+##  generators    restored,     and     another     attempt     made.     Use
+##  `ACESubgroupGenerators' (see~"ACESubgroupGenerators")  to  determine  the
+##  current subgroup generator list.
+##
+InstallGlobalFunction(ACERandomlyApplyCosetCoincidence, function(arg)
+local ioIndex, datarec, index, opt, sgens, try, trycosetrep, tries, newsgens;
+  ioIndex := ACE_IOINDEX(arg);
+  datarec := ACEData.io[ ioIndex ];
+  index := ACEStats(ioIndex).index;
+  if index = 0 then
+    Error("ACERandomlyApplyCosetCoincidence: coset table must be complete.\n");
+  fi;
+  opt := rec();
+  if ACE_VALUE_OPTION_ERROR(
+         opt, "subindex", 1, d -> IsPosInt(d) and (index mod d = 0),
+         "option `subindex' must be a positive divisor of current index"
+         ) or
+     ACE_VALUE_OPTION_ERROR(
+         opt, "hibound", index, h -> 1 < h and h <= index,
+         "option `hibound' must be > 1 and at most the current index"
+         ) or
+     ACE_VALUE_OPTION_ERROR(
+         opt, "lobound", 1, lo -> 1 <= lo and lo < index,
+         "option `lobound' must be at least 1 and less than the current index"
+         ) or
+     ACE_VALUE_OPTION_ERROR(
+         opt, "attempts", 8, IsPosInt,
+         "option `attempts' must be a positive integer"
+         )
+  then
+     opt.onbreakmsg := ["You can only 'quit;' from here."];
+     PopOptions();
+     Error(ACE_ERROR(opt.errmsg, opt.onbreakmsg), "\n");
+  fi;
+  if opt.attempts > index - 1 then
+    opt.attempts := index - 1;
+  fi;
+
+  sgens := ACESubgroupGenerators(ioIndex);
+  tries := [];
+  newsgens := [];
+  ACERecover(ioIndex);
+  while Length(tries) < opt.attempts and (datarec.stats.index >= opt.hibound) do
+    repeat
+      try := Random([2 .. datarec.stats.index]);
+      trycosetrep := ACECosetRepresentative(ioIndex, try);
+    until not(trycosetrep in tries);
+    Add(tries, try);
+    Add(newsgens, ACECosetCoincidence(ioIndex, try));
+    Info(InfoACE, 1, "Added new subgroup gen'r:");
+    Info(InfoACE, 1, "  ", newsgens[ Length(newsgens) ]);
+    if datarec.stats.index <= opt.lobound or 
+       (datarec.stats.index mod opt.subindex <> 0) then
+      # abort
+      Info(InfoACE, 1, "Subgroup index (", datarec.stats.index, ") ",
+                       "has become too small ...");
+      Info(InfoACE, 1, "restoring original subgroup gen'rs.");
+      ACEDeleteSubgroupGenerators(ioIndex, newsgens);
+      newsgens := [];
+    else
+      Info(InfoACE, 1, "New subgroup index = ", datarec.stats.index);
+    fi;
+    ACERecover(ioIndex);
+  od;
+  if ACEStats(ioIndex).index >= opt.hibound then
+    Info(InfoACE, 1, "ACERandomlyApplyCosetCoincidence: Unsuccessful!");
+  fi;
+  return Difference(ACESubgroupGenerators(ioIndex), sgens);
 end);
 
 #############################################################################

@@ -37,6 +37,7 @@ DeclareGlobalVariable("ACETCENUM",
 
 DeclareGlobalFunction("InfoACELevel");
 DeclareGlobalFunction("SetInfoACELevel");
+DeclareGlobalFunction("ACEPackageVersion");
 
 #############################################################################
 ##

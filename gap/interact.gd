@@ -70,7 +70,7 @@ DeclareGlobalFunction("ACE_GAP_WORDS");
 DeclareGlobalFunction("ACE_GENS");
 DeclareGlobalFunction("ACE_ARGS");
 DeclareGlobalFunction("ACEParameters");
-DeclareGlobalFunction("ACEVersion");
+DeclareGlobalFunction("ACEBinaryVersion");
 DeclareGlobalFunction("EXEC_ACE_DIRECTIVE_OPTION");
 DeclareGlobalFunction("ACE_IOINDEX_AND_NO_VALUE");
 DeclareGlobalFunction("ACE_IOINDEX_AND_ONE_VALUE");
@@ -103,6 +103,7 @@ DeclareGlobalFunction("ACEDeleteRelators");
 DeclareGlobalFunction("ACEDeleteSubgroupGenerators");
 DeclareGlobalFunction("ACECosetCoincidence");
 DeclareGlobalFunction("ACERandomCoincidences");
+DeclareGlobalFunction("ACERandomlyApplyCosetCoincidence");
 DeclareGlobalFunction("ACEConjugatesForSubgroupNormalClosure");
 
 #E  interact.gd . . . . . . . . . . . . . . . . . . . . . . . . .  ends here 

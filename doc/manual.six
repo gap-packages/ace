@@ -1,4 +1,5 @@
 C ace.tex 1. The ACE Share Package
+I 1.0. ACE
 S 1.1. Using ACE as a Default for Coset Enumerations
 S 1.2. Using ACE Directly to Generate a Coset Table
 I 1.2. ACECosetTable
@@ -30,7 +31,6 @@ F 1.6. ACEReadResearchExample
 F 1.6. ACEPrintResearchExample
 F 1.6. ACEPrintResearchExample
 S 1.7. General Warnings regarding the Use of Options
-F 1.7. FlushOptionsStack
 S 1.8. The ACEData Record
 F 1.8. ACEData
 F 1.8. ACEDirectoryTemporary
@@ -41,10 +41,7 @@ F 1.9. SetInfoACELevel
 F 1.9. SetInfoACELevel
 S 1.10. Acknowledgements
 S 1.11. Changes from earlier versions
-I 1.11. CallACE (deprecated)
-I 1.11. option outfile (deprecated)
-I 1.11. option messfile (deprecated)
-I 1.11. ACEinfo (deprecated)
+F 1.11. ACEPackageVersion
 C install.tex 2. Installing and Loading the ACE Share Package
 S 2.1. Installing the ACE Share Package
 S 2.2. Loading the ACE Share Package
@@ -105,7 +102,7 @@ I 3.6. state (machine)
 C options.tex 4. Options for ACE
 S 4.1. Passing ACE Options
 S 4.2. Warnings regarding Options
-F 4.2. FlushOptionsStack!additional remarks
+F 4.2. FlushOptionsStack
 S 4.3. Abbreviations and mixed case for ACE Options
 S 4.4. Honouring of the order in which ACE Options are passed
 S 4.5. What happens if no ACE Strategy Option or if no ACE Option is passed
@@ -307,8 +304,8 @@ F 6.5. ACEDumpVariables
 F 6.5. ACEDumpVariables
 F 6.5. ACEDumpStatistics
 F 6.5. ACEDumpStatistics
-F 6.5. ACEVersion
-F 6.5. ACEVersion
+F 6.5. ACEBinaryVersion
+F 6.5. ACEBinaryVersion
 S 6.6. Interactive Versions of Non-interactive ACE Functions
 F 6.6. ACECosetTable!interactive
 F 6.6. ACECosetTable!interactive
@@ -339,6 +336,8 @@ F 6.7. ACERandomCoincidences
 F 6.7. ACERandomCoincidences
 F 6.7. ACERandomCoincidences
 F 6.7. ACERandomCoincidences
+F 6.7. ACERandomlyApplyCosetCoincidence
+F 6.7. ACERandomlyApplyCosetCoincidence
 F 6.7. ACEConjugatesForSubgroupNormalClosure
 F 6.7. ACEConjugatesForSubgroupNormalClosure
 F 6.7. ACEConjugatesForSubgroupNormalClosure
@@ -394,6 +393,7 @@ S 9.1. Getting Started
 I 9.1. ACEStats
 I 9.1. ACECosetTableFromGensAndRels
 I 9.1. ACEStart
+S 9.2. Emulating Sims
 C otheroptions.tex 10. Other ACE Options
 S 10.1. Experimentation Options
 F 10.1. option aep

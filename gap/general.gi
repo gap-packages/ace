@@ -54,6 +54,18 @@ InstallGlobalFunction(SetInfoACELevel, function(arg)
 end);
 
 #############################################################################
+####
+##
+#F  ACEPackageVersion() 
+##
+##  returns the version number of the current ACE share package.
+##
+InstallGlobalFunction(ACEPackageVersion, function()
+
+  return PACKAGES_VERSIONS.ace;
+end);
+
+#############################################################################
 ##
 #M  IS_ACE_MATCH( <list>, <sub>[, <ind>] )
 ##

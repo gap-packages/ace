@@ -63,10 +63,16 @@ SetInfoLevel(InfoACE, 1);
 ####
 ##  Print a banner . . . . . .  using InfoWarning (so a user can turn it off)
 ##
-Info(InfoWarning,1,"Loading the ACE (Advanced Coset Enumerator) share package");
-Info(InfoWarning,1,"         by George Havas <havas@csee.uq.edu.au> and");
+Info(InfoWarning,1,"  The ACE (Advanced Coset Enumerator) share package");
+Info(InfoWarning,1,"  C code by George Havas <havas@csee.uq.edu.au> and");
 Info(InfoWarning,1,"            Colin Ramsay <cram@csee.uq.edu.au>");
 Info(InfoWarning,1,"                 ACE binary version: ", ACEData.version);
+Info(InfoWarning,1,"  GAP code by Greg Gamble <gregg@csee.uq.edu.au> and");
+Info(InfoWarning,1,"         Alexander Hulpke <ahulpke@math.ohio-state.edu>");
+Info(InfoWarning,1,"                 ACE package version: ", 
+                                     PACKAGES_VERSIONS.ace);
+Info(InfoWarning,1,"");
+Info(InfoWarning,1,"                 For help, type: ?ACE");
 
 #############################################################################
 ####

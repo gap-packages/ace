@@ -14,6 +14,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Chapter{The ACE Share Package}
 
+\index{ACE}
 The ``Advanced Coset Enumerator'' {\ACE}:
 
 \begintt
@@ -185,9 +186,9 @@ discussed in detail via the example that follows.
 
 The example given  below  is  the  call  for  a  presentation  of  the
 Fibonacci group F(2,7) for  which  we  shall  discuss  the  impact  of
-various options in Appendix~"Examples". Observe that in  the  example,
-no options are passed, which means  that  {\ACE}  uses  the  `default'
-strategy (see Chapter~"Strategy Options for ACE").
+various options in Section~"Fun with ACEExample". Observe that in  the
+example, no options are passed,  which  means  that  {\ACE}  uses  the
+`default' strategy (see Chapter~"Strategy Options for ACE").
 
 \beginexample
 gap> F:= FreeGroup( "a", "b", "c", "d", "e", "x", "y");;
@@ -609,53 +610,33 @@ easy for users to copy and edit the examples for their own purposes.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{General Warnings regarding the Use of Options}
 
-Firstly, let us mention that an {\ACE} strategy is  merely  a  special
-option of {\ACE} that sets  a  number  of  the  options  described  in
-Chapter~"Options for ACE" all at once.
+Firstly, let us mention (and we will remind you later) that an  {\ACE}
+strategy is merely a special option of {\ACE} that sets  a  number  of
+the options described in Chapter~"Options for ACE" all  at  once.  The
+strategy options are discussed in their own chapter (Chapter~"Strategy
+Options for ACE").
 
-One can set options globally using  the  function  `PushOptions'  (see
-Chapter~"ref:Options Stack" in the {\GAP} Reference  Manual);  options
-pushed onto `OptionsStack' this way, remain there  until  an  explicit
-`PopOptions()' call is made. However, the usual way to pass options is
-behind a colon following a  function's  arguments  (see  "ref:Function
-Calls" in the {\GAP} Reference Manual, or for an example refer to  the
-function               `ACECosetTableFromGensAndRels'               in
-Section~"ACECosetTableFromGensAndRels"); options passed this  way  are
-local, and  disappear  from  `OptionsStack'  after  the  function  has
-executed successfully. Beware, however the function will see any other
-options on the `OptionsStack' (in particular,  any  pushed  there  via
-`PushOptions', prior to the function call), unless over-ridden  by  an
-option passed via the function. Also note that duplication  of  option
-names for different programs may lead to misinterpretations.  You  can
-use `DisplayOptionsStack'  (see  Chapter~"ref:DisplayOptionsStack"  in
-the {\GAP} Reference Manual) to ensure that there is no  such  danger.
-However, considering how much of a potential  mine-field  a  non-empty
-`OptionsStack' might be for the unwary user, we provide
+In Section~"Passing ACE Options", we describe the two  means  provided
+by {\GAP} by which {\ACE} options may be passed. In  Section~"Warnings
+regarding Options", we discuss how options ``left over'' from previous
+calculations can upset subsequent calculations; and hence, to  ``clear
+the  decks''   in   such   circumstances,   why   we   have   provided
+`FlushOptionsStack' (see~"FlushOptionsStack").
 
-\>FlushOptionsStack() F
+Note, that the  {\ACE}  share  package  treatment  of  options  is  an
+``enhancement'' over the general way {\GAP} treats  options.  Firstly,
+the {\ACE} binary allows abbreviations and mixed case of  options  and
+so the {\ACE}  share  package  does  also,  as  much  as  is  possible
+(see~"Abbreviations and mixed case for ACE Options"). Secondly,  since
+{\ACE}'s options are in general not orthogonal,  the  order  in  which
+they are put to {\ACE} is, in general, honoured (see~"Honouring of the
+order in which ACE Options are passed"). Thirdly, the {\ACE}  binary's
+concept of a boolean option is slightly different to that of {\GAP}'s;
+Section~"Interpretation of ACE Options" discusses, in particular,  how
+an option detected by {\GAP} as `true' is passed to the {\ACE} binary.
 
-which simply executes `PopOptions()' until `OptionsStack' is empty.
-
-It  is  important  to  realize  that  {\ACE}'s   options   (even   the
-non-strategy options) are not orthogonal, i.e.\  the  order  in  which
-they are put to {\ACE} can be important. For this reason, except for a
-few options that have no effect on the course of an  enumeration,  the
-order in which options are passed to the {\ACE} interface is preserved
-when those same options are passed to the  {\ACE}  binary.  Also  note
-that except for limitations  imposed  by  {\GAP}  e.g.\  clashes  with
-{\GAP} keywords and blank spaces not allowed in keywords, the  options
-of the {\ACE} interface are the  same  as  for  the  binary;  so,  for
-example, the options can appear in upper or  lower  case  (or  indeed,
-mixed case) and most may be abbreviated. Note that  any  options  that
-the {\ACE} binary doesn't understand are simply ignored and a  warning
-appears in the {\ACE} output. If this occurs, you may  wish  to  check
-the input fed to {\ACE} and the output from {\ACE}, which when  {\ACE}
-is run non-interactively are stored in files whose full path names are
-recorded in the record fields `ACEData.infile' and  `ACEData.outfile',
-respectively. Alternatively, both interactively and  non-interactively
-one can set the `InfoLevel' of `InfoACE' to 3 (see~"SetInfoACELevel"),
-to see the output from {\ACE}, or  to  4  to  also  see  the  commands
-directed to {\ACE}.
+Finally, Section~"What happens if no ACE Strategy Option or if no  ACE
+Option is passed" discusses what happens if no option is selected.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{The ACEData Record}
@@ -682,7 +663,9 @@ file;
 \quad`outfile'& the full path of the (non-interactive)  {\ACE}  output
 file; and
 
-\quad`version'& the version of the current {\ACE} binary.
+\quad`version'& the  version  of  the  current  {\ACE}  binary.   More
+detailed information regarding the compilation of the binary is  given
+by `ACEBinaryVersion' (see~"ACEBinaryVersion").
 
 \enditems
 
@@ -831,34 +814,21 @@ him.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{Changes from earlier versions}
 
-A function, some options and a data record variable have been changed
-from older versions of the {\ACE} Share Package:
+A reasonably comprehensive history of  the  evolution  of  pre-release
+versions of the  {\ACE}  Share  Package,  is  contained  in  the  file
+`CHANGES' in the `gap' directory. However, the only  change  affecting
+users who only have knowledge of the release  version  of  the  {\ACE}
+Share Package has to do with the change of the  default  standard  for
+the numbering of cosets in a coset table from {\GAP} 4.2 to {\GAP} 4.3
+(see Section~"Coset Table Standardisation Schemes"). The {\ACE}  Share
+Package is compatible with {\GAP} 4.2, but has been built for use with
+{\GAP} 4.3.
 
-\beginlist
+\>ACEPackageVersion() F
 
-\item{--} `ACEExample' now uses the `ACEStats'  function  by  default.
-Originally `ACECosetTableFromGensAndRels' was used by default.
-
-\atindex{CallACE (deprecated)}{@\noexpand`CallACE' (deprecated: use %
-\noexpand`ACECosetTableFromGensAndRels')}
-\item{--} Function   `CallACE'  (deprecated:  use  `ACECosetTable'  or
-`ACECosetTableFromGensAndRels').
-
-\atindex{option outfile (deprecated)}{@option \noexpand`outfile' %
-(deprecated: use \noexpand`aceinfile')}
-\item{--} Option `outfile' (deprecated: use `aceinfile').
-
-\atindex{option messfile (deprecated)}{@option \noexpand`messfile' %
-(deprecated: use \noexpand`aceoutfile')}
-\item{--} Option `messfile' (deprecated: use `aceoutfile').
-
-\atindex{ACEinfo (deprecated)}{@\noexpand`ACEinfo' (deprecated: old %
-name for \noexpand`ACEData' record)}
-\item{--} Data record `ACEinfo' (deprecated: old  name  for  `ACEData'
-record). This change was made because there is now a new  `InfoClass':
-`InfoACE' (and it was too confusing to have both it and `ACEinfo'!)
-
-\endlist
+gives the current version of the {\ACE} Share Package (i.e.~the {\GAP}
+code      component;       the       function       `ACEBinaryVersion'
+(see~"ACEBinaryVersion") gives details of the C code compilation).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%

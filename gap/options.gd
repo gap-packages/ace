@@ -40,6 +40,10 @@ DeclareGlobalVariable("NonACEbinOptions",
   "A list of known ACE (interface) options that are not ACE binary options"
   );
 
+DeclareGlobalVariable("ACE_INTERACT_FUNC_OPTIONS",
+  "A list of non ACE options that are used by the interactive ACE functions"
+  );
+
 DeclareGlobalVariable("ACEParameterOptions",
   Concatenation([
     "A record whose fields are the known ACE (interface) options for which\n",
@@ -84,6 +88,7 @@ DeclareGlobalFunction("FULL_ACE_OPT_NAME");
 DeclareGlobalFunction("ACE_OPTION_SYNONYMS");
 DeclareGlobalFunction("ACE_IF_EXPR");
 DeclareGlobalFunction("ACE_VALUE_OPTION");
+DeclareGlobalFunction("ACE_VALUE_OPTION_ERROR");
 DeclareGlobalFunction("VALUE_ACE_OPTION");
 DeclareGlobalFunction("DATAREC_VALUE_ACE_OPTION");
 DeclareGlobalFunction("ACE_COSET_TABLE_STANDARD");

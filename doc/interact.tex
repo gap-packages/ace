@@ -273,14 +273,15 @@ possible.
 \>ACERedo( [:<options>] ) F
 
 for the <i>th (or  default)  interactive  {\ACE}  process,  apply  any
-<options> and then ``redo''  the  current  enumeration;  any  existing
-information in the table is retained, and the enumeration is restarted
-from coset 1 (i.e., the subgroup).
+<options> and then ``redo''  the  current  enumeration  from  coset  1
+(i.e., the subgroup), keeping any existing information in the table.
 
 *Notes:*
-
-This command is really intended for the case where additional relators
-and/or subgroup generators have been introduced.  The  current  table,
+The  difference  between  `ACEContinue'  and  `ACERedo'  is   somewhat
+technical, and the user should regard it as a mode that  is  a  little
+more  expensive  than  `ACEContinue'  but  cheaper  than   `ACEStart'.
+`ACERedo' is really intended for the case  where  additional  relators
+and/or subgroup generators have been introduced;  the  current  table,
 which may be incomplete or exhibit a finite index, is still ``valid''.
 However, the new data may allow the enumeration to complete, or  cause
 a collapse to a smaller index. In some cases,  `ACERedo'  may  not  be
@@ -1011,27 +1012,26 @@ the output means.
 dump {\ACE}'s internal statistics accumulated during the  most  recent
 enumeration of the <i>th (or default) process started  by  `ACEStart',
 provided the {\ACE} binary  was  built  with  the  statistics  package
-(which it is by default). Use  `ACEVersion();'  (see~"ACEVersion")  to
-check for the inclusion of the statistics package.  See  the  `enum.c'
-source file for the meaning of the variables.
+(which    it    is    by    default).    Use     `ACEBinaryVersion();'
+(see~"ACEBinaryVersion") to check for the inclusion of the  statistics
+package.  See  the  `enum.c'  source  file  for  the  meaning  of  the
+variables.
 
-\>ACEVersion( <i> ) F
-\>ACEVersion() F
+\>ACEBinaryVersion( <i> ) F
+\>ACEBinaryVersion() F
 
-for the <i>th  (or  default)  process  started  by  `ACEStart',  print
-version details of  the  {\ACE}  binary  you  are  currently  running,
-including what compiler flags were set when the executable was  built;
-essentially the information obtained is what is obtained via  {\ACE}'s
-`options'   option   (see~"option   options").   A   typical   output,
-illustrating the default build, is:
+for the <i>th (or default) process started by `ACEStart',  print,  via
+`Info' (at `InfoACE' level 1), version details of  the  {\ACE}  binary
+you are currently running, including what compiler flags were set when
+the executable was built, and also returns the version number  of  the
+binary as a string. Essentially the information obtained  is  what  is
+obtained via {\ACE}'s `options' option (see~"option options"), and the
+returned value is what is stored in `ACEData.version' (see~"ACEData").
+A typical output, illustrating the default build, is:
 
 \beginexample
-gap> ACEVersion();      
-#I  ACE 3.000        Sat Mar  3 19:09:13 2001
-#I  =========================================
-#I  Host information:
-#I    name = hamal
-#I  ACE Version: 3.000
+gap> ACEBinaryVersion();       
+#I  ACE Binary Version: 3.000
 #I  Executable built:
 #I    Mon Feb 26 18:50:15 CET 2001
 #I  Level 0 options:
@@ -1042,18 +1042,21 @@ gap> ACEVersion();
 #I    workspace multipliers = decimal
 #I  Level 2 options:
 #I    host info = on
+"3.000"
 \endexample
 
-*Note:*
-The {\ACE} banner may also appear in the output (if it has not already
-appeared). Unlike other {\ACE} interface  functions,  the  information
-obtained  via  `ACEVersion();'  is  absolutely  independent   of   any
-enumeration.  For  this  reason,  we  make  it  permissible   to   run
-`ACEVersion();' when there are no currently active interactive  {\ACE}
-processes; and, in such a case, `ACEVersion();' emits a  warning  that
-there  are  no  interactive  {\ACE}  sessions  currently  active   and
-initiates (and closes again) its own stream to obtain the  information
-from the {\ACE} binary.
+*Notes:*
+The {\ACE} binary's banner may also appear in the output  (if  it  has
+not already appeared). Unlike other {\ACE}  interface  functions,  the
+information   obtained   via   `ACEBinaryVersion();'   is   absolutely
+independent  of  any  enumeration.  For  this  reason,  we   make   it
+permissible to run `ACEBinaryVersion();' when there are  no  currently
+active  interactive  {\ACE}  processes;   and,   in   such   a   case,
+`ACEBinaryVersion();' emits a warning that there  are  no  interactive
+{\ACE} sessions currently active and initiates (and closes again)  its
+own stream to obtain the information from the {\ACE} binary.  For  the
+current  version  of  the  {\ACE}  share  package  (the  {\GAP}   code
+component) use `ACEPackageVersion();' (see~"ACEPackageVersion").
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{Interactive Versions of Non-interactive ACE Functions}
@@ -1266,11 +1269,13 @@ for the <i>th (or  default)  interactive  {\ACE}  process  started  by
 times to find nontrivial subgroups with index a multiple of <subindex>
 by repeatedly making random coset numbers coincident with coset 1  and
 seeing what happens. The starting coset table must be  non-empty,  but
-should not be complete. For each attempt,  we  repeatedly  add  random
-coset representatives to the subgroup and `redo' the  enumeration.  If
-the table becomes too small, the  attempt  is  aborted,  the  original
-subgroup generators restored, and another attempt made. If an  attempt
-succeeds, then  the  new  set  of  subgroup  generators  is  retained.
+must  *not*  be   complete   (use   `ACERandomlyApplyCosetCoincidence'
+(see~"ACERandomlyApplyCosetCoincidence")  if  your  table  is  already
+complete).  For  each  attempt,  we  repeatedly   add   random   coset
+representatives to the subgroup and `redo'  the  enumeration.  If  the
+table becomes too small, the attempt is aborted, the original subgroup
+generators restored, and another attempt made. If an attempt succeeds,
+then   the   new   set   of   subgroup   generators    is    retained.
 `ACERandomCoincidences' returns the list of  new  subgroup  generators
 added. Use  `ACESubgroupGenerators'  (see~"ACESubgroupGenerators")  to
 determine the current subgroup generator list.
@@ -1283,16 +1288,66 @@ applying                                 `ACEDeleteSubgroupGenerators'
 (see~"ACEDeleteSubgroupGenerators")  with   the   list   returned   by
 `ACERandomCoincidences'.
 
-It  makes  no  sense  to  invoke   `ACERandomCoincidences'   when   an
-enumeration has already obtained a finite index (either, <subindex> is
-already a divisor of that finite index, or the request is impossible).
-Thus an invocation of `ACERandomCoincidences', in  this  case,  is  an
-error.
+`ACERandomCoincidences' applies the `rc' option (see~"option  rc")  of
+{\ACE} which takes  the  line  that  if  an  enumeration  has  already
+obtained a finite index then either, <subindex> is already  a  divisor
+of that finite index, or the request is impossible. Thus an invocation
+of `ACERandomCoincidences', in the  case  where  the  coset  table  is
+already complete, is an error.
 
 *Guru  Notes:*  A  coset  can  have  many  different  representatives.
 Consider              running              `ACEStandardCosetNumbering'
 (see~"ACEStandardCosetNumbering") before  `ACERandomCoincidences',  to
 canonicise the table and the representatives.
+
+\>ACERandomlyApplyCosetCoincidence( <i> [: <controlOptions>]) F
+\>ACERandomlyApplyCosetCoincidence( [: <controlOptions>]) F
+
+for the <i>th (or  default)  interactive  {\ACE}  process  started  by
+`ACEStart', try to find a larger proper subgroup (i.e.~a  subgroup  of
+smaller   but    nontrivial    index),    by    repeatedly    applying
+`ACECosetCoincidence'  (see~"ACECosetCoincidence")  and  seeing   what
+happens;  `ACERandomlyApplyCosetCoincidence'  returns  the   (possibly
+empty) list of new subgroup generators added. The starting coset table
+must    already    be    complete     (use     `ACERandomCoincidences'
+(see~"ACERandomCoincidences") if your table is not already  complete).
+`ACERandomlyApplyCosetCoincidence' provides the following four options
+(<controlOptions>).
+
+\beginitems
+
+\quad`subindex := <subindex>' & 
+Sets the restriction that the final index  should  be  a  multiple  of
+<subindex>; <subindex> must be  a  positive  integer  divisor  of  the
+initial subgroup index.
+
+\quad`hibound := <hibound>' &
+Sets the restriction that the final index should  be  (strictly)  less
+than <hibound>; <hibound> must be an integer that is  greater  than  1
+and at most the initial subgroup index.
+
+\quad`lobound := <lobound>' &
+Sets the restriction that the final index should be (strictly) greater
+than <lobound>; <lobound> must be an integer that is at  least  1  and
+(strictly) less than the initial subgroup index.
+
+\quad`attempts := <attempts>' &
+Sets  the   restriction   that   the   number   of   applications   of
+`ACECosetCoincidence' should be at most <attempts>; <attempts> must be
+a positive integer.
+
+\enditems
+
+By default, `<subindex> =  1',  <hibound>  is  the  existing  subgroup
+index, `<lobound> = 1' and `<attempts> = 8'. If after an  attempt  the
+new index is a multiple of <subindex>, less than <hibound> and greater
+than <lobound> then the  process  terminates  (and  the  list  of  new
+subgroup generators is returned). Otherwise, if an attempt  reaches  a
+stage where the criteria cannot be satisfied, the attempt is  aborted,
+the original subgroup generators restored, and another  attempt  made.
+If  no  attempt  is  successful  an  empty  list  is   returned.   Use
+`ACESubgroupGenerators' (see~"ACESubgroupGenerators") to determine the
+current subgroup generator list.
 
 \>ACEConjugatesForSubgroupNormalClosure( <i> ) F
 \>ACEConjugatesForSubgroupNormalClosure() F

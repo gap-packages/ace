@@ -18,9 +18,11 @@ Revision.streams_gi :=
 #############################################################################
 ####
 ##
-#F  ACE_JOIN  . . . . . . . . . . . . . . . . . . . . . . . Internal function
-##  . . . . . . . . . . . .  concatenates strings interspersed with separator
-##  . . . . . . . . . . . . . . .  e.g. ACE_JOIN(["a", "b"], ",") gives "a,b"
+#F  ACE_JOIN( <strings>, <separator> )  . . . join <strings> with <separator>
+##
+##  joins <strings> (a list of strings) by inserting the  string  <separator>
+##  between each adjacent pair of strings in  <strings>  e.g.  ACE_JOIN(["a",
+##  "b", "c"], ", ") gives "a, b, c".
 ##
 InstallGlobalFunction(ACE_JOIN, function(strings, separator)
   if IsEmpty(strings) then
@@ -59,11 +61,8 @@ InstallGlobalFunction(ACE_STRINGS,
 InstallGlobalFunction(ACE_EVAL_STRING_EXPR, function(expr)
 local temp;
 
-  temp := TemporaryGlobalVarName();
-  Read( InputTextString(Concatenation( temp, ":=", expr, ";" )) );
-  expr := ValueGlobal(temp);
-  UnbindGlobal(temp);
-  return expr;
+   temp := Concatenation( "return ", expr, ";" );
+   return ReadAsFunction( InputTextString( temp ) )();
 end);
 
 #############################################################################

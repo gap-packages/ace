@@ -10,9 +10,16 @@
 DeclarePackage( "ace", "3.0",
   function()
   local file;
-    # test for existence of the compiled binary
+    # Check that the version no. of GAP is ok.
+    if not(IsBound( CompareVersionNumbers ) and 
+           CompareVersionNumbers( VERSION, "4.2" )) then
+      Info(InfoWarning, 1,
+           "Package ``ace'': Sorry! ACE needs at least GAP 4.2");
+      return false;
+    fi;
+    # Test for existence of the compiled binary
     file := Filename(DirectoriesPackagePrograms("ace"), "ace");
-    if file=fail then
+    if file = fail then
       Info(InfoWarning, 1,
            "Package ``ace'': The program `ace' is not compiled");
     fi;
