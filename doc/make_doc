@@ -1,14 +1,14 @@
 #!/bin/sh
 #########################################################################
 ##
-#W  make_doc     make ACE Share Package documentation    Alexander Hulpke
+#W  make_doc        make ACE Package documentation       Alexander Hulpke
 #W                                                            Greg Gamble
 ##
 #H  $Id$
 ##
 ##  This shell script uses TeX, BibTeX and MakeIndex to  build  the  .dvi
-##  PostScript (commented  out) and HTML (provided  you  have   tth   and
-##  etc/convert.pl) documentation for the ACE Share Package.
+##  PostScript (commented  out), PDF and HTML (provided you have tth  and
+##  etc/convert.pl) documentation for the ACE Package.
 ##
 
 echo "TeXing documentation"
@@ -18,6 +18,8 @@ tex manual;bibtex manual
 tex manual; ../../../doc/manualindex manual
 # Finally TeX the manual again to get cross-references right
 tex manual
+# Create the PDF version of the manual
+pdftex manual
 # Create the PostScript version (uncomment next line, if needed)
 #dvips -D300 manual -o
 
