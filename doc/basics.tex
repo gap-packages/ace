@@ -14,6 +14,8 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Chapter{Some Basics}
 
+\index{strategy}\atindex{Felsch strategy}{@Felsch strategy}
+\atindex{HLT strategy}{@HLT strategy}
 Throughout this manual for  the  use  of  {\ACE}  as  a  {\GAP}  share
 package, we shall assume that the reader already knows the basic ideas
 of coset enumeration, as can be  found  for  example  in~\cite{Neu82}.
@@ -22,67 +24,67 @@ for a subgroup of finite index in  a  finitely  presented  group  must
 eventually terminate with the correct result, provided the enumeration
 process obeys a simple condition (Mendelsohn's  condition)  formulated
 in Lemma~1 and Theorem~2 of~\cite{Neu82}. This basic condition  leaves
-room for a great variety  of  *strategies*\index{strategy}  for  coset
-enumeration; two \lq{}classical' ones have been known for a long  time
-as the *Felsch  strategy*\atindex{Felsch  strategy}{@Felsch  strategy}
-and  the  *HLT  strategy*\atindex{HLT  strategy}{@HLT  strategy}  (for
-Haselgrove, Leech and Trotter). Extensive experimental studies on many
-strategies can be found in~\cite{CDHW73}, \cite{Hav91},  \cite{HR99a},
-and \cite{HR99b}, in particular.
+room for a great variety of *strategies* for  coset  enumeration;  two
+``classical'' ones have been known for a  long  time  as  the  *Felsch
+strategy* and the *HLT strategy* (for Haselgrove, Leech and  Trotter).
+Extensive  experimental  studies  on  many  strategies  can  be  found
+in~\cite{CDHW73}, \cite{Hav91},  \cite{HR99a},  and  \cite{HR99b},  in
+particular.
 
 A few basic points should be particularly understood:
 
 \beginlist
 
-\item{--} \lq{}Subgroup (generator) and relator tables' that are  used
-in the description of coset enumeration in \cite{Neu82}, and to  which
-we will also occasionally refer in this manual,  do  *not*  physically
-exist in the implementation of coset  enumeration  in  {\ACE}.  For  a
+\item{--} ``Subgroup (generator) and relator tables'' that are used in
+the description of coset enumeration in \cite{Neu82}, and to which  we
+will also occasionally refer in this manual, do *not* physically exist
+in  the  implementation  of  coset  enumeration  in  {\ACE}.   For   a
 terminology that is closer to the actual implementation  and  also  to
 the  formulations  in  the  manual  for  the  {\ACE}  standalone   see
 \cite{CDHW73} and \cite{Hav91}.
 
-\item{--} Coset    enumeration    proceeds    by    defining    *coset
-numbers*\index{coset   numbers}   that    really    denote    possible
-representatives for cosets written as words in the generators  of  the
-group. At the time of their generation it is not guaranteed  that  any
-two of these words do indeed represent different cosets. The state  of
-an enumeration at any time is stored in a 2-dimensional array known as
-a *coset table*\index{coset table} whose rows  are  indexed  by  coset
-numbers and whose columns are indexed  by  the  group  generators  and
-their inverses. Entries of the coset table that are  not  yet  defined
-are known as *holes*\index{holes} (typically they are filled  with  0,
+\index{cosets!coset numbers}\index{cosets!coset table}\index{holes}
+\item{--} Coset enumeration proceeds by defining *coset numbers*  that
+really denote possible representatives for cosets written as words  in
+the generators of the group. At the time of their generation it is not
+guaranteed that any two of these words do indeed  represent  different
+cosets. The state of an  enumeration  at  any  time  is  stored  in  a
+2-dimensional array known as a *coset table* whose rows are indexed by
+coset numbers and whose columns are indexed by  the  group  generators
+and their inverses. Entries of  the  coset  table  that  are  not  yet
+defined are known as  *holes*  (typically  they  are  filled  with  0,
 i.e.~an invalid coset number).
 
-\item{--} It is customary in  talking about coset enumeration to speak
-of *cosets*\index{cosets} when really coset numbers are  meant.  While
-we try to avoid  this  in  this  interface  manual,  in  certain  word
-combinations such as *coset application*\index{coset  application}  we
-will follow this custom.
+\index{cosets}\index{cosets!coset application}\index{cosets!coset numbers}
+\item{--} It is customary in talking about coset enumeration to  speak
+of *cosets* when really coset numbers are meant. While we try to avoid
+this in this interface manual, in certain word  combinations  such  as
+*coset application* we will follow this custom.
 
-\item{--} The   definition   of   a   coset   number   may   lead   to
-*deductions*\index{deduction}  from  the  \lq{}closing  of   rows   in
-subgroup  or  relator  tables'.  These  are  kept  in   a   *deduction
-stack*\index{deduction stack}.
+\index{deduction}\index{deduction!deduction stack}
+\item{--} The definition of a coset number may  lead  to  *deductions*
+from the ``closing of rows in subgroup or relator tables''. These  are
+kept in a *deduction stack*.
 
-\item{--} Also   it  may  be  found  that  (different)  words  in  the
+\index{coincidence}\index{coincidence!coincidence queue}
+\item{--}  Also  it  may  be  found  that  (different)  words  in  the
 generators defining different coset numbers really  lie  in  the  same
-coset    of    the    given    subgroup.    This    is    called     a
-*coincidence*\index{coincidence}  and  will  eventually  lead  to  the
-elimination of the  larger  of  the  two  coset  numbers.  Until  this
-elimination has been performed pending  coincidences  are  kept  in  a
-*queue of coincidences*\index{coincidence queue}.
+coset of the given subgroup. This is called a *coincidence*  and  will
+eventually lead to the elimination of the  larger  of  the  two  coset
+numbers.  Until  this   elimination   has   been   performed   pending
+coincidences are kept in a *queue of coincidences*.
 
+\index{preferred definition}\index{definition!preferred}
+\index{preferred definition!preferred definition stack}
 \item{--} A definition that will actually close a row in a subgroup or
 relator table will immediately yield twice  as  many  entries  in  the
 coset  table  as  other  definitions.  Such  definitions  are   called
-*preferred definitions*\index{preferred definitions},  the  places  in
-rows of a subgroup or relator table that they close are also  referred
-to as \lq{}gaps of length one' or minimal gaps. Such gaps can be found
-at little extra cost when \lq{}relators are traced from a given  coset
-number'. {\ACE} keeps a selection of them in a  *preferred  definition
-stack*\index{preferred definition stack} for use  in  some  definition
-strategies (see~\cite{Hav91}).
+*preferred definitions*, the places in rows of a subgroup  or  relator
+table that they close are also referred to as ``gaps of  length  one''
+or minimal gaps. Such gaps can be found  at  little  extra  cost  when
+``relators are traced from a given  coset  number''.  {\ACE}  keeps  a
+selection of them in a *preferred definition stack* for  use  in  some
+definition strategies (see~\cite{Hav91}).
 
 \endlist
 
@@ -91,7 +93,7 @@ the  implementation and  the corresponding  terminology which  we will
 explain in the sequel.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\Section{Enumeration  Style}
+\Section{Enumeration Style}
 
 The first main decision for any coset enumeration is in which sequence
 to make definitions. When a new coset number has  to  be  defined,  in
@@ -99,31 +101,33 @@ to make definitions. When a new coset number has  to  be  defined,  in
 
 \beginlist
 
+\atindex{C style}{@C style!definition}
 \item{--} One may fill the next empty entry  in  the  coset  table  by
 scanning from the left/top of the coset table towards the right/bottom
---  that  is,  in  order  row  by  row.  This   is   called   *C style
-definition*\atindex{C  style  definition}{@C  style  definition}  (for
-*C*oset Table Based definition) of coset numbers. In fact a  procedure
-needs to follow a method like this to some extent for the proofs  that
-coset enumeration eventually terminates in the case  of  finite  index
-(see~\cite{Neu82}).
+-- that is, in order row by row. This is called *C  style  definition*
+(for *C*oset Table Based definition)  of  coset  numbers.  In  fact  a
+procedure needs to follow a method like this to some  extent  for  the
+proofs that coset enumeration eventually terminates  in  the  case  of
+finite index (see~\cite{Neu82}).
 
-\item{--} For an *R style definition*\atindex{R  style  definition}{@R
-style definition} (for *R*elator Based definition), the order in which
-coset numbers are defined is explicitly prescribed  by  the  order  in
-which rows of (the subgroup generator tables and) the  relator  tables
-are filled by making definitions.
+\atindex{R style}{@R style!definition}
+\item{--}  For  an  *R  style   definition*   (for   *R*elator   Based
+definition),  the  order  in  which  coset  numbers  are  defined   is
+explicitly prescribed by the order in  which  rows  of  (the  subgroup
+generator  tables  and)  the  relator  tables  are  filled  by  making
+definitions.
 
+\index{preferred definition}
+\index{preferred definition!preferred definition stack}
+\index{strategy!minimal gaps}
 \item{--} One may choose  definitions  from  a  *Preferred  Definition
-Stack*\index{preferred definition stack}. In this stack  possibilities
-for definition of coset numbers are stored that will close  a  certain
-row    of    a    relator    table.     Using     these     *preferred
-definitions*\index{preferred definitions} is sometimes  also  referred
-to as a *minimal gaps  strategy*\index{strategy,  minimal  gaps}.  The
-idea of using these is that by closing a row in a relator table, thus,
-one will immediately get a consequence.  We  will  come  back  to  the
-obvious question of where one obtains this  \lq{}preferred  definition
-stack'.
+Stack*. In this stack possibilities for definition  of  coset  numbers
+are stored that will close a certain row of  a  relator  table.  Using
+these *preferred definitions* is  sometimes  also  referred  to  as  a
+*minimal gaps strategy*. The idea of using these is that by closing  a
+row in a relator table, thus, one will immediately get a  consequence.
+We will come back to the obvious question of where  one  obtains  this
+``preferred definition stack''.
 
 \endlist
 
@@ -139,9 +143,9 @@ programs generally start off  by  ensuring  that  each  of  the  given
 subgroup generators produces a cycle of coset numbers at coset  1.  To
 explain the idea, an example may help. Suppose  $a,b$  are  the  group
 generators and $w=Abab$ is a subgroup generator, where $A$  represents
-the inverse of $a$; then to say that \lq{}$(1,i,j,k)$ is  a  cycle  of
-coset numbers produced at coset 1 by $w$' means  that  the  successive
-application  of  the  \lq{}letters'  $A,b,a,b$  of   $w$   takes   one
+the inverse of $a$; then to say that ``$(1,i,j,k)$ is  a  cycle  of
+coset numbers produced at coset 1 by $w$'' means  that  the  successive
+application  of  the  ``letters''  $A,b,a,b$  of   $w$   takes   one
 successively from coset 1, through cosets $i$, $j$ and $k$,  and  back
 to coset 1, i.e.~$A$ applied to coset 1  results  in  coset  $i$,  $b$
 applied to coset $i$ results in coset $j$, $a$ applied  to  coset  $j$
@@ -189,97 +193,116 @@ Rt value     Ct value     style name
 -----------------------------------------
 \endtt
 
-In *C style*\atindex{C style}{@C style}, most definitions are made  in
-the next empty coset table slot and are (in principle) tested  in  all
-essentially different  positions  in  the  relators;  i.e.~this  is  a
-Felsch-like style.
+\beginitems
+
+\atindex{C style}{@C style}
+*C style* &
+In this style, most definitions are made in the next empty coset table
+slot and are  (in  principle)  tested  in  all  essentially  different
+positions in the relators; i.e.~this is a Felsch-like style.
 
 However, in  C  style,  some  definitions  may  be  made  following  a
 preferred definition strategy, controlled by the `pmode'  and  `psize'
 options (see~"option pmode" and~"option psize").
 
-*Cr style*\atindex{Cr style}{@Cr style} is like C style except that  a
-single R style pass is done after the initial C style pass.
+\atindex{Cr style}{@Cr style}
+*Cr style* &
+is like C style except that a single R style pass is  done  after  the
+initial C style pass.
 
-In *CR style*\atindex{CR style}{@CR  style},  alternate  passes  of  C
-style and R style are performed.
+\atindex{CR style}{@CR style}
+*CR style* &
+In this style, alternate passes of C style and R style are performed.
 
-In *R style*\atindex{R style}{@R style}, all the definitions are  made
-via relator scans; i.e.~this is an HLT-like style.
+\atindex{R style}{@R style}
+*R  style* &
+In this style,  all  the  definitions  are  made  via  relator  scans;
+i.e.~this is an HLT-like style.
 
-*R\* style*\atindex{R\* style}{@R\* style} makes definitions the  same
-as R style, but tests all definitions as for C style.
+\atindex{R\* style}{@R\* style}
+*R\* style* &
+makes definitions the same as R style, but tests  all  definitions  as
+for C style.
 
-*Rc style*\atindex{Rc style}{@Rc style} is like R style, except that a
-single C style pass is done after the initial R style pass.
+\atindex{Rc style}{@Rc style}
+*Rc style* &
+is like R style, except that a single C style pass is done  after  the
+initial R style pass.
 
-In *R/C style*\atindex{R/C style}{@R/C style}, we run in R style until
-an overflow, perform a lookahead on the entire table, and then  switch
-to CR style.
+\atindex{R/C style}{@R/C style}
+*R/C style* &
+In this style, we  run  in  R  style  until  an  overflow,  perform  a
+lookahead on the entire table, and then switch to CR style.
 
-*Defaulted R/C*\atindex{Defaulted  R/C  style}{@Defaulted  R/C  style}
-($={}$*R/C    (defaulted)*\atindex{R/C     (defaulted)     style}{@R/C
-(defaulted) style}$\,$) *style* is the default style used if you  call
-{\ACE} without specifying options. In it, we use R/C style  with  `ct'
-set to 1000 and `rt' set to approximately $2000$ divided by the  total
-length of the relators in an attempt to balance R style  and  C  style
-definitions when we switch to CR style.
+\atindex{Defaulted  R/C  style}{@Defaulted  R/C  style}
+\atindex{R/C (defaulted) style}{@R/C (defaulted) style}
+*Defaulted R/C* ($={}$*R/C (defaulted)* $\,$) *style* &
+is the default style  used  if  you  call  {\ACE}  without  specifying
+options. In it, we use R/C style with `ct' set to 1000 and `rt' set to
+approximately $2000$ divided by the total length of the relators in an
+attempt to balance R style and C style definitions when we  switch  to
+CR style.
+
+\enditems
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{Finding Deductions, Coincidences, and Preferred Definitions} 
 
+\index{definition}
 First, let us  broadly  discuss  strategies  and  how  they  influence
-\lq{}definitions'.  By  *definition*\index{definition}  we  mean   the
-allocation of a coset number. In a complete  coset  table  each  group
-relator produces a cycle of cosets numbers at each  coset  number,  in
-particular at coset 1, i.e.~for each relator $w$, and for  each  coset
-number $i$, successive application of the letters of $w$ trace through
-a sequence  of  coset  numbers  that  begins  and  ends  in  $i$  (see
-Section~"Enumeration Style" for an example). It has been found to be a
-good general  rule  to  use  the  given  group  relators  as  subgroup
-generators. This ensures the early definition  of  some  useful  coset
-numbers, and is the  basis  of  the  `default'  strategy  (see~"option
-default").  The  number  of  group  relators  included   as   subgroup
-generators is determined by the `no' option (see~"option no"). Over  a
-wide range of examples the use of group relators in this way has  been
-shown to produce generally beneficial results in terms of the  maximum
-number of cosets numbers defined at any one time and the total  number
-of coset numbers defined. In~\cite{CDHW73}, it was reported  that  for
-some Macdonald group $G(\alpha,\beta)$  examples,  (pure)  Felsch-type
-strategies (that don't include the given group  relators  as  subgroup
-generators) e.g.~the `felsch  :=  0'  strategy  (see~"option  felsch")
-defined significantly more coset numbers than HLT-type (e.g.~the `hlt'
-strategy,  see~"option  hlt")  strategies.  The  comparison  of  these
-strategies  in  terms  of  total  number  of  coset  numbers  defined,
-in~\cite{Hav91}, for the enumeration of the cosets of a certain  index
-40 subgroup of the $G(3,21)$ Macdonald group were 91  for  HLT  versus
-16067 for a pure Felsch-type strategy. For the  Felsch  strategy  with
-the group relators included as subgroup generators, as for the `felsch
-:= 1' strategy (see~"option felsch") the total number of coset numbers
-defined reduced markedly to 59.
+``definitions''. By *definition* we mean the  allocation  of  a  coset
+number. In a complete coset table each group relator produces a  cycle
+of cosets numbers at each coset number,  in  particular  at  coset  1,
+i.e.~for each relator $w$, and for each coset number  $i$,  successive
+application of the letters of $w$ trace through a  sequence  of  coset
+numbers that begins and ends in $i$ (see  Section~"Enumeration  Style"
+for an example). It has been found to be a good general  rule  to  use
+the given group relators as  subgroup  generators.  This  ensures  the
+early definition of some useful coset numbers, and is the basis of the
+`default'  strategy  (see~"option  default").  The  number  of   group
+relators included as subgroup generators is  determined  by  the  `no'
+option (see~"option no"). Over a wide range of  examples  the  use  of
+group relators in  this  way  has  been  shown  to  produce  generally
+beneficial results in terms of the maximum number  of  cosets  numbers
+defined at any one time and the total number of coset numbers defined.
+In~\cite{CDHW73}, it  was  reported  that  for  some  Macdonald  group
+$G(\alpha,\beta)$ examples, (pure) Felsch-type strategies (that  don't
+include the given group  relators  as  subgroup  generators)  e.g.~the
+`felsch := 0' strategy  (see~"option  felsch")  defined  significantly
+more coset numbers than HLT-type (e.g.~the `hlt' strategy, see~"option
+hlt") strategies. The comparison of these strategies in terms of total
+number of coset numbers defined, in~\cite{Hav91}, for the  enumeration
+of the cosets  of  a  certain  index  40  subgroup  of  the  $G(3,21)$
+Macdonald group were 91 for HLT versus 16067 for  a  pure  Felsch-type
+strategy. For the Felsch strategy with the group relators included  as
+subgroup generators, as for the `felsch :=  1'  strategy  (see~"option
+felsch") the total number of coset numbers defined reduced markedly to
+59.
 
-A *deduction*\index{deduction} occurs when the scanning of  a  relator
-results in the assignment of a coset table  body  entry.  A  completed
-table is only valid if every  table  entry  has  been  tested  in  all
-essentially different positions in  all  relators.  This  testing  can
-either be done directly (Felsch strategy) or via relator scanning (HLT
-strategy). If it is done directly, then more than one deduction can be
-waiting to be processed at any one time. The untested  deductions  are
-stored in a stack. How this stack is  managed  is  determined  by  the
-`dmode' option (see~"option dmode"), and its size is controlled by the
-`dsize' option (see~"option dsize").
+\index{deduction}
+A *deduction* occurs when the scanning of a  relator  results  in  the
+assignment of a coset table body entry.  A  completed  table  is  only
+valid if  every  table  entry  has  been  tested  in  all  essentially
+different positions in all relators. This testing can either  be  done
+directly (Felsch strategy) or via relator scanning (HLT strategy).  If
+it is done directly, then more than one deduction can be waiting to be
+processed at any one time. The untested deductions  are  stored  in  a
+stack. How this stack is managed is determined by the  `dmode'  option
+(see~"option dmode"), and its size is controlled by the `dsize' option
+(see~"option dsize").
 
-As already mentioned a *coincidence*\index{coincidence} occurs when it
-is determined that two coset numbers in fact represent the same coset.
-When this occurs  the  larger  coset  number  becomes  a  *dead  coset
-number*\index{dead coset (number)} and the coincidence is placed in  a
-queue. When and how these dead coset numbers are eventually eliminated
-is  controlled  by  the  options  `dmode',  `path'  and   `compaction'
-(see~"option dmode", "option path" and~"option compaction"). The  user
-may  also  force   coincidences   to   occur   (see   Section~"Finding
-Subgroups"), which, however, may change the subgroup whose cosets  are
-enumerated.
+\index{coincidence}\index{dead coset (number)}
+As already mentioned a *coincidence* occurs when it is determined that
+two coset numbers in fact represent the same coset. When  this  occurs
+the larger  coset  number  becomes  a  *dead  coset  number*  and  the
+coincidence is placed in a  queue.  When  and  how  these  dead  coset
+numbers  are  eventually  eliminated  is  controlled  by  the  options
+`dmode', `path' and `compaction' (see~"option  dmode",  "option  path"
+and~"option compaction"). The user  may  also  force  coincidences  to
+occur (see Section~"Finding Subgroups"), which,  however,  may  change
+the subgroup whose cosets are enumerated.
 
+\index{preferred definition!preferred definition stack}
 The key  to  performance  of  coset  enumeration  procedures  is  good
 selection  of  the  next   coset   number   to   be   defined.   Leech
 in~\cite{Lee77}  and~\cite{Lee84}  showed  how  a  number   of   coset
@@ -295,23 +318,24 @@ definitions are *preferred*; if the value of  the  `pmode'  option  is
 non-zero, depending on the `pmode' value, gaps  of  length  one  found
 during relator C style  (i.e.~Felsch-like)  scans  are  either  filled
 immediately  (subject  to  the  value  of  `fill')  or  noted  in  the
-*preferred definition stack*\index{preferred  definition  stack}.  The
-preferred definition stack is implemented as a ring of size determined
-by the `psize' option (see~"option psize"). However, making  preferred
-definitions  carelessly  can  violate  the  conditions  required   for
-guaranteed termination of the coset enumeration procedure in the  case
-of finite index. To avoid such a violation {\ACE} ensures  a  fraction
-of the coset table is filled before a preferred  definition  is  made;
-the reciprocal of this fraction, the `fill factor', is manipulated via
-the `fill' option (see~"option fill"). In~\cite{Hav91}, the `felsch :=
-1' type enumeration of the cosets of the certain index 40 subgroup  of
-the $G(3,21)$ Macdonald group was further improved to require a  total
+*preferred  definition  stack*.  The  preferred  definition  stack  is
+implemented as a  ring  of  size  determined  by  the  `psize'  option
+(see~"option psize"). However, making preferred definitions carelessly
+can violate the conditions required for guaranteed termination of  the
+coset enumeration procedure in the case of finite index. To avoid such
+a violation {\ACE} ensures a fraction of the  coset  table  is  filled
+before  a  preferred  definition  is  made;  the  reciprocal  of  this
+fraction, the `fill factor', is  manipulated  via  the  `fill'  option
+(see~"option  fill").  In~\cite{Hav91},  the  `felsch   :=   1'   type
+enumeration of the cosets of the certain  index  40  subgroup  of  the
+$G(3,21)$ Macdonald group was further  improved  to  require  a  total
 number of coset numbers  of  just  43  by  incorporating  the  use  of
 preferred definitions.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{Finding Subgroups}
 
+\index{coincidence}
 The  {\ACE}  Share  Package,  via  its  interactive  {\ACE}  interface
 functions   (described   in   Chapter~"Functions   for    Using    ACE
 Interactively"), provides the possibility of searching for  subgroups.
@@ -319,28 +343,28 @@ To do this one starts  at  a  known  subgroup  (possibly  the  trivial
 subgroup). Then one may augment it by adding new  subgroup  generators
 either        explicitly        via         `ACEAddSubgroupGenerators'
 (see~"ACEAddSubgroupGenerators")   or   implicitly   by    introducing
-*coincidences*\index{coincidence}     (see      `ACECosetCoincidence':
-"ACECosetCoincidence",           or           `ACERandomCoincidences':
-"ACERandomCoincidences"). Also, one may descend to  smaller  subgroups
-by  deleting  subgroup  generators  via  `ACEDeleteSubgroupGenerators'
-(see~"ACEDeleteSubgroupGenerators").
+*coincidences* (see `ACECosetCoincidence':  "ACECosetCoincidence",  or
+`ACERandomCoincidences':  "ACERandomCoincidences").  Also,   one   may
+descend to smaller  subgroups  by  deleting  subgroup  generators  via
+`ACEDeleteSubgroupGenerators' (see~"ACEDeleteSubgroupGenerators").
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{Coset Table Standardisation Schemes}
 
+\atindex{lenlex standardisation scheme}{@\noexpand`lenlex' %
+standardisation scheme} 
 The default standardisation scheme for {\GAP} from {\GAP}~4.3 and  the
-standardisation    scheme    provided     by     {\ACE}     is     the
-`lenlex'{\undoquotes\atindex{lenlex standardisation scheme} {@`lenlex'
-standardisation scheme}} scheme, of  Charles  Sims~\cite{Sim94}.  This
-scheme  numbers  cosets  first  according  to  word-length  and   then
-according to a lexical ordering of coset representatives.  Each  coset
-representative  is  a  word  in  an   alphabet   consisting   of   the
-user-supplied generators and their inverses, and the lexical  ordering
-of `lenlex' is that implied by ordering that  alphabet  so  that  each
-generator is followed by its inverse, and  the  generators  appear  in
-user-supplied order. As an example, the first 20 lines of the `lenlex'
-standard  coset  table  of  the  (infinite)  group  with  presentation
-$\langle x, y, a, b \mid x^2, y^3, a^4, b^2\rangle$ is as follows:
+standardisation scheme provided by {\ACE} is the `lenlex'  scheme,  of
+Charles Sims~\cite{Sim94}. This scheme numbers cosets first  according
+to word-length and then according  to  a  lexical  ordering  of  coset
+representatives. Each coset representative is a word  in  an  alphabet
+consisting of the user-supplied generators and their inverses, and the
+lexical ordering of `lenlex' is that implied by ordering that alphabet
+so that each generator is followed by its inverse, and the  generators
+appear in user-supplied order. As an example, the first  20  lines  of
+the `lenlex'  standard  coset  table  of  the  (infinite)  group  with
+presentation $\langle x, y, a, b \mid x^2, y^3, a^4, b^2\rangle$ is as
+follows:
 
 \begintt
  coset no. ||      x      X      y      Y      a      A      b      B   rep've
@@ -385,24 +409,24 @@ With the `lenlex' option (see~"option lenlex"), the coset table output
 by `ACECosetTable' or `ACECosetTableFromGensAndRels'  is  standardised
 according to the `lenlex' scheme.
 
+\atindex{semilenlex standardisation scheme}{@\noexpand`semilenlex' %
+standardisation scheme}
 Another standardisation scheme for coset tables (the default scheme of
 versions of {\GAP} up to  {\GAP}~4.2),  numbers  cosets  according  to
 coset representative word-length in the group generators  and  lexical
 ordering  imposed  by  the  user-supplied  ordering   of   the   group
-generators; it is known as `semilenlex'{\undoquotes\atindex{semilenlex
-standardisation scheme} {@`semilenlex' standardisation scheme}}  since
-though like `lenlex', generator inverses do  not  feature.  (The  term
-`semilenlex'   was   coined   by   Edmund   Robertson   and    Joachim
-Neub{\accent127u}ser, for the  scheme's  applicability  to  semigroups
-where generator inverses need not exist.) This scheme ensures that  as
-one scans the  columns  corresponding  to  the  group  generators  (in
-user-supplied order) row by row, one encounters new coset  numbers  in
-numeric order. As an example, consider again the (infinite) group with
-presentation $\langle x, y, a, b  \mid  x^2,  y^3,  a^4,  b^2\rangle$.
-According  to  this  scheme  the  coset  table  corresponding  to  the
-aforementioned presentation (with  columns  corresponding  to  inverse
-generators, which play no part in the numbering scheme, omitted) would
-begin as follows:
+generators; it is known as `semilenlex' since  though  like  `lenlex',
+generator inverses do not feature. (The term `semilenlex'  was  coined
+by Edmund Robertson and Joachim Neub{\accent127u}ser, for the scheme's
+applicability to semigroups where generator inverses need not  exist.)
+This scheme ensures that as one scans the columns corresponding to the
+group generators (in user-supplied order) row by row,  one  encounters
+new coset numbers in numeric order. As an example, consider again  the
+(infinite) group with presentation $\langle x, y, a, b \mid x^2,  y^3,
+a^4,  b^2\rangle$.  According  to  this   scheme   the   coset   table
+corresponding  to  the  aforementioned  presentation   (with   columns
+corresponding to  inverse  generators,  which  play  no  part  in  the
+numbering scheme, omitted) would begin as follows:
 
 \begintt
  coset no. ||      x      y      a      b    rep've
@@ -440,46 +464,46 @@ already seen, 6, 7, etc.).
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{Coset Statistics Terminology}
 
+\indextt{activecosets}\indextt{maxcosets}\indextt{totcosets}
+\index{coincidence}\index{dead coset (number)}\index{alive coset number}
 There are three statistics involved in the counting  of  coset  number
-definitions:                       *activecosets*\index{activecosets},
-*maxcosets*\index{maxcosets} and  *totcosets*\index{totcosets};  these
-are three of the fields of the  record  returned  by  `ACEStats'  (see
+definitions: `activecosets', `maxcosets' and  `totcosets';  these  are
+three of  the  fields  of  the  record  returned  by  `ACEStats'  (see
 Section~"Using ACE  Directly  to  Test  whether  a  Coset  Enumeration
 Terminates"), and they correspond to the `a', `m' and  `t'  statistics
-of an {\ACE} \lq{}results  message'  (see  Appendix~"The  Meanings  of
-ACE's Output  Messages").  As  already  described,  coset  enumeration
-proceeds by defining coset  numbers;  *totcosets*  counts  *all*  such
-definitions made during an enumeration. During the  coset  enumeration
-process, *coincidences*\index{coincidence} usually occur, resulting in
-the  larger  of  each  coincident  pair   becoming   a   *dead   coset
-number*\index{dead coset (number)}. The  statistic  *activecosets*  is
-the count of coset  numbers  left  *alive*\index{alive  coset  number}
-(i.e.~not dead) at the end of an enumeration; and *maxcosets*  is  the
-maximum number of *alive* cosets at any point of an enumeration.
+of an {\ACE} ``results message'' (see Appendix~"The Meanings of  ACE's
+Output Messages"). As already described, coset enumeration proceeds by
+defining coset numbers; `totcosets' counts *all* such definitions made
+during  an  enumeration.  During  the   coset   enumeration   process,
+*coincidences*  usually  occur,  resulting  in  the  larger  of   each
+coincident  pair  becoming  a  *dead  coset  number*.  The   statistic
+`activecosets' is the count of coset numbers  left  *alive*  (i.e.~not
+dead) at the end of an enumeration; and  `maxcosets'  is  the  maximum
+number of *alive* cosets at any point of an enumeration.
 
-In practice, the statistics *maxcosets* and *totcosets* tend to be  of
-a similar order, though, of course, *maxcosets* can never be more than
-*totcosets*.
+In practice, the statistics `maxcosets' and `totcosets' tend to be  of
+a similar order, though, of course, `maxcosets' can never be more than
+`totcosets'.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{Other Terminology}
 
-In  various  places  in  this  manual,  we  will  refer  to  a  (main)
-*loop*\index{loop} or a *pass*\index{pass} through  such  a  loop.  We
-don't intend to give a precise meaning to these terms. The reader will
-need to forgive us for giving somewhat  circular  definitions  in  our
-attempt to make  these  terms  less  nebulous.  It  is  sufficient  to
-appreciate that the {\ACE} enumerator is organised as a state machine,
-where each *state*\index{state (machine)} is  a  value  of  the  coset
-table held internally by {\ACE} at the end of  each  \lq{}main  loop'.
-Each step from one state to the next (i.e.~each  passage  through  the
-main loop) performs an \lq{}action' (i.e., `lookahead',  `compaction';
-see~"option lookahead" and~"option compaction") or a block of  actions
-(i.e.,  $|`ct'|$  coset  number  definitions,  $|`rt'|$  coset  number
-applications). {\ACE} counts the number of  passes  through  the  main
-loop; if the option `loop' (see~"option loop") is set  to  a  positive
-integer, {\ACE} makes an early return when the  loop  count  hits  the
-value of `loop'.
+\index{loop}\index{pass}\index{state (machine)}
+In various places in this manual, we will refer to a (main) *loop*  or
+a *pass* through such a loop.  We  don't  intend  to  give  a  precise
+meaning to these terms. The reader will need to forgive us for  giving
+somewhat circular definitions in our attempt to make these terms  less
+nebulous. It is sufficient to appreciate that the {\ACE} enumerator is
+organised as a state machine, where each *state* is  a  value  of  the
+coset table held internally by  {\ACE}  at  the  end  of  each  ``main
+loop''. Each step from  one  state  to  the  next  (i.e.~each  passage
+through the main loop)  performs  an  ``action''  (i.e.,  `lookahead',
+`compaction'; see~"option lookahead"  and~"option  compaction")  or  a
+block of actions (i.e., `|ct|' coset number definitions, `|rt|'  coset
+number applications). {\ACE} counts the number of passes  through  the
+main loop; if the option  `loop'  (see~"option  loop")  is  set  to  a
+positive integer, {\ACE} makes an early return  when  the  loop  count
+hits the value of `loop'.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%

@@ -27,12 +27,12 @@ examples in Appendix~"Examples" first.
 \Section{Getting Started}
 
 Each     of     the      functions      `ACECosetTableFromGensAndRels'
-(see~"ACECosetTableFromGensAndRels"),  `ACEStats'   (see~"ACEStatsNI")
-and `ACEStart' (see~"ACEStart"), may be called with  three  arguments:
-<fgens> (the group  generators),  <rels>  (the  group  relators),  and
-<sgens> (the subgroup generators). While it is legal for the arguments
-<rels> and <sgens> to be empty  lists,  it  is  always  an  error  for
-<fgens> to be empty, e.g.
+(see~"ACECosetTableFromGensAndRels"),                       `ACEStats'
+(see~"ACEStats!non-interactive") and `ACEStart' (see~"ACEStart"),  may
+be called with three arguments: <fgens> (the group generators), <rels>
+(the group relators), and <sgens> (the subgroup generators). While  it
+is legal for the arguments <rels> and <sgens> to be empty lists, it is
+always an error for <fgens> to be empty, e.g.
 
 \beginexample
 gap> ACEStats([], [], []);
@@ -55,9 +55,8 @@ gap> fgens := GeneratorsOfGroup(F);
 [ a, b ]
 \endexample
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-*An   `ACEStats'    example*{\undoquotes\atindex{ACEStats,    example}
-{@`ACEStats', example}}
+\atindex{ACEStats}{@\noexpand`ACEStats'!example}
+*An `ACEStats' example*
 
 By  default,  the  presentation  is  not  echoed;   use   the   `echo'
 (see~"option echo") option if you want that.  Also,  by  default,  the
@@ -83,7 +82,7 @@ rec( index := 0, cputime := 22, cputimeUnits := "10^-2 seconds",
   activecosets := 249998, maxcosets := 249998, totcosets := 249998 )
 \endexample
 
-The  line  starting  with  \lq{}`\#I  ''  is  the  `Info'-ed  *results
+The  line  starting  with   ```\#I  '''.  is  the  `Info'-ed  *results
 message* from {\ACE};  see  Appendix~"The  Meanings  of  ACE's  Output
 Messages" for details  on  what  it  means.  Observe  that  since  the
 enumeration overflowed, {\ACE}'s result message  has  been  translated
@@ -152,7 +151,7 @@ rec( index := 0, cputime := 20, cputimeUnits := "10^-2 seconds",
 \endexample
 
 Essentially, because {\ACE} had  not  done  an  enumeration  prior  to
-getting the `print' directive, it complained with an \lq{}`** ERROR'',
+getting the `print' directive, it complained with an  ```**  ERROR''',
 recovered  and  went  on  with  the  `start'  directive  automatically
 inserted by the `ACEStats' command:  no  ill  effects  at  the  {\GAP}
 level, but also no table.
@@ -201,10 +200,9 @@ are no dead cosets. The coset representatives are simply all  possible
 freely reduced words, in length plus lexicographic (i.e. `lenlex'; see
 Section~"Coset Table Standardisation Schemes") order.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\atindex{ACECosetTableFromGensAndRels}%
+{@\noexpand`ACECosetTableFromGensAndRels'!example}
 *Using `ACECosetTableFromGensAndRels'*
-{\undoquotes\atindex{ACECosetTableFromGensAndRels, example}
-{@`ACECosetTableFromGensAndRels', example}}
 
 The  essential  difference  between  the  functions   `ACEStats'   and
 `ACECosetTableFromGensAndRels' is that `ACEStats' parses the  *results
@@ -321,9 +319,9 @@ gap> ACECosetTableFromGensAndRels(fgens, [], [] : max := 12,
 Observe, that despite the fact that {\ACE} is  able  to  define  coset
 representatives for all 12 coset numbers  defined,  the  body  of  the
 coset table now contains a 0 at each  place  formerly  occupied  by  a
-coset number larger  than  12  (0  essentially  represents  \lq{}don't
-know'). To get a table that is the same in the first 12 rows as before
-we would have had to set `max' to 38, since that was the largest coset
+coset number larger than 12 (0 essentially represents ``don't know'').
+To get a table that is the same in the first  12  rows  as  before  we
+would have had to set `max' to 38, since that was  the  largest  coset
 number that appeared in the body of  the  12-line  table,  previously.
 Also, note that the `max' option *preceded* the `start' option;  since
 the interface respects the order in which options are put by the user,
@@ -332,9 +330,8 @@ restricted by the size of `workspace'  (see~"option  workspace").  The
 warning that the coset table is incomplete is emitted at `InfoACE'  or
 `InfoWarning' level 1, i.e.~by default, you will see it.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-*Using `ACEStart'*{\undoquotes\atindex{ACEStart, example}{@`ACEStart',
-example}}
+\atindex{ACEStart}{@\noexpand`ACEStart'!example}
+*Using `ACEStart'*
 
 The     limitation     of     the     functions     `ACEStats'     and
 `ACECosetTableFromGensAndRels' (on three arguments) is  that  they  do
@@ -394,8 +391,8 @@ Above we passed `1' to the `ACEParameters' command which caused `sr :=
 1' (see~"option sr") to be passed to the  interactive  {\ACE}  process
 indexed by 1 (the process we just started), and  a  record  containing
 the  parameter  options  (see  Section~"ACE  Parameter  Options")   is
-returned. Note that  the  \lq{}Run  Parameters':  `Group  Generators',
-`Group Relators' and `Subgroup Generators' are  considered  \lq{}args'
+returned. Note that the ``Run Parameters'': `Group Generators', `Group
+Relators'  and   `Subgroup   Generators'   are   considered   ``args''
 (i.e.~arguments) and a record containing  these  is  returned  by  the
 `GetACEArgs' (see~"GetACEArgs")  command;  or  they  may  be  obtained
 individually     via      the      commands:      `ACEGroupGenerators'
@@ -403,7 +400,7 @@ individually     via      the      commands:      `ACEGroupGenerators'
 `ACESubgroupGenerators' (see~"ACESubgroupGenerators").
 
 We can obtain the enumeration statistics record, via  the  interactive
-version of `ACEStats' (see~"ACEStatsI") :
+version of `ACEStats' (see~"ACEStats!interactive") :
 
 \beginexample
 gap> ACEStats(1); # The interactive version of ACEStats takes 1 or no arguments
@@ -510,7 +507,7 @@ gap> ACECosetTable(1 : incomplete);
   [ 5, 8, 11, 1, 0, 0, 2, 0, 0, 3, 0, 0 ] ]
 \endexample
 
-Observe the line beginning \lq{}`\#I start = yes,'' (the first line in
+Observe the line beginning ```\#I start = yes,'''  (the  first line in
 the output of `ACECosetTable'). This line appears in response  to  the
 option `mode' (see~"option mode") inserted  by  `ACECosetTable'  after
 any user options; it is inserted  in  order  to  check  that  no  user
@@ -521,16 +518,16 @@ see~"option continue") is directed at {\ACE} which evokes  a  *results
 message*. Then `ACECosetTable' extracts the  incomplete  table  via  a
 `print' (see "option print") directive. If you wish  to  see  all  the
 options that are directed to {\ACE}, set  the  `InfoACE'  level  to  4
-(then all such commands are `Info'-ed behind a \lq{}`ToACE> '' prompt;
+(then all such commands are `Info'-ed behind a  ```ToACE> '''  prompt;
 see~"SetInfoACELevel").
 
 We now set things up to do the alternating group $A_5$, of order $60$.
 We turn  messaging  on  via  the  `messages'  (see~"option  messages")
 option, but set the interval high enough so that we will only get  the
-\lq{}Run Parameters' block (the same as that obtained with `sr :=  1')
+``Run Parameters'' block (the same as that obtained with  `sr  :=  1')
 and no progress messages. Recall `F' is the free group we  defined  on
 generators `fgens': `"a"' and `"b"', and the `InfoACE' level is  still
-3. Note, that when {\GAP} prints `F.1' ($={}$`fgens[1]')  it  displays
+3. Note, that when {\GAP} prints  `F.1'  ($=$ `fgens[1]') it  displays
 `a', but the *variable* `a' is (at  the  moment)  unassigned;  so  for
 convenience (in defining relators, for example) we  first  assign  the
 variable `a' to be `F.1' (and `b' to be `F.2').
@@ -564,9 +561,9 @@ gap> ACEStart(1, fgens, [a^2, b^3, (a*b)^5], []
 Since we  did  not  specify  a  strategy  the  `default'  (see~"option
 default") strategy was followed and  hence  coset  number  definitions
 were R (i.e.~HLT) style, and a total of $76$  coset  numbers  (`t=76')
-were  defined.  Note,  that  {\ACE}  already  \lq{}knew'   the   group
-generators and subgroup generators, using the `relators'  (see~"option
-relators") option:
+were defined. Note, that {\ACE} already ``knew'' the group  generators
+and subgroup generators, using the `relators' (see~"option  relators")
+option:
 
 \beginexample
 gap> ACEStart(1 : relators := ToACEWords(fgens, [a^2, b^3, (a*b)^5]),
@@ -607,7 +604,7 @@ gap> ACEStart(1 : relators := ToACEWords(fgens, [a^2, b^3, (a*b)^5]),
 Note the usage  of  `ToACEWords'  (see~"ToACEWords")  to  provide  the
 appropriate string value of the `relators' option. Also,  observe  the
 `Info'-ed warning of the action  triggered  by  using  the  `relators'
-option, that says that the current values of the \lq{}args' (i.e.~what
+option, that says that the current values of the  ``args''  (i.e.~what
 would be returned by `GetACEArgs'; see~"GetACEArgs")  were  discarded,
 which immediately triggered the action of reinstantiating the value of
 `ACEData.io[1].args' (which is what the `Info':
@@ -616,7 +613,7 @@ which immediately triggered the action of reinstantiating the value of
 #I  No group generators saved. Setting value(s) from ACE ...
 \endtt
 
-was all about). Also observe that the \lq{}Run Parameters'  block  was
+was all about). Also observe that the  ``Run  Parameters''  block  was
 `Info'-ed twice; the first time was due to  `ACEStart'  emitting  `sr'
 with value `1' to {\ACE} ({\ACE}'s response is used to  re-instantiate
 `ACEData.io[1].args').

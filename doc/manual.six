@@ -1,22 +1,25 @@
 C ace.tex 1. The ACE Share Package
 S 1.1. Using ACE as a Default for Coset Enumerations
 S 1.2. Using ACE Directly to Generate a Coset Table
+I 1.2. ACECosetTable
 F 1.2. ACECosetTableFromGensAndRels
 F 1.2. ACECosetTable
 I 1.2. break-loop
-I 1.2. ACECosetTable, break-loop example
+I 1.2. ACECosetTable
 F 1.2. IsACEStandardCosetTable
-I 1.2. lenlex standardisation scheme
+I 1.2. lenlex standardisation
+I 1.2. IsACEGeneratorsInPreferredOrder
 F 1.2. IsACEGeneratorsInPreferredOrder
 S 1.3. Using ACE Directly to Test whether a Coset Enumeration Terminates
+I 1.3. ACEStats
 F 1.3. ACEStats
 I 1.3. activecosets
 I 1.3. maxcosets
 I 1.3. totcosets
 S 1.4. Writing ACE Standalone Input Files to Generate a Coset Table
 S 1.5. Using ACE Interactively
-F 1.5. ACEStart
-F 1.5. ACEQuit
+F 1.5. ACEStart!introduction
+F 1.5. ACEQuit!introduction
 I 1.5. coincidence
 S 1.6. Accessing ACE Examples with ACEExample and ACEReadResearchExample
 F 1.6. ACEExample
@@ -29,17 +32,18 @@ F 1.6. ACEPrintResearchExample
 S 1.7. General Warnings regarding the Use of Options
 F 1.7. FlushOptionsStack
 S 1.8. The ACEData Record
-I 1.8. ACEData
+F 1.8. ACEData
 S 1.9. Setting the Verbosity of ACE via Info and InfoACE
+F 1.9. InfoACE
 F 1.9. InfoACELevel
 F 1.9. SetInfoACELevel
 F 1.9. SetInfoACELevel
 S 1.10. Acknowledgements
 S 1.11. Changes from earlier versions
-I 1.11. CallACE
-I 1.11. option outfile
-I 1.11. option messfile
-I 1.11. ACEinfo
+I 1.11. CallACE (deprecated)
+I 1.11. option outfile (deprecated)
+I 1.11. option messfile (deprecated)
+I 1.11. ACEinfo (deprecated)
 C install.tex 2. Installing and Loading the ACE Share Package
 S 2.1. Installing the ACE Share Package
 S 2.2. Loading the ACE Share Package
@@ -47,23 +51,25 @@ C basics.tex 3. Some Basics
 I 3.0. strategy
 I 3.0. Felsch strategy
 I 3.0. HLT strategy
-I 3.0. coset numbers
-I 3.0. coset table
+I 3.0. cosets!coset numbers
+I 3.0. cosets!coset table
 I 3.0. holes
 I 3.0. cosets
-I 3.0. coset application
+I 3.0. cosets!coset application
+I 3.0. cosets!coset numbers
 I 3.0. deduction
-I 3.0. deduction stack
+I 3.0. deduction!deduction stack
 I 3.0. coincidence
-I 3.0. coincidence queue
-I 3.0. preferred definitions
-I 3.0. preferred definition stack
+I 3.0. coincidence!coincidence queue
+I 3.0. preferred definition
+I 3.0. definition!preferred
+I 3.0. preferred definition!preferred definition stack
 S 3.1. Enumeration Style
-I 3.1. C style definition
-I 3.1. R style definition
-I 3.1. preferred definition stack
-I 3.1. preferred definitions
-I 3.1. strategy, minimal gaps
+I 3.1. C style
+I 3.1. R style
+I 3.1. preferred definition
+I 3.1. preferred definition!preferred definition stack
+I 3.1. strategy!minimal gaps
 I 3.1. C style
 I 3.1. Cr style
 I 3.1. CR style
@@ -78,7 +84,7 @@ I 3.2. definition
 I 3.2. deduction
 I 3.2. coincidence
 I 3.2. dead coset (number)
-I 3.2. preferred definition stack
+I 3.2. preferred definition!preferred definition stack
 S 3.3. Finding Subgroups
 I 3.3. coincidence
 S 3.4. Coset Table Standardisation Schemes
@@ -98,25 +104,25 @@ I 3.6. state (machine)
 C options.tex 4. Options for ACE
 S 4.1. Passing ACE Options
 S 4.2. Warnings regarding Options
-F 4.2. FlushOptionsStack
+F 4.2. FlushOptionsStack!additional remarks
 S 4.3. Abbreviations and mixed case for ACE Options
 S 4.4. Honouring of the order in which ACE Options are passed
 S 4.5. What happens if no ACE Strategy Option or if no ACE Option is passed
 S 4.6. Interpretation of ACE Options
 S 4.7. An Example of passing Options
 S 4.8. The KnownACEOptions Record
-I 4.8. KnownACEOptions
+F 4.8. KnownACEOptions
 F 4.8. ACEOptionData
 F 4.8. IsKnownACEOption
 F 4.8. ACEPreferredOptionName
 F 4.8. IsACEParameterOption
 F 4.8. IsACEStrategyOption
 S 4.9. The ACEStrategyOptions List
-I 4.9. ACEStrategyOptions
+F 4.9. ACEStrategyOptions
 S 4.10. ACE Option Synonyms
-I 4.10. ACEOptionSynonyms
+F 4.10. ACEOptionSynonyms
 S 4.11. Non-ACE-binary Options
-I 4.11. NonACEbinOptions
+F 4.11. NonACEbinOptions
 F 4.11. option silent
 F 4.11. option lenlex
 F 4.11. option semilenlex
@@ -132,7 +138,7 @@ F 4.11. option aceecho
 F 4.11. option aceincomment
 F 4.11. option aceexampleoptions
 S 4.12. ACE Parameter Options
-I 4.12. ACEParameterOptions
+F 4.12. ACEParameterOptions
 S 4.13. General ACE Parameter Options that Modify the Enumeration Process
 F 4.13. option asis
 F 4.13. option ct
@@ -142,12 +148,13 @@ F 4.13. option rfactor
 F 4.13. option no
 F 4.13. option mendelsohn
 S 4.14. ACE Parameter Options Modifying C Style Definitions
-I 4.14. C style definitions
+I 4.14. C style
 F 4.14. option fill
 F 4.14. option ffactor
 F 4.14. option pmode
 F 4.14. option psize
 S 4.15. ACE Parameter Options for R Style Definitions
+I 4.15. R style
 F 4.15. option row
 F 4.15. option lookahead
 S 4.16. ACE Parameter Options for Deduction Handling
@@ -158,8 +165,8 @@ F 4.17. option workspace
 F 4.17. option time
 F 4.17. option loop
 F 4.17. option path
-F 4.17. option compaction
 I 4.17. dead coset (number)
+F 4.17. option compaction
 I 4.17. dead coset (number)
 I 4.17. dead coset (number)
 F 4.17. option max
@@ -172,10 +179,19 @@ F 4.19. option enumeration
 F 4.19. option subgroup
 S 4.20. Options for redirection of ACE Output
 F 4.20. option ao
-F 4.20. option aceoutfile
+F 4.20. option aceoutfile!ao synonym
 S 4.21. Other Options
 C strategies.tex 5. Strategy Options for ACE
 S 5.1. The Strategies in Detail
+I 5.1. C style
+I 5.1. Cr style
+I 5.1. CR style
+I 5.1. R style
+I 5.1. R\* style
+I 5.1. Rc style
+I 5.1. R/C style
+I 5.1. Defaulted R/C style
+I 5.1. R/C (defaulted) style
 F 5.1. option default
 F 5.1. option easy
 F 5.1. option felsch
@@ -187,6 +203,7 @@ F 5.1. option purer
 F 5.1. option sims
 C interact.tex 6. Functions for Using ACE Interactively
 S 6.1. Starting and Stopping Interactive ACE Processes
+I 6.1. ACEStart
 F 6.1. ACEStart
 F 6.1. ACEStart
 F 6.1. ACEStart
@@ -195,6 +212,7 @@ F 6.1. ACEStart
 F 6.1. ACEStart
 F 6.1. ACEStart
 F 6.1. ACEStart
+I 6.1. ACEQuit
 F 6.1. ACEQuit
 F 6.1. ACEQuit
 F 6.1. ACEQuitAll
@@ -291,12 +309,12 @@ F 6.5. ACEDumpStatistics
 F 6.5. ACEVersion
 F 6.5. ACEVersion
 S 6.6. Interactive Versions of Non-interactive ACE Functions
-F 6.6. ACECosetTable
-F 6.6. ACECosetTable
-F 6.6. ACEStats
-F 6.6. ACEStats
-F 6.6. IsACEGeneratorsInPreferredOrder
-F 6.6. IsACEGeneratorsInPreferredOrder
+F 6.6. ACECosetTable!interactive
+F 6.6. ACECosetTable!interactive
+F 6.6. ACEStats!interactive
+F 6.6. ACEStats!interactive
+F 6.6. IsACEGeneratorsInPreferredOrder!interactive
+F 6.6. IsACEGeneratorsInPreferredOrder!interactive
 S 6.7. Steering ACE Interactively
 F 6.7. ACERecover
 F 6.7. ACERecover
@@ -347,9 +365,9 @@ I 8.4. break-loop
 S 8.5. Using ACEReadResearchExample
 C moreexamples.tex 9. More Examples
 S 9.1. Getting Started
-I 9.1. ACEStats, example
-I 9.1. ACECosetTableFromGensAndRels, example
-I 9.1. ACEStart, example
+I 9.1. ACEStats
+I 9.1. ACECosetTableFromGensAndRels
+I 9.1. ACEStart
 C otheroptions.tex 10. Other ACE Options
 S 10.1. Experimentation Options
 F 10.1. option aep
@@ -410,9 +428,9 @@ F 10.5. option style
 F 10.5. option tw
 F 10.5. option trace
 S 10.6. Options that Modify the Coset Table
+I 10.6. dead coset (number)
 F 10.6. option recover
 F 10.6. option contiguous
-I 10.6. dead coset (number)
 F 10.6. option standard
 S 10.7. Options for Comments
 F 10.7. option text

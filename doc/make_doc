@@ -17,13 +17,13 @@ tex manual;bibtex manual
 tex manual; ../../../doc/manualindex manual
 # Finally TeX the manual again to get cross-references right
 tex manual
-# Create the PostScript version (comment out next line, if not needed)
-dvips -D300 manual -o
+# Create the PostScript version (uncomment next line, if needed)
+#dvips -D300 manual -o
 
-# # The HTML versions
-# cd htm
-# echo "HTML documentation"
-# make
+# The HTML version of the manual
+#mkdir -p ../htm
+#echo "Creating HTML documentation"
+#../../../etc/convert.pl -t -n ACE . ../htm
 
 #########################################################################
 ##

@@ -15,11 +15,14 @@
 \Chapter{Other ACE Options}
 
 Here we list all the known {\ACE} options not provided  earlier.  Most
-of the options provided here have interactive alternatives; a few have
-only limited usefulness from {\GAP}; many, users  will  normally  only
-wish to  use  if  generating  an  input  file,  by  using  the  option
-`aceinfile' (see~"option aceinfile"). However  all  options  here  are
-functional, both interactively and non-interactively.
+of the options provided here have  interactive  function  alternatives
+(each such alternative is noted at the end of the  section  describing
+the corresponding option  and  introduced  by  ``*INTERACTIVELY*,  use
+\dots''). A few options have only limited usefulness from {\GAP}; many
+options, users will normally only wish to use if generating  an  input
+file,  by  using  the  option  `aceinfile'  (see~"option  aceinfile").
+However all  options  here  are  functional,  both  interactively  and
+non-interactively.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{Experimentation Options}
@@ -36,19 +39,19 @@ ordering, relator rotations, and relator inversions.
 The argument <val> is considered as a binary number.  Its  three  bits
 are treated as flags, and control relator rotations (the  $2^0$  bit),
 relator inversions (the $2^1$ bit) and relator  orderings  (the  $2^2$
-bit),  respectively;  where  $1$  means  \lq{}active'  and  $0$  means
-\lq{}inactive'. (See below for an example).
+bit),  respectively;  where  $1$  means  ``active''  and   $0$   means
+``inactive''. (See below for an example).
 
-The `aep' option first performs a \lq{}priming run' using the  options
-as they stand. In particular, the `asis' and  `messages'  options  are
+The `aep' option first performs a ``priming run'' using the options as
+they stand. In particular,  the  `asis'  and  `messages'  options  are
 honoured.
 
 It then turns `asis' on and `messages' off  (i.e.~sets  `messages'  to
 0), and generates and tests the  requested  equivalent  presentations.
 The maximum and minimum values attained by `m' (the maximum number  of
 coset numbers defined at any stage) and `t' (the total number of coset
-numbers defined) are tracked, and each  time  a  new  \lq{}record'  is
-found, the relators used and the summary result line is  printed.  See
+numbers defined) are tracked, and each time a new ``record'' is found,
+the relators  used  and  the  summary  result  line  is  printed.  See
 Appendix~"The Meanings of ACE's output messages" for a  discussion  of
 the statistics `m' and `t'. To observe these messages either  set  the
 `InfoLevel' of `InfoACE' to 3 or non-interactively you can peruse  the
@@ -98,18 +101,18 @@ equivalent presentations are tested.
 There is no way to stop the `aep'  option  before  it  has  completed,
 other than killing the task. So do a reality check beforehand  on  the
 size of the search space and the time for each enumeration. If you are
-interested in  finding  a  \lq{}good'  enumeration,  it  can  be  very
-helpful, in terms of running time, to put a tight limit on the  number
-of coset numbers via the `max'  option.  You  may  also  have  to  set
-`compaction' = $100$ to prevent time-wasting attempts to recover space
-via compaction. This maximises throughput  by  causing  the  \lq{}bad'
+interested in finding a ``good'' enumeration, it can be very  helpful,
+in terms of running time, to put a tight limit on the number of  coset
+numbers via the `max' option. You may also have to set `compaction'  =
+$100$  to  prevent  time-wasting  attempts  to   recover   space   via
+compaction.  This  maximises  throughput  by   causing   the   ``bad''
 enumerations, which are in  the  majority,  to  overflow  quickly  and
 abort. If you wish to explore  a  very  large  search-space,  consider
-firing up many copies of {\ACE}, and starting each with a \lq{}random'
+firing up many copies of {\ACE}, and starting each with  a  ``random''
 equivalent  presentation.  Alternatively,  you  could  use  the  `rep'
 command.
 
-Interactively,             use              `ACEAllEquivPresentations'
+*INTERACTIVELY*,            use             `ACEAllEquivPresentations'
 (see~"ACEAllEquivPresentations").
 
 \>`rep:=<val>'{option rep}@{option `rep'}
@@ -141,9 +144,9 @@ the `start' option is neither needed nor done, when a  non-interactive
 {\ACE} interface function is called with the `rep' option.
 
 *Notes:*
-The relator inversions and rotations are \lq{}genuinely'  random.  The
-relator permuting is a little bit of a kludge, with the  \lq{}quality'
-of the permutations tending to improve with successive  presentations.
+The relator inversions and rotations  are  ``genuinely''  random.  The
+relator permuting is a little bit of a kludge, with the ``quality'' of
+the permutations tending to  improve  with  successive  presentations.
 When the `rep' command  completes,  the  presentation  active  is  the
 *last* one generated, (not that the non-interactive user cares).
 
@@ -157,7 +160,7 @@ equivalent presentations to serve as starting-points  is  tedious  and
 error-prone. The `rep' option provides a simple solution;  simply  run
 `rep := 7' before `aep := 7'.
 
-Interactively,            use            `ACERandomEquivPresentations'
+*INTERACTIVELY*,           use           `ACERandomEquivPresentations'
 (see~"ACERandomEquivPresentations").
 
 \enditems
@@ -251,7 +254,7 @@ group generators <fgens> into a form  suitable  for  the  `generators'
 option,   use   the   construction:   `ToACEWords(<fgens>,   <sgens>)'
 (see~"ToACEWords").
 
-Interactively,             use              `ACEAddSubgroupGenerators'
+*INTERACTIVELY*,            use             `ACEAddSubgroupGenerators'
 (see~"ACEAddSubgroupGenerators").
 
 \>`rl:=<relators>'{option rl}@{option `rl'}&
@@ -266,7 +269,7 @@ To convert a  {\GAP}  list  <rels>  of  relators  in  the  free  group
 generators <fgens> into a form suitable for the `rl' option,  use  the
 construction: `ToACEWords(<fgens>, <rels>)' (see~"ToACEWords").
 
-Interactively, use `ACEAddRelators' (see~"ACEAddRelators").
+*INTERACTIVELY*, use `ACEAddRelators' (see~"ACEAddRelators").
 
 \>`ds:=<list>'{option ds}@{option `ds'}&
 `D'eletes `s'ubgroup generators; <list> must be  a  list  of  positive
@@ -277,7 +280,7 @@ presentation. If the generators are numbered from 1 in the output  of,
 say, the `sr' command (see~"option sr"), then the generators listed in
 `<list>' are deleted; `<list>' must be a strictly increasing sequence.
 
-Interactively,            use            `ACEDeleteSubgroupGenerators'
+*INTERACTIVELY*,           use           `ACEDeleteSubgroupGenerators'
 (see~"ACEDeleteSubgroupGenerators").
 
 \>`dr:=<list>'{option dr}@{option `dr'}&
@@ -288,7 +291,7 @@ presentation. If the relators are numbered from 1 in  the  output  of,
 say, the `sr' command (see~"option sr"), then the relators  listed  in
 `<list>' are deleted; `<list>' must be a strictly increasing sequence.
 
-Interactively, use `ACEDeleteRelators' (see~"ACEDeleteRelators").
+*INTERACTIVELY*, use `ACEDeleteRelators' (see~"ACEDeleteRelators").
 
 \>`cc:=<val>'{option cc}@{option `cc'}&
 Makes `c'oset <val>  `c'oincide  with  coset  1;  <val>  should  be  a
@@ -298,7 +301,8 @@ Prints out the representative of coset `<val>', and  adds  it  to  the
 subgroup generators; i.e., forces coset `<val>' to coincide with coset
 1, the subgroup.
 
-Interactively, use `ACECosetCoincidence' (see~"ACECosetCoincidence").
+*INTERACTIVELY*,               use               `ACECosetCoincidence'
+(see~"ACECosetCoincidence").
 
 \>`rc:=<val>'{option rc}@{option `rc'}
 \>`rc:=[<val>]'{option rc}@{option `rc'}
@@ -316,12 +320,13 @@ the table becomes too small, the  attempt  is  aborted,  the  original
 subgroup generators restored, and another attempt made. If an  attempt
 succeeds, then the new set of subgroup generators is retained.
 
-Interactively, use `ACERandomCoincidences' (see~"ACERandomCoincidences").
-
 *Guru Notes:*
 A coset number can have many different coset representatives. Consider
 running `standard' before `rc', to canonicise the table and hence  the
 coset representatives.
+
+*INTERACTIVELY*,              use              `ACERandomCoincidences'
+(see~"ACERandomCoincidences").
 
 \enditems
 
@@ -338,6 +343,8 @@ Prints the possible enumeration  `mode's  (i.e.~which  of  `continue',
 `redo' or `start' are possible (see~"option continue",  "option  redo"
 and "option start").
 
+*INTERACTIVELY*, use `ACEModes' (see~"ACEModes").
+
 \>`begin'{option begin}@{option `begin'}
 \>`start'{option start}@{option `start'}&
 Start an enumeration. (Shortest abbreviation of `begin' is `beg'.)
@@ -351,7 +358,7 @@ the options provided by the user, to  initiate  a  coset  enumeration;
 however, this is not done, if the user  herself  supplies  either  the
 `begin' or `start' option.
 
-Interactively, use `ACEStart' (see~"ACEStart").
+*INTERACTIVELY*, use `ACEStart' (see~"ACEStart").
 
 \>`check'{option check}@{option `check'}
 \>`redo'{option redo}@{option `redo'}&
@@ -361,8 +368,6 @@ As opposed to `start' (see~"option start"), which clears  an  existing
 coset table, any existing information in the table  is  retained,  and
 the enumeration is restarted from coset 1 (i.e., the subgroup).
 
-Interactively, use `ACERedo' (see~"ACERedo").
-
 *Notes:*
 This option is really intended for the case where additional  relators
 (option `rl'; see~"option  rl")  and/or  subgroup  generators  (option
@@ -370,6 +375,8 @@ This option is really intended for the case where additional  relators
 may be incomplete  or  exhibit  a  finite  index,  is  still  *valid*.
 However, the additional data may allow the enumeration to complete, or
 cause a collapse to a smaller index.
+
+*INTERACTIVELY*, use `ACERedo' (see~"ACERedo").
 
 \>`continue'{option continue}@{option `continue'}&
 `Continue's the current enumeration, building upon the existing table.
@@ -382,7 +389,7 @@ be allowed to `continue',  although  you  may  be  allowed  to  `redo'
 (see~"option redo"). If `redo' is not  allowed,  you  must  re-`start'
 (see~"option start").
 
-Interactively, use `ACEContinue' (see~"ACEContinue").
+*INTERACTIVELY*, use `ACEContinue' (see~"ACEContinue").
 
 \enditems
 
@@ -416,11 +423,11 @@ This quits {\ACE} nicely, printing the date and  the  time.  An  `EOF'
 (end-of-file;  i.e.,  `\^{}d')  has  the  same   effect,   so   proper
 termination occurs if {\ACE} is taking its input from a script file.
 
-Interactively, use `ACEQuit' (see~"ACEQuit").
-
 Note  that  `qui'  actually  abbreviates  the   corresponding   {\ACE}
 directive `quit', but since `quit' is  a  {\GAP}  keyword  it  is  not
 available via the {\GAP} interface to {\ACE}.
+
+*INTERACTIVELY*, use `ACEQuit' (see~"ACEQuit").
 
 \>`system:=<string>'{option system}@{option `system'}&
 Does a shell escape, to execute <string>; <string> must be a string.
@@ -441,7 +448,7 @@ Prints out the table in `cycles'. (Shortest abbreviation: `cy'.)
 
 This option prints out the permutation representation.
 
-Interactively, use `ACECycles' (see~"ACECycles").
+*INTERACTIVELY*, use `ACECycles' (see~"ACECycles").
 
 \>`dump'{option dump}@{option `dump'}
 \>`dump:=<level>'{option dump}@{option `dump'}
@@ -460,7 +467,7 @@ selects `<level> = 0, <detail> = 0'. The second form of  this  command
 makes `<detail> = 0'. This option is intended for  gurus;  the  source
 code should be consulted to see what the output means.
 
-Interactively, use `ACEDumpVariables' (see~"ACEDumpVariables").
+*INTERACTIVELY*, use `ACEDumpVariables' (see~"ACEDumpVariables").
 
 \>`help'{option help}@{option `help'}&
 Prints the {\ACE} help screen. (Shortest abbreviation: `h'.)
@@ -491,7 +498,7 @@ option `nc'  with  the  value  1.  It  is  still  possible  that  some
 conjugates of the newly added subgroup generators will not be elements
 of the subgroup.
 
-Interactively,       use       `ACEConjugatesForSubgroupNormalClosure'
+*INTERACTIVELY*,      use      `ACEConjugatesForSubgroupNormalClosure'
 (see~"ACEConjugatesForSubgroupNormalClosure").
 
 \>`options'{option options}@{option `options'}&
@@ -499,12 +506,8 @@ Dumps version information of the {\ACE} binary.
 (Shortest abbreviation: `opt'.)
 
 A rather unfortunate name for an option; this command dumps details of
-the \lq{}options' included in the version of {\ACE}  when  the  {\ACE}
+the ``options'' included in the version  of  {\ACE}  when  the  {\ACE}
 binary was compiled.
-
-Use  the   command   `ACEVersion();'   (see~"ACEVersion")   for   this
-information, instead, unless you want it in an {\ACE} standalone input
-file.
 
 A typical output, is as follows:
 
@@ -521,6 +524,10 @@ Level 2 options:
   host info = on
 \endtt
 
+*INTERACTIVELY* and non-interactively, use the command `ACEVersion();'
+(see~"ACEVersion") for this information, instead, unless you  want  it
+in an {\ACE} standalone input file.
+
 \>`oo:=<val>'{option oo}@{option `oo'}
 \>`order:=<val>'{option order}@{option `order'}&
 Print a coset representative of a coset number with order  a  multiple
@@ -533,8 +540,8 @@ the subgroup, and prints out its coset representative.  If  `<val>  \<
 is printed. Also, `<val> = 0' is permitted; this special value effects
 the printing of the orders (modulo the subgroup) of all coset numbers.
 
-Interactively, use `ACEOrders' (see~"ACEOrders"), for the case  `<val>
-= 0', or `ACEOrder' (see~"ACEOrder"), otherwise.
+*INTERACTIVELY*,  use  `ACEOrders'  (see~"ACEOrders"),  for  the  case
+`<val> = 0', or `ACEOrder' (see~"ACEOrder"), otherwise.
 
 \>`sr'{option sr}@{option `sr'}
 \>`sr:=<val>'{option sr}@{option `sr'}&
@@ -543,13 +550,9 @@ Print out parameters of the current presentation; <val> must be  0  or
 
 No argument, or `<val> = 0', prints out the  `Group  Name',  `Subgroup
 Name', the group's `relators'  and  the  subgroup's  `generators'.  If
-`<val> = 1', then the current setting of the \lq{}run  parameters'  is
+`<val> = 1', then the current setting of  the  ``run  parameters''  is
 also printed. The printout is the same as that produced at  the  start
 of a run when option `messages' (see~"option messages") is non-zero.
-
-Interactively,  use  `ACEGroupGenerators'  (see~"ACEGroupGenerators"),
-`ACERelators'   (see~"ACERelators"),   `ACESubgroupGenerators'    (see
-"ACESubgroupGenerators"), and `ACEParameters' (see~"ACEParameters").
 
 *Notes:*
 The `sr' option should  only  be  used  *after*  an  enumeration  run;
@@ -559,6 +562,10 @@ an enumeration: `start' (see~"option  start")  or  `aep'  (see~"option
 aep") or `rep' (see~"option rep"), precedes the `sr' option. (When  an
 enumeration-invoking option is included  non-interactively  the  quiet
 inclusion step of the `start' option is omitted.)
+
+*INTERACTIVELY*, use `ACEGroupGenerators'  (see~"ACEGroupGenerators"),
+`ACERelators'   (see~"ACERelators"),   `ACESubgroupGenerators'    (see
+"ACESubgroupGenerators"), and `ACEParameters' (see~"ACEParameters").
 
 \>`print'{option print}@{option `print'}
 \>`print:=<val>'{option print}@{option `print'}
@@ -580,7 +587,8 @@ to be printed. In the last  form,  the  table  is  printed  from  line
 the  orders   modulo   the   subgroup   (if   available)   and   coset
 representatives are printed also.
 
-Interactively, use `ACEDisplayCosetTable' (see~"ACEDisplayCosetTable").
+*INTERACTIVELY*,              use               `ACEDisplayCosetTable'
+(see~"ACEDisplayCosetTable").
 
 \>`sc:=<val>'{option sc}@{option `sc'}
 \>`stabilising:=<val>'{option stabilising}@{option `stabilising'}&
@@ -597,12 +605,12 @@ normalise the subgroup, plus their representatives, are printed.
 
 *Note:*
 The name of this option is an historical hangover. It is named for the
-property that elements that \lq{}normalise' a subgroup, may be said to
-\lq{}stabilise' that subgroup  when  they  act  \lq{}by  conjugation'.
-Also, the option `normal' (see~"option  normal")  already  performs  a
-different function.
+property that elements that ``normalise'' a subgroup, may be  said  to
+``stabilise'' that subgroup when they act  ``by  conjugation''.  Also,
+the option `normal' (see~"option normal") already performs a different
+function.
 
-Interactively,          use           `ACECosetsThatNormaliseSubgroup'
+*INTERACTIVELY*,         use          `ACECosetsThatNormaliseSubgroup'
 (see~"ACECosetsThatNormaliseSubgroup").
 
 \>`statistics'{option statistics}@{option `statistics'}
@@ -616,7 +624,7 @@ option  dumps  the  statistics  accumulated  during  the  most  recent
 enumeration. See the `enum.c' source  file  for  the  meaning  of  the
 variables.
 
-Interactively, use `ACEDumpStatistics' (see~"ACEDumpStatistics").
+*INTERACTIVELY*, use `ACEDumpStatistics' (see~"ACEDumpStatistics").
 
 \>`style'{option style}@{option `style'}&
 Prints the current enumeration style.
@@ -624,7 +632,7 @@ Prints the current enumeration style.
 This option prints the current enumeration style, as deduced from  the
 current `ct' and `rt' parameters (see~"Enumeration Style").
 
-Interactively, use `ACEStyle' (see~"ACEStyle").
+*INTERACTIVELY*, use `ACEStyle' (see~"ACEStyle").
 
 \>`tw:=[<val>, <word>]'{option tw}@{option `tw'}
 \>`trace:=[<val>, <word>]'{option trace}@{option `trace'}&
@@ -635,7 +643,7 @@ group generators.
 This option prints the final coset number of the trace, if  the  trace
 completes.
 
-Interactively, use `ACETraceWord' (see~"ACETraceWord").
+*INTERACTIVELY*, use `ACETraceWord' (see~"ACETraceWord").
 
 \enditems
 
@@ -644,9 +652,10 @@ Interactively, use `ACETraceWord' (see~"ACETraceWord").
 
 \beginitems
 
+\index{dead coset (number)}
 \>`recover'{option recover}@{option `recover'}
 \>`contiguous'{option contiguous}@{option `contiguous'}&
-`Recover' space used by dead coset numbers\index{dead coset (number)}.
+`Recover' space used by dead coset numbers.
 (Shortest  abbreviation  of  `recover'   is   `reco',   and   shortest
 abbreviation of `contiguous' is `contig'.)
 
@@ -657,7 +666,7 @@ routine is called automatically if  the  `cycles',  `nc',  `print'  or
 `standard' options (see~"option cycles", "option nc",  "option  print"
 and "option standard") are invoked.
 
-Interactively, use `ACERecover' (see~"ACERecover").
+*INTERACTIVELY*, use `ACERecover' (see~"ACERecover").
 
 \>`standard'{option standard}@{option `standard'}&
 Compacts {\ACE}'s  coset  table  and  standardises  the  numbering  of
@@ -694,7 +703,7 @@ effect of doing this can be investigated  in  {\ACE}  by  (repeatedly)
 halting  the  enumeration  (by  say,  imposing  timing  restrictions),
 standardising the coset numbering, and continuing.
 
-Interactively,             use             `ACEStandardCosetNumbering'
+*INTERACTIVELY*,            use            `ACEStandardCosetNumbering'
 (see~"ACEStandardCosetNumbering").
 
 \enditems

@@ -48,7 +48,7 @@ gap> RecNames(KnownACEOptions);
 (See Section~"The KnownACEOptions Record".) Also, from within a {\GAP}
 session, you may use {\GAP}'s help browser (see Chapter~"ref:The  Help
 System" in the  {\GAP}  Reference  Manual);  to  find  out  about  any
-particular {\ACE} option, simply type: \lq{}`?option <option>'', where
+particular {\ACE} option, simply type: ```?option  <option>''',  where
 <option> is one of the options listed above without any quotes, e.g.
 
 \beginexample
@@ -93,8 +93,6 @@ that prior to calling `ACEStart' the `OptionsStack' be empty.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{Warnings regarding Options}
 
-\beginitems
-
 As mentioned above, one can set options globally  using  the  function
 `PushOptions' (see Chapter~"ref:Options Stack" in the {\GAP} Reference
 Manual); however, options pushed onto  `OptionsStack',  in  this  way,
@@ -111,7 +109,7 @@ programs may lead to misinterpretations. Considering  how  much  of  a
 potential mine-field a  non-empty  `OptionsStack'  might  be  for  the
 unwary user, we have provided
 
-\>FlushOptionsStack()
+\>FlushOptionsStack()!{additional remarks} F
 
 which simply executes `PopOptions()' until `OptionsStack' is empty.
 
@@ -120,8 +118,6 @@ needs to be told explicitly to ignore options passed down  recursively
 to it from calling functions. For this purpose we  have  provided  the
 options `aceignore' (see~"option  aceignore")  and  `aceignoreunknown'
 (see~"option aceignoreunknown").
-
-\enditems
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{Abbreviations and mixed case for ACE Options}
@@ -180,8 +176,7 @@ than one strategy, but it's not sensible; as just mentioned, the later
 one prevails.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\Section{What happens if no ACE Strategy Option or if no ACE Option is
-passed}
+\Section{What happens if no ACE Strategy Option or if no ACE Option is passed}
 
 If  an  {\ACE}  interface  function   (`ACECosetTableFromGensAndRels',
 `ACEStats',  `ACECosetTable'  or  `ACEStart')  is  given  no  strategy
@@ -189,16 +184,16 @@ option, the `default'  strategy  (see  Chapter~"Strategy  Options  for
 ACE") is selected, and a number of options that {\ACE} needs to have a
 value for are given default values, *prior* to the  execution  of  any
 user options, if any. This ensures that {\ACE} has a value for all its
-\lq{}run parameters'; three of  these  are  defined  from  the  {\ACE}
-interface function arguments; and the remaining \lq{}run  parameters',
-we denote by \lq{}{\ACE} Parameter Options'. For user convenience,  we
-have  provided  the  `ACEParameterOptions'  record  (see  Section~"ACE
-Parameter Options"), the fields of which are the \lq{}{\ACE} Parameter
-Options'.   The   value   of    each    field    (option)    of    the
-`ACEParameterOptions' record is either a default value or (in the case
-of an option that is set by a strategy) a  record  of  default  values
-that {\ACE} assumes when the user does not  define  a  value  for  the
-option (either indirectly by selecting a strategy option or directly).
+``run parameters'';  three  of  these  are  defined  from  the  {\ACE}
+interface function arguments; and the remaining ``run parameters'', we
+denote by ``{\ACE} Parameter Options''. For user convenience, we  have
+provided the `ACEParameterOptions' record (see Section~"ACE  Parameter
+Options"), the fields of which are the ``{\ACE}  Parameter  Options''.
+The value of each field (option) of the  `ACEParameterOptions'  record
+is either a default value or (in the case of an option that is set  by
+a strategy) a record of default values that {\ACE}  assumes  when  the
+user does not define a value for  the  option  (either  indirectly  by
+selecting a strategy option or directly).
 
 If the `default' strategy does not suffice, most usually a  user  will
 select one of the other strategies  from  among  the  ones  listed  in
@@ -270,7 +265,7 @@ assigning `true' or  `false'),  whereas  strategy  (no-value)  options
 should *not* be thought of as boolean (a `false' assignment will *not*
 give you what you might have expected).
 
-Options, that are unknown to the {\ACE} interface  functions,  that  are
+Options, that are unknown to the {\ACE} interface functions, that  are
 passed without a value, are *always* passed to the  {\ACE}  binary  as
 no-value options (except when the options are ignored); the  user  can
 over-ride this behaviour simply by assigning the  intended  value.  An
@@ -313,14 +308,15 @@ have  been  abbreviated:  `Wo'  is  a  mixed  case   abbreviation   of
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{The KnownACEOptions Record}
 
-The {\ACE} options known to the {\ACE} interface are the fields of the
-record          `KnownACEOptions'{\undoquotes\atindex{KnownACEOptions}
-{@`KnownACEOptions'}}; each field (known {\ACE} option) is assigned to
-a list of the  form  `[<i>,  <ListOrFunction>]',  where  `<i>'  is  an
-integer representing the length of the shortest  abbreviation  of  the
-option and `<ListOrFunction>' is either  a  list  of  (known)  allowed
-values or a boolean function that may be  used  to  determine  if  the
-given value is a (known) valid value e.g.
+\>`KnownACEOptions' V
+
+is a {\GAP} record whose fields are the {\ACE} options  known  to  the
+{\ACE} interface; each field (known {\ACE} option) is  assigned  to  a
+list of the form `[<i>, <ListOrFunction>]', where `<i>' is an  integer
+representing the length of the shortest abbreviation of the option and
+`<ListOrFunction>' is either a list of (known)  allowed  values  or  a
+boolean function that may be used to determine if the given value is a
+(known) valid value e.g.
 
 \beginexample
 gap> KnownACEOptions.compaction;
@@ -338,8 +334,6 @@ gap> KnownACEOptions.ct;
 indicates that there is essentially no abbreviation of `ct' (since its
 shortest abbreviation is of length 2),  and a value of  `ct' is  known
 to be valid if `IsInt' returns true for that value.
-
-\beginitems
 
 For user convenience, we provide the function
 
@@ -381,11 +375,9 @@ functions.
 
 returns `true' if <optname> is a mixed case abbreviation of a field of
 `KnownACEOptions',           or           `false'           otherwise.
-`IsKnownACEOption(<optname>);'        is         equivalent         to
+`IsKnownACEOption(<optname>);' is equivalent to
 
-\beginitems
-\qquad`ACEOptionData(<optname>).known;'
-\enditems
+\)\kernttindent{ACEOptionData(<optname>).known;}
 
 \>ACEPreferredOptionName( <optname> ) F
 
@@ -393,38 +385,31 @@ returns the lowercase unabbreviated first alternative of <optname>  if
 it is a known {\ACE} option, or  <optname>  in  lowercase,  otherwise.
 `ACEPreferredOptionName(<optname>);' is equivalent to
 
-\beginitems
-\qquad`ACEOptionData(<optname>).synonyms[1];'
-\enditems
+\)\kernttindent{ACEOptionData(<optname>).synonyms[1];}
 
 \>IsACEParameterOption( <optname> ) F
 
-returns true if <optname> is an \lq{}{\ACE} parameter option'. ({\ACE}
+returns true if <optname> is an ``{\ACE} parameter option''. ({\ACE}
 Parameter Options are described in Section~"ACE  Parameter  Options").
-`IsACEParameterOption(<optname>)' is equivalent to
+`IsACEParameterOption(<optname>);' is equivalent to
 
-\beginitems
-\qquad`ACEPreferredOptionName(<optname>) in RecNames(ACEParameterOptions);'
-\enditems
+\)\kernttindent{ACEPreferredOptionName(<optname>) in RecNames(ACEParameterOptions);}
 
 \>IsACEStrategyOption( <optname> ) F
 
-returns true if <optname> is  an  \lq{}{\ACE}  strategy  option'  (see
+returns true if <optname> is  an  ``{\ACE}  strategy  option''  (see
 Section~"The                ACEStrategyOptions                 list").
-`IsACEStrategyOption(<optname>)' is equivalent to
+`IsACEStrategyOption(<optname>);' is equivalent to
 
-\beginitems
-\qquad`ACEPreferredOptionName(<optname>) in ACEStrategyOptions;'
-\enditems
-
-\enditems
+\)\kernttindent{ACEPreferredOptionName(<optname>) in ACEStrategyOptions;}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{The ACEStrategyOptions List}
 
-For  convenience,  the  {\GAP}  list  `ACEStrategyOptions'{\undoquotes
-\atindex{ACEStrategyOptions}{@`ACEStrategyOptions'}}   contains    the
-strategy options known to the {\ACE} interface functions:
+\>`ACEStrategyOptions' V
+
+is a {\GAP} list that contains  the  strategy  options  known  to  the
+{\ACE} interface functions:
 
 \beginexample
 gap> ACEStrategyOptions;
@@ -437,13 +422,14 @@ See Chapter~"Strategy Options  for  ACE"  for  details  regarding  the
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{ACE Option Synonyms}
 
-A number of known {\ACE} options have synonyms. For user  convenience,
-we     have      defined      the      `ACEOptionSynonyms'{\undoquotes
-\atindex{ACEOptionSynonyms}{@`ACEOptionSynonyms'}} record, the  fields
-of which are the \lq{}preferred' option names and the values of  which
-are lists of synonyms of those option names. What makes an option name
-\lq{}preferred' is somewhat arbitrary (in most cases, it is simply the
-shortest of a list of synonyms). For  a  \lq{}preferred'  option  name
+\>`ACEOptionSynonyms' V
+
+is a {\GAP} record. A number of known {\ACE}  options  have  synonyms.
+The fields of the `ACEOptionSynonyms'  record  are  the  ``preferred''
+option names and the values assigned to the fields are  the  lists  of
+synonyms  of  those  option  names.  What   makes   an   option   name
+``preferred'' is somewhat arbitrary (in most cases, it is  simply  the
+shortest of a list of  synonyms).  For  a  ``preferred''  option  name
 <optname> that has synonyms, the complete  list  of  synonyms  may  be
 obtained     by     concatenating     `[     <optname>     ]'      and
 `ACEOptionSynonyms.(<optname>)', e.g.
@@ -461,14 +447,17 @@ synonyms (which may be a list of one element) may be obtained  as  the
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{Non-ACE-binary Options}
 
-*Except* for the options listed  in  this  section  (which  appear  as
-elements of the global  variable  list  `NonACEbinOptions'{\undoquotes
-\atindex{NonACEbinOptions}{@`NonACEbinOptions'}})  and  those  options
-that are excluded via the `aceignore' and  `aceignoreunknown'  options
-(described below), *all* options that are on the  `OptionsStack'  when
-an {\ACE} interface function is  called,  are  passed  to  the  {\ACE}
-binary. Even options that produce the warning  message:  \lq{}`unknown
-(maybe  new)  or  bad'',  by  virtue  of  not   being   a   field   of
+\>`NonACEbinOptions' V
+
+is a {\GAP} list of options that have  meaning  only  for  the  {\ACE}
+Share Package interface, i.e.~options in  `KnownACEOptions'  that  are
+*not* {\ACE} binary options; each such option is described  in  detail
+below. *Except* for the options listed in `NonACEbinOptions' and those
+options that are excluded via the `aceignore'  and  `aceignoreunknown'
+options  (described  below),   *all*   options   that   are   on   the
+`OptionsStack' when an {\ACE} interface function is called, are passed
+to the {\ACE} binary. Even options that produce the  warning  message:
+```unknown (maybe new) or bad''', by virtue of not being  a  field  of
 `KnownACEOptions', are passed to the {\ACE} binary  (except  that  the
 options `purer' and `purec' are first translated to `pure r' and `pure
 c', respectively). When the {\ACE} binary encounters an option that it
@@ -497,7 +486,7 @@ Ensures that `ACECosetTable' and `ACECosetTableFromGensAndRels' output
 a coset table that is `lenlex' standardised.
 
 The  `lenlex'  scheme,  numbers  cosets  in  such  a  way  that  their
-\lq{}preferred' (coset) representatives, in an alphabet consisting  of
+``preferred'' (coset) representatives, in an  alphabet  consisting  of
 the user-submitted generators and their inverses,  are  ordered  first
 according to `length' and then according to a `lexical'  ordering.  In
 order to describe what the `lenlex' scheme's  `lexical'  ordering  is,
@@ -529,7 +518,7 @@ Ensures that `ACECosetTable' and `ACECosetTableFromGensAndRels' output
 a coset table that is `semilenlex' standardised.
 
 The `semilenlex' scheme, numbers cosets  in  such  a  way  that  their
-\lq{}preferred' (coset) representatives, in an alphabet consisting  of
+``preferred'' (coset) representatives, in an  alphabet  consisting  of
 only the user-submitted generators, are  ordered  first  according  to
 `length' and then according to a `lexical' ordering.
 
@@ -608,7 +597,7 @@ options that are not listed among  the  fields  of  `KnownACEOptions',
 which you intend to use.
 
 \>`acenowarnings'{option acenowarnings}@{option `acenowarnings'}& 
-Inhibits the warning message \lq{}`unknown (maybe new) or bad option''
+Inhibits the warning message ```unknown (maybe new) or bad option'''
 for options not listed in `KnownACEOptions'.
 (Shortest abbreviation: `acenow'.)
 
@@ -657,40 +646,41 @@ and has no abbreviation to discourage user use.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{ACE Parameter Options}
 
-The \lq{}{\ACE} Parameter Options' are options which, if not  supplied
-a value by the user, are supplied a default value by {\ACE}. In  fact,
-the \lq{}{\ACE} Parameter  Options'  are  those  options  that  appear
-(along  with  `Group  Generators',  `Group  Relators'  and   `Subgroup
-Generators',  which  are  defined  from  {\ACE}   interface   function
-arguments) in the \lq{}Run Parameters' block of {\ACE}  output,  when,
-for example, the `messages' option is non-zero.
+\>`ACEParameterOptions' V
 
-For convenience, we have defined the `ACEParameterOptions'{\undoquotes
-\atindex{ACEParameterOptions}{@`ACEParameterOptions'}}   record,   the
-fields of which are the \lq{}{\ACE} Parameter Options' and the  values
-of which are the default values (or a record of default  values)  that
-are supplied by {\ACE} when those options are not given values by  the
-user (either indirectly by selecting a strategy option or directly).
+is a {\GAP} record, whose fields are the ``{\ACE} Parameter Options''.
+The ``{\ACE} Parameter Options'' are options which, if not supplied  a
+value by the user, are supplied a default value by  {\ACE}.  In  fact,
+the ``{\ACE} Parameter Options'' are those options that appear  (along
+with `Group Generators', `Group Relators' and  `Subgroup  Generators',
+which are defined from {\ACE} interface  function  arguments)  in  the
+``Run Parameters'' block of {\ACE}  output,  when,  for  example,  the
+`messages' option is non-zero.
 
-In some cases, the value  of  a  field  of  the  `ACEParameterOptions'
-record is itself a record. In such cases, the fields  of  that  record
-are `default' and strategies for which  the  value  assigned  by  that
-strategy differs from the `default' strategy. A \lq{}strategy',  here,
-is the strategy option itself, if it is only a no-value option, or the
-strategy option concatenated  with  any  of  its  integer  values  (as
-strings), otherwise (e.g.~`felsch0' and `sims9'  are  strategies,  and
-`hlt' is both a strategy and a strategy option). As an  exercise,  the
-reader might like to try to reproduce the table at  the  beginning  of
-Chapter~"Strategy Options for  ACE"  using  the  `ACEParameterOptions'
-record.  (Hint:  you  first  need  to  select  those  fields  of   the
-`ACEParameterOptions' record whose values are records  with  at  least
-two fields.)
+For each field ({\ACE} parameter option) of the  `ACEParameterOptions'
+record, the value assigned is  the  default  value  (or  a  record  of
+default values) that are supplied by {\ACE} when  the  option  is  not
+given a value by the user (either indirectly by selecting  a  strategy
+option or directly).
+
+In the cases where the value of a field of  the  `ACEParameterOptions'
+record is itself a record, the fields of that record are `default' and
+strategies for which the value assigned by that strategy differs  from
+the `default' strategy. A ``strategy'', here, is the  strategy  option
+itself, if it is only  a  no-value  option,  or  the  strategy  option
+concatenated with any of its integer values  (as  strings),  otherwise
+(e.g.~`felsch0' and `sims9'  are  strategies,  and  `hlt'  is  both  a
+strategy and a strategy option). As an exercise, the reader might like
+to try to reproduce the table at the  beginning  of  Chapter~"Strategy
+Options for ACE" using the `ACEParameterOptions'  record.  (Hint:  you
+first need to select those fields of the `ACEParameterOptions'  record
+whose values are records with at least two fields.)
 
 *Note:*
-Where  an  \lq{}{\ACE}  Parameter  Option'  has  synonyms,  only   the
-\lq{}preferred'  option  name  (see  Section~"ACE  Option   Synonyms")
-appears as a field of  `ACEParameterOptions'.  The  complete  list  of
-\lq{}{\ACE} Parameter Options' may be obtained by
+Where  an  ``{\ACE}  Parameter  Option''  has   synonyms,   only   the
+``preferred'' option name (see Section~"ACE Option Synonyms")  appears
+as a field of `ACEParameterOptions'. The  complete  list  of  ``{\ACE}
+Parameter Options'' may be obtained by
 
 \beginexample
 gap> Concatenation( List(RecNames(ACEParameterOptions),                    
@@ -701,13 +691,13 @@ gap> Concatenation( List(RecNames(ACEParameterOptions),
   "row", "subgroup", "time", "workspace" ]
 \endexample
 
-We   describe   the   \lq{}{\ACE}   Parameter    Options'    in    the
-Sections~"General ACE Parameter Options that  Modify  the  Enumeration
-Process", "ACE Parameter Options Modifying C Style Definitions",  "ACE
-Parameter Options for R Style Definitions", "ACE Parameter Options for
-Deduction Handling", "Technical ACE Parameter Options", "ACE Parameter
-Options controlling ACE Output", and~"ACE Parameter Options that gives
-Names to the Group and Subgroup", following.
+We describe the ``{\ACE} Parameter Options'' in the  Sections~"General
+ACE Parameter Options  that  Modify  the  Enumeration  Process",  "ACE
+Parameter Options  Modifying  C  Style  Definitions",  "ACE  Parameter
+Options for R Style Definitions", "ACE Parameter Options for Deduction
+Handling", "Technical ACE Parameter Options", "ACE  Parameter  Options
+controlling ACE Output", and~"ACE Parameter Options that give Names to
+the Group and Subgroup", following.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{General ACE Parameter Options that Modify the Enumeration Process}
@@ -735,22 +725,22 @@ of involutory generators see the {\ACE} standalone manual.
 Number of C style definitions per pass; `<val>' should be an  integer. 
 (Shortest abbreviation of `cfactor' is `c'.)
 
-The absolute value of `<val>' sets the
-number of C style definitions per  pass through  the enumerator's main
-loop. The sign of `<val>'  sets the  style. The possible  combinations
-of the values of `ct' and  `rt'  (described below)  are  given in  the
-table of  enumeration styles in Section~"Enumeration Style".
+The absolute value of `<val>' sets the number of C  style  definitions
+per pass through the enumerator's main loop. The sign of `<val>'  sets
+the style. The possible combinations of the values of  `ct'  and  `rt'
+(described below) are given in the  table  of  enumeration  styles  in
+Section~"Enumeration Style".
 
 \>`rt:=<val>'{option rt}@{option `rt'}
 \>`rfactor:=<val>'{option rfactor}@{option `rfactor'}&
 Number of R style definitions per pass; `<val>' should be an  integer. 
 (Shortest abbreviation of `rfactor' is `r'.)
 
-The absolute value of `<val>' sets the
-number of R style definitions per  pass through  the enumerator's main
-loop. The sign of `<val>'  sets the  style. The possible  combinations
-of the values of `ct' (described above)  and  `rt'  are  given in  the
-table of  enumeration styles in Section~"Enumeration Style".
+The absolute value of `<val>' sets the number of R  style  definitions
+per pass through the enumerator's main loop. The sign of `<val>'  sets
+the style. The possible combinations of the values of `ct'  (described
+above) and `rt' are given  in  the  table  of  enumeration  styles  in
+Section~"Enumeration Style".
 
 \>`no:=<val>'{option no}@{option `no'}&
 The number of group relators to include in the subgroup;  
@@ -769,9 +759,9 @@ Turns on mendelsohn processing. (Shortest abbreviation: `mend'.)
 
 Mendelsohn style processing during relator scanning/closing is  turned
 on by giving this option. Off is the default, and  here  relators  are
-scanned only from  the  start  (and  end)  of  a  relator.  Mendelsohn
-\lq{}on' means that all (different) cyclic permutations of  a  relator
-are scanned.
+scanned only from the start (and end) of a relator. Mendelsohn  ``on''
+means that all  (different)  cyclic  permutations  of  a  relator  are
+scanned.
 
 The effect of Mendelsohn style processing  is  case-specific.  It  can
 mean the difference between success or failure, or it can  impact  the
@@ -788,18 +778,18 @@ off.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{ACE Parameter Options Modifying C Style Definitions}
 
+\atindex{C style}{@C style!definition}
 The  next  three  options  are  relevant  only  for  making  *C  style
-definitions*\atindex{C style definitions}{@C style  definitions}  (see
-Section~"Enumeration Style"). Making definitions in C style,  that  is
-filling the coset table line by line, it can be very  advantageous  to
-switch to making definitions  from  the  preferred  definition  stack.
-Possible definitions can be extracted from this stack in various  ways
-and  the  two  options  `pmode'  and   `psize'   (see~"option   pmode"
-and~"option psize" respectively) regulate this. However it  should  be
-clearly understood  that  making  all  definitions  from  a  preferred
-definition  stack  one  may  violate  the  condition  of  Mendelsohn's
-theorem, and the option `fill' (see~"option  fill")  can  be  used  to
-avoid this.
+definitions* (see Section~"Enumeration Style"). Making definitions  in
+C style, that is filling the coset table line by line, it can be  very
+advantageous to  switch  to  making  definitions  from  the  preferred
+definition stack. Possible definitions  can  be  extracted  from  this
+stack in  various  ways  and  the  two  options  `pmode'  and  `psize'
+(see~"option pmode" and~"option psize"  respectively)  regulate  this.
+However it should be clearly understood that  making  all  definitions
+from a preferred definition stack one may  violate  the  condition  of
+Mendelsohn's theorem, and the option `fill' (see~"option fill") can be
+used to avoid this.
 
 \beginitems
 
@@ -832,7 +822,7 @@ well.  The  effects of the various gap-filling  strategies vary widely.
 It is  not clear  which values are  good general defaults  or, indeed,
 whether any strategy is always ``not too bad''.
 
-This option is identified as `Fi' in the  \lq{}Run  Parameters'  block
+This option is identified as `Fi'  in  the  ``Run  Parameters''  block
 (obtained when `messages' is non-zero) of the {\ACE} output, since for
 the {\ACE} binary, `fi' is an allowed abbreviation of `fill'. However,
 `fi' is a {\GAP} keyword and so the shortest  abbreviation  of  `fill'
@@ -873,12 +863,13 @@ store up to $2^n-1$ entries.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{ACE Parameter Options for R Style Definitions}
 
+\atindex{R style}{@R style!definition}
 \beginitems
 
 \>`row:=<val>'{option row}@{option `row'}&
-Set the \lq{}row filling' option; `<val>' is either 0 or 1.
+Set the ``row filling'' option; `<val>' is either 0 or 1.
 
-By default, \lq{}row filling' is on (i.e.~`true' or 1). To turn it off
+By default, ``row filling'' is on (i.e.~`true' or 1). To turn  it  off
 set `row' to `false' or 0 (both are translated to 0 when passed to the
 {\ACE}  binary).  When   making   HLT   style   (i.e.~R   style;   see
 Section~"Enumeration Style") definitions, rows of the coset table  are
@@ -1044,7 +1035,7 @@ iterations in a given time may vary.
 Loop limit; `<val>' should be a non-negative integer.
 
 The core enumerator is organised as a state machine,  with  each  step
-performing an \lq{}action' (i.e., lookahead, compaction) or a block of
+performing an ``action'' (i.e., lookahead, compaction) or a  block  of
 actions (i.e.,  $|`ct'|$  coset  number  definitions,  $|`rt'|$  coset
 number applications). The number  of  passes  through  the  main  loop
 (i.e., steps) is counted, and the enumerator can make an early  return
@@ -1077,17 +1068,19 @@ path  compression on  cuts down  the  amount of  data movement  during
 coincidence processing at the expense of having to trace the paths and
 compress them.  In general, it does not seem to be worthwhile.
 
+\index{dead coset (number)}
 \>`compaction:=<val>'{option compaction}@{option `compaction'}&
-Percentage of dead coset numbers\index{dead coset (number)} to trigger
-compaction; `<val>' should be an integer (percentage) in  the  integer
-range 0 to 100. (Shortest abbreviation: `com'.)
+Percentage of dead coset numbers to trigger compaction; 
+`<val>' should be an integer (percentage) in the integer  range  0  to
+100. (Shortest abbreviation: `com'.)
 
-The option `compaction'  sets  the  percentage  of  *dead*~\index{dead
-coset (number)} coset numbers needed  to  trigger  compaction  of  the
-coset table, during an enumeration. A *dead* coset (number) is a coset
-number found to be coincident with a smaller coset number.  The
-default  is  10  or  100,  depending  on  the   strategy   used   (see
-Chapter~"Strategy Options for ACE").
+\index{dead coset (number)}
+The option `compaction' sets the percentage of  *dead*  coset  numbers
+needed  to  trigger  compaction  of  the  coset   table,   during   an
+enumeration. A *dead* coset (number) is a coset  number  found  to  be
+coincident with a smaller coset number. The  default  is  10  or  100,
+depending on the strategy  used  (see  Chapter~"Strategy  Options  for
+ACE").
 
 Compaction recovers the space allocated to  coset  numbers  which  are
 flagged as dead. It results in a table  where  all  the  active  coset
@@ -1117,9 +1110,10 @@ there are  outstanding  deductions;  since  deductions  are  discarded
 during compaction, a final lookahead  phase  will  (automatically)  be
 performed.
 
-Compacting a table \lq{}destroys'  information  and  history,  in  the
-sense that the coincidence list is deleted, and the table entries  for
-any dead coset numbers\index{dead coset (number)} are deleted.
+\index{dead coset (number)}
+Compacting a table ``destroys'' information and history, in the  sense
+that the coincidence list is deleted, and the table  entries  for  any
+dead coset numbers are deleted.
 
 \>`max:=<val>'{option max}@{option `max'}&
 Sets the maximum coset number that can be defined;
@@ -1196,11 +1190,11 @@ messages are simply  not  displayed.  However,  one  can  change  this
 situation both interactively and   non-interactively  by  setting  the
 `InfoLevel' of `InfoACE' to 3 via
 
-\begintt
+\beginexample
 gap> SetInfoACELevel(3);
-\endtt
+\endexample
 
-Then {\ACE}'s messages are  displayed  prepended  with  \lq{}`\#I  ''.
+Then {\ACE}'s messages are  displayed  prepended  with  ```\#I  '''.
 Please refer to Appendix~"The  Meanings  of  ACE's  output  messages",
 where the meanings of {\ACE}'s output messages are fully discussed.
 
@@ -1220,7 +1214,7 @@ Sets the `Group Name' to <string>;  <string>,  must  of  course  be  a
 string. (Shortest abbreviation: `enum'.)
 
 The {\ACE} binary has a two-word synonym for this option: `Group Name'
-and this is how it is identified in the \lq{}Run Parameters' block  of
+and this is how it is identified in the ``Run  Parameters''  block  of
 the {\ACE} output when `messages' has a non-zero  value.  The  default
 `Group Name' is `"G"'.
 
@@ -1238,7 +1232,7 @@ The default `Subgroup Name' is `"H"'.
 \beginitems
 
 \>`ao:=<filename>'{option ao}@{option `ao'}
-\>`aceoutfile:=<filename>'{option aceoutfile}@{option `aceoutfile'}&
+\>`aceoutfile:=<filename>'{option aceoutfile!ao synonym}@{option `aceoutfile'}&
 Redirects (`a'lters) `o'utput to <filename>; <filename>  should  be  a
 string.
 

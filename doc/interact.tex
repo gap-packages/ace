@@ -36,7 +36,7 @@ first  argument  is  the  integer  <i>  returned  by  the   initiating
 the integer <i> is  discovered  by  a  default  mechanism,  namely  by
 determining the least integer <i>  for  which  there  is  a  currently
 active interactive {\ACE} process). We will  thus  commonly  say  that
-\lq{}for the <i>th (or default) interactive {ACE} process'  a  certain
+``for the <i>th (or default) interactive  {ACE}  process''  a  certain
 function performs a given action. In each case, it is an error, if <i>
 is not the index of an active interactive process,  or  there  are  no
 current active interactive processes.
@@ -61,8 +61,7 @@ kill' if these hints are unhelpful).
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{Starting and Stopping Interactive ACE Processes}
 
-\beginitems
-
+\atindex{ACEStart}{@\noexpand`ACEStart'!details}
 \>ACEStart( <fgens>, <rels>, <sgens> [:<options>] ) F
 \>ACEStart( <i> [:<options>] ) F
 \>ACEStart( [:<options>] ) F
@@ -71,7 +70,6 @@ kill' if these hints are unhelpful).
 \>ACEStart( 0, <fgens>, <rels>, <sgens> [:<options>] ) F
 \>ACEStart( 0, <i> [:<options>] ) F
 \>ACEStart( 0, <i>, <fgens>, <rels>, <sgens> [:<options>] ) F
-\label{ACEStartDetails}
 
 The variables are: <i>, a  positive  integer  numbering  from  1  that
 represents (indexes) an already running  interactive  {\ACE}  process;
@@ -131,18 +129,18 @@ applies `ACEStart(<i>)'. (Most users will  only  run  one  interactive
 process at a time. Hence, `ACEStart()' will be a useful  shortcut  for
 `ACEStart(1)'.)
 
-The fourth form of `ACEStart' on four arguments, invokes a new enumeration
-on the <i>th running process, with new generators <fgens>, relators <rels>
-and subgroup generators <sgens>. This is provided so a user can re-use an
-already running process, rather than start a new process. (This may be
-useful when pseudo-ttys are a scarce resource.)
+The fourth form  of  `ACEStart'  on  four  arguments,  invokes  a  new
+enumeration on the <i>th running process, with new generators <fgens>,
+relators <rels> and subgroup generators <sgens>. This is provided so a
+user can re-use an already running process, rather than  start  a  new
+process. (This may be useful when pseudo-ttys are a scarce resource.)
 
 The fifth form of `ACEStart' (on the one argument: `0')  initiates  an
 interactive {\ACE} process, processes any user options, but  does  not
 insert a `start' (see~"option start") directive. This form  is  mainly
 for gurus who are familiar with the {\ACE} standalone and who wish, at
 least initially,  to  communicate  with  {\ACE}  using  the  primitive
-read/write tools of Section~"Primitive ACE Read/Write  Functions".  In
+read/write tools of  Section~"Primitive ACE Read/Write Functions".  In
 this  case,  after  the  group  generators,  relators,  and   subgroup
 generators have been set in the {\ACE} process, invocations of any  of
 `ACEGroupGenerators'     (see~"ACEGroupGenerators"),     `ACERelators'
@@ -179,9 +177,9 @@ interactive {\ACE} process, with a new presentation. There is no  form
 of `ACEStart' with the same functionality as this form, where the  <i>
 argument is omitted.
 
+\atindex{ACEQuit}{@\noexpand`ACEQuit'!details}
 \>ACEQuit( <i> ) F
 \>ACEQuit() F
-\label{ACEQuitDetails}
 
 terminate an interactive {\ACE} process,  where  <i>  is  the  integer
 returned by `ACEStart' when the process was  started.  If  the  second
@@ -192,8 +190,6 @@ As a convenience, to terminate all active interactive {\ACE} processes
 at once, we provide:
 
 \>ACEQuitAll() F
-
-\enditems
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{General ACE Modes}
@@ -206,9 +202,8 @@ when called with the  argument  0,  and  the  commands  `ACERedo'  and
 *general {\ACE} modes*. Additionally, there  are  two  other  commands
 which   deliver   enumeration   results:    `ACEAllEquivPresentations'
 (see~"ACEAllEquivPresentations")   and   `ACERandomEquivPresentations'
-(see~"ACERandomEquivPresentations");       we        call        these
-\lq{}experimentation'   {\ACE}   modes   and    describe    them    in
-Section~"Experimentation ACE Modes".
+(see~"ACERandomEquivPresentations"); we call these ``experimentation''
+{\ACE} modes and describe them in Section~"Experimentation ACE Modes".
 
 *Guru Note:*
 The {\ACE} standalone uses the term `mode'  in  a  slightly  different
@@ -219,15 +214,12 @@ generalised it  to  include  any  command  that  produces  enumeration
 results.
 
 After changing any of  {\ACE}'s  parameters,  one  of  three  *general
-modes*  is  possible:  one  may  be   able   to   \lq{}continue'   via
-`ACEContinue'  (see~"ACEContinue"),  or   \lq{}redo'   via   `ACERedo'
-(see~"ACERedo"), or if neither of these is possible one  may  have  to
-re-\lq{}start'  the  enumeration  via   `ACEStart'   (see~"ACEStart").
-Generally, the appropriate mode is invoked automatically when  options
-are changed; so most users should be  able  to  ignore  the  following
-three functions.
-
-\beginitems
+modes* is possible: one may be able to ``continue'' via  `ACEContinue'
+(see~"ACEContinue"), or ``redo'' via `ACERedo' (see~"ACERedo"), or  if
+neither of  these  is  possible  one  may  have  to  re-``start''  the
+enumeration   via   `ACEStart'   (see~"ACEStart").   Generally,    the
+appropriate mode is invoked automatically when options are changed; so
+most users should be able to ignore the following three functions.
 
 \>ACEModes( <i> ) F
 \>ACEModes() F
@@ -241,8 +233,8 @@ and `false' otherwise.
 \>ACEContinue( [:<options>] ) F
 
 for the <i>th (or  default)  interactive  {\ACE}  process,  apply  any
-<options> and then \lq{}continue' the  current  enumeration,  building
-upon the existing table. If a previous run stopped without producing a
+<options> and then ``continue'' the current enumeration, building upon
+the existing table. If a previous  run  stopped  without  producing  a
 finite index you can, in principle, change  any  of  the  options  and
 continue on. Of course, if you make any changes which  invalidate  the
 current table, you won't be allowed to `ACEContinue' and an error will
@@ -255,7 +247,7 @@ possible.
 \>ACERedo( [:<options>] ) F
 
 for the <i>th (or  default)  interactive  {\ACE}  process,  apply  any
-<options> and then \lq{}redo' the current  enumeration;  any  existing
+<options> and then ``redo''  the  current  enumeration;  any  existing
 information in the table is retained, and the enumeration is restarted
 from coset 1 (i.e., the subgroup).
 
@@ -263,20 +255,16 @@ from coset 1 (i.e., the subgroup).
 
 This command is really intended for the case where additional relators
 and/or subgroup generators have been introduced.  The  current  table,
-which  may  be  incomplete  or  exhibit  a  finite  index,  is   still
-\lq{}valid'. However, the  new  data  may  allow  the  enumeration  to
-complete, or cause a collapse to  a  smaller  index.  In  some  cases,
-`ACERedo' may not be possible and an error will  be  raised;  in  this
-case, `quit' the `break'-loop, and try `ACEStart', which will  discard
-the current table and re-\lq{}start' the enumeration.
-
-\enditems
+which may be incomplete or exhibit a finite index, is still ``valid''.
+However, the new data may allow the enumeration to complete, or  cause
+a collapse to a smaller index. In some cases,  `ACERedo'  may  not  be
+possible and an error  will  be  raised;  in  this  case,  `quit'  the
+`break'-loop, and try `ACEStart', which will discard the current table
+and re-``start'' the enumeration.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{Interactive ACE Process Utility Functions and Interruption of
 an Interactive ACE Process}
-
-\beginitems
 
 \>ACEProcessIndex( <i> ) F
 \>ACEProcessIndex() F
@@ -292,13 +280,13 @@ interactive process or returns `fail' and emits a warning  message  to
 returns the list of integer indices of all active  interactive  {\ACE}
 processes.
 
-If\atindex{interruption}{@interruption of an interactive ACE  process}
-the user does not yet have a `gap>'  prompt  then  usually  {\ACE}  is
+\atindex{interruption}{@interruption of an interactive ACE process}
+\atindex{break-loop}{@\noexpand`break'-loop}
+If the user does not yet have a `gap>' prompt then usually  {\ACE}  is
 still away doing something and an {\ACE} interface function  is  still
 waiting for a reply from {\ACE}. Typing a `Ctrl-C' (i.e. holding  down
 the `Ctrl' key and typing `c') will stop the waiting and  send  {\GAP}
-into     a     `break'-loop{\undoquotes     \atindex      {break-loop}
-{@`break'-loop}}, from which one has no option  but  to  `quit;'.  The
+into a `break'-loop, from which one has no option but to `quit;'.  The
 typing of `Ctrl-C', in such a circumstance, usually causes the  stream
 of the the interactive {\ACE} process to die; to check this we provide
 `IsACEProcessAlive' (see~"IsACEProcessAlive"). If  the  stream  of  an
@@ -395,15 +383,11 @@ values   for   the   options   `relators'   (see~"option   relators"),
 `generators' (see~"option generators"), `sg'  (see~"option  sg"),  and
 `rl' (see~"option rl").
 
-\enditems
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{Experimentation ACE Modes}
 
 Now we describe the two *experimentation modes*. The term  *mode*  was
 defined in Section~"General ACE Modes".
-
-\beginitems
 
 \>ACEAllEquivPresentations( <i>, <val> ) F
 \>ACEAllEquivPresentations( <val> ) F
@@ -416,15 +400,15 @@ rotations, and relator inversions; <val> is in the integer range 0  to
 The argument <val> is considered as a binary number.  Its  three  bits
 are treated as flags, and control relator rotations (the  $2^0$  bit),
 relator inversions (the $2^1$ bit) and relator  orderings  (the  $2^2$
-bit),  respectively;  where  $1$  means  \lq{}active'  and  $0$  means
-\lq{}inactive'. (See below for an example).
+bit),  respectively;  where  $1$  means  ``active''  and  $0$  means
+``inactive''. (See below for an example).
 
 Before we describe the {\GAP} output of `ACEAllEquivPresentations' let
 us spend some time considering what happens before the  {\ACE}  binary
 output is parsed.
 
-The `ACEAllEquivPresentations' command first performs  a  \lq{}priming
-run' using the options as they stand. In particular,  the  `asis'  and
+The `ACEAllEquivPresentations'  command  first  performs  a  ``priming
+run'' using the options as they stand. In particular, the  `asis'  and
 `messages' options are honoured.
 
 It  then  turns  `asis'  (see~"option   asis")   on   and   `messages'
@@ -432,7 +416,7 @@ It  then  turns  `asis'  (see~"option   asis")   on   and   `messages'
 and tests the requested  equivalent  presentations.  The  maximum  and
 minimum values attained by `m' (the maximum number  of  coset  numbers
 defines at any stage) and `t'  (the  total  number  of  coset  numbers
-defined) are tracked, and each time a new \lq{}record' is  found,  the
+defined) are tracked, and each time a new  ``record''  is  found,  the
 relators  used  and  the  summary  result  line   are   printed.   See
 Appendix~"The Meanings of ACE's output messages" for a  discussion  of
 the statistics  `m'  and  `t'.  To  observe  these  messages  set  the
@@ -442,7 +426,7 @@ The order in which the  equivalent  presentations  are  generated  and
 tested has no particular significance, but note that the  presentation
 as given *after* the initial priming run) is the  *last*  presentation
 to be generated and tested, so that  the  group's  relators  are  left
-\lq{}unchanged' by running the `ACEAllEquivPresentations' command.
+``unchanged'' by running the `ACEAllEquivPresentations' command.
 
 As discussed by Cannon, Dimino, Havas  and  Watson  \cite{CDHW73}  and
 Havas and Ramsay \cite{HR99b} such equivalent presentations can  yield
@@ -486,34 +470,27 @@ returned by `ACEStats' (see~"ACEStats");
 \quad`equivRuns' & a list of data records, one  for  each  run,  where
 each record has fields:
 
-\beginitems
+\qquad`rels'& the relators in the order used for the run,
 
-\quad\quad`rels'& the relators in the order used for the run,
-
-\quad\quad`enumResult'& the {\ACE}  enumeration  result  message  (see
+\qquad`enumResult'&  the  {\ACE}  enumeration  result   message   (see
 Section~"Results Messages") of the run, and
 
-\quad\quad`stats'& the enumeration result as a {\GAP}  record  exactly
-like the record returned by `ACEStats' (see~"ACEStats");
-
-\enditems
+\qquad`stats'& the enumeration result as a {\GAP} record exactly  like
+the record returned by `ACEStats' (see~"ACEStats");
 
 \quad`summary' & a record with fields:
 
-\beginitems
-\quad\quad`successes'& the total  number  of  successful  (i.e.~having
-finite enumeration index) runs,
+\qquad`successes'& the total number of successful (i.e.~having  finite
+enumeration index) runs,
 
-\quad\quad`runs'& the total number  of  equivalent  presentation  runs
+\qquad`runs'&  the  total  number  of  equivalent  presentation   runs
 executed,
 
-\quad\quad`maxcosetsRange'& the range  of  values  as  a  {\GAP}  list
-inside which each `equivRuns[<i>].maxcosets' lies, and
+\qquad`maxcosetsRange'& the range of values as a  {\GAP}  list  inside
+which each `equivRuns[<i>].maxcosets' lies, and
 
-\quad\quad`totcosetsRange'& the range  of  values  as  a  {\GAP}  list
-inside which each `equivRuns[<i>].totcosets' lies.
-
-\enditems
+\qquad`totcosetsRange'& the range of values as a  {\GAP}  list  inside
+which each `equivRuns[<i>].totcosets' lies.
 
 \enditems
 
@@ -521,16 +498,16 @@ inside which each `equivRuns[<i>].totcosets' lies.
 There is no way to stop the `ACEAllEquivPresentations' command  before
 it has completed, other than killing the task. So do a  reality  check
 beforehand on the size of the search  space  and  the  time  for  each
-enumeration.  If  you  are  interested   in   finding   a   \lq{}good'
-enumeration, it can be very helpful, in terms of running time, to  put
-a tight limit on the number of coset numbers via the `max' option. You
-may also have to set `compaction'  =  $100$  to  prevent  time-wasting
-attempts to recover space via compaction. This maximises throughput by
-causing the \lq{}bad' enumerations, which  are  in  the  majority,  to
-overflow quickly and abort. If  you  wish  to  explore  a  very  large
-search-space, consider firing up many copies of {\ACE},  and  starting
-each with a \lq{}random' equivalent presentation.  Alternatively,  you
-could use the `ACERandomEquivPresentations' command.
+enumeration. If you are interested in finding a ``good''  enumeration,
+it can be very helpful, in terms of running time, to put a tight limit
+on the number of coset numbers via the `max' option. You may also have
+to set `compaction'  =  $100$  to  prevent  time-wasting  attempts  to
+recover space via compaction. This maximises throughput by causing the
+``bad'' enumerations, which are in the majority, to  overflow  quickly
+and abort. If you wish to explore a very large search-space,  consider
+firing up many copies of {\ACE}, and starting each with  a  ``random''
+equivalent   presentation.   Alternatively,   you   could   use    the
+`ACERandomEquivPresentations' command.
 
 
 \>ACERandomEquivPresentations( <i>, <val> ) F
@@ -550,8 +527,8 @@ The routine first turns `asis' (see~"option asis") on  and  `messages'
 (see~"option messages") off (i.e.~sets  `messages'  to  0),  and  then
 generates  and  tests  the  requested  number  of  random   equivalent
 presentations. For  each  presentation,  the  relators  used  and  the
-summary result line are printed by {\ACE}. To observe these messages set
-the `InfoLevel' of `InfoACE' to at least 3. 
+summary result line are printed by {\ACE}. To observe  these  messages
+set the `InfoLevel' of `InfoACE' to at least 3.
 
 `ACERandomEquivPresentations' parses the {\ACE} messages,  translating
 them to {\GAP}, and thus returns a list of  records  (similar  to  the
@@ -572,9 +549,9 @@ the record returned by `ACEStats' (see~"ACEStats").
 \enditems
 
 *Notes:*
-The relator inversions and rotations are \lq{}genuinely'  random.  The
-relator permuting is a little bit of a kludge, with the  \lq{}quality'
-of the permutations tending to improve with successive  presentations.
+The relator inversions and rotations  are  ``genuinely''  random.  The
+relator permuting is a little bit of a kludge, with the ``quality'' of
+the permutations tending to  improve  with  successive  presentations.
 When  the   `ACERandomEquivPresentations'   command   completes,   the
 presentation active is the *last* one generated.
 
@@ -590,12 +567,8 @@ serve   as   starting-points   is   tedious   and   error-prone.   The
 simply    run    `ACERandomEquivPresentations(<i>,     7);'     before
 `ACEAllEquivPresentations(<i>, 7);'.
 
-\enditems
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{Interactive Query Functions and an Option Setting Function}
-
-\beginitems
 
 \>ACEGroupGenerators( <i> ) F
 \>ACEGroupGenerators() F
@@ -697,9 +670,9 @@ record.
 modify the current options of the <i>th (or default)  process  started
 by `ACEStart'. Please ensure that the `OptionsStack' is  empty  before
 calling `SetACEOptions', otherwise the options already present on  the
-`OptionsStack'  will  also  be  \lq{}seen'.  All  interactive   {\ACE}
-interface functions that accept options,  actually  call  an  internal
-version of `SetACEOptions'; so, it is generally important to keep  the
+`OptionsStack' will also be ``seen''. All interactive {\ACE} interface
+functions that accept options, actually call an  internal  version  of
+`SetACEOptions';  so,  it  is  generally   important   to   keep   the
 `OptionsStack' clear while working with {\ACE} interactively.
 
 After  setting  the  options  passed,  the  first  available  mode  of
@@ -731,11 +704,12 @@ gap> SetACEOptions( : hlt);
 
 *Notes:*
 
-When `ACECosetTableFromGensAndRels' enters a  `break'-loop{\undoquotes
-\atindex {break-loop} {@`break'-loop}} (see~"ACECosetTableNI"),  local
-versions of  the  second  form  of  each  of  `DisplayACEOptions'  and
-`SetACEOptions' become available. (Even though the names  are  similar
-and their function is analogous they are in fact different functions.)
+\atindex{break-loop}{@\noexpand`break'-loop}
+When    `ACECosetTableFromGensAndRels'    enters    a     `break'-loop
+(see~"ACECosetTable!non-interactive"), local versions  of  the  second
+form  of  each  of  `DisplayACEOptions'  and  `SetACEOptions'   become
+available. (Even though the names are similar and  their  function  is
+analogous they are in fact different functions.)
 
 \>ACEParameters( <i> ) F
 \>ACEParameters() F
@@ -749,9 +723,9 @@ changed  recently  without  following  up  with  one  of   the   modes
 `ACEGroupGenerators',   `ACERelators',   `ACESubgroupGenerators'   and
 `ACEParameters'  give  the  equivalent  {\GAP}  information  that   is
 obtained in {\ACE} with `sr := 1'  (see~"option  sr"),  which  is  the
-\lq{}Run  Parameters'  block  obtained   in   the   messaging   output
-(observable when the `InfoLevel' of `InfoACE' is set to at  least  3),
-when `messages' (see~"option messages") is set a non-zero value.
+``Run Parameters'' block obtained in the messaging output  (observable
+when the `InfoLevel'  of  `InfoACE'  is  set  to  at  least  3),  when
+`messages' (see~"option messages") is set a non-zero value.
 
 *Notes:*
 One use for this function might be to determine the  options  required
@@ -1018,76 +992,65 @@ there  are  no  interactive  {\ACE}  sessions  currently  active   and
 initiates (and closes again) its own stream to obtain the  information
 from the {\ACE} binary.
 
-\enditems
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{Interactive Versions of Non-interactive ACE Functions}
 
-\beginitems
-
-\>ACECosetTable( <i> [:<options>] ) F
-\>ACECosetTable( [:<options>] ) F
-\label{ACECosetTableI}
+\>ACECosetTable( <i> [:<options>] )!{interactive} F
+\>ACECosetTable( [:<options>] )!{interactive} F
 
 return a coset table  as  a  {\GAP}  object,  in  standard  form  (for
 {\GAP}).   These   functions   perform   the    same    function    as
 `ACECosetTableFromGensAndRels' and `ACECosetTable' on three  arguments
-(see~"ACECosetTableNI"),  albeit  interactively,  on  the  <i>th   (or
-default) process started by `ACEStart'. If options are passed then  an
-internal version of `ACEModes'  is  run  to  determine  which  of  the
+(see~"ACECosetTable!non-interactive"), albeit  interactively,  on  the
+<i>th (or default) process  started  by  `ACEStart'.  If  options  are
+passed then an internal version of  `ACEModes'  is  run  to  determine
+which of the general {\ACE} modes (see  Section~"General  ACE  Modes")
+`ACEContinue', `ACERedo' or `ACEStart' is possible; and  (an  internal
+version of) the first mode of these that is allowed  is  executed,  to
+ensure the resultant table is correct for the current options.
+
+\>ACEStats( <i> [:<options>] )!{interactive} F
+\>ACEStats( [:<options>] )!{interactive} F
+
+perform  the  same  function  as   `ACEStats'   on   three   arguments
+(see~"ACEStats!non-interactive"), albeit interactively, on  the  <i>th
+(or default) process started by `ACEStart'. If options are passed then
+an internal version of `ACEModes' is run to  determine  which  of  the
 general {\ACE} modes (see Section~"General ACE Modes")  `ACEContinue',
 `ACERedo' or `ACEStart' is possible; and (an internal version of)  the
 first mode of these  that  is  allowed  is  executed,  to  ensure  the
-resultant table is correct for the current options.
-
-\>ACEStats( <i> [:<options>] ) F
-\>ACEStats( [:<options>] ) F
-\label{ACEStatsI}
-
-perform  the  same  function  as   `ACEStats'   on   three   arguments
-(see~"ACEStatsNI"), albeit interactively, on the  <i>th  (or  default)
-process started by `ACEStart'. If options are passed then an  internal
-version of `ACEModes' is run to determine which of the general  {\ACE}
-modes (see Section~"General ACE Modes")  `ACEContinue',  `ACERedo'  or
-`ACEStart' is possible; and (an internal version of) the first mode of
-these that is allowed is executed, to ensure the resultant  statistics
-are correct for the current options.
+resultant statistics are correct for the current options.
 
 See Section~"Example of Using ACE Interactively (Using ACEStart)"  for
 an example demonstrating both these functions  within  an  interactive
 process.
 
-\>IsACEGeneratorsInPreferredOrder( <i> ) F
-\>IsACEGeneratorsInPreferredOrder() F
-\label{IsACEGeneratorsInPreferredOrderI}
+\>IsACEGeneratorsInPreferredOrder( <i> )!{interactive} F
+\>IsACEGeneratorsInPreferredOrder()!{interactive} F
 
 for the <i>th (or  default)  interactive  {\ACE}  process  started  by
 `ACEStart', return `true' if the group generators of that process, are
 in an order that will not be changed by {\ACE}, and `false' otherwise.
 This function has greatest relevance to users who call `ACECosetTable'
-(see~"ACECosetTableI"),  with   the   `lenlex'   option   (see~"option
-lenlex"). For more details, see the discussion for the non-interactive
-version              of              `IsACEGeneratorsInPreferredOrder'
-("IsACEGeneratorsInPreferredOrderNI"),  which  is  called   with   two
-arguments.
-
-\enditems
+(see~"ACECosetTable!interactive"),   with    the    `lenlex'    option
+(see~"option lenlex"). For more details, see the  discussion  for  the
+non-interactive    version    of     `IsACEGeneratorsInPreferredOrder'
+("IsACEGeneratorsInPreferredOrder!non-interactive"), which  is  called
+with two arguments.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{Steering ACE Interactively}
 
-\beginitems
-
 \>ACERecover( <i> ) F
 \>ACERecover() F
 
+\index{dead coset (number)}
 invoke the compaction routine on the coset  table  of  the  <i>th  (or
 default) interactive {\ACE} process started by `ACEStart', in order to
-recover the space used by  the  dead  coset  numbers\index{dead  coset
-(number)}. A `CO' message line is printed if any  rows  of  the  coset
-table were recovered, and a `co' line if none were. (See Appendix~"The
-Meanings  of  ACE's  output  messages"  for  the  meanings  of   these
-messages.)
+recover the space used by the dead coset numbers. A `CO' message  line
+is printed if any rows of the coset table were recovered, and  a  `co'
+line if  none  were.  (See  Appendix~"The  Meanings  of  ACE's  output
+messages" for the meanings of these messages.)
 
 *Note:*
 The  compaction  routine  is  called   automatically   when   any   of
@@ -1103,20 +1066,20 @@ The  compaction  routine  is  called   automatically   when   any   of
 \>ACEStandardCosetNumbering( <i> ) F
 \>ACEStandardCosetNumbering() F
 
-compact   and   then    do    a    `lenlex'{\undoquotes\atindex{lenlex
-standardisation   scheme}    {@`lenlex'    standardisation    scheme}}
-standardisation (see Section~"Coset Table Standardisation Schemes") of
-the numbering of cosets in the coset table of the <i>th  (or  default)
-interactive {\ACE} process started by `ACEStart'. That is, for a given
-ordering of the generators in the columns of the table, they produce a
-canonic table. A table that  includes  a  column  for  each  generator
-inverse  immediately  following  the  column  for  the   corresponding
-generator, standardised according to  the  `lenlex'  scheme,  has  the
-property that a row-major scan (i.e.~a scan of the successive rows  of
-the *body* of the table row by row, from  left  to  right)  encounters
-previously unseen cosets in numeric  order.  This  function  does  not
-display     the     new     table;     use      `ACEDisplayCosetTable'
-(see~"ACEDisplayCosetTable") for that.
+\atindex{lenlex standardisation scheme}%
+{@\noexpand`lenlex' standardisation scheme}
+compact and then do a  `lenlex'  standardisation  (see  Section~"Coset
+Table Standardisation Schemes") of the  numbering  of  cosets  in  the
+coset table of the  <i>th  (or  default)  interactive  {\ACE}  process
+started by `ACEStart'. That is, for a given ordering of the generators
+in the columns of the table, they produce a  canonic  table.  A  table
+that  includes  a  column  for  each  generator  inverse   immediately
+following the column for  the  corresponding  generator,  standardised
+according to the `lenlex' scheme, has the property  that  a  row-major
+scan (i.e.~a scan of the successive rows of the *body*  of  the  table
+row by row, from left to right) encounters previously unseen cosets in
+numeric order. This function does  not  display  the  new  table;  use
+`ACEDisplayCosetTable' (see~"ACEDisplayCosetTable") for that.
 
 *Notes:*
 In a `lenlex' canonic table, the  coset  representatives  are  ordered
@@ -1128,7 +1091,7 @@ generators), except when there is only  one  generator,  or  when  the
 second generator is also an involution;  so  the  lexicographic  order
 used by {\ACE} need not necessarily correspond with the order in which
 the generators were first put  to  {\ACE}.  (We  have  used  the  term
-\lq{}involution' above; what we really mean is  a  generator  `x'  for
+``involution'' above; what we really mean is  a  generator  `x'  for
 which there is a relator `x*x' or `x^2'.  Such  a  generator  may,  of
 course,  turn  out  to  actually  be  the  identity.)   The   function
 `IsACEGeneratorsInPreferredOrder'                                 (see
@@ -1325,7 +1288,7 @@ gap> ACEConjugatesForSubgroupNormalClosure( i : add );
 \endexample
 
 Though we know that $H$ is not equal to its normal closure, we did not
-get a normalising element (we had warned above of such a possibility).
+get any new elements (we had warned  above  of  such  a  possibility).
 Apparently our incomplete table is too small. So let us increase `max'
 to 100 and continue.
 
@@ -1341,11 +1304,11 @@ gap> ACEStats( i ).index;
 20
 \endexample
 
-This time we got a normalising element, and after  adding  it  to  the
-subgroup  generators  we  obtained  a  complete  table.  However   the
-resulting subgroup need not yet be the normal closure of $H$  (and  in
-fact we know that it is not). So we continue with another call to  the
-function `ACEConjugatesForSubgroupNormalClosure'.
+This time we got a new element, and after adding it  to  the  subgroup
+generators  we  obtained  a  complete  table.  However  the  resulting
+subgroup need not yet be the normal closure of $H$  (and  in  fact  we
+know that it is not). So we continue with another call to the function
+`ACEConjugatesForSubgroupNormalClosure'.
 
 \beginexample
 gap> ACEConjugatesForSubgroupNormalClosure( i : add );
@@ -1366,8 +1329,6 @@ gap> ACEConjugatesForSubgroupNormalClosure( i : add );
 gap> ACESubgroupGenerators( i );
 [ a*b^3, b*a*b^2, b^-1*a*b^4, b^-2*a*b^5 ]
 \endexample
-
-\enditems
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{Primitive ACE Read/Write Functions}
@@ -1391,15 +1352,13 @@ equivalent  for  the  standalone   {\ACE}   (`start;',   `redo;',   or
 options (see Section~"ACE Parameter  Options"),  some  of  the  values
 reported by `ACEParameters' may well be *incorrect*.
 
-\beginitems
-
 \>ACEWrite( <i>, <string> ) F
 \>ACEWrite( <string> ) F
 
 write <string> to the <i>th or  default  interactive  {\ACE}  process;
 <string> must be in exactly the form the  {\ACE}  standalone  expects.
 The command is  echoed  via  `Info'  at  `InfoACE'  level  4  (with  a
-\lq{}`ToACE> '' prompt); i.e.~do `SetInfoACELevel(4);' to see what  is
+```ToACE> ''' prompt); i.e.~do `SetInfoACELevel(4);' to  see  what  is
 transmitted  to  the  {\ACE}  binary.  `ACEWrite'  returns  `true'  if
 successful in writing to the stream of the interactive {\ACE} process,
 and `fail' otherwise.
@@ -1416,7 +1375,7 @@ read a complete line of {\ACE}  output,  from  the  <i>th  or  default
 interactive {\ACE} process, if there is output to be read and  returns
 `fail' otherwise. When successful, the line is returned  as  a  string
 complete with trailing newline  character.  Please  note  that  it  is
-possible to be \lq{}too quick' (i.e.~the return can be  `fail'  purely
+possible to be ``too quick'' (i.e.~the return  can  be  `fail'  purely
 because the output from {\ACE} is not there  yet),  but  if  `ACERead'
 finds any output at all, it waits for a complete line.
 
@@ -1438,13 +1397,12 @@ output to be had from {\ACE}.
 \>ACEReadUntil( <IsMyLine>, <Modify> ) F
 
 read complete lines of  {\ACE}  output,  from  the  <i>th  or  default
-interactive  {\ACE}  process,  \lq{}chomps'  them  (i.e.~removes   any
-trailing newline character), emits them to `Info' at  `InfoACE'  level
-3, and applies the function  <Modify>  (where  <Modify>  is  just  the
-identity map/function for the first two forms) until  a  \lq{}chomped'
-line <line>  for  which  `<IsMyLine>(  <Modify>(<line>)  )'  is  true.
-`ACEReadUntil' returns the list  of  <Modify>-ed  \lq{}chomped'  lines
-read.
+interactive {\ACE} process, ``chomps'' them (i.e.~removes any trailing
+newline character), emits them to `Info' at  `InfoACE'  level  3,  and
+applies the function <Modify> (where <Modify>  is  just  the  identity
+map/function for the first two forms) until a ``chomped'' line  <line>
+for which `<IsMyLine>( <Modify>(<line>)  )'  is  true.  `ACEReadUntil'
+returns the list of <Modify>-ed ``chomped'' lines read.
 
 *Notes:* 
 When provided by the user, <Modify> should be a function that  accepts
@@ -1456,8 +1414,6 @@ provided) and should return a boolean.
 
 If `<IsMyLine>( <Modify>(<line>) )' is never true, `ACEReadUntil' will
 wait indefinitely.
-
-\enditems
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%

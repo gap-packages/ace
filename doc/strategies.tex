@@ -17,11 +17,11 @@
 It can be difficult to select appropriate options when presented  with
 a new enumeration. The problem is  compounded  by  the  fact  that  no
 generally applicable rules exist to  predict,  given  a  presentation,
-which option settings are \lq{}good'. To help overcome  this  problem,
+which option settings are ``good''. To  help  overcome  this  problem,
 {\ACE} contains various commands which select  particular  enumeration
 strategies. One or other of these strategies may work and, if not, the
 results may indicate how  the  options  can  be  varied  to  obtain  a
-successful enumeration. 
+successful enumeration.
 
 If no strategy option is passed to {\ACE}, the `default'  strategy  is
 assumed, which starts out presuming that the enumeration will be easy,
@@ -112,7 +112,7 @@ in all of the predefined strategies, even though some of them have  no
 effect. For example,  the  `fill'  value  is  irrelevant  in  HLT-type
 enumeration (see Section~"Enumeration Style"). The idea behind this is
 that,  if  you  later  change  some  options  individually,  then  the
-enumeration retains the \lq{}flavour' of the last selected  predefined
+enumeration retains the ``flavour'' of the last selected  predefined
 strategy.
 
 Note also that other options which may effect an enumeration are  left
@@ -127,6 +127,12 @@ all of the strategies are distinct, although some are very similar.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{The Strategies in Detail}
 
+\atindex{C style}{@C style}\atindex{Cr style}{@Cr style}
+\atindex{CR style}{@CR style}\atindex{R style}{@R style}
+\atindex{R\* style}{@R\* style}\atindex{Rc style}{@Rc style}
+\atindex{R/C style}{@R/C style}
+\atindex{Defaulted  R/C  style}{@Defaulted  R/C  style}
+\atindex{R/C (defaulted) style}{@R/C (defaulted) style}
 Please note that the strategies  are  based  on  various  *enumeration
 styles*: *C style*, *Cr style*, *CR style*, *R  style*,  *R\*  style*,
 *Rc style*, *R/C style* and *defaulted R/C style*, all  of  which  are
@@ -139,13 +145,13 @@ Selects the default strategy. (Shortest abbreviation: `def'.)
 
 This  strategy  is  based  on   the   *defaulted   R/C   style*   (see
 Section~"Enumeration Style"). The idea here is that we assume that the
-enumeration is \lq{}easy' and start out in *R style*. If it turns  out
-not to be easy, then we regard it as \lq{}hard',  and  switch  to  *CR
+enumeration is ``easy'' and start out in *R style*. If  it  turns  out
+not to be easy, then we regard it  as  ``hard'',  and  switch  to  *CR
 style*, after performing a `lookahead' (see~"option lookahead") on the
 entire table.
 
 \>`easy'{option easy}@{option `easy'}&
-Selects an \lq{}easy' R style strategy.
+Selects an ``easy'' R style strategy.
 
 If this strategy is selected, we follow a HLT-type enumeration  style,
 i.e. *R style* (see Section~"Enumeration Style"), but turn `lookahead'
@@ -167,7 +173,7 @@ gap-`fill'ing (see "option fill") on.
 \>`hard'{option hard}@{option `hard'}&  
 Selects a mixed *R style* and *C style* strategy.
 
-In many \lq{}hard' enumerations, a mixture of *R style* and *C  style*
+In many ``hard'' enumerations, a mixture of *R style*  and  *C  style*
 (see Section~"Enumeration  Style")  definitions,  all  tested  in  all
 essentially different positions, is appropriate. This  option  selects
 such a mixed strategy. The idea here is that most of the work is  done

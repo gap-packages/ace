@@ -18,10 +18,10 @@ In this chapter  we  collect  together  a  number  of  examples  which
 illustrate the various ways in which the {\ACE} Share Package  may  be
 used, and give some interactions with the `ACEExample' function. In  a
 number of cases, we have set the `InfoLevel' of  `InfoACE'  to  3,  so
-that all output from {\ACE} is displayed, prepended by  \lq{}`\#I  ''.
+that all output from {\ACE} is displayed,  prepended  by  ```\#I  '''.
 Recall that to also see the commands directed *to*  {\ACE}  (behind  a
-\lq{}`ToACE> '' prompt), you will need to set the `InfoACE'  level  to
-4. We have omitted the line
+```ToACE> ''' prompt), you will need to set the `InfoACE' level to  4.
+We have omitted the line
 
 \beginexample
 gap> RequirePackage("ace");
@@ -38,12 +38,38 @@ method of passing arguments normally used  with  those  commands  that
 invoke `CosetTableFromGensAndRels', but one is able to use all options
 available via the {\ACE} interface. As an example  we  use  {\ACE}  to
 compute the permutation representation of a  perfect  group  from  the
-data library (in this case, an automorphic  extension  of  the  simple
-alternating group $A_5$):
+data library ({\GAP}'s perfect group library stores for each  group  a
+presentation together with generators of a subgroup as  words  in  the
+group generators such  that  the  permutation  representation  on  the
+cosets  of  this  subgroup  will  be  a  (nice)  faithful  permutation
+representation for the perfect group). The example we have  chosen  is
+an automorphic extension of the simple alternating group $A_5$.
+
+\beginexample
+gap> TCENUM:=ACETCENUM;; # Make ACE the standard coset enumerator
+gap> G := PerfectGroup(IsPermGroup, 16*60, 1   # Arguments ... as per usual
+>                      : max := 50, mess := 10 # ... but we use ACE options
+>                      );
+A5 2^4
+gap> GeneratorsOfGroup(G); # Just to show we indeed have a perm'n rep'n
+[ (2,4)(3,5)(7,15)(8,14)(10,13)(12,16), (2,6,7)(3,11,12)(4,14,5)(8,9,13)(10,
+    15,16), (1,2)(3,8)(4,9)(5,10)(6,7)(11,15)(12,14)(13,16), 
+  (1,3)(2,8)(4,13)(5,6)(7,10)(9,16)(11,12)(14,15), 
+  (1,4)(2,9)(3,13)(5,14)(6,15)(7,11)(8,16)(10,12), 
+  (1,5)(2,10)(3,6)(4,14)(7,8)(9,12)(11,16)(13,15) ]
+gap> Order(G);
+960
+\endexample
+
+The call to `PerfectGroup' produced an output string  that  identifies
+the group `G', but we didn't see  how  {\ACE}  became  involved  here.
+Let's redo that part of the above  example  after  first  setting  the
+`InfoLevel' of `InfoACE' to 3, so that we may get  to  glimpse  what's
+going on behind the scenes.
 
 \beginexample
 gap> SetInfoACELevel(3); # Just to see what's going on behind the scenes
-gap> TCENUM:=ACETCENUM;; # Make ACE the standard coset enumerator
+gap> # Recall that we did: TCENUM:=ACETCENUM;;
 gap> G := PerfectGroup(IsPermGroup, 16*60, 1   # Arguments ... as per usual
 >                      : max := 50, mess := 10 # ... but we use ACE options
 >                      );
@@ -91,14 +117,6 @@ gap> G := PerfectGroup(IsPermGroup, 16*60, 1   # Arguments ... as per usual
 #I      15 ||      3     13     12      7     13      9      8
 #I      16 ||     12      9     14     13      7     11     10
 A5 2^4
-gap> GeneratorsOfGroup(G); # Just to show we indeed have a perm'n rep'n
-[ (2,4)(3,5)(7,15)(8,14)(10,13)(12,16), (2,6,7)(3,11,12)(4,14,5)(8,9,13)(10,
-    15,16), (1,2)(3,8)(4,9)(5,10)(6,7)(11,15)(12,14)(13,16), 
-  (1,3)(2,8)(4,13)(5,6)(7,10)(9,16)(11,12)(14,15), 
-  (1,4)(2,9)(3,13)(5,14)(6,15)(7,11)(8,16)(10,12), 
-  (1,5)(2,10)(3,6)(4,14)(7,8)(9,12)(11,16)(13,15) ]
-gap> Order(G);
-960
 \endexample
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -107,8 +125,9 @@ gap> Order(G);
 The following example calls {\ACE} for up to 800 coset  numbers  (`max
 := 800') using Mendelsohn style relator processing (`mendelsohn')  and
 sets progress messages to be printed every 500  iterations  (`messages
-:=500').  The  value  of  `table',  i.e.~the   {\GAP}   coset   table,
-immediately follows the last {\ACE} message (\lq{}`\#I '')  line,  but
+:=500'); we do ```SetInfoACELevel(3);''' so  that  we  may  see  these
+messages.  The  value  of  `table',  i.e.~the  {\GAP}   coset   table,
+immediately follows the last {\ACE}  message  (```\#I ''')  line,  but
 both the coset table from {\ACE} and the {\GAP} coset table have  been
 abbreviated. A  slightly  modified  version  of  this  example,  which
 includes  the  `echo'  option  is  available  on-line  via  `table  :=
@@ -119,8 +138,10 @@ used {\GAP} 4.3; with {\GAP} 4.2 the final table will be  `semilenlex'
 standardised.)
 
 \beginexample
-gap> SetInfoACELevel(3);
-gap> G := PerfectGroup(2^5*60, 2);;
+gap> SetInfoACELevel(3);           # So we can see the progress messages
+gap> G := PerfectGroup(2^5*60, 2);;# See previous example:
+gap>                               # "Example where ACE is made the
+gap>                               #  Standard Coset Enumerator"
 gap> fgens := FreeGeneratorsOfFpGroup(G);;
 gap> table := ACECosetTableFromGensAndRels(
 >                 # arguments
@@ -158,11 +179,7 @@ gap> table := ACECosetTableFromGensAndRels(
 #I  -------+---------------------------------------------------------------
 #I       1 ||      1      1      7      6      2      3      4      5      1
 #I       2 ||      4      4     22     36      1      8     10     11      2
-#I       3 ||      5      5     30     23      8      1     12     13      3
-#I       4 ||      2      2     17     14     10     12      1      9      4
-... 472 lines omitted here ...
-#I     477 ||    477    477    314    313    474    471    467    468    477
-#I     478 ||    473    473    380    379    476    467    471    470    478
+... 476 lines omitted here ...
 #I     479 ||    479    479    384    383    475    468    470    471    479
 #I     480 ||    480    480    421    420    470    469    475    476    480
 [ [ 1, 8, 13, 6, 7, 4, 5, 2, 34, 35, 32, 33, 3, 48, 49, 46, 47, 57, 59, 28, 
@@ -186,15 +203,19 @@ gap> table := ACECosetTableFromGensAndRels(
 Now we illustrate a simple interactive process, with an enumeration of
 an index 12 subgroup (isomorphic to $C_5$) within $A_5$. Observe  that
 we  have  relied  on  the  default  level  of  messaging  from  {\ACE}
-(`messages' = 0) which gives a result  line  only,  without  parameter
-information. We have however used the option `echo', so  that  we  can
+(`messages' = 0) which gives a result line (the  ```\#I  INDEX''' line
+here) only, without parameter information. The result line is  visible
+in the `Info'-ed component of the output  below  because  we  set  the
+`InfoLevel' of `InfoACE' to a value of at least 2 (in fact we  set  it
+to 3; doing ```SetInfoACELevel(2);''' would  make  *only*  the  result
+line visible). We have however used the option `echo', so that we  can
 see how the interface handled the arguments and options. On-line  try:
 `SetInfoACELevel(3); ACEExample("A5-C5", ACEStart);' (this  is  nearly
 equivalent to the sequence following, but the variables `F', `a', `b',
-`G' are not accessible, being \lq{}local' to `ACEExample').
+`G' are not accessible, being ``local'' to `ACEExample').
 
 \beginexample
-gap> SetInfoACELevel(3);
+gap> SetInfoACELevel(3); # So we can see output from ACE binary
 gap> F := FreeGroup("a","b");; a := F.1;;  b := F.2;;
 gap> G := F / [a^2, b^3, (a*b)^5 ];
 <fp group on the generators [ a, b ]>
@@ -220,10 +241,10 @@ ACEStart called with the following options:
 1
 \endexample
 
-The return value on the last line is an  \lq{}index'  that  identifies
-the interactive process; we use this \lq{}index' with  functions  that
-need  to  interact  with  the  interactive  {\ACE}  process;  we   now
-demonstrate this with the interactive version of `ACEStats':
+The return value on the last line is an ``index'' that identifies  the
+interactive process; we use this ``index'' with functions that need to
+interact with the interactive {\ACE} process; we now demonstrate  this
+with the interactive version of `ACEStats':
 
 \beginexample
 gap> ACEStats(1);
@@ -312,19 +333,25 @@ gap> ACEExample();
 #I  -----
 #I  1. The example (first) argument of ACEExample() is a string; each
 #I     example above is in double quotes to remind you to include them.
-#I  2. The enumeration for each of the *-ed examples fails. (See Note 3.)
-#I  3. Try altering the ACE function used, by calling ACEExample with a
-#I     2nd argument; choose from: ACECosetTableFromGensAndRels (default),
-#I     or ACEStats, or ACEStart. The 2nd argument is *not* quoted.
-#I  4. Try `SetInfoACELevel(3);' before calling ACEExample, to see the
+#I  2. By default, ACEExample applies ACECosetTableFromGensAndRels to the
+#I     chosen example. You may alter the ACE function used, by calling
+#I     ACEExample with a 2nd argument; choose from: ACEStats, or ACEStart,
+#I     e.g. `ACEExample("A5", ACEStats);'
+#I  3. You may call ACEExample with additional ACE options (entered after a
+#I     colon in the usual way for options), e.g. `ACEExample("A5" : hlt);' 
+#I  4. Try the *-ed examples to explore how to modify options when an
+#I     enumeration fails (just follow the instructions you get within the
+#I     break-loop, or see Notes 2. and 3.).
+#I  5. Try `SetInfoACELevel(3);' before calling ACEExample, to see the
 #I     effect of setting the "mess" (= "messages") option.
-#I  5. To suppress a long output, use a double semicolon (`;;') after the
-#I     ACEExample command.
-#I  6. Also, try `SetInfoACELevel(2);' before calling ACEExample.
+#I  6. To suppress a long output, use a double semicolon (`;;') after the
+#I     ACEExample command. (However, this does not suppress Info-ed output.)
+#I  7. Also, try `SetInfoACELevel(2);' or `SetInfoACELevel(4);' before 
+#I     calling ACEExample.
 gap> 
 \endexample
 
-Observe that the example we first met in Section~"Using  ACE  Directly
+Notice  that the example we first met in Section~"Using  ACE  Directly
 to Generate a Coset Table", the Fibonacci group F(2,7),  is  available
 via examples `"F27-purec"',  `"F27-fel0"',  and  `"F27-fel1"',  except
 each of these enumerate the cosets of its trivial subgroup  (of  index
@@ -332,7 +359,22 @@ each of these enumerate the cosets of its trivial subgroup  (of  index
 this  example  uses  the  `messages'  option,  we  ought  to  set  the
 `InfoLevel' of `InfoACE' to  3,  first,  but  since  the  coset  table
 (default output) is  quite  long,  we'll  pass  `ACEStats'  as  second
-argument:
+argument.
+
+Before exhibiting the example we list a few observations  that  should
+be made. Observe that  the  first  group  of  `Info'  lines  list  the
+commands that are executed; these lines are followed by the result  of
+the `echo' option (see~"option echo"); which in turn are  followed  by
+`Info' messages from {\ACE} courtesy of  the  non-zero  value  of  the
+`messages'  option  (and  we  see  these  because  we  first  set  the
+`InfoLevel' of `InfoACE'  to  3);  and  finally,  we  get  the  output
+(record) of the `ACEStats' command.
+
+Observe also that {\ACE} uses the same generators as  are input;  this
+will always occur if you stick to single lowercase  letters  for  your
+generator names. Note, also that capitalisation is used by {\ACE} as a
+short-hand for inverses, e.g.~`C = c^-1' (see `Group Relators' in  the
+{\ACE} ``Run Parameters'' block).
 
 \beginexample
 gap> SetInfoACELevel(3);
@@ -398,21 +440,7 @@ rec( index := 29, cputime := 40, cputimeUnits := "10^-2 seconds",
   activecosets := 29, maxcosets := 33237, totcosets := 33239 )
 \endexample
 
-Observe that the first group of `Info' lines list  the  commands  that
-were executed; these lines are followed by the result  of  the  `echo'
-option (see~"option echo"); which  in  turn  are  followed  by  `Info'
-messages from {\ACE} courtesy of the non-zero value of the  `messages'
-option (and we see these because  we  first  set  the  `InfoLevel'  of
-`InfoACE' to 3); and finally,  we  get  the  output  (record)  of  the
-`ACEStats' command.
-
-Observe also that {\ACE} has used the same generators as  were  input;
-this will always occur if you stick to single  lowercase  letters  for
-your generator names. Note, also that capitalisation is used by {\ACE}
-as a short-hand for inverses, e.g.~`C = c^-1' (see `Group Relators' in
-the {\ACE} \lq{}Run Parameters' block).
-
-Now let's observe that we can add some new  options,  even  ones  that
+Now let's see that we  can  add  some  new  options,  even  ones  that
 over-ride the example's options; but first we'll reduce the  output  a
 bit by setting the `InfoLevel' of `InfoACE' to 2 and since we are  not
 going to observe any progress messages from {\ACE} with that `InfoACE'
@@ -423,14 +451,28 @@ with F(2,7) we'll add the subgroup generator `c'  via  `sg  :=  ["c"]'
 generator; to convert a list of {\GAP}  words  <sgens>  in  generators
 <fgens>, suitable for  an  assignment  of  the  `sg'  option  use  the
 construction: `ToACEWords(<fgens>, <sgens>)' (see~"ToACEWords").  Note
-that if only single lowercase letter strings are used to identify  the
-{\GAP} group generators, the same strings are used to  identify  those
-generators in {\ACE}. (It's actually fortunate that we could pass  the
-value of  `sg'  as  a  string  here,  since  the  generators  of  each
-`ACEExample' example are *local* variables and so are not accessible.)
-For good measure, we also change the string identifying  the  subgroup
-(since it will no longer be the trivial  group),  via  the  `subgroup'
-option (see "option subgroup").
+again that if  only  single  lowercase  letter  strings  are  used  to
+identify the {\GAP} group generators, the same  strings  are  used  to
+identify those generators in {\ACE}. (It's actually fortunate that  we
+could pass the value of `sg' as a string here, since the generators of
+each `ACEExample'  example  are  *local*  variables  and  so  are  not
+accessible, though  we  could  call  `ACEExample'  with  2nd  argument
+`ACEStart' and use `ACEGroupGenerators' to  get  at  them.)  For  good
+measure, we also change the string identifying the subgroup (since  it
+will no longer be the trivial group), via the `subgroup'  option  (see
+"option subgroup").
+
+In considering the example following, observe that in the `Info' block
+all the original example options are listed along with our new options
+`sg := [ "c" ], messages := 0' after the tag  ```\#  User  Options'''.
+Following the `Info' block there is a block  due  to  `echo';  in  its
+listing of the options first up there is `aceexampleoptions'  alerting
+us that we passed some `ACEExample' options; observe also that in this
+block `subg := Id' and `mess := 25000' disappear (they are over-ridden
+by `subgroup := "\< c >", messages := 0', but the quotes for the value
+of `subgroup' are not visible); note that we don't  have  to  use  the
+same abbreviations for options to over-ride them.  Also  observe  that
+our new options are *last*.
 
 \beginexample
 gap> SetInfoACELevel(2);
@@ -477,28 +519,17 @@ ACECosetTableFromGensAndRels called with the following options:
   [ 1 ], [ 1 ], [ 1 ], [ 1 ] ]
 \endexample
 
-Observe that in the block of `Info' output all  the  original  example
-options are listed along with our new options `sg := [ "c" ], messages
-:= 0' after the tag \lq{}`\#  User  Options''.  Following  the  `Info'
-block there is the block due to `echo'; in its listing of the  options
-first up there is `aceexampleoptions' alerting us that we passed  some
-`ACEExample' options. Observe that `subg := Id' and  `mess  :=  25000'
-have disappeared (they were over-ridden by  `subgroup  :=  "\<  c  >",
-messages := 0', but the quotes for the value  of  `subgroup'  are  not
-visible); note that we didn't have to use the  same  abbreviations  to
-over-ride them. Also observe that our new options *are* last.
-
+\atindex{break-loop}{@\noexpand`break'-loop}
 Now following on from our last example we shall  demonstrate  how  one
-can recover  from  a  `break'-loop{\undoquotes  \atindex  {break-loop}
-{@`break'-loop}} (see Section~"Using ACE Directly to Generate a  Coset
-Table"). To force the `break'-loop we pass  `max  :=  2'  (see~"option
-max"),   while   using   the   default   {\ACE}   interface   function
+can recover from a `break'-loop (see Section~"Using  ACE  Directly  to
+Generate a Coset Table"). To force the `break'-loop we pass `max := 2'
+(see~"option max"), while using the default {\ACE} interface  function
 `ACECosetTableFromGensAndRels' of `ACEExample'; in  this  way,  {\ACE}
 will not be able to complete  the  enumeration,  and  hence  enters  a
 `break'-loop when it tries to provide a complete  coset  table.  While
 we're at it we'll pass the `hlt' (see~"option  hlt")  strategy  option
 (which will over-ride `purec'). (The `InfoACE' level is still 2.) Note
-that there are some \lq{}user-input' comments inserted at  the  `brk>'
+that there are some ``user-input'' comments  inserted  at  the  `brk>'
 prompt.
 
 \beginexample
@@ -613,7 +644,7 @@ Other options set via ACE defaults:
 
 Observe that  `purec'  did  *not*  disappear  from  the  option  list;
 nevertheless, it *is* over-ridden by the `hlt' option (at  the  {\ACE}
-level). Observe the \lq{}`Other options set via ACE defaults'' list of
+level). Observe the  ```Other options set via ACE defaults''' list  of
 options  that  has  resulted  from  having  the  `echo  :=  2'  option
 (see~"option echo"). Observe, also, that  `hlt'  is  nowhere  near  as
 good, here, as  `purec'  (refer  to  Section~"Using  ACE  Directly  to
