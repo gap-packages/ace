@@ -29,14 +29,12 @@ number) from the same places as GAP. The main FTP servers are:
 ftp://ftp-gap.dcs.st-and.ac.uk/pub/gap/gap4/share/
 ftp://ftp.math.rwth-aachen.de/pub/gap4/share/
 ftp://ftp.ccs.neu.edu/pub/mirrors/ftp-gap.dcs.st-and.ac.uk/pub/gap/gap4/share/
-ftp://pell.anu.edu.au/pub/algebra/gap4/share/
 
 `ace-XXX.zoo' is also available via the GAP www page at
 
 http://www-gap.dcs.st-and.ac.uk/~gap/Info4/share.html
 http://aldebaran.math.rwth-aachen.de/~GAP/Info4/share.html
 http://mirrors.ccs.neu.edu/GAP/NEU/Info4/share.html
-http://wwwmaths.anu.edu.au/research.groups/algebra/GAP/www/Info4/share.html
 
 or, alternatively, from one of the authors' home page at
 
@@ -160,4 +158,4 @@ reproduce the problem; so please include:
     Australia
     e-mail: gregg@itee.uq.edu.au
     www:    http://www.itee.uq.edu.au/~gregg
-  -- 6 February, 2002.
+  -- 30 April, 2002.
