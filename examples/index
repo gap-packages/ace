@@ -31,12 +31,18 @@ Notes
 -----
 1. The example (first) argument of ACEExample() is a string; each
    example above is in double quotes to remind you to include them.
-2. The enumeration for each of the *-ed examples fails. (See Note 3.)
-3. Try altering the ACE function used, by calling ACEExample with a
-   2nd argument; choose from: ACECosetTableFromGensAndRels (default),
-   or ACEStats, or ACEStart. The 2nd argument is *not* quoted.
-4. Try `SetInfoACELevel(3);' before calling ACEExample, to see the
+2. By default, ACEExample applies ACECosetTableFromGensAndRels to the
+   chosen example. You may alter the ACE function used, by calling
+   ACEExample with a 2nd argument; choose from: ACEStats, or ACEStart,
+   e.g. `ACEExample("A5", ACEStats);'
+3. You may call ACEExample with additional ACE options (entered after a
+   colon in the usual way for options), e.g. `ACEExample("A5" : hlt);' 
+4. Try the *-ed examples to explore how to modify options when an
+   enumeration fails (just follow the instructions you get within the
+   break-loop, or see Notes 2. and 3.).
+5. Try `SetInfoACELevel(3);' before calling ACEExample, to see the
    effect of setting the "mess" (= "messages") option.
-5. To suppress a long output, use a double semicolon (`;;') after the
-   ACEExample command.
-6. Also, try `SetInfoACELevel(2);' before calling ACEExample.
+6. To suppress a long output, use a double semicolon (`;;') after the
+   ACEExample command. (However, this does not suppress Info-ed output.)
+7. Also, try `SetInfoACELevel(2);' or `SetInfoACELevel(4);' before 
+   calling ACEExample.
