@@ -1964,7 +1964,7 @@ local ioIndex, ACEout, iostream, datarec, fgens, lenlex, incomplete,
 
     SetACEOptions := function()
       if not IsEmpty(OptionsStack) and 
-         ACEData.optionsStackDepth = Length(OptionsStack) then
+         ACEData.optionsStackDepth in [0, Length(OptionsStack)] then
         SET_ACE_OPTIONS(ACEData);
       fi;
     end;
@@ -2054,7 +2054,7 @@ end);
 #############################################################################
 ####
 ##
-#F  ACERecover . . . . . . . . . . . .  Recover space from dead coset numbers
+#F  ACERecover  . . . . . . . . . . . . Recover space from dead coset numbers
 ##  . . . . . . . . . . . . . . for interactive ACE process determined by arg
 ##
 InstallGlobalFunction(ACERecover, function(arg)

@@ -169,6 +169,7 @@ local optnames, echo, infile, instream, outfile, ToACE, gens, acegens,
       ToACE([ "Print Table;" ]);
     fi;
 
+    CloseStream(instream);
     if ACEfname = "ACEStats" or infile = ACEData.infile then
       # Run ACE on the constructed infile
       # ... the ACE output will appear in outfile 
@@ -293,13 +294,13 @@ local line, instream, rest;
   # We don't want the user to see this ... so we flush at InfoACE level 10.
   line := FLUSH_ACE_STREAM_UNTIL( instream, 10, 10, ReadLine,
                                   line -> line{[1..5]} = "local" );
+  rest := ReadAll(instream);
+  CloseStream(instream);
   return ReadAsFunction(
              InputTextString(
-                 Concatenation([
-                     ReplacedString(line, ";", ", ACEfunc;"),
-                     "ACEfunc := ", NameFunction(ACEfunc), ";",
-                     ReadAll(instream)
-                     ]) ) )();
+                 Concatenation([ ReplacedString(line, ";", ", ACEfunc;"),
+                                 "ACEfunc := ", NameFunction(ACEfunc), ";",
+                                 rest ]) ) )();
 end);
 
 #############################################################################
@@ -384,6 +385,7 @@ local name, file, instream, line, ACEfunc,
     fi;
   fi;
   FLUSH_ACE_STREAM_UNTIL( instream, 1, 10, ReadLine, line -> line = fail );
+  CloseStream(instream);
   if name <> "index" then
     return ACE_READ_AS_FUNC(file, ACEfunc);
   fi;
