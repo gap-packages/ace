@@ -1,20 +1,19 @@
-                        The ACE share package
+                               The ACE package
 
-The ACE share package provides functions associated with  Todd-Coxeter
-coset enumeration by interfacing with the  Advanced  Coset  Enumerator
-(ACE), 
+The ACE package provides functions associated with Todd-Coxeter  coset
+enumeration by interfacing with the Advanced Coset Enumerator (ACE),
 
 ACE coset enumerator (C) 1995-2001 by George Havas and Colin Ramsay
     http://www.csee.uq.edu.au/~cram/ce.html
 
 from within GAP 4.
 
-The GAP interface (share package) has been written by Alexander Hulpke
-and Greg Gamble. In order to install the ACE share  package  you  must
-get the archive file `ace-XXX.zoo', for  some  version  number  `XXX',
-(which includes the C source code of Havas and Ramsay).
+The GAP interface (package) has been written by Alexander  Hulpke  and
+Greg Gamble. In order to install the ACE  package  you  must  get  the
+archive file `ace-XXX.zoo', for  some  version  number  `XXX',  (which
+includes the C source code of Havas and Ramsay).
 
-The ACE share package provides a  mechanism  to  replace  GAP's  usual
+The  ACE  package  provides  a  mechanism  to  replace   GAP's   usual
 Todd-Coxeter coset enumerator by ACE, so that  functions  that  behind
 the scenes use coset enumeration will use the ACE enumerator. The  ACE
 enumerator may also be used  explicitly;  both  non-interactively  and
@@ -22,7 +21,7 @@ interactively. However the package is used, a plethora of options  and
 strategies are available to assist the  user  in  avoiding  incomplete
 coset  enumerations.  The  interactive  functions  provided  use   the
 IOStream functionality first introduced in GAP 4.2.  (Hence,  the  ACE
-share package requires at least GAP 4.2.)
+package requires at least GAP 4.2.)
 
 You can download `ace-XXX.zoo' (where `XXX'  is  the  package  version
 number) from the same places as GAP. The main FTP servers are:
@@ -48,14 +47,14 @@ only usable under UNIX or a UNIX-like environment. It will not work on
 Windows or the Macintosh.
 
 
-                   Installing the ACE share package
+                         Installing the ACE package
 
-To install the ACE share package, move the file `ace-XXX.zoo' into the
-`pkg' directory in which you plan to install ACE. Usually,  this  will
-be the directory `pkg' in the hierarchy of  your  version  of  GAP  4.
-(However, it is also possible to keep an additional `pkg' directory in
-your private directories, see section "ref:Installing Share  Packages"
-of the GAP 4 reference manual for details on how to do this.)
+To install the ACE package, move the file `ace-XXX.zoo' into the `pkg'
+directory in which you plan to install ACE. Usually, this will be  the
+directory `pkg' in the hierarchy of your version of GAP  4.  (However,
+it is also possible to keep an  additional  `pkg'  directory  in  your
+private directories, see section "ref:Installing GAP Packages" of  the
+GAP 4 reference manual for details on how to do this.)
 
 Then unzoo `ace-XXX.zoo' by
 
@@ -94,7 +93,7 @@ That's it. Now start GAP and type
 
 The ACE banner should appear on the screen.
 
-For details on how to use the ACE share package see the share  package
+For  details  on  how  to  use  the  ACE  package  see   the   package
 documentation in the `doc' subdirectory (execute `make_doc'  and  then
 view either `manual.dvi' via `xdvi' or `manual.ps'  via  `ghostview'),
 which gives information on how to use ACE from within GAP, and the ACE
@@ -135,8 +134,8 @@ the C code  authors:  George  Havas  <havas@csee.uq.edu.au>  or  Colin
 Ramsay <cram@csee.uq.edu.au>.
 
 If you encounter problems at the GAP level, please contact one of  the
-ACE share  package  authors:  Greg  Gamble  <gregg@csee.uq.edu.au>  or
-Alexander Hulpke <hulpke@math.colostate.edu>.
+ACE package authors: Greg Gamble <gregg@csee.uq.edu.au>  or  Alexander
+Hulpke <hulpke@math.colostate.edu>.
 
 When sending a bug report,  remember  we  will  need  to  be  able  to
 reproduce the problem; so please include:
