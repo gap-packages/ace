@@ -1,0 +1,15 @@
+#!/bin/sh
+#W  make_doc                                                 Alexander Hulpke
+##  this shell script TeXs the documentation
+##
+echo "TeXing documentation"
+# tex the manual and build its biliography and index information
+(tex manual;bibtex manual;tex manual;../../../doc/manualindex manual)
+# finally tex all manuals again to get cross-references right
+(tex manual; dvips -D300 manual -o manual.ps)
+
+# # The HTML versions
+# cd htm
+# echo "HTML documentation"
+# make
+
