@@ -1,6 +1,6 @@
                            ACEExample Index
                            ----------------
-This index is displayed when calling ACEExample with no arguments,  or
+This index is displayed when calling ACEExample with no arguments, or
 with the argument: "index", or with a non-existent example name.
 
 The following ACE examples are available (in each case, for a subgroup
@@ -29,14 +29,14 @@ H of a group G, the cosets of H in G are enumerated):
 
 Notes
 -----
-1. The example (first) argument of  ACEExample()  is  a  string;  each
+1. The example (first) argument of ACEExample() is a string; each
    example above is in double quotes to remind you to include them.
 2. The enumeration for each of the *-ed examples fails. (See Note 3.)
-3. Try altering the ACE function used, by calling  ACEExample  with  a
-   2nd argument; choose from: ACECosetTableFromGensAndRels  (default),
+3. Try altering the ACE function used, by calling ACEExample with a
+   2nd argument; choose from: ACECosetTableFromGensAndRels (default),
    or ACEStats, or ACEStart. The 2nd argument is *not* quoted.
-4. Try `SetInfoACELevel(3);' before calling  ACEExample,  to  see  the
+4. Try `SetInfoACELevel(3);' before calling ACEExample, to see the
    effect of setting the "mess" (= "messages") option.
-5. To suppress a long output, use a double semicolon (`;;') after  the
+5. To suppress a long output, use a double semicolon (`;;') after the
    ACEExample command.
 6. Also, try `SetInfoACELevel(2);' before calling ACEExample.
