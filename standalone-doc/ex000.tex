@@ -1,0 +1,266 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%W  ex000.tex          ACE standalone documentation          Colin Ramsay
+%W                                                            Greg Gamble
+%%
+%H  $Id$
+%%
+
+%%  Colin Ramsay - 21 Sep 1999  is the true author of this document
+%%  Greg Gamble  - 29 Feb 2000 made minor modifications:
+%%                * put this header at the top for CVS
+
+%%  The example describing input file ex000.in
+
+This example uses input file \ttt{ex000.in}, and illustrates the basics of
+  \ace.
+Note how the input is generally insensitive to command synonyms,
+  capitalisation, white space, and \ttt{:} \amp \ttt{;} characters.
+%
+When \ace\ starts up, it prints out its version, the date \amp time, and
+  the name of the host on which it's running.
+If we attempt to do an enumeration immediately we get an error, since the
+  lack of generators means we can't build the (empty) coset table.
+
+\bv\begin{verbatim}
+ACE 3.000        Sat May  8 13:50:29 1999
+=========================================
+Host information:
+  name = flute
+end;
+** ERROR (continuing with next line)
+   can't start (no generators?)
+\end{verbatim}\ev
+
+After defining two generators, we can do an enumeration.
+The default state is not to echo the presentation or print any messages;
+  only the result line is printed.
+The group is free, since there are no relators, and the subgroup is
+ trivial.
+So the enumeration overflows.
+
+\bv\begin{verbatim}
+gr:ab;          # A stupid comment
+Begin
+OVERFLOW (a=249998 r=83333 h=83333 n=249999; l=337 c=0.97; 
+                                                       m=249998 t=249998)
+\end{verbatim}\ev
+
+The \ttt{sr} commands dumps out the presentation and the parameters for
+  the run.
+All of these are currently defaulted, apart from those dependent on there
+  being two (non-involutionary) generators.
+
+\bv\begin{verbatim}
+sr:1;
+  #-- ACE 3.000: Run Parameters ---
+Group Name: G;
+Group Generators: ab;
+Group Relators: ;
+Subgroup Name: H;
+Subgroup Generators: ;
+Wo:1000000; Max:249998; Mess:0; Ti:-1; Ho:-1; Loop:0;
+As:0; Path:0; Row:1; Mend:0; No:0; Look:0; Com:10;
+C:0; R:0; Fi:7; PMod:3; PSiz:256; DMod:4; DSiz:1000;
+  #--------------------------------
+\end{verbatim}\ev
+
+This is the first part of the table.
+Note that, as there are no relators, the table has separate columns for
+  generator inverses.
+So the default workspace of $1000000$ words allows
+  a table of $249998 = 1000000/4 - 2$ cosets.
+As row filling is on by default, the table is simply filled with
+  cosets in order.
+Note that a compaction phase is done before printing the table, but that
+  this does nothing here (the lower-case \ttt{co} tag), since there are no 
+ dead cosets.
+The coset representatives are simply all possible freely reduced words, in
+  length plus lexicographic order.
+
+\bv\begin{verbatim}
+pr:-1,12;
+co: a=249998 r=83333 h=83333 n=249999; c=+0.00
+ coset |      a      A      b      B   order   rep've
+-------+---------------------------------------------
+     1 |      2      3      4      5
+     2 |      6      1      7      8       0   a
+     3 |      1      9     10     11       0   A
+     4 |     12     13     14      1       0   b
+     5 |     15     16      1     17       0   B
+     6 |     18      2     19     20       0   aa
+     7 |     21     22     23      2       0   ab
+     8 |     24     25      2     26       0   aB
+     9 |      3     27     28     29       0   AA
+    10 |     30     31     32      3       0   Ab
+    11 |     33     34      3     35       0   AB
+    12 |     36      4     37     38       0   ba
+\end{verbatim}\ev
+
+We now set things up to do the alternating group on five letters, of order
+  $60$.
+We turn messaging on, but set the interval high enough so that there will
+  be no progress messages.
+
+\bv\begin{verbatim}
+Enum: A_5;
+rel: a^2, b^3, ababababab;
+subgr: trivial;
+mess: 1000;    start;
+\end{verbatim}\ev
+
+The presentation and the parameters are echoed, the enumeration is
+  performed, and then the results of the run are printed.
+Note that the exponent of the \ttt{ababababab} word has been correctly
+  deduced, and that \ttt{a} is treated as an involution.
+So the table has only three columns now.
+Definitions are HLT-style, and a total of $76$ cosets (incl.\@ the 
+  subgroup) were defined.
+
+\bv\begin{verbatim}
+  #-- ACE 3.000: Run Parameters ---
+Group Name: A_5;
+Group Generators: ab;
+Group Relators: (a)^2, (b)^3, (ab)^5;
+Subgroup Name: trivial;
+Subgroup Generators: ;
+Wo:1000000; Max:333331; Mess:1000; Ti:-1; Ho:-1; Loop:0;
+As:0; Path:0; Row:1; Mend:0; No:3; Look:0; Com:10;
+C:0; R:0; Fi:6; PMod:3; PSiz:256; DMod:4; DSiz:1000;
+  #--------------------------------
+INDEX = 60 (a=60 r=77 h=1 n=77; l=3 c=0.00; m=66 t=76)
+\end{verbatim}\ev
+
+We now use a non-trivial subgroup, and monitor all the actions of the
+  enumerator.
+
+\bv\begin{verbatim}
+Subgroup Name: C_5 ;
+gen:ab;
+Monit :1
+END;
+  #-- ACE 3.000: Run Parameters ---
+Group Name: A_5;
+Group Generators: ab;
+Group Relators: (a)^2, (b)^3, (ab)^5;
+Subgroup Name: C_5;
+Subgroup Generators: ab;
+Wo:1000000; Max:333331; Mess:1; Ti:-1; Ho:-1; Loop:0;
+As:0; Path:0; Row:1; Mend:0; No:3; Look:0; Com:10;
+C:0; R:0; Fi:6; PMod:3; PSiz:256; DMod:4; DSiz:1000;
+  #--------------------------------
+AD: a=2 r=1 h=1 n=3; l=1 c=+0.00; m=2 t=2
+SG: a=2 r=1 h=1 n=3; l=1 c=+0.00; m=2 t=2
+RD: a=3 r=1 h=1 n=4; l=2 c=+0.00; m=3 t=3
+RD: a=4 r=2 h=1 n=5; l=2 c=+0.00; m=4 t=4
+RD: a=5 r=2 h=1 n=6; l=2 c=+0.00; m=5 t=5
+RD: a=6 r=2 h=1 n=7; l=2 c=+0.00; m=6 t=6
+RD: a=7 r=2 h=1 n=8; l=2 c=+0.00; m=7 t=7
+RD: a=8 r=2 h=1 n=9; l=2 c=+0.00; m=8 t=8
+RD: a=9 r=2 h=1 n=10; l=2 c=+0.00; m=9 t=9
+CC: a=8 r=2 h=1 n=10; l=2 c=+0.00; d=0
+RD: a=9 r=5 h=1 n=11; l=2 c=+0.00; m=9 t=10
+RD: a=10 r=5 h=1 n=12; l=2 c=+0.00; m=10 t=11
+RD: a=11 r=5 h=1 n=13; l=2 c=+0.00; m=11 t=12
+RD: a=12 r=5 h=1 n=14; l=2 c=+0.00; m=12 t=13
+RD: a=13 r=5 h=1 n=15; l=2 c=+0.00; m=13 t=14
+RD: a=14 r=5 h=1 n=16; l=2 c=+0.00; m=14 t=15
+CC: a=13 r=6 h=1 n=16; l=2 c=+0.00; d=0
+CC: a=12 r=6 h=1 n=16; l=2 c=+0.00; d=0
+INDEX = 12 (a=12 r=16 h=1 n=16; l=3 c=0.00; m=14 t=15)
+\end{verbatim}\ev
+
+We now dump out the statistics accumulated during the run.
+The run had \ttt{a=12} \amp \ttt{t=15}, so there must have been three
+  coincidences (\ttt{qcoinc=3}).
+Of these, two were primary coincidences (\ttt{rdcoinc=2}).
+Since \ttt{t=15}, there must have been fourteen coset definitions;  one
+  was during the application of coset \#1 (i.e., the subgroup) to the
+  subgroup generator (\ttt{apdefn=1}), and the remainder during the
+  application of the cosets to the relators (\ttt{rddefn=13}).
+
+\bv\begin{verbatim}
+STATistics;
+  #- ACE 3.000: Level 0 Statistics --
+cdcoinc=0 rdcoinc=2 apcoinc=0 rlcoinc=0 clcoinc=0
+  xcoinc=2 xcols12=4 qcoinc=3
+  xsave12=0 s12dup=0 s12new=0
+  xcrep=6 crepred=0 crepwrk=0 xcomp=0 compwrk=0
+xsaved=0 sdmax=0 sdoflow=0
+xapply=1 apdedn=1 apdefn=1
+rldedn=0 cldedn=0
+xrdefn=1 rddedn=5 rddefn=13 rdfill=0
+xcdefn=0 cddproc=0 cdddedn=0 cddedn=0
+  cdgap=0 cdidefn=0 cdidedn=0 cdpdl=0 cdpof=0
+  cdpdead=0 cdpdefn=0 cddefn=0
+  #----------------------------------
+\end{verbatim}\ev
+
+Note how the pre-printout compaction phase now does some work (the
+  upper-case \ttt{CO} tag), since there were coincidences, and hence dead
+  cosets.
+Note how \ttt{b/B} have been used as the first two columns, since these
+  must be occupied by a generator/inverse pair or a pair of involutions.
+The \ttt{a} column is also the \ttt{A} column, as \ttt{a} is an
+  involution.
+
+\bv\begin{verbatim}
+  print  TABLE : -1, 12 ;
+CO: a=12 r=13 h=1 n=13; c=+0.00
+ coset |      b      B      a   order   rep've
+-------+--------------------------------------
+     1 |      3      2      2
+     2 |      1      3      1       3   B
+     3 |      2      1      4       3   b
+     4 |      8      5      3       5   ba
+     5 |      4      8      6       2   baB
+     6 |      9      7      5       5   baBa
+     7 |      6      9      8       3   baBaB
+     8 |      5      4      7       5   bab
+     9 |      7      6     10       5   baBab
+    10 |     12     11      9       3   baBaba
+    11 |     10     12     12       2   baBabaB
+    12 |     11     10     11       3   baBabab
+\end{verbatim}\ev
+
+If we define the generator order to be that of the columns, then the table
+  above is not in canonic form, and the coset representatives are not in
+  order.
+We now standardise the table; note the compaction phase before
+  standardisation, although it does nothing in this particular case.
+Note how, if we read through the table in row-major order, new cosets
+  are introduced using the smallest available number, and that the 
+  representatives are now in order and are minimal.
+
+\bv\begin{verbatim}
+st;
+co/ST: a=12 r=13 h=1 n=13; c=+0.00
+pr:-1,12;
+co: a=12 r=13 h=1 n=13; c=+0.00
+ coset |      b      B      a   order   rep've
+-------+--------------------------------------
+     1 |      2      3      3
+     2 |      3      1      4       3   b
+     3 |      1      2      1       3   B
+     4 |      5      6      2       5   ba
+     5 |      6      4      7       5   bab
+     6 |      4      5      8       2   baB
+     7 |      8      9      5       5   baba
+     8 |      9      7      6       5   baBa
+     9 |      7      8     10       3   babaB
+    10 |     11     12      9       3   babaBa
+    11 |     12     10     12       3   babaBab
+    12 |     10     11     11       2   babaBaB
+\end{verbatim}\ev
+
+We now exit \ace, printing out the version and the date \amp time again.
+
+\bv\begin{verbatim}
+q
+=========================================
+ACE 3.000        Sat May  8 13:52:49 1999
+\end{verbatim}\ev
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%E

@@ -1,0 +1,90 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%W  defns.tex          ACE standalone documentation          Colin Ramsay
+%W                                                            Greg Gamble
+%%
+%H  $Id$
+%%
+
+%%  Colin Ramsay - 8 May 1999  is the true author of this document
+%%  Greg Gamble  - 29 Feb 2000 made minor modifications:
+%%                * put this header at the top for CVS
+
+%%  defns.tex - LaTeX macros 
+%%
+%%   All the stuff specific for the report. Only includes that not done
+%%   directly in my version of the class/option/package files.
+%%
+%%  5   10   15   20   25   30   35   40   45   50   55   60   65   70   75
+%%..|....|....|....|....|....|....|....|....|....|....|....|....|....|....|
+
+%% PAGE LAYOUT STUFF
+
+% May need to adjustment offsets to set `origin' to match printer.
+% This is the CHANGE to the nom 1in!
+
+%% original HP/lp4 is now lp3/6th floor?
+%\hoffset +1.4mm \voffset +1.4mm
+
+%% lp6 (3rd floor printer/photocopier room, double-sided)
+\hoffset -0.75mm \voffset +1.4mm
+
+%% VERBATIM / LINE-SPACING COMMANDS
+
+\def\bv{\renewcommand{\baselinestretch}{0.85}\small}
+\def\ev{\renewcommand{\baselinestretch}{1.05}\normalsize}
+
+%% THEOREM-LIKE ENVIRONMENTS
+
+\newtheorem{theorem}{Theorem}[chapter]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{conjecture}[theorem]{Conjecture}
+
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+
+%% CONVENIENCES
+
+\def\proof{\textsc{Proof:} }
+\def\notate{\textsc{Notation:} }
+\def\rem{\textsc{Remark:} }
+
+\def\qedbox{\hspace*{1pt}\hfill$\Box$}
+
+%\def\tba#1{$\cdots$ TBA (#1) $\cdots$}
+\def\fs#1#2{#1 \kern-3.25pt/ \kern-3.5pt#2}
+
+\def\amp{{\small\&} }
+%\def\amp{{and }}
+
+\def\ttt#1{\texttt{#1}}
+\def\tit#1{\textit{#1}}
+\def\tsc#1{\textsc{#1}}
+\def\tbf#1{\textbf{\small#1}}
+
+% Allow, but do not force, a linebreak
+\def\lb{\linebreak[0]}
+
+\def\ul#1{\underline{#1}}
+\def\ull#1{\underline{\underline{#1}}}
+
+% tick mark
+\def\tm{\raisebox{.45ex}{\scriptsize$\sqrt{}$}}
+
+% THEOREMS, ETC - seems to work!
+
+\makeatletter
+  \def\@begintheorem#1#2{%
+    \slshape\trivlist\item[\hskip\labelsep{\textsc{#1\ #2:}}]}
+\makeatother
+
+% ABBREVIATIONS
+
+\def\acex#1{\textsf{ACE} #1}
+\def\acet{\textsf{ACE} 3.001}
+\def\ace{\textsf{ACE}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%E

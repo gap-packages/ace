@@ -1,0 +1,95 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%W  ex.tex             ACE standalone documentation          Colin Ramsay
+%W                                                            Greg Gamble
+%%
+%H  $Id$
+%%
+
+%%  Colin Ramsay - 22 Oct 1999  is the true author of this document
+%%  Greg Gamble  - 29 Feb 2000 made minor modifications:
+%%                * put this header at the top for CVS
+
+%%  ex.tex - The wrapper for the appendix of examples.
+%%
+%%  5   10   15   20   25   30   35   40   45   50   55   60   65   70   75
+%%..|....|....|....|....|....|....|....|....|....|....|....|....|....|....|
+
+In this appendix we give some examples of \ace\ runs.
+A stand-alone discussion of some of the features of these runs is included,
+  although parts of these runs are mentioned in the body of the text, as 
+  illustrations of specific features of \ace's behaviour.
+The \ttt{ex***.in} files supplied as part of this documentation can be
+  used to run these examples, although an example may be presented as if it
+  were generated interactively, and the output may be edited for reasons of
+  space or perspicuity.
+There may be minor variations in the exact format of the output, since
+  \ace\ is continually being `improved'\kern-1pt.
+Unless otherwise noted, all parameters are defaulted and the default
+  build of \ace\ was used.
+In multipart runs, note that parameters from an earlier part may carry
+  across to a later one.
+Note that some of the examples may require a machine with a large amount
+  of memory.
+
+\section{Getting started}\label{ex000}
+\input{ex000.tex}
+
+\section{Emulating Sims}\label{ex001}
+\input{ex001.tex}
+
+\section{Row filling}\label{ex002}
+\input{ex002.tex}
+
+\section{Equivalent presentations}
+
+TBA: $F(2,7)$, using \ttt{rep} \amp \ttt{aep} ...
+
+\section{Deduction queues}
+
+TBA: ... (see test009)
+
+\section{Large enumerations}
+
+Suppose that the presentation given is such that the final coset table
+  exceeds the 4\,Gbyte limit imposed by 32-bit machines; e.g., an index of
+  $250 \times 10^6$\kern-2pt, with a 5-column table and 4 byte integers.
+We are justified in regarding such an enumeration as `big'\kern-1.5pt, 
+  since it will require more than 4\,Gbyte of storage no matter how
+  efficiently it is performed.
+Of course, even trivial enumerations may exceed this limit if they are
+  very pathological (see, e.g., \cite{HR2}).
+However, we have no (easy) way of knowing whether or not such enumerations
+  can be done within the 4\,Gbyte limit, so we are hesitant to classify
+  them as big.
+\ace\ is 64-bit `aware'\kern-1.5pt, and can use more than 4\,Gbyte of
+  memory if it is available.
+Note however that the number of cosets (i.e., the number of rows in the
+  coset table) is still limited by the size of a signed \ttt{int}.
+So the maximum size of a table is $2^{31} - n$ cosets, where $n$ is
+  probably $3$; one since we can't actually represent $+2147483648$, one
+  since coset \#0 is not used, and one since we need to count one past the
+  top of the table.
+
+Some trivial group enumerations involving more than 1\,G total cosets 
+  and 4\,Gbyte of memory were reported in \cite{HR2}.
+However, the first big enumeration, in the above sense, done by \ace\ was
+  the Thomson simple group.
+This group has order $TBA$, and contains $TBA$ as an index $TBA$ subgroup.
+TBA: ...
+
+\section{Looping}
+
+TBA: ...
+
+\section{Use of \ttt{st}}\label{ex007}
+
+TBA: ...
+
+\section{Use of \ttt{cy}, \ttt{nc}, \ttt{cc} and \ttt{rc}} 
+
+TBA: ...
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%E

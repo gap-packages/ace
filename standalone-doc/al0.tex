@@ -1,0 +1,239 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%W  al0.tex            ACE standalone documentation          Colin Ramsay
+%W                                                            Greg Gamble
+%%
+%H  $Id$
+%%
+
+%%  Colin Ramsay - 11 May 1999  is the true author of this document
+%%  Greg Gamble  - 29 Feb 2000 made minor modifications:
+%%                * put this header at the top for CVS
+
+%%  The AL0 chapter.
+%%
+%%  5   10   15   20   25   30   35   40   45   50   55   60   65   70   75
+%%..|....|....|....|....|....|....|....|....|....|....|....|....|....|....|
+
+THIS CHAPTER IS OUT OF DATE !!
+
+Level 0 of \ace\ is the actual enumerator.
+The routines in Level 0 are the only ones in \ace\ which change the coset
+  table and its associated data structure.
+
+\section{Introduction}
+
+\dots concept of a self-consistent table, guaranteed to be the `correct'
+  table, or a multiple thereof.
+
+\section{The \ttt{void al0\_enum(void)} function}
+
+The \ttt{al0\_enum()} function assumes that it has been called with a 
+  consistent table \amp status, and that its arguments \amp parameters
+  are valid.
+It is written for speed, not forgiveness; it is up to the caller (e.g.,
+  \ace\ Level 1) to do the right thing.
+
+\subsection{Modes, styles \amp phases}
+
+The \ttt{cntrl} argument of \ttt{al0\_enum()} determines which of the 
+  three possible \tit{modes} the enumerator will run in.
+If $\ttt{cntrl} > 0$ the current table and status are preserved, and
+  enumeration continues from where it was interrupted.
+This is the \tit{continue} mode and can be used, e.g., if
+  the previous enumeration ran out of time.
+If $\ttt{cntrl} = 0$ the current table and status are cleared, and a new
+  enumeration is performed.
+This is the \tit{begin}, \tit{end} or \tit{start} mode, and is that used
+  for a new or changed presentation.
+If $\ttt{cntrl} < 0$ the current table is preserved, the status is altered
+  to indicate the start of the table, and enumeration is commenced at
+  coset $1$.
+This is the \tit{check} or \tit{redo} mode and can be used, e.g., if 
+  relators or subgroup generators were \tit{added} to the presentaion.
+
+The \ttt{rfactor} \amp \ttt{cfactor} parameters determine the
+  \tit{style} of the enumeration to be run.
+The five valid combinations are listed below.
+
+$\ttt{rfactor}>0$ \amp $\ttt{cfactor}=0$:
+The relator table-based style (\tit{R-style}).
+
+$\ttt{rfactor}=0$ \amp $\ttt{cfactor}>0$:
+The coset table-based style (\tit{C-style}).
+
+$\ttt{rfactor}<0$ \amp $\ttt{cfactor}>0$:
+The coset table-based plus one round of relator table-based style 
+  (\tit{Cr-style}).
+
+$\ttt{rfactor}>0$ \amp $\ttt{cfactor}>0$:
+The mixed style (\tit{CR-style}), which combines C-style \amp R-style.
+
+$\ttt{rfactor}=0$ \amp $\ttt{cfactor}=0$:
+The default style (\tit{Def-style}), which runs R-style and then switches
+  to C-style.
+
+The control structure of the enumerator's main loop can be though of as a
+  collection of state machines (i.e., finite automata).
+The style selects the appropriate \tit{machine}, while the current state
+  of a machine is the enumeration's current \tit{phase}.
+The mode selects the starting state. 
+%
+The body of the main loop consists of a collection of blocks of code, each
+  of which performs some specific \tit{action} and returns a \tit{result}.
+The status and the phase are used to select the next action and phase from
+  the machine's transition table.
+ 
+\begin{table}
+\hrule
+\caption{The modes, styles \amp start states}
+\label{tab:msm}
+\smallskip
+\renewcommand{\arraystretch}{0.85}
+\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}rrrrrr} 
+\hline\hline
+\ttt{cntrl} & \ttt{rfactor} & \ttt{cfactor} & mode & style & start \\
+\hline
+$<\!0$ & $<\!0$ & $<\!0$ & redo     & R/C-style & 2  \\
+$<\!0$ & $<\!0$ & $0$    & -        & -         & -  \\
+$<\!0$ & $<\!0$ & $>\!0$ & redo     & Cr-style  & 1  \\
+$<\!0$ & $0$    & $<\!0$ & -        & -         & -  \\
+$<\!0$ & $0$    & $0$    & -        & -         & -  \\
+$<\!0$ & $0$    & $>\!0$ & redo     & C-style   & 3  \\
+$<\!0$ & $>\!0$ & $<\!0$ & redo     & Rc-style  & 30 \\
+$<\!0$ & $>\!0$ & $0$    & redo     & R-style   & 4  \\
+$<\!0$ & $>\!0$ & $>\!0$ & redo     & CR-style  & 5  \\
+\hline
+$0$    & $<\!0$ & $<\!0$ & start    & R/C-style & 7  \\
+$0$    & $<\!0$ & $0$    & -        & -         & -  \\
+$0$    & $<\!0$ & $>\!0$ & start    & Cr-style  & 6  \\
+$0$    & $0$    & $<\!0$ & -        & -         & -  \\
+$0$    & $0$    & $0$    & -        & -         & -  \\
+$0$    & $0$    & $>\!0$ & start    & C-style   & 8  \\
+$0$    & $>\!0$ & $<\!0$ & start    & Rc-style  & 35 \\
+$0$    & $>\!0$ & $0$    & start    & R-style   & 9  \\
+$0$    & $>\!0$ & $>\!0$ & start    & CR-style  & 10 \\
+\hline
+$>\!0$ & $<\!0$ & $<\!0$ & continue & R/C-style & 12 \\
+$>\!0$ & $<\!0$ & $0$    & -        & -         & -  \\
+$>\!0$ & $<\!0$ & $>\!0$ & continue & Cr-style  & 11 \\
+$>\!0$ & $0$    & $<\!0$ & -        & -         & -  \\
+$>\!0$ & $0$    & $0$    & -        & -         & -  \\
+$>\!0$ & $0$    & $>\!0$ & continue & C-style   & 13 \\
+$>\!0$ & $>\!0$ & $<\!0$ & continue & Rc-style  & 40 \\
+$>\!0$ & $>\!0$ & $0$    & continue & R-style   & 14 \\
+$>\!0$ & $>\!0$ & $>\!0$ & continue & CR-style  & 15 \\
+\hline\hline
+\end{tabular*}
+\end{table}
+
+\begin{table}
+\hrule
+\caption{The non-starting states}
+\label{tab:phase}
+\smallskip
+\renewcommand{\arraystretch}{0.85}
+\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}rl} 
+\hline\hline
+state & meaning \\
+\hline
+16 & definitions in R-style \\
+17 & lookahead in R-style \\
+18 & compact in R-style \\
+19 & definitions/deductions in C-style \\
+20 & lookahead in C-style \\
+21 & compact in C-style \\
+22 & check finite result \\
+23 & C-lookahead in CR-style \\
+24 & C-definitions/deductions in CR-style \\
+25 & C-compact in CR-style \\
+26 & R-definitions in CR-style \\
+27 & R-lookahead in CR-style \\
+28 & R-compact in CR-style \\
+29 & R-definitions in R/C-style \\
+\hline\hline
+\end{tabular*}
+\end{table}
+
+\begin{table}
+\hrule
+\caption{The actions}
+\label{tab:action}
+\smallskip
+\renewcommand{\arraystretch}{0.85}
+\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}rl} 
+\hline\hline
+action & meaning \\
+\hline
+-1 & invalid action (i.e., invalid machine state)\\
+0  & null action \\
+1  & make some R-style definitions \\
+2  & perform lookahead for R-style \\
+3  & compact the table \\
+4  & make some C-style definitions/deductions \\
+5  & perform lookahead for C-style \\
+6  & check finite result \\
+\hline\hline
+\end{tabular*}
+\end{table}
+
+\begin{table}
+\hrule
+\caption{The results}
+\label{tab:result}
+\smallskip
+\renewcommand{\arraystretch}{0.85}
+\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}rll} 
+\hline\hline
+result & internal & returned \\
+\hline
+% `normal' terminations/results
+$>\!0$  & n/a                             & finite index \\
+$0$     & unable to make definition       & overflow \\
+$-1$    & successful                      & n/a \\
+$-2$    & finite result (potential index) & n/a \\
+% `anomalous' terminations
+$-256$  & n/a & incomplete table \\
+$-257$  & n/a & too many holes \\
+$-258$  & n/a & out of time \\
+% non-fatal errors
+$-512$  & n/a & bad mode/style combination \\
+% fatal errors
+$-4096$ & n/a & invalid machine state \\
+$-4097$ & n/a & invalid finite result \\
+\hline\hline
+\end{tabular*}
+\end{table}
+
+\section{The \ttt{void al0\_compact(void)} function}
+
+\dots can be called even if already compact, so no point in keeping track
+  of CT compaction state, just fall through if $\ttt{nextalive} = 
+  \ttt{nextdf-1}$.
+(There would actually be little penalty in running it on a compacted
+  table anyway!)
+\dots \tit{don't} call if deductions (up to user to catch this), since
+  we discard deductions!
+\dots pdl is cleared.
+\dots how long does it take, one pass through the table, circa constant
+  time?
+
+\dots does \tit{not} produce canonic forms.
+Discuss this, and reference illustrative examples.
+One serious case where this is useful is for low-index subgroups, where
+  one dosn't want duplicates.
+Perhaps add a switch that folds standardisation into the compaction
+  routine?
+
+\dots table is standardised, so we can find a `small' rep by backtracing
+  the rows minimal entries, this does not produce a minimal rep!
+
+\section{Coincidence handling}
+
+The coincidences are stored in the coset table by using the ideas
+  described in \cite{Bee}, but not the data structure.
+Instead we use the data structure described in \cite{CDHW}.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%E

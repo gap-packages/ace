@@ -1,0 +1,32 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%W  al1.tex            ACE standalone documentation          Colin Ramsay
+%W                                                            Greg Gamble
+%%
+%H  $Id$
+%%
+
+%%  Colin Ramsay - 16 May 1999  is the true author of this document
+%%  Greg Gamble  - 29 Feb 2000 made minor modifications:
+%%                * put this header at the top for CVS
+
+%%  The AL1 chapter.
+%%
+%%  5   10   15   20   25   30   35   40   45   50   55   60   65   70   75
+%%..|....|....|....|....|....|....|....|....|....|....|....|....|....|....|
+
+\ace\ Level $0$ is a complete, efficient coset enumerator.
+However, it is `naked'\kern-1.5pt, in the sense that it expects all its 
+  data structures to be correctly setup and it assumes that it is
+  `sensibly' driven.
+\ace\ Level $1$ is a simple wrapper for Level $0$ which processes the 
+  presentation and the parameters, and sets up the appropriate data
+  structures.
+It contains some utility routines to help drive \ace, and it prevents some
+  of the more obvious errors.
+Although it has to be used with care, the wrapper is a great deal easier to
+  drive than the core enumerator, and is its recommended interface.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%E

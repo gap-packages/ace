@@ -1,0 +1,131 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%W  ex002.tex          ACE standalone documentation          Colin Ramsay
+%W                                                            Greg Gamble
+%%
+%H  $Id$
+%%
+
+%%  Colin Ramsay - 21 Sep 1999  is the true author of this document
+%%  Greg Gamble  - 29 Feb 2000 made minor modifications:
+%%                * put this header at the top for CVS
+
+%%  The example describing input file ex002.in
+
+If all definitions are made by applying cosets to relators, then the coset
+  table can contain holes, either because the form of the relators `hides'
+  one of the generators from one of the cosets, or because one of the
+  generators is not present in the relators.
+The \ttt{row} and \ttt{mend} parameters can be used to deal with these
+  sorts of situations.
+Consider the following examples, drawn from \cite{War}; see the input file
+  \ttt{ex002.in}.
+Note that, although the \ttt{row} parameter is specifically intended to
+  prevent the table containing holes, the \ttt{mend} parameter actually
+  yields better enumeration statistics.
+Note also the use of the \ttt{asis} parameter to control whether or not
+  the presentation is reduced.
+
+\bv\begin{verbatim}
+asis:1;  pure r;  end;  
+#-- ACE 3.000: Run Parameters ---
+Group Name: infinite cyclic group;
+Group Generators: xy;
+Group Relators: yxyxY;
+Subgroup Name: self (index 1);
+Subgroup Generators: x;
+Wo:1000000; Max:249998; Mess:1000000; Ti:-1; Ho:-1; Loop:0;
+As:1; Path:0; Row:0; Mend:0; No:0; Look:0; Com:100;
+C:0; R:1000; Fi:1; PMod:0; PSiz:256; DMod:0; DSiz:1000;
+  #--------------------------------
+OVERFLOW (a=249992 r=249996 h=1 n=249999; l=253 c=1.19; m=249992 t=249998)
+pr:-1,12;
+CO: a=249992 r=249990 h=1 n=249993; c=+0.33
+ coset |      x      X      y      Y   order   rep've
+-------+---------------------------------------------
+     1 |      1      1      2      0
+     2 |      4      3      5      1       0   y
+     3 |      2      5      6      4       0   yX
+     4 |      0      2      3      0       0   yx
+     5 |      3      6      7      2       0   yy
+     6 |      5      7      8      3       0   yXy
+     7 |      6      8      9      5       0   yyy
+     8 |      7      9     10      6       0   yXyy
+     9 |      8     10     11      7       0   yyyy
+    10 |      9     11     12      8       0   yXyyy
+    11 |     10     12     13      9       0   yyyyy
+    12 |     11     13     14     10       0   yXyyyy
+
+pure r;  row:1;  end;
+INDEX = 1 (a=1 r=2 h=2 n=2; l=3 c=0.00; m=12 t=17)
+pure r;  mend:1;  end;
+INDEX = 1 (a=1 r=2 h=2 n=2; l=3 c=0.00; m=5 t=6)
+
+asis:0;  pure r;  end;  
+#-- ACE 3.000: Run Parameters ---
+Group Name: infinite cyclic group;
+Group Generators: xy;
+Group Relators: xyx;
+Subgroup Name: self (index 1);
+Subgroup Generators: x;
+Wo:1000000; Max:249998; Mess:1000000; Ti:-1; Ho:-1; Loop:0;
+As:0; Path:0; Row:0; Mend:0; No:0; Look:0; Com:100;
+C:0; R:1000; Fi:1; PMod:0; PSiz:256; DMod:0; DSiz:1000;
+  #--------------------------------
+INDEX = 1 (a=1 r=2 h=2 n=2; l=3 c=0.00; m=1 t=1)
+
+asis:1;  pure r;  end;  
+#-- ACE 3.000: Run Parameters ---
+Group Name: C_3;
+Group Generators: xy;
+Group Relators: xxxyxyXXX, yyyxyxYYY;
+Subgroup Name: trivial (index 3);
+Subgroup Generators: ;
+Wo:1000000; Max:249998; Mess:1000000; Ti:-1; Ho:-1; Loop:0;
+As:1; Path:0; Row:0; Mend:0; No:0; Look:0; Com:100;
+C:0; R:1000; Fi:1; PMod:0; PSiz:256; DMod:0; DSiz:1000;
+  #--------------------------------
+OVERFLOW (a=181146 r=38770 h=1 n=249999; l=32 c=0.67; m=181146 t=249998)
+pr:-1,16;
+CO: a=181146 r=28074 h=1 n=181147; c=+0.28
+ coset |      x      X      y      Y   order   rep've
+-------+---------------------------------------------
+     1 |      2      0      7      0
+     2 |      3      1     15      0       0   x
+     3 |      4      2     23      0       0   xx
+     4 |     12      3      6      5       0   xxx
+     5 |     35      6      4      0       0   xxxY
+     6 |      5      0     31      4       0   xxxy
+     7 |     47      0      8      1       0   y
+     8 |     55      0      9      7       0   yy
+     9 |     11     10     52      8       0   yyy
+    10 |      9      0     72     11       0   yyyX
+    11 |     63      9     10      0       0   yyyx
+    12 |     20      4     14     13       0   xxxx
+    13 |     89     14     12      0       0   xxxxY
+    14 |     13      0     85     12       0   xxxxy
+    15 |    101      0     16      2       0   xy
+    16 |    109      0     17     15       0   xyy
+
+pure r;  row:1;   end;
+INDEX = 3 (a=3 r=468 h=1 n=468; l=3 c=0.00; m=343 t=467)
+pure r;  mend:1;  end;
+INDEX = 3 (a=3 r=29 h=29 n=29; l=3 c=0.00; m=21 t=28)
+
+asis:0;  pure r;  end;  
+#-- ACE 3.000: Run Parameters ---
+Group Name: C_3;
+Group Generators: xy;
+Group Relators: yxy, xyx;
+Subgroup Name: trivial (index 3);
+Subgroup Generators: ;
+Wo:1000000; Max:249998; Mess:1000000; Ti:-1; Ho:-1; Loop:0;
+As:0; Path:0; Row:0; Mend:0; No:0; Look:0; Com:100;
+C:0; R:1000; Fi:1; PMod:0; PSiz:256; DMod:0; DSiz:1000;
+  #--------------------------------
+INDEX = 3 (a=3 r=6 h=6 n=6; l=3 c=0.00; m=5 t=5)
+\end{verbatim}\ev
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%E
