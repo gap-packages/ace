@@ -241,7 +241,6 @@ brk> SetACEOptions(: max := 0);
 brk> return;
 [ [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], 
   [ 1 ], [ 1 ], [ 1 ], [ 1 ] ]
-gap> 
 \endexample
 
 Observe how the lines  after  the  ```Entering  break  read-eval-print
@@ -307,12 +306,15 @@ in  the  case  where  an  enumeration  overflows.  This  is  generally
 advantageous. However, on some systems, it may *not* be  advisable  to
 repeatedly  call  `ACECosetTable'  or   `ACECosetTableFromGensAndRels'
 (e.g.~in a loop), since one may run out of the pseudo  ttys  used  for
-iostreams.  If  you  encounter  this  problem,  consider   using   the
-non-interactive `ACEStats' (see~"ACEStats"), which only uses files, to
-first  test  whether  the  coset  enumeration  will  succeed.  Another
-alternative, if one is looping over several possibilities of  <fgens>,
-<rels> and <sgens>, is to just use one interactive {\ACE} process, and
-re-use the process continually in something like the following manner:
+iostreams. If you encounter this problem, consider using an adaptation
+of  the  usage  of  the  interactive  forms  of  `ACECosetTable'   and
+`ACEStats'                            (see~"ACECosetTable!interactive"
+and~"ACEStats!interactive"), together with  `ACEStart'  initialisation
+steps, that is sketched in the schema below. For the  following  code,
+it  is  imagined  the  scenario  is  one  of  looping   over   several
+possibilities of <fgens>, <rels> and <sgens>; the two special forms of
+`ACEStart' used, allow one to continually re-use a single  interactive
+{\ACE} process (i.e.~only *one* iostream is used).
 
 \){\kernttindent}\# start the interactive ACE process with no group information
 \){\kernttindent}procId := ACEStart(0);
@@ -324,10 +326,6 @@ re-use the process continually in something like the following manner:
 \){\kernttindent\quad\quad}...
 \){\kernttindent\quad}fi;
 \){\kernttindent}od;
-
-See~"ACEStart", for the two special forms of  `ACEStart'  used  above,
-and see~"ACEStats!interactive" and~"ACECosetTable!interactive" for the
-interactive usages of `ACEStats' and `ACECosetTable'.
 
 For an already  calculated  coset  table,  we  provide  the  following
 function to determine whether or not it has been standardised.
@@ -891,9 +889,10 @@ Initial value of `ACEIgnoreUnknownDefault' is now  `true'  (previously
 it was `false').
 
 \item{}
-`ACECosetTableFromGensAndRels'      (and      the      non-interactive
-`ACECosetTable') invoke iostreams (previously files were used,  as  is
-still the case with the non-interactive `ACEStats').
+`ACECosetTableFromGensAndRels' and the non-interactive `ACECosetTable'
+(except when producing an input script via  option  `ACEinfile'),  and
+the non-interactive `ACEStats' which previously  used  files  all  now
+invoke iostreams .
 
 \endlist
 
