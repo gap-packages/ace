@@ -69,6 +69,12 @@ only modification is that a file `Makefile.in' was obtained from the different
 `make.xyz' and will be used to create a `Makefile'.)
 You can replace the source by a newer version before compiling.
 
+The subdirectory `acedoc' contains a version of the `ACE' manual
+\cite{aceman}. This
+manual describes the various possibilities to guide the enumeration process.
+If you are goind to call the `ACE' interface with options, it is recommended
+you consult this manual for a detailled description.
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{Loading the ACE share package}
 
@@ -150,7 +156,7 @@ specific strategies to get the coset enumeration to finish successfully and
 quickly.
 
 All these options and their functionality are described in detail in the
-chapter on the interactive interface (``level 2'') of the manual of the
+chapter on the interactive interface (``ACE Level 2'') of the manual of the
 `ACE' standalone~\cite{aceman}. 
 
 This section therefore only lists how to pass the options from {\GAP}.
@@ -171,10 +177,10 @@ to a value of `true'. Note that the order in which the options are passed to
 `ACE' is implicit in the interface, the order in which the options are given
 in {\GAP} is ignored!
 
-So for example to use the `hard' option and increase the workspace to $10^6$
+So for example to use the `hard' option and increase the workspace to $10^7$
 words, one would call:
 \begintt
-gap> CallACE(f,RelatorsOfFpGroup(g),[]:hard,workspace:=10^6);;
+gap> CallACE(f,RelatorsOfFpGroup(g),[]:hard,workspace:=10^7);;
 \endtt
 
 In the following list of recognized options for
@@ -188,28 +194,42 @@ further description is given here, see the `ACE' manual for details.
 
 \beginitems
 `asis'&
+Do not reduce relators.
 
 `ct:=<val>'&
-
-`dmode:=<val>'&
-
-`dsize:=<val>'&
-
-`fill:=<val>'&
-
-`look:=<val>'&
-
-`number:=<val>'&
-
-`mendelsohn'&
-
-`norow'&
-
-`pmode:=<val>'&
-
-`psize:=<val>'&
+Number of C-style definitions per pass.
 
 `rt:=<val>'&
+Number of R-style definitions per pass.
+
+`dmode:=<val>'&
+Deduction mode.
+
+`dsize:=<val>'&
+Deduction stack size.
+
+`pmode:=<val>'&
+Parameter for preferred definitions.
+
+`psize:=<val>'&
+Size of preferred definition queue.
+
+`fill:=<val>'&
+Fill factor.
+
+`look:=<val>'&
+Lookahead
+
+`number:=<val>'&
+The `no' (number of relators in subgroup) parameter.
+
+`mendelsohn'&
+Turns on mendelsohn processing.
+
+`norow'&
+The `row filling' parameter to 0.
+
+\enditems
 
 *Strategies:*
 
@@ -224,26 +244,39 @@ is therefore possible to modify parameters on top of a strategy.
 
 \beginitems
 `com:=<val>'&
+Percentage of dead cosets to trigger compaction.
 
 `max:=<val>'&
+Maximum number of cosets to be defined.
 
 `path'&
+Turns on path compression.
 
 `time:=<val>'&
+Maximum execution time in seconds.
 
 `workspace:=<val>'&
+Workspace size in words (default $10^6$).
 \enditems
 
 *Information about the Enumeration:*
 
 \beginitems
 `aep:=<val>'&
+Runs the enumeration for all equivalent presentations. Use with the `mess'
+option to see the result.
 
-`mess'&
+`mess',`mess:=<val>'&
+If only `mess' is given, messages are turned on. It is also possible to
+assigne the message level.
 
 `messfile:=<filename>'&
+Messages are printed in file <filename> (the default output is on the
+screen).
 
 `rep:=<val>'&
+Runs the enumeration for random equivalent presentations. See the `aep'
+option.
 \enditems
 
 The `ACE' standalone provides further features, in particular the possibility
@@ -313,3 +346,12 @@ A5 2^4
 
 (If you run the examples time, machine name or the version number of the
 binary might differ.)
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{Further Facilities of the Standalone}
+
+The `ACE' standalone provides a couple of further possibilities to work
+interactively with a coset table or to work with incomplete coset table.
+These facilities are not available through {\GAP}, mainly because as the
+time of writing {\GAP} does not yet provide all necessary features.
+It would be possible to add these features at a later stage.

@@ -23,5 +23,9 @@ builddoc:
 	(cd doc;tex manual;bibtex manual;tex manual;dvips manual)
 	if test ! -d htm;  then mkdir htm;  fi
 	../../etc/convert.pl -c -i -t -n ace doc htm
-	(cd doc;rm manual.{blg,lab,log})
+	(cd doc;rm manual.{blg,lab,log,aux})
+
+otherdoc:
+	(cd acedoc;latex ace3001;bibtex ace3001;latex ace3001;dvips ace3001)
+	(cd acedoc;rm ace3001.{blg,log,aux})
 
