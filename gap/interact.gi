@@ -1874,6 +1874,9 @@ local ioIndexAndValue, datarec, coset, line, list;
   READ_ACE_ERRORS(datarec.stream); # purge any output not yet collected
   if coset = 1 then
     return One(ACEGroupGenerators( ioIndexAndValue[1] )[1]);
+  elif coset > datarec.stats.activecosets then
+    Error("ACECosetRepresentative: coset table has only ",
+          datarec.stats.activecosets, " (<", coset, ") active coset nos.\n");
   fi;
   PROCESS_ACE_OPTION(datarec.stream, "print", [-coset, coset]);
   line := FLUSH_ACE_STREAM_UNTIL(datarec.stream, 3, 3, READ_NEXT_LINE, 
@@ -2221,7 +2224,8 @@ local ACEfname, ioIndexAndValue, lines, line, datarec;
   ioIndexAndValue := ACE_IOINDEX_AND_ONE_VALUE(arg);
   lines := EXEC_ACE_DIRECTIVE_OPTION(
                ioIndexAndValue, "sc", 3, "", "---------------------", true);
-  if IS_ACE_MATCH(lines[Length(lines) - 2], "** ERROR", 1) then
+  if Length(lines) > 2 and 
+     IS_ACE_MATCH(lines[Length(lines) - 2], "** ERROR", 1) then
     line := lines[Length(lines) - 1];
     Error(ACEfname, ":", line{[3..Length(line)]}, "\n",
           "(most probably the value passed to ", ACEfname, 
