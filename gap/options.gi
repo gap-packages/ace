@@ -351,6 +351,46 @@ InstallValue(ACE_ERRORS, rec(
 #############################################################################
 ####
 ##
+#V  ACE_OPT_SENTINELS . . . . . . . . . . . . . .  record of option sentinels
+##
+##  is a record whose fields are the  preferred  option  name  of  those  ACE
+##  options that normally produce output and whose values are  either  `fail'
+##  if there is no reliable way of detecting the last line  of  output  or  a
+##  function of an input line <line> that returns `true'  if  <line>  is  the
+##  last line of output expected for an option.
+##
+
+InstallValue(ACE_OPT_SENTINELS, rec(
+  start := line -> Length(line) > 1 and line[ Length(line) - 1 ] = ')',
+  redo  := line -> Length(line) > 1 and line[ Length(line) - 1 ] = ')',
+  continu := line -> Length(line) > 1 and line[ Length(line) - 1 ] = ')',
+  aep  := line -> IsMatchingSublist(line, "* P"),
+  rep  := fail,
+  cc   := line -> IsMatchingSublist(line, "Coset"),
+  mode := line -> IsMatchingSublist(line, "start ="),
+  nc   := fail,
+  order := fail,
+  options := line -> IsMatchingSublist(line, "  host info"),
+  dump  := line -> IsMatchingSublist(line, "  #----"),
+  sr    := line -> IsMatchingSublist(line, "  #----"),
+  stats := line -> IsMatchingSublist(line, "  #----"),
+  print := fail,
+  rc   := line -> Length(line) > 12 and
+                  line{[1..13]} in ["* No success;", "* An appropri",
+                                    "   finite ind", "   * Unable t"],
+  cycles := line -> Length(line) > 1 and line{[1..2]} in ["CO", "co"],
+  recover := line -> Length(line) > 1 and line{[1..2]} in ["CO", "co"],
+  standard := line -> Length(line) > 1 and line{[1..2]} in ["CO", "co"],
+  sc   := fail,
+  style := line -> IsMatchingSublist(line, "style ="),
+  test := fail,
+  tw   := line -> PositionSublist(line, "* word =") <> fail or
+                  IsMatchingSublist(line, "* Trace ")
+));
+
+#############################################################################
+####
+##
 #F  IS_INC_POS_INT_LIST . . . . . . Internal function used in KnownACEOptions
 ##  . . . . . . . .  returns true if argument is a single positive integer or
 ##  . . . . . . . . . . .  is a strictly increasing list of positive integers
@@ -919,10 +959,14 @@ end);
 ##  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .  ignored.
 ##
 InstallGlobalFunction(PROCESS_ACE_OPTIONS, 
-function(ACEfname, optnames, newoptnames, echo, ToACE, disallowed, ignored)
-local IsValidOptionValue, CheckValidOption, ProcessOption, 
-      AddIgnoreOptionsToIgnored, nowarnings, ignoreunknown, 
-      paramoptnames, strategy, opt, optname;
+function(ACEfname, optnames, newoptnames, echo, datarec, disallowed, ignored)
+local ToACE, IsValidOptionValue, CheckValidOption, ProcessOption, 
+      AddIgnoreOptionsToIgnored, IsMyLine, nowarnings, ignoreunknown, 
+      paramoptnames, strategy, opt, optname, line, invokesEnumeration;
+
+  ToACE := function(list) 
+    WRITE_LIST_TO_ACE_STREAM(datarec.stream, list);
+  end;
 
   IsValidOptionValue := function(val)
     # Check that val is a valid value of opt.fullname.
@@ -1007,6 +1051,48 @@ local IsValidOptionValue, CheckValidOption, ProcessOption,
       else
         ToACE([ opt.ace, ":", val, ";" ]);
       fi;
+
+      # Eventually we may include more general support for interpretation
+      # of ACE output here ... for the moment we ensure the enumeration
+      # result is set (for ACEStats) and the coset table is set (for
+      # ACECosetTable[FromGensAndRels]) if there is an enumeration result
+      if IsBound(datarec.procId) then
+        if not IsBound( ACE_OPT_SENTINELS.(opt.synonyms[1]) ) then
+          # Flush any available output ... it may contain errors
+          line := ReadAllLine(datarec.stream);
+          while line <> fail do
+            Info(InfoACE + InfoWarning, 1, Chomp(line));
+            line := ReadAllLine(datarec.stream);
+          od;
+        elif opt.fullname = "print" and IsBound(datarec.stats) and
+             val in [ "", datarec.stats.activecosets ] and
+             (datarec.stats.index <> 0 or 
+              VALUE_ACE_OPTION(optnames, false, "incomplete") ) then
+          datarec.cosettable := ACE_COSET_TABLE(datarec.stats.activecosets,
+                                                datarec.acegens, 
+                                                datarec.stream, 
+                                                ACE_READ_NEXT_LINE);
+        else
+          if ACE_OPT_SENTINELS.(opt.synonyms[1]) = fail then
+            ToACE([ "text:***" ]);
+            IsMyLine := line -> IsMatchingSublist(line, "***");
+          else
+            IsMyLine := ACE_OPT_SENTINELS.(opt.synonyms[1]);
+          fi;
+          invokesEnumeration := opt.synonyms[1] in
+                                ["start", "continu", "redo", "aep", "rep"];
+          repeat
+            line := ACE_READ_NEXT_LINE(datarec.stream);
+            if invokesEnumeration and
+               Length(line) > 1 and line[ Length(line) - 1 ] = ')' then
+              datarec.enumResult := Chomp(line);
+              datarec.stats := ACE_STATS(datarec.enumResult);
+            fi;
+            Info(InfoACE + InfoWarning, 1, Chomp(line));
+          until IsMyLine(line);
+        fi;
+      fi;
+
     fi;
   end;
 
@@ -1034,11 +1120,11 @@ local IsValidOptionValue, CheckValidOption, ProcessOption,
   AddIgnoreOptionsToIgnored();
 
   for optname in newoptnames do
+    opt := ACEOptionData(optname); # sets opt.name, opt.known, opt.fullname
+                                   # and opt.synonyms
+    opt.value := ValueOption(opt.name);
     if echo = 2 then
-      opt := ACEOptionData(optname); # sets opt.name, opt.known, opt.fullname
-                                     # and opt.synonyms
       paramoptnames := Difference(paramoptnames, opt.synonyms);
-      opt.value := ValueOption(opt.name);
       if opt.fullname in ACEStrategyOptions then
         strategy := opt.fullname;
         if IsInt(opt.value) then
@@ -1047,10 +1133,6 @@ local IsValidOptionValue, CheckValidOption, ProcessOption,
           strategy := "felsch0";     # Hmm! I'd like to do this differently!!
         fi;
       fi;
-    else
-      opt := rec(name := optname);
-      FULL_ACE_OPT_NAME(opt); # sets opt.known and opt.fullname
-      opt.value := ValueOption(opt.name);
     fi;
     # We don't pass the NonACEbinOptions options to ACE unless they
     # have a translation (i.e. are fields of ACE_OPT_TRANSLATIONS)

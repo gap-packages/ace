@@ -27,6 +27,7 @@ Revision.ace_g :=
 ##
 ##    "binary"  . . the path of the ACE binary
 ##    "tmpdir"  . . the path of the temporary directory for ACE i/o files
+##    "ni"  . . . . record for a non-interactive process
 ##    "io"  . . . . list of data records for ACEStart IO Streams
 ##    "infile"  . . the path of the ACE input file
 ##    "outfile" . . the path of the ACE output file
@@ -38,6 +39,7 @@ DeclareGlobalVariable( "ACEData",
 InstallValue( ACEData,
   rec( binary := Filename(DirectoriesPackagePrograms("ace"), "ace"),
        tmpdir := DirectoryTemporary(),
+       ni     := rec(),
        io     := [] # Initially no ACEStart IO Streams
        )
 );

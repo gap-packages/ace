@@ -120,10 +120,14 @@ local optnames, echo, errmsg, onbreakmsg, infile, datarec, ToACE, gens,
     if datarec.stream = fail then
       Error("sorry! Run out of pseudo-ttys. Can't initiate stream\n");
     fi;
+    if ACEfname <> ACEStart then
+      datarec.procId := 0;
+      ACEData.ni := datarec;
+    fi;
     FLUSH_ACE_STREAM_UNTIL(datarec.stream, 3, 3, ACE_READ_NEXT_LINE, 
                            line -> IsMatchingSublist(line, "name", 3));
     ToACE := function(list) 
-                 INTERACT_TO_ACE_WITH_ERRCHK(datarec.stream, list);
+                 INTERACT_TO_ACE_WITH_ERRCHK(datarec, list);
              end;
   fi;
   datarec.args    := rec(fgens := fgens, rels := rels, sgens := sgens);
@@ -160,7 +164,7 @@ local optnames, echo, errmsg, onbreakmsg, infile, datarec, ToACE, gens,
   fi;
 
   PROCESS_ACE_OPTIONS(
-      ACEfname, optnames, optnames, echo, ToACE, 
+      ACEfname, optnames, optnames, echo, datarec, 
       rec(group      := ACE_ERRORS.argnotopt, # disallowed options
           generators := ACE_ERRORS.argnotopt,
           relators   := ACE_ERRORS.argnotopt), 
@@ -181,12 +185,7 @@ local optnames, echo, errmsg, onbreakmsg, infile, datarec, ToACE, gens,
     fi;
     CloseStream(datarec.stream);
   elif ACEfname <> "ACEStart" then
-    if VALUE_ACE_OPTION(optnames, fail, ["start", "aep", "rep"]) <> fail then
-      # Got to iron out some bugs here!
-      datarec.enumResult := ACEData.enumResult;
-      datarec.stats := ACE_STATS(datarec.enumResult);
-      ToACE([ "text:***" ]);
-    else
+    if VALUE_ACE_OPTION(optnames, fail, ["start", "aep", "rep"]) = fail then
       ACE_MODE( "Start", datarec );
     fi;
     if ACEfname = "ACECosetTableFromGensAndRels" and standard = "lenlex" then
@@ -195,13 +194,13 @@ local optnames, echo, errmsg, onbreakmsg, infile, datarec, ToACE, gens,
   fi;
 
   if ACEfname = "ACEStart" then
+    datarec.procId := Length(ACEData.io) + 1;
     Add(ACEData.io, datarec);
     return Length(ACEData.io);
   elif ACEfname = "ACECosetTableFromGensAndRels" then
     datarec.silent := VALUE_ACE_OPTION(optnames, false, "silent");
   fi;
-  ACEData.ni := datarec;
-  return ACEData.ni;
+  return datarec;
 end);
 
 #############################################################################
@@ -279,7 +278,7 @@ InstallGlobalFunction(IsACEGeneratorsInPreferredOrder, function(arg)
 local ioIndex, gens, rels;
 
   if Length(arg) < 2 then
-    ioIndex := ACE_IOINDEX(arg);
+    ioIndex := CallFuncList(ACEProcessIndex, arg);
     gens := ACEGroupGenerators(ioIndex);
     rels := ACERelators(ioIndex);
   elif Length(arg) = 2 then

@@ -70,6 +70,10 @@ DeclareGlobalVariable("ACE_ERRORS",
   "A record of ACE (interface) error messages"
   );
 
+DeclareGlobalVariable("ACE_OPT_SENTINELS",
+  "A record of ACE option sentinels (functions matching last lines of output)"
+  );
+
 #############################################################################
 ##
 #D  Declare functions.

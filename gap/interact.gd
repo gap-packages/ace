@@ -19,6 +19,7 @@ Revision.ace_interact_gd :=
 ##
 DeclareGlobalFunction("ACE_IOINDEX");
 DeclareGlobalFunction("ACE_IOINDEX_ARG_CHK");
+DeclareGlobalFunction("ACEDataRecord");
 DeclareGlobalFunction("ACEProcessIndex");
 DeclareGlobalFunction("ACEProcessIndices");
 DeclareGlobalFunction("IsACEProcessAlive");
