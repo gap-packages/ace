@@ -189,11 +189,11 @@ trivial coset table. Despite the fact that the  eventual  coset  table
 only has one line (i.e.~there is  exactly  one  coset  number)  {\ACE}
 *did* need to define more than 2 coset numbers. To find out  just  how
 many  were  required  before  the  final  collapse,  let's   set   the
-`InfoLevel' of `InfoACE' (see~"SetInfoACELevel") to  1,  so  that  the
+`InfoLevel' of `InfoACE' (see~"SetInfoACELevel") to  2,  so  that  the
 {\ACE} enumeration result is printed.
 
 \beginexample
-gap> SetInfoACELevel(1);
+gap> SetInfoACELevel(2);
 gap> ACECosetTable(fgens, rels, [c]);
 #I  INDEX = 1 (a=1 r=2 h=2 n=2; l=6 c=0.01; m=2049 t=3127)
 [ [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], 
@@ -233,16 +233,17 @@ don't want to  transfer the whole coset table  to {\GAP}, you can call
 \>ACEStats( <fgens>, <rels>, <sgens> [: <options>] ) F
 
 which returns a record `rec(index=<i>, cputime=<c>, cputimeUnits=<cu>,
-maxcosets=<m>, totcosets=<t>]' for which  <i>  is  the  index  of  the
-subgroup $\langle <sgens> \rangle$ in  $\langle  <fgens>  \mid  <rels>
-\rangle$ (or $0$, whenever the enumeration does not succeed);  <c>  is
-the total CPU time used as an integer; <cu> is a  string  representing
-the units of <c>, e.g.~`"10^-2 seconds"'; <m> is the maximum number of
-\lq{}alive' coset numbers at any one time in the enumeration; and  <t>
-is the total  number  of  coset  numbers  that  were  defined  in  the
-enumeration. Options (see  Chapters~"Options  for  ACE"  and~"Strategy
-Options  for  ACE")  are  used  in  exactly  the  same  way   as   for
-`ACECosetTableFromGensAndRels',  discussed in  the  previous  section;
+activecosets=<a>, maxcosets=<m>, totcosets=<t>)' for which <i> is  the
+index of the subgroup $\langle <sgens> \rangle$  in  $\langle  <fgens>
+\mid <rels> \rangle$  (or  $0$,  whenever  the  enumeration  does  not
+succeed); <c> is the total CPU time used as  an  integer;  <cu>  is  a
+string representing the units of <c>, e.g.~`"10^-2 seconds"';  <a>  is
+the number of currently active  coset  numbers;  <m>  is  the  maximum
+number  of  \lq{}alive'  coset  numbers  at  any  one  time   in   the
+enumeration; and <t> is the total number of coset  numbers  that  were
+defined in the enumeration. Options (see  Chapters~"Options  for  ACE"
+and~"Strategy Options for ACE") are used in exactly the  same  way  as
+for `ACECosetTableFromGensAndRels', discussed in the previous section;
 and the same warnings alluded to previously,  regarding  options  (see
 Section~"General Warnings regarding the Use of Options"), apply.
 
@@ -368,7 +369,7 @@ with `ACEExample'.
 *Notes*
 
 Most examples use the `mess'  ($=  `messages'$)  option.  To  see  the
-effect of this, it is recommended to do: `SetInfoACELevel(2);'  before
+effect of this, it is recommended to do: `SetInfoACELevel(3);'  before
 calling `ACEExample', with an example.
 
 The coset table output from `ACEExample', when called with many of the
@@ -377,7 +378,7 @@ examples     and     with     the     default     {\ACE}      function
 output may be suppressed by following the (`ACEExample') command  with
 a double semicolon (`;;').
 
-Also, try `SetInfoACELevel(1);' before  calling `ACEExample', with  an
+Also, try `SetInfoACELevel(2);' before  calling `ACEExample', with  an
 example.
 
 If you unexpectedly observe `aceexampleoptions' in your  output,  then
@@ -445,7 +446,9 @@ the input fed to {\ACE} and the output from {\ACE}, which when  {\ACE}
 is run non-interactively are stored in files whose full path names are
 recorded in the record fields `ACEData.infile' and  `ACEData.outfile',
 respectively. Alternatively, both interactively and  non-interactively
-one can set the `InfoLevel' of `InfoACE' to 2 (see~"SetInfoACELevel").
+one can set the `InfoLevel' of `InfoACE' to 3 (see~"SetInfoACELevel"),
+to see the output from {\ACE}, or  to  4  to  also  see  the  commands
+directed to {\ACE}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{The ACEData Record}
@@ -516,8 +519,11 @@ via the `Info' mechanism  (see  Chapter~"ref:Info  Functions"  in  the
 `InfoACE'. Each line of output from {\ACE} is directed to  a  call  to
 `Info' and will be displayed for the user to see if the `InfoLevel' of
 `InfoACE' is high enough. By default, the `InfoLevel' of `InfoACE'  is
-0, which means none of {\ACE}'s output is displayed. For  convenience,
-we provide the function
+1, and it is recommended that you leave it at this level,  or  higher.
+Only messages which we think that the user will really want to see are
+directed to `Info' at `InfoACE' level 1. To turn off  *all*  `InfoACE'
+messaging, set the `InfoACE' level to 0  (see~"SetInfoACELevel").  For
+convenience, we provide the function
 
 \>InfoACELevel()
 
@@ -526,36 +532,41 @@ a shorthand for `InfoLevel(InfoACE)'.
 
 To set the `InfoLevel' of `InfoACE' we also provide
 
-\>SetInfoACELevel(<level>)
+\>SetInfoACELevel( <level> )
+\>SetInfoACELevel()
 
 which for a non-negative integer  <level>,  sets  the  `InfoLevel'  of
 `InfoACE'    to    <level>    (i.e.~it    is    a    shorthand     for
-`SetInfoLevel(InfoACE, <level>)'). Currently, information from  {\ACE}
-is directed to `Info' at two non-zero `InfoACE' levels: 1 and  2.  The
-command
+`SetInfoLevel(InfoACE, <level>)'),  or  with  no  arguments  sets  the
+`InfoACE' level to the default value 1.  Currently,  information  from
+{\ACE} is directed to `Info' at four `InfoACE' levels: 1, 2, 3 and  4.
+The command
 
 \begintt
-gap> SetInfoACELevel(1);
+gap> SetInfoACELevel(2);
 \endtt
 
 enables the display of the results line of an enumeration from {\ACE},
 whereas
 
 \begintt
-gap> SetInfoACELevel(2);
+gap> SetInfoACELevel(3);
 \endtt
 
 enables the display of all of  the  output  from  {\ACE},  except  the
-{\ACE} banner (including the host machine information). Finally,
+{\ACE} banner (including the host machine information); in particular,
+the progress messages, emitted by {\ACE} when  the  `messages'  option
+(see~"Option  `messages'")  is  set  to  a  non-zero  value,  will  be
+displayed via `Info'. Finally,
 
 \begintt
-gap> SetInfoACELevel(3);
+gap> SetInfoACELevel(4);
 \endtt
 
 enables the display of all the input  directed  to  {\ACE}  (behind  a
 \lq{}`ToACE> '' prompt, so you can distinguish it from  other  output)
 and, interactively, the {\ACE}  banner  (including  the  host  machine
-information). The `InfoACELevel' of 3 is  really  for  gurus  who  are
+information). The `InfoACE' level of 4 is really  for  gurus  who  are
 familiar with the {\ACE} standalone.
 
 \enditems
@@ -1381,7 +1392,7 @@ unknown to the {\ACE} interface a warning is issued. Options that  are
 unknown to the {\ACE} binary are  simply  ignored  by  {\ACE}  (and  a
 warning that the option was ignored  appears  in  the  {\ACE}  output,
 which the user will not see unless the `InfoLevel' of `InfoACE' is set
-to 2). This option enables the user to avoid such options being passed
+to 3). This option enables the user to avoid such options being passed
 at all, thus avoiding the warning messages and also any  options  that
 coincidentally are {\ACE} options but are not intended for the  {\ACE}
 function being called.
@@ -1967,10 +1978,10 @@ non-interactively,   these   messages    are    directed    to    file
 <filename>', or `ao := <filename>', is used), and interactively  these
 messages are simply  not  displayed.  However,  one  can  change  this
 situation both interactively and   non-interactively  by  setting  the
-`InfoLevel' of `InfoACE' to 2 via
+`InfoLevel' of `InfoACE' to 3 via
 
 \begintt
-gap> SetInfoACELevel(2);
+gap> SetInfoACELevel(3);
 \endtt
 
 Then {\ACE}'s messages are  displayed  prepended  with  \lq{}`\#I  ''.
@@ -2065,7 +2076,7 @@ coset numbers defines at any stage) and `t' (the total number of coset
 numbers defined) are tracked, and each  time  a  new  \lq{}record'  is
 found, the relators used and the summary result line is  printed.  See
 the previous section for a discussion of the statistics `m'  and  `t'.
-To observe these messages either set the `InfoLevel' of `InfoACE' to 2
+To observe these messages either set the `InfoLevel' of `InfoACE' to 3
 or  non-interactively  you  can  peruse   the   {\ACE}   output   file
 (see~"Option `aceoutfile'").
 
@@ -2134,7 +2145,7 @@ The routine first  turns  `asis'  on  and  `messages'  off  (i.e.~sets
 `messages' to 0), and then generates and tests the requested number of
 random equivalent presentations. For each presentation,  the  relators
 used and the  summary  result  line  are  printed.  To  observe  these
-messages  either  set  the  `InfoLevel'   of   `InfoACE'   to   2   or
+messages either set the `InfoLevel' of `InfoACE'  to  at  least  3  or
 non-interactively you can peruse the {\ACE} output  file  (see~"Option
 `aceoutfile'").
 
@@ -2175,6 +2186,9 @@ present; <wordList> must be a list of words in the group generators.
 The enumeration must  be  (re)`start'ed  or  `redo'ne,  it  cannot  be
 `continue'd.
 
+Interactively,             use              `ACEAddSubgroupGenerators'
+(see~"ACEAddSubgroupGenerators").
+
 \>`rl:=<wordList>'{Option `rl'}&
 Appends the `r'elator `l'ist,  <wordList>  to  the  existent  list  of
 relators present; <wordList> must be a list  of  words  in  the  group
@@ -2182,6 +2196,8 @@ generators.
 
 The enumeration must  be  (re)`start'ed  or  `redo'ne,  it  cannot  be
 `continue'd.
+
+Interactively, use `ACEAddRelators' (see~"ACEAddRelators").
 
 \>`ai'{Option `ai'}
 \>`ai:=<filename>'{Option `ai'}&
@@ -2279,6 +2295,9 @@ say, the `sr' command (see~"Option `sr'"), then the generators  listed
 in `<list>' are  deleted;  `<list>'  must  be  a  strictly  increasing
 sequence.
 
+Interactively,            use            `ACEDeleteSubgroupGenerators'
+(see~"ACEDeleteSubgroupGenerators").
+
 \>`dr:=<list>'{Option `dr'}&
 `D'elete relators; <list> must be a list of positive integers.
 
@@ -2286,6 +2305,8 @@ This  command  allows  group  relators  to   be   deleted   from   the
 presentation. If the relators are numbered from 1 in  the  output  of,
 say, the `sr' command (see~"Option `sr'"), then the relators listed in
 `<list>' are deleted; `<list>' must be a strictly increasing sequence.
+
+Interactively, use `ACEDeleteRelators' (see~"ACEDeleteRelators").
 
 \>`dump'{Option `dump'}
 \>`dump:=<level>'{Option `dump'}
@@ -2382,6 +2403,8 @@ If a subgroup generator does not normalise a generator, then  this  is
 printed out. If `<val> = 1', then any non-normalising  conjugates  are
 also added to the subgroup generators.
 
+Interactively, use `ACENormalClosure' (see~"ACENormalClosure").
+
 \>`options'{Option `options'}&
 Dump version information of the {\ACE} binary.
 (Shortest abbreviation: `opt'.)
@@ -2421,6 +2444,9 @@ the subgroup, and prints out its coset representative.  If  `<val>  \<
 is printed. Also, `<val> = 0' is permitted; this special value effects
 the printing of the orders (modulo the subgroup) of all coset numbers.
 
+Interactively, use `ACEOrders' (see~"ACEOrders"), for the case  `<val>
+= 0', or `ACEOrder' (see~"ACEOrder"), otherwise.
+
 \>`sr'{Option `sr'}
 \>`sr:=<val>'{Option `sr'}&
 Print out parameters of the current presentation; <val> must be  0  or
@@ -2442,6 +2468,7 @@ options will be unreliable.
 
 \>`print'{Option `print'}
 \>`print:=<val>'{Option `print'}
+\>`print:=[<val>]'{Option `print'}
 \>`print:=[<val>, <last>]'{Option `print'}
 \>`print:=[<val>, <last>, <by>]'{Option `print'}&
 Compact and print the coset table;  <val>  must  be  an  integer,  and
@@ -2449,30 +2476,33 @@ Compact and print the coset table;  <val>  must  be  an  integer,  and
 (Shortest abbreviation: `pr'.)
 
 In the first (no value) form, `print' prints the entire  coset  table,
-without orders or coset  representatives.  In  the  second  form,  the
-absolute value of <val> is taken to be the last line of the  table  to
-be printed (and 1 is taken to be the first); in the third  and  fourth
-forms, `|<val>|' is taken to be the first line  of  the  table  to  be
-printed, and <last> is taken to be the number of the last line  to  be
-printed. In the last form, the table is printed from line `|<val>|' to
-line <last> in steps of <by>. If <val> is negative,  then  the  orders
-modulo the subgroup  (if  available)  and  coset  representatives  are
-printed also.
+without orders or coset  representatives.  In  the  second  and  third
+forms, the absolute value of <val> is taken to be the last line of the
+table to be printed (and 1 is taken to be the first);  in  the  fourth
+and fifth forms, `|<val>|' is taken to be the first line of the  table
+to be printed, and <last> is taken to be the number of the  last  line
+to be printed. In the last  form,  the  table  is  printed  from  line
+`|<val>|' to line <last> in steps of <by>. If <val> is negative,  then
+the  orders   modulo   the   subgroup   (if   available)   and   coset
+representatives are printed also.
 
 \>`rc:=<val>'{Option `rc'}
-\>`rc:=[<val>, <limit>]'{Option `rc'}&
-Enforce `r'andom `c'oincidences; <val> and <limit>  must  be  positive
+\>`rc:=[<val>]'{Option `rc'}
+\>`rc:=[<val>, <attempts>]'{Option `rc'}&
+Enforce `r'andom `c'oincidences; <val> and <attempts> must be positive
 integers.
 
-This option attempts upto <limit> (or, in the first form, 8) times  to
-find nontrivial subgroups with index a multiple of <val> by repeatedly
-making random coset numbers coincident with coset 1  and  seeing  what
-happens. The starting coset table must be non-empty, but need  not  be
-complete.  For  each  attempt,  we   repeatedly   add   random   coset
-representatives to the subgroup and `redo'  the  enumeration.  If  the
-table becomes too small, the attempt is aborted, the original subgroup
-generators restored, and another attempt made. If an attempt succeeds,
-then the new set of subgroup generators is retained.
+This option attempts upto <attempts> (or,  in  the  first  and  second
+forms, 8) times to find nontrivial subgroups with index a multiple  of
+<val> by repeatedly making random coset numbers coincident with  coset
+1 and seeing what happens. The starting coset table must be non-empty,
+but need not be complete. For each attempt, we repeatedly  add  random
+coset representatives to the subgroup and `redo' the  enumeration.  If
+the table becomes too small, the  attempt  is  aborted,  the  original
+subgroup generators restored, and another attempt made. If an  attempt
+succeeds, then the new set of subgroup generators is retained.
+
+Interactively, use `ACERandomCoincidences' (see~"ACERandomCoincidences").
 
 *Guru Notes:*
 A coset number can have many different coset representatives. Consider
@@ -2505,6 +2535,8 @@ This option prints out the stabilising  cosets  of  the  subgroup.  If
 representatives, are printed. If `<val> \<  0',  the  first  `|<val>|'
 stabilising cosets, plus their representatives, are printed.
 
+Interactively, use `ACEStabilisingCosets' (see~"ACEStabilisingCosets").
+
 \>`standard'{Option `standard'}&
 Compacts {\ACE}'s  coset  table  and  standardises  the  numbering  of
 cosets. (Shortest abbreviation: `st'.)
@@ -2535,8 +2567,8 @@ effect of doing this can be investigated  in  {\ACE}  by  (repeatedly)
 halting  the  enumeration  (by  say,  imposing  timing  restrictions),
 standardising the coset numbering, and continuing.
 
-Interactively,           use            `ACEStandardiseCosetNumbering'
-(see~"ACEStandardiseCosetNumbering").
+Interactively,             use             `ACEStandardCosetNumbering'
+(see~"ACEStandardCosetNumbering").
 
 \>`statistics'{Option `statistics'}
 \>`stats'{Option `stats'}&
@@ -2792,8 +2824,9 @@ Chapter~"Examples". % again, in the appendix ...
 \Chapter{Functions for Using ACE Interactively}
 
 The user will probably benefit most from interactive use of {\ACE}  by
-setting the `InfoLevel' of  `InfoACE'  to  2  (see~"SetInfoACELevel"),
-particularly if she uses the `messages' option with a non-zero value.
+setting   the   `InfoLevel'   of   `InfoACE'    to    at    least    3
+(see~"SetInfoACELevel"),  particularly  if  she  uses  the  `messages'
+option with a non-zero value.
 
 All functions that manipulate an interactive process  (that  has  been
 initiated by `ACEStart', with three arguments), have a form where  the
@@ -2917,8 +2950,8 @@ translate the output strings from {\ACE} into a form useful in {\GAP}.
 
 Writes <string> to the <i>th or default  interactive  {\ACE}  process;
 <string> must be in exactly the form the  {\ACE}  standalone  expects.
-The command is  echoed  via  `Info'  at  `InfoACE'  level  3  (with  a
-\lq{}`ToACE> '' prompt); i.e.~do `SetInfoACELevel(3);' to see what  is
+The command is  echoed  via  `Info'  at  `InfoACE'  level  4  (with  a
+\lq{}`ToACE> '' prompt); i.e.~do `SetInfoACELevel(4);' to see what  is
 transmitted to the {\ACE} binary.
 
 
@@ -2940,7 +2973,7 @@ Reads and returns as many *complete* lines of {\ACE} output, from  the
 <i>th or default interactive {\ACE} process, as there are to be  read,
 *at the time of the call*, as a list  of  strings  with  the  trailing
 newlines removed and returns the empty  list  otherwise.  `ACEReadAll'
-also writes each line read via `Info' at `InfoACE' level  2.  Whenever
+also writes each line read via `Info' at `InfoACE' level  3.  Whenever
 `ACEReadAll' finds only a partial line,  it  waits  for  the  complete
 line, thus increasing the probability that it  has  captured  all  the
 output to be had from {\ACE}.
@@ -2954,7 +2987,7 @@ interactive  {\ACE}  process,  until   a   line   <line>   for   which
 argument that should be a string and should  return  a  boolean.  Like
 `ACEReadAll', `ACEReadUntil'  returns  a  list  of  strings  with  the
 trailing newlines removed and writes each  line  read  via  `Info'  at
-`InfoACE' level 2.
+`InfoACE' level 3.
 
 *Notes:* 
 
@@ -3149,7 +3182,7 @@ changed  recently  without  following  up  with  one  of   the   modes
 `ACEParameters'  give  the  equivalent  {\GAP}  information  that   is
 obtained in {\ACE} with `sr := 1' (see~"Option `sr'"),  which  is  the
 \lq{}Run  Parameters'  block  obtained   in   the   messaging   output
-(observable when the `InfoLevel' of `InfoACE' is set to at  least  2),
+(observable when the `InfoLevel' of `InfoACE' is set to at  least  3),
 when `messages' (see~"Option `messages'") is set a non-zero value.
 
 *Notes:*
@@ -3225,7 +3258,8 @@ dump {\ACE}'s internal statistics accumulated during the  most  recent
 enumeration of the <i>th (or default) process started  by  `ACEStart',
 provided the {\ACE} binary  was  built  with  the  statistics  package
 (which it is by default). Use  `ACEVersion();'  (see~"ACEVersion")  to
-check for the inclusion of the statistics package.
+check for the inclusion of the statistics package.  See  the  `enum.c'
+source file for the meaning of the variables.
 
 \>ACEStyle( <i> ) F
 \>ACEStyle() F
@@ -3234,9 +3268,38 @@ returns the current enumeration style as one of  the  strings:  `"C"',
 `"Cr"', `"CR"', `"R"', `"R*"', `"Rc"', `"R/C"', or `"R/C (defaulted)"'
 (see Section~"Enumeration Style").
 
-*TODO*
 \>ACEDisplayCosetTable( <i> ) F
 \>ACEDisplayCosetTable() F
+\>ACEDisplayCosetTable( <i>, [<val>] ) F
+\>ACEDisplayCosetTable( [<val>] ) F
+\>ACEDisplayCosetTable( <i>, [<val>, <last>] ) F
+\>ACEDisplayCosetTable( [<val>, <last>] ) F
+\>ACEDisplayCosetTable( <i>, [<val>, <last>, <by>] ) F
+\>ACEDisplayCosetTable( [<val>, <last>, <by>] ) F
+
+compact and display the coset table of the <i>th (or default)  process
+started by `ACEStart'; <val> must be an integer, and <last>  and  <by>
+must be positive integers. In the first two forms of the command,  the
+entire  coset  table   is   displayed,   without   orders   or   coset
+representatives. In the third and fourth forms, the absolute value  of
+<val> is taken to be the last line of the table to be displayed (and 1
+is taken to be the first); in the fifth and sixth forms, `|<val>|'  is
+taken to be the first line of the table to be displayed, and <last> is
+taken to be the number of the last line to be displayed. In  the  last
+two forms, the table is displayed from line `|<val>|' to  line  <last>
+in steps of <by>. If <val> is negative, then  the  orders  modulo  the
+subgroup (if available) and coset representatives are displayed also.
+
+\>ACECycles( <i> ) F
+\>ACECycles() F
+\>ACEPermutationRepresentation( <i> ) F
+\>ACEPermutationRepresentation() F
+
+returns, for the <i>th (or default) process started by  `ACEStart',  a
+list of permutations corresponding to the group generators, (i.e., the
+permutation representation), if the current coset table held by {\ACE}
+is complete or `fail', otherwise. In the event of failure a message is
+emitted to `Info' at `InfoACE' or `InfoWarning' level 1.
 
 \enditems
 
@@ -3295,11 +3358,11 @@ messages" for the meanings of these messages.)
 The compaction routine is called automatically when any of `ACECycles'
 (see~"ACECycles"),    `ACENormalClosure'     (see~"ACENormalClosure"),
 `ACEDisplayTable'              (see~"ACEDisplayTable")              or
-`ACEStandardiseCosetNumbering' (see~"ACEStandardiseCosetNumbering") is
+`ACEStandardCosetNumbering'    (see~"ACEStandardCosetNumbering")    is
 invoked.
 
-\>ACEStandardiseCosetNumbering( <i> ) F
-\>ACEStandardiseCosetNumbering() F
+\>ACEStandardCosetNumbering( <i> ) F
+\>ACEStandardCosetNumbering() F
 
 compacts and then standardises the numbering of cosets  in  the  coset
 table of <i>th (or default)  interactive  {\ACE}  process  started  by
@@ -3333,113 +3396,138 @@ standardising the coset numbering, and continuing.
 \>ACEAddRelators( <i>, <relatorlist> ) F
 \>ACEAddRelators( <relatorlist> ) F
 
-Adds the words in the  list  <relatorlist>  to  any  relators  already
-present. The enumeration must be restarted or  redone,  it  cannot  be
-continued.
+add, for the <i>th (or default) interactive {\ACE} process started  by
+`ACEStart', the words  in  the  list  <relatorlist>  to  any  relators
+already  present,  and  automatically  invokes  either  `ACERedo'   or
+`ACEStart'. Note that, {\ACE} chooses an \lq{}optimal' ordering of the
+resultant relator list, unless the `asis' option (see~"Option `asis'")
+has been set to 1; don't assume, unless `asis  :=  1',  that  the  new
+relators have been appended in user-provided order to  the  previously
+existing relator list.
 
 \>ACEAddSubgroupGenerators( <i>, <wordlist> ) F
 \>ACEAddSubgroupGenerators( <wordlist> ) F
 
-Adds the words in the  list  <wordlist>  to  any  subgroup  generators
-already present. The enumeration  must  be  restarted  or  redone,  it
-cannot be continued.
+add, for the <i>th (or default) interactive {\ACE} process started  by
+`ACEStart',  the  words  in  the  list  <wordlist>  to  any   subgroup
+generators already present.  The  enumeration  must  be  restarted  or
+redone, it cannot be  continued.  add,  for  the  <i>th  (or  default)
+interactive {\ACE} process started by `ACEStart',  the  words  in  the
+list <wordlist>  to  any  subgroup  generators  already  present,  and
+automatically invokes either `ACERedo' or `ACEStart'. The new subgroup
+generators are simply appended by  {\ACE}  to  the  existing  list  of
+subgroup generators in user-provided order.
 
-\>ACEDeleteRelators( <i>, <relatorlist> ) F
-\>ACEDeleteRelators( <relatorlist> ) F
+\>ACEDeleteRelators( <i>, <list> ) F
+\>ACEDeleteRelators( <list> ) F
 
-Deletes the words in the list <relatorlist> to  any  relators  already
-present. The enumeration must be restarted or  redone,  it  cannot  be
-continued.
+delete, for the <i>th (or default) interactive {\ACE} process  started
+by `ACEStart', from the current relators those indexed by the integers
+in <list>, which must be a strictly increasing  sequence  of  positive
+integers, and automatically  invoke  `ACEStart'.  Use  `ACEParameters'
+(see~"ACEParameters") to determine the current relator list.
+
+\>`dr:=<list>'{Option `dr'}&
+`D'elete relators; <list> must be a list of positive integers.
 
 \>ACEDeleteSubgroupGenerators( <i>, <wordlist> ) F
 \>ACEDeleteSubgroupGenerators( <wordlist> ) F
 
-Deletes the words in the list <wordlist> to  any  subgroup  generators
-already present. The enumeration  must  be  restarted  or  redone,  it
-cannot be continued.
+delete, for the <i>th (or default) interactive {\ACE} process  started
+by `ACEStart', from the current subgroup generators those  indexed  by
+the integers in <list>, which must be a strictly  increasing  sequence
+of  positive  integers,  and  automatically  invoke  `ACEStart'.   Use
+`ACEParameters'  (see~"ACEParameters")  to   determine   the   current
+subgroup generator list.
 
 \>ACECosetCoincidence( <i>, <int> ) F
 \>ACECosetCoincidence( <int> ) F
 
-Print out the representative  of  coset  <int>,  and  add  it  to  the
-subgroup generators; i.e.,  equates  this  coset  with  coset  1,  the
-subgroup.
+print, for the <i>th (or default) interactive {\ACE}  process  started
+by `ACEStart', out the representative of coset <int>, and  add  it  to
+the subgroup generators; i.e., equates this coset with  coset  1,  the
+subgroup. `ACERedo' is automatically invoked.
+
+\>ACERandomCoincidences( <i>, [<index>] ) F
+\>ACERandomCoincidences( [<index>] ) F
+\>ACERandomCoincidences( <i>, [<index>, <attempts>] ) F
+\>ACERandomCoincidences( [<index>, <attempts>] ) F
+
+attempt, for the <i>th (or default) interactive {\ACE} process started
+by `ACEStart', upto <attempts> (or, in the first and second forms,  8)
+times to find nontrivial subgroups with index a multiple of <index> by
+repeatedly making random coset numbers coincident  with  coset  1  and
+seeing what happens. The starting coset table must be  non-empty,  but
+need not be complete. For each attempt, we repeatedly add random coset
+representatives to the subgroup and `redo'  the  enumeration.  If  the
+table becomes too small, the attempt is aborted, the original subgroup
+generators restored, and another attempt made. If an attempt succeeds,
+then the new set of subgroup generators is retained.
+
+*Guru  Notes:*  A  coset  can  have  many  different  representatives.
+Consider              running              `ACEStandardCosetNumbering'
+(see~"ACEStandardCosetNumbering") before  `ACERandomCoincidences',  to
+canonicise the table and the representatives.
 
 \enditems
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\Section{Operations with a Coset table}
+\Section{Operations with ACE's Coset Table}
 
 \beginitems
 
-\>ACECycles( <i> ) F
-\>ACECycles() F
+\>ACENormalClosure( <i> ) F
+\>ACENormalClosure() F
+\>ACENormalClosure( <i>, <add> ) F
+\>ACENormalClosure( <add> ) F
 
-returns a list of permutations corresponding to the generators,
-i.e., the permutation representation.
-%T only for complete tables?
+for the <i>th (or  default)  interactive  {\ACE}  process  started  by
+`ACEStart', if <add> (which *must* be boolean) is missing or  `false',
+test for normal closure. If a subgroup generator does not normalise  a
+generator, then  this  is  returned.  If  `<add>  =  true',  then  any
+non-normalising conjugates are also added to the subgroup generators.
 
-\>ACENormalClosure( <aceobj>[, <conjugates>] ) F
+\>ACEOrders( <i> ) F
+\>ACEOrders() F
 
-If the second argument is missing or `false', test for normal closure.
-If a subgroup  generator  does not  normalise  a  generator,  then this  is
-returned.
-If  the  argument  is `true',  then  any  non-normalising
-conjugates are also added to the subgroup generators.
+return, for the <i>th (or default) interactive {\ACE} process  started
+by `ACEStart', the list of orders (modulo the subgroup) of  all  coset
+numbers.
 
-\>ACEOrder( <aceobj>, <int> ) F
+\>ACEOrder( <i>, <int> ) F
+\>ACEOrder( <int> ) F
 
-This function searches for cosets with order modulo the subgroup a multiple
-of the absolute value of the integer <int>.
-If <int> is negative then the list of all cosets meeting the requirement is
-returned.
-If <int> is positive then the first coset meeting the requirement is
-returned if such a coset exists, and `fail' otherwise.
+search, for the <i>th (or default) interactive {\ACE} process  started
+by `ACEStart', for cosets with order modulo the subgroup a multiple of
+the absolute value of the integer <int>. If <int> is negative then the
+list of all cosets meeting the requirement is returned.  If  <int>  is
+positive then the first coset meeting the requirement is  returned  if
+such a coset exists, and `fail' otherwise.
 
-\>ACEOrders( <aceobj> ) F
+\>ACEStabilisingCosets( <i>, <int> ) F
+\>ACEStabilisingCosets( <int> ) F
 
-returns the list of orders modulo the subgroup of all cosets.
-
-
-\>ACEStabilisingCosets( <aceobj>, <int> ) F
-
-This function returns stabilising cosets of the subgroup.
+return, for the <i>th (or default) interactive {\ACE} process  started
+by `ACEStart', stabilising cosets of the subgroup.
 
 \beginlist
-\item{--} If <int> $> 0$, the list of the first <int> stabilising cosets
-    is returned.
-\item{--} If <int> $\< 0$, the list of pairs of the first <int> stabilising
-    cosets, plus their representatives, is returned.
-\item{--} If <int> = $0$, the list of pairs of all of the stabilising cosets,
-    plus their representatives, is returned.
+\item{--} If <int> $> 0$, the list  of  the  first  <int>  stabilising
+cosets is returned. 
+
+\item{--} If <int> $\< 0$, the  list  of  pairs  of  the  first  <int>
+stabilising cosets, plus their representatives, is returned.
+
+\item{--} If <int> = $0$, the list of pairs of all of the  stabilising
+cosets, plus their representatives, is returned.
 \endlist
 
+\>ACETraceWord( <i>, <int>, <word> ) F
+\>ACETraceWord( <int>, <word> ) F
 
-\>ACETraceWord( <aceobj>, <int>, <word> ) F
-
-Traces <word> through the coset table, starting at coset number <int>,
-and returns the final coset number if the trace completes,
-and `fail' otherwise.
-
-
-\>ACERandomCoincidences( <aceobj>, <index>[, <attempts> ) F
-
-This function attempts  to  find  nontrivial subgroups  with  index  a
-multiple  of the first  argument <index> by  repeatedly putting  random
-cosets
-coincident with coset 1 and seeing what happens.  The starting coset
-table  must  be non-empty,  but  need  not  be complete.   The  second
-argument <attempts> puts  a limit on  the number of  attempts,
-with a  default of
-eight.    For   each  attempt,   we   repeatedly   add  random   coset
-representatives  to the  subgroup and  redo the  enumeration.   If the
-table becomes too small, the attempt is aborted, the original subgroup
-generators  restored,  and  another   attempt  made.   If  an  attempt
-succeeds, then the new set of subgroup generators is retained.
-
-*Guru  Notes:*  A  coset  can  have  many  different  representatives.
-Consider running  `st' before  `rc', to canonicise  the table  and the
-representatives.
+trace, for the <i>th (or default) interactive {\ACE}  process  started
+by `ACEStart', <word> through {\ACE}'s coset table, starting at  coset
+<int>, and return the final coset number if the trace  completes,  and
+`fail' otherwise.
 
 \enditems
 
@@ -3453,10 +3541,10 @@ these messages are directed to file `ACEData.outfile' (or  <filename>,
 if option `aceoutfile := <filename>', or `ao := <filename>', is used).
 They  may  also  be  seen  prepended   with   \lq{}`\#I   ''   (either
 interactively of non-interactively) if one has set the `InfoLevel'  of
-`InfoACE' to 2, via
+`InfoACE' to  at least 3, via
 
 \beginexample
-gap> SetInfoACELevel(2);
+gap> SetInfoACELevel(3);
 \endexample
 
 Note that when {\ACE} is run non-interactively, the banner stating the
@@ -3682,7 +3770,7 @@ output files.
 In this chapter  we  collect  together  a  number  of  examples  which
 illustrate the various ways in which the {\ACE} Share Package  may  be
 used, and give some interactions with the  `ACEExample'  function.  In
-the first few cases, we have set the `InfoLevel' of `InfoACE' to 2, so
+the first few cases, we have set the `InfoLevel' of `InfoACE' to 3, so
 that (except for {\ACE}'s banner in non-interactive use),  all  output
 from {\ACE} is displayed, prepended by \lq{}`\#I ''. We  have  omitted
 the line
@@ -3706,7 +3794,7 @@ data library (in this case, an automorphic  extension  of  the  simple
 alternating group $A_5$):
 
 \beginexample
-gap> SetInfoACELevel(2); # Just to see what's going on behind the scenes
+gap> SetInfoACELevel(3); # Just to see what's going on behind the scenes
 gap> TCENUM:=ACETCENUM;; # Make ACE the standard coset enumerator
 gap> G := PerfectGroup(IsPermGroup, 16*60, 1   # Arguments ... as per usual
 >                      : max := 50, mess := 10 # ... but we use ACE options
@@ -3777,7 +3865,7 @@ You may wish to peruse the notes  in  the  `ACEExample'  index  first,
 however, by executing `ACEExample();'.
 
 \beginexample
-gap> SetInfoACELevel(2);
+gap> SetInfoACELevel(3);
 gap> G := PerfectGroup(2^5*60, 2);;
 gap> fgens := FreeGeneratorsOfFpGroup(G);;
 gap> table := ACECosetTableFromGensAndRels(
@@ -3841,15 +3929,15 @@ Now we illustrate a simple interactive process, with an enumeration of
 an index 12 subgroup (isomorphic to $C_5$) within $A_5$. Observe  that
 we  have  relied  on  the  default  level  of  messaging  from  {\ACE}
 (`messages' = 0) which gives a result  line  only,  without  parameter
-information. Interactively, {\ACE}'s banner is not redirected  and  so
-it is observed when the `InfoLevel' of `InfoACE' is 2. We have however
-used the option `echo', so that we can see how the  interface  handled
-the  arguments  and   options.   On-line   try:   `SetInfoACELevel(2);
+information. Interactively, {\ACE}'s banner is not redirected  but  it
+is only observed when the `InfoLevel'  of  `InfoACE'  is  4.  We  have
+however used the option `echo', so that we can see how  the  interface
+handled the arguments and options. On-line  try:  `SetInfoACELevel(3);
 ACEExample("A5-C5", ACEStart);' to emulate the session  prior  to  the
 `ACEQuit' command.
 
 \beginexample
-gap> SetInfoACELevel(2);
+gap> SetInfoACELevel(3);
 gap> F := FreeGroup("a","b");; a := F.1;;  b := F.2;;
 gap> G := F / [a^2, b^3, (a*b)^5 ];
 <fp group on the generators [ a, b ]>
@@ -3866,10 +3954,6 @@ ACEStart called with the following options:
  echo := true (not passed to ACE)
  enum := A_5
  subg := C_5
-#I  ACE 3.000        Sun Apr 23 18:11:17 2000
-#I  =========================================
-#I  Host information:
-#I    name = flute
 #I  INDEX = 12 (a=12 r=16 h=1 n=16; l=3 c=0.00; m=14 t=15)
 1
 gap> # The return value on the last line identifies the interactive process
@@ -3957,11 +4041,11 @@ gap> ACEExample();
 #I  3. Try altering the ACE function used, by calling  ACEExample with  a
 #I     2nd argument; choose from: ACECosetTableFromGensAndRels (default),
 #I     or ACEStats, or ACEStart. The 2nd argument is *not* quoted.
-#I  4. Try `SetInfoACELevel(2);' before calling  ACEExample,  to  see the
+#I  4. Try `SetInfoACELevel(3);' before calling  ACEExample,  to  see the
 #I     effect of setting the "mess" (= "messages") option.
 #I  5. To suppress a long output, use a double semicolon (`;;') after the
 #I     ACEExample command.
-#I  6. Also, try `SetInfoACELevel(1);' before calling ACEExample.
+#I  6. Also, try `SetInfoACELevel(2);' before calling ACEExample.
 gap>
 \endexample
 
@@ -3971,12 +4055,12 @@ via examples `"F27-purec"',  `"F27-fel0"',  and  `"F27-fel1"',  except
 each of these enumerate the cosets of its trivial subgroup  (of  index
 29). Let's experiment with the first of these F(2,7)  examples;  since
 this  example  uses  the  `messages'  option,  we  ought  to  set  the
-`InfoLevel' of `InfoACE' to  2,  first,  but  since  the  coset  table
+`InfoLevel' of `InfoACE' to  3,  first,  but  since  the  coset  table
 (default output) is  quite  long,  we'll  pass  `ACEStats'  as  second
 argument:
 
 \beginexample
-gap> SetInfoACELevel(2);
+gap> SetInfoACELevel(3);
 gap> ACEExample("F27-purec", ACEStats);
 #I  # ACEExample "F27-purec" : enumeration of cosets of H in G,
 #I  # where G = F(2,7) = C_29, H = Id, using purec strategy.
@@ -4040,7 +4124,7 @@ were executed; these lines are followed by the result  of  the  `echo'
 option (see~"Option `echo'"); which in turn  are  followed  by  `Info'
 messages from {\ACE} courtesy of the non-zero value of the  `messages'
 option (and we see these because  we  first  set  the  `InfoLevel'  of
-`InfoACE' to 2); and finally,  we  get  the  output  (record)  of  the
+`InfoACE' to 3); and finally,  we  get  the  output  (record)  of  the
 `ACEStats' command.
 
 Observe also that {\ACE} has used the same generators as  were  input;
@@ -4051,7 +4135,7 @@ the {\ACE} \lq{}Run Parameters' block).
 
 Now let's observe that we can add some new  options,  even  ones  that
 over-ride the example's options; but first we'll reduce the  output  a
-bit by setting the `InfoLevel' of `InfoACE' to 1 and since we are  not
+bit by setting the `InfoLevel' of `InfoACE' to 2 and since we are  not
 going toobserve any progress mesages form {\ACE} with  that  `InfoACE'
 level we'll set `messages := 0'; also we'll use the  default  function
 `ACECosetTableFromGensAndRels' and so it's like  our  first  encounter
@@ -4069,7 +4153,7 @@ identifying the subgroup (since it  will  no  longer  be  the  trivial
 group), via the `subgroup' option (see "Option `subgroup'").
 
 \beginexample
-gap> SetInfoACELevel(1);                                                       
+gap> SetInfoACELevel(2);                                                       
 gap> ACEExample("F27-purec" : sg := ["c"], subgroup := "< c >", messages := 0);
 #I  # ACEExample "F27-purec" : enumeration of cosets of H in G,
 #I  # where G = F(2,7) = C_29, H = Id, using purec strategy.
@@ -4136,7 +4220,7 @@ Table"). To force the `break'-loop we pass  `max  :=  2'  (see~"Option
 will not be able to complete  the  enumeration,  and  hence  enters  a
 `break'-loop when it tries to provide a complete  coset  table.  While
 we're at it we'll pass the `hlt' (see~"Option `hlt'") strategy  option
-(which will over-ride `purec'). (The `InfoACE' level is still 1.) Note
+(which will over-ride `purec'). (The `InfoACE' level is still 2.) Note
 that there are some \lq{}user-input' comments inserted at  the  `brk>'
 prompt.
 
