@@ -21,9 +21,9 @@ tex manual
 #dvips -D300 manual -o
 
 # The HTML version of the manual
-#mkdir -p ../htm
-#echo "Creating HTML documentation"
-#../../../etc/convert.pl -t -n ACE . ../htm
+mkdir -p ../htm
+echo "Creating HTML documentation"
+../../../etc/convert.pl -t -c -n ACE . ../htm
 
 #########################################################################
 ##
