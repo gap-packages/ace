@@ -61,7 +61,7 @@ end);
 ##
 InstallGlobalFunction(CALL_ACE, function(ACEfname, fgens, rels, sgens)
 local optnames, echo, infile, instream, outfile, ToACE, gens, acegens, 
-      lenlex, enforceAsis, ignored;
+      standard, enforceAsis, ignored;
 
   if ValueOption("aceexampleoptions") = true and
      IsBound(ACEData.aceexampleoptions) then
@@ -78,19 +78,17 @@ local optnames, echo, infile, instream, outfile, ToACE, gens, acegens,
   # We have hijacked ACE's echo option ... we don't actually pass it to ACE
   echo := ACE_VALUE_ECHO(optnames);
 
-  if echo > 0 then
-    Print(ACEfname, " called with the following arguments:\n");
-    Print(" Group generators : ", fgens, "\n");
-    Print(" Group relators : ", rels, "\n");
-    Print(" Subgroup generators : ", sgens, "\n");
-  fi;
-  
+  ECHO_ACE_ARGS( echo, ACEfname, rec(fgens := fgens, 
+                                     rels  := rels, 
+                                     sgens := sgens) );
+  # Check arguments are valid
   if IsEmpty(fgens) then
-    Error(": first argument defines an empty list of group generators");
-  elif ForAny(fgens, 
-              i -> NumberSyllables(i)<>1 or ExponentSyllable(i, 1)<>1) then
-    Error(": first argument is not a valid list of group generators");
+    Error(": fgens argument defines an empty list of group generators");
+  else
+    ACE_FGENS_ARG_CHK(fgens, "fgens ");
   fi;
+  ACE_WORDS_ARG_CHK(fgens, rels, "rels ");
+  ACE_WORDS_ARG_CHK(fgens, sgens, "sgens ");
 
   if ACEfname = "ACEStart" then
     instream := InputOutputLocalProcess(ACEData.tmpdir, ACEData.binary, []);
@@ -104,7 +102,6 @@ local optnames, echo, infile, instream, outfile, ToACE, gens, acegens,
     if ACEfname = "ACECosetTableFromGensAndRels" then
       # If option "aceinfile" is set we only want to produce an ACE input file
       infile := VALUE_ACE_OPTION(optnames, ACEData.infile, "aceinfile");
-      lenlex := VALUE_ACE_OPTION(optnames, false, "lenlex");
     elif ACEfname = "ACEStats" then
       infile := ACEData.infile; # If option "aceinfile" is set ... we ignore it
     fi;
@@ -112,6 +109,7 @@ local optnames, echo, infile, instream, outfile, ToACE, gens, acegens,
     ToACE := function(list) WRITE_LIST_TO_ACE_STREAM(instream, list); end;
   fi;
   outfile := VALUE_ACE_OPTION(optnames, ACEData.outfile, "aceoutfile");
+  standard := ACE_COSET_TABLE_STANDARD( ACE_OPTIONS() );
 
   # Define the group generators ACE will use
   gens := TO_ACE_GENS(fgens);
@@ -119,18 +117,10 @@ local optnames, echo, infile, instream, outfile, ToACE, gens, acegens,
   acegens := gens.acegens;
 
   # Define the group relators ACE will use
-  if ACEfname <> "ACECosetTableFromGensAndRels" or not lenlex or
-     IsACEGeneratorsInPreferredOrder(fgens, rels) 
-  then
-    ToACE([ "Group Relators: ", ACE_WORDS(rels, fgens, acegens), ";" ]);
-    enforceAsis := false;
-  else
-    ToACE([ "Group Relators: ", acegens[1], acegens[1], ", ",
-            ACE_WORDS(Filtered(rels, rel -> rel <> fgens[1]^2), 
-                      fgens, acegens), 
-            ";" ]);
-    enforceAsis := true;
-  fi;
+  enforceAsis := (ACEfname <> "ACEStats") and (standard = "lenlex") and
+                 not IsACEGeneratorsInPreferredOrder(fgens, rels, "noargchk");
+  ToACE([ "Group Relators: ", 
+          ACE_RELS(rels, fgens, acegens, enforceAsis), ";" ]);
 
   # Define the subgroup generators ACE will use
   ToACE([ "Subgroup Generators: ", ACE_WORDS(sgens, fgens, acegens), ";" ]);
@@ -143,6 +133,10 @@ local optnames, echo, infile, instream, outfile, ToACE, gens, acegens,
   if ACEfname  = "ACEStart" then
     Add(ignored, "aceoutfile");
   fi;
+  if enforceAsis then
+    Add(ignored, "asis");
+    ToACE([ "Asis: 1;" ]);
+  fi;
 
   PROCESS_ACE_OPTIONS(
       ACEfname, optnames, optnames, echo, ToACE, 
@@ -153,9 +147,6 @@ local optnames, echo, infile, instream, outfile, ToACE, gens, acegens,
       );
               
   if ACEfname <> "ACEStart" then
-    if enforceAsis then
-      ToACE([ "Asis: 1;" ]);
-    fi;
 
     if VALUE_ACE_OPTION(optnames, fail, ["start", "aep", "rep"]) = fail then
       # if the user hasn't issued there own enumeration initiation directive
@@ -166,7 +157,7 @@ local optnames, echo, infile, instream, outfile, ToACE, gens, acegens,
     ToACE([ "text:***" ]); # We use this as a sentinel
 
     if ACEfname = "ACECosetTableFromGensAndRels" then
-      if lenlex then
+      if standard = "lenlex" then
         ToACE([ "Standard;" ]);
       fi;
       ToACE([ "Print Table;" ]);
@@ -192,6 +183,7 @@ local optnames, echo, infile, instream, outfile, ToACE, gens, acegens,
         rec(args := rec(fgens := fgens, rels := rels, sgens := sgens),
             options := ACE_OPTIONS(),
             acegens := acegens, 
+            enforceAsis := enforceAsis,
             stream := instream));
     return Length(ACEData.io);
   fi;
@@ -217,12 +209,19 @@ end);
 ##  . . . . . . . . . . . . . . . . . . . . the lenlex standardisation scheme
 ##
 InstallGlobalFunction(IsACEStandardCosetTable, function(table)
-local geninvIndices, index, next, j, i;
+local standard, geninvIndices, index, next, j, i;
 
-  if ValueOption("lenlex") = true then
+  standard := ACE_COSET_TABLE_STANDARD( ACE_OPTIONS() );
+  if standard in ["lenlex", "GAPlenlex"] then
     geninvIndices := [1 .. Length(table)];
-  else
+  elif standard in ["semilenlex", "GAPsemilenlex"] then
     geninvIndices := [1, 3 .. Length(table) - 1];
+  else
+    return IsStandardized(table); # Should only get here with GAP 4.3+
+                                  # ... by which time `IsStandardized'
+                                  # will hopefully have been generalised
+                                  # to cope with any other standardisation
+                                  # schemes
   fi;
 
   index := Length( table[1] );
@@ -269,6 +268,12 @@ local ioIndex, gens, rels;
     gens := ACEGroupGenerators(ioIndex);
     rels := ACERelators(ioIndex);
   elif Length(arg) = 2 then
+    gens := arg[1];
+    ACE_FGENS_ARG_CHK(gens, "first ");
+    rels := arg[2];
+    ACE_WORDS_ARG_CHK(gens, rels, "second ");
+  elif Length(arg) = 3 and arg[3] = "noargchk" then
+    # This scenario only intended for use internally
     gens := arg[1];
     rels := arg[2];
   else

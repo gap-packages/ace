@@ -72,6 +72,7 @@ DeclareGlobalVariable("ACE_ERRORS",
 ##
 
 DeclareGlobalFunction("IS_INC_POS_INT_LIST");
+DeclareGlobalFunction("IS_ACE_STRINGS");
 DeclareGlobalFunction("IsKnownACEOption");
 DeclareGlobalFunction("ACEPreferredOptionName");
 DeclareGlobalFunction("IsACEParameterOption");
@@ -85,13 +86,18 @@ DeclareGlobalFunction("ACE_IF_EXPR");
 DeclareGlobalFunction("ACE_VALUE_OPTION");
 DeclareGlobalFunction("VALUE_ACE_OPTION");
 DeclareGlobalFunction("DATAREC_VALUE_ACE_OPTION");
+DeclareGlobalFunction("ACE_COSET_TABLE_STANDARD");
 DeclareGlobalFunction("ACE_VALUE_ECHO");
 DeclareGlobalFunction("TO_ACE_GENS");
 DeclareGlobalFunction("ACE_WORDS");
+DeclareGlobalFunction("ACE_RELS");
+DeclareGlobalFunction("ToACEGroupGenerators");
+DeclareGlobalFunction("ToACEWords");
+DeclareGlobalFunction("ACE_FGENS_ARG_CHK");
+DeclareGlobalFunction("ACE_WORDS_ARG_CHK");
 DeclareGlobalFunction("PROCESS_ACE_OPTIONS");
 DeclareGlobalFunction("PROCESS_ACE_OPTION");
 DeclareGlobalFunction("ACEOptionData");
-DeclareGlobalFunction("DISPLAY_ACE_OPTIONS");
 DeclareGlobalFunction("SANITISE_ACE_OPTIONS");
 DeclareGlobalFunction("FlushOptionsStack");
 

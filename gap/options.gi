@@ -69,9 +69,10 @@ InstallValue(KnownACEOptions, rec(
   aceexampleoptions := [17, [0,1]],
   silent := [6, [0,1]],
   lenlex := [6, [0,1]],
+  semilenlex := [10, [0,1]],
   incomplete := [10, [0,1]],
-  sg := [2, x -> IsList(x) and ForAll(x, xi -> IsWord(xi)) ],
-  rl := [2, x -> IsList(x) and ForAll(x, xi -> IsWord(xi)) ],
+  sg := [2, IS_ACE_STRINGS],
+  rl := [2, IS_ACE_STRINGS],
   aep  := [3, [1..7]],
   ai := [2, IsString],
   ao   := [2, IsString],      # "aceoutfile" is a GAP-introduced 
@@ -109,11 +110,15 @@ InstallValue(KnownACEOptions, rec(
                                             # keyword
   ## Most interface functions require the next 3 ACE options to be
   ## passed as arguments rather than options
-  group := [2, x -> IsInt(x) or IsString(x) ],  # For group generators
-  generators := [3, x -> IsList(x) and ForAll(x, xi -> IsWord(xi)) ],
-                                                # For subgroup generators
-  relators := [3, x -> IsList(x) and ForAll(x, xi -> IsWord(xi)) ],
-                                                # For group relators
+  group := [2, x -> IsInt(x) or IsString(x) or
+                    (IsList(x) and 
+                     ForAll(x, xi -> IsString(xi) and
+                                     (Length(xi) = 1) and
+                                     IsLowerAlphaChar( xi[1] )))], 
+                                               # For group generators
+  generators := [3, IS_ACE_STRINGS],           # For subgroup generators
+  relators := [3, IS_ACE_STRINGS],             # For group relators
+
   hard := [2, [""]],
   help := [1, [""]],
   hlt  := [3, [""]],
@@ -210,7 +215,8 @@ InstallValue(ACEOptionSynonyms, rec(
 InstallValue(NonACEbinOptions,
   [ "aceinfile",     "aceoutfile", "aceignore",    "aceignoreunknown",
     "acenowarnings", "aceecho",    "aceincomment", "aceexampleoptions",
-    "echo",          "silent",     "lenlex",       "incomplete" ]
+    "echo",          "silent",     "lenlex",       "semilenlex",
+    "incomplete" ]
 );
 
 #############################################################################
@@ -335,6 +341,15 @@ InstallValue(ACE_ERRORS, rec(
 ##
 InstallGlobalFunction(IS_INC_POS_INT_LIST, 
   x -> IsPosInt(x) or (IsPosInt(x[1]) and IsSSortedList(x)));
+
+#############################################################################
+####
+##
+#F  IS_ACE_STRINGS  . . . . . . . . Internal function used in KnownACEOptions
+##  . . . . . . . . . returns true if argument is a string or list of strings
+##
+InstallGlobalFunction(IS_ACE_STRINGS, 
+  x -> IsString(x) or (IsList(x) and ForAll(x, xi -> IsString(xi))));
 
 #############################################################################
 ####
@@ -586,6 +601,44 @@ end);
 #############################################################################
 ####
 ##
+#F  ACE_COSET_TABLE_STANDARD  . . . . . . Return either the user's choice for
+##  . . . . . . . . . . . . . . . . . . . the CosetTableStandard or,  if  the
+##  . . . . . . . . . . . . . . . . . . . user has made no choice,  a  string
+##  . . . . . . . . . . . . . . . . . . . representing   the   current    GAP
+##  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . standard.
+##
+##  A check among options for any settings of `lenlex' or  `semilenlex'.  The
+##  latest such optname that is set to true is returned, or if  there  is  no
+##  such setting a string representing the current GAP default  is  returned:
+##  for GAP 4.2 "GAPsemilenlex" is returned; and for GAP 4.3 (or any  version
+##  of GAP for which CosetTableStandard is  defined)  "GAPCosetTableStandard"
+##  is returned.
+##
+InstallGlobalFunction(ACE_COSET_TABLE_STANDARD, function(options)
+local optname;
+  for optname in Filtered(Reversed( RecNames(options) ), 
+                          optname -> ForAny(["lenlex", "semilenlex"],
+                                            s ->
+                                            MATCHES_KNOWN_ACE_OPT_NAME(
+                                                s, 
+                                                LowercaseString(optname)
+                                                )
+                                            )) 
+  do
+    if options.(optname) = true then
+      return ACEPreferredOptionName(optname);
+    fi;
+  od;
+  if "CosetTableStandard" in NamesGVars() then
+    return Flat(["GAP", ACE_EVAL_STRING_EXPR("CosetTableStandard")]);
+  else
+    return "GAPsemilenlex";
+  fi;
+end);
+  
+#############################################################################
+####
+##
 #F  ACE_VALUE_ECHO  . . . . . . . . . . . . . . . . . . . . Internal function
 ##
 ##
@@ -603,9 +656,18 @@ end);
 ####
 ##
 #F  TO_ACE_GENS . . . . . . . . . . . . . . . . . . . . . . Internal function
-##  . . . . . . . . . .  returns the translation of words in generators fgens
-##  . . . . . . . . . . .  to words in ACEgens (the generators ACE will use),
-##  . . . . . . . . . . . . . . . . . . . . . . . . . . . . .  as one string.
+##  . . . . . . . . . . . . from the GAP free group generators fgens  returns
+##  . . . . . . . . . . . . a record used to create the equivalent ACE  group
+##  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .  generators
+##
+##  Returns a record with fields: 
+##
+##    acegens
+##        the ACE equivalent of fgens; and 
+##
+##    toace
+##        the ACE directive string needed for the `group' option so that  ACE
+##        uses acegens for its generators.
 ##
 InstallGlobalFunction(TO_ACE_GENS, function(fgens)
 local n, acegens;
@@ -656,6 +718,101 @@ end);
 #############################################################################
 ####
 ##
+#F  ACE_RELS  . . . . . . . . . . . . . . . . . . . . . . . Internal function
+##  . . . . . . . . . . . returns the translation of  the  relators  rels  in
+##  . . . . . . . . . . . generators  fgens  to   words   in   ACEgens   (the
+##  . . . . . . . . . . . generators ACE will use), as  one  string,  but  if
+##  . . . . . . . . . . . enforceAsis is true  ensure  the  relator  for  the
+##  . . . . . . . . . . . first generator (which we'll  represent  as  x)  is
+##  . . . . . . . . . . . . . . . . .  translated as "x*x" rather than "x^2".
+##
+InstallGlobalFunction(ACE_RELS, function(rels, fgens, ACEgens, enforceAsis)
+  if enforceAsis then
+    return Concatenation( ACEgens[1], ACEgens[1], ", ",
+                          ACE_WORDS(Filtered(rels, rel -> rel <> fgens[1]^2),
+                                    fgens, ACEgens) );
+  else
+    return ACE_WORDS(rels, fgens, ACEgens);
+  fi;
+end);
+
+#############################################################################
+####
+##
+#F  ToACEGroupGenerators  . . . . . Given the GAP free group generators fgens
+##  . . . . . . . . . . . . . . . . returns the ACE directive  string  needed
+##  . . . . . . . . . . . . . . . . for the `group' option so that  ACE  uses
+##  . . . . . . . . . . . . . . . . an   appropriate   equivalent   set    of
+##  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . generators.
+##
+InstallGlobalFunction(ToACEGroupGenerators, function(fgens)
+
+  ACE_FGENS_ARG_CHK(fgens, "");
+  return TO_ACE_GENS(fgens).toace;
+end);
+
+#############################################################################
+####
+##
+#F  ToACEWords  . . . .  Returns the translation of words in generators fgens
+##  . . . . . . . . . .  to equivalent ACE words, as one string, suitable for
+##  . . . . . . . . . . . . . . . .  the `relators' and `generators' options.
+##
+InstallGlobalFunction(ToACEWords, function(fgens, words)
+
+  ACE_FGENS_ARG_CHK(fgens, "first ");
+  return ACE_WORDS(words, fgens, TO_ACE_GENS(fgens).acegens);
+end);
+
+#############################################################################
+####
+##
+#F  ACE_FGENS_ARG_CHK . . . . . . . . . . . . . . . . . . . Internal function
+##  . . . . . . . . . . Checks that fgens is a list of free group generators.
+##  . . . . . . . . . . If not produces an error  message  for  the  whicharg
+##  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . argument.
+##
+InstallGlobalFunction(ACE_FGENS_ARG_CHK, function(fgens, whicharg)
+
+  if not IsList(fgens) or
+     not ForAll(fgens, g -> IsAssocWord(g) and
+                            (NumberSyllables(g) = 1) and
+                            (ExponentSyllable(g, 1) = 1))
+  then
+    # I'd like to use Error rather than Info here ...
+    # but in GAP 4.2 a word need not satisfy IsAssocWord
+    Info(InfoACE + InfoWarning, 1,
+         whicharg, "argument may not be a valid list of group generators");
+  fi;
+end);
+
+#############################################################################
+####
+##
+#F  ACE_WORDS_ARG_CHK . . . . . . . . . . . . . . . . . . . Internal function
+##  . . . . . . . . . . Checks that words is a valid list of word in the free
+##  . . . . . . . . . . group generators fgens.  If  not  produces  an  error
+##  . . . . . . . . . . . . . . . . . . .  message for the whicharg argument.
+##
+InstallGlobalFunction(ACE_WORDS_ARG_CHK, function(fgens, words, whicharg)
+local one, ones;
+  
+  one := One( GroupWithGenerators(fgens) );
+  ones := List(fgens, gen -> one);
+  if not IsList(words) or ForAny(words, 
+                                 w -> not IsWord(w) or
+                                      (MappedWord(w, fgens, ones) <> one))
+  then
+    # I'd like to use Error rather than Info here ...
+    # but in GAP 4.2 a word need not satisfy IsWord
+    Info(InfoACE + InfoWarning, 1, whicharg, 
+         "argument may not be a valid list of words in the generators");
+  fi;
+end);
+
+#############################################################################
+####
+##
 #F  PROCESS_ACE_OPTIONS . . . . . . . . . . . . . . . . .  Internal procedure
 ##  . . . . . . . . . for the ACE function with name ACEfname process options
 ##  . . . . . . . . . (on the top of OptionsStack)  with  names  newoptnames,
@@ -699,7 +856,7 @@ local IsValidOptionValue, CheckValidOption, ProcessOption,
     if not nowarnings then
       if opt.fullname in RecNames(disallowed) then
         Info(InfoACE + InfoWarning, 1,
-             "ACE Warning: ", opt, ": ", disallowed.(opt.fullname));
+             "ACE Warning: ", opt.name, ": ", disallowed.(opt.fullname));
       elif opt.known then
         if not IsValidOptionValue(val) then
           Info(InfoACE + InfoWarning, 1,
@@ -934,29 +1091,6 @@ local opt;
     opt.abbrev := opt.fullname;
   fi;
   return opt;
-end);
-
-#############################################################################
-####
-##
-#F  DISPLAY_ACE_OPTIONS . . . . . . . . . . . . . . . . .  Internal procedure
-##  . . . . . . . . . . . . . . . . . . . . . . . Called by DisplayACEOptions
-##
-##  DisplayACEOptions  has  two   forms:   the   interactive   version   (see
-##  interact.g*) and  the  non-interactive  version  defined  locally  within
-##  ACECosetTable. For the interactive version the  data  record  datarec  is
-##  ACEData.io[ioIndex] for some integer  ioIndex.  For  the  non-interactive
-##  version, which will only be invoked from within a break-loop, datarec  is
-##  ACEData.
-##
-InstallGlobalFunction(DISPLAY_ACE_OPTIONS, function(datarec)
-
-  if not IsBound(datarec.options) or datarec.options = rec() then
-    Print("No options.\n");
-  else
-    Display(datarec.options);
-    Print("\n");
-  fi;
 end);
 
 #############################################################################
