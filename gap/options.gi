@@ -523,15 +523,24 @@ end);
 ##
 #F  VALUE_ACE_OPTION  . . . . . . . . . . . . . . . . . . . Internal function
 ##  . . . . . . . checks among optnames for any settings of synonyms of optnm
-##  . . . . . . . The latest such optname in optnames will  prevail  and  its
-##  . . . . . . . value will be  returned.  Otherwise, if there isn't such an
-##  . . . . . . . . . . . . . . . . . . . .  optname, defaultval is returned.
+##  . . . . . . . (or if optnm is a list  any  synonyms  of  the  members  of
+##  . . . . . . . optnm). The latest such optname in  optnames  will  prevail
+##  . . . . . . . and its value will be returned. Otherwise, if  there  isn't
+##  . . . . . . . . . . . . . . . .  such an optname, defaultval is returned.
 ##
 InstallGlobalFunction(VALUE_ACE_OPTION, function(optnames, defaultval, optnm)
-local optname, optval;
+local optname, optval, optnmlist;
   optval := defaultval;
+  if IsString(optnm) then
+    optnmlist := [ optnm ];
+  else
+    optnmlist := optnm; # This situation is special ... useful for checking
+                        # whether a list of options have been set
+  fi;
+  optnmlist := Union( List(optnmlist, 
+                           optname -> ACE_OPTION_SYNONYMS(optname)) );
   for optname in Filtered(optnames, 
-                          optname -> ForAny(ACE_OPTION_SYNONYMS(optnm), 
+                          optname -> ForAny(optnmlist,
                                             s ->
                                             MATCHES_KNOWN_ACE_OPT_NAME(
                                                 s, 

@@ -78,10 +78,6 @@ local optnames, echo, infile, instream, outfile, ToACE, gens, acegens,
   # We have hijacked ACE's echo option ... we don't actually pass it to ACE
   echo := ACE_VALUE_ECHO(optnames);
 
-  if ForAny(fgens, i -> NumberSyllables(i)<>1 or ExponentSyllable(i, 1)<>1) then
-    Error("first argument not a valid list of group generators");
-  fi;
-
   if echo > 0 then
     Print(ACEfname, " called with the following arguments:\n");
     Print(" Group generators : ", fgens, "\n");
@@ -89,9 +85,16 @@ local optnames, echo, infile, instream, outfile, ToACE, gens, acegens,
     Print(" Subgroup generators : ", sgens, "\n");
   fi;
   
+  if IsEmpty(fgens) then
+    Error(": first argument defines an empty list of group generators");
+  elif ForAny(fgens, 
+              i -> NumberSyllables(i)<>1 or ExponentSyllable(i, 1)<>1) then
+    Error(": first argument is not a valid list of group generators");
+  fi;
+
   if ACEfname = "ACEStart" then
     instream := InputOutputLocalProcess(ACEData.tmpdir, ACEData.binary, []);
-    FLUSH_ACE_STREAM_UNTIL(instream, 4, 4, READ_NEXT_LINE, 
+    FLUSH_ACE_STREAM_UNTIL(instream, 3, 3, READ_NEXT_LINE, 
                            line -> line{[3..6]} = "name");
     ToACE := function(list) INTERACT_TO_ACE_WITH_ERRCHK(instream, list); end;
   else 
@@ -147,16 +150,17 @@ local optnames, echo, infile, instream, outfile, ToACE, gens, acegens,
       );
               
   if ACEfname <> "ACEStart" then
-    # Direct ACE output to outfile if called via
-    # ACECosetTableFromGensAndRels or ACEStats
-    ToACE([ "Alter Output:", outfile, ";" ]);
-
     if enforceAsis then
       ToACE([ "Asis: 1;" ]);
     fi;
 
-    ToACE([ "Start;" ]); # (one of) the ACE directives that initiate
-                         # an enumeration
+    if VALUE_ACE_OPTION(optnames, fail, ["start", "aep", "rep"]) = fail then
+      # if the user hasn't issued there own enumeration initiation directive
+      # ... initiate the enumeration
+      ToACE([ "Start;" ]);
+    fi;
+
+    ToACE([ "text:***" ]); # We use this as a sentinel
 
     if ACEfname = "ACECosetTableFromGensAndRels" then
       if lenlex then
@@ -168,8 +172,7 @@ local optnames, echo, infile, instream, outfile, ToACE, gens, acegens,
     if ACEfname = "ACEStats" or infile = ACEData.infile then
       # Run ACE on the constructed infile
       # ... the ACE output will appear in outfile 
-      #     (except for the banner which is directed to ACEData.banner)
-      Exec(Concatenation(ACEData.binary, "<", infile, ">", ACEData.banner));
+      Exec(Concatenation(ACEData.binary, "<", infile, ">", outfile));
     fi;
   fi;
 

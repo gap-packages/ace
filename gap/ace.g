@@ -30,7 +30,6 @@ Revision.ace_g :=
 ##    "io . . . . . list of data records for ACEStart IO Streams
 ##    "infile"  . . the path of the ACE input file
 ##    "outfile" . . the path of the ACE output file
-##    "banner"  . . the path of the file where ACE's banner is directed
 ##    "version" . . the version of the current ACE binary
 ##
 ACEData := rec( binary := Filename(DirectoriesPackagePrograms("ace"), "ace"),
@@ -39,18 +38,17 @@ ACEData := rec( binary := Filename(DirectoriesPackagePrograms("ace"), "ace"),
               );
 ACEData.infile  := Filename(ACEData.tmpdir, "in"); 
 ACEData.outfile := Filename(ACEData.tmpdir, "out");
-ACEData.banner  := Filename(ACEData.tmpdir, "banner");
 
 PrintTo(ACEData.infile, "\n");
 # Fire up ACE with a null input (ACEData.infile contains only a "\n")
 # ... to generate a banner (which has ACE's current version)
-Exec( Concatenation(ACEData.binary, "<", ACEData.infile, ">", ACEData.banner) );
+Exec(Concatenation(ACEData.binary, "<", ACEData.infile, ">", ACEData.outfile));
 # For now use ACEData.scratch for an input stream
-ACEData.scratch := InputTextFile(ACEData.banner);
-# Grab the first line of banner, which begins like: "ACE N.nnn   "
+ACEData.scratch := InputTextFile(ACEData.outfile);
+# Grab the first line of outfile, which begins like: "ACE N.nnn   "
 ACEData.version := ReadLine(ACEData.scratch);
 CloseStream(ACEData.scratch);
-# We just want the N.nnn part of the first line of banner
+# We just want the N.nnn part of the first line of outfile
 # ... ACEData.scratch now records where N.nnn starts
 ACEData.scratch := PositionSublist(ACEData.version, "ACE") + 4;
 ACEData.version := ACEData.version{[ACEData.scratch ..

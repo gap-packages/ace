@@ -229,23 +229,44 @@ end);
 ##
 #F  READ_ACE_ERRORS . . . . . . . . . . . . . . . . . . . . Internal function
 ##  . . . . . . . . . . . . . . . . . . . . reads interactive ACE output from
-##  . . . . . . . . . . . . . . . . . . . . stream when none is expected;  if
-##  . . . . . . . . . . . . . . . . . . . . an error is found  returns  true,
-##  . . . . . . . . . . . . . . . . . . . . . . . . . . . or false otherwise.
+##  . . . . . . . . . . . . . . . . . . . . stream  when  none  is  expected.
 ##
 ##  Writes any output read to Info at InfoACE + InfoWarning level 1.
 ##
+##  This function may miss data output by ACE purely because it wasn't  ready
+##  at the time of the call. If it turns out that READ_ACE_ERRORS is used  in
+##  a place where it's important that all data be collected  from  ACE,  then
+##  the  call  to  READ_ACE_ERRORS  should  be  replaced   by   a   call   to
+##  ENSURE_NO_ACE_ERRORS.
+##
 InstallGlobalFunction(READ_ACE_ERRORS, function(stream)
-local line, errorfound;
+local line;
 
   line := READ_ALL_LINE(stream);
-  errorfound := false;
   while line <> fail do
-    errorfound := errorfound or line{[1..8]} = "** ERROR";
     Info(InfoACE + InfoWarning, 1, CHOMP(line));
     line := READ_ALL_LINE(stream);
   od;
-  return errorfound;
+end);
+
+#############################################################################
+####
+##
+#F  ENSURE_NO_ACE_ERRORS  . . . . . . . . . . . . . . . . . Internal function
+##  . . . . . . . . . . . . . . . . . . . . . . .  purges all interactive ACE
+##  . . . . . . . . . . . . . . . . . . . . . . . . . . .  output from stream
+##
+##  Writes any output read to Info at InfoACE + InfoWarning level 1.
+##
+##  This function is like READ_ACE_ERRORS but makes ACE write "***" which  we
+##  use as a sentinel to ensure we get all output due to  be  collected  from
+##  ACE.
+##
+InstallGlobalFunction(ENSURE_NO_ACE_ERRORS, function(stream)
+
+  PROCESS_ACE_OPTION(stream, "text", "***"); # Causes ACE to print "***"
+  FLUSH_ACE_STREAM_UNTIL(stream, 3, 3, READ_NEXT_LINE,
+                         line -> line{[1 .. 3]} = "***");
 end);
 
 #############################################################################
@@ -285,7 +306,7 @@ local line;
     Info(InfoACE, infoLevelFlushed, CHOMP(line));
     line := readline(iostream);
   od;
-  if line <> fail then
+  if line <> fail and infoLevelMyLine < 10 then
     Info(InfoACE, infoLevelMyLine, CHOMP(line));
   fi;
   return line;
@@ -294,26 +315,59 @@ end);
 #############################################################################
 ####
 ##
-#F  ACE_ENUMERATION_RESULT  . . . . . Flush iostream until line ends in ")\n"
+#F  ACE_ENUMERATION_RESULT  . . . .  Get and return an ACE enumeration result
 ##
-##  This is potentially flaky ... it relies on ACE enumeration  result  lines
-##  being unique with regard to the property of not starting  with  "** "  or
-##  "   " (as ACE error diagnostics do) and ending in a close bracket.
 ##
-InstallGlobalFunction(ACE_ENUMERATION_RESULT, function(iostream, readline)
-local line;
+InstallGlobalFunction(ACE_ENUMERATION_RESULT, function(stream, readline)
+  # Call LAST_ACE_ENUM_RESULT with first (3rd argument) set to true,
+  # so that it returns on the first enumeration result (or error) found
+  return  LAST_ACE_ENUM_RESULT(stream, readline, true);
+end);
 
-  line := FLUSH_ACE_STREAM_UNTIL(iostream, 3, 2, readline,
-                                 line -> Length(line) > 1 and
-                                         line[Length(line) - 1] = ')');
-  if line{[1..8]} = "** ERROR" then
-    Info(InfoACE + InfoWarning, 1, line);
-    line := CHOMP( readline(iostream) );
-    Info(InfoACE + InfoWarning, 1, line);
-    Error("ACE Enumeration failed: ", line);
+#############################################################################
+####
+##
+#F  LAST_ACE_ENUM_RESULT  . . . .  Get and return the last enumeration result
+##
+##  Enumeration result lines are recognised by being ones that end  in  ")\n"
+##  but not starting with "** " or " " (as ACE error diagnostics do) ... this
+##  is potentially flaky.
+##
+##  Reads and Infos lines from stream via function readline until a  sentinel
+##  "***" and returns the last enumeration result (or  error)  found,  unless
+##  first = true, in which case, it simply returns on the  first  enumeration
+##  result (or error) found (without looking for a sentinel "***").
+##
+InstallGlobalFunction(LAST_ACE_ENUM_RESULT, function(stream, readline, first)
+local IsLastLine, IsEnumLine, line, enumResult;
+
+  if first then
+    IsLastLine := line -> true;
+    IsEnumLine := line -> Length(line) > 1 and line[ Length(line) - 1 ] = ')';
   else
-    return CHOMP(line);
+    IsLastLine := line -> line = "***";
+    IsEnumLine := line -> Length(line) > 1 and 
+                          (line{[1..3]} = "***" or 
+                           line[ Length(line) - 1 ] = ')');
   fi;
+  repeat
+    line := CHOMP(FLUSH_ACE_STREAM_UNTIL(stream, 3, 10, readline, IsEnumLine));
+    if line{[1..8]} = "** ERROR" then
+      Info(InfoACE + InfoWarning, 1, line);
+      line := CHOMP( readline(stream) );
+      Info(InfoACE + InfoWarning, 1, line);
+      enumResult := Concatenation("ACE Enumeration failed: ", line);
+    elif first or not IsLastLine(line) then
+      Info(InfoACE, 2, line);
+      enumResult := line;
+    else
+      Info(InfoACE, 3, line);
+    fi;
+  until IsLastLine(line);
+  if enumResult{[1 .. 8]} = "ACE Enum" then
+    Error(":", enumResult);
+  fi;
+  return enumResult;
 end);
 
 #############################################################################
@@ -513,8 +567,9 @@ end);
 ##  . . . . . . . . . . . .  also sets enumResult and stats fields of datarec
 ##
 InstallGlobalFunction(ACE_MODE, function(mode, datarec)
-  READ_ACE_ERRORS(datarec.stream); # purge any output not yet collected
-                                   # e.g. error messages due to unknown options
+  ENSURE_NO_ACE_ERRORS(datarec.stream); # purge any output not yet collected
+                                        # e.g. error messages due to unknown 
+                                        # or inappropriate options
   WRITE_LIST_TO_ACE_STREAM(datarec.stream, [ mode, ";" ]);
   datarec.enumResult := ACE_ENUMERATION_RESULT(datarec.stream, READ_NEXT_LINE);
   datarec.stats := ACE_STATS(datarec.enumResult);
@@ -969,8 +1024,12 @@ end);
 ##
 InstallGlobalFunction(INTERACT_SET_ACE_OPTIONS, function(ACEfname, datarec)
 local newoptnames, optnames;
+  datarec.modereqd := false;
   if not IsEmpty(OptionsStack) then
     newoptnames := ShallowCopy(RecNames(OptionsStack[ Length(OptionsStack) ]));
+    datarec.modereqd := ForAny(newoptnames, 
+                               optname -> not (ACEPreferredOptionName(optname) 
+                                               in NonACEbinOptions));
     if IsBound(datarec.options) then
       SET_ACE_OPTIONS(datarec);
       OptionsStack[ Length(OptionsStack) ] := datarec.options;
@@ -1026,7 +1085,9 @@ local datarec;
   else
     Error("2nd argument should have been a record\n");
   fi;
-  CHEAPEST_ACE_MODE(datarec); 
+  if datarec.modereqd then
+    CHEAPEST_ACE_MODE(datarec); 
+  fi;
 end);
 
 #############################################################################
@@ -1289,7 +1350,7 @@ local ioIndex, stream;
     # Fire up a new stream ... which we'll close when we're finished
     stream := InputOutputLocalProcess( ACEData.tmpdir, ACEData.binary, [] );
     # Purge ACE banner
-    FLUSH_ACE_STREAM_UNTIL(stream, 4, 4, READ_ALL_LINE, line -> line = fail);
+    FLUSH_ACE_STREAM_UNTIL(stream, 3, 3, READ_ALL_LINE, line -> line = fail);
   else
     # Use interactive ACE process: ioIndex
     stream := ACEData.io[ ioIndex ].stream;
@@ -1922,7 +1983,7 @@ local ioIndex, ACEout, iostream, datarec, fgens, lenlex, incomplete,
         return;
       fi;
       iostream := InputTextFile(ACEout.outfile);
-      ACEData.enumResult := ACE_ENUMERATION_RESULT(iostream, ReadLine);
+      ACEData.enumResult := LAST_ACE_ENUM_RESULT(iostream, ReadLine, false);
       ACEData.stats := ACE_STATS(ACEData.enumResult);
       incomplete := ACEData.stats.index = 0 and
                     VALUE_ACE_OPTION(RecNames( ACE_OPTIONS() ), 
@@ -1982,7 +2043,7 @@ local datarec, iostream, line, stats;
   elif Length(arg) = 3 then              # args are: fgens,   rels,  sgens
     # Called non-interactively
     iostream := InputTextFile( CALL_ACE("ACEStats", arg[1], arg[2], arg[3]) );
-    stats := ACE_STATS( ACE_ENUMERATION_RESULT( iostream, ReadLine) );
+    stats := ACE_STATS( LAST_ACE_ENUM_RESULT(iostream, ReadLine, false) );
     CloseStream(iostream);
     return stats;
   else
