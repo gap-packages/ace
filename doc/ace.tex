@@ -12,15 +12,15 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Chapter{The ACE Share Package}
 
-The {\GAP} interface, written by Alexander Hulpke, permits the user to
-call the  'Adaptable Coset Enumerator' {\ACE}:
+The  'Adaptable Coset Enumerator' {\ACE}:
 
 \begintt
 ACE coset enumerator (C) 1995-1999 by George Havas and Colin Ramsay
     http://www.csee.uq.edu.au/~havas/ace3.tar.gz
 \endtt
 
-written  by  George  Havas   and  Colin  Ramsay  from  within  {\GAP}.
+can  be called  from within  {\GAP} through  an interface,  written by
+Alexander Hulpke, which is described in this manual.
 
 The interface links to an external binary and therefore is only usable
 under UNIX. It will not work  on Windows or the Macintosh. It requires
@@ -40,24 +40,31 @@ indirectly),  you can  achieve  this by  setting  the global  variable
 gap> TCENUM:=ACETCENUM;;
 \endtt
 
-If this is done without any further action the default strategy of the
-{\ACE}  enumerator (see~"parameter  default") will  be used.   You may
+If this  is done without any  further action, the  default strategy of
+the {\ACE} enumerator (see~"parameter default") will be used.  You may
 however want to use the  {\ACE} enumerator globally with some other of
 the strategies  or options that are described  in Chapter~"Options for
 the ACE  Enumerator".  You  can set these  options globally  using the
-function `PushOptions' (see~"ref:PushOptions"  in the {\GAP} Reference
-Manual). Note however the explicit  warnings about the working of this
-mechanism  in  Chapter "ref:Options  Stack"  of  the {\GAP}  Reference
-Manual  that always the  topmost record  of an  option stack  is used,
-which means  that later setting  of other options may  invalidate your
-request  and  that  in  turn  setting your  options  for  {\ACE}  will
-invalidate other  options set earlier.  Also note  that duplication of
-option names  for different  programs can lead  to misinterpretations.
-You  can Use 'DisplayOptionsStack'  (see~"ref:DisplayOptionsStack") to
-make sure that there is no such danger.
+function `PushOptions' (see  Chapter~"ref:Options Stack" in the {\GAP}
+Reference  Manual).   Note however  the  explicit  warnings about  the
+working  of this  mechanism in  this Chapter  that always  the topmost
+record of an  option stack is used, which means  that later setting of
+other options  may invalidate  your request and  that in  turn setting
+your  options for {\ACE}  will invalidate  other options  set earlier.
+Also note that duplication of  option names for different programs can
+lead  to misinterpretations.  You  can use  'DisplayOptionsStack' (see
+Chapter~"ref:DisplayOptionsStack") to make sure  that there is no such
+danger.
+
+*TO  GREG: 
+HERE THE  APPROPRIATE WARNINGS ABOUT  INTERPLAY OF OPTIONS HAVE  TO BE
+INSERTED THAT YOU MENTION IN YOUR LETTER OF FEB. 11. DETAILS ABOUT THE
+INTERPLAY  OF DIFFERENT  OPTIONS CAN  BE LEFT  TO THE  CHAPTER  ON THE
+OPTIONS, TO WHICH A POINTER SHOULD BE GIVEN*
 
 You  can switch back  to the  coset enumerator  built into  the {\GAP}
 library by assigning `TCENUM' to `GAPTCENUM'.
+
 
 \begintt
 gap> TCENUM:=GAPTCENUM;;
@@ -69,25 +76,38 @@ gap> TCENUM:=GAPTCENUM;;
 
 If on  the other hand you  do not want  to set up {\ACE}  globally for
 your coset  enumerations, you may call the  {\ACE} interface directly,
-which will allow you to decide yourself in each such call which values
-you want to give for the options for running {\ACE}.
+which  will allow  you  to decide  yourself  in each  such call  which
+options you  want to use  for running {\ACE}.   By such a call  a file
+with  your input  data in  {\ACE} readable  format will  be  handed to
+{\ACE} and you will get the answer back in some {\GAP} format. At that
+moment however the {\ACE} job  is terminated, that is, you cannot send
+any  further questions or  requests about  the result  of that  job to
+{\ACE}, you  are not using  {\ACE} interactively.  For  an interactive
+use of {\ACE} from {\GAP} see Section "Using ACE Interactively".
 
 Calling the {\ACE} interface directly is done by
 
 \>CallACE( <fgens>, <rels>, <sgens> :<options> )
 
 Here <fgens> is  a list of free generators, <rels> a  list of words in
-these generators  giving relators for  a finitely presented  group and
+these generators  giving relators for a finitely  presented group, and
 <sgens> the list  of subgroup generators, again expressed  as words in
 the free generators. All these are given in the standard {\GAP} format
 (See Chapter~"ref:Finitely  Presented Groups" of  the {\GAP} Reference
-Manual). 
+Manual).
 
 Behind  the colon  any  selection  of the  options  available for  the
 interface (see Chapter~"Options for the ACE Enumerator") can be given,
 separated by kommas like record components.  These can be used e.g. to
 preset limits of space and time to be used, to modify input and output
 and to modify the enumeration procedure.
+
+*TO GREG:  
+PLEASE ADD  A PASSAGE  HERE THAT EXPLAINS  HOW OPTIONS ARE  PARSED AND
+THAT  DEPENDENCIES OF  THE OPTIONS  MUST  BE CONSIDERED.  IT MIGHT  BE
+ENOUGH TO  EXPLAIN THIS  IS PRINCIPLE HERE  WITH A STRONG  WARNING AND
+LEAVE  THE   DETAILS  TO  THE   CHAPTER  IN  WHICH  THE   OPTIONS  ARE
+DESCRIBED. THEN A POINTER TO THAT CHAPTER MUST BE GIVEN HERE.*
 
 The  operation  calls the  {\ACE}  coset  enumerator  and returns  the
 (standardized) coset table obtained.
@@ -132,42 +152,49 @@ numbers at any time in the enumeration , while <t> is the total number
 of  coset numbers  that  were  defined in  the  enumeration. See  also
 Section "Information about the Enumeration".
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\Section{Remarks and Acknowledgement}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{Writing ACE Standalone Input Files}
 
-The  {\ACE} standalone  provides further  features, in  particular 
+If you want  to use ACE as  a standalone with its own  syntax, you can
+write  a  {\GAP}   input  and  can  use  `CallACE'   with  the  option
+`outfile:=<filename>' (see~"parameter  outfile").  This will  keep the
+input file for the {\ACE}  standalone produced by the {\GAP} interface
+under the  file name <filename> (and  just return `fail')  so that you
+can perform  interactive work in the standalone.
 
-\beginlist
 
-\item{--} the possibility for  interactive work. This is presently not
-available  from {\GAP} through  the interface,  since {\GAP}  does not
-provide  (yet) bidirectional  streams.  It is  hoped  that these  will
-become  available in  the future  and when  this will  be the  case an
-update  of  the  interface  should  also provide  the  possibility  of
-interactive use of {\ACE} from {\GAP}.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{Calling ACE Interactively}
 
-\item{--} the possibility to work with incomplete tables and to try to
-get information out of these.  This is not (yet) available from {\GAP}
-since {\GAP} does not have data structures for such incomplete tables.
 
-\endlist
 
-While  these  features  are  not  available  via  {\GAP},  the  option
-`outfile:=<filename>' (see~"parameter outfile")  of the interface will
-however  keep  the  input  file  for {\ACE}  produced  by  the  {\GAP}
-interface under the  file name <filename> (and just  return `fail') so
-that  one could  perform this  interactive work  in the  standalone by
-hand.
 
-For  compatibility  with  the   coset  enumerator  built  into  {\GAP}
-(see~"ref:CosetTableFromGensAndRels"  in the  Reference  Manual), also
-the `silent' option is recognized. (Note that the `max' option has the
-same name and functionality in {\ACE} as well).
+%The  {\ACE} standalone  provides further  features, in  particular 
+%
+%\beginlist
 
-*Acknowledgement:* Large  parts of this  manual, in particular  of the
-description  of the options  for running  {\ACE}, are  directly copied
-from  the respective description  in the  manual \cite{HR99a}  for the
-standalone version of {\ACE} by George Havas and Colin Ramsay
+%\item{--} the possibility for  interactive work. This is presently not
+%available  from {\GAP} through  the interface,  since {\GAP}  does not
+%provide  (yet) bidirectional  streams.  It is  hoped  that these  will
+%become  available in  the future  and when  this will  be the  case an
+%update  of  the  interface  should  also provide  the  possibility  of
+%interactive use of {\ACE} from {\GAP}.
+
+%\item{--} the possibility to work with incomplete tables and to try to
+%get information out of these.  This is not (yet) available from {\GAP}
+%since {\GAP} does not have data structures for such incomplete tables.
+
+%\endlist
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\Section{Acknowledgement}
+
+Large parts of  this manual, in particular of  the description of the
+options for  running {\ACE}, are  directly copied from  the respective
+description in  the manual \cite{HR99a} for the  standalone version of
+{\ACE} by George Havas and Colin Ramsay.
 
 
 
@@ -247,75 +274,114 @@ If you want to load the {\ACE} package by default, you can put this
 `RequirePackage' command into your `gaprc' file
 (see~"ref:The .gaprc file" in the {\GAP} Reference Manual).
 
+
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Chapter{Some Basics}
 
 Throughout this manual for the use of {\ACE} as a {\GAP} share package
 we shall assume that the reader already knows the basic ideas of coset
-enumeration, as  can be found for example  in~\cite{Neu82}. However it
-will  also be  necessary  to  understand some  basic  features of  the
-implementation and the corresponding terminology.
+enumeration,  as  can be  found  for  example in~\cite{Neu82}.   There
+i.a. a simple proof is given for the fact that a coset enumeration for
+a  subgroup  of  finite  index  in a  finitely  presented  group  must
+eventually terminate with the correct result, provided the enumeration
+process obeys  a simple  condition (Mendelsohn's theorem).  This basic
+condition leaves  room for a  great variety of 'strategies'  for coset
+enumeration, the  two 'classical'  ones are known  for a long  time as
+'Felsch  strategy'  and  'HLT  strategy' (for  Haselgrove,  Leech  and
+Trotter).  Extensive  experimental studies  on many strategies  can be
+found in particular in \cite{CDHW73}, \cite{Hav91}, and \cite{HR99}.
+
+A few basic points  should in particular be understood:
+
+\beginlist
+
+\item{--} 'Subgroup(generator)  and relator  tables' that are  used in
+the description of coset enumeration  in \cite{Neu82}, and to which we
+will  also occasionally  refer in  this manual,  are  *not* physically
+existing in the implementation of  coset enumeration in {\ACE}.  For a
+terminology that  is closer to  the actual implementation and  also to
+the  formulations  in  the   manual  for  the  {\ACE}  standalone  see
+\cite{CDHW73} and \cite{Hav91}.
+
+\item{--} Coset enumeration proceeds  by defining 'coset numbers' that
+really represent  possible representatives for cosets of  which at the
+time of their generation it is  not guaranteed that any two of them do
+indeed represent different cosets.
+
+\item{--} The  definition of a  coset number may lead  to 'deductions'
+from the 'closing  of rows in subgroup or  relator tables'. These are
+kept in a 'deduction stack'.
+
+\item{--}  Also it may  be found  that 'representatives'  described by
+different 'coset  numbers' really lie in  the same coset  of the given
+subgroup. This is  called a 'coincidence' and will  eventually lead to
+the elimination  of the larger of  the two coset  numbers.  Until this
+elimination  has been  performed pending  coincidences are  kept  in a
+'queue of coincidences'.
+
+\item{--} A definition that will actually close a row in a subgroup or
+relator  table will  immediately yield  twice as  many entries  in the
+coset  table  as  other  definitions.   Such  definitions  are  called
+'preferred definitions', the  places in rows of a  subgroup or relator
+table that they close are also  referred to as 'gaps of length one' or
+minimal  gaps.  Such  gaps  can be  found  at little  extra cost  when
+'relators  are traced  from a  given  coset number'.   {\ACE} keeps  a
+selection of  them in a 'preferred  definition stack' for  use in some
+definition strategies. (see~\cite{Hav91}).
+
+\endlist
+
+It will also be necessary to understand some further basic features of
+the  implementation and  the corresponding  terminology which  we will
+explain in the sequel.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{Enumeration  Style}
 
-The  majority of  options affect  certain aspects  of  the enumeration
-process. In  this section  we define some  general terms that  will be
-used in the description of such options and strategies for {\ACE}.
-
-*Note:*  Historically two  coset enumeration  strategies stood  at the
-beginning  of coset  enumeration programs:  
-
-\beginitems{--}
-
-\item
-In  the  so-called  'Felsch'  strategy  definition  of  coset  numbers
-proceeded  from  the  left/top  of the  coset  table  row-wise  to  the
-right/bottom and after each definition a search for consequences to be
-obtained from the  closing of rows of (subgroup-  and) relation tables
-was performed.
-
-\item{--} 
-In the so-called 'HLT type'  strategies, coset numbers were defined by
-filling the  rows of (subgroup-  and) relation tables, but  only those
-consequences were used that followed  directly from the closing of the
-row of the (subgroup- or)  relation table which was presently operated
-at,  no exta search  in other  relators was  performed.  (The  loss of
-possible information  that was  risked in HLT  strategy could  be made
-made good for  by so-called lookahead phases, in  which suchsearch for
-consequences was done.)
-
-\enditems
-
-In {\ACE} these two aspects of the original Felsch and HLT methods are
-clearly separated.
-
 The first main decision for any coset enumeration is in which sequence
-definitions are made and we define:
+definitions are  made. When a new  coset number has to  be defined, in
+{\ACE} there are basically three possibilities to choose it:
 
-In *C-style definition* (for  *C*oset Table Based definition) of coset
-numbers  proceeds from  the left/top  of the  coset table  towards the
-right/bottom ---  that is, in order  row by row.  In  fact a procedure
-needs to follow a method like  this to some extent for the proofs that
-coset enumeration eventually terminates in the case of finite index.
+\beginlist
 
-In *R-style definition* (for  *R*elator Based definition) the order in
-which  cosets are  defined is  explicitly prescribed  by the  order in
-which (the subgroup  generators and) the group relators  are filled by
-making definitions.
+\item{--}  One  may fill  the  next empty  entry  in  the coset  table
+scanning  this  from the  left/top  of  the  coset table  towards  the
+right/bottom -- that is, in order  row by row. This is called *C-style
+definition* (for *C*oset Table Based definition) of coset numbers.  In
+fact a procedure needs to follow a method like this to some extent for
+the proofs that coset enumeration eventually terminates in the case of
+finite index (see~\cite{Neu82}).
+
+\item{--} In *R-style definition* (for *R*elator Based definition) the
+order  in which  cosets are  defined is  explicitly prescribed  by the
+order in which rows of (the subgroup generator tables and) the relator
+tables are filled by making definitions.
+
+\item{--}  One may  choose  definitions from  a *Preferred  Definition
+Stack*.  In  this stack possibilities for definition  of coset numbers
+are stored  that will close a  certain row of a  relator table.  Using
+these  'preferred definitions'  is  sometimes also  referred  to as  a
+'minimal gaps strategy'.  The idea of using these is of course that by
+thus closing  a row  in a  relator table, one  will immediately  get a
+consequence. We will come back  to the obvious question where one gets
+this 'preferred definition stack' from.
+
+\endlist
 
 The *enumeration  style* is mainly  determined by the  balance between
 C-style definitions  and R-style  definitions, which is  controlled by
 the  values  of  the  `ct'  and `rt'  parameters  (see~"parameter  ct"
 and~"parameter rt").
 
-However  this still  leaves us  with plenty  of freedom  in definition
-strategies,  freedom which  can e.g.   be used  to great  advantage in
-Felsch-type   strategies.  Though  it   is  not   strictly  necessary,
-Felsch-type programs generally start off  by ensuring that each of the
-given subgroup generators forms a cycle at coset 1 before embarking on
-further enumeration. The use of  this and other possibilities leads to
-the following table of *enumeration styles*.
+However this still leaves us with  plenty of freedom for the design of
+definition  strategies,  freedom which  can  e.g.   be  used to  great
+advantage  in  Felsch-type  strategies.   Though it  is  not  strictly
+necessary, Felsch-type  programs generally start off  by ensuring that
+each of the given subgroup generators  forms a cycle at coset 1 before
+embarking  on   further  enumeration.  The  use  of   this  and  other
+possibilities leads to the following table of *enumeration styles*.
 
 
 % \begin{table}
@@ -343,71 +409,71 @@ the following table of *enumeration styles*.
 \begintt
 Rt value     Ct value     style name
 ---------------------------------------
-  <0           <0         R/C
-  <0            0         R*
-  <0           >0         Cr
-   0           <0         C
-   0            0         R/C (default)
+
    0           >0         C
-  >0           <0         Rc
-  >0            0         R
+  <0           >0         Cr
   >0           >0         CR
+
+  >0            0         R
+  <0            0         R*
+  >0           <0         Rc
+  <0           <0         R/C
+   0            0         R/C (default)
+
 ---------------------------------------
 \endtt
 
-In C  style most definitions  are made in  the next empty  coset table
+In *C style*  most definitions are made in the  next empty coset table
 slot  and  are (in  principle)  tested  in  all essentially  different
 positions in the relators; i.e., this is a Felsch-like mode.
 
 However in C Style some  definitions may be made following a preferred
 definition strategy, see the `pmode' and `psize' options below.
 
-Cr style  is like C style  except that a  single R style pass  is done
+*Cr style* is like  C style except that a single R  style pass is done
 after the initial C style pass.
 
-In CR style alternate passes of C style and R style are performed.
+In *CR style* alternate passes of C style and R style are performed.
 
 
-In R style all the definitions  are made via relator scans; i.e., this
-is an HLT-like mode.  
+In *R  style* all  the definitions are  made via relator  scans; i.e.,
+this is an HLT-like mode.
 
-R\*  style  makes definitions  the  same as  R  style,  but tests  all
+*R\*  style* makes  definitions the  same as  R style,  but  tests all
 definitions as for C style.
 
-Rc style is  like R style, except  that a single C style  pass is done
+*Rc style* is like R style, except  that a single C style pass is done
 after the initial R style pass.
 
-In R/C style we run in  R style until an overflow, perform a lookahead
-on the entire table, and then switch to CR style.
+In  *R/C  style* we  run  in  R style  until  an  overflow, perform  a
+lookahead on the entire table, and then switch to CR style.
 
-Defaulted  R/C style is  the default  style, used  if you  call {\ACE}
+*Defaulted R/C  style* is the default  style, used if  you call {\ACE}
 without specifying  options. In it we  use R/C style with  `ct' set to
 1000 and `rt' set to  approximately $2000$ divided by the total length
 of the relators  in an attempt to balance R and  C definitions when we
 switch to CR style.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{Finding Deductions, Coincidences, and Preferred Definitions} 
 
-Section{The Preferred Definition queue}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-Section{The Deduction Queue}
+*TO BE WRITTEN*
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \Chapter{Options for the ACE Enumerator}
 
-The {\ACE} standalone program offers a wide range of options to direct
-and guide a coset enumeration, most of which are available from {\GAP}
-through this interface.  In this chapter we describe those options and
-how they are passed syntactically from {\GAP}.
+{\ACE} offers a default strategy as well as several further predefined
+strategies.   Such  strategies  can  be chosen  by  setting  'strategy
+options'  (see Chapter~"Predefined Strategies"  for the  definition of
+these startegies and  how they are chosen). However  you may define to
+some  extent your  own  strategy or  modify  predefined strategies  by
+combining the options described in this chapter.
 
-{\ACE} has a default  strategy (see~"parameter default" in the section
-on predefined strategies, Section~"Predefined Strategies"). However if
-problems  become more complicated  you might  have to  select specific
-strategies  to get the  coset enumeration  to finish  successfully and
-quickly.   Further  predefined strategies  can  be  chosen by  setting
-*Strategy Options*  (See Section~"Predefined Strategies").
+{\ACE} offers  a wide  range of  options to direct  and guide  a coset
+enumeration,  most of  which are  available from  {\GAP}  through this
+interface.  In this chapter we describe those options and how they are
+passed syntactically from {\GAP}.
 
 Further options can also be used to specify technical parameters (such
 as the  amount of  memory to  be used), to  specify in  detail certain
@@ -421,16 +487,20 @@ strategy.*  Note that the  order in  which the  options are  passed to
 {\ACE} is  implicit in the interface,  the order in  which the options
 are given in {\GAP} is ignored!
 
+*TO  GREG: 
+THE PRECEDING PASSAGE IS CERTAINLY  NO LONGER TRUE AS YOU EXPLAINED IN
+YOUR  LETTER OF FEB.   11, PLEASE  REPLACE THAT  PASSAGE BY  A CORRECT
+STATEMENT HERE*
 
 Options  are   passed  via  the   option  mechanism  of   {\GAP}  (see
 chapter~"ref:Options Stack"  in the Reference Manual):  
 
-\beginitems
+\beginlist
 
 \item{--}  Options  can either  be  set  globally  using the  function
 `PushOptions', in particular  if you want to use  {\ACE} for all coset
 enumerations in a {\GAP} run  (see Section~"Using ACE as a Default for
-Coset Enumeration" for details), or
+Coset Enumerations" for details), or
 
 
 \item{--} Options can be appended to the argument list of any function
@@ -442,17 +512,20 @@ possibility of passing options with the arguments of a function can in
 particular  be used  if  {\ACE}  is called  directly  by the  function
 `CallACE' (see Section~"Calling ACE directly").
 
-\enditems
+\item{--} If {\ACE} is to be used interactively .....
+*TO BE FILLED IN*
+
+\endlist
 
 Options  are  given  like  record  components,  separated  by  commas.
 Options that take a parameter are  given as an assignement to the name
 (such  as `time:=<val>').  As  a convenience  for boolean  options the
-assignement can  be left out, defaulting  to a value of  `true'.  If a
+assignment can  be left out, defaulting  to a value of  `true'.  If a
 boolean option is not given at  all, it defaults to `false'. 
 
 
-So for example to use the  `hard' option and increase the workspace to
-$10^7$ words for the example given above, one would call:
+So  for example to  use the  `hard' strategy  option and  increase the
+workspace to $10^7$ words for the example given above, one would call:
 
 \begintt
 gap> CallACE(fgens,rels,[c]:hard,workspace:=10^7);;
@@ -484,9 +557,6 @@ some fine points of the influence of `asis' being set on the treatment
 of involutory generators see the {\ACE} standalone manual.
 
 
-
-
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{Parameters that Modify the Enumeration Process}
 
@@ -506,8 +576,8 @@ possible  combinations are given  in the  table of  enumeration styles
 in Section~"Enumeration Style".
 
 
-\>`number:=<val>'{parameter  number}&   The  number  of   relators  in
-subgroup parameter (called `no' in the standalone manual).
+\>`number:=<val>'{parameter  number}&   The  'number  of   relators  in
+subgroup' parameter (called `no' in the standalone manual).
 
 It  is sometimes  helpful to  include relators  into the  list  of the
 subgroup generators, in  the sense that they are  applied to coset \#1
@@ -537,14 +607,26 @@ time-consuming,  especially if  the  presentation is  large.  So,  all
 other things being equal, the  Mendelsohn flag should normally be left
 off.
 
+*Parameters Modifying C Style Definition*
+
+The  next  three  options  are   relevant  only  for  making  C  style
+definitions.  Making definitions in C style, that is filling the coset
+table line  by line, it can  be very advantageous to  switch to making
+definitions from the preferred definition stack.  Possible definitions
+can  be  extracted  from  this  stack  in various  ways  and  the  two
+parameters `pmode'  and `psize' (see~"parameter  pmode" and ~"parameter
+psize"  respectively)  regulate this.  However  it  should be  clearly
+understood that  making  all definitions  from  a preferred  definition
+stack one may  violate the condition of Mendelsohn's  theorem, and the
+parameter `fill' (see~"parameter fill") can be used to avoid this.
 
 \>`fill:=<val>'{parameter fill}&
 Controls the preferred definition strategy by setting the fill factor.
 
 Unless prevented by  the fill factor, gaps of  length one found during
-deduction  testing  are   preferentially  filled  (see~\cite{Hav}).
+deduction   testing   are   preferentially  filled   (see~\cite{Hav91}).
 However,  this potentially  violates the  formal requirement  that all
-rows  in the  table  are  eventually filled  (and  tested against  the
+rows in the coset table  are eventually filled (and tested against the
 relators).   The fill  factor is  used  to ensure  that some  constant
 proportion of the coset table  is always kept filled.  Before defining
 a coset  to fill a  gap of length  one, the enumerator  checks whether
@@ -555,13 +637,12 @@ order (C style) instead of filling gaps.
 An  argument of  0  selects  the default  value  of $\lfloor  5(n+2)/4
 \rfloor$,  where $n$  is the  number of  columns in  the  table.  This
 default  fill factor  allows  a moderate  amount  of gap-filling.   If
-`fill' is  1, then  there is no  gap-filling.  This  parameter applies
-only to C-mode.   A large value of `fill' can cause  what is in effect
-infinite  looping   (resolved  by  the   coset  enumeration  failing).
-However, in general, a large value does work well.  The effects of the
-various  gap-filling stategies  vary widely.   It is  not  clear which
-values are good  general defaults or, indeed, whether  any strategy is
-always ``not too bad''.
+`fill' is  1, then there is  no gap-filling.  A large  value of `fill'
+can cause  what is in effect  infinite looping (resolved  by the coset
+enumeration failing).   However, in general,  a large value  does work
+well.  The  effects of the various gap-filling  stategies vary widely.
+It is  not clear  which values are  good general defaults  or, indeed,
+whether any strategy is always ``not too bad''.
 
 
 \>`pmode:=<val>'{parameter pmode}&
@@ -580,9 +661,8 @@ of length one are noted in the preferred definition queue.
 Provided such a gap survives  (and no coincidence occurs, which causes
 the queue to be discarded) the  next coset will be defined to fill the
 oldest  gap of  length  one.  The  default  value is  either  0 or  3,
-depending       on        the       strategy       selected       (see
-Section~"Predefined Strategies").  If you  want to  know  more details,
-read the code.
+depending   on  the   strategy  selected   (see   Section  "Predefined
+Strategies").  If you want to know more details, read the code.
 
 
 \>`psize:=<val>'{parameter psize}&
@@ -594,16 +674,18 @@ argument  of 0 selects  the default  size of  $256$.  Each  queue slot
 takes two words (i.e., 8 bytes), and the queue can store up to $2^n-1$
 entries.
 
+*Parameters for R style Definition*
+
 \>`norow'{parameter norow}&
 Set the `row filling' parameter to 0.
 
-When making HLT-style definitions, it is normal to scan each row of the
-coset table after its coset has been applied to all relators, and make 
-definitions to fill any holes encountered.
-Failure to do so can cause even simple enumerations to overflow; see
-Section~{ex002}.
-% in the appendix, not included here ...
-To turn row filling off, use `norow'.
+When making  HLT-style definitions, it is  normal to scan  each row of
+the coset table after its coset  has been applied to all relators, and
+make definitions  to fill  any holes  in that row  of the  coset table
+encountered. This  will in particular guarantee that  the condition of
+Mendelsohn's Theorem  will be fulfilled.   Failure to do so  can cause
+even simple enumerations to overflow.   To turn this row filling off,
+you can use `norow'.
 
 \>`look:=<val>'{parameter look}&
 Lookahead
@@ -623,18 +705,19 @@ different positions).
 The `look' option sets the value for lookahead, a value of 0 disables
 lookahead.
 
-\beginitems
+\beginlist
 
 \item{--} A value of 1 does a partial table, R-style lookahead; 
 \item{--} 2 does all the table, C-style; 
 \item{--} 3 does all the table, R-style; 
 \item{--} 4 does a partial table, C-style.  
 
-\enditems
+\endlist
 
 The  default  is  either  0  or  1  depending  on  the  strategy;  see
 Section~"Predefined Strategies".
 
+*Further Parameters*
 
 \>`dmode:=<val>'{parameter dmode}&
 Deduction mode.
@@ -647,11 +730,10 @@ can either be done directly  (Felsch strategy) or via relator scanning
 So the untested deductions are stored in a stack.  Normally this stack
 is fairly small but, during a collapse, it can become very large.
 
-This command allows the user to specify how
-deductions should be handled.  The value <val> has the following
-interpretations: 
+This  command allows  the user  to  specify how  deductions should  be
+handled.  The value <val> has the following interpretations:
 
-\beginitems
+\beginlist
 
 \item{--} <val>  = $0$:  
 discard deductions if there is no stack space left; in addition purges
@@ -662,7 +744,6 @@ like <val> = $0$, but purge  redundant cosets off the top of the stack
 at every coincidence,
 
 \item{--} <val> = $2$: 
-
 again as <val> = 0, but  purges all redundant cosets from the stack at
 every coincidence.
 
@@ -673,7 +754,7 @@ every coincidence.
 if  the stack  overflows, then  double the  stack size  and  purge all
 redundant cosets from the stack.
 
-\enditems
+\endlist
 
 The  default deduction mode  is either  $0$ or  $4$, depending  on the
 strategy  selected (see  Section~"Predefined Strategies"),  and  it is
@@ -697,45 +778,214 @@ discussion of deduction handling.
 
 \enditems
 
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\Section{Predefined Strategies}
+\Section{Technical Options}
+
+The following options do not affect how the coset enumeration is done,
+but how it  uses the computer's resources. They  might thus affect the
+runtime as  well as  the range of  problems that  can be tackled  on a
+given machine.
+
+\beginitems
+
+\>`workspace:=<val>'{parameter workspace}&
+Workspace size in words (default $10^6$).
 
 
-??? (von Mode and Style)
-By default  {\ACE} uses  a strategy `default'  which assumes  that the
-enumeration is easy, and if it turns out not to be so, {\ACE} switches
-to  a strategy designed  for more  difficult enumerations.   The other
-straightforward options for beginning users are `easy' and `hard', and
-about 10 further predefined  strategies are available by name. Details
-are to be found in Section~"Predefined Strategies".
-
-Thus, `easy' will quickly succeed or fail (in the context of the given
-resources); `default' may  quickly succeed, but then try  `hard' for a
-while; `hard' will run more slowly from the beginning try to succeed.
-????
+By default, {\ACE} has a physical table size of $10^6$ words (i.e., $4
+\times 10^6$ bytes in the  default 32-bit environment).  The number of
+cosets  in the  table  is the  table  size divided  by  the number  of
+columns.  Although the  number of cosets is limited  to $2^{31}-1$ (if
+the C `int'  type is 32 bits), the table size  can exceed the $4$GByte
+32-bit limit if a suitable machine is used.
 
 
+\>`time:=<val>'{parameter time}&
+Maximum execution time in seconds.
+
+The `time' command  puts a time limit (in seconds) on  the length of a
+run.  The  default is 0  which is no  time limit.  If the  argument is
+$\ge0$ then the total elapsed time for this call is checked at the end
+of each pass through the enumerator's main loop, and if it's more than
+the limit the run is stopped and the current table returned.
+
+Note that a limit of $0$ performs exactly one pass through the main
+loop, since $0 \ge 0$.
+
+\begintt
+???????????????????????????????????????????????????????????????????
+*GREG:
+
+DOES THIS HAVE RELEVANCE TO THE INTERACTIVE MODE?*
+
+If the enumerator is run in the continue mode, this allows a form of
+  ``single-stepping''\kern-1.5pt.
+
+??????????????????????????????????????????????????????????????????
+\endtt
+
+The time  limit is approximate, in  the sense that  the enumerator may
+run for a longer, but never a shorter, time.  So, if there is, e.g., a
+big collapse (so that the time round the loop becomes very long), then
+the run may run over the limit by a large amount.
+
+*Notes:*
+The time  limit is  CPU-time, not wall-time.   As in all  timing under
+Unix, the clock's granularity (usually  $10$ mSec) and the system load
+can affect  the timing;  so the  number of main  loop iterations  in a
+given time may vary.
+
+\begintt
+*GREG:
+
+I WOULD  LIKE TO HAVE THE  `loop' PARAMETER BEEN MADE  AVAILABLE AS AN
+OPTION  TOO. IT  SHOULD THEN  PROBABLY GO  INTO THIS  PLACE  AMONG THE
+TECHNICAL OPTIONS. A FORMULASTION OF THE FUNCTION CALL HAS TO BE GIVEN
+IN  LINE WITH  THE OTHERS  IN TH  INTERFACE. THE  TEXT FOR  IT  IN THE
+STANDALONE MANUAL SAYS:*
+\endtt
 
 
+The core enumerator is organised as a state machine, with each step
+performing an 'action' (i.e., lookahead, compaction) or a block of
+actions (i.e., `ct' coset definitions, `rt' coset applications).
+The number of passes through the main loop (i.e., steps) is counted, and
+the enumerator can make an early return when this count hits the
+value of `loop'.
+A value of $0$, the default, turns this feature off.
+
+*Guru Notes:*
+You can do lots of really neat things using this feature, but you need
+some understanding of the internals of {\ACE} to get real benefit from
+it.
 
 
-The following  boolean options  can set strategies  as defined  in the
-{\ACE} manual: `default', `easy', `felsch0', `felsch1', `hard', `hlt',
-`purec', `purer', `sims1', `sims3', `sims5', `sims7', and `sims9'.
+\>`path'{parameter path}&
+Turns on path compression.
 
-Strategy options are parsed by the interface *before* any other option, it
-is therefore possible to modify parameters on top of a strategy.
+To  correctly  process  multiple  concidences, a  union-find  must  be
+performed.  If both path compression and weighted union are used, then
+this can be  done in essentially linear time  (see, e.g., \cite{CLR}).
+Weighted union alone, in the  worst-case, is worse than linear, but is
+subquadratic.  In  practice, path  compression is expensive,  since it
+involves many coset table  accesses.  So, by default, path compression
+is turned off; it can be turned on by `path'.  It has no effect on the
+result, but may effect the running time and the internal statistics.
+
+*Guru Notes:*
+The whole question of the best way to handle large coincidence forests
+is problematic.  Formally, {\ACE} does  not do a weighted union, since
+it is constrained to replace the higher-numbered of a coincident pair.
+In practice,  this seems  to amount to  much the same  thing!  Turning
+path  compression on  cuts down  the  amount of  data movement  during
+coincidence processing at the expense of having to trace the paths and
+compress them.  In general, it does not seem to be worthwhile.
+
+\>`com:=<val>'{parameter com}&
+Percentage of dead cosets to trigger compaction.
+
+The parameter `com'  controls compaction of the coset  table during an
+enumeration.  It sets the percentage  of dead cosets needed to trigger
+compaction.  The default is 10  or 100, depending on the strategy used
+(see Section~"Predefined Strategies").
+
+Compaction recovers the space allocated to cosets which are flagged as
+dead  (i.e., which  were found  to be  coincident  with lower-numbered
+cosets).   It results  in  a table  where  all the  active cosets  are
+numbered contiguously  from \#1, and  with the remainder of  the table
+available for new cosets.
+
+The  coset table  is compacted  when a  coset definition  is required,
+there is  no space for  a new coset  available, and provided  that the
+given  percentage  of  the  coset  table contains  dead  cosets.   For
+example, `com =  20' means compaction will occur only  if 20\% or more
+of the cosets in the table  are dead.  The argument can be any integer
+in  the range  $0--100$,  and the  default  value is  10  or 100;  see
+Section~"Predefined  Strategies".   An  argument  of  100  means  that
+compaction is  never performed,  while an argument  of 0  means always
+compact, no matter how few dead cosets there are (provided there is at
+least one, of course).
+
+Compaction may be performed  multiple times during an enumeration, and
+the table that results from an  enumeration may or may not be compact,
+depending on whether or not there have been any coincidences since the
+last compaction (or  from the start of the  enumeration, if there have
+been no compactions).
+
+*Notes:*
+In some strategies  (e.g., `hlt') a lookahead phase  may be run before
+compaction  is   attempted.   In  other   strategies  (e.g.,  `sims3')
+compaction may  be performed  while there are  outstanding deductions;
+since deductions  are discarded  during compaction, a  final lookahead
+phase will (automatically) be performed.
+
+Compacting a  table 'destroys' information  and history, in  the sense
+that the  coincidence list is deleted,  and the table  entries for any
+dead cosets are deleted.
+
+??????????????????????????????????????????????????????????????????????
+*GREG:
+WILL THIS BE RELEVANT FOR INTERACTIVE USE?*
+
+If  messaging is  enabled (see~"Information  About  the Enumeration"),
+then a progress  message (labelled {\tt CO}) is  printed each time the
+compaction routine is  actually called (as opposed to  each time it is
+potentially called).
+??????????????????????????????????????????????????????????????????????
+
+
+\>`max:=<val>'{parameter max}&
+Maximum number of cosets to be defined.
+
+Sets the maximum  number of cosets to be defined.   By default, all of
+the workspace is used, if  necessary, in building the coset table.  So
+the table size is  an upper bound on how many cosets  can be active at
+any one  time.  The `max'  option allows a  limit to be placed  on how
+much of the physical table  space is made available to the enumerator.
+Enough  space for  at least  two cosets  (i.e., the  subgroup  and one
+other) must  be made available.  An  argument of 0 selects  all of the
+workspace.
+
+\enditems
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Chapter{Predefined Strategies}
+
 
 The versatility  of {\ACE}  means that it  can be difficult  to select
 appropriate  parameters when  presented with  a new  enumeration.  The
 problem is compounded  by the fact that no  generally applicable rules
 exist to  predict, given a presentation, which  parameter settings are
-'good'.   To help  overcome  this problem,  {\ACE} contains  various
+'good'.   To  help  overcome  this problem,  {\ACE}  contains  various
 commands which select particular enumeration strategies.  One or other
 of these strategies may work and, if not, the results may indicate how
-the parameters can be varied  to obtain a successful enumeration.  The
-thirteen  standard strategies  are listed  below, their  definition is
-given in the following table.
+the parameters can be varied  to obtain a successful enumeration.  
+
+By default  {\ACE} uses  a strategy `default'  which assumes  that the
+enumeration is easy, and if it turns out not to be so, {\ACE} switches
+to  a strategy designed  for more  difficult enumerations.   The other
+straightforward  options for  beginning users  are `easy'  and `hard'.
+Thus, `easy' will quickly succeed or fail (in the context of the given
+resources); `default' may  quickly succeed, but then try  `hard' for a
+while;  `hard' will  run  more  slowly from  the  beginning trying  to
+succeed.
+
+The following boolean  options can set strategies (as  also defined in
+the   {\ACE}  standalone   manual):   `default',  `easy',   `felsch0',
+`felsch1', `hard', `hlt', `purec', `purer', `sims1', `sims3', `sims5',
+`sims7', and `sims9'.
+
+Strategy  options  are parsed  by  the  interface  *before* any  other
+option,  it is therefore  possible to  modify parameters  on top  of a
+strategy.
+
+The thirteen standard strategies are listed below, their definition is
+given  in the following  table. For  all of  them the  following three
+parameters  are the  same;  `path'  = `false',  `psize'  = $256$,  and
+`dsize' = $1000$. Note;  `mend' stands for the parameter `mendelsohn',
+`row' =  `n' means that `norow' has  been set, `row' =  `y' means that
+`norow' has not been set.
 
 % \begin{table}
 % \hrule
@@ -790,9 +1040,9 @@ sims9       n     n       0     n   10  1000      0     1      0      4
 
 The  various  parameters  occurring  in  this table  (which  are  also
 available  via {\GAP})  are  explained in  groups  according to  their
-functionality in Section "Parameters  that Modify Enumeration Mode and
-Style".   The  parameter names  are  listed in  the  top  row and  the
-strategy names are in the first column.
+functionality  in  Chapter  "Options  for the  ACE  Enumerator".   The
+parameter names are  listed in the top row and  the strategy names are
+in the first column.
 
 Note  that  we  explicitly   (re)set  all  of  the  listed  enumerator
 parameters in all of the  predefined strategies, even although some of
@@ -835,22 +1085,19 @@ This selects a pure Felsch strategy.
 selects a Felsch strategy with  all relators in the subgroup and turns
 gap-filling on.
 
-\>`hard'{parameter hard}&
-In  many  'hard'  enumerations,  a  mixture  of  R-style  and  C-style
-definitions,  all tested  in all  essentially different  positions, is
-appropriate.   This option selects  such a  mixed strategy.   The idea
-here is  that most of the work  is done C-style (with  the relators in
-the  subgroup and  with  gap-filling active),  but  that every  $1000$
-C-style definitions a further coset is applied to all relators.
-
-*Guru Notes:*
-The $1000/1$ mix is  not necessarily optimal, and some experimentation
-may  be  needed to  find  an  acceptable  balance (see,  for  example,
-\cite{HR1}).   Note also  that, the  longer  the total  length of  the
-presentation,  the  more  work  needs   to  be  done  for  each  coset
-application to the relators; one  coset application can result in more
-than  $1000$ definitions,  reversing the  balance between  R-style and
-C-style definitions.
+\>`hard'{parameter hard}&  In many  'hard' enumerations, a  mixture of
+R-style  and  C-style  definitions,  all  tested  in  all  essentially
+different positions, is appropriate.  This option selects such a mixed
+strategy.  The  idea here  is that  most of the  work is  done C-style
+(with the relators  in the subgroup and with  gap-filling active), but
+that every  $1000$ C-style definitions  a further coset is  applied to
+all  relators.*Guru  Notes:*  The  $1000/1$  mix  is  not  necessarily
+optimal, and some experimentation may  be needed to find an acceptable
+balance (see,  for example, \cite{HR1}).   Note also that,  the longer
+the total length  of the presentation, the more work  needs to be done
+for each coset application to  the relators; one coset application can
+result in more than  $1000$ definitions, reversing the balance between
+R-style and C-style definitions.
 
 \>`hlt'{parameter hlt}&
 Selects the standard HLT strategy.
@@ -882,170 +1129,30 @@ statistics   given  in~\cite{Sim};  some   examples  are   given  in
 Section~{ex001}.
 % again, in the appendix ...
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\Section{Technical Options}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-The following options do not affect how the coset enumeration is done,
-but how it  uses the computer's resources. They  might thus affect the
-runtime as  well as  the range of  problems that  can be tackled  on a
-given machine.
+\Chapter{Information and Experimentation}
 
-\beginitems
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\>`workspace:=<val>'{parameter workspace}&
-Workspace size in words (default $10^6$).
-
-
-By default, {\ACE} has a physical table size of $10^6$ words (i.e., $4
-\times 10^6$ bytes in the  default 32-bit environment).  The number of
-cosets  in the  table  is the  table  size divided  by  the number  of
-columns.  Although the  number of cosets is limited  to $2^{31}-1$ (if
-the C `int'  type is 32 bits), the table size  can exceed the $4$GByte
-32-bit limit if a suitable machine is used.
-
-?????????????????????????????????????????????????????????????????????
-
-*Notes*:
-If the binary option is set (see the `opt' command), the multipliers
-  are $1$, $2^{10}$\kern-2pt, $2^{20}$ and $2^{30}$ respectively.
-The actual number of cosets in the table is $`size'/4 -2$, rounded
-  down to the nearest integer.
-The $-2$ is to allow for possible rounding errors and the fact that coset
-  \#0 is not used.
-
-?????????????????????????????????????????????????????????????????????????
-
-\>`time:=<val>'{parameter time}&
-Maximum execution time in seconds.
-
-The `time' command  puts a time limit (in seconds) on  the length of a
-run.  The  default is 0  which is no  time limit.  If the  argument is
-$\ge0$ then the total elapsed time for this call is checked at the end
-of each pass through the enumerator's main loop, and if it's more than
-the limit the run is stopped and the current table returned.
-
-Note that a limit of $0$ performs exactly one pass through the main
-loop, since $0 \ge 0$.
-
-???????????????????????????????????????????????????????????????????
-
-If the enumerator is run in the continue mode, this allows a form of
-  ``single-stepping''\kern-1.5pt.
-
-??????????????????????????????????????????????????????????????????
-
-The time  limit is approximate, in  the sense that  the enumerator may
-run for a longer, but never a shorter, time.  So, if there is, e.g., a
-big collapse (so that the time round the loop becomes very long), then
-the run may run over the limit by a large amount.
-
-*Notes:*
-The time  limit is  CPU-time, not wall-time.   As in all  timing under
-Unix, the clock's granularity (usually  $10$ mSec) and the system load
-can affect  the timing;  so the  number of main  loop iterations  in a
-given time may vary.
-
-
-\>`path'{parameter path}&
-Turns on path compression.
-
-To  correctly  process  multiple  concidences, a  union-find  must  be
-performed.  If both path compression and weighted union are used, then
-this can be  done in essentially linear time  (see, e.g., \cite{CLR}).
-Weighted union alone, in the  worst-case, is worse than linear, but is
-subquadratic.  In  practice, path  compression is expensive,  since it
-involves many coset table  accesses.  So, by default, path compression
-is turned off; it can be turned on by `path'.  It has no effect on the
-result, but may effect the running time and the internal statistics.
-
-*Guru Notes:*
-The whole question of the best way to handle large coincidence forests
-is problematic.  Formally, {\ACE} does  not do a weighted union, since
-it is constrained to replace the higher-numbered of a coincident pair.
-In practice,  this seems  to amount to  much the same  thing!  Turning
-path  compression on  cuts down  the  amount of  data movement  during
-coincidence processing at the expense of having to trace the paths and
-compress them.  In general, it does not seem to be worthwhile.
-
-\>`com:=<val>'{parameter com}&
-Percentage of dead cosets to trigger compaction.
-
-
-The parameter `com'  controls compaction of the coset  table during an
-enumeration.  It sets the percentage  of dead cosets needed to trigger
-compaction.  The default is 10  or 100, depending on the strategy used
-(see Section~"Predefined Strategies").
-
-Compaction recovers the space allocated to cosets which are flagged as
-dead  (i.e., which  were found  to be  coincident  with lower-numbered
-cosets).   It results  in  a table  where  all the  active cosets  are
-numbered contiguously  from \#1, and  with the remainder of  the table
-available for new cosets.
-
-The  coset table  is compacted  when a  coset definition  is required,
-there is  no space for  a new coset  available, and provided  that the
-given  percentage  of  the  coset  table contains  dead  cosets.   For
-example, `com =  20' means compaction will occur only  if 20\% or more
-of the cosets in the table  are dead.  The argument can be any integer
-in  the range  $0--100$,  and the  default  value is  10  or 100;  see
-Section~"Predefined  Strategies".   An  argument  of  100  means  that
-compaction is  never performed,  while an argument  of 0  means always
-compact, no matter how few dead cosets there are (provided there is at
-least one, of course).
-
-Compaction may be performed  multiple times during an enumeration, and
-the table that results from an  enumeration may or may not be compact,
-depending on whether or not there have been any coincidences since the
-last compaction (or  from the start of the  enumeration, if there have
-been no compactions).
-
-??????????????????????????????????????????????????????????????????????
-
-If messaging is enabled (see~"Information About the Enumeration"), then a
-progress message (labelled {\tt CO}) is printed each time the compaction routine
-is actually called (as opposed to each time it is potentially called).
-
-????????????????????????????????????????????????????????????????????????
-
-
-*Notes:*
-In some strategies  (e.g., `hlt') a lookahead phase  may be run before
-compaction  is   attempted.   In  other   strategies  (e.g.,  `sims3')
-compaction may  be performed  while there are  outstanding deductions;
-since deductions  are discarded  during compaction, a  final lookahead
-phase will (automatically) be performed.
-
-Compacting a  table 'destroys' information  and history, in  the sense
-that the  coincidence list is deleted,  and the table  entries for any
-dead cosets are deleted.
-
-?????????????????????????????????????????????????????????????????????
-
-At Level 2, it is not possible to access the `data' in dead cosets; in
-fact, most options that require table data compact the table 
-automatically before they run.
-
-???????????????????????????????????????????????????????????????????????
-
-\>`max:=<val>'{parameter max}&
-Maximum number of cosets to be defined.
-
-Sets the maximum  number of cosets to be defined.   By default, all of
-the workspace is used, if  necessary, in building the coset table.  So
-the table size is  an upper bound on how many cosets  can be active at
-any one  time.  The `max'  option allows a  limit to be placed  on how
-much of the physical table  space is made available to the enumerator.
-Enough  space for  at least  two cosets  (i.e., the  subgroup  and one
-other) must  be made available.  An  argument of 0 selects  all of the
-workspace.
-
-\enditems
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{Information about the Enumeration}
 
 \beginitems
+
+\>`silent'{parameter silent}& If the  coset enumeration did not finish
+within  the preset  limits, an  error is  raised by  the  interface to
+{\GAP}, unless the option `silent'  has been set, in which case `fail'
+is  returned.  Note that  this is  a feature  of the  {\GAP} interface
+only, it has no counterpart in the {\ACE} standalone.
+
+\>`outfile:=<filename>'{parameter outfile}&
+
+If this  option is used,  {\GAP} will keep  the input file  for {\ACE}
+produced by he {\GAP} interface under the filename <filename>, so that
+one  could  easily  use  the  {\ACE}  standalone  for  work  with  the
+respective presentation,  without having to  create an input  file for
+the standalone anew.  Clearly this is a feature  of the interface only
+that has no counterpart in the {\ACE} standalone.
 
 \>`mess'{parameter mess}
 \>`mess:=<val>'{parameter mess}&
@@ -1066,37 +1173,19 @@ it progresses are also printed  out.  The absolute value of `val' sets
 the frequency of  the progress messages, with a  negative sign turning
 hole monitoring on.
 
-?????????????????????????????????????????????????????????????????????????
-
-The initial printout of the presentation and the parameters is the same
-as that produced by the `sr:1' command; see Appendix~{app:ex}
-  for some examples.
-
-?????????????????????????????????????????????????????????????????????????
-
 The result line gives the result of the call to the enumerator and some
-basic statistics 
-
-????????????????????????????????????????????????
-
-(see Appendix~{app:ex} for some examples).
-
-????????????????????????????????????????????
-
-
-
-The statistics given are, in order: 
+basic statistics.  The statistics given are, in order: 
  
 \beginlist
-\item{--}  `a', number of active cosets; 
-\item{--}  `r', number of applied cosets;
-\item{--}  `h', first (potentially) incomplete row;
-\item{--}  `n', next coset definition number; 
-\item{--}  `h', (if `mess'$ \< 0$), percentage of holes in the table;
-\item{--}  `l', number of main loop passes;
-\item{--}  `c', total CPU time;
-\item{--}  `m', maximum number of active cosets;
-\item{--}  `t', total number of cosets defined.
+\item{--}  `a':   number of active cosets; 
+\item{--}  `r':   number of applied cosets;
+\item{--}  `h':   first (potentially) incomplete row;
+\item{--}  `n':   next coset definition number; 
+\item{--}  `h':   (if `mess'$ \< 0$), percentage of holes in the table;
+\item{--}  `l':   number of main loop passes;
+\item{--}  `c':   total CPU time;
+\item{--}  `m':   maximum number of active cosets;
+\item{--}  `t':   total number of cosets defined.
 \endlist
 
 The possible results are given in the following Table; any result not
@@ -1203,12 +1292,9 @@ The tags indicate the function  just completed by the enumerator.  The
 tags with a  `y' in the `action' column  represent functions which are
 aggregated and counted.
 
-Every time this count overflows the value of `mess', a message line
-is printed and the count is zeroed.
-Those tags flagged with a `y*' are only present if the appropriate option
-has been included in the build 
-
-??????????????????????(see the `opt' command).?????????????????????
+Every time this count overflows the value of `mess', a message line is
+printed and the  count is zeroed.  Those tags flagged  with a `y*' are
+only present if the appropriate option has been included in the build.
 
 Tags with an `n' in the `action' column are not counted, and cause a
 message line to be output every time they occur.
@@ -1220,7 +1306,7 @@ is the time since the last message line.
 
 The variable portion of the statistics can be:
 
-\beginitems
+\beginlist
 
 \item{--}  the `m' and `t' values, as for the result line;
 \item{--}  `d', the current size of the deduction stack;
@@ -1228,7 +1314,7 @@ The variable portion of the statistics can be:
 the non-redundant deductions retained, and the redundant deductions
 discarded.
 
-\enditems
+\endlist
 
 *Notes:*
 Hole monitoring  is expensive, so don't  turn it on  unless you really
@@ -1248,19 +1334,20 @@ output files.
 \beginitems
 
 \>`aep:=<val>'{parameter aep}&
-Runs the enumeration for all equivalent presentations. Use with the `mess'
-option to see the result.
+<val> is  an integer $0 \leq  <val> \leq 7$. Runs  the enumeration for
+equivalent presentations.
 
 \enditems
 
 The `aep'  (all equivalent  presentations) option runs  an enumeration
-for each possible combination  of relator ordering, relator rotations,
-and relator inversions.
+for combinations  of relator ordering, relator  rotations, and relator
+inversions.
 
-As discussed by Cannon, Dimino, Havas and Watson \cite{CDHW} and Havas
-and Ramsay  \cite{HR1} such  equivalent presentations can  yield large
-variations in  the number of  cosets required in an  enumeration.  For
-this command, we are interested in this variation.
+The mandatory  argument <val> is  considered as a binary  number.  Its
+three bits  are treated as  flags, and control relator  rotations (the
+$2^0$ bit),  relator inversions (the $2^1$ bit)  and relator orderings
+(the $2^2$  bit); $1$  means 'active' and  $0$ means  'inactive'. (See
+below for an example).
 
 The `aep' option  first performs a 'priming run'  using the parameters
 as they  stand.  In particular,  the `asis' and `mess'  parameters are
@@ -1268,30 +1355,33 @@ honoured.
 
 It then  turns `asis' on and  `mess' off, and generates  and tests the
 requested  equivalent presentations.  The  maximum and  minimum values
-attained by  `maxcos' and  `totcos' are tracked,  and each time  a new
-'record' is  found the  relators used and  the summary result  line is
-printed.
-
-At the end, some additional status information is printed: 
-
-\beginitems
-
-\item{--}  the number of runs which yielded a finite index; 
-\item{--}  the total number of runs (excluding the priming run); and 
-\item{--}  the range of values observed for `maxcos' and `totcos'.
-
-\enditems
-
-The mandatory  argument is considered  as a binary number.   Its three
-bits are  treated as flags,  and control relator rotations  (the $2^0$
-bit), relator  inversions (the $2^1$  bit) and relator  orderings (the
-$2^2$ bit); $1$ means 'active' and $0$ means 'inactive'.
+attained by  `m' (the maximum number  of coset numbers  defines at any
+stage)  and  `t' (the  total  number  of  coset numbers  defined)  are
+tracked, and each  time a new 'record' is found  the relators used and
+the summary result line is printed.
 
 The  order in  which the  equivalent presentations  are  generated and
 tested has no particular  significance, but note that the presentation
-as  given {\it  after}  the initial  priming  run) is  the {\it  last}
+as  given *after*  the initial  priming  run) is  the *last*
 presentation to be generated and  tested, so that the group's relators
 are left `unchanged' by running the `aep' option.
+
+Use  with  the  `mess' option  to  see  the  result. 
+
+As discussed by Cannon, Dimino, Havas and Watson \cite{CDHW} and Havas
+and Ramsay  \cite{HR1} such  equivalent presentations can  yield large
+variations in  the number of  cosets required in an  enumeration.  For
+this command, we are interested in this variation.
+
+At the end, some additional status information is printed: 
+
+
+\beginlist
+\item{--}  the number of runs which yielded a finite index; 
+\item{--}  the total number of runs (excluding the priming run); and 
+\item{--}  the range of values observed for `m' and `t'.
+\endlist
+
 
 As an example (drawn from the discussion in \cite{HR1}) consider the index
   $448$ enumeration of $(8,7 \mid 2,3) / \langle a^2,Ab \rangle$,
@@ -1349,7 +1439,6 @@ When the `rep' command completes,  the presentation active is the {\it
 last} one generated.
 
 *Guru Note:*
-
 It might  appear that neglecting to restore  the original presentation
 is an error.  In fact, it is a useful feature!  Suppose that the space
 of  equivalent presentations is  too large  to exhaustively  test.  As
@@ -1359,9 +1448,269 @@ noted in the  entry for `aep', we can start  up multiple copies of
 tedious and error-prone.  The `rep' option provides a simple solution;
 simply run `rep' := $7$ before `aep' := $7$!
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\Chapter{Using ACE Interactively}
+
+\>StartACE( <name>, <fgens>, <rels>, <sgens> [:<options>] ) F
+
+`StartACE' takes a string <name>, a list <fgens> of free generators,
+a list <rels> of relators and a list <sgens> of subgroup generators,
+both in terms of the free generators, and optionally <options>
+(see~"CallAce" for the format of the latter).
+
+The return value is a {\GAP} object that represents the running {\ACE},
+it is used as an argument in all functions described below.
+<name> is used to print the return value in all subsequent outputs.
+
+\>LeaveACE( <aceobj> ) F
+
+`LeaveACE' takes an object <aceobj> as returned by `StartACE'
+(see~"StartACE"), and terminates the corresponding {\ACE} job.
+%T return an exit status if possible?
+
+\begintt
+*GREG:
+
+THERE SHOULD PERHAPS BE THREE SECTIONS, 
+
+ONE GIVING COMMANDS THAT INTERACTIVELY 'STEER' ACE
+
+ONE WITH FUNCTIONS THAT ALLOW  TO SEND QUESTIONS ABOUT THE COSET TABLE
+TO ACE.
+
+ONE THAT ALLOWS OPERATIONS USING THE (POSSIBLY INCOMPLETE) COSET TABLE
+TO GET FURTHER INFORMATION.
+
+I HAVE  INSERTED INTO PLACEHOLDERS  FOR THESE SECTIONS  THE RESPECTIVE
+STANDALONE COMMANDS WHICH  I WOULD LIKE TO HAVE  AVAILABLE THROUGH THE
+INTERFACE*
+\endtt
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{Steering ACE Interactively}
+
+\>ACECheck( <aceobj> ) F
+\>ACERedo( <aceobj> ) F
+
+An extant  enumeration is redone,  using the current  parameters.  Any
+existing information in the table  is retained, and the enumeration is
+restarted from coset \#1 (i.e., the subgroup).
+
+*Notes:*
+
+This option is really intended  for the case where additional relators
+and/or subgroup  generators have been introduced.   The current table,
+which may be  incomplete or exhibit a finite  index, is still 'valid'.
+However, the new data may  allow the enumeration to complete, or cause
+a collapse to a smaller index.
+
+\>ACEContinue( <aceobj> ) F
+
+Continue the  current enumeration,  building upon the  existing table.
+If a previous run stopped without producing a finite index you can, in
+principle, change any  of the parameters and continue  on.  Of course,
+if you make any changes  which invalidate the current table, you won't
+be allowed to continue, although you may be allowed to redo.
+
+
+\>ACERecover( <aceobj> ) F
+
+Invokes the compaction routine on  the table to recover the space used
+by the dead  cosetnumbers. A `CO' message line is  printed if any rows
+of the coset table were recovered,  and a `co' line if none were. 
+
+*GREG: DOES THE NEXT SENTENCE MAKE SENSE FOR THE INTERFACE?*
+
+This routine is  called automatically if the `cy',  `nc', `pr',or `st'
+options are involved.
+
+
+\>ACEAddGenerators( <aceobj>, <wordlist> ) F
+
+Adds the words in the list <wordlist> to any subgroup generators already
+present.
+The enumeration must be restarted or redone, it cannot be continued.
+
+\>ACEAddRelators( <aceobj>, <relatorlist> ) F
+
+Adds the words in the list <relatorlist> to any relators already present.
+The enumeration must be restarted or redone, it cannot be continued.
+
+\>ACECosetCoincidence( <aceobj>, <int> ) F
+
+Print out the representative of coset <int>, and add it to the
+subgroup generators; i.e., equates this coset with coset \#1, the
+subgroup.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{Interactive Questions}
+
+% \>`dump' := [0/1/2[,0/1]]&
+% 
+% Dumps  the internal  variables of  {\ACE}.  The  first  argument selects
+% which of  the three levels  of {\ACE} to  dump, and defaults  to Level
+% $0$.  The second argument selects the level of detail, and defaults to
+% $0$  (i.e., less  detail).  This  option  is intended  for gurus;  the
+% source code should be consulted to see what the output means.
+
+\>ACEPrintOptions( <aceobj> ) F
+
+This command prints details of the options included  in the version of
+{\ACE} you're  running; i.e.,  what compiler flags  were set  when the
+executable  was built.   A  typical output,  illustrating the  default
+build, is:
+
+\begintt
+Executable built:
+  Sat Feb 27 15:57:59 EST 1999
+Level 0 options:
+  statistics package = on
+  coinc processing messages = on
+  dedn processing messages = on
+Level 1 options:
+  workspace multipliers = decimal
+Level 2 options:
+  host info = on
+\endtt
+
+
+\>ACEPrintDetails( <aceobj>[, <params> ) F
+
+This  command  prints out  details  of  the  current presentation  and
+parameters.  No second argument, or second argument `false', prints out
+the group
+and subgroup name, the group's relators and the subgroup's generators.
+If the second argument is `true', then  the current setting of the
+parameters is
+also printed.  The printout is the  same as that produced at the start
+of a run when messaging is on.
+
+% *Notes:*
+% The output is printed out in a form suitable for input, so that a record
+% of a previous run can be used to replicate the run.
+% Note that, due to the defaulting of some parameters and the special
+% meaning attached to some values, a little care has to be taken in
+% interpreting the parameters.
+%T mention outfile option here?
+
+*GREG: DOES THE FOLLOWING PASSAGE MAKE SENSE WITH THE INTERFACE?*
+If you wish to *exactly* duplicate a run, you should use the output
+of `sr' *after* the run completes.
+
+
+\>ACEPrintStatistics( <aceobj> ) F
+
+If the statistics package is compiled into the code (which it is by
+default),
+then print the statistics accumulated during the most recent enumeration.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{Operations with a Coset table}
+
+\>ACECycles( <aceobj> ) F
+
+returns a list of permutations corresponding to the generators,
+i.e., the permutation representation.
+%T only for complete tables?
+
+\>ACENormalClosure( <aceobj>[, <conjugates>] ) F
+
+If the second argument is missing or `false', test for normal closure.
+If a subgroup  generator  does not  normalise  a  generator,  then this  is
+returned.
+If  the  argument  is `true',  then  any  non-normalising
+conjugates are also added to the subgroup generators.
+
+\>ACEOrder( <aceobj>, <int> ) F
+
+This function searches for cosets with order modulo the subgroup a multiple
+of the absolute value of the integer <int>.
+If <int> is negative then the list of all cosets meeting the requirement is
+returned.
+If <int> is positive then the first coset meeting the requirement is
+returned if such a coset exists, and `fail' otherwise.
+
+\>ACEOrders( <aceobj> ) F
+
+returns the list of orders modulo the subgroup of all cosets.
+
+
+\>ACEStabilisingCosets( <aceobj>, <int> ) F
+
+This function returns stabilising cosets of the subgroup.
+
+\beginlist
+\item{--} If <int> $> 0$, the list of the first <int> stabilising cosets
+    is returned.
+\item{--} If <int> $\< 0$, the list of pairs of the first <int> stabilising
+    cosets, plus their representatives, is returned.
+\item{--} If <int> = $0$, the list of pairs of all of the stabilising cosets,
+    plus their representatives, is returned.
+\endlist
+
+
+\>ACEStandardTable( <aceobj> ) F
+
+This function compacts and then standardises the table.
+That is, for a given ordering of the generators in the columns of the
+table, it produces a canonic table.
+In such a table, a row-major scan encounters previously unseen cosets in
+numeric order.
+
+*GREG, WHAT DOES THE LAST SENTENCE MEAN???*
+
+*Notes:*
+In a canonic table, the coset representatives are in length plus (column
+order) lexicographic order, and each is the minimum in this order.
+Two tables are equivalent only if their canonic forms are the same.
+
+*Guru Notes:*
+In half of the ten standard enumeration strategies of Sims \cite{Sim},
+the   table   is   standardised   repeatedly.    This   is   expensive
+computationally, but can result  in fewer cosets being necessary.  The
+effect of  doing this  can be investigated  in {\ACE}  by (repeatedly)
+halting the enumeration, standardising the table, and continuing.
+
+\>ACETraceWord( <aceobj>, <int>, <word> ) F
+
+Traces <word> through the coset table, starting at coset number <int>,
+and returns the final coset number if the trace completes,
+and `fail' otherwise.
+
+
+\>ACERandomCoincidences( <aceobj>, <index>[, <attempts> ) F
+
+This function attempts  to  find  nontrivial subgroups  with  index  a
+multiple  of the first  argument <index> by  repeatedly putting  random
+cosets
+coincident with coset \#1 and seeing what happens.  The starting coset
+table  must  be non-empty,  but  need  not  be complete.   The  second
+argument <attempts> puts  a limit on  the number of  attempts,
+with a  default of
+eight.    For   each  attempt,   we   repeatedly   add  random   coset
+representatives  to the  subgroup and  redo the  enumeration.   If the
+table becomes too small, the attempt is aborted, the original subgroup
+generators  restored,  and  another   attempt  made.   If  an  attempt
+succeeds, then the new set of subgroup generators is retained.
+
+*Guru  Notes:*  A  coset  can  have  many  different  representatives.
+Consider running  `st' before  `rc', to canonicise  the table  and the
+representatives.
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Chapter{Examples}
+
+\begintt
+*GREG:
+
+HERE I WANT EVENTUALLY TO INSERT MORE EXAMPLES USING THE INTERFACE,
+THIS IS JUST THE ONE ALEXANDER HAD IN HIS FIRST SHORT DRAFT*
+\endtt
 
 The following example calls `ACE' for up to 800 cosets using
 Mendelsohn style relator processing and sets the message level to 500
