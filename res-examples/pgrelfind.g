@@ -3,6 +3,7 @@
 ##
 #W  pgrelfind.g             ACE Research Example             Alexander Hulpke
 #W                                                                Greg Gamble
+#W                                                               George Havas
 ##
 ##  Defines programs and variables for finding 3-relator presentations  of  a
 ##  specific form, for perfect simple groups.
@@ -10,8 +11,8 @@
 ##  Featured in this file is a genuine research example.  The  original  code
 ##  was  written  by  Alexander  Hulpke.  Greg  Gamble  later   modified   it
 ##  significantly, adding comments and options,  and  alterations  needed  to
-##  enable it to work with the  latest  ACE  Share  Package.  Names  of  some
-##  functions and variables were also changed.
+##  enable it to work with the  latest  ACE Package.  Names of some functions
+##  and variables were also changed.
 ##
 #H  @(#)$Id$
 ##
@@ -659,6 +660,7 @@ F := FreeGroup("a","b");     a := F.1;    b := F.2;
 #   [CR84]  Colin M. Campbell and Edmund F. Robertson,
 #           `Presentations for the Simple groups G, 10^5 < |G| < 10^6',
 #           Comm. Alg. 12(21), 2643-2663 (1984).
+#   [Bray]  John Bray's web site: http://www.cix.co.uk/~vicarage/
 
 L2_8 := rec( source := "[CCN85, p6]",
              rels := [a^7, (a^2*b)^3, (a^3*b)^2, (a*b^5)^2],
@@ -706,6 +708,12 @@ M11 := rec( source := "[CMY79, 7.1]",
             rels := [a^2, b^4, (a*b)^11, (a*b^2)^6,
                      (a*b)^2*(a*b^-1)^2*a*b*a*b^-1*a*b^2*a*b*a*b^-1],
             sgens := [a, b^((a*b)^2)] );
+
+M12 := rec( source := "[Bray, M=C2]",
+            rels := [a^2, b^3, (a*b)^11, (Comm(a,b))^6,
+                     (a*b)^8*(a*b^-1)^2*(a*b*a*b^-1)^4*a*b^-1,
+                     (a*b*a*b*a*b^-1)^6],
+            sgens := [a, b*a*b*a*b*a*b^-1] );
 
 L2_32 := rec( source := "[CCN85, p29]",
               rels := [a^31, (a^2*b)^3, (a^3*b)^2, (a*b^6)^2,
@@ -1117,6 +1125,7 @@ presentations := rec( L2_8 := L2_8,
                       L3_3s := L3_3s,
                       U3_3s := U3_3s,
                       M11 := M11,
+                      M12 := M12,
                       L2_32 := L2_32,
                       U3_4s := U3_4s,
                       J1s := J1s,
@@ -1222,7 +1231,7 @@ if not(IsBound(ACEResExample.reread) and ACEResExample.reread) then
             "  IsACEResExampleOK",
             "Variables:",
             "  ACEResExample, ALLRELS, newrels, F, a, b, newF, x, y,",
-            "  L2_8, L2_16, L3_3s, U3_3s, M11, L2_32,",
+            "  L2_8, L2_16, L3_3s, U3_3s, M11, M12, L2_32,",
             "  U3_4s, J1s, L3_5s, PSp4_4s, presentations",
             "",
             "Also:",
