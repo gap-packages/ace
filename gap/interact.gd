@@ -98,7 +98,7 @@ DeclareGlobalFunction("ACERecover");
 DeclareGlobalFunction("ACEStandardCosetNumbering");
 DeclareGlobalFunction("ACEAddRelators");
 DeclareGlobalFunction("ACEAddSubgroupGenerators");
-DeclareGlobalFunction("WORDS_OR_UNSORTED");
+DeclareGlobalFunction("ACE_WORDS_OR_UNSORTED");
 DeclareGlobalFunction("ACEDeleteRelators");
 DeclareGlobalFunction("ACEDeleteSubgroupGenerators");
 DeclareGlobalFunction("ACECosetCoincidence");

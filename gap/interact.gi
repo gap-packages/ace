@@ -262,7 +262,8 @@ local line;
 
   line := ReadAllLine(datarec.stream);
   while line <> fail do
-    if Length(line) > 1 and line[ Length(line) - 1 ] = ')' then
+    if not IsMatchingSublist(line, "** ERROR") and
+       Length(line) > 1 and line[ Length(line) - 1 ] = ')' then
       #a `start', `aep' or `rep' option was slipped in
       datarec.enumResult := Chomp(line);
       datarec.stats := ACE_STATS(datarec.enumResult);
@@ -1644,7 +1645,7 @@ local datarec, optval, line;
   datarec := ACEData.io[ arglist[1] ];
   optval := arglist[2];
   READ_ACE_ERRORS(datarec); # purge any output not yet collected
-                                   # e.g. error messages due to unknown options
+                            # e.g. error messages due to unknown options
   PROCESS_ACE_OPTION(datarec.stream, optname, optval);
 
   if IsMyLine = "" then
@@ -2470,7 +2471,7 @@ end);
 #############################################################################
 ####
 ##
-#F  WORDS_OR_UNSORTED . . . . . . . . . . . . . . . . . . . Internal function
+#F  ACE_WORDS_OR_UNSORTED . . . . . . . . . . . . . . . . . Internal function
 ##  . . . . . . . . . . . . . . check val is a word list of goodwords, if  so
 ##  . . . . . . . . . . . . . . return the sorted list  of  indices  of  word
 ##  . . . . . . . . . . . . . . list in goodwords or report that  some  words
@@ -2479,7 +2480,7 @@ end);
 ##  . . . . . . . . . . . . . . Otherwise, if  val  is  not  a  list  or  not
 ##  . . . . . . . . . . . . . . . . . . . . . . homogeneous, val is returned.
 ##
-InstallGlobalFunction(WORDS_OR_UNSORTED, function(val, goodwords, wordtype)
+InstallGlobalFunction(ACE_WORDS_OR_UNSORTED, function(val, goodwords, wordtype)
 local badwords;
   if IsList(val) then
     if ForAll(val, IsWord) then
@@ -2510,9 +2511,9 @@ end);
 InstallGlobalFunction(ACEDeleteRelators, function(arg)
 local ioIndexAndOptval;
   ioIndexAndOptval := ACE_IOINDEX_AND_ONE_LIST(arg);
-  ioIndexAndOptval[2] := WORDS_OR_UNSORTED(ioIndexAndOptval[2],
-                                           ACERelators(ioIndexAndOptval[1]),
-                                           "relators");
+  ioIndexAndOptval[2] := ACE_WORDS_OR_UNSORTED(ioIndexAndOptval[2],
+                                               ACERelators(ioIndexAndOptval[1]),
+                                               "relators");
   EXEC_ACE_DIRECTIVE_OPTION(ioIndexAndOptval, "dr", 3, "", "", false);
   CHEAPEST_ACE_MODE(ACEData.io[ ioIndexAndOptval[1] ]);
   return ACE_ARGS(ioIndexAndOptval[1], "rels");
@@ -2531,11 +2532,11 @@ end);
 InstallGlobalFunction(ACEDeleteSubgroupGenerators, function(arg)
 local ioIndexAndOptval;
   ioIndexAndOptval := ACE_IOINDEX_AND_ONE_LIST(arg);
-  ioIndexAndOptval[2] := WORDS_OR_UNSORTED(ioIndexAndOptval[2],
-                                           ACESubgroupGenerators(
-                                               ioIndexAndOptval[1]
-                                               ),
-                                           "subgroup generators");
+  ioIndexAndOptval[2] := ACE_WORDS_OR_UNSORTED(ioIndexAndOptval[2],
+                                               ACESubgroupGenerators(
+                                                   ioIndexAndOptval[1]
+                                                   ),
+                                               "subgroup generators");
   EXEC_ACE_DIRECTIVE_OPTION(ioIndexAndOptval, "ds", 3, "", "", false);
   CHEAPEST_ACE_MODE(ACEData.io[ ioIndexAndOptval[1] ]);
   return ACE_ARGS(ioIndexAndOptval[1], "sgens");

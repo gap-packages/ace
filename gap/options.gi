@@ -1084,6 +1084,7 @@ local ToACE, IsValidOptionValue, CheckValidOption, ProcessOption,
           repeat
             line := ACE_READ_NEXT_LINE(datarec.stream);
             if invokesEnumeration and
+               not IsMatchingSublist(line, "** ERROR") and
                Length(line) > 1 and line[ Length(line) - 1 ] = ')' then
               datarec.enumResult := Chomp(line);
               datarec.stats := ACE_STATS(datarec.enumResult);
