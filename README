@@ -1,30 +1,69 @@
                         The ACE share package
 
-The ACE share package provides an  interface  to  the  Advanced  Coset
-Enumerator (ACE) from within GAP 4:
+The ACE share package provides functions associated with  Todd-Coxeter
+coset enumeration by interfacing with the  Advanced  Coset  Enumerator
+(ACE), 
 
 ACE coset enumerator (C) 1995-1999 by George Havas and Colin Ramsay
-    http://www.it.uq.edu.au/~havas/ace3.tar.gz
+    http://www.csee.uq.edu.au/~havas/ace3.tar.gz
 
-The GAP interface has  been  written  by  Alexander  Hulpke  and  Greg
-Gamble.
+from within GAP 4.
 
-The package interfaces to an external binary  and  therefore  is  only
-usable under UNIX or a UNIX-like environment.  It  will  not  work  on
-Windows or the Macintosh. It requires at least GAP 4.2.
+The GAP interface (share package) has been written by Alexander Hulpke
+and Greg Gamble. In order to install the ACE share  package  you  must
+get the archive file `ace.zoo' (which includes the C  source  code  of
+Havas and Ramsay).
+
+The ACE share package provides a  mechanism  to  replace  GAP's  usual
+Todd-Coxeter coset enumerator by ACE, so that  functions  that  behind
+the scenes use coset enumeration will use the ACE enumerator. The  ACE
+enumerator may also be used  explicitly;  both  non-interactively  and
+interactively. However the package is used, a plethora of options  and
+strategies are available to assist the  user  in  avoiding  incomplete
+coset  enumerations.  The  interactive  functions  provided  use   the
+IOStream functionality first introduced in GAP 4.2.  (Hence,  the  ACE
+share package requires at least GAP 4.2.)
+
+You can download `ace.zoo' from the same places as GAP. The  main  FTP
+servers are:
+
+ftp://ftp-gap.dcs.st-and.ac.uk/pub/gap/gap4/share/
+ftp://ftp.math.rwth-aachen.de/pub/gap4/share/
+ftp://ftp.ccs.neu.edu/pub/mirrors/ftp-gap.dcs.st-and.ac.uk/pub/gap/gap4/share/
+ftp://pell.anu.edu.au/pub/algebra/gap4/share/
+
+`ace.zoo' is also available via the GAP www page at
+
+http://www-gap.dcs.st-and.ac.uk/~gap/Info4/share.html
+http://aldebaran.math.rwth-aachen.de/~GAP/Info4/share.html
+http://mirrors.ccs.neu.edu/GAP/NEU/Info4/share.html
+http://wwwmaths.anu.edu.au/research.groups/algebra/GAP/www/Info4/share.html
+
+or, alternatively, from one of the authors' home page at
+
+http://www.csee.uq.edu.au/~gregg/ACE/home.html
+
+Since the ACE share package interfaces to an external  binary,  it  is
+only usable under UNIX or a UNIX-like environment. It will not work on
+Windows or the Macintosh.
 
 
                    Installing the ACE share package
 
-To install unpack the  archive  file  in  a  directory  in  the  `pkg'
-hierarchy of your version of GAP 4. (This might be the `pkg' directory
-of the GAP 4 home directory; it is however also possible  to  keep  an
-additional `pkg' directory in you  private  directories,  see  section
-"ref:Installing Share Packages" of the  GAP  4  reference  manual  for
-details on how to do this.) Go to the newly  created  `ace'  directory
-and call `configure <path>' where <path> is the path to the  GAP  home
-directory. So for example if you install the package in the main `pkg'
-directory call
+To install the ACE share package, move the  file  `ace.zoo'  into  the
+`pkg' directory in which you plan to install ACE. Usually,  this  will
+be the directory `pkg' in the hierarchy of  your  version  of  GAP  4.
+(However, it is also possible to keep an additional `pkg' directory in
+your private directories, see section "ref:Installing Share  Packages"
+of the GAP 4 reference manual for details on how to do this.)
+
+Then unzoo `ace.zoo' by
+
+  unzoo -x ace
+
+Go to the newly created `ace' directory and  call  `configure  <path>'
+where <path> is the path to the GAP home directory. So for example  if
+you install the package in the main `pkg' directory call
 
   ./configure ../..
 
@@ -49,23 +88,29 @@ been compiled on the same architecture) you do not need to compile GAP
 again, it is sufficient to call the `configure' script in the GAP home
 directory.
 
-For details on how to use the `ACE'  package  see  the  share  package
+That's it. Now start GAP and type
+
+  RequirePackage("ace");
+
+The ACE banner should appear on the screen.
+
+For details on how to use the ACE share package see the share  package
 documentation in the `doc' subdirectory (execute `make_doc'  and  then
 view either `manual.dvi' via `xdvi' or `manual.ps'  via  `ghostview'),
-which gives information on how to use `ACE' from within GAP,  and  the
-`ACE' user manual (`ace3001.dvi' created by executing `latex  ace3001'
-three  times)  in  the   `standalone-doc'   directory,   which   gives
-information on how to use the `ACE' binary as a stand-alone.
+which gives information on how to use ACE from within GAP, and the ACE
+user manual (`ace3001.dvi' created by executing `latex ace3001'  three
+times) in the `standalone-doc' directory, which gives  information  on
+how to use the ACE binary as a stand-alone.
 
-The `src' subdirectory contains a  copy  of  the  original  source  of
-`ACE'. (The only modification  is  that  a  make-file  was  copied  to
-`Makefile'.) You can replace it by a newer version before compiling.
+The `src' subdirectory contains a copy of the C source code  for  ACE.
+(The only modification is that a make-file was copied  to  `Makefile'.
+You can replace it by a newer version before compiling.)
 
-The only known problems with  compilation  of  `ACE'  occur  with  old
+The only known  problems  with  compilation  of  ACE  occur  with  old
 versions of gcc (gcc 2.7.2.1 and gcc 2.7.2.3 under Linux are known  to
-produce  a   buggy   `ACE'   whereby   options   that   output   coset
-representatives may cause  a  segmentation  fault).  The  following  C
-compilers are known to be ok:
+produce a buggy ACE whereby options that output coset  representatives
+may cause a segmentation fault). The following C compilers  are  known
+to be ok:
 
    compiler             platform              comments
    --------             --------              --------
@@ -78,12 +123,20 @@ compilers are known to be ok:
 (Since April 1999, egcs has been the official Gnu cc supplier. This is
 why the numbering now follows egcs' numbering.)
 
-If you encounter problems with the `ACE' binary, please contact one of
+If you encounter problems with the ACE binary, please contact  one  of
 the C code  authors:  George  Havas  <havas@csee.uq.edu.au>  or  Colin
 Ramsay <cram@csee.uq.edu.au>.
 
-If you encounter problems at the `GAP' level, please  contact  one  of
-the `ACE' Share Package authors: Greg Gamble <gregg@csee.uq.edu.au> or
+If you encounter problems at the GAP level, please contact one of  the
+ACE share  package  authors:  Greg  Gamble  <gregg@csee.uq.edu.au>  or
 Alexander Hulpke <ahulpke@math.ohio-state.edu>.
 
-  - Greg Gamble -- 15 August, 2000.
+  - Greg Gamble 
+    Centre for Discrete Mathematics and Computing, 
+    Department of Computer Science and Electrical Engineering,
+    The University of Queensland,
+    Brisbane, Queensland, 4072
+    Australia
+    e-mail: gregg@csee.uq.edu.au
+    www:    http://www.csee.uq.edu.au/~gregg
+  -- 24 January, 2001.
