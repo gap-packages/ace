@@ -24,7 +24,7 @@ Go to the newly created `ACE' directory and call `configure <path>' where
 <path> is the path to the GAP home directory. So for example if you install
 the package in the main `pkg' directory call
 
-  configure ../..
+  ./configure ../..
 
 This will fetch the architecture type for which GAP has been compiled last
 and create a `Makefile'. 
