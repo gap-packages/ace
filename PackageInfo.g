@@ -115,9 +115,9 @@ SetPackageInfo( rec(
 ##  and updating of the package in the GAP distribution.
 ##  
 
-  README_URL  := "http://www.math.rwth-aachen.de/~Greg.Gamble/ACE/README",
+  README_URL := "http://www.math.rwth-aachen.de/~Greg.Gamble/ACE/README",
   PackageInfoURL 
-              := "http://www.math.rwth-aachen.de/~Greg.Gamble/ACE/PkgInfo.g",
+             := "http://www.math.rwth-aachen.de/~Greg.Gamble/ACE/PackageInfo.g",
 
 ##  Here you  must provide a short abstract explaining the package content 
 ##  in HTML format (used on the package overview Web page) and an URL 
