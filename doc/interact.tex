@@ -245,21 +245,21 @@ interactive process or returns `fail' and emits a warning  message  to
 returns the list of integer indices of all active  interactive  {\ACE}
 processes.
 
-\index{interruption of an interactive ACE process} If  the  user  does
-not yet have a `gap>' prompt then usually {\ACE} is still  away  doing
-something and an {\ACE} interface function  is  still  waiting  for  a
-reply from {\ACE}. Typing a `Ctrl-C' (i.e. holding down the `Ctrl' key
-and typing  `c')  will  stop  the  waiting  and  send  {\GAP}  into  a
-`break'-loop{\undoquotes \atindex {break-loop} {@`break'-loop}},  from
-which one has no option but to `quit;'.  Typing  `Ctrl-C'  in  such  a
-circumstance will usually cause the  stream  of  the  the  interactive
-{\ACE} process to die; to check this  we  provide  `IsACEProcessAlive'
-(see~"IsACEProcessAlive"). If the  stream  of  an  interactive  {\ACE}
-process, indexed by <i>, say, has died, it may still  be  possible  to
-recover enough of the state before the death of the  stream  from  the
-information stored in the `ACEData.io[<i>]' record  (see  Section~"The
-ACEData   Record").   For   such   a   purpose,   we   have   provided
-`ACEResurrectProcess' (see~"ACEResurrectProcess").
+If\atindex{interruption}{@interruption of an interactive ACE  process}
+the user does not yet have a `gap>'  prompt  then  usually  {\ACE}  is
+still away doing something and an {\ACE} interface function  is  still
+waiting for a reply from {\ACE}. Typing a `Ctrl-C' (i.e. holding  down
+the `Ctrl' key and typing `c') will stop the waiting and  send  {\GAP}
+into     a     `break'-loop{\undoquotes     \atindex      {break-loop}
+{@`break'-loop}}, from which one has no option  but  to  `quit;'.  The
+typing of `Ctrl-C', in such a circumstance, usually causes the  stream
+of the the interactive {\ACE} process to die; to check this we provide
+`IsACEProcessAlive' (see~"IsACEProcessAlive"). If  the  stream  of  an
+interactive {\ACE} process, indexed by <i>,  say,  has  died,  it  may
+still be possible to recover enough, of the state before the death  of
+the stream, from  the  information  stored  in  the  `ACEData.io[<i>]'
+record (see Section~"The ACEData Record"). For such a purpose, we have
+provided `ACEResurrectProcess' (see~"ACEResurrectProcess").
 
 \>IsACEProcessAlive( <i> ) F
 \>IsACEProcessAlive() F
@@ -268,11 +268,11 @@ return `true' if the stream of  the  <i>th  (or  default)  interactive
 {\ACE} process started by  `ACEStart'  is  alive  (i.e.~can  still  be
 written to), or `false', otherwise.
 
-\>ACEResurrectProcess( <i> [: options] ) F
-\>ACEResurrectProcess( [: options] ) F
+\>ACEResurrectProcess( <i> [: <options>] ) F
+\>ACEResurrectProcess( [: <options>] ) F
 
 re-generate the stream of the <i>th (or  default)  interactive  {\ACE}
-process, started by `ACEStart' (see~"ACEStart"), and tries to  recover
+process started by `ACEStart' (see~"ACEStart"), and tries  to  recover
 as much as possible of the previous state from  saved  values  of  the
 process's arguments and parameter options. The possible <options> here
 are `use' and `useboth' which are described in detail below.
@@ -292,11 +292,11 @@ has been run previously).
 
 By   default,   `ACEResurrectProcess'   recovers   parameter    option
 information from `ACEData.io[<i>].options' if it  is  bound,  or  from
-`ACEData.io[<i>].parameters'   if    is    bound,    otherwise.    The
+`ACEData.io[<i>].parameters'  if   it   is   bound,   otherwise.   The
 `ACEData.io[<i>].options'  record,  however,  is  first  filtered  for
 parameter and strategy options (see Sections~"ACE  Parameter  Options"
-and~"The ACEStrategyOptions list"). To alter this behaviour, the  user
-is provided two options:
+and~"The ACEStrategyOptions list") and the `echo' option  (see~"option
+echo"). To alter this behaviour, the user is provided two options:
 
 \beginitems
 
@@ -309,19 +309,28 @@ is provided two options:
 \enditems
 
 If `useboth = true', `SetACEOptions' (see~"SetACEOptions") is  applied
-to   the    <i>-th    interactive    {\ACE}    process    with    each
+to    the    <i>th    interactive    {\ACE}    process    with    each
 `ACEData.io[<i>].(<field>)'   for   each   <field>   (`"options"'   or
 `"parameters"') that is bound and in <useList>, in the  order  implied
 by <useList>. If `useboth = false', `SetACEOptions'  is  applied  with
 `ACEData.io[<i>].(<field>)' for only the first <field> that  is  bound
-in <useList>.
+in <useList>. The current value of the `echo' option is also preserved
+(no matter what values the user chooses for the  `use'  and  `useboth'
+options).
 
 *Notes:*
 Do not use general {\ACE}  options  with  `ACEResurrectProcess';  they
 will  only   be   superseded   by   those   options   recovered   from
 `ACEData.io[<i>].options'     and/or     `ACEData.io[<i>].parameters'.
-Instead, call `SetACEOptions' first (despite a warning that the stream
-is dead, the `ACEData.io[<i>].options' will be updated).
+Instead, call `SetACEOptions' first (or afterwards). When called prior
+to `ACEResurrectProcess', `SetACEOptions' will emit a warning that the
+stream is dead; despite this, the `ACEData.io[<i>].options' *will*  be
+updated.
+
+`ACEResurrectProcess'  does  *not*  invoke   an   {\ACE}   mode   (see
+Section~"General and Experimentation ACE Modes"). This leaves the user
+free to use `SetACEOptions' (which does  invoke  an  {\ACE}  mode)  to
+further modify options afterwards.
 
 \enditems
 

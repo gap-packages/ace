@@ -158,7 +158,7 @@ below, no options  are  passed,  which  means  that  {\ACE}  uses  the
 gap> F:= FreeGroup( "a", "b", "c", "d", "e", "x", "y");;
 gap> a:= F.1;; b:= F.2;; c:= F.3;; d:= F.4;; e:= F.5;; x:= F.6;; y:= F.7;;
 gap> fgens:= [a, b, c, d, e, x, y,];;
-yap> rels:= [ a*b*c^-1, b*c*d^-1, c*d*e^-1, d*e*x^-1, 
+gap> rels:= [ a*b*c^-1, b*c*d^-1, c*d*e^-1, d*e*x^-1, 
 >             e*x*y^-1, x*y*a^-1, y*a*b^-1];;
 gap> ACECosetTable(fgens, rels, [c]);;
 \endexample

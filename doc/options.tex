@@ -368,6 +368,9 @@ otherwise.
 
 \enditems
 
+For more on  synonyms  of  {\ACE}  options,  see  Section~"ACE  Option
+Synonyms".
+
 The function `ACEOptionData' provides the  user  with  all  the  query
 facility she should ever need; nevertheless, we provide the  following
 functions.
@@ -411,9 +414,6 @@ Section~"The                ACEStrategyOptions                 list").
 \beginitems
 \qquad`ACEPreferredOptionName(<optname>) in ACEStrategyOptions;'
 \enditems
-
-For more on  synonyms  of  {\ACE}  options,  see  Section~"ACE  Option
-Synonyms".
 
 \enditems
 
@@ -479,14 +479,43 @@ interface to {\ACE} that have no counterpart in the {\ACE} standalone:
 \beginitems
 
 \>`silent'{option silent}@{option `silent'}& 
-Inhibits an error return.
+Inhibits an `Error' return when generating a coset table.
 
 If a coset  enumeration  that  invokes  `ACECosetTableFromGensAndRels'
 does not finish within the preset limits, an error is  raised  by  the
-interface to {\GAP}, unless the option `silent' has been set, in which
-case `fail' is returned. This option is included to make the behaviour
-of `ACECosetTableFromGensAndRels' compatible with that of the function
+interface to  {\GAP},  unless  the  option  `silent'  or  `incomplete'
+(see~"option incomplete") has been set; in the former case, `fail'  is
+returned.  This  option  is  included  to  make   the   behaviour   of
+`ACECosetTableFromGensAndRels' compatible with that  of  the  function
 `CosetTableFromGensAndRels' it replaces.
+
+\>`lenlex'{option lenlex}@{option `lenlex'}& 
+Standardises coset numbering according to the `lenlex' scheme.
+
+The  `lenlex'  scheme,  numbers  cosets  in  such  a  way  that  their
+\lq{}preferred' (coset) representatives, in an alphabet consisting  of
+the user-submitted generators and their inverses,  are  ordered  first
+according to `length' and then according to a `lexical'  ordering.  In
+order to describe what the `lenlex' scheme's  `lexical'  ordering  is,
+let us consider an example. Suppose the generators  submitted  by  the
+user are, in user-supplied order, `[x, y, a, b]',  and  represent  the
+inverses of these generators by the corresponding  uppercase  letters:
+`[X, Y, A, B]', then  the  `lexical'  ordering  of  `lenlex'  is  that
+derived from defining `x \< X \< y \< Y \< a \< A \< b \< B'.
+
+*Note:*
+{\GAP}'s standardisation scheme is similar to `lenlex', but  does  not
+use generator inverses.
+
+\>`incomplete'{option incomplete}@{option `incomplete'}& 
+Allows the return  of  an  `incomplete'  coset  table,  when  a  coset
+enumeration does not finish within preset limits.
+
+If a coset  enumeration  that  invokes  `ACECosetTableFromGensAndRels'
+does not finish within the preset limits, an error is  raised  by  the
+interface to {\GAP}, unless the option `silent' (see~"option  silent")
+or `incomplete' has been set; in the  latter  case,  a  partial  coset
+table, that is a valid {\GAP} list of lists, is returned.
 
 \>`aceinfile:=<filename>'{option aceinfile}@{option `aceinfile'}&
 Creates an {\ACE} input file <filename> for use with  the  standalone,

@@ -69,6 +69,8 @@ I 3.2. dead coset (number)
 I 3.2. preferred definition stack
 S 3.3. Finding Subgroups
 I 3.3. coincidences
+S 3.4. Coset Table Standardisation Schemes
+I 3.4. lenlex standardisation scheme
 C options.tex 4. Options for ACE
 S 4.1. Passing ACE Options
 S 4.2. Warnings regarding Options
@@ -92,6 +94,8 @@ I 4.10. ACEOptionSynonyms
 S 4.11. Non-ACE-binary Options
 I 4.11. NonACEbinOptions
 F 4.11. option silent
+F 4.11. option lenlex
+F 4.11. option incomplete
 F 4.11. option aceinfile
 F 4.11. option aceoutfile
 F 4.11. option aceignore
@@ -179,7 +183,7 @@ S 6.3. Interactive ACE Process Utility Functions and Interruption of an Interact
 F 6.3. ACEProcessIndex
 F 6.3. ACEProcessIndex
 F 6.3. ACEProcessIndices
-I 6.3. interruption of an interactive ACE process
+I 6.3. interruption
 I 6.3. break-loop
 F 6.3. IsACEProcessAlive
 F 6.3. IsACEProcessAlive
