@@ -87,7 +87,7 @@ in turn have options of their own.
 
 In general, if {\ACE} is to be used  interactively  one  should  avoid
 using the global method of passing options. In fact, it is recommended
-that prior to calling `ACEStart' that the `OptionsStack' be empty.
+that prior to calling `ACEStart' the `OptionsStack' be empty.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{Warnings regarding Options}
@@ -96,18 +96,19 @@ that prior to calling `ACEStart' that the `OptionsStack' be empty.
 
 As mentioned above, one can set options globally  using  the  function
 `PushOptions' (see Chapter~"ref:Options Stack" in the {\GAP} Reference
-Manual); however, options pushed onto `OptionsStack' this way,  remain
-there until an explicit `PopOptions()'  call  is  made.  In  contrast,
-options passed in the usual way behind a colon following a  function's
-arguments (see "ref:Function Calls" in the  {\GAP}  Reference  Manual)
-are local, and disappear from `OptionsStack' after  the  function  has
-executed successfully; nevertheless, a function  passed  options  this
-way will also see any  global  options  or  any  options  passed  down
-recursively from functions calling that function,  unless  over-ridden
-by an option passed via the function. Also note  that  duplication  of
-option names for different programs may  lead  to  misinterpretations.
-Considering  how  much  of  a   potential   mine-field   a   non-empty
-`OptionsStack' might be for the unwary user, we have provided
+Manual); however, options pushed onto  `OptionsStack',  in  this  way,
+remain there  until  an  explicit  `PopOptions()'  call  is  made.  In
+contrast, options passed in the usual way behind a colon  following  a
+function's arguments (see "ref:Function Calls" in the {\GAP} Reference
+Manual)  are  local,  and  disappear  from  `OptionsStack'  after  the
+function has executed successfully; nevertheless,  a  function  passed
+options this way will also see  any  global  options  or  any  options
+passed down recursively from functions calling that  function,  unless
+over-ridden by an option passed  via  the  function.  Also  note  that
+duplication of  option  names  for  different  programs  may  lead  to
+misinterpretations. Considering how much of a potential  mine-field  a
+non-empty `OptionsStack'  might  be  for  the  unwary  user,  we  have
+provided
 
 \>FlushOptionsStack()
 

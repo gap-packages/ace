@@ -434,7 +434,7 @@ deleting   subgroup   generators   via   `ACEDeleteSubgroupGenerators'
 (see~"ACEDeleteSubgroupGenerators").
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\Section{Accessing ACE Examples with ACEExample}
+\Section{Accessing ACE Examples with ACEExample and ACEReadResearchExample}
 
 \beginitems
 
@@ -458,7 +458,9 @@ However, if `ACEExample' is called with a second argument (choose from
 the (other) alternatives: `ACEStats', or `ACEStart'), the  example  is
 executed using that function, instead. Note that,  whereas  the  first
 argument appears in double quotes (since it's a  string),  the  second
-argument does not (since it's a function).
+argument does not (since it's a  function);  e.g.~to  execute  example
+`"A5"' with function `ACEStats',  one  would  type:  `ACEExample("A5",
+ACEStats);'.
 
 `ACEExample' also accepts user options, which  may  be  passed  either
 globally  (i.e.~by  using  `PushOptions'  to  push   them   onto   the
@@ -486,9 +488,9 @@ gap> ACEExample("A5", ACEStats);
 is essentially equivalent to executing:
 
 \beginexample
-file := Filename(DirectoriesPackageLibrary("ace", "examples"), "A5");
-ACEfunc := ACEStats;
-ReadAsFunction(file)();
+gap> file := Filename(DirectoriesPackageLibrary("ace", "examples"), "A5");
+gap> ACEfunc := ACEStats;
+gap> ReadAsFunction(file)();
 \endexample
 
 except that  some  internal  \lq{}magic'  of  `ACEExample'  edits  the
@@ -530,6 +532,41 @@ strategy option (see Chapter~"Strategy Options for ACE")  to  `false';
 if you wish to nullify the effect of a strategy option,  pass  another
 strategy  option,  e.g.~pass  the  `default'  (see~"option   default")
 strategy option.
+
+Also provided are:
+
+\> ACEReadResearchExample( <filename> ) F
+\> ACEReadResearchExample() F
+
+which perform `Read' (see Section~"ref:Read" in the  {\GAP}  Reference
+Manual) on <filename> or, with no argument,  the  file  with  filename
+`"pgrelfind.g"' in the `res-examples' directory; e.g.~ the  effect  of
+running
+
+\beginexample
+gap> ACEReadResearchExample("pgrelfind.g");
+\endexample
+
+is equivalent to executing:
+
+\beginexample
+gap> Read( Filename(DirectoriesPackageLibrary("ace", "res-examples"),
+>                   "pgrelfind.g") );
+\endexample
+
+The examples provided in the `res-examples'  directory  were  used  to
+solve a genuine research problem, the results of which are reported in
+\cite{CHHR00}. Please see Section~"Using  ACEReadResearchExample"  for
+detailed descriptions of the research examples provided.
+
+\> ACEPrintResearchExample( <example-filename> ) F
+\> ACEPrintResearchExample( <example-filename>, <output-filename>) F
+
+print the file <example-filename> in the `res-examples'  directory  to
+the terminal, or with two arguments  to  the  file  <output-filename>;
+<example-filename>   and   <output-filename>   should   be    strings.
+`ACEPrintResearchExample' is provided to make it  easy  for  users  to
+copy and edit the examples for their own purposes.
 
 \enditems
 
@@ -709,15 +746,32 @@ familiar with the {\ACE} standalone.
 \enditems
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\Section{Acknowledgement}
+\Section{Acknowledgements}
 
 Large parts of this manual,  in  particular  the  description  of  the
 options for running {\ACE}, are directly copied  from  the  respective
-description in the manual~\cite{Ram99} for the standalone  version  of
+descriptions in the manual~\cite{Ram99} for the standalone version  of
 {\ACE} by Colin Ramsay.  Most  of  the  examples,  in  the  `examples'
-directory, and accessed  via  the  `ACEExample'  function  are  direct
-translations  of  Colin  Ramsay's `test\#\#\#.in' files  in  the `src'
+directory and accessed  via  the  `ACEExample'  function,  are  direct
+translations of Colin Ramsay's  `test\#\#\#.in'  files  in  the  `src'
 directory.
+
+Many thanks to Joachim Neub{\accent127u}ser who not only provided  one
+of the early manual drafts and hence a template for the style  of  the
+manual and conceptual hooks for the design of the Share Package  code,
+but also meticulously proof-read all drafts and made  many  insightful
+comments.
+
+Many thanks also to Volkmar Felsch who, in testing  the  {\ACE}  Share
+Package, discovered a number of bugs.
+
+Finally, we wish to acknowledge the contribution of Charles Sims.  The
+inclusion of the `incomplete' (see "option incomplete")  and  `lenlex'
+(see~"option lenlex") options, were made in response  to  requests  to
+the  {\GAP}  developers  to  include  such  options  for  coset  table
+functions. Also, the definition of `lenlex' standardisation  of  coset
+tables (see Section~"Coset Table Standardisation Schemes"), is due  to
+him.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{Changes from earlier versions}
