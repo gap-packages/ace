@@ -51,10 +51,27 @@ InstallGlobalFunction(ACE_STRINGS,
 #############################################################################
 ####
 ##
+#F  ACE_EVAL_STRING_EXPR  . . . . . . . . . . . . . . . . . evaluate a string
+##  . . . . . . . . . . . . . . . . passes string through an  InputTextStream
+##  . . . . . . . . . . . . . . . . . . . . . . . . so that GAP interprets it
+##
+InstallGlobalFunction(ACE_EVAL_STRING_EXPR, function(string)
+local expr, temp;
+
+  temp := TemporaryGlobalVarName();
+  Read( InputTextString(Concatenation( temp, ":=", string, ";" )) );
+  expr := ValueGlobal(temp);
+  UnbindGlobal(temp);
+  return expr;
+end);
+
+#############################################################################
+####
+##
 #F  CHOMP . . . . . . . . . Return string minus a trailing '\n' if it has one
 ##  . . . . . . . . . . . . . . . . . . . . . (named after the Perl function)
 ##
-InstallGlobalFunction("CHOMP", function(string)
+InstallGlobalFunction(CHOMP, function(string)
 
   if string<>fail and string[Length(string)] = '\n' then
     return string{[1 .. Length(string) - 1]};
@@ -73,7 +90,7 @@ end);
 ##  initial ReadLine call doesn't return fail, it waits until it has all  the
 ##  line before returning.
 ##
-InstallGlobalFunction("READ_ALL_LINE", function(iostream)
+InstallGlobalFunction(READ_ALL_LINE, function(iostream)
 local line, moreOfline;
 
   line := ReadLine(iostream); # If we get fail here, we just return
@@ -114,14 +131,14 @@ end);
 #F  WRITE_LIST_TO_ACE_STREAM . . . . . . . . . . . . . . .  Internal function
 ##
 ##  Writes list to stream and with a `ToACE> '  prompt  to  Info  at  InfoACE
-##  level 3
+##  level 4
 ##
 InstallGlobalFunction(WRITE_LIST_TO_ACE_STREAM, function(stream, list)
 local string;
 
   string := Concatenation( List(list, x -> String(x)) );
-  Info(InfoACE, 3, "ToACE> ", string);
+  Info(InfoACE, 4, "ToACE> ", string);
   WriteLine(stream, string);
 end);
 
-#E  streams.gd  . . . . . . . . . . . . . . . . . . . . . . . . . . ends here 
+#E  streams.gi  . . . . . . . . . . . . . . . . . . . . . . . . . . ends here 

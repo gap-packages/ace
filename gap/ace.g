@@ -58,6 +58,9 @@ ACEData.version := ACEData.version{[ACEData.scratch ..
                                              ACEData.scratch) - 1]};
 Unbind(ACEData.scratch); # We don't need ACEData.scratch, anymore.
 
+# Set the default level of InfoACE
+SetInfoLevel(InfoACE, 1);
+
 #############################################################################
 ####
 ##  Print a banner . . . . . .  using InfoWarning (so a user can turn it off)

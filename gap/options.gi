@@ -135,19 +135,20 @@ InstallValue(KnownACEOptions, rec(
   psize := [4, x -> x = 0 or 
                     (IsInt(x) and IsEvenInt(x) and IsPrimePowerInt(x))],
   sr := [2, ["",0,1]],
-  print := [2, x -> (IsList(x) and Length(x) <= 3 and
-                    ForAll(x, IsInt)) or IsInt(x)],
+  print := [2, x -> x = "" or IsInt(x) or
+                    (IsList(x) and Length(x) <= 3 and IsInt(x[1]) and
+                     ForAll(x{[2..Length(x)]}, IsPosInt)) ],
   purec := [5, [""]],       # the ACE option is "pure c"
   purer := [5, [""]],       # the ACE option is "pure r"
-  rc   := [2, x -> (IsList(x) and Length(x) <= 2 and
-                   ForAll(x, IsInt)) or IsInt(x)],
+  rc   := [2, x -> x = "" or IsInt(x) or 
+                   (IsList(x) and Length(x) <= 2 and ForAll(x, IsInt))],
   recover := [4, [""]],     # "recover" and "contiguous"
   contiguous := [6, [""]],  # are synonyms ... "rec" is
                             # not an allowed abbreviation
                             # since it's a GAP  keyword
   rep  := [2, x -> x in [1..7] or
-                   (IsList(x) and Length(x) <= 2 and
-                    ForAll(x, IsInt) and x[1] in [1..7])],
+                   (IsList(x) and Length(x) <= 2 and x[1] in [1..7] and
+                    ForAll(x{[2..Length(x)]}, IsInt))],
   #restart := [7, [""]],    # decommissioned ACE option
   rfactor := [1, IsInt],    # "rfactor" and "rt" are synonyms
   rt   := [2, IsInt],
@@ -168,9 +169,7 @@ InstallValue(KnownACEOptions, rec(
   trace := [2, x -> IsList(x) and Length(x) = 2 and 
                     IsInt(x[1]) and IsWord(x[2])],
   workspace := [2, x -> IsInt(x) or 
-                        (IsString(x) and 
-                         x[Length(x)] 
-                             in "0123456789kmgKMG")]
+                        (IsString(x) and x[Length(x)] in "0123456789kmgKMG")]
 ));
 
 #############################################################################

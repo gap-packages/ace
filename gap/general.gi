@@ -45,8 +45,12 @@ end);
 #F  SetInfoACELevel . . . . . . . . . . . . . . Set the InfoLevel for InfoACE
 ##
 ##
-InstallGlobalFunction(SetInfoACELevel, function(level)
-  SetInfoLevel(InfoACE, level);
+InstallGlobalFunction(SetInfoACELevel, function(arg)
+  if IsEmpty(arg) then
+    SetInfoLevel(InfoACE, 1);     # Set to default level
+  else
+    SetInfoLevel(InfoACE, arg[1]);
+  fi;
 end);
 
 #############################################################################
@@ -88,7 +92,7 @@ local optnames, echo, n, infile, instream, outfile, ToACE,
   
   if ACEfname = "ACEStart" then
     instream := InputOutputLocalProcess(ACEData.tmpdir, ACEData.binary, []);
-    FLUSH_ACE_STREAM_UNTIL(instream, 3, 3, READ_NEXT_LINE, 
+    FLUSH_ACE_STREAM_UNTIL(instream, 4, 4, READ_NEXT_LINE, 
                            line -> line{[3..6]} = "name");
     ToACE := function(list) INTERACT_TO_ACE_WITH_ERRCHK(instream, list); end;
   else 
@@ -207,7 +211,8 @@ InstallGlobalFunction(ACE_READ_AS_FUNC, function(file, ACEfunc)
   local line, instream, rest;
 
   instream := InputTextFile(file);
-  line := FLUSH_ACE_STREAM_UNTIL( instream, 3, 3, ReadLine,
+  # We don't want the user to see this ... so we flush at InfoACE level 10.
+  line := FLUSH_ACE_STREAM_UNTIL( instream, 10, 10, ReadLine,
                                   line -> line{[1..5]} = "local" );
   return ReadAsFunction(
              InputTextString(
@@ -230,7 +235,7 @@ end);
 ##  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . is displayed.
 ##
 InstallGlobalFunction(ACEExample, function(arg)
-    local name, infoACElevel, file, instream, line, ACEfunc,
+    local name, file, instream, line, ACEfunc,
           EnquoteIfString, optnames, lastoptname, optname;
 
     if IsEmpty(arg) then
@@ -248,8 +253,6 @@ InstallGlobalFunction(ACEExample, function(arg)
         PushOptions( rec(aceexampleoptions := true) );
       fi;
     fi;
-    infoACElevel := InfoACELevel();
-    SetInfoACELevel(1);
     file := Filename( DirectoriesPackageLibrary( "ace", "examples"), name );
     if file = fail then
       Info(InfoACE + InfoWarning, 1,
@@ -260,18 +263,18 @@ InstallGlobalFunction(ACEExample, function(arg)
     # Display file ... after a few minor modifications
     instream := InputTextFile(file);
     if name <> "index" then
-      line := FLUSH_ACE_STREAM_UNTIL( instream, 1, 3, ReadLine,
+      line := FLUSH_ACE_STREAM_UNTIL( instream, 1, 10, ReadLine,
                                       line -> line{[1..5]} = "local" );
       Info(InfoACE, 1,
            "#", line{[Position(line, ' ')..Position(line, ';') - 1]},
            " are local to ACEExample");
-      line := FLUSH_ACE_STREAM_UNTIL( instream, 1, 3, ReadLine, 
+      line := FLUSH_ACE_STREAM_UNTIL( instream, 1, 10, ReadLine, 
                                       line -> line{[1..6]} = "return" );
       Info(InfoACE, 1, 
            CHOMP(ReplacedString(line, "return ACEfunc", NameFunction(ACEfunc)))
            );
       if IsBound(ACEData.aceexampleoptions) then
-        line := FLUSH_ACE_STREAM_UNTIL( instream, 1, 3, ReadLine, 
+        line := FLUSH_ACE_STREAM_UNTIL( instream, 1, 10, ReadLine, 
                                         line -> ForAny(
                                                     [1..Length(line)],
                                                     i -> line{[i..i+1]} = ");"
@@ -301,8 +304,7 @@ InstallGlobalFunction(ACEExample, function(arg)
                              ACEData.aceexampleoptions.(lastoptname) ), ");");
       fi;
     fi;
-    FLUSH_ACE_STREAM_UNTIL( instream, 1, 3, ReadLine, line -> line = fail );
-    SetInfoACELevel( infoACElevel );
+    FLUSH_ACE_STREAM_UNTIL( instream, 1, 10, ReadLine, line -> line = fail );
     if name <> "index" then
       return ACE_READ_AS_FUNC(file, ACEfunc);
     fi;
