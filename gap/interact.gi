@@ -172,8 +172,8 @@ local ioIndex, datarec, gens, ToACE, uselist, useone, saved, optname, field;
     Info(InfoACE + InfoWarning, 1, "No group generators.");
   fi;
     
-  uselist := Filtered( ACE_VALUE_OPTION("use", ["options", "parameters"]),
-                   field -> IsBound(datarec.(field)) );
+  uselist := Filtered(ACE_VALUE_OPTION("use", ["options", "parameters"]),
+                      field -> IsBound(datarec.(field)) );
   useone := not ACE_VALUE_OPTION("useboth", false);
   if IsEmpty(uselist) then
     Info(InfoACE + InfoWarning, 1, "Sorry. No parameter options recovered.");
@@ -221,6 +221,9 @@ local ioIndex, datarec, gens, ToACE, uselist, useone, saved, optname, field;
       PopOptions();
     od;
     Info(InfoACE, 1, "Options set to: ", GetACEOptions(ioIndex));
+  fi;
+  if not IsBound(datarec.options) then
+    datarec.options := rec();
   fi;
 end);
 

@@ -572,7 +572,7 @@ equivalent   presentation.   Alternatively,   you   could   use    the
 
 for the <i>th (or default) interactive {\ACE} process,  generates  and
 tests up to <Npresentations> (or 8,  in  the  first  4  forms)  random
-presentations; <val>, an integer in the range 0  to  7,  acts  as  for
+presentations; <val>, an integer in the range 1  to  7,  acts  as  for
 `ACEAllEquivPresentations' and <Npresentations>, when given, should be
 a positive integer.
 
@@ -697,25 +697,33 @@ they are unset.
 \>DisplayACEOptions( <i> ) F
 \>DisplayACEOptions() F
 
-display the options of the  <i>th  (or  default)  process  started  by
+display the options, explicitly set by the user, of the  <i>th  (or  default)  process  started  by
 `ACEStart'. In fact, `DisplayACEOptions(<i>)' is just a pretty-printer
 of   the   `ACEData.io[<i>].options'   record.   Use   `GetACEOptions'
 (see~"GetACEOptions") in assignments. Please note that no-value {\ACE}
 options  will   appear   with   the   assigned   value   `true'   (see
 Section~"Interpretation of ACE Options" for how the  {\ACE}  interface
-functions interpret such options). Note, however, that any options set
-via `ACEWrite' (see~"ACEWrite") will *not* be displayed.
+functions interpret such options). 
+
+*Notes:* 
+Any  options  set  via  `ACEWrite'  (see~"ACEWrite")  will  *not*   be
+displayed. Also, recall that if {\ACE} is not  given  any  options  it
+uses the `default' strategy  (see  Section~"What  happens  if  no  ACE
+Strategy Option or if no ACE  Option  is  passed").  To  discover  the
+various settings of the {\ACE} Parameter Options  (see~"ACE  Parameter
+Options")  in  vogue  for  the  {\ACE}  process,  use  `ACEParameters'
+(see~"ACEParameters").
 
 \>GetACEOptions( <i> ) F
 \>GetACEOptions() F
 
-return a record of the current  options  of  the  <i>th  (or  default)
-process started  by  `ACEStart'.  Please  note  that  no-value  {\ACE}
-options  will   appear   with   the   assigned   value   `true'   (see
-Section~"Interpretation of ACE Options" for how the  {\ACE}  interface
-functions interpret such options). Note, however, that any options set
-via `ACEWrite' (see~"ACEWrite") will *not* be included in the returned
-record.
+return  a  record  of  the  current  options  (those  that  have  been
+explicitly set by the user) of the <i>th (or default) process  started
+by `ACEStart'. Please note that no-value {\ACE}  options  will  appear
+with the assigned value `true'  (see  Section~"Interpretation  of  ACE
+Options"  for  how  the  {\ACE}  interface  functions  interpret  such
+options).    The     notes     applying     to     `DisplayACEOptions'
+(see~"DisplayACEOptions") also apply here.
 
 \>SetACEOptions( <i> [:<options>] ) F
 \>SetACEOptions( [:<options>] ) F
