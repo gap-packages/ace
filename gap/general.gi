@@ -94,6 +94,9 @@ local optnames, echo, infile, instream, outfile, ToACE, gens, acegens,
 
   if ACEfname = "ACEStart" then
     instream := InputOutputLocalProcess(ACEData.tmpdir, ACEData.binary, []);
+    if instream = fail then
+      Error(": Sorry! Run out of pseudo-ttys. Can't initiate stream.");
+    fi;
     FLUSH_ACE_STREAM_UNTIL(instream, 3, 3, READ_NEXT_LINE, 
                            line -> line{[3..6]} = "name");
     ToACE := function(list) INTERACT_TO_ACE_WITH_ERRCHK(instream, list); end;

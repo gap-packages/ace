@@ -614,20 +614,19 @@ end);
 ##
 ##
 InstallGlobalFunction(ACEStart, function(arg)
-local ioIndex;
+local ioIndex, stream;
 
   if Length(arg) = 1 and arg[1] = 0 then
     # Allocate an ioIndex and initiate a stream for ACEStart with 0 args
     # ... the user is on their own, having to use ACEWrite, ACERead to
     # communicate with ACE.
-    Add(ACEData.io, 
-        rec(#args := rec(),
-            #options := ACE_OPTIONS(),
-            #acegens := [], 
-            stream := InputOutputLocalProcess(
-                          ACEData.tmpdir, ACEData.binary, []
-                          ) ) );
-    return Length(ACEData.io); # ioIndex
+    stream := InputOutputLocalProcess(ACEData.tmpdir, ACEData.binary, []);
+    if stream = fail then
+      Error(": Sorry! Run out of pseudo-ttys. Can't initiate stream.");
+    else
+      Add( ACEData.io, rec(stream := stream) );
+      return Length(ACEData.io); # ioIndex
+    fi;
   elif Length(arg) <= 1 then 
     return ACE_MODE_AFTER_SET_OPTS("Start", arg);
   elif Length(arg) = 3 then #args are: fgens,   rels,  sgens
