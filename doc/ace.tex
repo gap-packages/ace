@@ -52,9 +52,9 @@ coset  enumerations  done  by   {\GAP}  (which  may  also  get  called
 indirectly),  you can  achieve  this by  setting  the global  variable
 `TCENUM' to `ACETCENUM'.
 
-\begintt
+\beginexample
 gap> TCENUM:=ACETCENUM;;
-\endtt
+\endexample
 
 This    sets    the    function    `CosetTableFromGensAndRels'    (see
 Section~"ref:Coset  Tables  and  Coset  Enumeration"  in  the   {\GAP}
@@ -69,9 +69,9 @@ Options for ACE").
 You can switch back to the coset  enumerator  built  into  the  {\GAP}
 library by assigning `TCENUM' to `GAPTCENUM'.
 
-\begintt
+\beginexample
 gap> TCENUM:=GAPTCENUM;;
-\endtt
+\endexample
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{Using ACE Directly to Generate a Coset Table}
@@ -91,6 +91,8 @@ result of that job to {\ACE}. For an interactive use  of  {\ACE}  from
 {\GAP} see Section~"Using ACE  Interactively"  and  Chapter~"Functions
 for Using ACE Interactively".
 
+\beginitems
+
 Using the {\ACE} interface directly to generate a coset table is  done
 by either of
 
@@ -101,18 +103,18 @@ Here <fgens> is a list of free generators, <rels> a list of  words  in
 these generators giving relators for a finitely presented  group,  and
 <sgens> the list of subgroup generators, again expressed as  words  in
 the free generators. All these are given in the standard {\GAP} format
-(See Chapter~"ref:Finitely Presented Groups" of the  {\GAP}  Reference
+(see Chapter~"ref:Finitely Presented Groups" of the  {\GAP}  Reference
 Manual). Note that `ACECosetTable' may be called with 0 or 1 arguments
 after  a  call  to  `StartACE',  in  which  case  it  is  being   used
 interactively (see Chapter~"Using ACE Interactively").
 
 Behind the colon any  selection  of  the  options  available  for  the
 interface (see Chapters~"Options for ACE"  and~"Strategy  Options  for
-ACE") can be given, separated by commas like record  components.  Note
+ACE") can be given, separated by commas like record components.  These
+can be used e.g.~to preset limits of space and time  to  be  used,  to
+modify input and output and to modify the enumeration procedure.  Note
 that strategies are simply special options that set a  number  of  the
-options, detailed in Chapter~"Options for ACE", all at once. These can
-be used e.g.~to preset limits of space and time to be used, to  modify
-input and output and to modify the enumeration procedure.
+options, detailed in Chapter~"Options for ACE", all at once.
 
 Please see Section~"General Warnings regarding the Use of Options" for
 a discussion regarding global and local passing of  options,  and  the
@@ -121,28 +123,109 @@ non-orthogonal nature of {\ACE}'s options.
 The function calls the {\ACE} binary and  returns  the  (standardized)
 coset table obtained.
 
-If the coset enumeration does not  finish  in  the  preset  limits  it
-raises an error, unless the `silent' option (see~"Option `silent'") is
-set, in which case it returns `fail'.
-
 The example given  below  is  the  call  for  a  presentation  of  the
 Fibonacci group F(2,7) for  which  we  shall  discuss  the  impact  of
 various options in Chapter~"Examples". Observe  that  in  the  example
 below, no options  are  passed,  which  means  that  {\ACE}  uses  the
 `default' strategy (see Chapter~"Strategy Options for ACE").
 
-\begintt
-gap> F:= FreeGroup( "a", "b", "c", "d", "e", "f", "g");;
-gap> a:= F.1;; b:= F.2;; c:= F.3;; d:= F.4;; e:= F.5;; f:= F.6;; g:= F.7;;
-gap> fgens:= [a, b, c, d, e, f, g,];;
-gap> rels:= [ a*b*c^-1, b*c*d^-1, c*d*e^-1, d*e*f^-1, 
->             e*f*g^-1, f*g*a^-1, g*a*b^-1];;
+\beginexample
+gap> F:= FreeGroup( "a", "b", "c", "d", "e", "x", "y");;
+gap> a:= F.1;; b:= F.2;; c:= F.3;; d:= F.4;; e:= F.5;; x:= F.6;; y:= F.7;;
+gap> fgens:= [a, b, c, d, e, x, y,];;
+yap> rels:= [ a*b*c^-1, b*c*d^-1, c*d*e^-1, d*e*x^-1, 
+>             e*x*y^-1, x*y*a^-1, y*a*b^-1];;
 gap> ACECosetTable(fgens, rels, [c]);;
-\endtt
+\endexample
+
+In computing  the  coset  table,  `ACECosetTableFromGensAndRels'  must
+first do a coset enumeration (which is where {\ACE} comes in!). If the
+coset  enumeration  does  not  finish   in   the   preset   limits   a
+`break'-loop{\undoquotes\atindex{break-loop}{@`break'-loop}}        is
+entered, unless the `silent' option (see~"Option `silent'") is set, in
+which case it returns `fail'. In the  event  that  a  `break'-loop  is
+entered, don't despair or  be  frightened  by  the  word  `Error';  by
+tweaking  {\ACE}'s  options  via  the  `SetACEOptions'  function  that
+becomes available in the `break'-loop and then typing `return;' it may
+be possible to help {\ACE} complete the coset enumeration  (and  hence
+successfully compute the coset table); if not, you will end up in  the
+`break'-loop again, and you can have another go (or `quit;' if  you've
+had enough). The `SetACEOptions' function is a  no-argument  function;
+it's there *purely* to pass *options* (which, of  course,  are  listed
+behind a colon (`:') with record components  syntax).  Let's  continue
+the Fibonacci example above, redoing the last  command  but  with  the
+option `max := 2' (see~"Option `max'"), so that the coset  enumeration
+has only two coset numbers to play with and hence is bound to fail  to
+complete, putting us in a `break'-loop.
+
+\beginexample
+gap> ACECosetTable(fgens, rels, [c] : max := 2);
+Error : No coset table ... at
+Error( ": No coset table ..." );
+#I  The `ACE' coset enumeration failed with the result:
+#I  OVERFLOW (a=2 r=1 h=1 n=3; l=5 c=0.00; m=2 t=2)
+#I  Try relaxing any restrictive options:
+#I  type: 'CurrentACEOptions();' to see current ACE options;
+#I  type: 'SetACEOptions(:<option1> := <value1>, ...);'
+#I  to set <option1> to <value1> etc.
+#I  (i.e. pass options after the ':' in the usual way)
+#I  ... and then, type: 'return;' to continue.
+#I  Otherwise, type: 'quit;' to quit the enumeration.
+Entering break read-eval-print loop, you can 'quit;' to quit to outer loop,
+or you can return to continue
+brk> SetACEOptions(: max := 0);
+brk> return;
+[ [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], 
+  [ 1 ], [ 1 ], [ 1 ], [ 1 ] ]
+gap>
+\endexample
+
+Observe how the `Info' lines (the  ones  starting  with  \lq{}`\#I '')
+tell you *exactly* what to do. At the `break'-loop  prompt  `brk>'  we
+relaxed all restrictions on `max' (by re-setting it to  0)  and  typed
+`return;' to leave the `break'-loop. The coset  enumeration  was  then
+successful, allowing the computation  of  what  turned  out  to  be  a
+trivial coset table. Despite the fact that the  eventual  coset  table
+only has one line (i.e.~there is  exactly  one  coset  number)  {\ACE}
+*did* need to define more than 2 coset numbers. To find out  just  how
+many  were  required  before  the  final  collapse,  let's   set   the
+`InfoLevel' of `InfoACE' (see~"SetInfoACELevel") to  1,  so  that  the
+{\ACE} enumeration result is printed.
+
+\beginexample
+gap> SetInfoACELevel(1);
+gap> ACECosetTable(fgens, rels, [c]);
+#I  INDEX = 1 (a=1 r=2 h=2 n=2; l=6 c=0.01; m=2049 t=3127)
+[ [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], 
+  [ 1 ], [ 1 ], [ 1 ], [ 1 ] ]
+\endexample
+
+The enumeration result line is the `Info' line beginning \lq{}`\#I ''.
+Chapter~"The Meanings  of  ACE's  Output  Messages"  explains  how  to
+interpret such output messages from {\ACE}. In particular, it explains
+that `t=3127' tells us that a `t'otal number  of  3127  coset  numbers
+needed to be defined before the final  collapse  to  1  coset  number.
+Using some of the many options that {\ACE} provides, one  may  achieve
+this  result  more  efficiently,  e.g.~with   the   `purec'   strategy
+(see~"Option `purec'"):
+
+\beginexample
+gap> ACECosetTable(fgens, rels, [c] : purec);
+#I  INDEX = 1 (a=1 r=2 h=2 n=2; l=4 c=0.00; m=332 t=332)
+[ [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], 
+  [ 1 ], [ 1 ], [ 1 ], [ 1 ] ]
+\endexample
+
+{\ACE} needs to define a `t'otal number of only  (relatively-speaking)
+621 coset numbers before the final collapse to 1 coset number.
+
+\enditems
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{Using ACE  Directly  to  Test  whether  a  Coset  Enumeration
 Terminates}
+
+\beginitems
 
 If you only want to  test, whether a coset enumeration terminates, and
 don't want to  transfer the whole coset table  to {\GAP}, you can call
@@ -163,6 +246,8 @@ Options  for  ACE")  are  used  in  exactly  the  same  way   as   for
 and the same warnings alluded to previously,  regarding  options  (see
 Section~"General Warnings regarding the Use of Options"), apply.
 
+\enditems
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{Writing ACE Standalone Input Files to Generate a Coset Table}
 
@@ -176,6 +261,8 @@ interactive work in the standalone.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{Using ACE Interactively}
+
+\beginitems
 
 An interactive {\ACE} process is initiated with the command
 
@@ -196,7 +283,7 @@ should be applied to.
 
 An interactive{\ACE} process is terminated with the command
 
-\>QuitACE(<i>) F
+\>QuitACE( <i> ) F
 
 where <i> is the integer returned by `StartACE' when the  process  was
 begun.
@@ -206,19 +293,36 @@ which enable one to access  features  of  the  {\ACE}  standalone  not
 available non-interactively, in depth in Chapter~"Functions for  Using
 ACE interactively".
 
+\enditems
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{Accessing ACE Examples with ACEExample}
+
+\beginitems
 
 There are a number of examples available in the `examples'  directory,
 which may be accessed via
 
 \>ACEExample() F
-\>ACEExample( <examplename> ) F
-\>ACEExample( <examplename>, <ACEfunc> ) F
+\>ACEExample( <examplename> [:<options>] ) F
+\>ACEExample( <examplename>, <ACEfunc> [:<options>] ) F
 
 where  <examplename>  is  a  string,  the  name  of  an  example  (and
 corresponding file in the `examples' directory); and <ACEfunc> is  the
-{\ACE} function with which the example is to be executed.
+{\ACE} function with which the example is to be executed. 
+
+Observe, that one *can* add additional options to those  already  used
+in an example (but since the example's options are \lq{}seen'  *after*
+any added options, one can't over-ride any of  the  example's  options
+\dots\ not directly, anyhow).  What  one  *can*  do,  is  to  force  a
+`break'-loop{\undoquotes\atindex{break-loop}{@`break'-loop}}, and then
+use the `SetACEOptions' function that becomes available to reset *any*
+options as one likes (see Section~"Fun with ACEExample  Example").  On
+the other hand, for `<ACEfunc> = StartACE', one doesn't need to  force
+a `break'-loop; since the {\ACE} session is still alive,  new  options
+can be added (and  the  enumeration  re-started)  via  the  `StartACE'
+function.
+
 
 If `ACEExample' is called with no arguments,  or  with  the  argument:
 `"index"', or with a non-existent example name, an index of  available
@@ -233,24 +337,23 @@ argument does not (since it's a function).
 
 Considering the example `"A5"', the effect of running
 
-\begintt
+\beginexample
 gap> ACEExample("A5", ACEStats);
-\endtt
+\endexample
 
 is essentially equivalent to executing:
 
-\begintt
+\beginexample
 file := Filename(DirectoriesPackageLibrary("ace", "examples"), "A5");
 ACEfunc := ACEStats;
 ReadAsFunction(file)();
-\endtt
+\endexample
 
 except that  some  internal  \lq{}magic'  of  `ACEExample'  edits  the
 example file and  displays  equivalent  commands  a  user  \lq{}would'
 execute.
 
 *Notes*
-
 Most examples use the `mess'  ($=  `messages'$)  option.  To  see  the
 effect of this, it is recommended to do: `SetInfoACELevel(2);'  before
 calling `ACEExample', with an example.
@@ -264,34 +367,40 @@ a double semicolon (`;;').
 Also, try `SetInfoACELevel(1);' before  calling `ACEExample', with  an
 example.
 
+\enditems
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{General Warnings regarding the Use of Options}
 Firstly, let us mention that an {\ACE} strategy is  merely  a  special
 option of {\ACE} that sets  a  number  of  the  options  described  in
 Chapter~"Options for ACE" all at once.
 
+\beginitems
+
 One can set options globally using  the  function  `PushOptions'  (see
 Chapter~"ref:Options Stack" in the {\GAP} Reference  Manual);  options
 pushed onto `OptionsStack' this way, remain there  until  an  explicit
 `PopOptions()' call is made. However, the usual way to pass options is
-behind a colon following a function's arguments (as described for  the
+behind a colon following a  function's  arguments  (see  "ref:Function
+Calls" in the {\GAP} Reference Manual, or for an example refer to  the
 function               `ACECosetTableFromGensAndRels'               in
-Section~"ACECosetTableFromGensAndRels", for example);  options  passed
-this way are  local,  and  disappear  from  `OptionsStack'  after  the
-function has executed successfully. Beware, however the function  will
-see any other options on the `OptionsStack' (in particular, any pushed
-there  via  `PushOptions',  prior  to  the  function   call),   unless
-over-ridden by an option passed  via  the  function.  Also  note  that
-duplication of  option  names  for  different  programs  may  lead  to
-misinterpretations.   You   can   use    `DisplayOptionsStack'    (see
-Chapter~"ref:DisplayOptionsStack" in the {\GAP} Reference  Manual)  to
-ensure that there is no such danger. However, considering how much  of
-a potential mine-field a non-empty `OptionsStack'  might  be  for  the
-unwary user, we provide
+Section~"ACECosetTableFromGensAndRels"); options passed this  way  are
+local, and  disappear  from  `OptionsStack'  after  the  function  has
+executed successfully. Beware, however the function will see any other
+options on the `OptionsStack' (in particular,  any  pushed  there  via
+`PushOptions', prior to the function call), unless over-ridden  by  an
+option passed via the function. Also note that duplication  of  option
+names for different programs may lead to misinterpretations.  You  can
+use `DisplayOptionsStack'  (see  Chapter~"ref:DisplayOptionsStack"  in
+the {\GAP} Reference Manual) to ensure that there is no  such  danger.
+However, considering how much of a potential  mine-field  a  non-empty
+`OptionsStack' might be for the unwary user, we provide
 
 \>FlushOptionsStack()
 
 which simply executes `PopOptions()' until `OptionsStack' is empty.
+
+\enditems
 
 It  is  important  to  realize  that  {\ACE}'s   options   (even   the
 non-strategy options) are not orthogonal, i.e.\  the  order  in  which
@@ -305,12 +414,12 @@ of the {\ACE} interface are the  same  as  for  the  binary;  so,  for
 example, the options can appear in upper or  lower  case  (or  indeed,
 mixed case) and most may be abbreviated. Note that  any  options  that
 the {\ACE} binary doesn't understand are simply ignored and a  warning
-is sent  to  standard  error  (which  should  appear  in  your  {\GAP}
-session). If this occurs, you may wish  to  check  the  input  fed  to
-{\ACE}  and  the  output  from  {\ACE},  which  when  {\ACE}  is   run
-non-interactively are stored  in  files  whose  full  path  names  are
+appears in the {\ACE} output. If this occurs, you may  wish  to  check
+the input fed to {\ACE} and the output from {\ACE}, which when  {\ACE}
+is run non-interactively are stored in files whose full path names are
 recorded in the record fields `ACEData.infile' and  `ACEData.outfile',
-respectively.
+respectively. Alternatively, both interactively and  non-interactively
+one can set the `InfoLevel' of `InfoACE' to 2 (see~"SetInfoACELevel").
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{The ACEData Record}
@@ -372,6 +481,8 @@ newline, output from {\ACE};
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{Setting the Verbosity of ACE via Info and InfoACE}
 
+\beginitems
+
 The output of the {\ACE} binary is, by default, not displayed. However
 the user may choose to see some, or all, of this output. This is  done
 via the `Info' mechanism  (see  Chapter~"ref:Info  Functions"  in  the
@@ -410,6 +521,8 @@ gap> SetInfoACELevel(2);
 
 enables the display of *all* of the output from {\ACE}.
 
+\enditems
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{Acknowledgement}
 
@@ -437,7 +550,7 @@ from older versions of the {\ACE} Share Package:
 {@option `outfile' (deprecated: use  `aceinfile')}}  (deprecated:  use
 `aceinfile').
 
-\item{--} Option    `messfile'{\undoquotes\atindex{Option    messfile}
+\item{--} Option    `messfile'{\undoquotes\atindex{Option  `messfile'}
 {@option `messfile' (deprecated: use `aceoutfile')}} (deprecated:  use
 `aceoutfile').
 
@@ -455,14 +568,14 @@ both it and `ACEinfo'!)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{Installing the ACE Share Package}
 
-To  install, unpack  the  archive file  in  a directory  in the  `pkg'
-hierarchy  of your  version  of  {\GAP}~4. (This  might  be the  `pkg'
-directory of the {\GAP}~4 home  directory; it is however also possible
+To install, unpack the archive file as a sub-directory  in  the  `pkg'
+hierarchy of your version  of  {\GAP}~4.  (This  might  be  the  `pkg'
+directory of the {\GAP}~4 home directory; it is however also  possible
 to keep an additional `pkg' directory in your private directories, see
-Section~"ref:Installing  Share Packages"  of  the {\GAP}~4   Reference
-Manual for details  on how to do this.) Go to  the newly created `ACE'
-directory and  call `./configure <path>'  where <path> is the  path to
-the {\GAP} home  directory. So for example if  you install the package
+Section~"ref:Installing Share  Packages"  of  the  {\GAP}~4  Reference
+Manual for details on how to do this.) Go to the newly  created  `ace'
+directory and call `./configure <path>' where <path> is  the  path  to
+the {\GAP} home directory. So for example if you install  the  package
 in the main `pkg' directory call
 
 \begintt
@@ -494,7 +607,15 @@ in the {\GAP} home directory.
 
 The manual you are currently reading describes how to use  the  {\ACE}
 Share Package; it can be  found  in  the  `doc'  subdirectory  of  the
-package.
+package. If your manual does not have a table of contents or index, or
+has these but with invalid page numbers please re-generate the  manual
+by executing
+
+\begintt
+./make_doc
+\endtt
+
+in the `doc' subdirectory.
 
 The  subdirectory  `standalone-doc'  contains the  file  `ace3001.dvi'
 which holds a version of the user manual for the {\ACE} standalone; it
@@ -514,16 +635,17 @@ compiling.
 To use the {\ACE} Share Package you have  to  request  it  explicitly.
 This is done by calling
 
-\begintt
+\beginexample
 gap> RequirePackage( "ace" );
 #I  Loading the ACE (Advanced Coset Enumerator) share package
 #I           by George Havas <havas@csee.uq.edu.au> and
 #I              Colin Ramsay <cram@csee.uq.edu.au>
 #I                   ACE binary version: 3.000
 true
-\endtt
+\endexample
 
-See Section~"ref:RequirePackage" in the {\GAP} Reference Manual.
+The      `RequirePackage'      command      is      described       in
+Section~"ref:RequirePackage" in the {\GAP} Reference Manual.
 
 If {\GAP} cannot find a working binary, the call  to  `RequirePackage'
 will fail.
@@ -533,10 +655,10 @@ installed {\ACE} Share Package, it is possible to suppress the  `Info'
 messages by temporarily setting the `InfoLevel' of `InfoWarning' to 0,
 and a duplicated semicolon will suppress the `true' result:
 
-\begintt
+\beginexample
 gap> SetInfoLevel(InfoWarning, 0); RequirePackage(" ace ");;
 gap> SetInfoLevel(InfoWarning, 1);
-\endtt
+\endexample
 
 If you want to load the {\ACE} package by default, you  can  put   the
 `RequirePackage' command into your `.gaprc' file (see Section~"ref:The
@@ -700,8 +822,9 @@ In *C-style*  most definitions are made in the  next empty coset table
 slot  and  are (in  principle)  tested  in  all essentially  different
 positions in the relators; i.e.~this is a Felsch-like mode.
 
-However in C-Style some  definitions may be made following a preferred
-definition strategy, see the `pmode' and `psize' options below.
+However in C-Style some definitions may be made following a  preferred
+definition strategy, controlled by the  `pmode'  and  `psize'  options
+(see~"Option `pmode'" and~"Option `psize'").
 
 *Cr-style* is like  C-style except that a single R-style  pass is done
 after the initial C-style pass.
@@ -729,18 +852,153 @@ switch to CR-style.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{Finding Deductions, Coincidences, and Preferred Definitions} 
 
-*TO BE WRITTEN*
+First, let us  broadly  discuss  strategies  and  how  they  influence
+\lq{}definitions'. By *definition* we mean the allocation of  a  coset
+number. In a complete coset table each group relator  will  eventually
+form a cycle at each coset number, in particular at coset  1.  It  has
+been found to be a good general rule to use the given  group  relators
+as subgroup generators. This ensures  the  early  definition  of  some
+useful coset numbers, and is  the  basis  of  the  `default'  strategy
+(see~"Option `default'"). The number of  group  relators  included  as
+subgroup generators is determined  by  the  `no'  option  (see~"Option
+`no'"). Over a wide range of examples the use  of  group  relators  in
+this way has been shown to produce  generally  beneficial  results  in
+terms of the maximum number of cosets numbers defined at any one  time
+and the total number of coset numbers  defined.  In~\cite{CDHW73},  it
+was reported that for some Macdonald group $G(\alpha,\beta)$ examples,
+(pure) Felsch-type strategies (that  don't  include  the  given  group
+relators as subgroup  generators)  e.g.~the  `felsch  :=  0'  strategy
+(see~"Option `felsch'") defined significantly more coset numbers  than
+HLT-type (e.g.~the `hlt' strategy, see~"Option hlt'") strategies.  The
+comparison of these strategies in  terms  of  total  number  of  coset
+numbers defined, in~\cite{Hav91}, for the enumeration of the cosets of
+a certain index 40 subgroup of the $G(3,21)$ Macdonald group  were  91
+for HLT versus 16067 for a pure Felsch-type strategy. For  the  Felsch
+strategy with the group relators included as subgroup  generators,  as
+for the `felsch :=  1'  strategy  (see~"Option  `felsch'")  the  total
+number of coset numbers defined reduced markedly to 59.
+
+A *deduction* occurs when the scanning of a  relator  results  in  the
+assignment of a coset table body entry.  A  completed  table  is  only
+valid if  every  table  entry  has  been  tested  in  all  essentially
+different positions in all relators. This testing can either  be  done
+directly (Felsch strategy) or via relator scanning (HLT strategy).  If
+it is done directly, then more than one deduction can be waiting to be
+processed at any one time. The untested deductions  are  stored  in  a
+stack. How this stack is managed is determined by the  `dmode'  option
+(see~"Option `dmode'"), and its size  is  controlled  by  the  `dsize'
+option (see~"Option `dsize'").
+
+As already mentioned a *coincidence* occurs when it is determined that
+two coset numbers in fact represent the same coset. When  this  occurs
+the larger  coset  number  becomes  a  *dead*  coset  number  and  the
+coincidence is placed in a queue. When  and  how  these  *dead*  coset
+numbers  are  eventually  eliminated  is  controlled  by  the  options
+`dmode',  `path'  and  `compaction'  (see~"Option  `dmode'",   "Option
+`path'"  and~"Option  `compaction'").  The   user   may   also   force
+coincidences to occur via the `cc' and `rc' options (see~"Option `cc'"
+and~"Option `rc'").
+
+The key  to  performance  of  coset  enumeration  procedures  is  good
+selection  of  the  next   coset   number   to   be   defined.   Leech
+in~\cite{Lee77}  and~\cite{Lee84}  showed  how  a  number   of   coset
+enumerations could be simplified by removing coset numbers  needlessly
+defined by computer implementations. Human  enumerators  intelligently
+choose which coset number should be defined next, based on  the  value
+of each potential definition. In particular, definitions  which  close
+relator cycles (or at least shorten gaps in cycles)  are  favoured.  A
+definition which actually closes a relator  cycle  immediately  yields
+twice as many table entries (deductions)  as  other  definitions.  The
+value of the `pmode' option (see~"Option  `pmode'")  determines  which
+definitions are *preferred*; if the value of  the  `pmode'  option  is
+non-zero, depending on the `pmode' value, gaps  of  length  one  found
+during relator scans in Felsch style  are  either  filled  immediately
+(subject to the value of `fill') or noted in the *preferred definition
+queue*. The preferred definition queue is implemented  as  a  ring  of
+size determined by the `psize' option (see~"Option `psize'"). However,
+making preferred definitions carelessly  can  violate  the  conditions
+required for guaranteed termination of the coset enumeration procedure
+in the case of finite index. To avoid such a violation {\ACE}  ensures
+a fraction of the coset table is filled before a preferred  definition
+is made; the reciprocal  of  this  fraction,  the  `fill  factor',  is
+manipulated   via   the   `fill'   option    (see~"Option    `fill'").
+In~\cite{Hav91}, the `felsch := 1' type enumeration of the  cosets  of
+the certain index 40 subgroup of the  $G(3,21)$  Macdonald  group  was
+further improved to require a total number of coset numbers of just 43
+by incorporating the use of preferred definitions.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \Chapter{Options for ACE}
 
 {\ACE} offers a wide range of options to  direct  and  guide  a  coset
-enumeration, most of which are  available  from  {\GAP}  through  this
-interface. We describe most of the options available via the interface
-in this chapter; other options, termed strategies, are defined in  the
-following chapter. Strategies are merely  special  options  of  {\ACE}
-that set a number of options described in this chapter, all at once.
+enumeration, most of which  are  available  from  {\GAP}  through  the
+interface provided by the {\ACE} Share Package. We  describe  most  of
+the options  available  via  the  interface  in  this  chapter;  other
+options, termed strategies, are  defined  in  the  following  chapter.
+Strategies are merely special options of {\ACE} that set a  number  of
+options described in this chapter, all at once.
+
+We begin this chapter with several sections discussing the  nature  of
+the options provided. Please spend some time reading these sections.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{Passing ACE Options}
+
+Options are passed to the {\ACE} interface functions in either of the
+two usual mechanisms provided by {\GAP}, namely:
+
+\beginlist
+
+\item{--} options may be set globally using the function `PushOptions'
+(see Chapter~"ref:Options Stack" in the {\GAP} Reference  Manual); or
+
+\item{--} options may be appended to the argument list of any function
+call, separated by a colon from the argument list  (see  "ref:Function
+Calls" in the {\GAP} Reference Manual), in which case  they  are  then
+passed on recursively to any subsequent inner function call, which may
+in turn have options of their own.
+
+\endlist
+
+In general, if {\ACE} is to be used  interactively  one  should  avoid
+using the global method of passing options. In fact, it is recommended
+that prior to calling `StartACE' that the `OptionsStack' be empty.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{Warnings regarding Options}
+
+\beginitems
+
+As mentioned above, one can set options globally  using  the  function
+`PushOptions' (see Chapter~"ref:Options Stack" in the {\GAP} Reference
+Manual); however, options pushed onto `OptionsStack' this way,  remain
+there until an explicit `PopOptions()'  call  is  made.  In  contrast,
+options passed in the usual way behind a colon following a  function's
+arguments (see "ref:Function Calls" in the  {\GAP}  Reference  Manual)
+are local, and disappear from `OptionsStack' after  the  function  has
+executed successfully; nevertheless, a function  passed  options  this
+way will also see any  global  options  or  any  options  passed  down
+recursively from functions calling that function,  unless  over-ridden
+by an option passed via the function. Also note  that  duplication  of
+option names for different programs may  lead  to  misinterpretations.
+Considering  how  much  of  a   potential   mine-field   a   non-empty
+`OptionsStack' might be for the unwary user, we have provided
+
+\>FlushOptionsStack()
+
+which simply executes `PopOptions()' until `OptionsStack' is empty.
+
+However, there will be situations where an {\ACE}  interface  function
+needs to be told explicitly to ignore options passed down  recursively
+to it from calling functions. For this purpose we  have  provided  the
+options `aceignore' (see~"Option `aceignore'") and  `aceignoreunknown'
+(see~"Option `aceignoreunknown'").
+
+\enditems
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{Abbreviations and mixed case for ACE Options}
 
 Except for limitations imposed by {\GAP}  e.g.\  clashes  with  {\GAP}
 keywords and blank spaces not allowed in keywords, the options of  the
@@ -754,6 +1012,33 @@ the `mendelsohn' option we state that  its  shortest  abbreviation  is
 `MeND', are all valid abbreviations of that option. Some options  have
 synonyms e.g.~`cfactor' is an alternative for `ct'.
 
+The complete list of {\ACE} options  known  to  the  {\ACE}  interface
+functions, their abbreviations and the values that they are  known  to
+take  may  be  gleaned  from   the   `KnownACEOptions'   record   (see
+Section~"The KnownACEOptions Record").
+
+Options      for      the       {\ACE}       interface       functions
+`ACECosetTableFromGensAndRels',   `ACECosetTable',   `ACEStats'    and
+`StartACE' (see  Chapter~"Functions  for  Using  ACE  Interactively"),
+comprise the few  non-{\ACE}-binary  options  (`silent',  `aceinfile',
+`aceoutfile',   `aceignore',   `aceignoreunknown',    `acenowarnings',
+`aceincomment',     `aceecho'     and     `echo')     discussed     in
+Section "Non-ACE-binary  Options",  (almost)  all  single-word  {\ACE}
+binary options and  `purer'  and  `purec'.  The  options  `purer'  and
+`purec' give  the  {\ACE}  binary  options  `pure  r'  and  `pure  c',
+respectively; (they are the only multiple-word {\ACE}  binary  options
+that do not have a single word alternative).  The  *only*  single-word
+{\ACE}  binary  options  that  are  *not*  available  via  the  {\ACE}
+interface are abbreviations that clash with {\GAP} keywords (e.g.~`fi'
+for `fill', and `rec' for `recover'). The detail of this paragraph  is
+probably of little importance to the {\GAP} user; these comments  have
+been included for the user who  wishes  to  reconcile  the  respective
+functionalities of the {\ACE} interface and the {\ACE} standalone, and
+are probably of most value to standalone users.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{Honouring of the order in which ACE Options are passed}
+
 It  is  important  to  realize  that  {\ACE}'s   options   (even   the
 non-strategy options) are not orthogonal, i.e.\  the  order  in  which
 they are put to {\ACE} can be important. For this reason, except for a
@@ -762,86 +1047,141 @@ order in which options are passed to the {\ACE} interface is preserved
 when those same options are passed to the {\ACE} binary.  One  of  the
 reasons for the non-orthogonality of options is to  protect  the  user
 from obtaining invalid enumerations from bad combinations of  options;
-the general rule is that the later option prevails.
+another reason is that commonly one may specify a strategy option  and
+override some of that strategies defaults; the general  rule  is  that
+the later option prevails. By the way, it's not illegal to select more
+than one strategy, but it's not sensible; as just mentioned, the later
+one prevails.
 
-Any option that the {\ACE} binary doesn't understand is simply ignored
-and a warning is sent to standard error (which should appear  in  your
-{\GAP} session). If this occurs, you may wish to check the  input  fed
-to {\ACE} and the  output  from  {\ACE},  which  when  {\ACE}  is  run
-non-interactively are stored  in  files  whose  full  path  names  are
-recorded in the record fields `ACEData.infile' and  `ACEData.outfile',
-respectively.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{What happens if no ACE Strategy Option or if no ACE Option is
+passed}
 
-If `ACECosetTableFromGensAndRels' (see~"ACECosetTableFromGensAndRels")
-is given no options, the  `default'  strategy  (see  Chapter~"Strategy
-Options for ACE") is selected. If  the  `default'  strategy  does  not
-suffice, most usually a user will select one of the  other  strategies
-from among the ones listed in Chapter~"Strategy Options for ACE",  and
-possibly modify some of the options by selecting from the  options  in
-this chapter. It's not illegal to select more than one  strategy,  but
-it's not sensible; as mentioned above, the later one prevails.
+If  an  {\ACE}  interface  function   (`ACECosetTableFromGensAndRels',
+`ACEStats',  `ACECosetTable'  or  `StartACE')  is  given  no  strategy
+option, the `default'  strategy  (see  Chapter~"Strategy  Options  for
+ACE") is selected, and a number of options that {\ACE} needs to have a
+value for are given default values, *prior* to the  execution  of  any
+user options, if any. This ensures that {\ACE} has a value for all its
+\lq{}run parameters'; three of  these  are  defined  from  the  {\ACE}
+interface function arguments; and the remaining \lq{}run  parameters',
+we denote by \lq{}{\ACE} Parameter Options', and are the fields of the
+`ACEParameterOptions' record (see  Section~"ACE  Parameter  Options").
+The value of each field (option) of the  `ACEParameterOptions'  record
+is either a default value or (in the case of an option that is set  by
+a strategy) a record of default values that {\ACE}  assumes  when  the
+user does not define a value for  the  option  (either  indirectly  by
+selecting a strategy option or directly).
 
-Please see Section~"General Warnings regarding the Use of Options" for
-a general discussion of the option mechanism and of the  pitfalls  one
-may encounter, in the passing of options. There are two  ways  options
-may be passed to {\ACE}:
+If the `default' strategy does not suffice, most usually a  user  will
+select one of the other strategies  from  among  the  ones  listed  in
+Chapter~"Strategy Options for ACE", and possibly modify  some  of  the
+options by selecting from  the  options  in  this  chapter.  It's  not
+illegal to select more than one strategy, but it's  not  sensible;  as
+mentioned above, the later one prevails.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{Interpretation of ACE Options}
+
+Options may be given a value by an assignment to  the  name  (such  as
+`time := <val>'); or be passed without assigning  a  value,  in  which
+case {\GAP} treats the option as *boolean* and sets the option to  the
+value `true', which  is  then  interpreted  by  the  {\ACE}  interface
+functions. Technically speaking the {\ACE} binary itself does not have
+boolean options, though it does have some options which  are  declared
+by passing without a value  (e.g.  the  `hard'  strategy  option)  and
+others that are boolean in the C-sense (taking on just the values 0 or
+1).   The   behaviour    of    the    {\ACE}    interface    functions
+(`ACECosetTableFromGensAndRels',   `ACEStats',   `ACECosetTable'    or
+`StartACE') is essentially  to  restore  as  much  as  is  possible  a
+behaviour that mimics the {\ACE} standalone; a `false' value is always
+translated to 0 and `true' may be translated to any of no-value, 0  or
+1. Any option passed with an assigned value <val> other  than  `false'
+or `true' is passed with the value <val> to the {\ACE}  binary.  Since
+this may appear confusing, let's consider some examples.
 
 \beginlist
 
-\item{--} Options may be set globally using the function `PushOptions'.
+\item{--} The `hard' strategy option (see~"Option `hard'")  should  be
+passed without a value, which in turn is passed to the  {\ACE}  binary
+without  a  value.  However,  the  {\ACE}  interface  function  cannot
+distinguish the option `hard' being passed without a  value,  from  it
+being passed via `hard := true'. Passing `hard := false' or  `hard  :=
+<val>' for any non-`true' <val> will however produce a warning message
+(unless the option `acenowarnings' is passed) that the  value  0  (for
+`false') or <val> is unknown for that  option.  Nevertheless,  despite
+the warning, in this event, the {\ACE} interface function  passes  the
+value to the {\ACE} binary. When the {\ACE} binary sees a line that it
+doesn't understand it prints a warning  and  simply  ignores  it.  (So
+passing `hard := false' will produce warnings, but will  have  no  ill
+effects.) The reason we still pass  *unknown*  values  to  the  {\ACE}
+binary is that it's conceivable a future version of the {\ACE}  binary
+might have  several  `hard'  strategies,  in  which  case  the  {\ACE}
+interface function will still complain (until it's made aware  of  the
+new possible values) but it will perform in the correct  manner  if  a
+value expected by the {\ACE} binary is passed.
 
-\item{--} Options may be appended to the argument list of any function
-call,  separated by a  colon from  the argument  list;  they  are then
-passed on recursively to any subsequent inner function call, which may
-in turn have options of their own.
-
-%\item{--} If {\ACE} is to be used interactively .....
-%*TO BE FILLED IN*
+\item{--} The `felsch' strategy option (see~"Option `felsch'") may  be
+passed without a value (which chooses the *felsch 0* strategy) or with
+the values 0 or 1. Despite the fact that {\GAP} sees  this  option  as
+*boolean*; it is *not*. There are two Felsch  strategies:  *felsch  0*
+and *felsch 1*. To get the *felsch 1* strategy,  the  user  must  pass
+`felsch := 1'. If the user were to pass `felsch := false'  the  result
+would be the *felsch 0* strategy (since `false' is  always  translated
+to 0), i.e.~the same as how `felsch := true' would be interpreted.  We
+could protect the user more from  such  ideosyncrasies,  but  we  have
+erred on the side of simplicity in order to make  the  interface  less
+vulnerable to upgrades of the {\ACE} binary.
 
 \endlist
 
-Options are given like record components, separated by commas. Options
-that take a value are given as an assignment  to  the  name  (such  as
-`time:=<val>'). Options passed without assigning a value, are  treated
-by {\GAP} as the setting of a boolean option to the value  `true'.  If
-the option is a known {\ACE} option,  the  {\ACE}  interface  function
-will make the appropriate translation to the  value  expected  by  the
-{\ACE} binary; the appropriate translation  may  be  to  pass  to  the
-binary: no value, 0, or 1. In general, this  should  not  concern  the
-user since  the  {\ACE}  interface  will  take  care  of  it.  Options
-announced as unknown (options are echoed to the screen, if the  `echo'
-option is passed) that are passed to the {\ACE} binary, will  *always*
-be passed to {\ACE} as no-value options; the user can  over-ride  this
-behaviour simply by assigning  the  intended  value.  The  reason  for
-passing unknown options in this way,  is  that  the  {\ACE}  interface
-should still work, albeit with erroneous  warning  messages,  with  an
-updated {\ACE} binary.
+The lesson from the two examples is: *check the documentation  for  an
+option to see  how  it  will  be  interpreted*.  In  general,  options
+documented (in this chapter) as *only* being no-value options  can  be
+safely thought of as boolean (i.e.~you will get  what  you  expect  by
+assigning `true' or  `false'),  whereas  strategy  (no-value)  options
+should *not* be thought of as boolean (a `false' assignment will *not*
+give you what you might have expected).
+
+Options that are unknown to the {\ACE} interface  functions  that  are
+passed without a value, are *always* passed to the  {\ACE}  binary  as
+no-value options (except when the options are ignored); the  user  can
+over-ride this behaviour simply by assigning the  intended  value.  An
+option is ignored if it is unknown to the {\ACE}  interface  functions
+and the `aceignoreunknown' option (see "Option `aceignoreunknown'") is
+passed, or if the `aceignore'option is passed and  the  option  is  an
+element of the list value of `aceignore' (see  "Option  `aceignore'").
+Warning messages regarding unknown  options  are  printed  unless  the
+`acenowarnings' (see "Option `acenowarnings'") is passed.
+
+To see how options are interpreted by an  {\ACE}  interface  function,
+pass the `echo' option.
+
+As  mentioned  above,  any  option  that  the  {\ACE}  binary  doesn't
+understand is simply ignored and a warning appears in the output  from
+{\ACE}. If this occurs, you may wish to check the input fed to  {\ACE}
+and the output from {\ACE}, which when {\ACE} is run non-interactively
+are stored in files whose full path names are recorded in  the  record
+fields `ACEData.infile' and `ACEData.outfile', respectively.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{An Example of passing Options}
 
 Continuing with the example of Section~"Using ACE Directly to Generate
-a Coset Table", one could use the `hard' strategy option and  increase
-the workspace to $10^7$ words, as follows:
+a Coset Table", one could set the `echo' option to be  true,  use  the
+`hard' strategy option, increase the workspace  to  $10^7$  words  and
+turn messaging on (but to be fairly infrequent) by setting  `messages'
+to a large positive value as follows:
 
-\begintt
-gap> ACECosetTable(fgens, rels, [c] : hard, workspace:=10^7);;
-\endtt
+\beginexample
+gap> ACECosetTable(fgens, rels, [c] : echo, hard, Wo := 10^7, mess := 10000);;
+\endexample
 
-Options      for      the       {\ACE}       interface       functions
-`ACECosetTableFromGensAndRels',   `ACECosetTable',   `ACEStats'    and
-`StartACE' (see  Chapter~"Functions  for  Using  ACE  Interactively"),
-comprise the few  non-{\ACE}-binary  options  (`silent',  `aceinfile',
-`aceoutfile',  `aceignore',  `aceignoreunknown',  `acenowarnings'  and
-`echo') discussed in Section~"Non-ACE-binary  Options",  (almost)  all
-single-word {\ACE} binary options and `purer' and `purec'. The options
-`purer' and `purec' give the {\ACE} binary options `pure r' and  `pure
-c', respectively; (they  are  the  only  multiple-word  {\ACE}  binary
-options that do not  have  a  single  word  alternative).  The  *only*
-single-word {\ACE} binary options that are  *not*  available  via  the
-{\ACE} interface are abbreviations that  clash  with  {\GAP}  keywords
-(e.g.~`fi' for `fill', and `rec' for `recover'). The  detail  of  this
-paragraph is probably of little importance to the {\GAP}  user;  these
-comments have been included for the user who wishes to  reconcile  the
-respective functionalities of the  {\ACE}  interface  and  the  {\ACE}
-standalone, and are probably of most value to standalone users.
+As mentioned in the previous section, `echo' may be thought  of  as  a
+boolean option, whereas `hard' is a strategy option (and hence  should
+be thought of as a no-value option). Also, observe  that  two  options
+have  been  abbreviated:  `Wo'  is  a  mixed  case   abbreviation   of
+`workspace', and `mess' is an abbreviation of `messages'.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{The KnownACEOptions Record}
@@ -855,22 +1195,85 @@ integer representing the  shortest  abbreviation  of  the  option  and
 boolean function that may be used to determine if the given value is a
 (known) valid value e.g.
 
-\begintt
+\beginexample
 gap> KnownACEOptions.compaction;
 [ 3, [ 0 .. 100 ] ]
-\endtt
+\endexample
 
 indicates that the option `compaction' may be  abbreviated  to  `com'
 and the (known) valid values are in the (integer) range 0 to 100; and
 
-\begintt
+\beginexample
 gap> KnownACEOptions.ct;
 [ 2, <Operation "IS_INT"> ]
-\endtt
+\endexample
 
 indicates that there is essentially no abbreviation of `ct' (since its
 shortest abbreviation is of length 2),  and a value of  `ct' is  known
 to be valid if `IsInt' returns true for that value.
+
+\beginitems
+
+For user convenience, we provide the function
+
+\>ACEOptionData( <optname> ) F
+
+which for a string <optname> representing an {\ACE} option (or a guess
+of one) returns a record with the following fields:
+
+\beginitems
+
+\quad`name'   & <optname> (unchanged);
+
+\quad`known'  & `true' if <optname> is a valid mixed case abbreviation
+of a known {\ACE} option, and false otherwise;
+
+\quad`fullname'& the lower case unabbreviated form of <optname> if the
+`known' field is set `true', or <optname> otherwise;
+
+\quad`synonyms'& a  list  of  known  {\ACE}  options  synonymous  with
+<optname>, in lowercase unabbreviated form, if the  `known'  field  is
+set `true', or `[ <optname> ]' otherwise;
+
+\quad`abbrev' & the shortest lowercase abbreviation  of  <optname>  if
+the `known' field is set `true', or <optname> otherwise.
+
+\enditems
+
+For more on synonyms of {\ACE} options, see the next section.
+
+\enditems
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{The ACEStrategyOptions list}
+
+For convenience the strategy options known  to  the  {\ACE}  interface
+functions  are  listed  in  the   {\GAP}   list  `ACEStrategyOptions'%
+{\undoquotes\atindex{ACEStrategyOptions}{@`ACEStrategyOptions'}}.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{ACE Option Synonyms}
+
+A number of known {\ACE} options have synonyms. For user  convenience,
+we     have      defined      the      `ACEOptionSynonyms'{\undoquotes
+\atindex{ACEOptionSynonyms}{@`ACEOptionSynonyms'}} record, the  fields
+of which are the \lq{}preferred' option names and the values of  which
+are lists of synonyms of those option names. What makes an option name
+\lq{}preferred' is somewhat arbitrary (in most cases, it is simply the
+shortest of a list of synonyms). For  a  \lq{}preferred'  option  name
+<optname> that has synonyms, the complete  list  of  synonyms  may  be
+obtained     by     concatenating     `[     <optname>     ]'      and
+`ACEOptionSynonyms.(<optname>)', e.g.
+
+\beginexample
+gap> Concatenation( [ "messages" ], ACEOptionSynonyms.("messages") );
+[ "messages", "monitor" ]
+\endexample
+
+More generally, for an arbitrary option name  <optname>  its  list  of
+synonyms (which maybe a list of one element)  maybe  obtained  as  the
+`synonyms' field of the record returned by  `ACEOptionData(<optname>)'
+(see~"ACEOptionData").
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{Non-ACE-binary Options}
@@ -885,9 +1288,9 @@ message: \lq{}`unknown (maybe new) or bad'', by virtue of not being  a
 field of `KnownACEOptions', are passed to the  {\ACE}  binary  (except
 that the options `purer' and `purec' are first translated to `pure  r'
 and `pure c', respectively). When  the  {\ACE}  binary  encounters  an
-option that it doesn't understand it issues a warning to `stderr'  and
-simply ignores it;  so  options  accidentally  passed  to  {\ACE}  are
-unlikely to pose problems.
+option that it doesn't understand  it  issues  a  warning  and  simply
+ignores it; so options accidentally passed to {\ACE} are  unlikely  to
+pose problems.
 
 Here now, are the  few  options  that  are  available  to  the  {\GAP}
 interface to {\ACE} that have no counterpart in the {\ACE} standalone:
@@ -906,8 +1309,8 @@ of `ACECosetTableFromGensAndRels' compatible with that of the function
 
 \>`aceinfile:=<filename>'{Option `aceinfile'}&
 Creates an {\ACE} input file <filename> for use with  the  standalone,
-only;  <filename>  should  be  a  string.  (Shortest  abbreviation  of
-`aceinfile' is `acein'.)
+only;  <filename>  should  be  a  string.
+(Shortest abbreviation: `acein'.)
 
 This option is only relevant to `ACECosetTableFromGensAndRels' and  is
 ignored if included as an option for  invocations  of  `ACEStats'  and
@@ -921,7 +1324,7 @@ to  the  input  file  normally  used  by  {\ACE}   (i.e.~when   option
 
 \>`aceoutfile:=<filename>'{Option `aceoutfile'}&
 Redirects {\ACE} output to file <filename>;  <filename>  should  be  a
-string. (Shortest abbreviation  of `aceoutfile' is `aceo'.)
+string. (Shortest abbreviation: `aceo'.)
 
 This  is  actually  a  synonym  for  the  `ao'  option.  Please  refer
 to~"Option `ao'", for further discussion of this option.
@@ -929,7 +1332,7 @@ to~"Option `ao'", for further discussion of this option.
 \>`aceignore:=<optionList>'{Option `aceignore'}&
 Directs an {\ACE} function to  ignore  the  options  in  <optionList>;
 <optionList> should be a list of strings.
-(Shortest abbreviation  of `aceignore' is `aceig'.)
+(Shortest abbreviation: `aceig'.)
 
 If a function called with its own options, in  turn  calls  an  {\ACE}
 function for which those options are not intended, the {\ACE} function
@@ -943,10 +1346,10 @@ at all, thus avoiding the warning messages and also any  options  that
 coincidentally are {\ACE} options but are not intended for the  {\ACE}
 function being called.
 
-\>`aceignoreunknown'{Option `aceignoreu'}&
+\>`aceignoreunknown'{Option `aceignoreunknown'}&
 Directs an {\ACE} function to  ignore  any  options  not known to the
 {\ACE} interface.
-(Shortest abbreviation  of `aceignoreunknown' is `aceignoreu'.)
+(Shortest abbreviation: `aceignoreu'.)
 
 This option is provided for similar reasons to `aceignore'.  Normally,
 it is safe to include it, to avoid aberrant warning messages from  the
@@ -958,25 +1361,99 @@ which you intend to use.
 \>`acenowarnings'{Option `acenowarnings'}& 
 Inhibits the warning message \lq{}`unknown (maybe new) or bad option''
 for options not listed in `KnownACEOptions'.
-(Shortest abbreviation  of `acenowarnings' is `acenow'.)
+(Shortest abbreviation: `acenow'.)
 
 This option suppresses the warning messages for  unknown  options  (to
 the {\ACE} interface), but unlike `aceignore'  and  `aceignoreunknown'
 still allows them to be passed to the {\ACE} binary.
 
-\>`echo'{Option `echo'}& 
+\>`echo'{Option `echo'} 
+\>`echo:=2'{Option `echo'}& 
 Echoes arguments and options (and indicates how options were handled).
 
 Unlike the previous options of this  section,  there  *is*  an  {\ACE}
 binary option `echo'. However, the `echo' option  is  handled  by  the
-{\ACE} interface and is not passed to the {\ACE} binary.
+{\ACE} interface and is not passed to the {\ACE} binary. (If you  wish
+to put  `echo'  in  a  standalone  script  use  the  `aceecho'  option
+following.) If `echo' is passed with the value 2 then a  list  of  the
+options (together with their values) that are set via {\ACE}  defaults
+are also echoed to the screen.
+
+\>`aceecho'{Option `aceecho'}& 
+The {\ACE} binary's `echo' command.
+
+This option is only included so  that  a  user  *can*  put  an  `echo'
+statement in  an  {\ACE}  standalone  script.  Otherwise,  use  `echo'
+(above).
+
+\>`aceincomment:=<string>'{Option `aceincomment'}&
+Print comment <string> in the {\ACE} input; <string> must be a string.
+(Shortest abbreviation: `aceinc'.)
+
+This option prints the comment <string> behind a sharp sign (`\#')  in
+the input to {\ACE}. Only useful  for  adding  comments  (that  {\ACE}
+ignores) to standalone input files.
 
 \enditems
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\Section{General Options that Modify the Enumeration Process}
+\Section{ACE Parameter Options}
+
+The \lq{}{\ACE} Parameter Options' are options which if not supplied a
+value by the user are supplied a default value  by  {\ACE}.  For  user
+convenience, we  have  defined  the  `ACEParameterOptions'{\undoquotes
+\atindex{ACEParameterOptions}{@`ACEParameterOptions'}}   record,   the
+fields of which are the \lq{}{\ACE} Parameter Options' and the  values
+of which are the default  values,  or  a  record  of  default  values,
+supplied by {\ACE} when those options are not given values by the user
+(either indirectly by selecting a strategy option  or  directly). 
+
+For the case that the value of a field  of  the  `ACEParameterOptions'
+record is itself a record, the fields of that record are `default' and
+strategies for which the value assigned by that strategy differs  from
+the `default' strategy; a \lq{}strategy', here, is the strategy option
+itself, if it is only  a  no-value  option,  or  the  strategy  option
+concatenated with any of its integer values  (as  strings),  otherwise
+(e.g.~`felsch0' and `sims9'  are  strategies,  and  `hlt'  is  both  a
+strategy and a strategy option). As an exercise, the reader might like
+to try to reproduce the table at the  beginning  of  Chapter~"Strategy
+Options for ACE" using the `ACEParameterOptions'  record.  (Hint:  you
+first need to select those fields of the `ACEParameterOptions'  record
+whose values are records with at least two fields.)
+
+Note,  however,  that  where  an  \lq{}{\ACE}  Parameter  Option'  has
+synonyms only the \lq{}preferred' option name (see Section~"ACE Option
+Synonyms") appears as a field of `ACEParameterOptions'.  The  complete
+list of \lq{}{\ACE} Parameter Options' may be obtained by
+
+\beginexample
+gap> Concatenation( List(RecNames(ACEParameterOptions),                    
+>                        optname -> ACEOptionData(optname).synonyms) ); 
+[ "asis", "ct", "cfactor", "compaction", "dmode", "dsize", "enumeration", 
+  "fill", "ffactor", "hole", "lookahead", "loop", "max", "mendelsohn", 
+  "messages", "monitor", "no", "path", "pmode", "psize", "rt", "rfactor", 
+  "row", "subgroup", "time", "workspace" ]
+\endexample
+
+The \lq{}{\ACE} Parameter Options'  are  those  options  which  appear
+(along  with  `Group  Generators',  `Group  Relators'  and   `Subgroup
+Generators'  which  are  defined  from   {\ACE}   interface   function
+arguments), in the \lq{}Run Parameters' block of {\ACE} output,  when,
+for example, the `messages' option is non-zero.
+
+We   describe   the   \lq{}{\ACE}   Parameter    Options'    in    the
+Sections~"General ACE Parameter Options that  Modify  the  Enumeration
+Process", "ACE Parameter Options Modifying C-Style Definitions",  "ACE
+Parameter Options for R-Style Definitions", "ACE Parameter Options for
+Deduction Handling", "Technical ACE Parameter Options", "ACE Parameter
+Options controlling ACE Output", and~"ACE Parameter Options that gives
+Names to the Group and Subgroup", following.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{General ACE Parameter Options that Modify the Enumeration Process}
 
 \beginitems
+
 \>`asis'{Option `asis'}&
 Do not reduce relators. (Shortest abbreviation: `as'.)
 
@@ -1015,16 +1492,16 @@ loop. The sign of `<val>'  sets the  style. The possible  combinations
 of the values of `ct' (described above)  and  `rt'  are  given in  the
 table of  enumeration styles in Section~"Enumeration Style".
 
-\>`no:=<val>'{Option `number'}&
+\>`no:=<val>'{Option `no'}&
 The number of group relators to include in the subgroup;  
 `<val>' should be an integer greater than or equal to $-1$.
 
 It is sometimes helpful to include the group relators into the list of
-the subgroup generators,  in the sense that they  are applied to coset
-number  \#1 at the  start of  an enumeration.  A value  of 0  for this
-option  turns this  feature off  and  the (default)  argument of  $-1$
-includes all the relators.  A positive argument includes the specified
-number of relators, in order. The `no' option affects only the C-style
+the subgroup generators, in the sense that they are applied  to  coset
+number 1 at the start of an enumeration. A value of 0 for this  option
+turns this feature off and the (default) argument of $-1$ includes all
+the relators. A positive argument includes  the  specified  number  of
+relators,  in  order.  The  `no'  option  affects  only  the   C-style
 procedures.
 
 \>`mendelsohn'{Option `mendelsohn'}&
@@ -1046,19 +1523,23 @@ time-consuming,  especially if  the  presentation is  large.  So,  all
 other things being equal, the  Mendelsohn flag should normally be left
 off.
 
+\enditems
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\Section{Options Modifying C-Style Definitions}
+\Section{ACE Parameter Options Modifying C-Style Definitions}
 
 The  next  three  options  are  relevant  only  for   making   C-style
 definitions. Making definitions in C-style, that is filling the  coset
 table line by line, it can be very advantageous to  switch  to  making
 definitions from the preferred definition stack. Possible  definitions
 can be extracted from this stack in various ways and the  two  options
-`pmode'  and  `psize'  (see~"Option  `pmode'"  and  ~"Option  `psize'"
+`pmode'  and  `psize'  (see~"Option  `pmode'"   and~"Option   `psize'"
 respectively) regulate this. However it should be  clearly  understood
 that making all definitions from a preferred definition stack one  may
 violate the condition of Mendelsohn's theorem, and the  option  `fill'
 (see~"Option `fill'") can be used to avoid this.
+
+\beginitems
 
 \>`fill:=<val>'{Option `fill'}
 \>`ffactor:=<val>'{Option `ffactor'}&
@@ -1067,15 +1548,15 @@ Controls the preferred definition strategy by setting the fill factor;
 (Shortest abbreviation of `fill' is `fil', and  shortest  abbreviation
 of `ffactor' is `f'.)
 
-Unless prevented by  the fill factor, gaps of  length one found during
-deduction   testing  are  preferentially   filled  (see~\cite{Hav91}).
-However,  this potentially  violates the  formal requirement  that all
-rows in the coset table  are eventually filled (and tested against the
-relators).   The fill  factor is  used  to ensure  that some  constant
-proportion of the coset table  is always kept filled.  Before defining
-a coset  number to  fill a  gap of length  one, the  enumerator checks
-whether `fill' times  the completed part of the table  is at least the
-total  size of  the  table and,  if  not, fills  coset  table rows  in
+Unless prevented by the fill factor, gaps of length one  found  during
+deduction  testing  are  preferentially   filled   (see~\cite{Hav91}).
+However, this potentially violates the  formal  requirement  that  all
+rows in the coset table are eventually filled (and tested against  the
+relators). The fill factor  is  used  to  ensure  that  some  constant
+proportion of the coset table is always kept filled. Before defining a
+coset number to fill a  gap  of  length  one,  the  enumerator  checks
+whether `fill' times the completed part of the table is at  least  the
+total size of the table  and,  if  not,  fills  coset  table  rows  in
 standard order (C-style) instead of filling gaps.
 
 An  argument of  0  selects  the default  value  of $\lfloor  5(n+2)/4
@@ -1088,8 +1569,14 @@ well.  The  effects of the various gap-filling  strategies vary widely.
 It is  not clear  which values are  good general defaults  or, indeed,
 whether any strategy is always ``not too bad''.
 
+This option is identified as `Fi' in the  \lq{}Run  Parameters'  block
+(obtained when `messages' is non-zero) of the {\ACE} output, since for
+the {\ACE} binary, `fi' is an allowed abbreviation of `fill'. However,
+`fi' is a {\GAP} keyword and so the shortest  abbreviation  of  `fill'
+allowed by the interface functions is `fil'.
+
 \>`pmode:=<val>'{Option `pmode'}&
-Option for preferred definitions;  `<val>' should be in the integer
+Option for preferred definitions; `<val>' should  be  in  the  integer
 range 0 to 3. (Shortest abbreviation: `pmod'.)
 
 The  value of  the  `pmode' option  determines  which definitions  are
@@ -1105,21 +1592,25 @@ of length one are noted in the preferred definition queue.
 Provided such a gap survives (and no coincidence occurs, which  causes
 the queue to be discarded) the next coset number will  be  defined  to
 fill the oldest gap of length one. The default value is either 0 or 3,
-depending on the strategy selected (see Section "Strategy Options  for
+depending on the strategy selected (see Chapter~"Strategy Options  for
 ACE"). If you want to know more details, read the code.
 
 
 \>`psize:=<val>'{Option `psize'}&
-Size of preferred definition queue; `<val>' *must*  be $2^n$, for some
-integer $n>0$. (Shortest abbreviation: `psiz'.)
+Size of preferred definition queue; `<val>' *must* be 0 or $2^n$,  for
+some integer $n>0$. (Shortest abbreviation: `psiz'.)
 
 The  preferred definition  queue is  implemented as  a  ring, dropping
 earliest entries. An argument of 0 selects  the default size of $256$.
 Each  queue slot takes two words (i.e., 8 bytes),  and the  queue  can
 store up to $2^n-1$ entries.
 
+\enditems
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\Section{Options for R-Style Definitions}
+\Section{ACE Parameter Options for R-Style Definitions}
+
+\beginitems
 
 \>`row:=<val>'{Option `row'}&
 Set the \lq{}row filling' option; `<val>' is either 0 or 1.
@@ -1163,10 +1654,14 @@ The following are the effects of the possible values of `lookahead':
 \endlist
 
 The default is 1 if the `hlt' strategy is used and  0  otherwise;  see
-Section~"Strategy Options for ACE".
+Chapter~"Strategy Options for ACE".
+
+\enditems
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\Section{Options for Deduction Handling}
+\Section{ACE Parameter Options for Deduction Handling}
+
+\beginitems
 
 \>`dmode:=<val>'{Option `dmode'}&
 Deduction mode; `<val>' should be in the integer range 0 to 4.
@@ -1206,7 +1701,7 @@ coset numbers from the stack.
 \endlist
 
 The default deduction mode is either $0$  or  $4$,  depending  on  the
-strategy selected (see Section~"Strategy Options for ACE"), and it  is
+strategy selected (see Chapter~"Strategy Options for ACE"), and it  is
 recommended that you stay with the default. If you want to  know  more
 details, read the well-commented C code.
 
@@ -1228,7 +1723,7 @@ discussion of deduction handling.
 \enditems
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\Section{Technical Options}
+\Section{Technical ACE Parameter Options}
 
 The following options do not affect how the coset enumeration is done,
 but how it  uses the computer's resources. They  might thus affect the
@@ -1337,11 +1832,11 @@ coset (number)} coset numbers needed  to  trigger  compaction  of  the
 coset table, during an enumeration. A *dead* coset (number) is a coset
 number found to be coincident with a lower numbered coset number.  The
 default  is  10  or  100,  depending  on  the   strategy   used   (see
-Section~"Strategy Options for ACE").
+Chapter~"Strategy Options for ACE").
 
 Compaction recovers the space allocated to  coset  numbers  which  are
 flagged as dead. It results in a table  where  all  the  active  coset
-numbers are numbered contiguously from \#1, and with the remainder  of
+numbers are numbered contiguously from 1, and with  the  remainder  of
 the table available for new coset numbers.
 
 The coset table is compacted when a definition of a  coset  number  is
@@ -1383,11 +1878,22 @@ the enumerator.   Enough space for  at least two coset  numbers (i.e.,
 the subgroup and one other) must  be made available.  An argument of 0
 selects all of the workspace.
 
+\>`hole:=<val>'{Option `hole'}&
+Maximum percentage of holes allowed during an enumeration;
+`<val>' should be an integer in the range $-1$ to 100.
+(Shortest abbreviation: `ho'.)
+
+This is an experimental feature which  allows  an  enumeration  to  be
+terminated when the percentage of holes in the table exceeds  a  given
+value. In practice, calculating this is very expensive, and  it  tends
+to remain constant or  decrease  throughout  an  enumeration.  So  the
+feature doesn't seem very useful. The default value of $-1$ turns this
+feature off. If you want more details, read the source code.
+
 \enditems
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\Section{Options controlling ACE Output}
+\Section{ACE Parameter Options controlling ACE Output}
 
 \beginitems
 
@@ -1422,6 +1928,39 @@ Then {\ACE}'s messages are  displayed  prepended  with  \lq{}`\#I  ''.
 Please refer to Chapter~"The Meanings of ACE's output messages", where
 the meanings of {\ACE}'s output messages are fully discussed.
 
+\enditems
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{ACE Parameter Options that gives Names to the Group and Subgroup}
+
+These options may be safely ignored; they only give names to the group
+or subgroup within the {\ACE}  output,  and  have  no  effect  on  the
+enumeration itself.
+
+\beginitems
+
+\>`enumeration:=<string>'{Option `enumeration'}&
+Sets the `Group Name' to <string>;  <string>,  must  of  course  be  a
+string. (Shortest abbreviation: `enum'.)
+
+The {\ACE} binary has a two-word synonym for this option: `Group Name'
+and this is how it is identified in the \lq{}Run Parameters' block  of
+the {\ACE} output when `messages' has a non-zero  value.  The  default
+`Group Name' is `"G"'.
+
+\>`subgroup:=<string>'{Option `subgroup'}& Sets the `Subgroup Name' to
+<string>; <string>, must of course be a string.
+(Shortest abbreviation: `subg'.) 
+
+The default `Subgroup Name' is `"H"'.
+
+\enditems
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{Options for redirection of ACE Output}
+
+\beginitems
+
 \>`ao:=<filename>'{Option `ao'}
 \>`aceoutfile:=<filename>'{Option `aceoutfile'}&
 Redirects (`a'lters) `o'utput to <filename>; <filename>  should  be  a
@@ -1448,16 +1987,14 @@ for `aceoutfile'.
 \Section{Options for Experimentation}
 
 With each of the options in this section you will probably want to set
-the option `aceoutfile' (see~"Option `aceoutfile'").  In  fact,  if  you
-haven't already done so,  read  the  entire  previous  section.
+the option `aceoutfile' (see~"Option `aceoutfile'"). In fact,  if  you
+haven't already done so, read the entire previous section.
 
 \beginitems
 
 \>`aep:=<val>'{Option `aep'}&
 Runs  the enumeration for `a'll `e'quivalent `p'resentations;
 <val> is in the integer range 0 to 7.
-
-\enditems
 
 The `aep' option runs  an  enumeration  for  combinations  of  relator
 ordering, relator rotations, and relator inversions.
@@ -1531,15 +2068,11 @@ firing up many copies of {\ACE}, and starting each with a \lq{}random'
 equivalent  presentation.  Alternatively,  you  could  use  the  `rep'
 command.
 
-\beginitems
-
 \>`rep:=<val>'{Option `rep'}
 \>`rep:=[<val>, <Npresentations>]'{Option `rep'}&
 Runs  the enumeration for `r'andom `e'quivalent `p'resentations;
 <val> is in the integer range 0 to 7;
 <Npresentations> must be a positive integer.
-
-\enditems
 
 The `rep' (random equivalent  presentations)  option  complements  the
 `aep'  option.  It  generates  and  tests   some   random   equivalent
@@ -1573,13 +2106,416 @@ equivalent presentations to serve as starting-points  is  tedious  and
 error-prone. The `rep' option provides a simple solution;  simply  run
 `rep := 7' before `aep := 7'.
 
+\enditems
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{Other Options}
 
-*YET ANOTHER SECTION TO BE WRITTEN*
+Here we will list  all  the  known  {\ACE}  options  that  users  will
+normally only wish to use if generating an input file,  by  using  the
+option `aceinfile' (see~"Option  `aceinfile'").  Most of  the  options
+below are for interactive use with the  standalone;  from  the  {\GAP}
+interface, we provide other functions for interactive use.
 
-Here we will list all the known {\ACE} options that ordinarily  should
-not be used via `ACECosetTableFromGensAndRels' or `ACEStats'.
+\beginitems
+
+\>`sg:=<wordList>'{Option `sg'}&
+Adds the words in <wordList> to any  `s'ubgroup  `g'enerators  already
+present; <wordList> must be a list of words in the group generators.
+
+The enumeration must  be  (re)`start'ed  or  `redo'ne,  it  cannot  be
+`continue'd.
+
+\>`rl:=<wordList>'{Option `rl'}&
+Appends the `r'elator `l'ist,  <wordList>  to  the  existent  list  of
+relators present; <wordList> must be a list  of  words  in  the  group
+generators.
+
+The enumeration must  be  (re)`start'ed  or  `redo'ne,  it  cannot  be
+`continue'd.
+
+\>`ai'{Option `ai'}
+\>`ai:=<filename>'{Option `ai'}&
+`A'lter `i'nput to standard input or <filename>; <filename> must be  a
+string.
+
+By default, commands to {\ACE} are read from standard input (i.e., the
+keyboard). With no value `ai' causes {\ACE} to revert to reading  from
+standard input; otherwise, the `ai' command closes the  current  input
+file,  and  opens  `<filename>'  as  the  source   of   commands.   If
+`<filename>' can't be opened, input reverts to standard input.
+
+*Notes:*
+If you switch to taking input from (another) file, remember to  switch
+back before the end of that file; otherwise the `EOF' there will cause
+{\ACE} to terminate.
+
+\>`begin'{Option `begin'}
+\>`start'{Option `start'}&
+Start an enumeration. (Shortest abbreviation of `begin' is `beg'.)
+
+Any existing information in the table is cleared, and the  enumeration
+starts from coset 1 (i.e., the subgroup).
+
+Interactively, use `StartACE' (see~"StartACE").
+
+\>`bye'{Option `bye'}
+\>`exit'{Option `exit'}
+\>`qui'{Option `qui'}&
+Quit {\ACE}. (Shortest abbreviation of `qui' is `q'.)
+
+This quits {\ACE} nicely, printing the date and  the  time.  An  `EOF'
+(end-of-file; i.e., `\^{}d') has the same effect, so proper termination
+occurs if {\ACE} is taking its input from a script file.
+
+Interactively, use `QuitACE' (see~"QuitACE").
+
+Note  that  `qui'  actually  abbreviates  the   corresponding   {\ACE}
+directive `quit', but since `quit' is  a  {\GAP}  keyword  it  is  not
+available via the {\GAP} interface to {\ACE}.
+
+\>`cc:=<val>'{Option `cc'}&
+Make `c'oset <val> `c'oincide with coset 1; <val> should be a positive
+integer.
+
+Prints out the representative of coset `<val>', and  adds  it  to  the
+subgroup generators; i.e., forces coset `<val>' to coincide with coset
+1, the subgroup.
+
+\>`check'{Option `check'}
+\>`redo'{Option `redo'}&
+`Redo' an extant enumeration, using the current parameters.
+
+As opposed to `start' (see~"Option `start'"), which clears an existing
+coset table, any existing information in the table  is  retained,  and
+the enumeration is restarted from coset 1 (i.e., the subgroup).
+
+Interactively, use `ACERedo' (see~"ACERedo").
+
+*Notes:*
+This option is really intended for the case where additional  relators
+(option `rl'; see~"Option `rl'") and/or  subgroup  generators  (option
+`sg'; see~"Option `sg'") have  been  introduced.  The  current  table,
+which may be incomplete or exhibit a finite index, is  still  *valid*.
+However, the additional data may allow the enumeration to complete, or
+cause a collapse to a smaller index.
+
+\>`continue'{Option `continue'}&
+`Continue' the current enumeration, building upon the existing table.
+(Shortest abbreviation: `cont'.)
+
+If a previous run stopped without producing a finite index you can, in
+principle, change any of the parameters and `continue' on. Of  course,
+if you make any changes which invalidate the current table, you  won't
+be allowed to `continue',  although  you  may  be  allowed  to  `redo'
+(see~"Option `redo'"). If `redo' is not allowed, you  must  re-`start'
+(see~"Option `start'").
+
+Interactively, use `ACEContinue' (see~"ACEContinue").
+
+\>`cycles'{Option `cycles'}&
+Print out the table in `cycles'. (Shortest abbreviation: `cy'.)
+
+This option prints out the permutation representation.
+
+Interactively, use `ACECycles' (see~"ACECycles").
+
+\>`ds:=<list>'{Option `ds'}&
+`D'elete `s'ubgroup generators; <list> must  be  a  list  of  positive
+integers.
+
+This command  allows  subgroup  generators  to  be  deleted  from  the
+presentation. If the generators are numbered from 1 in the output  of,
+say, the `sr' command (see~"Option `sr'"), then the generators  listed
+in `<list>' are  deleted;  `<list>'  must  be  a  strictly  increasing
+sequence.
+
+\>`dr:=<list>'{Option `dr'}&
+`D'elete relators; <list> must be a list of positive integers.
+
+This  command  allows  group  relators  to   be   deleted   from   the
+presentation. If the relators are numbered from 1 in  the  output  of,
+say, the `sr' command (see~"Option `sr'"), then the relators listed in
+`<list>' are deleted; `<list>' must be a strictly increasing sequence.
+
+\>`dump:=<level>'{Option `dump'}
+\>`dump:=[<level>, <detail>]'{Option `dump'}&
+`Dump's the internal variables of {\ACE}; <level> must be  an  integer
+in the range 0 to 2, and <detail> must be 0 or 1.
+(Shortest abbreviation: `d'.)
+
+The argument <level> selects which of the three levels  of  {\ACE}  to
+dump, and defaults to Level 0. (You will need to read  the  standalone
+manual to understand what Levels 0,  1  and  2  are  all  about.)  The
+argument <detail> determines the amount  of  detail  (`<detail>  =  0'
+means less detail). The second form of this command with  `<detail>  =
+0' is equivalent to the first form (without  the  <detail>  argument).
+This option is intended for gurus; the source code should be consulted
+to see what the output means.
+
+Interactively, use `ACEDump' (see~"ACEDump").
+
+\>`generators:=<wordList>'{Option `generators'}&
+Define the subgroup `generators'; <wordList> must be a list  of  words
+in the group generators.
+(Shortest abbreviation: `gen'.)
+
+There should *never* be a need to use this command, even when creating
+a standalone input file. The subgroup generators should  be  input  as
+one of the arguments of an  {\ACE}  interface  function.  By  default,
+there are no subgroup generators and the  subgroup  is  trivial.  This
+command allows a list of subgroup generating words to be entered.
+
+\>`group:=<list>'{Option `group'}&
+Define the `group' generators; <list> must be a list of  {\GAP}  group
+generators.
+(Shortest abbreviation: `gr'.)
+
+There should *never* be a need to use this command, even when creating
+a standalone input file. The group generators should be input  as  one
+of the arguments of an {\ACE} interface function.  If  the  generators
+each have names that as strings are single  lowercase  letters,  those
+same strings are used to represent  the  same  generators  by  {\ACE};
+otherwise,  {\ACE}  will  represent  each  generator  by  an  integer,
+numbered sequentially from 1.
+
+*Notes:*
+Any use of the  `group'  command  which  actually  defines  generators
+invalidates any previous enumeration, and stays in  effect  until  the
+next `group' command. Any words for the  group  or  subgroup  must  be
+entered using the nominated generator format, and  all  printout  will
+use this format. A valid set of generators is the minimum  information
+necessary before {\ACE} will attempt an enumeration.
+
+*Guru Notes:*
+The columns of the coset table are allocated in the same order as  the
+generators are listed, insofar as this is  possible,  given  that  the
+first two columns must be  a  generator/inverse  pair  or  a  pair  of
+involutions. The ordering of the columns can, in  some  cases,  affect
+the definition sequence of cosets and  impact  the  statistics  of  an
+enumeration.
+
+\>`relators:=<wordList>'{Option `relators'}&
+Define the group `relators'; <wordList> must be a list of words in the
+group generators.
+(Shortest abbreviation: `rel'.)
+
+There should *never* be a need to use this command, even when creating
+a standalone input file. The group relators should be input as one  of
+the arguments of an {\ACE} interface function.  If  <wordList>  is  an
+empty list, the group is free.
+
+\>`help'{Option `help'}&
+Print the {\ACE} help screen. (Shortest abbreviation: `h'.)
+
+This option prints the list of options of the {\ACE} binary. Note that
+this list is longer than a standard screenful.
+
+\>`mode'{Option `mode'}&
+Prints the possible enumeration `mode's.
+(Shortest abbreviation: `mo'.)
+
+Prints the possible enumeration  `mode's  (i.e.~which  of  `continue',
+`redo' or  `start'  are  possible  (see~"Option  `continue'",  "Option
+`redo'" and "Option `start'").
+
+\>`nc'{Option `nc'}
+\>`nc:=<val>'{Option `nc'}
+\>`normal'{Option `normal'}
+\>`normal:=<val>'{Option `normal'}&
+Check or enforce normal closure; <val> must be 0 or 1.
+
+With no argument or if `<val> = 0', {\ACE} tests for  normal  closure.
+If a subgroup generator does not normalise a generator, then  this  is
+printed out. If `<val> = 1', then any non-normalising  conjugates  are
+also added to the subgroup generators.
+
+\>`options'{Option `options'}&
+Dump version information of the {\ACE} binary.
+(Shortest abbreviation: `opt'.)
+
+A rather unfortunate name for an option; this command dumps details of
+the \lq{}options' included in the version of {\ACE}  when  the  {\ACE}
+binary was compiled.
+
+Use  the   command   `ACEVersion();'   (see~"ACEVersion")   for   this
+information, instead, unless you want it in an {\ACE} standalone input
+file.
+
+A typical output, is as follows:
+
+\begintt
+Executable built:
+  Sat Feb 27 15:57:59 EST 1999
+Level 0 options:
+  statistics package = on
+  coinc processing messages = on
+  dedn processing messages = on
+Level 1 options:
+  workspace multipliers = decimal
+Level 2 options:
+  host info = on
+\endtt
+
+\>`oo:=<val>'{Option `oo'}
+\>`order:=<val>'{Option `order'}&
+Print a coset representative of a coset number with order  a  multiple
+of <val> modulo the subgroup; <val> must be an integer.
+
+This option finds a coset with order a multiple  of  `|<val>|'  modulo
+the subgroup, and prints out its coset representative.  If  `<val>  \<
+0', then all coset numbers meeting the  requirement  are  printed.  If
+`<val> > 0', then just the first coset number meeting the  requirement
+is printed. Also, `<val> = 0' is permitted; this special value effects
+the printing of the orders (modulo the subgroup) of all coset numbers.
+
+\>`sr'{Option `sr'}
+\>`sr:=<val>'{Option `sr'}&
+Print out parameters of the current presentation; <val> must be  0  or
+1.
+
+No argument, or `<val> = 0', prints out the  `Group  Name',  `Subgroup
+Name', the group's `relators'  and  the  subgroup's  `generators'.  If
+`<val> = 1', then the current setting of the \lq{}run  parameters'  is
+also printed. The printout is the same as that produced at  the  start
+of a run when option `messages' (see~"Option `messages'") is non-zero.
+
+*Notes:*
+Only use *after* an enumeration run; otherwise, the value 0  for  some
+options will be unreliable.
+
+\>`print'{Option `print'}
+\>`print:=<val>'{Option `print'}
+\>`print:=[<val>, <last>]'{Option `print'}
+\>`print:=[<val>, <last>, <by>]'{Option `print'}&
+Compact and print the coset table;  <val>  must  be  an  integer,  and
+<last> and <by> must be positive integers.
+(Shortest abbreviation: `pr'.)
+
+In the first (no value) form, `print' prints the entire  coset  table,
+without orders or coset  representatives.  In  the  second  form,  the
+absolute value of <val> is taken to be the last line of the  table  to
+be printed (and 1 is taken to be the first); in the third  and  fourth
+forms, `|<val>|' is taken to be the first line  of  the  table  to  be
+printed, and <last> is taken to be the number of the last line  to  be
+printed. In the last form, the table is printed from line `|<val>|' to
+line <last> in steps of <by>. If <val> is negative,  then  the  orders
+modulo the subgroup  (if  available)  and  coset  representatives  are
+printed also.
+
+\>`rc:=<val>'{Option `rc'}
+\>`rc:=[<val>, <limit>]'{Option `rc'}&
+Enforce `r'andom `c'oincidences; <val> and <limit>  must  be  positive
+integers.
+
+This option attempts upto <limit> (or, in the first form, 8) times  to
+find nontrivial subgroups with index a multiple of <val> by repeatedly
+making random coset numbers coincident with coset 1  and  seeing  what
+happens. The starting coset table must be non-empty, but need  not  be
+complete.  For  each  attempt,  we   repeatedly   add   random   coset
+representatives to the subgroup and `redo'  the  enumeration.  If  the
+table becomes too small, the attempt is aborted, the original subgroup
+generators restored, and another attempt made. If an attempt succeeds,
+then the new set of subgroup generators is retained.
+
+*Guru Notes:*
+A coset number can have many different coset representatives. Consider
+running `standard' before `rc', to canonicise the table and hence  the
+coset representatives.
+
+\>`recover'{Option `recover'}
+\>`contiguous'{Option `contiguous'}&
+`Recover' space used by dead coset numbers.
+(Shortest  abbreviation  of  `recover'   is   `reco',   and   shortest
+abbreviation of `contiguous' is `contig'.)
+
+This option invokes the compaction routine on the table to recover the
+space used by any dead coset numbers. A `CO' message line  is  printed
+if any cosets were recovered, and a  `co'  line  if  none  were.  This
+routine is called automatically if  the  `cycles',  `nc',  `print'  or
+`standard' options  (see~"Option  `cycles'",  "Option  `nc'",  "Option
+`print'" and "Option `standard'") are invoked.
+
+\>`sc:=<val>'{Option `sc'}
+\>`stabilising:=<val>'{Option `stabilising'}&
+Print out the stabilising coset numbers of the subgroup; <val> must be
+an integer. (Shortest abbreviation of `stabilising' is `stabil'.)
+
+This option prints out the stabilising  cosets  of  the  subgroup.  If
+`<val> > 0', the first `<val>'  stabilising  cosets  are  printed.  If
+`<val>  =  0',   all   of   the   stabilising   cosets,   plus   their
+representatives, are printed. If `<val> \<  0',  the  first  `|<val>|'
+stabilising cosets, plus their representatives, are printed.
+
+\>`standard'{Option `standard'}&
+Compact and standardise the table. (Shortest abbreviation: `st'.)
+
+For a given ordering of the generators in the columns of the table, it
+produces a canonic table. In such a table, a row-major scan encounters
+previously unseen cosets in numeric order.
+
+*Notes:*
+In a canonic table, the  coset  representatives  are  in  length  plus
+(column order) lexicographic order, and each is the  minimum  in  this
+order. Two tables are equivalent only if their canonic forms  are  the
+same.
+
+*Guru Notes:*
+In  half  of  the  ten  standard  enumeration   strategies   of   Sims
+\cite{Sim94}, the table is standardised repeatedly. This is  expensive
+computationally, but can result in fewer cosets being  necessary.  The
+effect of doing this can be investigated  in  {\ACE}  by  (repeatedly)
+halting the enumeration, standardising the table, and continuing.
+
+\>`statistics'{Option `statistics'}
+\>`stats'{Option `stats'}&
+Dump enumeration statistics.
+(Shortest abbreviation of `statistics' is `stat'.)
+
+If the statistics package is compiled into the {\ACE} code,  which  it
+is by default (see the `options'~"Option `options'" option), then this
+option  dumps  the  statistics  accumulated  during  the  most  recent
+enumeration. See the `enum.c' source  file  for  the  meaning  of  the
+variables.
+
+\>`style'{Option `style'}&
+Print the current enumeration style.
+
+This option prints the current enumeration style, as deduced from  the
+current `ct' and `rt' parameters (see~"Enumeration Style").
+
+\>`system:=<string>'{Option `system'}&
+Do a shell escape, to execute <string>; <string> must be a string.
+(Shortest abbreviation: `sys'.)
+
+Since {\GAP} already provides `Exec()' for this purpose,  this  option
+is unlikely to have a use.
+
+\>`text:=<string>'{Option `text'}&
+Prints <string> in the output; <string> must be a string.
+
+This allows the user to add comments to the output from {\ACE}.
+
+\>`tw:=[<val>, <word>]'{Option `tw'}
+\>`trace:=[<val>, <word>]'{Option `trace'}&
+Traces `<word>' through the coset table, starting  at  coset  `<val>';
+<val> must be a positive integer, and <word> must be  a  word  in  the
+group generators.
+
+This option prints the final coset number of the trace, if  the  trace
+completes.
+
+Interactively, use `ACETraceWord' (see~"ACETraceWord").
+
+\>`aceincomment:=<string>'{Option `aceincomment'}&
+Print comment <string> in the {\ACE} input; <string> must be a string.
+(Shortest abbreviation: `aceinc'.)
+
+This option prints the comment <string> behind a sharp sign (`\#')  in
+the input to {\ACE}. Only useful  for  adding  comments  (that  {\ACE}
+ignores) to standalone input files.
+
+\enditems
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Chapter{Strategy Options for ACE}
@@ -1591,37 +2527,39 @@ which option settings are \lq{}good'. To help overcome  this  problem,
 {\ACE} contains various commands which select  particular  enumeration
 strategies. One or other of these strategies may work and, if not, the
 results may indicate how  the  options  can  be  varied  to  obtain  a
-successful enumeration.
+successful enumeration. 
 
-Strategies are merely options that set a number of the options seen in
-the previous chapter, all at  once;  those  provided  are:  `default',
-`easy', `felsch', `hard', `hlt', `purec', `purer', and `sims'. All  of
-these can be passed as boolean  options  from  the  {\ACE}  interface,
-except `sims' which expects one of the integer values: 1, 3, 5, 7,  or
-9. Also, `felsch' can accept a value of 0 or 1, where 0 has  the  same
-effect as passing `felsch' with no value.
+If no strategy option is passed to {\ACE}, the `default'  strategy  is
+assumed, which starts out presuming that the enumeration will be easy,
+and if it turns out not to  be  so,  {\ACE}  switches  to  a  strategy
+designed for more difficult enumerations.  The  other  straightforward
+options for beginning users are `easy' and `hard'. Thus,  `easy'  will
+quickly succeed or fail (in  the  context  of  the  given  resources);
+`default' may succeed quickly, or if not will try the `hard' strategy;
+and `hard' will run more slowly, from the beginning trying to succeed.
 
-If no options are passed to {\ACE}, the `default' strategy is assumed,
-which starts out presuming that the enumeration will be easy,  and  if
-it turns out not to be so, {\ACE} switches to a strategy designed  for
-more difficult enumerations. The  other  straightforward  options  for
-beginning users are `easy'  and  `hard'.  Thus,  `easy'  will  quickly
-succeed or fail (in the context of the given resources); `default' may
-succeed quickly, or if not will try the `hard'  strategy;  and  `hard'
-will run more slowly, from the beginning trying to succeed.
-
-Strategy options are  parsed  in  *exactly*  the  same  way  as  other
+Strategy options  are  merely  options  that  set  a
+number of the options seen in the previous chapter, all at once;
+they are  parsed  in  *exactly*  the  same  way  as  other
 options; order *is* important. It is usual  to  specify  one  strategy
 option and possibly follow it with a number of options defined in  the
-previous chapter, possibly modifying some of the options  set  by  the
-strategy option. Please refer to  the  introduction  of  the  previous
-chapter and to Section~"General Warnings regarding the Use of Options"
-for more  information  and  warnings  about using options.
+previous chapter, some of which may over-ride those options set by
+strategy option. Please refer to  the  introductory  sections  of  the
+previous chapter, paying particular attention  to  Sections  "Warnings
+regarding Options", "What happens if no ACE Strategy Option or  if  no
+ACE Option is passed", and~"Interpretation of ACE Options", which give
+various warnings, hints  and  information  on  the  interpretation  of
+options.
 
-In the table below, we list the thirteen standard strategies,  showing
-the options (of Chapter~"Options for ACE") that they set, except  that
-all of them additionally set `path' = `false', `psize'  =  $256$,  and
-`dsize'  =  $1000$.  Recall  `mend',  `look'  and   `com'   abbreviate
+There are eight strategy options. Each is passed without a value  (see
+Section~"Interpretation of  ACE  Options")  except  for  `sims'  which
+expects one of the integer values: 1, 3, 5, 7, or 9; and, `felsch' can
+accept a value of 0 or 1, where 0  has  the  same  effect  as  passing
+`felsch' with  no  value.  Thus  the  eight  strategy  options  define
+thirteen standard strategies; these are listed  in  the  table  below,
+along with all but three of the options (of Chapter~"Options for ACE")
+that they set. Additionally, each strategy sets `path = 0',  `psize  =
+256', and `dsize = 1000'. Recall `mend', `look' and  `com'  abbreviate
 `mendelsohn'  (see~"Option  `mendelsohn'"),  `lookahead'  (see~"Option
 `lookahead'")   and    `compaction'    (see~"Option    `compaction'"),
 respectively.
@@ -1657,30 +2595,30 @@ respectively.
 % \end{table}
 
 \begintt
-                                option
-            ----------------------------------------------------------
-strategy    row   mend  no  look  com    ct     rt  fill  pmode  dmode
-----------------------------------------------------------------------
-default       1  false  -1     0   10     0      0     0      3      4
-easy          1  false   0     0  100     0   1000     1      0      0
-felsch := 0   0  false   0     0   10  1000      0     1      0      4
-felsch := 1   0  false  -1     0   10  1000      0     0      3      4
-hard          1  false  -1     0   10  1000      1     0      3      4
-hlt           1  false   0     1   10     0   1000     1      0      0
-purec         0  false   0     0  100  1000      0     1      0      4
-purer         0  false   0     0  100     0   1000     1      0      0
-sims := 1     1  false   0     0   10     0   1000     1      0      0
-sims := 3     1  false   0     0   10     0  -1000     1      0      4
-sims := 5     1   true   0     0   10     0   1000     1      0      0
-sims := 7     1   true   0     0   10     0  -1000     1      0      4
-sims := 9     0  false   0     0   10  1000      0     1      0      4
-----------------------------------------------------------------------
+                               option
+            ---------------------------------------------------------
+strategy    row  mend  no  look  com    ct     rt  fill  pmode  dmode
+---------------------------------------------------------------------
+default       1     0  -1     0   10     0      0     0      3      4
+easy          1     0   0     0  100     0   1000     1      0      0
+felsch := 0   0     0   0     0   10  1000      0     1      0      4
+felsch := 1   0     0  -1     0   10  1000      0     0      3      4
+hard          1     0  -1     0   10  1000      1     0      3      4
+hlt           1     0   0     1   10     0   1000     1      0      0
+purec         0     0   0     0  100  1000      0     1      0      4
+purer         0     0   0     0  100     0   1000     1      0      0
+sims := 1     1     0   0     0   10     0   1000     1      0      0
+sims := 3     1     0   0     0   10     0  -1000     1      0      4
+sims := 5     1     1   0     0   10     0   1000     1      0      0
+sims := 7     1     1   0     0   10     0  -1000     1      0      4
+sims := 9     0     0   0     0   10  1000      0     1      0      4
+---------------------------------------------------------------------
 \endtt
 
 Note that we explicitly (re)set all of the listed  enumerator  options
-in all of the predefined strategies, even although some of  them  have
-no effect. For example, the `fill' value is irrelevant  in  HLT  mode.
-The idea behind this  is  that,  if  you  later  change  some  options
+in all of the predefined strategies, even though some of them have  no
+effect. For example, the `fill' value is irrelevant in HLT  mode.  The
+idea  behind  this  is  that,  if  you  later  change   some   options
 individually, then the enumeration retains the  \lq{}flavour'  of  the
 last selected predefined strategy.
 
@@ -1813,6 +2751,8 @@ kill' if these hints are unhelpful).
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{Starting and Stopping Interactive ACE Processes}
 
+\beginitems
+
 \>StartACE( <fgens>, <rels>, <sgens> [:<options>] ) F
 \>StartACE( <i> [:<options>] ) F
 \>StartACE( [:<options>] ) F
@@ -1895,8 +2835,12 @@ calling  `SetACEOptions'  (or  any  interactive  function  that  calls
 `SetACEOptions'; any interactive function  that  accepts  new  options
 actually calls `SetACEOptions').
 
+\enditems
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{Interactive Versions of Non-interactive ACE Functions}
+
+\beginitems
 
 \>ACECosetTable( <i> [:<options>] ) F
 \>ACECosetTable( [:<options>] ) F
@@ -1916,15 +2860,19 @@ See Section~"Example of Using ACE Interactively (Using StartACE)"  for
 an example demonstrating both these functions  within  an  interactive
 process.
 
+\enditems
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{Steering ACE Interactively}
+
+\beginitems
 
 \>ACECheck( <aceobj> ) F
 \>ACERedo( <aceobj> ) F
 
 An extant  enumeration is redone,  using the current  options.  Any
 existing information in the table  is retained, and the enumeration is
-restarted from coset \#1 (i.e., the subgroup).
+restarted from coset 1 (i.e., the subgroup).
 
 *Notes:*
 
@@ -1969,12 +2917,15 @@ The enumeration must be restarted or redone, it cannot be continued.
 \>ACECosetCoincidence( <aceobj>, <int> ) F
 
 Print out the representative of coset <int>, and add it to the
-subgroup generators; i.e., equates this coset with coset \#1, the
+subgroup generators; i.e., equates this coset with coset 1, the
 subgroup.
 
+\enditems
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{Interactive Questions}
+
+\beginitems
 
 % \>`dump' := [0/1/2[,0/1]]&
 % 
@@ -2035,9 +2986,12 @@ If the statistics package is compiled into the code (which it is by
 default),
 then print the statistics accumulated during the most recent enumeration.
 
+\enditems
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{Operations with a Coset table}
+
+\beginitems
 
 \>ACECycles( <aceobj> ) F
 
@@ -2115,7 +3069,7 @@ and `fail' otherwise.
 This function attempts  to  find  nontrivial subgroups  with  index  a
 multiple  of the first  argument <index> by  repeatedly putting  random
 cosets
-coincident with coset \#1 and seeing what happens.  The starting coset
+coincident with coset 1 and seeing what happens.  The starting coset
 table  must  be non-empty,  but  need  not  be complete.   The  second
 argument <attempts> puts  a limit on  the number of  attempts,
 with a  default of
@@ -2129,6 +3083,8 @@ succeeds, then the new set of subgroup generators is retained.
 Consider running  `st' before  `rc', to canonicise  the table  and the
 representatives.
 
+\enditems
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Chapter{The Meanings of ACE's output messages}
 
@@ -2141,9 +3097,9 @@ They  may  also  be  seen  prepended   with   \lq{}`\#I   ''   (either
 interactively of non-interactively) if one has set the `InfoLevel'  of
 `InfoACE' to 2, via
 
-\begintt
+\beginexample
 gap> SetInfoACELevel(2);
-\endtt
+\endexample
 
 Note that when {\ACE} is run non-interactively, the banner stating the
 version number and date, which  will  be  observed  if  one  runs  the
@@ -2373,9 +3329,9 @@ that (except for {\ACE}'s banner in non-interactive use),  all  output
 from {\ACE} is displayed, prepended by \lq{}`\#I ''. We  have  omitted
 the line
 
-\begintt
+\beginexample
 gap> RequirePackage("ace");
-\endtt
+\endexample
 
 which is,  of  course,  required  at  the  beginning  of  any  session
 requiring {\ACE}.
@@ -2391,7 +3347,7 @@ compute the permutation representation of a  perfect  group  from  the
 data library (in this case, an automorphic  extension  of  the  simple
 alternating group $A_5$):
 
-\begintt
+\beginexample
 gap> SetInfoACELevel(2); # Just to see what's going on behind the scenes
 gap> TCENUM:=ACETCENUM;; # Make ACE the standard coset enumerator
 gap> G := PerfectGroup(IsPermGroup, 16*60, 1   # Arguments ... as per usual
@@ -2417,8 +3373,8 @@ gap> G := PerfectGroup(IsPermGroup, 16*60, 1   # Arguments ... as per usual
 #I  CC: a=19 r=6 h=1 n=36; l=2 c=+0.00; d=0
 #I  INDEX = 16 (a=16 r=36 h=1 n=36; l=3 c=0.00; m=30 t=35)
 #I  CO: a=16 r=17 h=1 n=17; c=+0.00
-\endtt
-\begintt
+\endexample
+\beginexample
 #I   coset |      b      B      a      s      t      u      v
 #I  -------+-------------------------------------------------
 #I       1 |      1      1      1      2      3      4      5
@@ -2447,7 +3403,7 @@ gap> GeneratorsOfGroup(G); # Just to show we indeed have a perm'n rep'n
   ( 1, 5)( 2, 9)( 3, 6)( 4,12)( 7,13)( 8,16)(10,15)(11,14) ]
 gap> Order(G);
 960
-\endtt
+\endexample
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{Example of Using ACECosetTableFromGensAndRels}
@@ -2462,7 +3418,7 @@ option is available on-line via `table  :=  ACEExample("perf602p5");'.
 You may wish to peruse the notes  in  the  `ACEExample'  index  first,
 however, by executing `ACEExample();'.
 
-\begintt
+\beginexample
 gap> SetInfoACELevel(2);
 gap> G := PerfectGroup(2^5*60, 2);;
 gap> fgens := FreeGeneratorsOfFpGroup(G);;
@@ -2518,7 +3474,7 @@ gap> table := ACECosetTableFromGensAndRels(
       21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 
 ... 30 lines omitted here ...
       472, 473, 474, 475, 476, 477, 478, 479, 480 ] ]
-\endtt
+\endexample
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{Example of Using ACE Interactively (Using StartACE)}
@@ -2534,7 +3490,7 @@ the  arguments  and   options.   On-line   try:   `SetInfoACELevel(2);
 ACEExample("A5-C5", StartACE);' to emulate the session  prior  to  the
 `QuitACE' command.
 
-\begintt
+\beginexample
 gap> SetInfoACELevel(2);
 gap> F := FreeGroup("a","b");; a := F.1;;  b := F.2;;
 gap> G := F / [a^2, b^3, (a*b)^5 ];
@@ -2595,9 +3551,285 @@ gap> QuitACE(1); # Again, we could have omitted the 1
 gap> # If we had more than one interactive process we could have 
 gap> # terminated them all in one go with:
 gap> QuitAllACE();
-\endtt
+\endexample
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{Fun with ACEExample Example}
+
+First let's see the `ACEExample' index (obtained with no argument,
+with `"index"' as argument, or with a non-existent example as
+argument):
+
+\beginexample
+gap> ACEExample();
+#I                             ACEExample Index
+#I                             ----------------
+#I  This index is displayed when calling ACEExample with no arguments, or
+#I  with the argument: "index", or with a non-existent example name.
+#I  
+#I  The following ACE examples are available (in each case, for a subgroup
+#I  H of a group G, the cosets of H in G are enumerated):
+#I  
+#I    Example          G                      H              strategy
+#I    -------          -                      -              --------
+#I    "A5"             A_5                    Id             default
+#I    "A5-C5"          A_5                    C_5            default
+#I    "C5-fel0"        C_5                    Id             felsch := 0
+#I    "F27-purec"      F(2,7) = C_29          Id             purec
+#I    "F27-fel0"       F(2,7) = C_29          Id             felsch := 0
+#I    "F27-fel1"       F(2,7) = C_29          Id             felsch := 1
+#I    "M12-hlt"        M_12 (Matthieu group)  Id             hlt
+#I    "M12-fel1"       M_12 (Matthieu group)  Id             felsch := 1
+#I    "SL219-hard"     SL(2,19)               ||G : H|| = 180  hard
+#I    "perf602p5"      PerfectGroup(60*2^5,2) ||G : H|| = 480  default
+#I  * "2p17-fel1"      ||G|| = 2^17             ||G : H|| = 1    felsch := 1
+#I  * "2p18-fel1"      ||G|| = 2^18             ||G : H|| = 2    felsch := 1
+#I  * "big-fel1"       ||G|| = 2^18.3           ||G : H|| = 6    felsch := 1
+#I  * "big-hard"       ||G|| = 2^18.3           ||G : H|| = 6    hard
+#I    "2p17-id-fel1"   ||G|| = 2^17             Id             felsch := 1
+#I    "2p17-2p14-fel1" ||G|| = 2^17             ||G : H|| = 2^14 felsch := 1
+#I    "2p17-2p3-fel1"  ||G|| = 2^17             ||G : H|| = 2^3  felsch := 1
+#I    "2p17-fel1a"     ||G|| = 2^17             ||G : H|| = 1    felsch := 1
+#I  
+#I  Notes
+#I  -----
+#I  1. The example (first) argument of  ACEExample()  is  a  string; each
+#I     example above is in double quotes to remind you to include them.
+#I  2. The enumeration for each of the *-ed examples fails. (See Note 3.)
+#I  3. Try altering the ACE function used, by calling  ACEExample with  a
+#I     2nd argument; choose from: ACECosetTableFromGensAndRels (default),
+#I     or ACEStats, or StartACE. The 2nd argument is *not* quoted.
+#I  4. Try `SetInfoACELevel(2);' before calling  ACEExample,  to  see the
+#I     effect of setting the "mess" (= "messages") option.
+#I  5. To suppress a long output, use a double semicolon (`;;') after the
+#I     ACEExample command.
+#I  6. Also, try `SetInfoACELevel(1);' before calling ACEExample.
+gap>
+\endexample
+
+Observe that the example we first met in Section~"Using  ACE  Directly
+to Generate a Coset Table", the Fibonacci group F(2,7),  is  available
+via examples `"F27-purec"',  `"F27-fel0"',  and  `"F27-fel1"',  except
+each of these enumerate the cosets of its trivial subgroup  (of  index
+29). Let's experiment with the first of these F(2,7)  examples;  since
+this  example  uses  the  `messages'  option,  we  ought  to  set  the
+`InfoLevel' of `InfoACE' to  2,  first,  but  since  the  coset  table
+(default output) is  quite  long,  we'll  pass  `ACEStats'  as  second
+argument:
+
+\beginexample
+gap> SetInfoACELevel(2);
+gap> ACEExample("F27-purec", ACEStats);
+#I  # ACEExample "F27-purec" : enumeration of cosets of H in G,
+#I  # where G = F(2,7) = C_29, H = Id, using purec strategy.
+#I  #
+#I  # F, G, a, b, c, d, e, x, y are local to ACEExample
+#I  # We define F(2,7) on 7 generators
+#I  F := FreeGroup("a","b","c","d","e", "x", "y"); 
+#I       a := F.1;  b := F.2;  c := F.3;  d := F.4; 
+#I       e := F.5;  x := F.6;  y := F.7;
+#I  G := F / [a*b*c^-1, b*c*d^-1, c*d*e^-1, d*e*x^-1, 
+#I            e*x*y^-1, x*y*a^-1, y*a*b^-1];
+#I  ACEStats(
+#I      FreeGeneratorsOfFpGroup(G), 
+#I      RelatorsOfFpGroup(G), 
+#I      [] # Generators of identity subgroup (empty list)
+#I      # Options that don't affect the enumeration
+#I      : echo, enum := "F(2,7), aka C_29", subg := "Id",
+#I      # Other options
+#I      wo := "2M", mess := 25000, purec);
+ACEStats called with the following arguments:
+ Group generators : [ a, b, c, d, e, x, y ]
+ Group relators : [ a*b*c^-1, b*c*d^-1, c*d*e^-1, d*e*x^-1, e*x*y^-1, 
+  x*y*a^-1, y*a*b^-1 ]
+ Subgroup generators : [  ]
+ACEStats called with the following options:
+ echo := true (not passed to ACE)
+ enum := F(2,7), aka C_29
+ subg := Id
+ wo := 2M
+ mess := 25000
+ purec (no value)
+#I    #-- ACE 3.000: Run Parameters ---
+#I  Group Name: F(2,7), aka C_29;
+#I  Group Generators: abcdexy;
+#I  Group Relators: abC, bcD, cdE, deX, exY, xyA, yaB;
+#I  Subgroup Name: Id;
+#I  Subgroup Generators: ;
+#I  Wo:2M; Max:142855; Mess:25000; Ti:-1; Ho:-1; Loop:0;
+#I  As:0; Path:0; Row:0; Mend:0; No:0; Look:0; Com:100;
+#I  C:1000; R:0; Fi:1; PMod:0; PSiz:256; DMod:4; DSiz:1000;
+#I    #--------------------------------
+#I  DD: a=5290 r=1 h=1050 n=5291; l=8 c=+0.03; d=2
+#I  CD: a=10410 r=1 h=2149 n=10411; l=13 c=+0.03; m=10410 t=10410
+#I  DD: a=15428 r=1 h=3267 n=15429; l=18 c=+0.03; d=0
+#I  DD: a=20430 r=1 h=4386 n=20431; l=23 c=+0.03; d=1
+#I  DD: a=25397 r=1 h=5519 n=25399; l=28 c=+0.02; d=1
+#I  CD: a=30313 r=1 h=6648 n=30316; l=33 c=+0.03; m=30313 t=30315
+#I  DS: a=32517 r=1 h=7326 n=33240; l=36 c=+0.02; s=2000 d=997 c=4
+#I  DS: a=31872 r=1 h=7326 n=33240; l=36 c=+0.01; s=4000 d=1948 c=53
+#I  DS: a=29077 r=1 h=7326 n=33240; l=36 c=+0.01; s=8000 d=3460 c=541
+#I  DS: a=23433 r=1 h=7326 n=33240; l=36 c=+0.02; s=16000 d=5940 c=2061
+#I  DS: a=4163 r=1 h=7326 n=33240; l=36 c=+0.08; s=32000 d=447 c=15554
+#I  INDEX = 29 (a=29 r=1 h=33240 n=33240; l=37 c=0.41; m=33237 t=33239)
+rec( index := 29, cputime := 41, cputimeUnits := "10^-2 seconds", 
+  maxcosets := 33237, totcosets := 33239 )
+gap>
+\endexample
+
+Observe that the first group of `Info' lines list  the  commands  that
+were executed; these lines are followed by the result  of  the  `echo'
+option (see~"Option `echo'"); which in turn  are  followed  by  `Info'
+messages from {\ACE} courtesy of the non-zero value of the  `messages'
+option (and we see these because  we  first  set  the  `InfoLevel'  of
+`InfoACE' to 2); and finally,  we  get  the  output  (record)  of  the
+`ACEStats' command.
+
+Observe also that {\ACE} has used the same generators as  were  input;
+this will always occur if you stick to single  lowercase  letters  for
+your generator names. Note, also that capitalisation is used by {\ACE}
+as a short-hand for inverses, e.g.~`C = c^-1' (see `Group Relators' in
+the {\ACE} \lq{}Run Parameters' block).
+
+Now let's observe that we can add some new options;  but  first  we'll
+reduce the output a bit by setting the `InfoLevel' of `InfoACE' to  1,
+use the default function `ACECosetTableFromGensAndRels'  and  so  it's
+like our first encounter with F(2,7) we'll add the subgroup  generator
+`c' via `sg := [c]' (see "Option `sg'"); and while we're at it,  we'll
+force     a     `break'-loop{\undoquotes     \atindex     {break-loop}
+{@`break'-loop}}, to demonstrate how we can over-ride any options  the
+example already sets.
+
+\beginexample
+gap> SetInfoACELevel(1);                               
+gap> ACEExample("F27-purec" : max := 2, sg := [c]);
+#I  # ACEExample "F27-purec" : enumeration of cosets of H in G,
+#I  # where G = F(2,7) = C_29, H = Id, using purec strategy.
+#I  #
+#I  # F, G, a, b, c, d, e, x, y are local to ACEExample
+#I  # We define F(2,7) on 7 generators
+#I  F := FreeGroup("a","b","c","d","e", "x", "y"); 
+#I       a := F.1;  b := F.2;  c := F.3;  d := F.4; 
+#I       e := F.5;  x := F.6;  y := F.7;
+#I  G := F / [a*b*c^-1, b*c*d^-1, c*d*e^-1, d*e*x^-1, 
+#I            e*x*y^-1, x*y*a^-1, y*a*b^-1];
+#I  ACECosetTableFromGensAndRels(
+#I      FreeGeneratorsOfFpGroup(G), 
+#I      RelatorsOfFpGroup(G), 
+#I      [] # Generators of identity subgroup (empty list)
+#I      # Options that don't affect the enumeration
+#I      : echo, enum := "F(2,7), aka C_29", subg := "Id", 
+#I      # Other options
+#I      wo := "2M", mess := 25000, purec);
+ACECosetTableFromGensAndRels called with the following arguments:
+ Group generators : [ a, b, c, d, e, x, y ]
+ Group relators : [ a*b*c^-1, b*c*d^-1, c*d*e^-1, d*e*x^-1, e*x*y^-1, 
+  x*y*a^-1, y*a*b^-1 ]
+ Subgroup generators : [  ]
+ACECosetTableFromGensAndRels called with the following options:
+ max := 2
+ sg := [ c ] (brackets are not passed to ACE)
+ echo := true (not passed to ACE)
+ enum := F(2,7), aka C_29
+ subg := Id
+ wo := 2M
+ mess := 25000
+ purec (no value)
+#I  OVERFLOW (a=2 r=1 h=1 n=3; l=4 c=0.00; m=2 t=2)
+Error : No coset table ... at
+Error( ": No coset table ..." );
+#I  The `ACE' coset enumeration failed with the result:
+#I  OVERFLOW (a=2 r=1 h=1 n=3; l=4 c=0.00; m=2 t=2)
+#I  Try relaxing any restrictive options:
+#I  type: 'CurrentACEOptions();' to see current ACE options;
+#I  type: 'SetACEOptions(:<option1> := <value1>, ...);'
+#I  to set <option1> to <value1> etc.
+#I  (i.e. pass options after the ':' in the usual way)
+#I  ... and then, type: 'return;' to continue.
+#I  Otherwise, type: 'quit;' to quit the enumeration.
+Entering break read-eval-print loop, you can 'quit;' to quit to outer loop,
+or you can return to continue
+brk> # Observe how `max := 2' which forced the break, was seen first
+brk> # ... so if we had entered the `hlt' option it would just have
+brk> # been over-ridden by `purec', but we are in the break-loop now
+brk> # ... so we are free to change to `hlt' now:
+brk> SetACEOptions(: hlt := false, hlt, echo := 2, max := 0);
+brk> # Let's check what the options are now:
+brk> CurrentACEOptions();
+rec(
+  max := 0,
+  sg := [ c ],
+  echo := 2,
+  enum := "F(2,7), aka C_29",
+  subg := "Id",
+  wo := "2M",
+  mess := 25000,
+  purec := true,
+  hlt := true )
+brk> return;
+ACECosetTableFromGensAndRels called with the following arguments:
+ Group generators : [ a, b, c, d, e, x, y ]
+ Group relators : [ a*b*c^-1, b*c*d^-1, c*d*e^-1, d*e*x^-1, e*x*y^-1, 
+  x*y*a^-1, y*a*b^-1 ]
+ Subgroup generators : [  ]
+ACECosetTableFromGensAndRels called with the following options:
+ max := 0
+ sg := [ c ] (brackets are not passed to ACE)
+ echo := 2 (not passed to ACE)
+ enum := F(2,7), aka C_29
+ subg := Id
+ wo := 2M
+ mess := 25000
+ purec (no value)
+ hlt (no value)
+Other options set via ACE defaults:
+ asis := 0
+ compaction := 10
+ ct := 0
+ dmode := 0
+ dsize := 1000
+ fill := 1
+ hole := -1
+ lookahead := 1
+ loop := 0
+ mendelsohn := 0
+ no := 0
+ path := 0
+ pmode := 0
+ psize := 256
+ row := 1
+ rt := 1000
+ time := -1
+#I  INDEX = 1 (a=1 r=2 h=2 n=2; l=3 c=0.01; m=2049 t=3127)
+[ [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], 
+  [ 1 ], [ 1 ], [ 1 ], [ 1 ] ]
+gap>
+\endexample
+
+Observe the \lq{}`Other options set via ACE defaults'' list of options
+that has resulted from having the  `echo  :=  2'  option  (see~"Option
+`echo'"). Observe, also, that `hlt' is nowhere near as good, here,  as
+`purec' (check with Section~"Using ACE Directly to  Generate  a  Coset
+Table").
+
+If we had passed `hlt' initially,  and  then  tried  from  within  the
+`break'-loop to over-ride `purec', by the passing `hlt',  it  wouldn't
+have worked, because the way {\GAP}'s `OptionsStack'  works  it  would
+have remained in the same position in the  stack  (and  `purec'  would
+have again over-ridden it); but we can trick {\GAP}! What we can do is
+use the fact that {\ACE} interface options can be uppercase, lowercase
+or even mixed case. So, if we pass `HLT' via  `SetACEOptions'  in  the
+`break'-loop, {\GAP} won't know that it's the same as `hlt'  and  push
+it onto the end of the stack, in which case `hlt' will be  over-ridden
+by `purec' which will in turn be over-ridden by `HLT'.
+
+Of course, running `ACEExample' with  `StartACE'  as  second  argument
+opens up far more flexibility. Try it! Have fun!  Play  with  as  many
+options as you can. (For the moment you will sometimes need  the  hint
+regarding changing case to enforce the order of options you want, even
+with `StartACE'; in the next  revision  however  this  *bug*  will  be
+fixed.)
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
 %E
-
