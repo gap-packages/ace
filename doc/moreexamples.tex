@@ -971,16 +971,27 @@ gap> ACEEvenSims := function(fgens, rels, sgens, i, maxstart, maxstep)
 
 It turns out that one can duplicate the Sims' strategy 4 statistics in
 Table~5.5.3 of \cite{Sim94}, with `<i> = 3' (so that `<i> + 1  =  4'),
-`<maxstart> = 14' and `<maxstep> = 10':
+`<maxstart> = 14' and `<maxstep> = 50':
 
 \beginexample
 gap> ACEEvenSims([r, s, t], [(r^t*r^-2)^-1, (s^r*s^-2)^-1, (t^s*t^-2)^-1], [],
->                3, 14, 10);
+>                3, 14, 50);
 rec( index := 1, cputime := 0, cputimeUnits := "10^-2 seconds", 
   activecosets := 1, maxcosets := 393, totcosets := 393 )
 \endexample
 
-Even though the (`lenlex') standardisation steps in the above  example
+Setting `<maxstep> = 60' (and leaving the other parameters  the  same)
+also gives Sims' statistics, but `<maxstart> = 64' with  `<maxstep>  =
+80' does better:
+
+\beginexample
+gap> ACEEvenSims([r, s, t], [(r^t*r^-2)^-1, (s^r*s^-2)^-1, (t^s*t^-2)^-1], [],
+>                3, 64, 80);
+rec( index := 1, cputime := 0, cputimeUnits := "10^-2 seconds", 
+  activecosets := 1, maxcosets := 352, totcosets := 352 )
+\endexample
+
+Even though the (`lenlex') standardisation steps in the above examples
 produce a significant improvement over the  `sims  :=  3'  statistics,
 this  does  not  happen  universally.  Sims  \cite{Sim94}  gives  many
 examples  where  the  even-numbered  strategies  fail  to   show   any

@@ -1,5 +1,5 @@
 
-# ex007.in - Greg Gamble - 2 Apr 01
+# ex007.in - Greg Gamble - 4 Apr 01
 
 # The following shows how one can approximate one of the
 # even-numbered Sims strategies by causing ACE to stop
@@ -19,22 +19,12 @@ text: ** Sims:4 (cf. 393/393) ...;
 sims:3;
 max:14;
 Start;
-standard; max:24;  Continue; standard; max:34;  Continue;
-standard; max:44;  Continue; standard; max:54;  Continue;
-standard; max:64;  Continue; standard; max:74;  Continue;
-standard; max:84;  Continue; standard; max:94;  Continue;
-standard; max:104; Continue; standard; max:114; Continue;
-standard; max:124; Continue; standard; max:134; Continue;
-standard; max:144; Continue; standard; max:154; Continue;
-standard; max:164; Continue; standard; max:174; Continue;
-standard; max:184; Continue; standard; max:194; Continue;
-standard; max:204; Continue; standard; max:214; Continue;
-standard; max:224; Continue; standard; max:234; Continue;
-standard; max:244; Continue; standard; max:254; Continue;
-standard; max:264; Continue; standard; max:274; Continue;
-standard; max:284; Continue; standard; max:294; Continue;
-standard; max:304; Continue; standard; max:314; Continue;
-standard; max:324; Continue; standard; max:334; Continue;
-standard; max:344; Continue; standard; max:354; Continue;
-standard; max:364; Continue; standard; max:374; Continue;
-standard; max:384; Continue; standard; max:394; Continue;
+standard; max:64;  Continue; standard; max:114; Continue;
+standard; max:164; Continue; standard; max:214; Continue;
+standard; max:264; Continue; standard; max:314; Continue;
+standard; max:364; Continue; standard; max:414; Continue;
+
+# Stepping max by 60 from 14 also works.
+
+# Note: starting with max:64 and stepping by 80 only needs
+# 352 (total/maximum no. of) cosets ... better than Sims.
