@@ -129,7 +129,7 @@ SetPackageInfo( rec(
 ##  
 
   AbstractHTML := 
-    "The <span class="pkgname">ACE</span> package provides both an \
+    "The <span class=\"pkgname\">ACE</span> package provides both an \
      interactive and non-interactive interface with the Todd-Coxeter coset\
      enumeration functions of the ACE (Advanced Coset Enumerator) C program.",
 
