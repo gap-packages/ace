@@ -89,6 +89,20 @@ Changes to Stand-alone documentation:
 
      Alternate forms of a command are separated by a \ttt{/}\kern-1pt, while
              ^
+7 July, 2000 [ These changes by Greg Gamble ]:
+ * Extended the glossary of terms at the beginning of al2.tex and made
+   it more consistent in appearance ... e.g. included <int>, <int list>
+   etc.
+
+ * Some headers for the options had omitted closing `]' ... these were
+   inserted.
+
+ * Uses of `effect' which were intended to be the verb `affect' changed.
+
+ * Description of the `nc'/`normal' option modified.
+             
+13 July, 2000 [ These changes by Greg Gamble ]:
+ * Proof table chapter deleted at Colin's request.
 ###################### End of CHANGES ######################################
 ##
 #E
