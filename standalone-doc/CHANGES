@@ -11,6 +11,12 @@
 
 Changes to Stand-alone documentation:
 
+8 Mar, 2000 [ These changes by Greg Gamble ]:
+
+ * The citation keys in each .tex file and the database were modified to
+   include years ... so that there would be a reasonably close match for
+   the files biblio.bib and ../doc/manual.bib
+
 29 Feb, 2000 [ These changes by Greg Gamble ]:
 
  * Added headers to each .tex/.cls/.clo/.bib file and to this file
