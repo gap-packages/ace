@@ -27,9 +27,15 @@ ACEinfo.version:=ACEinfo.version{
 Print("  Loading the `ACE' share package\n");
 Print("  Using ACE binary version ",ACEinfo.version,"\n");
 
-BindGlobal("CallACE",function(fgens,grels,fsgens)
-  local j,k,n,nums,i,DoWords,ParseValueOption,ParseBooleanOption,infile,l,
-        ind,p,gens,w,tab,a,redir,flag;
+BindGlobal("CALL_ACE",function(arg)
+local fgens,grels,fsgens,j,k,n,nums,i,DoWords,ParseValueOption,
+      ParseBooleanOption,infile,l,ind,p,gens,w,tab,a,redir,flag,stats,statval;
+
+  fgens:=arg[1];
+  grels:=arg[2];
+  fsgens:=arg[3];
+  # only do stats
+  stats:=Length(arg)>3 and arg[4]=1;
 
   n:=Length(fgens);
   if ForAny(fgens,i->NumberSyllables(i)<>1 or ExponentSyllable(i,1)<>1) then
@@ -145,7 +151,7 @@ BindGlobal("CallACE",function(fgens,grels,fsgens)
   # Technical options
   ParseValueOption("workspace");
   ParseValueOption("rtime","time");
-  ParseValueOption("maxdef","max");
+  ParseValueOption("max");
 
   # Info Stuff
   ParseValueOption("aep");
@@ -174,6 +180,7 @@ BindGlobal("CallACE",function(fgens,grels,fsgens)
     redir:="> temp";
   fi;
 
+  AppendTo(ACEinfo.infile,"AO:",ACEinfo.outfile,";\n");
   AppendTo(infile,"END\n");
 
   if infile<>ACEinfo.infile then
@@ -181,13 +188,29 @@ BindGlobal("CallACE",function(fgens,grels,fsgens)
     return;
   fi;
 
-  AppendTo(ACEinfo.infile,"AO:",ACEinfo.outfile);
-  AppendTo(ACEinfo.infile,";\nPR;\n");
+  if stats=false then
+    AppendTo(ACEinfo.infile,"PR;\n");
+  fi;
+
   Exec(Concatenation("cd ",Filename(ACEinfo.tmpdir,""),"; ",
           ACEinfo.binary," <ein ",redir));
 
   infile:=InputTextFile(ACEinfo.outfile);
   l:=ReadLine(infile);
+
+  # parse the line for statistics
+  a:=Filtered(l,i->i in ". " or i in CHARS_DIGITS);
+  a:=SplitString(a,""," .");
+  if l{[1..5]}="INDEX" then
+    statval:=[Int(a[1]),Int(a[7])+Int(a[8])/10^Length(a[8]),
+              Int(a[9]),Int(a[10])];
+  else
+    statval:=[0,Int(a[6])+Int(a[7])/10^Length(a[7]),Int(a[8]),Int(a[9])];
+  fi;
+
+  if stats then 
+    return statval;
+  fi;
 
   # skip some header until the ` coset ' line
   while l<>fail and l{[1..6]}<>" coset" do
@@ -267,14 +290,11 @@ BindGlobal("CallACE",function(fgens,grels,fsgens)
   return l;
 end);
 
-# the ACE version of the coset enumerator
-BindGlobal("ACETCENUM",rec(name:="ACE-enumerator",
-        CosetTableFromGensAndRels:=
-        function(fgens,grels,fsgens)
+BindGlobal("CallACE",function(fgens,grels,fsgens)
   local l,silent;
   silent:=ValueOption("silent")=true;
   repeat
-    l:=CallACE(fgens,grels,fsgens);
+    l:=CALL_ACE(fgens,grels,fsgens);
     if l=fail then
       if silent then return fail;fi;
       Error("the coset enumeration using the `ACE' enumerator did not ",
@@ -285,4 +305,13 @@ BindGlobal("ACETCENUM",rec(name:="ACE-enumerator",
   until l<>fail;
   StandardizeTable(l);
   return l;
-end));
+end);
+
+# the ACE version of the coset enumerator
+BindGlobal("ACETCENUM",rec(name:="ACE-enumerator",
+        CosetTableFromGensAndRels:=CallACE));
+
+BindGlobal("ACEStats",function(fgens,grels,fsgens)
+  return CALL_ACE(fgens,grels,fsgens,1);
+end);
+
