@@ -24,11 +24,8 @@ self-explanatory. (We describe some other output  to  give  points  of
 reference.)
 
 Both interactively and non-interactively, {\ACE} output  is  `Info'-ed
-at `InfoACE' level 3;  and  non-interactively,  this  output  is  also
-directed  to  file  `ACEData.outfile'  (or   <filename>,   if   option
-`aceoutfile := <filename>', or `ao := <filename>', is  used).  To  see
-the `Info'-ed {\ACE} output, set the `InfoLevel' of  `InfoACE'  to  at
-least 3, e.g.
+at `InfoACE' level 3. To see the  `Info'-ed  {\ACE}  output,  set  the
+`InfoLevel' of `InfoACE' to at least 3, e.g.
 
 \beginexample
 gap> SetInfoACELevel(3);
@@ -43,16 +40,16 @@ other  {\ACE}  interface  functions.  The  first-observed  (`Info'-ed)
 output from {\ACE}, is {\ACE}'s banner, e.g.
 
 \beginexample
-#I  ACE 3.001        Tue Aug 21 12:07:48 2001
+#I  ACE 3.001        Sun Sep 30 21:45:39 2001
 #I  =========================================
 #I  Host information:
-#I    name = hamal
+#I    name = rigel
 \endexample
 
 If there were any errors in the directives put to  {\ACE},  or  output
 from the options described in Appendix~"Other ACE Options", they  will
-appear next. Then, interactively, the next observed output is a row of
-three asterisks:
+appear next. Then,  the  next  observed  output  is  a  row  of  three
+asterisks:
 
 \beginexample
 #I  ***
@@ -64,10 +61,6 @@ text") directive, emitted to {\ACE}, so that {\ACE}'s response can  be
 used as a sentinel to flush out any user errors, or any output from  a
 user's use of Appendix~"Other ACE Options" options.
 
-Non-interactively, there will also be a row of three asterisks in  the
-output, but it occurs after any results messages  and  output  due  to
-user options.
-
 Next, if the `messages' option (see~"option messages")  is  set  to  a
 non-zero value, what is observed is a heading like:
 
@@ -75,10 +68,10 @@ non-zero value, what is observed is a heading like:
 #I    #--- ACE 3.001: Run Parameters ---
 \endexample
 
-(where `3.000' may be replaced be some later version number)  followed
-by the ``input parameters'' developed from the arguments  and  options
-passed to `ACECosetTableFromGensAndRels',  `ACEStats'  or  `ACEStart'.
-After these appears a separator:
+(where `3.001' may be replaced be some later  version  number  of  the
+{\ACE} binary) followed by the ``input parameters'' developed from the
+arguments  and  options  passed   to   `ACECosetTableFromGensAndRels',
+`ACEStats' or `ACEStart'. After these appears a separator:
 
 \beginexample
 #I    #--------------------------------
@@ -88,20 +81,18 @@ followed by any *progress messages* (progress messages only  occur  if
 `messages' is non-zero;  recall  that  by  default  `messages'  =  0),
 followed by a *results message*.
 
-Non-interactively, as aforementioned,  following  the  above  messages
-come any output due to user options and a row of asterisks,  followed,
-in the case of `ACECosetTableFromGensAndRels', by a  compaction  (`CO'
-or `co') progress message and a coset table.
+In the case of `ACECosetTableFromGensAndRels', the  *results  message*
+is followed by a compaction (`CO' or  `co')  progress  message  and  a
+coset table.
 
-Finally, non-interactively, all the above sans  the  prepended  `Info'
-string: ```\#I ''' also appears in the output file along with {\ACE}'s
-exit banner (which is not  `Info'-ed),  which  should  look  something
-like:
+{\ACE}'s exit banner which should looks something like:
 
 \beginexample
 =========================================
-ACE 3.001        Tue Aug 21 12:07:48 2001
+ACE 3.001        Sun Sep 30 22:03:36 2001
 \endexample
+
+is only seen when running {\ACE} as a standalone.
 
 Both *progress messages* and  the  *results  message*  consist  of  an
 initial tag followed by a list of statistics. All messages have values

@@ -44,7 +44,7 @@ Entering break read-eval-print loop ...
 brk> fgens := FreeGeneratorsOfFpGroup(FreeGroup("a"));
 [ a ]
 brk> return;
-rec( index := 0, cputime := 43, cputimeUnits := "10^-2 seconds", 
+rec( index := 0, cputime := 13, cputimeUnits := "10^-2 seconds", 
   activecosets := 499998, maxcosets := 499998, totcosets := 499998 )
 gap>
 \endexample
@@ -80,9 +80,9 @@ overflows:
 
 \beginexample
 gap> ACEStats(fgens, [], []);
-#I  OVERFLOW (a=249998 r=83333 h=83333 n=249999; l=337 c=0.29; m=249998 t=2499\
-98)
-rec( index := 0, cputime := 29, cputimeUnits := "10^-2 seconds", 
+#I  OVERFLOW (a=249998 r=83333 h=83333 n=249999; l=337 c=0.09; m=249998 t=249998\
+)
+rec( index := 0, cputime := 9, cputimeUnits := "10^-2 seconds", 
   activecosets := 249998, maxcosets := 249998, totcosets := 249998 )
 \endexample
 
