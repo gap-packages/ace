@@ -26,13 +26,13 @@ F 1.9. SetInfoACELevel
 S 1.10. Acknowledgement
 S 1.11. Changes from earlier versions
 I 1.11. CallACE
-I 1.11. Option `outfile'
-I 1.11. Option `messfile'
+I 1.11. option outfile
+I 1.11. option messfile
 I 1.11. ACEinfo
-C ace.tex 2. Installing and Loading the ACE Share Package
+C install.tex 2. Installing and Loading the ACE Share Package
 S 2.1. Installing the ACE Share Package
 S 2.2. Loading the ACE Share Package
-C ace.tex 3. Some Basics
+C basics.tex 3. Some Basics
 I 3.0. strategy
 I 3.0. Felsch strategy
 I 3.0. HLT strategy
@@ -69,7 +69,7 @@ I 3.2. dead coset (number)
 I 3.2. preferred definition stack
 S 3.3. Finding Subgroups
 I 3.3. coincidences
-C ace.tex 4. Options for ACE
+C options.tex 4. Options for ACE
 S 4.1. Passing ACE Options
 S 4.2. Warnings regarding Options
 F 4.2. FlushOptionsStack
@@ -87,71 +87,71 @@ S 4.10. ACE Option Synonyms
 I 4.10. ACEOptionSynonyms
 S 4.11. Non-ACE-binary Options
 I 4.11. NonACEbinOptions
-F 4.11. Option `silent'
-F 4.11. Option `aceinfile'
-F 4.11. Option `aceoutfile'
-F 4.11. Option `aceignore'
-F 4.11. Option `aceignoreunknown'
-F 4.11. Option `acenowarnings'
-F 4.11. Option `echo'
-F 4.11. Option `echo'
-F 4.11. Option `aceecho'
-F 4.11. Option `aceincomment'
-F 4.11. Option `aceexampleoptions'
+F 4.11. option silent
+F 4.11. option aceinfile
+F 4.11. option aceoutfile
+F 4.11. option aceignore
+F 4.11. option aceignoreunknown
+F 4.11. option acenowarnings
+F 4.11. option echo
+F 4.11. option echo
+F 4.11. option aceecho
+F 4.11. option aceincomment
+F 4.11. option aceexampleoptions
 S 4.12. ACE Parameter Options
 I 4.12. ACEParameterOptions
 S 4.13. General ACE Parameter Options that Modify the Enumeration Process
-F 4.13. Option `asis'
-F 4.13. Option `ct'
-F 4.13. Option `cfactor'
-F 4.13. Option `rt'
-F 4.13. Option `rfactor'
-F 4.13. Option `no'
-F 4.13. Option `mendelsohn'
+F 4.13. option asis
+F 4.13. option ct
+F 4.13. option cfactor
+F 4.13. option rt
+F 4.13. option rfactor
+F 4.13. option no
+F 4.13. option mendelsohn
 S 4.14. ACE Parameter Options Modifying C-Style Definitions
-F 4.14. Option `fill'
-F 4.14. Option `ffactor'
-F 4.14. Option `pmode'
-F 4.14. Option `psize'
+F 4.14. option fill
+F 4.14. option ffactor
+F 4.14. option pmode
+F 4.14. option psize
 S 4.15. ACE Parameter Options for R-Style Definitions
-F 4.15. Option `row'
-F 4.15. Option `lookahead'
+F 4.15. option row
+F 4.15. option lookahead
 S 4.16. ACE Parameter Options for Deduction Handling
-F 4.16. Option `dmode'
-F 4.16. Option `dsize'
+F 4.16. option dmode
+F 4.16. option dsize
 S 4.17. Technical ACE Parameter Options
-F 4.17. Option `workspace'
-F 4.17. Option `time'
-F 4.17. Option `loop'
-F 4.17. Option `path'
-F 4.17. Option `compaction'
+F 4.17. option workspace
+F 4.17. option time
+F 4.17. option loop
+F 4.17. option path
+F 4.17. option compaction
 I 4.17. dead coset (number)
 I 4.17. dead coset (number)
 I 4.17. dead coset (number)
-F 4.17. Option `max'
-F 4.17. Option `hole'
+F 4.17. option max
+F 4.17. option hole
 S 4.18. ACE Parameter Options controlling ACE Output
-F 4.18. Option `messages'
-F 4.18. Option `monitor'
+F 4.18. option messages
+F 4.18. option monitor
 S 4.19. ACE Parameter Options that gives Names to the Group and Subgroup
-F 4.19. Option `enumeration'
-F 4.19. Option `subgroup'
+F 4.19. option enumeration
+F 4.19. option subgroup
 S 4.20. Options for redirection of ACE Output
-F 4.20. Option `ao'
-F 4.20. Option `aceoutfile'
+F 4.20. option ao
+F 4.20. option aceoutfile
 S 4.21. Other Options
-C ace.tex 5. Strategy Options for ACE
+C strategies.tex 5. Strategy Options for ACE
 S 5.1. The Strategies in Detail
-F 5.1. Option `default'
-F 5.1. Option `easy'
-F 5.1. Option `felsch'
-F 5.1. Option `felsch'
-F 5.1. Option `hard'
-F 5.1. Option `hlt'
-F 5.1. Option `purec'
-F 5.1. Option `purer'
-F 5.1. Option `sims'
-C ace.tex 6. Functions for Using ACE Interactively
+F 5.1. option default
+F 5.1. option easy
+F 5.1. option felsch
+F 5.1. option felsch
+F 5.1. option hard
+F 5.1. option hlt
+F 5.1. option purec
+F 5.1. option purer
+F 5.1. option sims
+C interact.tex 6. Functions for Using ACE Interactively
 S 6.1. Starting and Stopping Interactive ACE Processes
 F 6.1. ACEStart
 F 6.1. ACEStart
@@ -283,3 +283,79 @@ F 6.7. ACEConjugatesForSubgroupNormalClosure
 F 6.7. ACEConjugatesForSubgroupNormalClosure
 F 6.7. ACEConjugatesForSubgroupNormalClosure
 F 6.7. ACEConjugatesForSubgroupNormalClosure
+C messages.tex 7. The Meanings of ACE's output messages
+S 7.1. Progress Messages
+S 7.2. Results Messages
+C otheroptions.tex 8. Other ACE Options
+S 8.1. Experimentation Options
+F 8.1. option aep
+F 8.1. option rep
+F 8.1. option rep
+S 8.2. Options that Modify a Presentation
+F 8.2. option generators
+F 8.2. option group
+F 8.2. option relators
+F 8.2. option sg
+F 8.2. option rl
+F 8.2. option ds
+F 8.2. option dr
+F 8.2. option cc
+F 8.2. option rc
+F 8.2. option rc
+F 8.2. option rc
+S 8.3. Mode Options
+F 8.3. option mode
+F 8.3. option begin
+F 8.3. option start
+F 8.3. option check
+F 8.3. option redo
+F 8.3. option continue
+S 8.4. Options that Interact with the Operating System
+F 8.4. option ai
+F 8.4. option ai
+F 8.4. option bye
+F 8.4. option exit
+F 8.4. option qui
+F 8.4. option system
+S 8.5. Query Options
+F 8.5. option cycles
+F 8.5. option dump
+F 8.5. option dump
+F 8.5. option dump
+F 8.5. option dump
+F 8.5. option help
+F 8.5. option nc
+F 8.5. option nc
+F 8.5. option normal
+F 8.5. option normal
+F 8.5. option options
+F 8.5. option oo
+F 8.5. option order
+F 8.5. option sr
+F 8.5. option sr
+F 8.5. option print
+F 8.5. option print
+F 8.5. option print
+F 8.5. option print
+F 8.5. option print
+F 8.5. option sc
+F 8.5. option stabilising
+F 8.5. option statistics
+F 8.5. option stats
+F 8.5. option style
+F 8.5. option tw
+F 8.5. option trace
+S 8.6. Options that Modify the Coset Table
+F 8.6. option recover
+F 8.6. option contiguous
+I 8.6. dead coset (number)
+F 8.6. option standard
+S 8.7. Options for Comments
+F 8.7. option text
+F 8.7. option aceincomment
+C examples.tex 9. Examples
+S 9.1. Example where ACE is made the Standard Coset Enumerator
+S 9.2. Example of Using ACECosetTableFromGensAndRels
+S 9.3. Example of Using ACE Interactively (Using ACEStart)
+S 9.4. Fun with ACEExample
+I 9.4. break-loop

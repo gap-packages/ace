@@ -1,0 +1,210 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%W  strategies.tex      ACE documentation - strategies   Alexander Hulpke
+%W                                                      Joachim Neub"user
+%W                                                            Greg Gamble
+%%
+%H  $Id$
+%%
+%Y  Copyright (C) 2000  Centre for Discrete Mathematics and Computing
+%Y                      Department of Computer Science & Electrical Eng.
+%Y                      University of Queensland, Australia.
+%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Chapter{Strategy Options for ACE}
+
+It can be difficult to select appropriate options when presented  with
+a new enumeration. The problem is  compounded  by  the  fact  that  no
+generally applicable rules exist to  predict,  given  a  presentation,
+which option settings are \lq{}good'. To help overcome  this  problem,
+{\ACE} contains various commands which select  particular  enumeration
+strategies. One or other of these strategies may work and, if not, the
+results may indicate how  the  options  can  be  varied  to  obtain  a
+successful enumeration. 
+
+If no strategy option is passed to {\ACE}, the `default'  strategy  is
+assumed, which starts out presuming that the enumeration will be easy,
+and if it turns out not to  be  so,  {\ACE}  switches  to  a  strategy
+designed for more difficult enumerations.  The  other  straightforward
+options for beginning users are `easy' and `hard'. Thus,  `easy'  will
+quickly succeed or fail (in  the  context  of  the  given  resources);
+`default' may succeed quickly, or if not will try the `hard' strategy;
+and `hard' will run more slowly, from the beginning trying to succeed.
+
+Strategy options are merely options that set a number of  the  options
+seen in Chapter~"Options for ACE", all at once;  they  are  parsed  in
+*exactly* the same way as other options; order *is* important.  It  is
+usual to specify one strategy option and possibly  follow  it  with  a
+number of options defined in Chapter~"Options for ACE", some of  which
+may over-ride those options set by strategy option.  Please  refer  to
+the  introductory  sections  of  Chapter~"Options  for  ACE",   paying
+particular attention to Sections "Warnings regarding  Options",  "What
+happens if no ACE Strategy Option or if  no  ACE  Option  is  passed",
+and~"Interpretation of ACE  Options",  which  give  various  warnings,
+hints and information on the interpretation of options.
+
+There are eight strategy options. Each is passed without a value  (see
+Section~"Interpretation of  ACE  Options")  except  for  `sims'  which
+expects one of the integer values: 1, 3, 5, 7, or 9; and, `felsch' can
+accept a value of 0 or 1, where 0  has  the  same  effect  as  passing
+`felsch' with  no  value.  Thus  the  eight  strategy  options  define
+thirteen standard strategies; these are listed  in  the  table  below,
+along with all but three of the options (of Chapter~"Options for ACE")
+that they set. Additionally, each strategy sets `path = 0',  `psize  =
+256', and `dsize = 1000'. Recall `mend', `look' and  `com'  abbreviate
+`mendelsohn'  (see~"option  mendelsohn"),   `lookahead'   (see~"option
+lookahead") and `compaction' (see~"option compaction"), respectively.
+
+% \begin{table}
+% \hrule
+% \caption{The Predefined Strategies}
+% \label{tab:pred}
+% \smallskip
+% \renewcommand{\arraystretch}{0.875}
+% \begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}lrrrrrrrrrrrrr} 
+% \hline\hline
+%           & \multicolumn{13}{c}{parameter} \\ 
+% \cline{2-14}
+% strategy & path & row & mend & no & look & com & ct   & rt    & fill &
+% pmode & psize & dmode & dsize \\ 
+% \hline
+% default    & 0   & 1   & 0    & -1 & 0    & 10  & 0    & 0     & 0  & 3    & 256  & 4    & 1000 \\
+% easy   & 0   & 1   & 0    & 0  & 0    & 100 & 0    & 1000  & 1  & 0    & 256  & 0    & 1000 \\
+% felsch:0& 0   & 0   & 0    & 0  & 0    & 10  & 1000 & 0     & 1  & 0    & 256  & 4    & 1000 \\
+% felsch:1  & 0   & 0   & 0    & -1 & 0    & 10  & 1000 & 0     & 0  & 3    & 256  & 4    & 1000 \\
+% hard   & 0   & 1   & 0    & -1 & 0    & 10  & 1000 & 1     & 0  & 3    & 256  & 4    & 1000 \\
+% hlt    & 0   & 1   & 0    & 0  & 1    & 10  & 0    & 1000  & 1  & 0    & 256  & 0    & 1000 \\
+% purec & 0   & 0   & 0    & 0  & 0    & 100 & 1000 & 0     & 1  & 0    & 256  & 4    & 1000 \\
+% purer & 0   & 0   & 0    & 0  & 0    & 100 & 0    & 1000  & 1  & 0    & 256  & 0    & 1000 \\
+% sims:1 & 0   & 1   & 0    & 0  & 0    & 10  & 0    & 1000  & 1  & 0    & 256  & 0    & 1000 \\
+% sims:3 & 0   & 1   & 0    & 0  & 0    & 10  & 0    & -1000 & 1  & 0    & 256  & 4    & 1000 \\
+% sims:5 & 0   & 1   & 1    & 0  & 0    & 10  & 0    & 1000  & 1  & 0    & 256  & 0    & 1000 \\
+% sims:7 & 0   & 1   & 1    & 0  & 0    & 10  & 0    & -1000 & 1  & 0    & 256  & 4    & 1000 \\
+% sims:9 & 0   & 0   & 0    & 0  & 0    & 10  & 1000 & 0     & 1  & 0    & 256  & 4    & 1000 \\
+% \hline\hline
+% \end{tabular*}
+% \end{table}
+
+\begintt
+                               option
+            ---------------------------------------------------------
+strategy    row  mend  no  look  com    ct     rt  fill  pmode  dmode
+---------------------------------------------------------------------
+default       1     0  -1     0   10     0      0     0      3      4
+easy          1     0   0     0  100     0   1000     1      0      0
+felsch := 0   0     0   0     0   10  1000      0     1      0      4
+felsch := 1   0     0  -1     0   10  1000      0     0      3      4
+hard          1     0  -1     0   10  1000      1     0      3      4
+hlt           1     0   0     1   10     0   1000     1      0      0
+purec         0     0   0     0  100  1000      0     1      0      4
+purer         0     0   0     0  100     0   1000     1      0      0
+sims := 1     1     0   0     0   10     0   1000     1      0      0
+sims := 3     1     0   0     0   10     0  -1000     1      0      4
+sims := 5     1     1   0     0   10     0   1000     1      0      0
+sims := 7     1     1   0     0   10     0  -1000     1      0      4
+sims := 9     0     0   0     0   10  1000      0     1      0      4
+---------------------------------------------------------------------
+\endtt
+
+Note that we explicitly (re)set all of the listed  enumerator  options
+in all of the predefined strategies, even though some of them have  no
+effect. For example, the `fill' value is irrelevant in HLT  mode.  The
+idea  behind  this  is  that,  if  you  later  change   some   options
+individually, then the enumeration retains the  \lq{}flavour'  of  the
+last selected predefined strategy.
+
+Note also that other options which may effect an enumeration are  left
+untouched by setting one of the predefined  strategies;  for  example,
+the values of `max' (see~"option max") and `asis' (see~"option asis").
+These options have an effect which  is  independent  of  the  selected
+strategy.
+
+Note that, apart from the `felsch := 0' and `sims  :=  9'  strategies,
+all of the strategies are distinct, although some are very similar.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{The Strategies in Detail}
+
+\beginitems
+
+\>`default'{option default}@{option `default'}&
+Selects the default strategy. (Shortest abbreviation: `def'.)
+
+This   strategy   is   based   on   the   defaulted   R/C-style;   see
+Section~"Enumeration Style". The idea here is that we assume that  the
+enumeration is \lq{}easy' and start out in R-style. If  it  turns  out
+not to be easy, then  we  regard  it  as  \lq{}hard',  and  switch  to
+CR-style, after performing a lookahead on the entire table.
+
+\>`easy'{option easy}@{option `easy'}&
+Selects an \lq{}easy' R-style strategy.
+
+If this strategy is selected, we run in R-style (i.e., HLT), but  turn
+`lookahead' and `compaction' off. For small and/or easy  enumerations,
+this mode is likely to be the fastest.
+
+\>`felsch'{option felsch}@{option `felsch'}
+\>`felsch:=<val>'{option felsch}@{option `felsch'}&
+Selects a Felsch strategy; <val> should be 0 or 1. 
+(Shortest abbreviation: `fel'.)
+
+Assigning `felsch' 0 or no value selects a pure Felsch strategy, and a
+value of 1 selects a Felsch strategy with all relators in the subgroup
+(`no = -1') and turns gap-`fill'ing on.
+
+\>`hard'{option hard}@{option `hard'}&  
+Selects a mixed R-style and C-style strategy.
+
+In many \lq{}hard' enumerations, a  mixture  of  R-style  and  C-style
+definitions, all tested in all  essentially  different  positions,  is
+appropriate. This option selects such a mixed strategy. The idea  here
+is that most of the work is done C-style (with  the  relators  in  the
+subgroup (`no = -1') and with gap-`fill'ing active),  but  that  every
+$1000$ C-style definitions a further coset number is  applied  to  all
+relators.
+
+*Guru  Notes:*
+The $1000/1$ mix is not necessarily optimal, and some  experimentation
+may be needed  to  find  an  acceptable  balance  (see,  for  example,
+\cite{HR99b}). Note also that, the longer  the  total  length  of  the
+presentation, the more work needs to be done  for  each  coset  number
+application to the relators; one coset number application  can  result
+in more than $1000$ definitions, reversing the balance between R-style
+and C-style definitions.
+
+\>`hlt'{option hlt}@{option `hlt'}&
+Selects the standard HLT strategy.
+
+\>`purec'{option purec}@{option `purec'}&
+Sets the strategy to basic C-style (coset table based).
+
+In this strategy there is no `compaction',  no  gap-`fill'ing  and  no
+relators in subgroup (`no = 0').
+
+\>`purer'{option purer}@{option `purer'}&
+Sets the strategy  to basic R-style (relator based).
+
+In this  strategy  there  is  no  `mendelsohn',  no  `compaction',  no
+`lookahead' and no `row'-filling.
+
+\>`sims:=<val>'{option sims}@{option `sims'}&
+Sets a Sims strategy; <val> should be one of 1, 3, 5, 7 or 9.
+
+In his book~\cite{Sim94},  Sims  discusses  ten  standard  enumeration
+strategies. These are effectively HLT (with and  without  `mendelsohn'
+set -- see~"option mendelsohn") and Felsch, all either with or without
+table standardisation as the enumeration  proceeds.  {\ACE}  does  not
+implement  table  standardisation  during  an  enumeration,   although
+incomplete tables can be standardised and  an  enumeration  continued.
+The five odd-numbered non-standardising strategies of~\cite{Sim94} are
+implemented ({\ACE}'s numbering is the same as  given  in  Section~5.5
+of~\cite{Sim94}).  With  care,  it  is  possible  to   duplicate   the
+statistics  given  in~\cite{Sim94};  some  examples   are   given   in
+Appendix~"Examples". % again, in the appendix ...
+
+\enditems
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%E

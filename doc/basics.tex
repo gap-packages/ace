@@ -1,0 +1,329 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%W  basics.tex          ACE documentation - basics       Alexander Hulpke
+%W                                                      Joachim Neub"user
+%W                                                            Greg Gamble
+%%
+%H  $Id$
+%%
+%Y  Copyright (C) 2000  Centre for Discrete Mathematics and Computing
+%Y                      Department of Computer Science & Electrical Eng.
+%Y                      University of Queensland, Australia.
+%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Chapter{Some Basics}
+
+Throughout this manual for  the  use  of  {\ACE}  as  a  {\GAP}  share
+package, we shall assume that the reader already knows the basic ideas
+of coset enumeration, as can be  found  for  example  in~\cite{Neu82}.
+There, a simple proof is given for the fact that a  coset  enumeration
+for a subgroup of finite index in  a  finitely  presented  group  must
+eventually terminate with the correct result, provided the enumeration
+process obeys a simple condition (Mendelsohn's  condition)  formulated
+in Lemma~1 and Theorem~2 of~\cite{Neu82}. This basic condition  leaves
+room for a great variety  of  *strategies*\index{strategy}  for  coset
+enumeration; two \lq{}classical' ones have been known for a long  time
+as the *Felsch  strategy*\atindex{Felsch  strategy}{@Felsch  strategy}
+and  the  *HLT  strategy*\atindex{HLT  strategy}{@HLT  strategy}  (for
+Haselgrove, Leech and Trotter). Extensive experimental studies on many
+strategies can be found in~\cite{CDHW73}, \cite{Hav91},  \cite{HR99a},
+and \cite{HR99b}, in particular.
+
+A few basic points should be particularly understood:
+
+\beginlist
+
+\item{--} \lq{}Subgroup (generator) and relator tables' that are  used
+in the description of coset enumeration in \cite{Neu82}, and to  which
+we will also occasionally refer in this manual,  do  *not*  physically
+exist in the implementation of coset  enumeration  in  {\ACE}.  For  a
+terminology that is closer to the actual implementation  and  also  to
+the  formulations  in  the  manual  for  the  {\ACE}  standalone   see
+\cite{CDHW73} and \cite{Hav91}.
+
+\item{--} Coset    enumeration    proceeds    by    defining    *coset
+numbers*\index{coset   numbers}   that    really    denote    possible
+representatives for cosets written as words in the generators  of  the
+group. At the time of their generation it is not guaranteed  that  any
+two of these words do indeed represent different cosets. The state  of
+an enumeration at any time is stored in a 2-dimensional array known as
+a *coset table*\index{coset table} whose rows  are  indexed  by  coset
+numbers and whose columns are indexed  by  the  group  generators  and
+their inverses. Entries of the coset table that are  not  yet  defined
+are known as *holes*\index{holes} (typically they are filled  with  0,
+i.e.~an invalid coset number).
+
+\item{--} It is customary in  talking about coset enumeration to speak
+of *cosets*\index{cosets} when really coset numbers are  meant.  While
+we try to avoid  this  in  this  interface  manual,  in  certain  word
+combinations such as *coset application*\index{coset  application}  we
+will follow this custom.
+
+\item{--} The   definition   of   a   coset   number   may   lead   to
+*deductions*\index{deduction}  from  the  \lq{}closing  of   rows   in
+subgroup  or  relator  tables'.  These  are  kept  in   a   *deduction
+stack*\index{deduction stack}.
+
+\item{--} Also   it  may  be  found  that  (different)  words  in  the
+generators defining different coset numbers really  lie  in  the  same
+coset    of    the    given    subgroup.    This    is    called     a
+*coincidence*\index{coincidence}  and  will  eventually  lead  to  the
+elimination of the  larger  of  the  two  coset  numbers.  Until  this
+elimination has been performed pending  coincidences  are  kept  in  a
+*queue of coincidences*\index{coincidence queue}.
+
+\item{--} A definition that will actually close a row in a subgroup or
+relator table will immediately yield twice  as  many  entries  in  the
+coset  table  as  other  definitions.  Such  definitions  are   called
+*preferred definitions*\index{preferred definitions},  the  places  in
+rows of a subgroup or relator table that they close are also  referred
+to as \lq{}gaps of length one' or minimal gaps. Such gaps can be found
+at little extra cost when \lq{}relators are traced from a given  coset
+number'. {\ACE} keeps a selection of them in a  *preferred  definition
+stack*\index{preferred definition stack} for use  in  some  definition
+strategies (see~\cite{Hav91}).
+
+\endlist
+
+It will also be necessary to understand some further basic features of
+the  implementation and  the corresponding  terminology which  we will
+explain in the sequel.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{Enumeration  Style}
+
+The first main decision for any coset enumeration is in which sequence
+to make definitions. When a new coset number has  to  be  defined,  in
+{\ACE} there are basically three possible methods to choose from:
+
+\beginlist
+
+\item{--} One may fill the next empty entry  in  the  coset  table  by
+scanning from the left/top of the coset table towards the right/bottom
+--  that  is,  in  order  row  by  row.  This   is   called   *C-style
+definition*\atindex{C-style  definition}{@C-style   definition}   (for
+*C*oset Table Based definition) of coset numbers. In fact a  procedure
+needs to follow a method like this to some extent for the proofs  that
+coset enumeration eventually terminates in the case  of  finite  index
+(see~\cite{Neu82}).
+
+\item{--} In *R-style definition*\atindex{R-style definition}{@R-style
+definition} (for *R*elator Based definition) the order in which  coset
+numbers are defined is explicitly prescribed by  the  order  in  which
+rows of (the subgroup generator tables and)  the  relator  tables  are
+filled by making definitions.
+
+\item{--} One may choose  definitions  from  a  *Preferred  Definition
+Stack*\index{preferred definition stack}. In this stack  possibilities
+for definition of coset numbers are stored that will close  a  certain
+row    of    a    relator    table.     Using     these     *preferred
+definitions*\index{preferred definitions} is sometimes  also  referred
+to as a *minimal gaps  strategy*\index{strategy,  minimal  gaps}.  The
+idea of using these is that by closing a row in a relator table, thus,
+one will immediately get a consequence.  We  will  come  back  to  the
+obvious question of where one obtains this  \lq{}preferred  definition
+stack'.
+
+\endlist
+
+The *enumeration style* is mainly determined by  the  balance  between
+C-style definitions and R-style definitions, which  is  controlled  by
+the values of the `ct' and `rt' options (see~"option  ct"  and~"option
+rt").
+
+However this still leaves us with plenty of freedom for the design  of
+definition strategies, freedom which can,  for  example,  be  used  to
+great advantage in Felsch-type strategies. Though it is  not  strictly
+necessary,  before  embarking  on  further  enumeration,   Felsch-type
+programs generally start off  by  ensuring  that  each  of  the  given
+subgroup generators produces a cycle of coset numbers at coset  1.  To
+explain the idea, an example may help. Suppose  $a,b$  are  the  group
+generators and $w=Abab$ is a subgroup generator, where $A$  represents
+the inverse of $a$; then to say that \lq{}$(1,i,j,k)$ is  a  cycle  of
+coset numbers produced at coset 1 by $w$' means  that  the  successive
+application  of  the  \lq{}letters'  $A,b,a,b$  of   $w$   takes   one
+successively from coset 1, through cosets $i$, $j$ and $k$,  and  back
+to coset 1, i.e.~$A$ applied to coset 1  results  in  coset  $i$,  $b$
+applied to coset $i$ results in coset $j$, $a$ applied  to  coset  $j$
+results in coset $k$, and finally $b$ applied to coset  $k$  takes  us
+back to coset $1$. In this  way,  a  hypothetical  subgroup  table  is
+filled first. The use of this and other  possibilities  leads  to  the
+following table of *enumeration styles*.
+
+% \begin{table}
+% \hrule
+% \caption{The styles}
+% \label{tab:sty}
+% \smallskip
+% \renewcommand{\arraystretch}{0.875}
+% \begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}crrlc} 
+% \hline\hline
+% & \ttt{Rt} value & \ttt{Ct} value & style name & \\
+% \hline
+% & $<\!0$ & $<\!0$ & R/C & \\
+% & $<\!0$ & $0$    & R*  & \\
+% & $<\!0$ & $>\!0$ & Cr  & \\
+% & $0$    & $<\!0$ & C   & \\
+% & $0$    & $0$    & R/C (defaulted) & \\
+% & $0$    & $>\!0$ & C  & \\
+% & $>\!0$ & $<\!0$ & Rc & \\
+% & $>\!0$ & $0$    & R  & \\
+% & $>\!0$ & $>\!0$ & CR & \\
+% \hline\hline
+% \end{tabular*}
+% \end{table}
+\begintt
+Rt value     Ct value     style name
+-----------------------------------------
+
+   0           >0         C
+  <0           >0         Cr
+  >0           >0         CR
+
+  >0            0         R
+  <0            0         R*
+  >0           <0         Rc
+  <0           <0         R/C
+   0            0         R/C (defaulted)
+
+-----------------------------------------
+\endtt
+
+In *C-style*\atindex{C-style}{@C-style} most definitions are  made  in
+the next empty coset table slot and are (in principle) tested  in  all
+essentially different  positions  in  the  relators;  i.e.~this  is  a
+Felsch-like mode.
+
+However in C-Style some definitions may be made following a  preferred
+definition strategy, controlled by the  `pmode'  and  `psize'  options
+(see~"option pmode" and~"option psize").
+
+*Cr-style*\atindex{Cr-style}{@Cr-style} is like C-style except that  a
+single R-style pass is done after the initial C-style pass.
+
+In *CR-style*\atindex{CR-style}{@CR-style} alternate passes of C-style
+and R-style are performed.
+
+In *R-style*\atindex{R-style}{@R-style} all the definitions  are  made
+via relator scans; i.e.~this is an HLT-like mode.
+
+*R\*-style*\atindex{R\*-style}{@R\*-style} makes definitions the  same
+as R-style, but tests all definitions as for C-style.
+
+*Rc-style*\atindex{Rc-style}{@Rc-style} is like R-style, except that a
+single C-style pass is done after the initial R-style pass.
+
+In *R/C-style*\atindex{R/C-style}{@R/C-style} we run in R-style  until
+an overflow, perform a lookahead on the entire table, and then  switch
+to CR-style.
+
+*Defaulted     R/C-style*\atindex{Defaulted      R/C-style}{@Defaulted
+R/C-style} is the default style,  used  if  you  call  {\ACE}  without
+specifying options. In it we use R/C-style with `ct' set to  1000  and
+`rt' set to approximately $2000$ divided by the total  length  of  the
+relators in an attempt to balance R and C definitions when  we  switch
+to CR-style.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{Finding Deductions, Coincidences, and Preferred Definitions} 
+
+First, let us  broadly  discuss  strategies  and  how  they  influence
+\lq{}definitions'.  By  *definition*\index{definition}  we  mean   the
+allocation of a coset number. In a complete  coset  table  each  group
+relator produces a cycle of cosets numbers at each  coset  number,  in
+particular at coset 1, i.e.~for each relator $w$, and for  each  coset
+number $i$, successive  application  of  the  letters  of  $w$,  trace
+through a sequence of coset numbers that begins and ends in  $i$  (see
+Section~"Enumeration Style" for an example). It has been found to be a
+good general  rule  to  use  the  given  group  relators  as  subgroup
+generators. This ensures the early definition  of  some  useful  coset
+numbers, and is the  basis  of  the  `default'  strategy  (see~"option
+default").  The  number  of  group  relators  included   as   subgroup
+generators is determined by the `no' option (see~"option no"). Over  a
+wide range of examples the use of group relators in this way has  been
+shown to produce generally beneficial results in terms of the  maximum
+number of cosets numbers defined at any one time and the total  number
+of coset numbers defined. In~\cite{CDHW73}, it was reported  that  for
+some Macdonald group $G(\alpha,\beta)$  examples,  (pure)  Felsch-type
+strategies (that don't include the given group  relators  as  subgroup
+generators) e.g.~the `felsch  :=  0'  strategy  (see~"option  felsch")
+defined significantly more coset numbers than HLT-type (e.g.~the `hlt'
+strategy,  see~"option  hlt")  strategies.  The  comparison  of  these
+strategies  in  terms  of  total  number  of  coset  numbers  defined,
+in~\cite{Hav91}, for the enumeration of the cosets of a certain  index
+40 subgroup of the $G(3,21)$ Macdonald group were 91  for  HLT  versus
+16067 for a pure Felsch-type strategy. For the  Felsch  strategy  with
+the group relators included as subgroup generators, as for the `felsch
+:= 1' strategy (see~"option felsch") the total number of coset numbers
+defined reduced markedly to 59.
+
+A *deduction*\index{deduction} occurs when the scanning of  a  relator
+results in the assignment of a coset table  body  entry.  A  completed
+table is only valid if every  table  entry  has  been  tested  in  all
+essentially different positions in  all  relators.  This  testing  can
+either be done directly (Felsch strategy) or via relator scanning (HLT
+strategy). If it is done directly, then more than one deduction can be
+waiting to be processed at any one time. The untested  deductions  are
+stored in a stack. How this stack is  managed  is  determined  by  the
+`dmode' option (see~"option dmode"), and its size is controlled by the
+`dsize' option (see~"option dsize").
+
+As already mentioned a *coincidence*\index{coincidence} occurs when it
+is determined that two coset numbers in fact represent the same coset.
+When this occurs  the  larger  coset  number  becomes  a  *dead  coset
+number*\index{dead coset (number)} and the coincidence is placed in  a
+queue. When and how these dead coset numbers are eventually eliminated
+is  controlled  by  the  options  `dmode',  `path'  and   `compaction'
+(see~"option dmode", "option path" and~"option compaction"). The  user
+may  also  force   coincidences   to   occur   (see   Section~"Finding
+Subgroups").
+
+The key  to  performance  of  coset  enumeration  procedures  is  good
+selection  of  the  next   coset   number   to   be   defined.   Leech
+in~\cite{Lee77}  and~\cite{Lee84}  showed  how  a  number   of   coset
+enumerations could be simplified by removing coset numbers  needlessly
+defined by computer implementations. Human  enumerators  intelligently
+choose which coset number should be defined next, based on  the  value
+of each potential definition. In particular, definitions  which  close
+relator cycles (or at least shorten gaps in cycles)  are  favoured.  A
+definition which actually closes a relator  cycle  immediately  yields
+twice as many table entries (deductions)  as  other  definitions.  The
+value of the `pmode'  option  (see~"option  pmode")  determines  which
+definitions are *preferred*; if the value of  the  `pmode'  option  is
+non-zero, depending on the `pmode' value, gaps  of  length  one  found
+during relator scans in Felsch style  are  either  filled  immediately
+(subject to the value of `fill') or noted in the *preferred definition
+stack*\index{preferred definition  stack}.  The  preferred  definition
+stack is implemented as a ring  of  size  determined  by  the  `psize'
+option (see~"option psize").  However,  making  preferred  definitions
+carelessly  can  violate  the  conditions  required   for   guaranteed
+termination of the coset enumeration procedure in the case  of  finite
+index. To avoid such a violation {\ACE}  ensures  a  fraction  of  the
+coset table is filled before  a  preferred  definition  is  made;  the
+reciprocal of this fraction, the `fill factor', is manipulated via the
+`fill' option (see~"option fill"). In~\cite{Hav91}, the `felsch :=  1'
+type enumeration of the cosets of the certain index 40 subgroup of the
+$G(3,21)$ Macdonald group was further  improved  to  require  a  total
+number of coset numbers  of  just  43  by  incorporating  the  use  of
+preferred definitions.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{Finding Subgroups}
+
+The  {\ACE}  Share  Package,  via  its  interactive  {\ACE}  interface
+functions   (described   in   Chapter~"Functions   for    Using    ACE
+Interactively"), provides the possibility of searching for  subgroups.
+To do this one starts  at  a  known  subgroup  (possibly  the  trivial
+subgroup). Then one may augment it by adding new  subgroup  generators
+either        explicitly        via         `ACEAddSubgroupGenerators'
+(see~"ACEAddSubgroupGenerators")   or   implicitly   by    introducing
+*coincidences*\index{coincidences}     (see     `ACECosetCoincidence':
+"ACECosetCoincidence",           or           `ACERandomCoincidences':
+"ACERandomCoincidences"). Also, one may descend to  smaller  subgroups
+by  deleting  subgroup  generators  via  `ACEDeleteSubgroupGenerators'
+(see~"ACEDeleteSubgroupGenerators").
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%E

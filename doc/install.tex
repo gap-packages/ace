@@ -1,0 +1,118 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%W  install.tex     ACE documentation - installation     Alexander Hulpke
+%W                                                      Joachim Neub"user
+%W                                                            Greg Gamble
+%%
+%H  $Id$
+%%
+%Y  Copyright (C) 2000  Centre for Discrete Mathematics and Computing
+%Y                      Department of Computer Science & Electrical Eng.
+%Y                      University of Queensland, Australia.
+%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Chapter{Installing and Loading the ACE Share Package}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{Installing the ACE Share Package}
+
+To install, unpack the archive file as a sub-directory  in  the  `pkg'
+hierarchy of your version  of  {\GAP}~4.  (This  might  be  the  `pkg'
+directory of the {\GAP}~4 home directory; it is however also  possible
+to keep an additional `pkg' directory in your private directories, see
+Section~"ref:Installing Share  Packages"  of  the  {\GAP}~4  Reference
+Manual for details on how to do this.) Go to the newly  created  `ace'
+directory and call `./configure <path>' where <path> is  the  path  to
+the {\GAP} home directory. So for example if you install  the  package
+in the main `pkg' directory call
+
+\begintt
+./configure ../..
+\endtt
+
+This  will fetch  the  architecture  type for  which  {\GAP} has  been
+compiled last and create a `Makefile'. Now simply call
+
+\begintt
+make
+\endtt
+
+to compile the binary and to install it in the appropriate place.
+
+Note that the  current version of the configuration  process only sets
+up  directory paths.  If you  need a  different compiler  or different
+compiler options, you need  to edit `src/Makefile.in' prior to calling
+`make' yourself.
+
+If you use this installation of {\GAP} on different hardware platforms
+you will have to compile the binary for each platform separately. This
+is  done  by calling  `configure'  and  `make'  for the  package  anew
+immediately   after  compiling  {\GAP}   itself  for   the  respective
+architecture.  If your version of  {\GAP} is already compiled (and has
+last  been compiled  on  the same  architecture)  you do  not need  to
+compile {\GAP} again, it is  sufficient to call the `configure' script
+in the {\GAP} home directory.
+
+The manual you are currently reading describes how to use  the  {\ACE}
+Share Package; it can be  found  in  the  `doc'  subdirectory  of  the
+package. If your manual does not have a table of contents or index, or
+has these but with invalid page numbers please re-generate the  manual
+by executing
+
+\begintt
+./make_doc
+\endtt
+
+in the `doc' subdirectory.
+
+The  subdirectory  `standalone-doc'  contains the  file  `ace3001.dvi'
+which holds a version of the user manual for the {\ACE} standalone; it
+forms part of~\cite{Ram99}).  You  should consult it if  you are going
+to  switch to  the {\ACE}  standalone, e.g.~in  order to  directly use
+interactive facilities.
+
+The  `src' subdirectory  contains a  copy  of the  original source  of
+{\ACE}.  (The  only modification  is  that  a  file `Makefile.in'  was
+obtained from  the different `make.xyz' and  will be used  to create a
+`Makefile'.)  You  can replace  the source by  a newer  version before
+compiling.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{Loading the ACE Share Package}
+
+To use the {\ACE} Share Package you have  to  request  it  explicitly.
+This is done by calling
+
+\beginexample
+gap> RequirePackage( "ace" );
+#I  Loading the ACE (Advanced Coset Enumerator) share package
+#I           by George Havas <havas@csee.uq.edu.au> and
+#I              Colin Ramsay <cram@csee.uq.edu.au>
+#I                   ACE binary version: 3.000
+true
+\endexample
+
+The      `RequirePackage'      command      is      described       in
+Section~"ref:RequirePackage" in the {\GAP} Reference Manual.
+
+If {\GAP} cannot find a working binary, the call  to  `RequirePackage'
+will fail.
+
+If you know you have a working {\ACE} binary, as well as  a  correctly
+installed {\ACE} Share Package, it is possible to suppress the  `Info'
+messages by temporarily setting the `InfoLevel' of `InfoWarning' to 0,
+and a duplicated semicolon will suppress the `true' result:
+
+\beginexample
+gap> SetInfoLevel(InfoWarning, 0); RequirePackage(" ace ");;
+gap> SetInfoLevel(InfoWarning, 1);
+\endexample
+
+If you want to load the {\ACE} package by default, you  can  put   the
+`RequirePackage' command into your `.gaprc' file (see Section~"ref:The
+.gaprc file" in the {\GAP} Reference Manual).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%E
