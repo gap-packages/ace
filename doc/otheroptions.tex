@@ -14,11 +14,12 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Chapter{Other ACE Options}
 
-Here we will list  all  the  known  {\ACE}  options  that  users  will
-normally only wish to use if generating an input file,  by  using  the
-option `aceinfile' (see~"option aceinfile"). Most of the options below
-are  for  interactive  use  with  the  standalone;  from  the   {\GAP}
-interface, we provide other functions for interactive use.
+Here we list all the known {\ACE} options not provided  earlier.  Most
+of the options provided here have interactive alternatives; a few have
+only limited usefulness from {\GAP}; many, users  will  normally  only
+wish to  use  if  generating  an  input  file,  by  using  the  option
+`aceinfile' (see~"option aceinfile"). However  all  options  here  are
+functional, both interactively and non-interactively.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{Experimentation Options}
@@ -296,6 +297,8 @@ positive integer.
 Prints out the representative of coset `<val>', and  adds  it  to  the
 subgroup generators; i.e., forces coset `<val>' to coincide with coset
 1, the subgroup.
+
+Interactively, use `ACECosetCoincidence' (see~"ACECosetCoincidence").
 
 \>`rc:=<val>'{option rc}@{option `rc'}
 \>`rc:=[<val>]'{option rc}@{option `rc'}
@@ -576,6 +579,8 @@ to be printed. In the last  form,  the  table  is  printed  from  line
 `|<val>|' to line <last> in steps of <by>. If <val> is negative,  then
 the  orders   modulo   the   subgroup   (if   available)   and   coset
 representatives are printed also.
+
+Interactively, use `ACEDisplayCosetTable' (see~"ACEDisplayCosetTable").
 
 \>`sc:=<val>'{option sc}@{option `sc'}
 \>`stabilising:=<val>'{option stabilising}@{option `stabilising'}&

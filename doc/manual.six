@@ -167,7 +167,7 @@ F 4.17. option hole
 S 4.18. ACE Parameter Options controlling ACE Output
 F 4.18. option messages
 F 4.18. option monitor
-S 4.19. ACE Parameter Options that gives Names to the Group and Subgroup
+S 4.19. ACE Parameter Options that give Names to the Group and Subgroup
 F 4.19. option enumeration
 F 4.19. option subgroup
 S 4.20. Options for redirection of ACE Output
@@ -338,81 +338,82 @@ F 6.8. ACEReadUntil
 C messages.tex 7. The Meanings of ACE's output messages
 S 7.1. Progress Messages
 S 7.2. Results Messages
-C otheroptions.tex 8. Other ACE Options
-S 8.1. Experimentation Options
-F 8.1. option aep
-F 8.1. option rep
-F 8.1. option rep
-S 8.2. Options that Modify a Presentation
-F 8.2. option group
-F 8.2. option relators
-F 8.2. option generators
-F 8.2. option sg
-F 8.2. option rl
-F 8.2. option ds
-F 8.2. option dr
-F 8.2. option cc
-F 8.2. option rc
-F 8.2. option rc
-F 8.2. option rc
-S 8.3. Mode Options
-F 8.3. option mode
-F 8.3. option begin
-F 8.3. option start
-F 8.3. option check
-F 8.3. option redo
-F 8.3. option continue
-S 8.4. Options that Interact with the Operating System
-F 8.4. option ai
-F 8.4. option ai
-F 8.4. option bye
-F 8.4. option exit
-F 8.4. option qui
-F 8.4. option system
-S 8.5. Query Options
-F 8.5. option cycles
-F 8.5. option dump
-F 8.5. option dump
-F 8.5. option dump
-F 8.5. option dump
-F 8.5. option help
-F 8.5. option nc
-F 8.5. option nc
-F 8.5. option normal
-F 8.5. option normal
-F 8.5. option options
-F 8.5. option oo
-F 8.5. option order
-F 8.5. option sr
-F 8.5. option sr
-F 8.5. option print
-F 8.5. option print
-F 8.5. option print
-F 8.5. option print
-F 8.5. option print
-F 8.5. option sc
-F 8.5. option stabilising
-F 8.5. option statistics
-F 8.5. option stats
-F 8.5. option style
-F 8.5. option tw
-F 8.5. option trace
-S 8.6. Options that Modify the Coset Table
-F 8.6. option recover
-F 8.6. option contiguous
-I 8.6. dead coset (number)
-F 8.6. option standard
-S 8.7. Options for Comments
-F 8.7. option text
-F 8.7. option aceincomment
-C examples.tex 9. Examples
+C examples.tex 8. Examples
+S 8.1. Example where ACE is made the Standard Coset Enumerator
+S 8.2. Example of Using ACECosetTableFromGensAndRels
+S 8.3. Example of Using ACE Interactively (Using ACEStart)
+S 8.4. Fun with ACEExample
+I 8.4. break-loop
+S 8.5. Using ACEReadResearchExample
+C moreexamples.tex 9. More Examples
 S 9.1. Getting Started
-I 9.1. ACEStats, a first example
+I 9.1. ACEStats, example
 I 9.1. ACECosetTableFromGensAndRels, example
 I 9.1. ACEStart, example
-S 9.2. Example where ACE is made the Standard Coset Enumerator
-S 9.3. Example of Using ACECosetTableFromGensAndRels
-S 9.4. Example of Using ACE Interactively (Using ACEStart)
-S 9.5. Fun with ACEExample
-I 9.5. break-loop
-S 9.6. Using ACEReadResearchExample
+C otheroptions.tex 10. Other ACE Options
+S 10.1. Experimentation Options
+F 10.1. option aep
+F 10.1. option rep
+F 10.1. option rep
+S 10.2. Options that Modify a Presentation
+F 10.2. option group
+F 10.2. option relators
+F 10.2. option generators
+F 10.2. option sg
+F 10.2. option rl
+F 10.2. option ds
+F 10.2. option dr
+F 10.2. option cc
+F 10.2. option rc
+F 10.2. option rc
+F 10.2. option rc
+S 10.3. Mode Options
+F 10.3. option mode
+F 10.3. option begin
+F 10.3. option start
+F 10.3. option check
+F 10.3. option redo
+F 10.3. option continue
+S 10.4. Options that Interact with the Operating System
+F 10.4. option ai
+F 10.4. option ai
+F 10.4. option bye
+F 10.4. option exit
+F 10.4. option qui
+F 10.4. option system
+S 10.5. Query Options
+F 10.5. option cycles
+F 10.5. option dump
+F 10.5. option dump
+F 10.5. option dump
+F 10.5. option dump
+F 10.5. option help
+F 10.5. option nc
+F 10.5. option nc
+F 10.5. option normal
+F 10.5. option normal
+F 10.5. option options
+F 10.5. option oo
+F 10.5. option order
+F 10.5. option sr
+F 10.5. option sr
+F 10.5. option print
+F 10.5. option print
+F 10.5. option print
+F 10.5. option print
+F 10.5. option print
+F 10.5. option sc
+F 10.5. option stabilising
+F 10.5. option statistics
+F 10.5. option stats
+F 10.5. option style
+F 10.5. option tw
+F 10.5. option trace
+S 10.6. Options that Modify the Coset Table
+F 10.6. option recover
+F 10.6. option contiguous
+I 10.6. dead coset (number)
+F 10.6. option standard
+S 10.7. Options for Comments
+F 10.7. option text
+F 10.7. option aceincomment

@@ -27,7 +27,9 @@ Alexander Hulpke and Greg Gamble, which is described in this manual.
 The interface links to an external binary and therefore is only usable
 under UNIX (see Section~"Installing the ACE Share Package" for how  to
 install {\ACE}).  It will not work  on  Windows  or the Macintosh.  It
-requires at least {\GAP}~4.2.
+requires at least {\GAP}~4.2. Examples, where they occur, show results
+and output from {\GAP}~4.3, which may differ  slightly  from  what  is
+obtained with {\GAP}~4.2.
 
 {\ACE} can be used through this interface in a variety  of  ways:
 
@@ -221,38 +223,38 @@ complete, putting us in a `break'-loop.
 {\undoquotes\atindex{ACECosetTable, break-loop example}
 {@`ACECosetTable', `break'-loop example}}
 \beginexample
-gap> ACECosetTable(fgens, rels, [c] : max := 2);
-Error : No coset table ... at
-Error( ": No coset table ..." );
-#I  The `ACE' coset enumeration failed with the result:
-#I  OVERFLOW (a=2 r=1 h=1 n=3; l=5 c=0.00; m=2 t=2)
-#I  Try relaxing any restrictive options:
-#I  type: 'DisplayACEOptions();' to see current ACE options;
-#I  type: 'SetACEOptions(:<option1> := <value1>, ...);'
-#I  to set <option1> to <value1> etc.
-#I  (i.e. pass options after the ':' in the usual way)
-#I  ... and then, type: 'return;' to continue.
-#I  Otherwise, type: 'quit;' to quit the enumeration.
-Entering break read-eval-print loop, you can 'quit;' to quit to outer loop,
-or you can return to continue
+gap> ACECosetTable(fgens, rels, [c] : max := 2);  
+Error, no coset table ...
+ the `ACE' coset enumeration failed with the result:
+ OVERFLOW (a=2 r=1 h=1 n=3; l=5 c=0.00; m=2 t=2)
+Entering break read-eval-print loop ...
+ try relaxing any restrictive options.
+ Type: 'DisplayACEOptions();' to see current ACE options;
+ type: 'SetACEOptions(:<option1> := <value1>, ...);'
+ to set <option1> to <value1> etc.
+ (i.e. pass options after the ':' in the usual way)
+ ... and then, type: 'return;' to continue.
+ Otherwise, type: 'quit;' to quit the enumeration.
 brk> SetACEOptions(: max := 0);
 brk> return;
 [ [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], 
   [ 1 ], [ 1 ], [ 1 ], [ 1 ] ]
-gap>
+gap> 
 \endexample
 
-Observe how the `Info' lines (the  ones  starting  with  \lq{}`\#I '')
-tell you *exactly* what to do. At the `break'-loop  prompt  `brk>'  we
-relaxed all restrictions on `max' (by re-setting it to  0)  and  typed
-`return;' to leave the `break'-loop. The coset  enumeration  was  then
-successful, allowing the computation  of  what  turned  out  to  be  a
-trivial coset table. Despite the fact that the  eventual  coset  table
-only has one line (i.e.~there is  exactly  one  coset  number)  {\ACE}
-*did* need to define more than 2 coset numbers. To find out  just  how
-many  were  required  before  the  final  collapse,  let's   set   the
-`InfoLevel' of `InfoACE' (see~"SetInfoACELevel") to  2,  so  that  the
-{\ACE} enumeration result is printed.
+Observe how the lines after the \lq{}`Entering  break  read-eval-print
+loop'' announcement tell you *exactly* what  to  do  (for  {\GAP}  4.2
+these  lines  are  instead   `Info'-ed   *before*   the   `break'-loop
+announcement). At  the  `break'-loop  prompt  `brk>'  we  relaxed  all
+restrictions on `max' (by re-setting it to 0) and typed  `return;'  to
+leave the `break'-loop. The coset  enumeration  was  then  successful,
+allowing the computation of what turned out  to  be  a  trivial  coset
+table. Despite the fact that the eventual coset  table  only  has  one
+line (i.e.~there is exactly one coset number)  {\ACE}  *did*  need  to
+define more than 2 coset numbers. To  find  out  just  how  many  were
+required before the final  collapse,  let's  set  the  `InfoLevel'  of
+`InfoACE' (see~"SetInfoACELevel") to 2, so that the {\ACE} enumeration
+result is printed.
 
 \beginexample
 gap> SetInfoACELevel(2);

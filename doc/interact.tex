@@ -31,16 +31,16 @@ identifies the  interactive  {\ACE}  process  that  was  initiated  or
 manipulated.
 
 Most functions (there is one `ACEStart' exception), that manipulate an
-already started interactive {\ACE} process, have a form where the first  argument  is
-the integer <i> returned by the initiating `ACEStart' command,  and  a
-second form with  one  fewer  arguments  (where  the  integer  <i>  is
-discovered by a default mechanism, namely  by  determining  the  least
-integer <i> for which there is a currently active  interactive  {\ACE}
-process). We will thus  commonly  say  that  \lq{}for  the  <i>th  (or
-default) interactive {ACE} process'  a  certain  function  performs  a
-given action. In each case, it is an error, if <i> is not the index of
-an  active  interactive  process,  or  there  are  no  current  active
-interactive processes.
+already started interactive {\ACE} process,  have  a  form  where  the
+first  argument  is  the  integer  <i>  returned  by  the   initiating
+`ACEStart' command, and a second form with one argument  fewer  (where
+the integer <i> is  discovered  by  a  default  mechanism,  namely  by
+determining the least integer <i>  for  which  there  is  a  currently
+active interactive {\ACE} process). We will  thus  commonly  say  that
+\lq{}for the <i>th (or default) interactive {ACE} process'  a  certain
+function performs a given action. In each case, it is an error, if <i>
+is not the index of an active interactive process,  or  there  are  no
+current active interactive processes.
 
 *Notes*: 
 The global method of passing options (via `PushOptions'),  should  not
@@ -601,7 +601,7 @@ simply    run    `ACERandomEquivPresentations(<i>,     7);'     before
 \>ACEGroupGenerators( <i> ) F
 \>ACEGroupGenerators() F
 
-return  the  {\GAP}  group  generators,  of  the  <i>th  (or  default)
+return  the  {\GAP}  group  generators  of  the  <i>th  (or   default)
 interactive {\ACE} process. If no generators have been saved  for  the
 interactive {\ACE} process, possibly because the process  was  started
 via   `ACEStart(0);'   (see~"ACEStart"),   the   {\ACE}   process   is
@@ -610,7 +610,7 @@ Essentially,   `ACEGroupGenerators(<i>)'   interrogates   {\ACE}   and
 establishes `ACEData.io[<i>].args.fgens', if  necessary,  and  returns
 `ACEData.io[<i>].args.fgens'.  As  a  side-effect,  if  any   of   the
 remaining       fields       of       `ACEData.io[<i>].args'        or
-`ACEData.io[<i>].acegens' are unset, they are  also  set.  Note  that,
+`ACEData.io[<i>].acegens' are unset, they  are  also  set.  Note  that
 {\GAP} provides  `GroupWithGenerators'  (see~"ref:GroupWithGenerators"
 in the {\GAP} Reference Manual) to establish a free group on  a  given
 set of already-defined generators.
@@ -618,7 +618,7 @@ set of already-defined generators.
 \>ACERelators( <i> ) F
 \>ACERelators() F
 
-return the {\GAP} relators, of  the  <i>th  (or  default)  interactive
+return the {\GAP} relators  of  the  <i>th  (or  default)  interactive
 {\ACE} process. If no relators have been  saved  for  the  interactive
 {\ACE}  process,  possibly  because  the  process  was   started   via
 `ACEStart(0);' (see~"ACEStart"), the {\ACE} process  is  interrogated,
@@ -632,7 +632,7 @@ unset, they are also set.
 \>ACESubgroupGenerators( <i> ) F
 \>ACESubgroupGenerators() F
 
-return the {\GAP} subgroup  generators,  of  the  <i>th  (or  default)
+return the {\GAP}  subgroup  generators  of  the  <i>th  (or  default)
 interactive {\ACE} process. If no subgroup generators have been  saved
 for the interactive {\ACE} process, possibly because the  process  was
 started via `ACEStart(0);' (see~"ACEStart"),  the  {\ACE}  process  is
@@ -994,10 +994,10 @@ essentially the information obtained is what is obtained via  {\ACE}'s
 illustrating the default build, is:
 
 \beginexample
-gap> ACEVersion();
-#I  ACE 3.000
+gap> ACEVersion();      
+#I  ACE Version: 3.000
 #I  Executable built:
-#I    Sat Feb 27 15:57:59 EST 1999
+#I    Tue Oct 17 10:45:14 EST 2000
 #I  Level 0 options:
 #I    statistics package = on
 #I    coinc processing messages = on
@@ -1009,12 +1009,15 @@ gap> ACEVersion();
 \endexample
 
 *Note:*
-Unlike other {\ACE} interface functions, the information obtained  via
-`ACEVersion();' is absolutely independent of any enumeration. For this
-reason, we make it permissible to run `ACEVersion();' when  there  are
-no currently active interactive {\ACE} processes; and, in such a case,
-`ACEVersion();' initiates (and closes again) its own stream to  obtain
-the information from the {\ACE} binary.
+The {\ACE} banner may also appear in the output (if it has not already
+appeared). Unlike other {\ACE} interface  functions,  the  information
+obtained  via  `ACEVersion();'  is  absolutely  independent   of   any
+enumeration.  For  this  reason,  we  make  it  permissible   to   run
+`ACEVersion();' when there are no currently active interactive  {\ACE}
+processes; and, in such a case, `ACEVersion();' emits a  warning  that
+there  are  no  interactive  {\ACE}  sessions  currently  active   and
+initiates (and closes again) its own stream to obtain the  information
+from the {\ACE} binary.
 
 \enditems
 
@@ -1079,8 +1082,8 @@ arguments.
 \>ACERecover( <i> ) F
 \>ACERecover() F
 
-invoke on the coset table,  of  the  <i>th  (or  default)  interactive
-{\ACE} process  started  by  `ACEStart',  the  compaction  routine  to
+invoke the compaction routine on the coset  table  of  the  <i>th  (or
+default) interactive {\ACE} process started by `ACEStart', in order to
 recover the space used by  the  dead  coset  numbers\index{dead  coset
 (number)}. A `CO' message line is printed if any  rows  of  the  coset
 table were recovered, and a `co' line if none were. (See Appendix~"The
@@ -1168,7 +1171,7 @@ standardising the coset numbering, and continuing.
 add, for the <i>th (or default) interactive {\ACE} process started  by
 `ACEStart', the words in the list <wordlist> to any  relators  already
 present, and automatically invokes  either  `ACERedo'  or  `ACEStart'.
-Note that, {\ACE} sorts the resultant relator list, unless the  `asis'
+Note that {\ACE} sorts the resultant relator list, unless  the  `asis'
 option (see~"option asis") has been set to  1;  don't  assume,  unless
 `asis = 1', that the new relators have been appended in  user-provided
 order to the previously existing relator list.  `ACEAddRelators'  also
@@ -1184,10 +1187,10 @@ generators already present.  The  enumeration  must  be  restarted  or
 redone, it cannot be  continued.  add,  for  the  <i>th  (or  default)
 interactive {\ACE} process started by `ACEStart',  the  words  in  the
 list <wordlist>  to  any  subgroup  generators  already  present,  and
-automatically invokes  either  `ACERedo'  or  `ACEStart'.  Note  that,
-{\ACE} sorts the resultant subgroup generator list, unless the  `asis'
-option (see~"option asis") has been set to  1;  don't  assume,  unless
-`asis = 1', that the new subgroup generators  have  been  appended  in
+automatically invokes either `ACERedo' or `ACEStart'. Note that {\ACE}
+sorts the resultant subgroup generator list, unless the `asis'  option
+(see~"option asis") has been set to 1; don't assume,  unless  `asis  =
+1',  that  the  new  subgroup  generators  have   been   appended   in
 user-provided order to  the  previously  existing  subgroup  generator
 list.  `ACEAddSubgroupGenerators'  also  returns  the   new   subgroup
 generator          list.          Use          `ACESubgroupGenerators'
@@ -1234,7 +1237,7 @@ automatically invoked.
 \>ACERandomCoincidences( [<subindex>, <attempts>] ) F
 
 for the <i>th (or  default)  interactive  {\ACE}  process  started  by
-`ACEStart', attempt upto <attempts> (or, in the first four  forms,  8)
+`ACEStart', attempt up to <attempts> (or, in the first four forms,  8)
 times to find nontrivial subgroups with index a multiple of <subindex>
 by repeatedly making random coset numbers coincident with coset 1  and
 seeing what happens. The starting coset table must be  non-empty,  but

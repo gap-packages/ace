@@ -29,6 +29,7 @@ of {\ACE}  options,  after  loading  the  {\ACE}  Share  Package  (see
 Section~"Loading the ACE Share Package"), by typing
 
 \beginexample
+gap> RecNames(KnownACEOptions);
 [ "aceinfile", "aceignore", "aceignoreunknown", "acenowarnings", "aceecho", 
   "aceincomment", "aceexampleoptions", "silent", "lenlex", "semilenlex", 
   "incomplete", "sg", "rl", "aep", "ai", "ao", "aceoutfile", "asis", "begin", 
@@ -1206,7 +1207,7 @@ where the meanings of {\ACE}'s output messages are fully discussed.
 \enditems
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\Section{ACE Parameter Options that gives Names to the Group and Subgroup}
+\Section{ACE Parameter Options that give Names to the Group and Subgroup}
 
 These options may be safely ignored; they only give names to the group
 or subgroup within the {\ACE}  output,  and  have  no  effect  on  the
@@ -1262,11 +1263,11 @@ for `aceoutfile'.
 \Section{Other Options}
 
 {\ACE} has a number of other options, but the  {\GAP}  user  will  not
-ordinarily need them, since interactively alternative functions  exist
-and non-interactively most have limited  usefulness,  except  possibly
-for a user wishing to generate an input file for use with  the  {\ACE}
-standalone. Hence, these remaining  options  have  been  relegated  to
-Appendix~"Other ACE Options".
+ordinarily need them, since, in most  cases,  alternative  interactive
+functions exist.  These  remaining  options  have  been  relegated  to
+Appendix~"Other ACE Options". The options listed  there  may  be  used
+both interactively and non-interactively, but many are  probably  best
+used directly via the {\ACE} standalone.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
