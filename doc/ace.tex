@@ -224,14 +224,16 @@ gap> ACECosetTable(fgens, rels, [c] : max := 2);
 Error, no coset table ...
  the `ACE' coset enumeration failed with the result:
  OVERFLOW (a=2 r=1 h=1 n=3; l=5 c=0.00; m=2 t=2)
+ called from
+<function>( <arguments> ) called from read-eval-loop
 Entering break read-eval-print loop ...
- try relaxing any restrictive options.
- Type: 'DisplayACEOptions();' to see current ACE options;
+ try relaxing any restrictive options:
+ type: 'DisplayACEOptions();' to see current ACE options;
  type: 'SetACEOptions(:<option1> := <value1>, ...);'
  to set <option1> to <value1> etc.
  (i.e. pass options after the ':' in the usual way)
  ... and then, type: 'return;' to continue.
- Otherwise, type: 'quit;' to quit the enumeration.
+ Otherwise, type: 'quit;' to quit to outer loop.
 brk> SetACEOptions(: max := 0);
 brk> return;
 [ [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], 
@@ -487,46 +489,46 @@ corresponding file in the `examples' directory); and <ACEfunc> is  the
 {\ACE} function with which the example is to be executed. 
 
 If `ACEExample' is called with no arguments,  or  with  the  argument:
-`"index"', or with a non-existent example name, an index of  available
-examples is displayed.
+`"index"' (meant in the sense of ``list''),  or  with  a  non-existent
+example  name,  a  list  of  available  examples  is  displayed.   See
+Section~"Fun with ACEExample" where the list is displayed.
 
-By default, examples are executed via  `ACECosetTableFromGensAndRels'.
-However, if `ACEExample' is called with a second argument (choose from
-the (other) alternatives: `ACEStats', or `ACEStart'), the  example  is
-executed using that function, instead. Note that,  whereas  the  first
-argument appears in double quotes (since it's a  string),  the  second
-argument does not (since it's a  function);  e.g.~to  execute  example
-`"A5"' with function `ACEStats',  one  would  type:  `ACEExample("A5",
-ACEStats);'.
+By  default,  examples  are  executed  via  `ACEStats'.  However,   if
+`ACEExample' is called with a second argument (choose from the (other)
+alternatives:   `ACECosetTableFromGensAndRels'    (or,    equivalently
+`ACECosetTable'), or `ACEStart'), the example is executed  using  that
+function, instead. Note that, whereas the first  argument  appears  in
+double quotes (since it's a string),  the  second  argument  does  not
+(since it's a function); e.g.~to execute example `"A5"' with  function
+`ACECosetTable', one would type: `ACEExample("A5", ACECosetTable);'.
 
 `ACEExample' also accepts user options, which  may  be  passed  either
 globally  (i.e.~by  using  `PushOptions'  to  push   them   onto   the
 `OptionsStack') or locally  behind  a  colon  after  the  `ACEExample'
-arguments, and they are passed  to  `ACECosetTableFromGensAndRels'  or
-<ACEfunc> as if they  were  *appended*  to  the  existing  options  of
-<examplename>; in this way, the user may *over-ride* any or all of the
-options  of  <examplename>.  This  is  done  by  passing   an   option
-`aceexampleoptions' (see~"option aceexampleoptions"), which sets up  a
-mechanism to reverse the usual order in which options  of  recursively
-called functions  are  pushed  onto  the  `OptionsStack'.  The  option
-`aceexampleoptions' is *not* a user option; it is  intended  only  for
-*internal* use by `ACEExample', for the above purpose. In the  portion
-of the output due to the `echo' option, if one has passed  options  to
-`ACEExample', one will see `aceexampleoptions' listed  first  and  the
-result  of  the  interaction  of  <examplename>'s  options   and   the
-additional options.
+arguments, and they are passed to `ACEStats' or <ACEfunc> as  if  they
+were *appended* to the existing options of <examplename>; in this way,
+the user may *over-ride* any or all of the options  of  <examplename>.
+This is done by passing  an  option  `aceexampleoptions'  (see~"option
+aceexampleoptions"), which sets up a mechanism to  reverse  the  usual
+order in which options of recursively called functions are pushed onto
+the `OptionsStack'. The option `aceexampleoptions'  is  *not*  a  user
+option; it is intended only for *internal* use  by  `ACEExample',  for
+the above purpose. In the portion of the  output  due  to  the  `echo'
+option, if one has  passed  options  to  `ACEExample',  one  will  see
+`aceexampleoptions' listed first and the result of the interaction  of
+<examplename>'s options and the additional options.
 
 Consider the example `"A5"'. The effect of running
 
 \beginexample
-gap> ACEExample("A5", ACEStats);
+gap> ACEExample("A5", ACEStart);
 \endexample
 
 is essentially equivalent to executing:
 
 \beginexample
 gap> file := Filename(DirectoriesPackageLibrary("ace", "examples"), "A5");
-gap> ACEfunc := ACEStats;
+gap> ACEfunc := ACEStart;
 gap> ReadAsFunction(file)();
 \endexample
 
@@ -549,10 +551,9 @@ effect of this, it is recommended to do: `SetInfoACELevel(3);'  before
 calling `ACEExample', with an example.
 
 The coset table output from `ACEExample', when called with many of the
-examples     and     with     the     default     {\ACE}      function
-`ACECosetTableFromGensAndRels' is often quite long.  Recall  that  the
-output may be suppressed by following the (`ACEExample') command  with
-a double semicolon (`;;').
+examples and with the {\ACE}  function  `ACECosetTableFromGensAndRels'
+is often quite long. Recall that  the  output  may  be  suppressed  by
+following the (`ACEExample') command with a double semicolon (`;;').
 
 Also, try `SetInfoACELevel(2);' before  calling `ACEExample', with  an
 example.
@@ -713,6 +714,11 @@ from {\ACE};
 
 \quad`stats'  & a record as output by the function `ACEStats'.
 
+\quad`enforceAsis' & 
+a  boolean  that  is  set  to  `true'  whenever  the   `asis'   option
+(see~"option asis") must  be  set  to  `1'.  It  is  usually  `false'.
+See~"IsACEGeneratorsInPreferredOrder" *Guru Notes* for the details.
+
 \enditems
 
 \>ACEDirectoryTemporary( <dir> ) F
@@ -830,9 +836,12 @@ from older versions of the {\ACE} Share Package:
 
 \beginlist
 
+\item{--} `ACEExample' now uses the `ACEStats'  function  by  default.
+Originally `ACECosetTableFromGensAndRels' was used by default.
+
 \atindex{CallACE (deprecated)}{@\noexpand`CallACE' (deprecated: use %
 \noexpand`ACECosetTableFromGensAndRels')}
-\item{--}  Function  `CallACE'  (deprecated:  use  `ACECosetTable'  or
+\item{--} Function   `CallACE'  (deprecated:  use  `ACECosetTable'  or
 `ACECosetTableFromGensAndRels').
 
 \atindex{option outfile (deprecated)}{@option \noexpand`outfile' %

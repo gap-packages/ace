@@ -1,7 +1,8 @@
-                           ACEExample Index
-                           ----------------
-This index is displayed when calling ACEExample with no arguments, or
-with the argument: "index", or with a non-existent example name.
+                 ACEExample Index (Table of Contents)
+                 ------------------------------------
+This table of possible examples is displayed when calling ACEExample 
+with no arguments, or with the argument: "index" (meant in the sense
+of `list'), or with a non-existent example name.
 
 The following ACE examples are available (in each case, for a subgroup
 H of a group G, the cosets of H in G are enumerated):
@@ -31,10 +32,10 @@ Notes
 -----
 1. The example (first) argument of ACEExample() is a string; each
    example above is in double quotes to remind you to include them.
-2. By default, ACEExample applies ACECosetTableFromGensAndRels to the
-   chosen example. You may alter the ACE function used, by calling
-   ACEExample with a 2nd argument; choose from: ACEStats, or ACEStart,
-   e.g. `ACEExample("A5", ACEStats);'
+2. By default, ACEExample applies ACEStats to the chosen example. You 
+   may alter the ACE function used, by calling ACEExample with a 2nd 
+   argument; choose from: ACECosetTableFromGensAndRels (or, equival-
+   ently ACECosetTable), or ACEStart, e.g. `ACEExample("A5", ACEStart);'
 3. You may call ACEExample with additional ACE options (entered after a
    colon in the usual way for options), e.g. `ACEExample("A5" : hlt);' 
 4. Try the *-ed examples to explore how to modify options when an

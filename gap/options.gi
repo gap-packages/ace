@@ -747,7 +747,7 @@ end);
 ##
 InstallGlobalFunction(ToACEGroupGenerators, function(fgens)
 
-  ACE_FGENS_ARG_CHK(fgens, "");
+  fgens := ACE_FGENS_ARG_CHK(fgens);
   return TO_ACE_GENS(fgens).toace;
 end);
 
@@ -760,7 +760,7 @@ end);
 ##
 InstallGlobalFunction(ToACEWords, function(fgens, words)
 
-  ACE_FGENS_ARG_CHK(fgens, "first ");
+  fgens := ACE_FGENS_ARG_CHK(fgens);
   return ACE_WORDS(words, fgens, TO_ACE_GENS(fgens).acegens);
 end);
 
@@ -772,22 +772,27 @@ end);
 ##  . . . . . . . . . . If not produces an error  message  for  the  whicharg
 ##  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . argument.
 ##
-InstallGlobalFunction(ACE_FGENS_ARG_CHK, function(fgens, whicharg)
+InstallGlobalFunction(ACE_FGENS_ARG_CHK, function(fgens)
+local errmsg, onbreakmsg;
 
-  if not IsList(fgens) or
-     not ForAll(fgens, g -> IsAssocWord(g) and
-                            (NumberSyllables(g) = 1) and
-                            (ExponentSyllable(g, 1) = 1))
-  then
+  onbreakmsg := 
+      ["Type: 'quit;' to quit to outer loop, or",
+       "type: 'fgens := <val>; return;' to assign <val> to fgens to continue."];
+  while not IsList(fgens) or
+        not ForAll(fgens, g -> IsAssocWord(g) and
+                               (NumberSyllables(g) = 1) and
+                               (ExponentSyllable(g, 1) = 1))
+  do
     if IsList(fgens) and ForAll(fgens, IsElementOfFpGroup) then
-      Error(whicharg, "argument must be a list of free group generators,\n",
-            "        not fp group elements.\n", 
-            "        e.g. use 'FreeGeneratorsOfFpGroup' ",
-            "rather than 'GeneratorsOfGroup'.\n");
+      errmsg := ["fgens must be a list of free group gen'rs,",
+                 "not fp group elements e.g. use 'FreeGeneratorsOfFpGroup'",
+                 "rather than 'GeneratorsOfGroup'"];
     else
-      Error(whicharg, "argument must be a list of free group generators.\n");
+      errmsg := ["fgens must be a list of free group gen'rs"];
     fi;
-  fi;
+    Error(ACE_ERROR(errmsg, onbreakmsg), "\n");
+  od;
+  return fgens;
 end);
 
 #############################################################################
@@ -799,25 +804,36 @@ end);
 ##  . . . . . . . . . . . . . . . . . . .  message for the whicharg argument.
 ##
 InstallGlobalFunction(ACE_WORDS_ARG_CHK, function(fgens, words, whicharg)
-local one, ones;
+local fam, errmsg, onbreakmsg;
+
+  onbreakmsg := 
+      ["Type: 'quit;' to quit to outer loop, or",
+       "type: 'words := <val>; return;' to assign <val> to words to continue.",
+       "Note: fgens is the list of free group generators."];
   
-  one := One( GroupWithGenerators(fgens) );
-  ones := List(fgens, gen -> one);
-  if not IsList(words) or 
-     not ForAll(words, w -> IsElementOfFreeGroup(w) and 
-                            (MappedWord(w, fgens, ones) = one))
-  then
-    if IsList(words) and ForAll(words, IsElementOfFpGroup) then
-      Error(whicharg, 
-            "argument must be a list of words in the free group generators,\n",
-            "        not fp group elements.\n", 
-            "        Perhaps use 'UnderlyingElement' to convert each fp\n",
-            "        group element to a word in the free group generators.\n");
+  fam := FamilyObj(fgens[1]);
+  while not IsList(words) or not ForAll(words, w -> FamilyObj(w) = fam) do
+    if IsList(words) and ForAll(words, IsElementOfFreeGroup) then
+      errmsg := 
+        [Concatenation(
+             "words (", whicharg, 
+             ") is a list of words in the *wrong* free grp gen'rs")];
+    elif IsList(words) and ForAll(words, IsElementOfFpGroup) then
+      errmsg := 
+        [Concatenation(
+             "words (", whicharg, 
+             ") must be a list of words in the free group gen'rs,"),
+         "not fp group elements. Perhaps, you should use 'UnderlyingElement'",
+         "to convert each fp group element to a word in the free group gen'rs"];
     else
-      Error(whicharg, 
-            "argument must be a list of words in the free group generators.\n");
+      errmsg := 
+        [Concatenation(
+             "words (", whicharg, 
+             ") must be a list of words in the free group gen'rs")];
     fi;
-  fi;
+    Error(ACE_ERROR(errmsg, onbreakmsg), "\n");
+  od;
+  return words;
 end);
 
 #############################################################################

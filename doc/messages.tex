@@ -43,10 +43,10 @@ other  {\ACE}  interface  functions.  The  first-observed  (`Info'-ed)
 output from {\ACE}, is {\ACE}'s banner, e.g.
 
 \beginexample
-#I  ACE 3.000        Sun Aug 13 17:02:02 2000
+#I  ACE 3.000        Thu Mar  1 17:42:50 2001
 #I  =========================================
 #I  Host information:
-#I    name = boronia
+#I    name = hamal
 \endexample
 
 If there were any errors in the directives put to  {\ACE},  or  output
@@ -100,7 +100,7 @@ like:
 
 \beginexample
 =========================================
-ACE 3.000        Sun Aug 13 17:02:02 2000
+ACE 3.000        Thu Mar  1 17:42:50 2001
 \endexample
 
 Both *progress messages* and  the  *results  message*  consist  of  an
@@ -129,6 +129,13 @@ following is a sample results message:
 which, in this case, declares a successful enumeration  of  the  coset
 numbers of a subgroup of index 12 within a group,  and,  as  it  turns
 out, values for the same statistics as the sample progress message.
+
+You should see all the above (and a little  more),  except  that  your
+dates and host information will no doubt differ, by running:
+
+\beginexample
+ACEExample("A5-C5" : echo:=0, messages:=1);
+\endexample
 
 In the following table we  list  the  statistics  that  can  follow  a
 progress or results message tag, in order:

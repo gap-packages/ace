@@ -361,10 +361,28 @@ representatives. Each coset representative is a word  in  an  alphabet
 consisting of the user-supplied generators and their inverses, and the
 lexical ordering of `lenlex' is that implied by ordering that alphabet
 so that each generator is followed by its inverse, and the  generators
-appear in user-supplied order. As an example, the first  20  lines  of
-the `lenlex'  standard  coset  table  of  the  (infinite)  group  with
-presentation $\langle x, y, a, b \mid x^2, y^3, a^4, b^2\rangle$ is as
-follows:
+appear in user-supplied order. See below for an  example  which  gives
+the first 20 lines  of  the  `lenlex'  standard  coset  table  of  the
+(infinite) group with presentation $\langle x, y, a, b \mid x^2,  y^3,
+a^4, b^2\rangle$.
+
+In the table each  inverse  of  a  generator  is  represented  by  the
+corresponding uppercase letter ($X$  represents  the  inverse  of  $x$
+etc.), and the lexical ordering of the representatives is that implied
+by defining an ordering of the alphabet  of  user-supplied  generators
+and  their  inverses  to  be  $x\<X\<y\<Y\<a\<A\<b\<B$.  
+
+A `lenlex' standard coset table whose columns correspond, in order, to
+the already-described alphabet, of generators and their inverses,  has
+an important property: a scan of the body of the table row by row from
+left to right, encounters new coset numbers in numeric order.  Observe
+that the table above has this property: the definition of coset  1  is
+implicit; the first coset number we encounter in the table body is  2,
+then 2 again, 3, 4, 5, 6, 7, then 7 again, etc.
+
+With the `lenlex' option (see~"option lenlex"), the coset table output
+by `ACECosetTable' or `ACECosetTableFromGensAndRels'  is  standardised
+according to the `lenlex' scheme.
 
 \begintt
  coset no. ||      x      X      y      Y      a      A      b      B   rep've
@@ -391,24 +409,6 @@ follows:
         20 ||     90     90     91     92     93     94      4      4    Yb
 \endtt
 
-In the table each  inverse  of  a  generator  is  represented  by  the
-corresponding uppercase letter ($X$  represents  the  inverse  of  $x$
-etc.), and the lexical ordering of the representatives is that implied
-by defining an ordering of the alphabet  of  user-supplied  generators
-and  their  inverses  to  be  $x\<X\<y\<Y\<a\<A\<b\<B$.  
-
-A `lenlex' standard coset table whose columns correspond, in order, to
-the already-described alphabet, of generators and their inverses,  has
-an important property: a scan of the body of the table row by row from
-left to right, encounters new coset numbers in numeric order.  Observe
-that the table above has this property: the definition of coset  1  is
-implicit; the first coset number we encounter in the table body is  2,
-then 2 again, 3, 4, 5, 6, 7, then 7 again, etc.
-
-With the `lenlex' option (see~"option lenlex"), the coset table output
-by `ACECosetTable' or `ACECosetTableFromGensAndRels'  is  standardised
-according to the `lenlex' scheme.
-
 \atindex{semilenlex standardisation scheme}{@\noexpand`semilenlex' %
 standardisation scheme}
 Another standardisation scheme for coset tables (the default scheme of
@@ -416,17 +416,9 @@ versions of {\GAP} up to  {\GAP}~4.2),  numbers  cosets  according  to
 coset representative word-length in the group generators  and  lexical
 ordering  imposed  by  the  user-supplied  ordering   of   the   group
 generators; it is known as `semilenlex' since  though  like  `lenlex',
-generator inverses do not feature. (The term `semilenlex'  was  coined
-by Edmund Robertson and Joachim Neub{\accent127u}ser, for the scheme's
-applicability to semigroups where generator inverses need not  exist.)
-This scheme ensures that as one scans the columns corresponding to the
-group generators (in user-supplied order) row by row,  one  encounters
-new coset numbers in numeric order. As an example, consider again  the
-(infinite) group with presentation $\langle x, y, a, b \mid x^2,  y^3,
-a^4,  b^2\rangle$.  According  to  this   scheme   the   coset   table
-corresponding  to  the  aforementioned  presentation   (with   columns
-corresponding to  inverse  generators,  which  play  no  part  in  the
-numbering scheme, omitted) would begin as follows:
+generator inverses do not feature. Here again is 20 lines of the coset
+table of the group with presentation $\langle x, y,  a,  b  \mid  x^2,
+y^3, a^4, b^2\rangle$, this time `semilenlex' standardised.
 
 \begintt
  coset no. ||      x      y      a      b    rep've
@@ -452,6 +444,13 @@ numbering scheme, omitted) would begin as follows:
         19 ||     64     65     66     67    ba
         20 ||      6     68     69     70    xyx
 \endtt
+
+The term `semilenlex' was  coined  by  Edmund  Robertson  and  Joachim
+Neub{\accent127u}ser, for the  scheme's  applicability  to  semigroups
+where generator inverses need not exist. This scheme ensures  that  as
+one scans the  columns  corresponding  to  the  group  generators  (in
+user-supplied order) row by row, one encounters new coset  numbers  in
+numeric order. 
 
 Observe that the representatives are ordered according to  length  and
 then the lexical ordering implied by defining $x\<y\<a\<b$ (with  some

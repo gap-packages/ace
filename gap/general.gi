@@ -89,8 +89,8 @@ InstallOtherMethod( IS_ACE_MATCH,"list, empty list, pos",true,
 ##
 ##
 InstallGlobalFunction(CALL_ACE, function(ACEfname, fgens, rels, sgens)
-local optnames, echo, infile, instream, outfile, ToACE, gens, acegens, 
-      standard, enforceAsis, ignored;
+local optnames, echo, errmsg, onbreakmsg, infile, instream, outfile,
+      ToACE, gens, acegens, standard, enforceAsis, ignored;
 
   if ValueOption("aceexampleoptions") = true and
      IsBound(ACEData.aceexampleoptions) then
@@ -111,13 +111,18 @@ local optnames, echo, infile, instream, outfile, ToACE, gens, acegens,
                                      rels  := rels, 
                                      sgens := sgens) );
   # Check arguments are valid
-  if IsEmpty(fgens) then
-    Error("fgens argument defines an empty list of group generators\n");
-  else
-    ACE_FGENS_ARG_CHK(fgens, "fgens ");
-  fi;
-  ACE_WORDS_ARG_CHK(fgens, rels, "rels ");
-  ACE_WORDS_ARG_CHK(fgens, sgens, "sgens ");
+  while IsEmpty(fgens) do
+    errmsg := 
+        ["fgens (arg[1]) must be a non-empty list of group generators ..."];
+    onbreakmsg := 
+        ["Type: 'quit;' to quit to outer loop, or",
+         "type: 'fgens := <val>; return;' to assign <val> to fgens to continue."
+        ];
+    Error(ACE_ERROR(errmsg, onbreakmsg), "\n");
+  od;
+  fgens := ACE_FGENS_ARG_CHK(fgens);
+  rels  := ACE_WORDS_ARG_CHK(fgens, rels, "relators");
+  sgens := ACE_WORDS_ARG_CHK(fgens, sgens, "subgp gen'rs");
 
   if ACEfname = "ACEStart" then
     instream := InputOutputLocalProcess(ACEData.tmpdir, ACEData.binary, []);
@@ -297,10 +302,8 @@ local ioIndex, gens, rels;
     gens := ACEGroupGenerators(ioIndex);
     rels := ACERelators(ioIndex);
   elif Length(arg) = 2 then
-    gens := arg[1];
-    ACE_FGENS_ARG_CHK(gens, "first ");
-    rels := arg[2];
-    ACE_WORDS_ARG_CHK(gens, rels, "second ");
+    gens := ACE_FGENS_ARG_CHK(arg[1]);
+    rels := ACE_WORDS_ARG_CHK(gens, arg[2], "relators");
   elif Length(arg) = 3 and arg[3] = "noargchk" then
     # This scenario only intended for use internally
     gens := arg[1];
@@ -343,13 +346,20 @@ end);
 #############################################################################
 ####
 ##
-#F  ACEExample  . . . . . . . .  Read an example from the examples directory.
-##  . . . . . . . . . . . . . . . If given the name of a file in the examples 
-##  . . . . . . . . . . . . . . . directory,  that file is displayed and read
-##  . . . . . . . . . . . . . . . as a function. Otherwise, if no argument is
-##  . . . . . . . . . . . . . . . given or the name given is for a file  that
-##  . . . . . . . . . . . . . . . does not exist,  the file  "examples/index"
-##  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . is displayed.
+#F  ACEExample( )
+#F  ACEExample( <file>[, <ACEfunc>] )
+##
+##  With no arguments, or with single argument "index", or a string  that  is
+##  not a filename  in  the  `examples'  directory,  an  index  of  available
+##  examples is displayed.
+##
+##  With argument <file> that is a filename in the `examples' directory other
+##  than "index" the example is displayed as it would  be  when  called  with
+##  <ACEfunc> (or `ACEStats', if  the  2nd  argument  is  omitted)  and  then
+##  executed via a call to `ReadAsFunction' and a little internal  ``magic''.
+##  <ACEfunc>    must    be    one    of    `ACEStats'     (the     default),
+##  `ACECosetTableFromGensAndRels'  (or  equivalently   `ACECosetTable',   or
+##  `ACEStart'.
 ##
 InstallGlobalFunction(ACEExample, function(arg)
 local name, file, instream, line, ACEfunc,
@@ -362,7 +372,7 @@ local name, file, instream, line, ACEfunc,
     if Length(arg) > 1 then
       ACEfunc := arg[2];
     else
-      ACEfunc := ACECosetTableFromGensAndRels;
+      ACEfunc := ACEStats;
     fi;
     if not IsEmpty(OptionsStack) then
       ACEData.aceexampleoptions := OptionsStack[ Length(OptionsStack) ];
@@ -543,27 +553,25 @@ end);
 #############################################################################
 ####
 ##
-#F  ACE_ERROR(<errdiag>, <errcause>, <onbreakmsg>)
+#F  ACE_ERROR(<errmsg>, <onbreakmsg>)
 ##
-##  essentially does Error(<errdiag>) followed by <errcause>, a list of lines
-##  (strings), and <onbreakmsg>, also a list of lines (strings). We make  use
-##  of OnBreak and OnBreakMessage (in case of GAP 4.3+) to generate a one-off
-##  user-friendly message of how the user may recover from the error.
+##  sets OnBreak (in GAP 4.2) and OnBreakMessage (in case  of  GAP  4.3+)  to
+##  print <onbreakmsg> in order to generate a one-off  user-friendly  message
+##  of how the user may recover from the error, and returns an error  message
+##  formed from <errmsg> to be used by Error.
 ##
-InstallGlobalFunction(ACE_ERROR, function(errdiag, errcause, onbreakmsg)
-local ACEOnBreak, ACEOnBreakMessage, NormalOnBreak, NormalOnBreakMessage;
+##  <errmsg> and <onbreakmsg> should be lists of strings;  <onbreakmsg>  must
+##  be non-empty and its first member must not be a null string.
+##
+InstallGlobalFunction(ACE_ERROR, function(errmsg, onbreakmsg)
+local NormalOnBreak, NormalOnBreakMessage;
 
+  errmsg := ACE_JOIN(errmsg, "\n ");
   if IsFunction(OnBreakMessage) then
     # what we do in GAP 4.3+
-    NormalOnBreak := OnBreak;
-    ACEOnBreak := function()
-      Where(0);
-      OnBreak := NormalOnBreak;
-    end;
-
     NormalOnBreakMessage := OnBreakMessage;
     onbreakmsg[1]{[1]} := LowercaseString( onbreakmsg[1]{[1]} );
-    ACEOnBreakMessage := function()
+    OnBreakMessage := function()
       local s;
 
       for s in onbreakmsg do
@@ -572,26 +580,21 @@ local ACEOnBreak, ACEOnBreakMessage, NormalOnBreak, NormalOnBreakMessage;
       OnBreakMessage := NormalOnBreakMessage;
     end;
 
-    OnBreak := ACEOnBreak;
-    OnBreakMessage := ACEOnBreakMessage;
-    Error( ACE_JOIN(Concatenation([errdiag], errcause), "\n "), "\n" );
+    return errmsg;
   else
     # what we do in GAP 4.2 where OnBreakMessage is not available
     NormalOnBreak := OnBreak;
-    ACEOnBreak := function()
+    OnBreak := function()
       local s;
 
-      for s in errcause do
-        Info(InfoACE + InfoWarning, 1, s);
-      od;
+      NormalOnBreak();
       for s in onbreakmsg do
         Info(InfoACE + InfoWarning, 1, s);
       od;
       OnBreak := NormalOnBreak;
     end;
 
-    OnBreak := ACEOnBreak;
-    Error(errdiag, "\n");
+    return Concatenation(": ", errmsg);
   fi;
 end);
 

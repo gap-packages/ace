@@ -35,23 +35,30 @@ is legal for the arguments <rels> and <sgens> to be empty lists, it is
 always an error for <fgens> to be empty, e.g.
 
 \beginexample
-gap> ACEStats([], [], []);
-Error, fgens argument defines an empty list of group generators
+gap> ACEStats([],[],[]);
+Error, fgens (arg[1]) must be a non-empty list of group generators ...
  called from
 CALL_ACE( "ACEStats", arg[1], arg[2], arg[3] ) called from
 <function>( <arguments> ) called from read-eval-loop
 Entering break read-eval-print loop ...
-you can 'quit;' to quit to outer loop, or
-you can 'return;' to continue
-brk> quit; # All we can do!
+ type: 'quit;' to quit to outer loop, or
+ type: 'fgens := <val>; return;' to assign <val> to fgens to continue.
+brk> fgens := FreeGeneratorsOfFpGroup(FreeGroup("a"));
+[ a ]
+brk> return;
+rec( index := 0, cputime := 45, cputimeUnits := "10^-2 seconds", 
+  activecosets := 499998, maxcosets := 499998, totcosets := 499998 )
 gap>
 \endexample
+
+The example shows that the {\ACE} share package does allow you to recover
+from the `break'-loop, but let us start again.
 
 After defining generators, we can do an enumeration:
 
 \beginexample
 gap> F := FreeGroup("a", "b");;
-gap> fgens := GeneratorsOfGroup(F);
+gap> fgens := FreeGeneratorsOfFpGroup(F);
 [ a, b ]
 \endexample
 
@@ -76,9 +83,9 @@ overflows:
 
 \beginexample
 gap> ACEStats(fgens, [], []);
-#I  OVERFLOW (a=249998 r=83333 h=83333 n=249999; l=337 c=0.22; m=249998 t=2499\
+#I  OVERFLOW (a=249998 r=83333 h=83333 n=249999; l=337 c=0.29; m=249998 t=2499\
 98)
-rec( index := 0, cputime := 22, cputimeUnits := "10^-2 seconds", 
+rec( index := 0, cputime := 29, cputimeUnits := "10^-2 seconds", 
   activecosets := 249998, maxcosets := 249998, totcosets := 249998 )
 \endexample
 
@@ -105,13 +112,13 @@ mind let's  rerun  the  enumeration  and  get  {\ACE}'s  dump  of  the
 presentation and parameters:
 
 \beginexample
-gap> SetInfoACELevel(3);     
+gap> SetInfoACELevel(3);
 gap> ACEStats(fgens, [], [] : start, sr := 1);
-#I  ACE 3.000        Tue Oct 17 23:05:57 2000
+#I  ACE 3.000        Sat Mar  3 21:05:53 2001
 #I  =========================================
 #I  Host information:
-#I    name = boronia
-#I  OVERFLOW (a=249998 r=83333 h=83333 n=249999; l=337 c=0.22; m=249998 t=2499\
+#I    name = hamal
+#I  OVERFLOW (a=249998 r=83333 h=83333 n=249999; l=337 c=0.29; m=249998 t=2499\
 98)
 #I    #-- ACE 3.000: Run Parameters ---
 #I  Group Name: G;
@@ -124,7 +131,7 @@ gap> ACEStats(fgens, [], [] : start, sr := 1);
 #I  C:0; R:0; Fi:7; PMod:3; PSiz:256; DMod:4; DSiz:1000;
 #I    #--------------------------------
 #I  ***
-rec( index := 0, cputime := 22, cputimeUnits := "10^-2 seconds", 
+rec( index := 0, cputime := 29, cputimeUnits := "10^-2 seconds", 
   activecosets := 249998, maxcosets := 249998, totcosets := 249998 )
 \endexample
 
@@ -136,17 +143,16 @@ happens if you disregard this (recall, we  still  have  the  `InfoACE'
 level set to 3):
 
 \beginexample
-gap> ACEStats(fgens, [], [] : print := [-1, 12]);
-#I  ACE 3.000        Tue Oct 17 23:09:39 2000
+#I  ACE 3.000        Sat Mar  3 21:06:42 2001
 #I  =========================================
 #I  Host information:
-#I    name = boronia
+#I    name = hamal
 #I  ** ERROR (continuing with next line)
 #I     no information in table
-#I  OVERFLOW (a=249998 r=83333 h=83333 n=249999; l=337 c=0.20; m=249998 t=2499\
+#I  OVERFLOW (a=249998 r=83333 h=83333 n=249999; l=337 c=0.29; m=249998 t=2499\
 98)
 #I  ***
-rec( index := 0, cputime := 20, cputimeUnits := "10^-2 seconds", 
+rec( index := 0, cputime := 29, cputimeUnits := "10^-2 seconds", 
   activecosets := 249998, maxcosets := 249998, totcosets := 249998 )
 \endexample
 
@@ -162,11 +168,11 @@ of the coset table), namely, insert  the  `start'  option  before  the
 
 \beginexample
 gap> ACEStats(fgens, [], [] : start, print := [-1, 12]);
-#I  ACE 3.000        Tue Oct 17 23:12:40 2000
+#I  ACE 3.000        Sat Mar  3 21:07:50 2001
 #I  =========================================
 #I  Host information:
-#I    name = boronia
-#I  OVERFLOW (a=249998 r=83333 h=83333 n=249999; l=337 c=0.21; m=249998 t=2499\
+#I    name = hamal
+#I  OVERFLOW (a=249998 r=83333 h=83333 n=249999; l=337 c=0.29; m=249998 t=2499\
 98)
 #I  co: a=249998 r=83333 h=83333 n=249999; c=+0.00
 #I   coset ||      a      A      b      B   order   rep've
@@ -184,7 +190,7 @@ gap> ACEStats(fgens, [], [] : start, print := [-1, 12]);
 #I      11 ||     33     34      3     35       0   AB
 #I      12 ||     36      4     37     38       0   ba
 #I  ***
-rec( index := 0, cputime := 21, cputimeUnits := "10^-2 seconds", 
+rec( index := 0, cputime := 29, cputimeUnits := "10^-2 seconds", 
   activecosets := 249998, maxcosets := 249998, totcosets := 249998 )
 \endexample
 
@@ -226,11 +232,11 @@ include the `silent' option. (We still have the `InfoACE' level set at
 \beginexample
 gap> ACECosetTableFromGensAndRels(fgens, [], [] : start, print := [-1, 12],
 >                                                 silent);
-#I  ACE 3.000        Tue Oct 17 23:30:00 2000
+#I  ACE 3.000        Sat Mar  3 21:09:10 2001
 #I  =========================================
 #I  Host information:
-#I    name = boronia
-#I  OVERFLOW (a=249998 r=83333 h=83333 n=249999; l=337 c=0.20; m=249998 t=2499\
+#I    name = hamal
+#I  OVERFLOW (a=249998 r=83333 h=83333 n=249999; l=337 c=0.29; m=249998 t=2499\
 98)
 #I  co: a=249998 r=83333 h=83333 n=249999; c=+0.00
 #I   coset ||      a      A      b      B   order   rep've
@@ -273,10 +279,10 @@ standard form; so despite the differences in the {\GAP} versions, both
 gap> ACECosetTableFromGensAndRels(fgens, [], [] : max := 12,
 >                                                 start, print := -12,
 >                                                 incomplete);
-#I  ACE 3.000        Wed Oct 18 00:13:08 2000
+#I  ACE 3.000        Sat Mar  3 21:10:28 2001
 #I  =========================================
 #I  Host information:
-#I    name = boronia
+#I    name = hamal
 #I  OVERFLOW (a=12 r=4 h=4 n=13; l=5 c=0.00; m=12 t=12)
 #I  co: a=12 r=4 h=4 n=13; c=+0.00
 #I   coset ||      a      A      b      B   order   rep've
@@ -355,13 +361,12 @@ explicitly listed. Alternatively, we may do the following  (note  that
 the `InfoACE' level is still 3):
 
 \beginexample
-gap> ACEStart( fgens, [], [] );                       
-#I  ACE 3.000        Wed Oct 18 00:30:42 2000
+#I  ACE 3.000        Sat Mar  3 21:12:28 2001
 #I  =========================================
 #I  Host information:
-#I    name = boronia
+#I    name = hamal
 #I  ***
-#I  OVERFLOW (a=249998 r=83333 h=83333 n=249999; l=337 c=0.24; m=249998 t=2499\
+#I  OVERFLOW (a=249998 r=83333 h=83333 n=249999; l=337 c=0.30; m=249998 t=2499\
 98)
 1
 gap> ACEParameters(1);
@@ -403,8 +408,8 @@ We can obtain the enumeration statistics record, via  the  interactive
 version of `ACEStats' (see~"ACEStats!interactive") :
 
 \beginexample
-gap> ACEStats(1); # The interactive version of ACEStats takes 1 or no arguments
-rec( index := 0, cputime := 22, cputimeUnits := "10^-2 seconds", 
+gap> ACEStats(1); # The interactive version of ACEStats takes 1 or no arg'ts
+rec( index := 0, cputime := 30, cputimeUnits := "10^-2 seconds", 
   activecosets := 249998, maxcosets := 249998, totcosets := 249998 )
 \endexample
 
@@ -447,7 +452,7 @@ equivalent interactive commands.  Note  that  the  `ACEStart'  command
 user option `max':
 
 \beginexample
-gap> ACEStart(1 : max := 12);                                           
+gap> ACEStart(1 : max := 12);
 #I  ***
 #I  OVERFLOW (a=12 r=4 h=4 n=13; l=5 c=0.00; m=12 t=12)
 1
@@ -481,26 +486,26 @@ interactive version of `ACECosetTableFromGensAndRels') with the option
 `incomplete'.
 
 \beginexample
-gap> ACECosetTable(1 : incomplete);
+gap> ACECosetTable(1 : incomplete);          
 #I  start = yes, continue = yes, redo = yes
 #I  ***
 #I  OVERFLOW (a=12 r=4 h=4 n=13; l=4 c=0.00; m=12 t=12)
 #I  co: a=12 r=4 h=4 n=13; c=+0.00
-#I   coset ||      a      A      b      B
+#I   coset |      a      A      b      B
 #I  -------+----------------------------
-#I       1 ||      2      3      4      5
-#I       2 ||      6      1      7      8
-#I       3 ||      1      9     10     11
-#I       4 ||     12      0      0      1
-#I       5 ||      0      0      1      0
-#I       6 ||      0      2      0      0
-#I       7 ||      0      0      0      2
-#I       8 ||      0      0      2      0
-#I       9 ||      3      0      0      0
-#I      10 ||      0      0      0      3
-#I      11 ||      0      0      3      0
-#I      12 ||      0      4      0      0
-#I  ACECosetTable: Coset table is incomplete, reduced and lenlex standardised.
+#I       1 |      2      3      4      5
+#I       2 |      6      1      7      8
+#I       3 |      1      9     10     11
+#I       4 |     12      0      0      1
+#I       5 |      0      0      1      0
+#I       6 |      0      2      0      0
+#I       7 |      0      0      0      2
+#I       8 |      0      0      2      0
+#I       9 |      3      0      0      0
+#I      10 |      0      0      0      3
+#I      11 |      0      0      3      0
+#I      12 |      0      4      0      0
+#I  ACECosetTable: Coset table is incomplete, reduced & lenlex standardised.
 [ [ 2, 6, 1, 12, 0, 0, 0, 0, 3, 0, 0, 0 ], 
   [ 3, 1, 9, 0, 0, 2, 0, 0, 0, 0, 0, 4 ], 
   [ 4, 7, 10, 0, 1, 0, 0, 2, 0, 0, 3, 0 ], 
@@ -618,6 +623,21 @@ was all about). Also observe that the  ``Run  Parameters''  block  was
 with value `1' to {\ACE} ({\ACE}'s response is used to  re-instantiate
 `ACEData.io[1].args').
 
+In  particular,  {\GAP}  no  longer  thinks  `fgens'  are  the   group
+generators:
+
+\beginexample
+gap> ACEGroupGenerators(1)=fgens;
+false
+\endexample
+
+Groan! We will just have to re-instantiate everything:
+
+\beginexample
+gap> fgens := ACEGroupGenerators(1);;                      
+gap> F := GroupWithGenerators(fgens);; a := F.1;; b := F.2;;
+\endexample
+
 We will now define a non-trivial subgroup, and monitor all the actions
 of the enumerator, by setting `messages := 1'.  As  for  defining  the
 relators, we could use the 1-argument version of `ACEStart', in  which
@@ -626,8 +646,8 @@ the value `ToACEWords(fgens, [ a*b ])'. Instead, we will use the  more
 convenient 4-argument form:
 
 \beginexample
-gap> ACEStart(1, ACEGroupGenerators(1), ACERelators(1), [ a*b ] 
->             : messages := 1);              
+gap> ACEStart(1, ACEGroupGenerators(1), ACERelators(1), [ a*b ]
+>             : messages := 1);
 #I  ***
 #I  ***
 #I    #-- ACE 3.000: Run Parameters ---
@@ -682,7 +702,6 @@ We now dump out the  statistics  accumulated  during  the  run,  using
 `InfoACE' level 1.
 
 \beginexample
-gap> ACEDumpStatistics(1);
 #I    #- ACE 3.000: Level 0 Statistics --
 #I  cdcoinc=0 rdcoinc=2 apcoinc=0 rlcoinc=0 clcoinc=0
 #I    xcoinc=2 xcols12=4 qcoinc=3

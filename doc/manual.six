@@ -33,6 +33,7 @@ S 1.7. General Warnings regarding the Use of Options
 F 1.7. FlushOptionsStack
 S 1.8. The ACEData Record
 F 1.8. ACEData
+F 1.8. ACEDirectoryTemporary
 S 1.9. Setting the Verbosity of ACE via Info and InfoACE
 F 1.9. InfoACE
 F 1.9. InfoACELevel
@@ -360,6 +361,7 @@ S 8.2. Example of Using ACECosetTableFromGensAndRels
 S 8.3. Example of Using ACE Interactively (Using ACEStart)
 S 8.4. Fun with ACEExample
 I 8.4. break-loop
+I 8.4. OnBreak
 S 8.5. Using ACEReadResearchExample
 C moreexamples.tex 9. More Examples
 S 9.1. Getting Started

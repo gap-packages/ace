@@ -73,10 +73,10 @@ gap> # Recall that we did: TCENUM:=ACETCENUM;;
 gap> G := PerfectGroup(IsPermGroup, 16*60, 1   # Arguments ... as per usual
 >                      : max := 50, mess := 10 # ... but we use ACE options
 >                      );
-#I  ACE 3.000        Wed Oct 18 11:07:24 2000
+#I  ACE 3.000        Thu Mar  1 17:51:33 2001
 #I  =========================================
 #I  Host information:
-#I    name = boronia
+#I    name = hamal
 #I    #-- ACE 3.000: Run Parameters ---
 #I  Group Name: G;
 #I  Group Generators: abstuv;
@@ -148,10 +148,10 @@ gap> table := ACECosetTableFromGensAndRels(
 >                 fgens, RelatorsOfFpGroup(G), fgens{[1]}
 >                 # options
 >                 : mendelsohn, max:=800, mess:=500);
-#I  ACE 3.000        Wed Oct 18 11:23:13 2000
+#I  ACE 3.000        Thu Mar  1 17:59:08 2001
 #I  =========================================
 #I  Host information:
-#I    name = boronia
+#I    name = hamal
 #I    #-- ACE 3.000: Run Parameters ---
 #I  Group Name: G;
 #I  Group Generators: abstuvd;
@@ -228,10 +228,10 @@ ACEStart called with the following arguments:
  Group generators : [ a, b ]
  Group relators : [ a^2, b^3, a*b*a*b*a*b*a*b*a*b ]
  Subgroup generators : [ a*b ]
-#I  ACE 3.000        Wed Oct 18 14:48:43 2000
+#I  ACE 3.000        Thu Mar  1 18:00:49 2001
 #I  =========================================
 #I  Host information:
-#I    name = boronia
+#I    name = hamal
 ACEStart called with the following options:
  echo := true (not passed to ACE)
  enum := A_5
@@ -300,10 +300,11 @@ argument):
 
 \beginexample
 gap> ACEExample();
-#I                             ACEExample Index
-#I                             ----------------
-#I  This index is displayed when calling ACEExample with no arguments, or
-#I  with the argument: "index", or with a non-existent example name.
+#I                   ACEExample Index (Table of Contents)
+#I                   ------------------------------------
+#I  This table of possible examples is displayed when calling ACEExample 
+#I  with no arguments, or with the argument: "index" (meant in the sense
+#I  of `list'), or with a non-existent example name.
 #I  
 #I  The following ACE examples are available (in each case, for a subgroup
 #I  H of a group G, the cosets of H in G are enumerated):
@@ -333,10 +334,10 @@ gap> ACEExample();
 #I  -----
 #I  1. The example (first) argument of ACEExample() is a string; each
 #I     example above is in double quotes to remind you to include them.
-#I  2. By default, ACEExample applies ACECosetTableFromGensAndRels to the
-#I     chosen example. You may alter the ACE function used, by calling
-#I     ACEExample with a 2nd argument; choose from: ACEStats, or ACEStart,
-#I     e.g. `ACEExample("A5", ACEStats);'
+#I  2. By default, ACEExample applies ACEStats to the chosen example. You 
+#I     may alter the ACE function used, by calling ACEExample with a 2nd 
+#I     argument; choose from: ACECosetTableFromGensAndRels (or, equival-
+#I     ently ACECosetTable), or ACEStart, e.g. `ACEExample("A5", ACEStart);'
 #I  3. You may call ACEExample with additional ACE options (entered after a
 #I     colon in the usual way for options), e.g. `ACEExample("A5" : hlt);' 
 #I  4. Try the *-ed examples to explore how to modify options when an
@@ -351,15 +352,16 @@ gap> ACEExample();
 gap> 
 \endexample
 
-Notice  that the example we first met in Section~"Using  ACE  Directly
-to Generate a Coset Table", the Fibonacci group F(2,7),  is  available
-via examples `"F27-purec"',  `"F27-fel0"',  and  `"F27-fel1"',  except
-each of these enumerate the cosets of its trivial subgroup  (of  index
-29). Let's experiment with the first of these F(2,7)  examples;  since
-this  example  uses  the  `messages'  option,  we  ought  to  set  the
-`InfoLevel' of `InfoACE' to  3,  first,  but  since  the  coset  table
-(default output) is  quite  long,  we'll  pass  `ACEStats'  as  second
-argument.
+Notice that the example we first met in Section~"Using ACE Directly to
+Generate a Coset Table", the Fibonacci group F(2,7), is available  via
+examples  `"F27-purec"',  `"F27-fel0"',  and  `"F27-fel1"'  (with  2nd
+argument `ACECosetTableFromGensAndRels' to  produce  a  coset  table),
+except that each of these enumerate the cosets of its trivial subgroup
+(of index 29).  Let's  experiment  with  the  first  of  these  F(2,7)
+examples; since this example uses the `messages' option, we  ought  to
+set the `InfoLevel' of `InfoACE' to 3,  first,  but  since  the  coset
+table is quite long, we will be content for the moment  with  applying
+the default function `ACEStats' to the example.
 
 Before exhibiting the example we list a few observations  that  should
 be made. Observe that  the  first  group  of  `Info'  lines  list  the
@@ -378,7 +380,7 @@ short-hand for inverses, e.g.~`C = c^-1' (see `Group Relators' in  the
 
 \beginexample
 gap> SetInfoACELevel(3);
-gap> ACEExample("F27-purec", ACEStats);
+gap> ACEExample("F27-purec");
 #I  # ACEExample "F27-purec" : enumeration of cosets of H in G,
 #I  # where G = F(2,7) = C_29, H = Id, using purec strategy.
 #I  #
@@ -409,10 +411,10 @@ ACEStats called with the following options:
  wo := 2M
  mess := 25000
  purec (no value, passed to ACE via option: pure c)
-#I  ACE 3.000        Wed Oct 18 17:55:31 2000
+#I  ACE 3.000        Thu Mar  1 20:37:32 2001
 #I  =========================================
 #I  Host information:
-#I    name = boronia
+#I    name = hamal
 #I    #-- ACE 3.000: Run Parameters ---
 #I  Group Name: F(2,7), aka C_29;
 #I  Group Generators: abcdexy;
@@ -436,7 +438,7 @@ ACEStats called with the following options:
 #I  DS: a=4163 r=1 h=7326 n=33240; l=36 c=+0.08; s=32000 d=447 c=15554
 #I  INDEX = 29 (a=29 r=1 h=33240 n=33240; l=37 c=0.40; m=33237 t=33239)
 #I  ***
-rec( index := 29, cputime := 40, cputimeUnits := "10^-2 seconds", 
+rec( index := 29, cputime := 53, cputimeUnits := "10^-2 seconds", 
   activecosets := 29, maxcosets := 33237, totcosets := 33239 )
 \endexample
 
@@ -444,7 +446,7 @@ Now let's see that we  can  add  some  new  options,  even  ones  that
 over-ride the example's options; but first we'll reduce the  output  a
 bit by setting the `InfoLevel' of `InfoACE' to 2 and since we are  not
 going to observe any progress messages from {\ACE} with that `InfoACE'
-level we'll set `messages := 0'; also we'll use the  default  function
+level  we'll  set  `messages  :=  0';  also  we'll  use  the  function
 `ACECosetTableFromGensAndRels' and so it's like  our  first  encounter
 with F(2,7) we'll add the subgroup generator `c'  via  `sg  :=  ["c"]'
 (see "option sg"). Observe that `"c"' is a string not a  {\GAP}  group
@@ -476,8 +478,8 @@ our new options are *last*.
 
 \beginexample
 gap> SetInfoACELevel(2);
-gap> ACEExample("F27-purec" : sg := ["c"], subgroup := "< c >",
->                             messages := 0);
+gap> ACEExample("F27-purec", ACECosetTableFromGensAndRels
+>               : sg := ["c"], subgroup := "< c >", messages := 0);
 #I  # ACEExample "F27-purec" : enumeration of cosets of H in G,
 #I  # where G = F(2,7) = C_29, H = Id, using purec strategy.
 #I  #
@@ -519,22 +521,31 @@ ACECosetTableFromGensAndRels called with the following options:
   [ 1 ], [ 1 ], [ 1 ], [ 1 ] ]
 \endexample
 
-\atindex{break-loop}{@\noexpand`break'-loop}
+\atindex{break-loop}{@\noexpand`break'-loop}\indextt{OnBreak}
 Now following on from our last example we shall  demonstrate  how  one
 can recover from a `break'-loop (see Section~"Using  ACE  Directly  to
 Generate a Coset Table"). To force the `break'-loop we pass `max := 2'
-(see~"option max"), while using the default {\ACE} interface  function
-`ACECosetTableFromGensAndRels' of `ACEExample'; in  this  way,  {\ACE}
+(see~"option  max"),  while  using  the  {\ACE}   interface   function
+`ACECosetTableFromGensAndRels' with `ACEExample'; in this way,  {\ACE}
 will not be able to complete  the  enumeration,  and  hence  enters  a
 `break'-loop when it tries to provide a complete  coset  table.  While
 we're at it we'll pass the `hlt' (see~"option  hlt")  strategy  option
-(which will over-ride `purec'). (The `InfoACE' level is still 2.) Note
-that there are some ``user-input'' comments  inserted  at  the  `brk>'
-prompt.
+(which will over-ride `purec'). (The `InfoACE' level is still  2.)  To
+avoid getting a trace-back during the `break'-loop (which can  look  a
+little   scary   to   the   unitiated)   we   will    set    `OnBreak'
+(see~"ref:OnBreak") as follows:
 
 \beginexample
-gap> ACEExample("F27-purec" : sg := ["c"], subgroup := "< c >",
->                             max := 2, hlt);
+gap> NormalOnBreak := OnBreak;; # Save the old value to restore it later
+gap> OnBreak := function() Where(0); end;;                              
+\endexample
+
+Note that there are  some  ``user-input''  comments  inserted  at  the
+`brk>' prompt.
+
+\beginexample
+gap> ACEExample("F27-purec", ACECosetTableFromGensAndRels
+>               : sg := ["c"], subgroup := "< c >", max := 2, hlt);
 #I  # ACEExample "F27-purec" : enumeration of cosets of H in G,
 #I  # where G = F(2,7) = C_29, H = Id, using purec strategy.
 #I  #
@@ -579,13 +590,13 @@ Error, no coset table ...
  the `ACE' coset enumeration failed with the result:
  OVERFLOW (a=2 r=1 h=1 n=3; l=4 c=0.00; m=2 t=2)
 Entering break read-eval-print loop ...
- try relaxing any restrictive options.
- Type: 'DisplayACEOptions();' to see current ACE options;
+ try relaxing any restrictive options:
+ type: 'DisplayACEOptions();' to see current ACE options;
  type: 'SetACEOptions(:<option1> := <value1>, ...);'
  to set <option1> to <value1> etc.
  (i.e. pass options after the ':' in the usual way)
  ... and then, type: 'return;' to continue.
- Otherwise, type: 'quit;' to quit the enumeration.
+ Otherwise, type: 'quit;' to quit to outer loop.
 brk> # Let's give ACE enough coset numbers to work with ...                    
 brk> # and while we're at it see the effect of 'echo := 2' :                   
 brk> SetACEOptions(: max := 0, echo := 2);                                     
@@ -657,6 +668,12 @@ opens up far more flexibility. Try it! Have fun!  Play  with  as  many
 options as you can. Also, note that the `*'-ed examples of  the  index
 fail  to  give  a  coset  table;  so  these  give  you  non-artificial
 `break'-loop examples for you to try.
+
+Let's now restore the original value of `OnBreak':
+
+\beginexample
+gap> OnBreak := NormalOnBreak;;
+\endexample
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{Using ACEReadResearchExample}

@@ -339,7 +339,7 @@ end);
 ##  result (or error) found (without looking for a sentinel "***").
 ##
 InstallGlobalFunction(LAST_ACE_ENUM_RESULT, function(stream, readline, first)
-local IsLastLine, IsEnumLine, line, enumResult;
+local errmsg, onbreakmsg, IsLastLine, IsEnumLine, line, enumResult;
 
   if first = true then
     IsLastLine := line -> true;
@@ -352,13 +352,15 @@ local IsLastLine, IsEnumLine, line, enumResult;
   repeat
     line := CHOMP(FLUSH_ACE_STREAM_UNTIL(stream, 3, 10, readline, IsEnumLine));
     if line = fail then
-      ACE_ERROR("expected to find output ...",
-                ["possibly, you have reached the limit of what can be",
-                 "written to ACEData.tmpdir (temporary directory)."],
+      errmsg := ["expected to find output ...",
+                 "possibly, you have reached the limit of what can be",
+                 "written to ACEData.tmpdir (temporary directory)."];
+      onbreakmsg :=
                 ["You can only 'quit;' from here.",
                  "You will have to redo the calculation, but before that",
                  "try running 'ACEDirectoryTemporary(<dir>);' for some",
-                 "directory <dir> where you know you will not be so limited."]);
+                 "directory <dir> where you know you will not be so limited."];
+      Error(ACE_ERROR(errmsg, onbreakmsg), "\n");
     elif IS_ACE_MATCH(line, "** ERROR") then
       Info(InfoACE + InfoWarning, 1, line);
       line := CHOMP( readline(stream) );
@@ -670,9 +672,9 @@ end);
 InstallGlobalFunction(SET_ACE_ARGS, function(ioIndex, fgens, rels, sgens)
 local datarec, gens;
   ioIndex := ACE_IOINDEX([ ioIndex ]); # Ensure ioIndex is valid
-  ACE_FGENS_ARG_CHK(fgens, "fgens ");
-  ACE_WORDS_ARG_CHK(fgens, rels, "rels ");
-  ACE_WORDS_ARG_CHK(fgens, sgens, "sgens ");
+  fgens := ACE_FGENS_ARG_CHK(fgens);
+  rels  := ACE_WORDS_ARG_CHK(fgens, rels, "relators");
+  sgens := ACE_WORDS_ARG_CHK(fgens, sgens, "subgp gen'rs");
   
   gens := TO_ACE_GENS(fgens);
   datarec := ACEData.io[ ioIndex ];
@@ -2177,7 +2179,7 @@ end);
 ##
 InstallGlobalFunction(ACECosetTable, function(arg)
 local ioIndex, ACEout, iostream, datarec, fgens, standard, incomplete,
-      cosettable, onbreakmsg, SetACEOptions, DisplayACEOptions;
+      cosettable, errmsg, onbreakmsg, SetACEOptions, DisplayACEOptions;
 
   if Length(arg) = 2 or Length(arg) > 3 then
     Error("expected 0, 1 or 3 arguments ... not ", Length(arg), " arguments\n");
@@ -2217,7 +2219,7 @@ local ioIndex, ACEout, iostream, datarec, fgens, standard, incomplete,
                    "to set <option1> to <value1> etc.",
                    "(i.e. pass options after the ':' in the usual way)",
                    "... and then, type: 'return;' to continue.",
-                   "Otherwise, type: 'quit;' to quit the enumeration."];
+                   "Otherwise, type: 'quit;' to quit to outer loop."];
 
     SetACEOptions := function()
       if not IsEmpty(OptionsStack) and 
@@ -2259,10 +2261,10 @@ local ioIndex, ACEout, iostream, datarec, fgens, standard, incomplete,
             # We pop options here, in case the user decides to quit
             PopOptions();
           fi;
-          ACE_ERROR("no coset table ...",
-                    ["the `ACE' coset enumeration failed with the result:",
-                     ACEData.enumResult],
-                    onbreakmsg);
+          errmsg := ["no coset table ...",
+                     "the `ACE' coset enumeration failed with the result:",
+                      ACEData.enumResult];
+          Error(ACE_ERROR(errmsg, onbreakmsg), "\n");
           if ACEData.options <> rec() then
             PushOptions(ACEData.options);
             Unbind(ACEData.options);
@@ -2289,7 +2291,7 @@ local ioIndex, ACEout, iostream, datarec, fgens, standard, incomplete,
       StandardizeTable(cosettable, "lenlex");
       Info(InfoACE + InfoWarning, 1, 
            "ACECosetTable: Coset table is incomplete, reduced ",
-           "and lenlex standardised.");
+           "& lenlex standardised.");
     else
       Info(InfoACE + InfoWarning, 1, 
            "ACECosetTable: Warning: Coset table is incomplete.");
