@@ -51,8 +51,8 @@ output from {\ACE}, is {\ACE}'s banner, e.g.
 
 If there were any errors in the directives put to  {\ACE},  or  output
 from the options described in Appendix~"Other ACE Options", they  will
-appear next. Then,  the  next  observed  output  is  a  row  of  three
-asterisks:
+appear next. Then, interactively, the next observed output is a row of
+three asterisks:
 
 \beginexample
 #I  ***
@@ -64,8 +64,12 @@ text") directive, emitted to {\ACE}, so that {\ACE}'s response can  be
 used as a sentinel to flush out any user errors, or any output from  a
 user's use of Appendix~"Other ACE Options" options.
 
-Then, if the `messages' option (see~"option messages")  is  set  to  a
-non-zero value, what is next observed is a heading like:
+Non-interactively, there will also be a row of three asterisks in  the
+output, but it occurs after any results messages  and  output  due  to
+user options.
+
+Next, if the `messages' option (see~"option messages")  is  set  to  a
+non-zero value, what is observed is a heading like:
 
 \beginexample
 #I    #-- ACE 3.000: Run Parameters ---
@@ -82,13 +86,17 @@ After these appears a separator:
 
 followed by any *progress messages* (progress messages only  occur  if
 `messages' is non-zero;  recall  that  by  default  `messages'  =  0),
-followed   by    a    *results    message*.    In    the    case    of
-`ACECosetTableFromGensAndRels', these messages  are  followed  by  yet
-more progress messages (if `messages' is non-zero) and a coset  table.
-For `ACECosetTableFromGensAndRels' and `ACEStats', all the above  sans
-the prepended `Info' string: \lq{}`\#I  '' also appears in the  output
-file along with {\ACE}'s exit banner (which is not  `Info'-ed),  which
-should look something like:
+followed by a *results message*.
+
+Non-interactively, as aforementioned,  following  the  above  messages
+come any output due to user options and a row of asterisks,  followed,
+in the case of `ACECosetTableFromGensAndRels', by a  compaction  (`CO'
+or `co') progress message and a coset table.
+
+Finally, non-interactively, all the above sans  the  prepended  `Info'
+string: \lq{}`\#I '' also  appears  in  the  output  file  along  with
+{\ACE}'s exit banner (which  is  not  `Info'-ed),  which  should  look
+something like:
 
 \beginexample
 =========================================
@@ -160,11 +168,9 @@ the value of `messages', a message line is printed and  the  count  is
 zeroed. Those tags flagged  with  a  `y*'  are  only  present  if  the
 appropriate option was included when the {\ACE} binary was compiled (a
 default compilation includes the appropriate options; so normally read
-`y*' as `y').
-
-Tags with an `n' in the `action' column indicate the function  is  not
-counted, and cause a message line to be output every time they  occur.
-They also cause the action count to be reset.
+`y*' as `y'). Tags with an `n' in the  `action'  column  indicate  the
+function is not counted, and cause a message line to be  output  every
+time they occur. They also cause the action count to be reset.
 
 \begintt
 ------------------------------------------------------------------
@@ -180,6 +186,7 @@ CP         y      preferred list gap-filling definition
 CD         y      C-style definition
 Lx         n      lookahead performed (type `x')
 CO         n      table compacted
+co         n      compaction routine called, but nothing recovered
 CL         n      complete lookahead (table as deduction stack)
 UH         n      updated completed-row counter
 RA         n      remaining coset numbers applied to relators
@@ -231,7 +238,7 @@ listed represents an internal error and  should  be  reported  to  the
 % GAP user
 \begintt
 result tag           meaning 
-------------------------------------------------------------------
+-------------------------------------------------------------------
 INDEX = x            finite index of `x' obtained
 OVERFLOW             out of table space
 SG PHASE OVERFLOW    out of space (processing subgroup generators)
@@ -240,7 +247,7 @@ TIME LIMT            `ti' limit triggered
 HOLE LIMIT           `ho' limit triggered
 INCOMPLETE TABLE     all coset numbers applied, but table has holes
 MEMORY PROBLEM       out of memory (building data structures)
----------------------------------------------------------------------
+-------------------------------------------------------------------
 \endtt
 
 % \begin{table}
