@@ -60,8 +60,7 @@ end);
 ##
 ##
 InstallGlobalFunction(CALL_ACE, function(ACEfname, fgens, rels, sgens)
-local optnames, echo, n, infile, instream, outfile, ToACE, 
-      IsLowercaseOneCharGen, acegens, ignored;
+local optnames, echo, infile, instream, outfile, ToACE, gens, acegens, ignored;
 
   if ValueOption("aceexampleoptions") = true and
      IsBound(ACEData.aceexampleoptions) then
@@ -78,7 +77,6 @@ local optnames, echo, n, infile, instream, outfile, ToACE,
   # We have hijacked ACE's echo option ... we don't actually pass it to ACE
   echo := ACE_VALUE_ECHO(optnames);
 
-  n := Length(fgens);
   if ForAny(fgens, i -> NumberSyllables(i)<>1 or ExponentSyllable(i, 1)<>1) then
     Error("first argument not a valid list of group generators");
   fi;
@@ -107,27 +105,10 @@ local optnames, echo, n, infile, instream, outfile, ToACE,
   fi;
   outfile := VALUE_ACE_OPTION(optnames, ACEData.outfile, "aceoutfile");
 
-  IsLowercaseOneCharGen := function(g)
-    local gstring;
-    gstring := String(g);
-    return Length(gstring) = 1 and LowercaseString(gstring) = gstring;
-  end;
-
-  # Define the generators ACE will use
-  if n <= 26 then
-    # if #generators <= 26 tell ACE to use alphabetic generators: a ...
-    if ForAll(fgens, g -> IsLowercaseOneCharGen(g)) then
-      # Use the user's set of generators for ACE ... if we can
-      acegens := List(fgens, g -> String(g));
-    else
-      acegens := List([1..n], i -> WordAlp(CHARS_LALPHA, i));
-    fi;
-    ToACE( [ Flat([ "Group Generators: ", acegens, ";"]) ] );
-  else
-    # if #generators > 26 tell ACE to use numerical generators: 1 ...
-    ToACE([ "Group Generators: ", n, ";" ]);
-    acegens := List([1..n], i -> String(i));
-  fi;
+  # Define the group generators ACE will use
+  gens := TO_ACE_GENS(fgens);
+  ToACE([ "Group Generators: ", gens.toace, ";"]);
+  acegens := gens.acegens;
 
   # Define the group relators ACE will use
   ToACE([ "Group Relators: ", ACE_WORDS(rels, fgens, acegens), ";" ]);
