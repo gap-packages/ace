@@ -705,6 +705,7 @@ end);
 ##  . . . . . . . . . . . . . . . . . . . . . . . . . . . . .  as one string.
 ##
 InstallGlobalFunction(ACE_WORDS, function(words, fgens, ACEgens)
+  words := ACE_WORDS_ARG_CHK(fgens, words, "");
   return ACE_JOIN( ACE_STRINGS( 
                        List(words, w -> MappedWord(w,
                                                    fgens,
@@ -812,28 +813,29 @@ local fam, errmsg, onbreakmsg;
        "Note: fgens is the list of free group generators."];
   
   fam := FamilyObj(fgens[1]);
+  errmsg := "words ";
+  if whicharg <> "" then
+    errmsg := Concatenation(errmsg, "(", whicharg, ") ");
+  fi;
   while not IsList(words) or not ForAll(words, w -> FamilyObj(w) = fam) do
     if IsList(words) and ForAll(words, IsElementOfFreeGroup) then
       errmsg := 
         [Concatenation(
-             "words (", whicharg, 
-             ") is a list of words in the *wrong* free grp gen'rs")];
+             errmsg, "is a list of words in the *wrong* free grp gen'rs")];
     elif IsList(words) and ForAll(words, IsElementOfFpGroup) then
       errmsg := 
         [Concatenation(
-             "words (", whicharg, 
-             ") must be a list of words in the free group gen'rs,"),
+             errmsg, "must be a list of words in the free group gen'rs,"),
          "not fp group elements. Perhaps, you should use 'UnderlyingElement'",
          "to convert each fp group element to a word in the free group gen'rs"];
     else
       errmsg := 
         [Concatenation(
-             "words (", whicharg, 
-             ") must be a list of words in the free group gen'rs")];
+             errmsg, "must be a list of words in the free group gen'rs")];
     fi;
     Error(ACE_ERROR(errmsg, onbreakmsg), "\n");
   od;
-  return words;
+  return Filtered(words, word -> not IsOne(word));
 end);
 
 #############################################################################

@@ -932,6 +932,18 @@ You may wish to compact {\ACE}'s coset table first, either  explicitly
 via `ACERecover' (see~"ACERecover"), or, implicitly, via any  function
 call that invokes {\ACE}'s compaction routine (see~"ACERecover" note).
 
+\>ACECosetOrderFromRepresentative( <i>, <cosetrep> ) F
+\>ACECosetOrderFromRepresentative( <cosetrep> ) F
+
+for the <i>th (or default) interactive {\ACE} process return the order
+(modulo the subgroup) of the coset with representative  <cosetrep>,  a
+word in the free group generators.
+
+*Note:*   
+`ACECosetOrderFromRepresentative' calls  `ACETraceWord'  to  determine
+the coset (number) to which <cosetrep> belongs,  and  then  scans  the
+output of `ACEOrders' to determine the order of the coset (number).
+
 \>ACECosetsThatNormaliseSubgroup( <i>, <n> ) F
 \>ACECosetsThatNormaliseSubgroup( <n> ) F
 

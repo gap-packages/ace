@@ -90,6 +90,7 @@ DeclareGlobalFunction("ACETraceWord");
 DeclareGlobalFunction("ACE_ORDER");
 DeclareGlobalFunction("ACEOrders");
 DeclareGlobalFunction("ACEOrder");
+DeclareGlobalFunction("ACECosetOrderFromRepresentative");
 DeclareGlobalFunction("ACECosetsThatNormaliseSubgroup");
 DeclareGlobalFunction("ACECosetTable");
 DeclareGlobalFunction("ACEStats");

@@ -1990,17 +1990,27 @@ end);
 ##  . . . . . . . . . . . . . . . . . . . . . . completes, and fail otherwise
 ##
 InstallGlobalFunction(ACETraceWord, function(arg)
-local ioIndex, datarec, twArgs, expected, line;
+local ioIndex, datarec, twArgs, acegen, expected, line;
   if Length(arg) in [2,3] then
     ioIndex := ACE_IOINDEX(arg{[1..Length(arg) - 2]});
     datarec := ACEData.io[ ioIndex ];
     twArgs := arg{[Length(arg) - 1..Length(arg)]};
+    if not IsPosInt(twArgs[1]) then
+      Error("ACETraceWord: coset number must be a positive integer\n"); 
+    fi;
   else
     Error("expected 2 or 3 arguments ... not ", 
           Length(arg), " arguments\n");
   fi;
   READ_ACE_ERRORS(datarec.stream); # purge any output not yet collected
-  PROCESS_ACE_OPTION(datarec.stream, "tw", twArgs);
+  if IsOne(twArgs[2]) and twArgs[2] = One( ACEGroupGenerators(ioIndex)[1] ) then
+    acegen := datarec.acegens[1];
+    # The ACE binary does not recognise the empty string as the identity
+    WRITE_LIST_TO_ACE_STREAM(
+        datarec.stream, [ "tw:", twArgs[1], ",", acegen, "*", acegen, "^-1;" ]);
+  else
+    PROCESS_ACE_OPTION(datarec.stream, "tw", twArgs);
+  fi;
   expected := Flat([String(twArgs[1]), " * word = "]){[1..8]};
   line := FLUSH_ACE_STREAM_UNTIL(datarec.stream, 3, 3, READ_NEXT_LINE, 
                                  line -> Length(line) > 7 and
@@ -2116,6 +2126,42 @@ local ioIndexAndValue, orderlist;
   else
     return orderlist;
   fi;
+end);
+
+#############################################################################
+####
+##
+#F  ACECosetOrderFromRepresentative( <i>, <cosetrep> )
+#F  ACECosetOrderFromRepresentative( <cosetrep> )
+##
+##  for the <i>-th (or default) interactive {\ACE} process return  the  order
+##  (modulo the subgroup) of the coset with representative <cosetrep> a  word
+##  in the free group generators.
+##
+##  *Note:*   
+##  `ACECosetOrderFromRepresentative' calls `ACETraceWord' to  determine  the
+##  coset (number) to which <cosetrep> belongs, and then scans the output  of
+##  `ACEOrders' to determine the order of the coset (number).
+##
+InstallGlobalFunction(ACECosetOrderFromRepresentative, function(arg)
+local ioIndexAndValue, ioIndex, cosetrep, coset, entry;
+  ioIndexAndValue := ACE_IOINDEX_AND_ONE_VALUE(arg);
+  ioIndex := ioIndexAndValue[1];
+  cosetrep := ioIndexAndValue[2];
+  if IsOne(cosetrep) and cosetrep = One( ACEGroupGenerators(ioIndex)[1] ) then
+    return 1;
+  fi;
+  ACERecover(ioIndex);
+  coset := ACETraceWord(ioIndex, 1, ioIndexAndValue[2]);
+  if coset = fail or coset = 1 then
+    return coset;
+  fi;
+  entry := First(ACE_ORDER("ACEOrder", [ioIndex, 0]),
+                 entry -> entry.coset = coset);
+  if entry = fail then
+    return fail;
+  fi;
+  return entry.order;
 end);
 
 #############################################################################
