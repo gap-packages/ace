@@ -1,11 +1,14 @@
 #############################################################################
 ##
-#W    init.g               share package 'ace'               Alexander Hulpke
+#W  init.g                ACE Share Package                       Greg Gamble
 ##
-##    @(#)$Id$
+##  The original init,g was written by Alexander Hulpke and modified  to read
+##  example.gd by Greg Gamble.
+##    
+#H  @(#)$Id$
 ##
 
-# announce the package version and test for the existence of the binary
+##  Announce the package version and test for the existence of the binary
 DeclarePackage("ace","3.0",
   function()
   local path,file,line,a;
@@ -19,8 +22,14 @@ DeclarePackage("ace","3.0",
     return file<>fail;
   end);
 
-# install the documentation
+##  Install the documentation
 DeclarePackageAutoDocumentation( "ace", "doc" );
 
-# read the actual code.
-ReadPkg( "ace", "gap/ace.g");
+#############################################################################
+##
+#R  Read the actual code.
+##
+ReadPkg( "ace", "gap/ace.g" );
+ReadPkg( "ace", "gap/example.gd" );
+
+#E init.g . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ends here
