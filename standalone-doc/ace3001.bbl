@@ -10,13 +10,6 @@ John~J. Cannon, Lucien~A. Dimino, George Havas, and Jane~M. Watson.
 \newblock Implementation and analysis of the {Todd-Coxeter} algorithm.
 \newblock {\em Mathematics of Computation}, 27(123):463--490, July 1973.
 
-\bibitem{Con65}
-J.H. Conway.
-\newblock Problem \#5327.
-\newblock {\em American Mathematical Monthly}, 72:915, 1965.
-\newblock Solutions, by various authors, given in: Generators and relations for
-  cyclic groups, \textit{Ibid.}, 74:91--93, 1965.
-
 \bibitem{CLR90}
 Thomas~H. Cormen, Charles~E. Leiserson, and Ronald~L. Rivest.
 \newblock {\em Introduction to Algorithms}.
@@ -39,34 +32,23 @@ George Havas.
   International Symposium on Symbolic and Algebraic Computation)}, pages
   191--199. ACM Press, 1991.
 
-\bibitem{HR99b}
-George Havas and Colin Ramsay.
-\newblock Experiments in coset enumeration.
-\newblock Technical Report~13, Centre for Discrete Mathematics and Computing,
-  The University of Queensland, St.~Lucia 4072, Australia, 1999.
-
 \bibitem{HR00}
 George Havas and Colin Ramsay.
-\newblock The trivial group made easy.
-\newblock {\em Bulletin of the Australian Mathematical Society}, to appear.
+\newblock Proving a group trivial made easy: a case study in coset enumeration.
+\newblock {\em Bulletin of the Australian Mathematical Society},
+  62(1):105--118, 2000.
+
+\bibitem{HR01}
+George Havas and Colin Ramsay.
+\newblock Groups and computation {III}.
+\newblock In {\em Ohio State University Mathematical Research Institute
+  Publications}, volume~8, pages 183--192. de Gruyter, 2001.
 
 \bibitem{Lee63}
 J.~Leech.
 \newblock Coset enumeration on digital computers.
 \newblock {\em Proceedings of the Cambridge Philosophical Society},
   59:257--267, 1963.
-
-\bibitem{Lee70}
-John Leech.
-\newblock Coset enumeration.
-\newblock In {\em Computational Problems in Abstract Algebra}, pages 21--35.
-  Pergamon Press, Oxford, 1970.
-
-\bibitem{Lee77}
-John Leech.
-\newblock Computer proof of relations in groups.
-\newblock In Michael~P.J. Curran, editor, {\em Topics in Group Theory and
-  Computation}, pages 38--61. Academic Press, 1977.
 
 \bibitem{Lee84}
 John Leech.
