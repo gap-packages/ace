@@ -182,7 +182,7 @@ SetPackageInfo( rec(
     # list of pairs [package name, (least) version],  package name is case
     # insensitive, least version denoted with '>=' prepended to version string.
     # without these, the package will not load
-    NeededOtherPackages := [["", ""]],
+    NeededOtherPackages := [],
     # without these the package will issue a warning while loading
     SuggestedOtherPackages := [],
     # needed external conditions (programs, operating system, ...)  provide 
@@ -212,7 +212,7 @@ SetPackageInfo( rec(
         return fail;
       fi;
       return true;
-    end );
+    end,
 
 
 ##  Suggest here if the package should be *automatically loaded* when GAP is 
