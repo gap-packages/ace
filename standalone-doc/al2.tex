@@ -675,6 +675,9 @@ Note that this list is fairly long, so its top may disappear off the top
 \subsection{\ttt{hlt\ ;}}
 
 Selects the standard HLT strategy; see Section~\ref{sec:strat}.
+Note that \ace's \ttt{hlt} has \ttt{lookahead} on; however, the
+  sequence \ttt{hlt\ ;lookahead:0;} easily achieves an HLT strategy
+  with \ttt{lookahead} off.
 
 \subsection{\ttt{ho[le\ limit]\ :\ [-1/0..100]\ ;}}
 
@@ -1151,8 +1154,8 @@ If $\ttt{<int>} < 0$, it prints the first $|\ttt{<int>}|$ stabilising cosets,
 
 In his book \cite{Sim94}, Sims discusses ten standard enumeration
   strategies.
-These are effectively HLT (with \amp without the \ttt{mend} parameter,
-  and with \amp without continuous `lookahead') and Felsch, all either with
+These are effectively HLT without \ttt{lookahead} (with or without the 
+  \ttt{mend} parameter, and in R or R* style) and Felsch, all either with
   or without table standardisation as the enumeration proceeds.
 \ace\ does not implement table standardisation on an ongoing basis, 
   although tables from an incomplete or paused enumeration can be 
@@ -1161,8 +1164,8 @@ The other five strategies are implemented, and can be selected by this
   command.
 The argument matches the number given in \cite[\S5.5]{Sim94}; see
   Section~\ref{sec:strat} for the parameter settings.
-With care, it is possible to duplicate the statistics given in \cite{Sim94};
-  some examples are given in Section~\ref{ex001}.
+With care, it is often possible to duplicate the statistics given in 
+  \cite{Sim94}; some examples are given in Section~\ref{ex001}.
 
 \subsection{\ttt{st[andard\ table]\ ;}}
 

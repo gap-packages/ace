@@ -11,6 +11,19 @@
 
 Changes to Stand-alone documentation:
 
+24 Mar, 2001 [ These changes by Greg Gamble ]:
+ * al2.tex, ex001.tex: `sims' option description said that some of the
+       strategies were distinguished by being with or without continuous
+       `lookahead' when in fact they all have `lookahead' turned off
+       and what distinguishes `sims:1' from `sims:3', and `sims:5' from
+       `sims:7' is that the former of each pair is R style and the latter
+       is R* style. In ex001.tex, it is now clear that what distinguishes
+       `sims:1' and `sims:3' from `sims:5' and `sims:7' is that the former
+       pair has `mendelsohn' off and the latter pair has `mendelsohn' on.
+
+       Also, added a note to the description of `hlt' stating that ACE's
+       `hlt' has `lookahead' on.
+
 19 Mar, 2001 [ These changes by Greg Gamble ]:
  * manual.bib, al2.tex : Reference HR99b has become HRO1. It has changed
        from being a UQ Technical Report entitled `Experiments in coset

@@ -364,6 +364,7 @@ S 8.4. Fun with ACEExample
 I 8.4. break-loop
 I 8.4. OnBreak
 S 8.5. Using ACEReadResearchExample
+I 8.5. PGRelFind
 C moreexamples.tex 9. Finer Points with Examples
 S 9.1. Getting Started
 I 9.1. ACEStats

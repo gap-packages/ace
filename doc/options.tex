@@ -113,7 +113,16 @@ unwary user, we have provided
 
 which simply executes `PopOptions()' until `OptionsStack' is empty.
 
-However, there will be situations where an {\ACE}  interface  function
+However, `FlushOptionsStack' does not wipe  out  the  options  already
+passed  to  an  *interactive*  {\ACE}  process.   We   have   provided
+`GetACEOptions' (see~"GetACEOptions") to keep track  of  options  that
+the {\ACE} binary process still considers active, which may or may not
+be  still  on   the   `OptionsStack'.   There   is   the   interactive
+`SetACEOptions' (see~"SetACEOptions") to change such options,  or,  of
+course, you can always elect to use `ACEQuit' (see~"ACEQuit") and then
+start a new interactive {\ACE} process.
+
+Finally, there will be situations where an {\ACE}  interface  function
 needs to be told explicitly to ignore options passed down  recursively
 to it from calling functions. For this purpose we  have  provided  the
 options `aceignore' (see~"option  aceignore")  and  `aceignoreunknown'

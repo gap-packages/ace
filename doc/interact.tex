@@ -18,6 +18,11 @@ setting   the   `InfoLevel'   of   `InfoACE'    to    at    least    3
 (see~"SetInfoACELevel"),  particularly  if  she  uses  the  `messages'
 option with a non-zero value.
 
+Have you read the various options warnings yet? If  not,  please  take
+the time to  read  Section~"General  Warnings  regarding  the  Use  of
+Options"  which  directs  you  to  various   important   sections   of
+Chapter~"Options for ACE".
+
 We describe in this chapter the functions that manipulate and initiate
 interactive {\ACE} processes.
 
@@ -1190,8 +1195,9 @@ In  five  of  the  ten  standard  enumeration   strategies   of   Sims
 the   table   is   standardised   repeatedly.   This   is    expensive
 computationally, but can result in fewer cosets being  necessary.  The
 effect of doing this can be investigated  in  {\ACE}  by  (repeatedly)
-halting  the  enumeration  (by  say,  imposing  timing  restrictions),
-standardising the coset numbering, and continuing.
+halting the enumeration (via restrictive options),  standardising  the
+coset numbering, and continuing (see Section~"Emulating Sims"  for  an
+example).
 
 \>ACEAddRelators( <i>, <wordlist> ) F
 \>ACEAddRelators( <wordlist> ) F

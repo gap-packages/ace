@@ -591,7 +591,10 @@ Error, no coset table ...
  the `ACE' coset enumeration failed with the result:
  OVERFLOW (a=2 r=1 h=1 n=3; l=4 c=0.00; m=2 t=2)
 Entering break read-eval-print loop ...
- try relaxing any restrictive options:
+ try relaxing any restrictive options
+ e.g. try the `hard' strategy or increasing `workspace'
+ type: '?strategy options' for info on strategies
+ type: '?options for ACE' for info on options
  type: 'DisplayACEOptions();' to see current ACE options;
  type: 'SetACEOptions(:<option1> := <value1>, ...);'
  to set <option1> to <value1> etc.
@@ -679,12 +682,15 @@ gap> OnBreak := NormalOnBreak;;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{Using ACEReadResearchExample}
 
+\indextt{PGRelFind}
 Without an argument, the function `ACEReadResearchExample'  reads  the
 file `"pgrelfind.g"' in the  `res-examples'  directory  which  defines
 functions such as `PGRelFind', that were used in \cite{CHHR01} to show
 that the group $L_3(5)$ has deficiency 0.
-
-*Some background*
+%display{nonhtml}
+%
+%*Some background*
+%enddisplay
 
 The *deficiency* of a finite presentation $\{X \mid R\}$ of  a  finite
 group $G$ is $|R| - |X|$, and the *deficiency* of the group $G$ is the

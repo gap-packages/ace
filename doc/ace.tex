@@ -228,7 +228,10 @@ Error, no coset table ...
  called from
 <function>( <arguments> ) called from read-eval-loop
 Entering break read-eval-print loop ...
- try relaxing any restrictive options:
+ try relaxing any restrictive options
+ e.g. try the `hard' strategy or increasing `workspace'
+ type: '?strategy options' for info on strategies
+ type: '?options for ACE' for info on options
  type: 'DisplayACEOptions();' to see current ACE options;
  type: 'SetACEOptions(:<option1> := <value1>, ...);'
  to set <option1> to <value1> etc.
@@ -621,7 +624,10 @@ by {\GAP} by which {\ACE} options may be passed. In  Section~"Warnings
 regarding Options", we discuss how options ``left over'' from previous
 calculations can upset subsequent calculations; and hence, to  ``clear
 the  decks''   in   such   circumstances,   why   we   have   provided
-`FlushOptionsStack' (see~"FlushOptionsStack").
+`FlushOptionsStack'   (see~"FlushOptionsStack").   However,   removing
+`OptionsStack' options does not remove the options  previously  passed
+to  an  *interactive*  {\ACE}  process;  Section~"Warnings   regarding
+Options" discusses that too.
 
 Note, that the  {\ACE}  share  package  treatment  of  options  is  an
 ``enhancement'' over the general way {\GAP} treats  options.  Firstly,

@@ -895,126 +895,104 @@ gap>
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{Emulating Sims}
 
-Here we demonstrate the various `sims' strategies (see~"option sims"),
-and see if we can duplicate the `m' (maximum active coset numbers) and
-`t'  (total  coset  numbers  defined)  values  (see  the  input   file
-`ex001.in'). The  ability  to  do  so  gives  our  confidence  in  the
-correctness of {\ACE} a large boost. We work with the formal  inverses
+Here we consider the various `sims'  strategies  (see~"option  sims"),
+with respect to duplicating Sims' example statistics of his strategies
+given in Section 5.5 of \cite{Sim94}, and giving approximations of his
+even-numbered strategies.
+
+In order to duplicate Sims' maximum active  coset  numbers  and  total
+coset numbers statistics, one needs to work with the  formal  inverses
 of the relators  and  subgroup  generators  from  \cite{Sim94},  since
 definitions are made from the front in Sims'  routines  and  from  the
-rear in {\ACE}. 
+rear      in      {\ACE}.      Also,      in      instances      where
+`IsACEGeneratorsInPreferredOrder(<gens>, <rels>)' returns `false', for
+group generators <fgens> and relators <rels>, one will need  to  apply
+the `lenlex' option to stop {\ACE} from re-ordering the generators and
+relators (see~"IsACEGeneratorsInPreferredOrder" and~"option  lenlex").
+In general, we can match Sims' values for the `sims := 1' and `sims :=
+3' strategies  (the  R  style  and  R\*  style  Sims  strategies  with
+`mendelsohn' off) and for the `sims :=  9'  (C  style)  strategy,  but
+sometimes we may not exactly match Sims' statistics for the  `sims  :=
+5' and `sims :=  7'  strategies  (the  R  style  and  R\*  style  Sims
+strategies with `mendelsohn' on); Sims does not specify an  order  for
+the (Mendelsohn) processing of cycled relators and evidently  {\ACE}'s
+processing order is different  to  the  one  Sims  used  in  his  CHLT
+algorithm to get his statistics (see~"option mendelsohn").
 
-*Do I need to ensure `lenlex' option is in force to ensure this? ...
- or can I just mention it and leave it to the user?*
+*Note:* 
+HLT as it appears in Table 5.5.1 of \cite{Sim94} is achieved in {\ACE}
+with the sequence ```hlt, lookahead  :=  0'''  and  CHLT  is  (nearly)
+equivalent to  ```hlt,  lookahead  :=  0,  mendelsohn''';  also  Sims'
+`<save> = false' equates to R style (`rt'  positive,  `ct  :=  0')  in
+{\ACE}, and `<save> = true', for Sims' HLT and CHLT,  equates  to  R\*
+style (`rt' negative, `ct := 0')  in  {\ACE}.  Sims'  Felsch  strategy
+coincides with {\ACE}'s `felsch := 0' strategy, i.e.~`sims  :=  9'  is
+identical to `felsch := 0'. (See  the  options~"option  hlt",  "option
+lookahead", "option mendelsohn", "option ct", "option rt"  and~"option
+felsch".)
 
-We may also have to use the `asis' flag, to force the column order (by
-entering involutions as `xx') and to preserve the relator ordering.
+The following duplicates the ``Total''  (`totcosets'  in  {\ACE})  and
+``Max.~Active'' (`maxcosets' in {\ACE}) statistics for Example~5.2  of
+\cite{Sim94},  found  in  Sims'  Table~5.5.3,  for  the  `sims  :=  3'
+strategy.
 
-We match Sims' values for R style and R\* style (`sims := 1' and `sims
-:= 3') and C style (`sims :=  9'),  but  may  not  do  so  if  we  use
-Mendelsohn (`sims := 5' and `sims := 7'); this makes sense, since  the
-order of processing cycled relators is not specified by Sims.
+\beginexample
+gap> F := FreeGroup("r", "s", "t");; r := F.1;; s := F.2;; t := F.3;;
+gap> ACEStats([r, s, t], [(r^t*r^-2)^-1, (s^r*s^-2)^-1, (t^s*t^-2)^-1], []
+>             : sims := 3);
+rec( index := 1, cputime := 0, cputimeUnits := "10^-2 seconds", 
+  activecosets := 1, maxcosets := 673, totcosets := 673 )
+\endexample
 
-*THE FOLLOWING EXAMPLES ARE in ``RAW'' ACE AND NEED TO BE TRANSLATED
- TO THE EQUIVALENT IN GAP*
+By replacing `sims := 3' with `sims := <i>' for <i> equal to~1,  5,  7
+or~9, one may verify that for <i> equal to~1  or~9,  Sims'  statistics
+are again  duplicated,  and  observe  a  slight  variance  with  Sims'
+statistics for <i> equal to~5 or~7.
 
-The input and output files for Example 5.2:
+Now, we show how one can approximate any one of  Sims'  even-numbered
+strategies. Essentially, the idea is to start  an  interactive  {\ACE}
+process using `ACEStart' (see~"ACEStart") with `sims := <i>', for  <i>
+equal to~1, 3, 5, 7 or~9, and `max' set to some low  value  <maxstart>
+so that the enumeration stops after only completing a few rows of  the
+coset table. Then, to  approximate  Sims'  strategy  `<i>  +  1',  one
+alternately  applies  `ACEStandardCosetNumbering'  and  `ACEContinue',
+progressively increasing the value of `max' by some  value  <maxstep>.
+The general  algorithm  is  provided  by  the  `ACEEvenSims'  function
+following.
 
-\begintt
-gr: r,s,t;
-rel: (r^tRR)^-1, (s^rSS)^-1, (t^sTT)^-1;
-text: ;                               sr;
-text: ** Sims:1 (cf. 1502/1550) ...;  sims:1;  end;
-text: ** Sims:3 (cf. 673/673) ...;    sims:3;  end;
-text: ** Sims:5 (cf. 1808/1864) ...;  sims:5;  end;
-text: ** Sims:7 (cf. 620/620) ...;    sims:7;  end;
-text: ** Sims:9 (cf. 588/588) ...;    sims:9;  end;
-\endtt
+\beginexample
+gap> ACEEvenSims := function(fgens, rels, sgens, i, maxstart, maxstep) 
+>      local j;
+>      j := ACEStart(fgens, rels, sgens : sims := i, max := maxstart);
+>      while ACEStats(j).index = 0 do
+>        ACEStandardCosetNumbering(j);
+>        ACEContinue(j : max := ACEParameters(j).max + maxstep);
+>      od;
+>      return ACEStats(j);
+>    end;
+\endexample
 
-\begintt
-  #-- ACE 3.000: Run Parameters ---
-Group Name: G;
-Group Relators: rrTRt, ssRSr, ttSTs;
-Subgroup Name: H;
-Subgroup Generators: ;
-  #--------------------------------
-** Sims:1 (cf. 1502/1550) ...
-INDEX = 1 (a=1 r=2 h=2 n=2; l=3 c=0.01; m=1502 t=1550)
-** Sims:3 (cf. 673/673) ...
-INDEX = 1 (a=1 r=2 h=2 n=2; l=3 c=0.01; m=673 t=673)
-** Sims:5 (cf. 1808/1864) ...
-INDEX = 1 (a=1 r=2 h=2 n=2; l=3 c=0.01; m=1603 t=1603)
-** Sims:7 (cf. 620/620) ...
-INDEX = 1 (a=1 r=2 h=2 n=2; l=3 c=0.01; m=615 t=615)
-** Sims:9 (cf. 588/588) ...
-INDEX = 1 (a=1 r=2 h=2 n=2; l=4 c=0.01; m=588 t=588)
-\endtt
+It turns out that one can duplicate the Sims' strategy 4 statistics in
+Table~5.5.3 of \cite{Sim94}, with `<i> = 3' (so that `<i> + 1  =  4'),
+`<maxstart> = 14' and `<maxstep> = 10':
 
-The input and output files for Example 5.3, $k=8$:
+\beginexample
+gap> ACEEvenSims([r, s, t], [(r^t*r^-2)^-1, (s^r*s^-2)^-1, (t^s*t^-2)^-1], [],
+>                3, 14, 10);
+rec( index := 1, cputime := 0, cputimeUnits := "10^-2 seconds", 
+  activecosets := 1, maxcosets := 393, totcosets := 393 )
+\endexample
 
-\begintt
-gr: x,y;
-rel: (xx)^-1, (y^3)^-1, ((xy)^7)^-1, ((xyxY)^8)^-1;
-text: ;                                  sr;
-text: ** Sims:1 (cf. 87254/128562) ...;  sims:1;  end;
-text: ** Sims:3 (cf. 31678/32320) ...;   sims:3;  end;
-text: ** Sims:5 (cf. 99632/178620) ...;  sims:5;  end;
-text: ** Sims:7 (cf. 30108/31365) ...;   sims:7;  end;
-text: ** Sims:9 (cf. 39745/39745) ...;   asis:1;  sims:9;  end;
-\endtt
-
-\begintt
-  #-- ACE 3.000: Run Parameters ---
-Group Name: G;
-Group Relators: XX, YYY, YXYXYXYXYXYXYX, yXYXyXYXyXYXyXYXyXYXyXYXyXYXyXYX;
-Subgroup Name: H;
-Subgroup Generators: ;
-  #--------------------------------
-** Sims:1 (cf. 87254/128562) ...
-INDEX=10752 (a=10752 r=128563 h=1 n=128563; l=27 c=1.00; m=87254 t=128562)
-** Sims:3 (cf. 31678/32320) ...
-INDEX=10752 (a=10752 r=8005 h=32321 n=32321; l=10 c=0.81; m=31678 t=32320)
-** Sims:5 (cf. 99632/178620) ...
-INDEX=10752 (a=10752 r=168547 h=1 n=168547; l=24 c=1.50; m=96952 t=168546)
-** Sims:7 (cf. 30108/31365) ...
-INDEX=10752 (a=10752 r=5738 h=31673 n=31673; l=8 c=0.90; m=30420 t=31672)
-** Sims:9 (cf. 39745/39745) ...
-INDEX=10752 (a=10752 r=1 h=39746 n=39746; l=43 c=1.37; m=39745 t=39745)
-\endtt
-
-The input and output files for Example 5.4:
-
-\begintt
-gr: a,b;
-rel: (a^8)^-1, (b^7)^-1, ((ab)^2)^-1, ((Ab)^3)^-1;
-gen: (a^2)^-1, (Ab)^-1;
-asis:1;
-text: ;                               sr;
-text: ** Sims:1 (cf. 2174/2635) ...;  sims:1;  end;
-text: ** Sims:3 (cf. 1199/1212) ...;  sims:3;  end;
-text: ** Sims:5 (cf. 2213/2619) ...;  sims:5;  end;
-text: ** Sims:7 (cf. 1258/1284) ...;  sims:7;  end;
-text: ** Sims:9 (cf. 1302/1306) ...;  asis:0;  sims:9;  end;
-\endtt
-
-\begintt
-  #-- ACE 3.000: Run Parameters ---
-Group Name: G;
-Group Relators: AAAAAAAA, BBBBBBB, BABA, BaBaBa;
-Subgroup Name: H;
-Subgroup Generators: AA, Ba;
-  #--------------------------------
-** Sims:1 (cf. 2174/2635) ...
-INDEX = 448 (a=448 r=2636 h=1 n=2636; l=4 c=0.02; m=2174 t=2635)
-** Sims:3 (cf. 1199/1212) ...
-INDEX = 448 (a=448 r=576 h=1213 n=1213; l=3 c=0.02; m=1199 t=1212)
-** Sims:5 (cf. 2213/2619) ...
-INDEX = 448 (a=448 r=2620 h=1 n=2620; l=4 c=0.03; m=2213 t=2619)
-** Sims:7 (cf. 1258/1284) ...
-INDEX = 448 (a=448 r=612 h=1285 n=1285; l=3 c=0.02; m=1258 t=1284)
-** Sims:9 (cf. 1302/1306) ...
-INDEX = 448 (a=448 r=1 h=1307 n=1307; l=5 c=0.02; m=1302 t=1306)
-\endtt
+Even though the (`lenlex') standardisation steps in the above  example
+produce a significant improvement over the  `sims  :=  3'  statistics,
+this  does  not  happen  universally.  Sims  \cite{Sim94}  gives  many
+examples  where  the  even-numbered  strategies  fail  to   show   any
+significant improvement over  the  odd-numbered  strategies,  and  one
+example (see~Table~5.5.7) where `sims := 2' gives a  performance  that
+is very much worse than any of the other Sims strategies. As with  any
+of the strategies, what works well for some groups may not work at all
+well with other groups. There are *no* general rules. It's a bit of  a
+game. Let's hope you win most of the time.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%

@@ -22,12 +22,13 @@ We work with the formal inverses of the relators and subgroup generators
   routines and from the rear in \ace.
 We may also have to use the \ttt{asis} flag, to force the column order (by
   entering involutions as \ttt{xx}) and to preserve the relator ordering.
-We match Sims' values for R style \amp R* style (\ttt{sims:1} \amp 
-  \ttt{3}) and C style (\ttt{sims:9}), but may not do so if we use
-  Mendelsohn (\ttt{sims:5} \amp \ttt{7}); this makes sense, since the
-  order of processing cycled relators is not specified by Sims.
+We can match Sims' values for \ttt{sims:1} \amp \ttt{sims:3} (the R style 
+  \amp R* style strategies without `mendelsohn') and for \ttt{sims:9} 
+  (the C style strategy), but sometimes may not do so for the strategies
+  that have `mendelsohn' on (\ttt{sims:5} \amp \ttt{7}); this makes sense,
+  since the order of processing cycled relators is not specified by Sims.
 
-The input and output files for Example 5.2:
+The input and output files for \cite[Example 5.2]{Sim94}:
 
 \bv\begin{verbatim}
 gr: r,s,t;
@@ -59,7 +60,7 @@ INDEX = 1 (a=1 r=2 h=2 n=2; l=3 c=0.01; m=615 t=615)
 INDEX = 1 (a=1 r=2 h=2 n=2; l=4 c=0.01; m=588 t=588)
 \end{verbatim}\ev
 
-The input and output files for Example 5.3, $k=8$:
+The input and output files for \cite[Example 5.3]{Sim94}, $k=8$:
 
 \bv\begin{verbatim}
 gr: x,y;
@@ -91,7 +92,7 @@ INDEX=10752 (a=10752 r=5738 h=31673 n=31673; l=8 c=0.90; m=30420 t=31672)
 INDEX=10752 (a=10752 r=1 h=39746 n=39746; l=43 c=1.37; m=39745 t=39745)
 \end{verbatim}\ev
 
-The input and output files for Example 5.4:
+The input and output files for \cite[Example 5.4]{Sim94}:
 
 \bv\begin{verbatim}
 gr: a,b;
