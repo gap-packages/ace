@@ -484,7 +484,7 @@ interactive version of `ACECosetTableFromGensAndRels') with the option
 `incomplete'.
 
 \beginexample
-gap> ACECosetTable(1 : incomplete);          
+gap> ACECosetTable(1 : incomplete);
 #I  start = yes, continue = yes, redo = yes
 #I  ***
 #I  OVERFLOW (a=12 r=4 h=4 n=13; l=4 c=0.00; m=12 t=12)
@@ -599,7 +599,7 @@ re-transmitting that information by using the `relators'  (see~"option
 relators") option:
 
 \beginexample
-gap> ACEStart(1 : relators := ToACEWords(fgens, [a^2, b^3, (a*b)^5]),          
+gap> ACEStart(1 : relators := ToACEWords(fgens, [a^2, b^3, (a*b)^5]),
 >                 enumeration := "A_5",
 >                 subgroup := "Id",
 >                 max := 0,
@@ -672,7 +672,7 @@ false
 Groan! We will just have to re-instantiate everything:
 
 \beginexample
-gap> fgens := ACEGroupGenerators(1);;                      
+gap> fgens := ACEGroupGenerators(1);;
 gap> F := GroupWithGenerators(fgens);; a := F.1;; b := F.2;;
 \endexample
 
@@ -688,7 +688,7 @@ save anything by doing this, since afterwards the  variables  `fgens',
 switch the `InfoACELevel' back to 3:
 
 \beginexample
-gap> SetInfoACELevel(3);                                       
+gap> SetInfoACELevel(3);
 gap> ACEStart(1, ACEGroupGenerators(1), ACERelators(1), [ a*b ]
 >             : messages := 1);
 #I  ***
@@ -846,7 +846,7 @@ the enumeration stage, we set the `InfoACELevel' to 4,  but  since  we
 don't really want to see messages this time we set `messages := 0'.
 
 \beginexample
-gap> SetInfoACELevel(4);                                       
+gap> SetInfoACELevel(4);
 gap> ACEStart(1, ACEGroupGenerators(1), ACERelators(1), [ a*b ]
 >             : messages := 0, lenlex);
 #I  ToACE> group:ab;
@@ -961,7 +961,7 @@ The general  algorithm  is  provided  by  the  `ACEEvenSims'  function
 following.
 
 \beginexample
-gap> ACEEvenSims := function(fgens, rels, sgens, i, maxstart, maxstep) 
+gap> ACEEvenSims := function(fgens, rels, sgens, i, maxstart, maxstep)
 >      local j;
 >      j := ACEStart(fgens, rels, sgens : sims := i, max := maxstart);
 >      while ACEStats(j).index = 0 do

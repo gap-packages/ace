@@ -193,7 +193,7 @@ example, no options are passed,  which  means  that  {\ACE}  uses  the
 gap> F:= FreeGroup( "a", "b", "c", "d", "e", "x", "y");;
 gap> a:= F.1;; b:= F.2;; c:= F.3;; d:= F.4;; e:= F.5;; x:= F.6;; y:= F.7;;
 gap> fgens:= [a, b, c, d, e, x, y,];;
-gap> rels:= [ a*b*c^-1, b*c*d^-1, c*d*e^-1, d*e*x^-1, 
+gap> rels:= [ a*b*c^-1, b*c*d^-1, c*d*e^-1, d*e*x^-1,
 >             e*x*y^-1, x*y*a^-1, y*a*b^-1];;
 gap> ACECosetTable(fgens, rels, [c]);;
 \endexample
@@ -220,7 +220,7 @@ to fail to complete, putting us in a `break'-loop.
 
 \atindex{ACECosetTable}{@\noexpand`ACECosetTable'!\noexpand`break'-loop example}
 \beginexample
-gap> ACECosetTable(fgens, rels, [c] : max := 2);  
+gap> ACECosetTable(fgens, rels, [c] : max := 2);
 Error, no coset table ...
  the `ACE' coset enumeration failed with the result:
  OVERFLOW (a=2 r=1 h=1 n=3; l=5 c=0.00; m=2 t=2)

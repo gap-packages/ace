@@ -313,7 +313,7 @@ turn messaging on (but to be fairly infrequent) by setting  `messages'
 to a large positive value as follows:
 
 \beginexample
-gap> ACECosetTable(fgens, rels, [c] 
+gap> ACECosetTable(fgens, rels, [c]
 >                  : echo, hard, Wo := 10^7, mess := 10000);;
 \endexample
 
@@ -718,8 +718,8 @@ as a field of `ACEParameterOptions'. The  complete  list  of  ``{\ACE}
 Parameter Options'' may be obtained by
 
 \beginexample
-gap> Concatenation( List(RecNames(ACEParameterOptions),                    
->                        optname -> ACEOptionData(optname).synonyms) ); 
+gap> Concatenation( List(RecNames(ACEParameterOptions),
+>                        optname -> ACEOptionData(optname).synonyms) );
 [ "asis", "ct", "cfactor", "compaction", "dmode", "dsize", "enumeration", 
   "fill", "ffactor", "hole", "lookahead", "loop", "max", "mendelsohn", 
   "messages", "monitor", "no", "path", "pmode", "psize", "rt", "rfactor", 

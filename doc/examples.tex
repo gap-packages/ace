@@ -538,7 +538,7 @@ little   scary   to   the   unitiated)   we   will    set    `OnBreak'
 
 \beginexample
 gap> NormalOnBreak := OnBreak;; # Save the old value to restore it later
-gap> OnBreak := function() Where(0); end;;                              
+gap> OnBreak := function() Where(0); end;;
 \endexample
 
 Note that there are  some  ``user-input''  comments  inserted  at  the
@@ -601,11 +601,11 @@ Entering break read-eval-print loop ...
  (i.e. pass options after the ':' in the usual way)
  ... and then, type: 'return;' to continue.
  Otherwise, type: 'quit;' to quit to outer loop.
-brk> # Let's give ACE enough coset numbers to work with ...                    
-brk> # and while we're at it see the effect of 'echo := 2' :                   
-brk> SetACEOptions(: max := 0, echo := 2);                                     
-brk> # Let's check what the options are now:                                   
-brk> DisplayACEOptions();                                                      
+brk> # Let's give ACE enough coset numbers to work with ...
+brk> # and while we're at it see the effect of 'echo := 2' :
+brk> SetACEOptions(: max := 0, echo := 2);
+brk> # Let's check what the options are now:
+brk> DisplayACEOptions();
 rec(
   enum := "F(2,7), aka C_29",
   wo := "2M",
@@ -617,8 +617,8 @@ rec(
   max := 0,
   echo := 2 )
 
-brk> # That's ok ... so now we 'return;' to escape the break-loop              
-brk> return;                                                                   
+brk> # That's ok ... so now we 'return;' to escape the break-loop
+brk> return;
 ACECosetTableFromGensAndRels called with the following arguments:
  Group generators : [ a, b, c, d, e, x, y ]
  Group relators : [ a*b*c^-1, b*c*d^-1, c*d*e^-1, d*e*x^-1, e*x*y^-1, 
@@ -759,7 +759,7 @@ minimum of the deficiencies of all finite presentations of $G$.
 Let us now invoke `ACEReadResearchExample' with no arguments:
 
 \beginexample
-gap> ACEReadResearchExample();                                 
+gap> ACEReadResearchExample();
 #I  The following are now defined:
 #I  
 #I  Functions:
@@ -1140,7 +1140,7 @@ gap> ?Using ACEReadResearchExample
 %`"doGrp.g"'.
 %
 %\beginexample
-%gap> ACEReadResearchExample("doGrp.g"                       
+%gap> ACEReadResearchExample("doGrp.g"
 %>                           : grp := "L2_8", newgens := [a^3*b, a^2*b],
 %>                             head := x*y*x*y*x*y^-1*x*y*x*y);
 %# IsACEResExampleOK() sets ACEResExample.grp     from options grp, n
