@@ -35,8 +35,8 @@ Notes
 3. Try altering the ACE function used, by calling  ACEExample  with  a
    2nd argument; choose from: ACECosetTableFromGensAndRels  (default),
    or ACEStats, or ACEStart. The 2nd argument is *not* quoted.
-4. Try `SetInfoACELevel(2);' before calling  ACEExample,  to  see  the
+4. Try `SetInfoACELevel(3);' before calling  ACEExample,  to  see  the
    effect of setting the "mess" (= "messages") option.
 5. To suppress a long output, use a double semicolon (`;;') after  the
    ACEExample command.
-6. Also, try `SetInfoACELevel(1);' before calling ACEExample.
+6. Also, try `SetInfoACELevel(2);' before calling ACEExample.
