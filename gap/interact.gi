@@ -1580,15 +1580,13 @@ local ioIndex, stream;
   if ioIndex = fail then 
     # Fire up a new stream ... which we'll close when we're finished
     stream := InputOutputLocalProcess( ACEData.tmpdir, ACEData.binary, [] );
-    # Purge ACE banner
-    FLUSH_ACE_STREAM_UNTIL(stream, 3, 3, READ_ALL_LINE, line -> line = fail);
   else
     # Use interactive ACE process: ioIndex
     stream := ACEData.io[ ioIndex ].stream;
   fi;
   READ_ACE_ERRORS(stream); # purge any output not yet collected
                            # e.g. error messages due to unknown options
-  Info(InfoACE, 1, "ACE ", ACEData.version);
+  Info(InfoACE, 1, "ACE Version: ", ACEData.version);
   WRITE_LIST_TO_ACE_STREAM(stream, [ "options;" ]);
   FLUSH_ACE_STREAM_UNTIL(stream, 1, 1, READ_NEXT_LINE,
                          line -> line{[1..13]} = "  host info =");
@@ -2152,7 +2150,8 @@ end);
 ##
 InstallGlobalFunction(ACECosetTable, function(arg)
 local ioIndex, ACEout, iostream, datarec, fgens, standard, incomplete,
-      cosettable, ACEOnBreak, NormalOnBreak, SetACEOptions, DisplayACEOptions;
+      cosettable, ACEOnBreak, NormalOnBreak, ACEOnBreakMessage, 
+      NormalOnBreakMessage, SetACEOptions, DisplayACEOptions;
 
   if Length(arg) = 2 or Length(arg) > 3 then
     Error("expected 0, 1 or 3 arguments ... not ", Length(arg), " arguments\n");
@@ -2187,23 +2186,42 @@ local ioIndex, ACEout, iostream, datarec, fgens, standard, incomplete,
     # Called non-interactively
 
     NormalOnBreak := OnBreak;
-    ACEOnBreak := function()
-      local s;
+    if IsFunction(OnBreakMessage) then
+      ACEOnBreak := function()
+        Where(0);
+        OnBreak := NormalOnBreak;
+      end;
+      NormalOnBreakMessage := OnBreakMessage;
+      ACEOnBreakMessage := function()
+        Print( " try relaxing any restrictive options.\n",
+               " Type: 'DisplayACEOptions();' to see current ACE options;\n",
+               " type: 'SetACEOptions(:<option1> := <value1>, ...);'\n",
+               " to set <option1> to <value1> etc.\n",
+               " (i.e. pass options after the ':' in the usual way)\n",
+               " ... and then, type: 'return;' to continue.\n",
+               " Otherwise, type: 'quit;' to quit the enumeration.\n" );
+        OnBreakMessage := NormalOnBreakMessage;
+      end;
+    else
+      NormalOnBreak := OnBreak;
+      ACEOnBreak := function()
+        local s;
 
-      for s in [ "The `ACE' coset enumeration failed with the result:",
-                 ACEData.enumResult,
-                 "Try relaxing any restrictive options:",
-                 "type: 'DisplayACEOptions();' to see current ACE options;",
-                 "type: 'SetACEOptions(:<option1> := <value1>, ...);'",
-                 "to set <option1> to <value1> etc.",
-                 "(i.e. pass options after the ':' in the usual way)",
-                 "... and then, type: 'return;' to continue.",
-                 "Otherwise, type: 'quit;' to quit the enumeration."]
-      do
-        Info(InfoACE + InfoWarning, 1, s);
-      od;
-      OnBreak := NormalOnBreak;
-    end;
+        for s in [ "The `ACE' coset enumeration failed with the result:",
+                   ACEData.enumResult,
+                   "Try relaxing any restrictive options:",
+                   "type: 'DisplayACEOptions();' to see current ACE options;",
+                   "type: 'SetACEOptions(:<option1> := <value1>, ...);'",
+                   "to set <option1> to <value1> etc.",
+                   "(i.e. pass options after the ':' in the usual way)",
+                   "... and then, type: 'return;' to continue.",
+                   "Otherwise, type: 'quit;' to quit the enumeration."]
+        do
+          Info(InfoACE + InfoWarning, 1, s);
+        od;
+        OnBreak := NormalOnBreak;
+      end;
+    fi;
 
     SetACEOptions := function()
       if not IsEmpty(OptionsStack) and 
@@ -2246,7 +2264,14 @@ local ioIndex, ACEout, iostream, datarec, fgens, standard, incomplete,
             PopOptions();
           fi;
           OnBreak := ACEOnBreak;
-          Error("no coset table ...\n");
+          if IsFunction(OnBreakMessage) then
+            OnBreakMessage := ACEOnBreakMessage;
+            Error("no coset table ...\n",
+                  " the `ACE' coset enumeration failed with the result:\n",
+                  " ", ACEData.enumResult, "\n");
+          else
+            Error("no coset table ...\n");
+          fi;
           if ACEData.options <> rec() then
             PushOptions(ACEData.options);
             Unbind(ACEData.options);

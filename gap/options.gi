@@ -887,8 +887,13 @@ local IsValidOptionValue, CheckValidOption, ProcessOption,
       if opt.ignore then
         Print(" ", opt.name, " := ", opt.value, " (ignored)\n");
       elif opt.fullname in RecNames(ACE_OPT_ACTIONS) then
-        Print(" ", opt.name, " := ", opt.value, 
-              " (", ACE_OPT_ACTIONS.(opt.fullname), ")\n");
+        Print(" ", opt.name);
+        if val = "" then
+          Print(" (no value, ");
+        else
+          Print(" := ", opt.value, " (");
+        fi;
+        Print( ACE_OPT_ACTIONS.(opt.fullname), ")\n" );
       elif opt.fullname in NonACEbinOptions then
         Print(" ", opt.name, " := ", opt.value, " (not passed to ACE)\n");
       elif val = "" then

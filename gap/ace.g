@@ -70,6 +70,15 @@ Info(InfoWarning,1,"                 ACE binary version: ", ACEData.version);
 
 #############################################################################
 ####
+##  For backward compatibility with  GAP  4.2  we  ensure  OnBreakMessage  is
+##  defined, but with a non-function definition.
+##
+if not( "OnBreakMessage" in NamesGVars() ) then
+  OnBreakMessage := "";
+fi;
+
+#############################################################################
+####
 ##  Ensure no zombie ACE processes from interactive (ACEStart)  sessions  are 
 ##  . . . . .  . . . . . . . . . . . .  left lying around when user quits GAP
 ##
