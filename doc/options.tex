@@ -31,17 +31,17 @@ Section~"Loading the ACE Share Package"), by typing
 \beginexample
 gap> RecNames(KnownACEOptions);
 [ "aceinfile", "aceignore", "aceignoreunknown", "acenowarnings", "aceecho", 
-  "aceincomment", "aceexampleoptions", "silent", "sg", "rl", "aep", "ai", 
-  "ao", "aceoutfile", "asis", "begin", "start", "bye", "exit", "qui", "cc", 
-  "cfactor", "ct", "check", "redo", "compaction", "continue", "cycles", 
-  "dmode", "dsize", "default", "ds", "dr", "dump", "easy", "echo", 
-  "enumeration", "felsch", "ffactor", "fill", "group", "generators", 
-  "relators", "hard", "help", "hlt", "hole", "lookahead", "loop", "max", 
-  "mendelsohn", "messages", "monitor", "mode", "nc", "normal", "no", 
-  "options", "oo", "order", "path", "pmode", "psize", "sr", "print", "purec", 
-  "purer", "rc", "recover", "contiguous", "rep", "rfactor", "rt", "row", 
-  "sc", "stabilising", "sims", "standard", "statistics", "stats", "style", 
-  "subgroup", "system", "text", "time", "tw", "trace", "workspace" ]
+  "aceincomment", "aceexampleoptions", "silent", "lenlex", "incomplete", 
+  "sg", "rl", "aep", "ai", "ao", "aceoutfile", "asis", "begin", "start", 
+  "bye", "exit", "qui", "cc", "cfactor", "ct", "check", "redo", "compaction", 
+  "continue", "cycles", "dmode", "dsize", "default", "ds", "dr", "dump", 
+  "easy", "echo", "enumeration", "felsch", "ffactor", "fill", "group", 
+  "generators", "relators", "hard", "help", "hlt", "hole", "lookahead", 
+  "loop", "max", "mendelsohn", "messages", "monitor", "mode", "nc", "normal", 
+  "no", "options", "oo", "order", "path", "pmode", "psize", "sr", "print", 
+  "purec", "purer", "rc", "recover", "contiguous", "rep", "rfactor", "rt", 
+  "row", "sc", "stabilising", "sims", "standard", "statistics", "stats", 
+  "style", "subgroup", "system", "text", "time", "tw", "trace", "workspace" ]
 \endexample
 
 (See Section~"The KnownACEOptions Record".) Also, from within a {\GAP}
@@ -487,7 +487,8 @@ interface to  {\GAP},  unless  the  option  `silent'  or  `incomplete'
 (see~"option incomplete") has been set; in the former case, `fail'  is
 returned.  This  option  is  included  to  make   the   behaviour   of
 `ACECosetTableFromGensAndRels' compatible with that  of  the  function
-`CosetTableFromGensAndRels' it replaces.
+`CosetTableFromGensAndRels' it replaces. If the option `incomplete' is
+also set, it overrides option `silent'.
 
 \>`lenlex'{option lenlex}@{option `lenlex'}& 
 Standardises coset numbering according to the `lenlex' scheme.
@@ -505,7 +506,9 @@ derived from defining `x \< X \< y \< Y \< a \< A \< b \< B'.
 
 *Note:*
 {\GAP}'s standardisation scheme is similar to `lenlex', but  does  not
-use generator inverses.
+use  generator   inverses.   For   a   longer   discussion   of   both
+standardisation  schemes  see  Section~"Coset  Table   Standardisation
+Schemes".
 
 \>`incomplete'{option incomplete}@{option `incomplete'}& 
 Allows the return  of  an  `incomplete'  coset  table,  when  a  coset
@@ -515,7 +518,12 @@ If a coset  enumeration  that  invokes  `ACECosetTableFromGensAndRels'
 does not finish within the preset limits, an error is  raised  by  the
 interface to {\GAP}, unless the option `silent' (see~"option  silent")
 or `incomplete' has been set; in the  latter  case,  a  partial  coset
-table, that is a valid {\GAP} list of lists, is returned.
+table, that is a valid {\GAP} list  of  lists,  is  returned.  If  the
+option `silent' is also set, `incomplete'  prevails.  When  a  partial
+table is returned, a warning is emitted at `InfoACE' or  `InfoWarning'
+level 1; the partial table is then returned unstandardised unless  the
+`lenlex' option (see~"option lenlex") is also set, with zeros at  each
+position of the table without a valid coset number entry.
 
 \>`aceinfile:=<filename>'{option aceinfile}@{option `aceinfile'}&
 Creates an {\ACE} input file <filename> for use with  the  standalone,

@@ -56,6 +56,7 @@ kill' if these hints are unhelpful).
 \>ACEStart( <fgens>, <rels>, <sgens> [:<options>] ) F
 \>ACEStart( <i> [:<options>] ) F
 \>ACEStart( [:<options>] ) F
+\label{ACEStartDetails}
 
 The first form of `ACEStart' (on the  one  argument:  0)  is  used  to
 initiate an interactive {\ACE} process, but does  nothing  more.  This
@@ -121,6 +122,7 @@ interactive {\ACE} interface function should be applied to.
 
 \>ACEQuit( <i> ) F
 \>ACEQuit() F
+\label{ACEQuitDetails}
 
 terminate an interactive {\ACE} process,  where  <i>  is  the  integer
 returned by `ACEStart' when the process was  started.  If  the  second
@@ -714,10 +716,10 @@ gap> SetACEOptions( : hlt);
 *Notes:*
 
 When `ACECosetTableFromGensAndRels' enters a  `break'-loop{\undoquotes
-\atindex {break-loop} {@`break'-loop}} local versions  of  the  second
-form  of  each  of  `DisplayACEOptions'  and  `SetACEOptions'   become
-available. (Even though the names are similar and  their  function  is
-analogous they are in fact different functions.)
+\atindex {break-loop} {@`break'-loop}} (see~"ACECosetTableNI"),  local
+versions of  the  second  form  of  each  of  `DisplayACEOptions'  and
+`SetACEOptions' become available. (Even though the names  are  similar
+and their function is analogous they are in fact different functions.)
 
 \>ACEParameters( <i> ) F
 \>ACEParameters() F
@@ -989,25 +991,27 @@ call that invokes {\ACE}'s compaction routine (see~"ACERecover" note).
 
 \>ACECosetTable( <i> [:<options>] ) F
 \>ACECosetTable( [:<options>] ) F
+\label{ACECosetTableI}
 
 return a coset table  as  a  {\GAP}  object,  in  standard  form  (for
 {\GAP}).   These   functions   perform   the    same    function    as
-`ACECosetTableFromGensAndRels' and `ACECosetTable' on three arguments,
-albeit interactively, on the <i>th (or  default)  process  started  by
-`ACEStart'.  If  options  are  passed  then  an  internal  version  of
-`ACEModes'  is  run   to   determine   which   of   the   modes   (see
-Section~"General  and  Experimentation  ACE   Modes")   `ACEContinue',
+`ACECosetTableFromGensAndRels' and `ACECosetTable' on three  arguments
+(see~"ACECosetTableNI"),  albeit  interactively,  on  the  <i>th   (or
+default) process started by `ACEStart'. If options are passed then  an
+internal version of `ACEModes' is run to determine which of the  modes
+(see Section~"General and Experimentation ACE  Modes")  `ACEContinue',
 `ACERedo' or `ACEStart' is possible; and (an internal version of)  the
 first mode of these  that  is  allowed  is  executed,  to  ensure  the
 resultant table is correct for the current options.
 
 \>ACEStats( <i> [:<options>] ) F
 \>ACEStats( [:<options>] ) F
+\label{ACEStatsI}
 
-perform the same function as `ACEStats'  on  three  arguments,  albeit
-interactively,  on  the  <i>th  (or  default)   process   started   by
-`ACEStart'.  If  options  are  passed  then  an  internal  version  of
-`ACEModes'  is  run   to   determine   which   of   the   modes   (see
+perform  the  same  function  as   `ACEStats'   on   three   arguments
+(see~"ACEStatsNI"), albeit interactively, on the  <i>th  (or  default)
+process started by `ACEStart'. If options are passed then an  internal
+version of `ACEModes' is run to determine  which  of  the  modes  (see
 Section~"General  and  Experimentation  ACE   Modes")   `ACEContinue',
 `ACERedo' or `ACEStart' is possible; and (an internal version of)  the
 first mode of these  that  is  allowed  is  executed,  to  ensure  the
@@ -1016,6 +1020,20 @@ resultant statistics are correct for the current options.
 See Section~"Example of Using ACE Interactively (Using ACEStart)"  for
 an example demonstrating both these functions  within  an  interactive
 process.
+
+\>IsACEGeneratorsInPreferredOrder( <i> ) F
+\>IsACEGeneratorsInPreferredOrder() F
+\label{IsACEGeneratorsInPreferredOrderI}
+
+for the <i>th (or  default)  interactive  {\ACE}  process  started  by
+`ACEStart', return `true' if the group generators of that process, are
+in the order preferred by {\ACE} (i.e.~the first two  generators  will
+not be swapped in {\ACE}'s coset table), and `false'  otherwise.  This
+function has greatest relevance  to  users  who  call  `ACECosetTable'
+(see~"ACECosetTableI"),  with   the   `lenlex'   option   (see~"option
+lenlex"). See  the  discussion  for  the  non-interactive  version  of
+`IsACEGeneratorsInPreferredOrder' ("IsACEGeneratorsInPreferredOrderNI"),
+which is called with two arguments, for details.
 
 \enditems
 
@@ -1027,7 +1045,7 @@ process.
 \>ACERecover( <i> ) F
 \>ACERecover() F
 
-invokes on the coset table, of  the  <i>th  (or  default)  interactive
+invoke on the coset table,  of  the  <i>th  (or  default)  interactive
 {\ACE} process  started  by  `ACEStart',  the  compaction  routine  to
 recover the space used by  the  dead  coset  numbers\index{dead  coset
 (number)}. A `CO' message line is printed if any  rows  of  the  coset
@@ -1049,26 +1067,57 @@ The  compaction  routine  is  called   automatically   when   any   of
 \>ACEStandardCosetNumbering( <i> ) F
 \>ACEStandardCosetNumbering() F
 
-compacts and then standardises the numbering of cosets  in  the  coset
-table of the <i>th (or default) interactive {\ACE} process started  by
-`ACEStart'.  This  function  does  not  display  the  new  table;  use
-`ACEDisplayCosetTable' (see~"ACEDisplayCosetTable") for that. That is,
-for a given ordering of the generators in the columns of the table, it
-produces a canonic table.  Such  a  table  has  the  property  that  a
-row-major scan (i.e.~a scan of the successive rows of  the  *body*  of
-the table row by row, from left to right) encounters previously unseen
-cosets in numeric order.
+compact   and   then   does   a    `lenlex'{\undoquotes\atindex{lenlex
+standardisation   scheme}    {@`lenlex'    standardisation    scheme}}
+standardisation (see Section~"Coset Table Standardisation Schemes") of
+the numbering of cosets in the coset table of the <i>th  (or  default)
+interactive {\ACE} process started by `ACEStart'. That is, for a given
+ordering of the generators in the columns of the table, it produces  a
+canonic table. A table that  includes  a  column  for  each  generator
+inverse  immediately  following  the  column  for  the   corresponding
+generator, standardised according to  the  `lenlex'  scheme,  has  the
+property that a row-major scan (i.e.~a scan of the successive rows  of
+the *body* of the table row by row, from  left  to  right)  encounters
+previously unseen cosets in numeric  order.  This  function  does  not
+display     the     new     table;     use      `ACEDisplayCosetTable'
+(see~"ACEDisplayCosetTable") for that.
 
 *Notes:*
-In a canonic  table,  the  coset  representatives  are  ordered  first
-according to length and then the lexicographic order  defined  by  the
-order the generators and their inverses head the columns.  Note  that,
-since {\ACE} avoids having an involutory generator in the first column
-when it can, this lexicographic order does not necessarily  correspond
-with the order in which the generators were first put to  {\ACE}.  Two
-tables are equivalent only if their canonic forms are the same.  Also,
-standardising the coset numbering within {\ACE} does *not* affect  the
-{\GAP} coset table obtained via `ACECosetTable'.
+In a `lenlex' canonic table, the  coset  representatives  are  ordered
+first according to length and then the lexicographic order defined  by
+the order the generators and their inverses  head  the  columns.  Note
+that,  unless  special  action  is  taken,  {\ACE}  avoids  having  an
+involutory generator in the first column (by swapping  the  first  two
+generators), except when there is only  one  generator,  or  when  the
+second generator is also an involution;  so  the  lexicographic  order
+used by {\ACE} need not necessarily correspond with the order in which
+the generators were first put  to  {\ACE}.  (We  have  used  the  term
+\lq{}involution' above; what we really mean is  a  generator  `x'  for
+which there is a relator `x*x' or `x^2'.  Such  a  generator  may,  of
+course,  turn  out  to  actually  be  the  identity.)   The   function
+`IsACEGeneratorsInPreferredOrder'                                 (see
+"IsACEGeneratorsInPreferredOrder") detects  cases  when  {\ACE}  would
+swap the first two generators.
+
+Standardising the coset numbering within {\ACE} does *not* affect  the
+{\GAP} coset table obtained via `ACECosetTable' (see~"ACECosetTable").
+If `ACECosetTable' is called  without  the  `lenlex'  option  {\GAP}'s
+default  standardisation  is  applied  after  conversion  of  {\ACE}'s
+output, which undoes an {\ACE} standardisation. On the other hand,  if
+`ACECosetTable' is called with the `lenlex' option then after a  check
+and  special  action,  if  required,  the  equivalent  of  a  call  to
+`ACEStandardCosetNumbering' is invoked, irrespective of whether it has
+been done by the user beforehand. The check that is done is a call  to
+`IsACEGeneratorsInPreferredOrder'                                 (see
+"IsACEGeneratorsInPreferredOrder")  to  ensure  that  {\ACE}  has  not
+swapped the first two generators. The special action  taken  when  the
+call to  `IsACEGeneratorsInPreferredOrder'  returns  `false',  is  the
+setting of  the  `asis'  option  (see~"option  asis")  to  1  and  the
+resubmission of the relators to {\ACE} taking care not to  submit  the
+relator that determines the first generator as an involution  as  that
+generator squared (these two actions together avert {\ACE}'s  swapping
+of the first two generators), followed by  the  re-`start'ing  of  the
+enumeration.
 
 *Guru Notes:*
 In  half  of  the  ten  standard  enumeration   strategies   of   Sims

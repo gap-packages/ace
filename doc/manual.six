@@ -4,6 +4,11 @@ S 1.2. Using ACE Directly to Generate a Coset Table
 F 1.2. ACECosetTableFromGensAndRels
 F 1.2. ACECosetTable
 I 1.2. break-loop
+F 1.2. IsACEStandardCosetTable
+F 1.2. IsACEStandardCosetTable
+I 1.2. lenlex standardisation scheme
+I 1.2. lenlex standardisation scheme
+F 1.2. IsACEGeneratorsInPreferredOrder
 S 1.3. Using ACE Directly to Test whether a Coset Enumeration Terminates
 F 1.3. ACEStats
 S 1.4. Writing ACE Standalone Input Files to Generate a Coset Table
@@ -271,12 +276,15 @@ F 6.6. ACECosetTable
 F 6.6. ACECosetTable
 F 6.6. ACEStats
 F 6.6. ACEStats
+F 6.6. IsACEGeneratorsInPreferredOrder
+F 6.6. IsACEGeneratorsInPreferredOrder
 S 6.7. Steering ACE Interactively
 F 6.7. ACERecover
 F 6.7. ACERecover
 I 6.7. dead coset (number)
 F 6.7. ACEStandardCosetNumbering
 F 6.7. ACEStandardCosetNumbering
+I 6.7. lenlex standardisation scheme
 F 6.7. ACEAddRelators
 F 6.7. ACEAddRelators
 F 6.7. ACEAddSubgroupGenerators
