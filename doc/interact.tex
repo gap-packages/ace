@@ -1,7 +1,6 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
-%W  interact.tex   ACE documentation - interactive fns   Alexander Hulpke
-%W                                                      Joachim Neub"user
+%W  interact.tex   ACE documentation - interactive fns  Joachim Neub"user
 %W                                                            Greg Gamble
 %%
 %H  $Id$
@@ -1292,6 +1291,81 @@ though the subgroup is *not* normally closed within the group.
 The `add' option does *not* guarantee that the resultant  subgroup  is
 normally closed. It is still possible  that  some  conjugates  of  the
 newly added subgroup generators will not be elements of the subgroup.
+
+*Example:*
+To      demonstrate      the      usage      and      features      of
+`ACEConjugatesForSubgroupNormalClosure', let us  consider  an  example
+where we know pretty well what to expect.
+
+Let $G$ be the group, isomorphic to the symmetric  group  $S_6$,  with
+the presentation
+$$\{ a, b \mid a^2, b^6, (ab^{-1}ab)^3, (ab^{-1}ab^2)^4,
+               (ab)^5, (ab^-2ab^2)^2 \}$$ 
+(from  \cite{CM72}),  and  let  $H$  be  the  subgroup  $\langle  ab^3
+\rangle$. There is an isomorphism $\phi$ from $G$ to $S_6$ mapping $a$
+onto $(1,2)$ and $ab^3$ onto $(1,2,3,4,5,6)$. It follows  that  $\phi$
+maps $ab^3$ into $A_6$. So we know that the normal closure of $H$  has
+index 2 in $G$. Let us observe this via {\ACE}.
+
+First we start an enumeration with `max' set to 80.
+
+\beginexample
+gap> F := FreeGroup( "a", "b" );;
+gap> a := F.1;; b := F.2;;
+gap> fgens := GeneratorsOfGroup( F );;
+gap> rels := [ a^2, b^6, (a*b^-1*a*b)^3, (a*b^-1*a*b^2)^4, (a*b)^5,
+>              (a*b^-2*a*b^2)^2 ];; 
+gap> sgens := [ a*b^3 ];;
+gap> i := ACEStart( fgens, rels, sgens : max := 80 );;
+gap> IsCompleteACECosetTable( i );
+false
+gap> ACEConjugatesForSubgroupNormalClosure( i : add );
+#I  ACEConjugatesForSubgroupNormalClosure: All (traceable) conjugates in subgp
+[  ]
+\endexample
+
+Though we know that $H$ is not equal to its normal closure, we did not
+get a normalising element (we had warned above of such a possibility).
+Apparently our incomplete table is too small. So let us increase `max'
+to 100 and continue.
+
+\beginexample
+gap> ACEContinue( i : max := 100 );;
+gap> IsCompleteACECosetTable( i );
+false
+gap> ACEConjugatesForSubgroupNormalClosure( i : add );
+[ b^-1*a*b^4 ]
+gap> IsCompleteACECosetTable( i );
+true
+gap> ACEStats( i ).index;
+20
+\endexample
+
+This time we got a normalising element, and after  adding  it  to  the
+subgroup  generators  we  obtained  a  complete  table.  However   the
+resulting subgroup need not yet be the normal closure of $H$  (and  in
+fact we know that it is not). So we continue with another call to  the
+function `ACEConjugatesForSubgroupNormalClosure'.
+
+\beginexample
+gap> ACEConjugatesForSubgroupNormalClosure( i : add );
+[ b^-2*a*b^5, b*a*b^2 ]
+gap> ACEStats( i ).index;
+2
+\endexample
+
+Now we have the index that we expected. Another call to  the  function
+`ACEConjugatesForSubgroupNormalClosure'  should  not  yield  any  more
+conjugates. We ensure that this is indeed the case  and  then  display
+the resulting list of subgroup generators.
+
+\beginexample
+gap> ACEConjugatesForSubgroupNormalClosure( i : add );
+#I  ACEConjugatesForSubgroupNormalClosure: All (traceable) conjugates in subgp
+[  ]
+gap> ACESubgroupGenerators( i );
+[ a*b^3, b*a*b^2, b^-1*a*b^4, b^-2*a*b^5 ]
+\endexample
 
 \enditems
 
