@@ -1,0 +1,58 @@
+ACE 3.000        Fri May 14 15:20:25 1999
+=========================================
+Host information:
+  name = flute
+
+  #-- ACE 3.000: Run Parameters ---
+Group Name: G;
+Group Relators: rrTRt, ssRSr, ttSTs;
+Subgroup Name: H;
+Subgroup Generators: ;
+  #--------------------------------
+** Sims:1 (cf. 1502/1550) ...
+INDEX = 1 (a=1 r=2 h=2 n=2; l=3 c=0.01; m=1502 t=1550)
+** Sims:3 (cf. 673/673) ...
+INDEX = 1 (a=1 r=2 h=2 n=2; l=3 c=0.01; m=673 t=673)
+** Sims:5 (cf. 1808/1864) ...
+INDEX = 1 (a=1 r=2 h=2 n=2; l=3 c=0.01; m=1603 t=1603)
+** Sims:7 (cf. 620/620) ...
+INDEX = 1 (a=1 r=2 h=2 n=2; l=3 c=0.01; m=615 t=615)
+** Sims:9 (cf. 588/588) ...
+INDEX = 1 (a=1 r=2 h=2 n=2; l=4 c=0.01; m=588 t=588)
+
+  #-- ACE 3.000: Run Parameters ---
+Group Name: G;
+Group Relators: XX, YYY, YXYXYXYXYXYXYX, yXYXyXYXyXYXyXYXyXYXyXYXyXYXyXYX;
+Subgroup Name: H;
+Subgroup Generators: ;
+  #--------------------------------
+** Sims:1 (cf. 87254/128562) ...
+INDEX = 10752 (a=10752 r=128563 h=1 n=128563; l=27 c=1.00; m=87254 t=128562)
+** Sims:3 (cf. 31678/32320) ...
+INDEX = 10752 (a=10752 r=8005 h=32321 n=32321; l=10 c=0.81; m=31678 t=32320)
+** Sims:5 (cf. 99632/178620) ...
+INDEX = 10752 (a=10752 r=168547 h=1 n=168547; l=24 c=1.50; m=96952 t=168546)
+** Sims:7 (cf. 30108/31365) ...
+INDEX = 10752 (a=10752 r=5738 h=31673 n=31673; l=8 c=0.90; m=30420 t=31672)
+** Sims:9 (cf. 39745/39745) ...
+INDEX = 10752 (a=10752 r=1 h=39746 n=39746; l=43 c=1.37; m=39745 t=39745)
+
+  #-- ACE 3.000: Run Parameters ---
+Group Name: G;
+Group Relators: AAAAAAAA, BBBBBBB, BABA, BaBaBa;
+Subgroup Name: H;
+Subgroup Generators: AA, Ba;
+  #--------------------------------
+** Sims:1 (cf. 2174/2635) ...
+INDEX = 448 (a=448 r=2636 h=1 n=2636; l=4 c=0.02; m=2174 t=2635)
+** Sims:3 (cf. 1199/1212) ...
+INDEX = 448 (a=448 r=576 h=1213 n=1213; l=3 c=0.02; m=1199 t=1212)
+** Sims:5 (cf. 2213/2619) ...
+INDEX = 448 (a=448 r=2620 h=1 n=2620; l=4 c=0.03; m=2213 t=2619)
+** Sims:7 (cf. 1258/1284) ...
+INDEX = 448 (a=448 r=612 h=1285 n=1285; l=3 c=0.02; m=1258 t=1284)
+** Sims:9 (cf. 1302/1306) ...
+INDEX = 448 (a=448 r=1 h=1307 n=1307; l=5 c=0.02; m=1302 t=1306)
+
+=========================================
+ACE 3.000        Fri May 14 15:20:32 1999

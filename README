@@ -49,7 +49,7 @@ again, it is sufficient to call the `configure' script in the GAP home
 directory.
 
 For details on how to use the `ACE' package see the documentation in the
-`doc' subdirectory.
+`doc' subdirectory and the `ACE' user manual in the `acedoc' directory.
 
 The `src' subdirectory contains a copy of the original source of `ACE'. (The
 only modification is that a make-file was copied to `Makefile'.) You can

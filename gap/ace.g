@@ -209,6 +209,7 @@ local fgens,grels,fsgens,j,k,n,nums,i,DoWords,ParseValueOption,
   fi;
 
   if stats then 
+    CloseStream(infile);
     return statval;
   fi;
 

@@ -26,6 +26,6 @@ builddoc:
 	(cd doc;rm manual.{blg,lab,log,aux})
 
 otherdoc:
-	(cd acedoc;latex ace3001;bibtex ace3001;latex ace3001;dvips ace3001)
-	(cd acedoc;rm ace3001.{blg,log,aux})
+	(cd acedoc;latex aceuser;bibtex aceuser;latex aceuser;dvips aceuser)
+	(cd acedoc;rm aceuser.{blg,log,aux})
 

@@ -69,8 +69,8 @@ only modification is that a file `Makefile.in' was obtained from the different
 `make.xyz' and will be used to create a `Makefile'.)
 You can replace the source by a newer version before compiling.
 
-The subdirectory `acedoc' contains a version of the `ACE' manual
-\cite{aceman}. This
+The subdirectory `acedoc' contains the file `acedoc.ps' which holds a
+version of the `ACE' user manual (which forms part of \cite{aceman}). This
 manual describes the various possibilities to guide the enumeration process.
 If you are goind to call the `ACE' interface with options, it is recommended
 you consult this manual for a detailled description.
@@ -156,12 +156,11 @@ specific strategies to get the coset enumeration to finish successfully and
 quickly.
 
 All these options and their functionality are described in detail in the
-chapter on the interactive interface (``ACE Level 2'') of the manual of the
-`ACE' standalone~\cite{aceman}. 
+`ACE' user manual you can find in the `acedoc' subdirectory.
 
-This section therefore only lists how to pass the options from {\GAP}.
-We refer the reader to this manual for a
-description of these options and of general enumeration strategies.
+This section therefore only lists how to pass the options syntactically from
+{\GAP}. For a description of these options and of general enumeration
+strategies we refer the reader to this manual.
 
 Options are passed via the option mechanism of {\GAP} (see
 chapter~"ref:Options Stack" in the reference manual):
@@ -191,6 +190,9 @@ If the name and the function is exactly the same as for an `ACE' option, no
 further description is given here, see the `ACE' manual for details.
 
 *Options that Modify the Enumeration Process:*
+
+Except for the `number' option, all option names are the same as in the
+`ACE' standalone.
 
 \beginitems
 `asis'&
@@ -227,7 +229,7 @@ The `no' (number of relators in subgroup) parameter.
 Turns on mendelsohn processing.
 
 `norow'&
-The `row filling' parameter to 0.
+Set the `row filling' parameter to 0.
 
 \enditems
 
@@ -284,7 +286,7 @@ for interactive work. These features are not available via {\GAP}, however
 the option `outfile:=<filename>' will  keep the input file for `ACE'
 produced by the {\GAP} interface under the file name <filename> (and just
 return `fail') so that one could perform this interactive work in the
-standalone.
+standalone by hand.
 
 For compatibility with the coset enumerator built into {\GAP}
 (see~"ref:CosetTableFromGensAndRels" in the reference manual), also the
