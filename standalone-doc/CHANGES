@@ -11,6 +11,12 @@
 
 Changes to Stand-alone documentation:
 
+19 Mar, 2001 [ These changes by Greg Gamble ]:
+ * manual.bib, al2.tex : Reference HR99b has become HRO1. It has changed
+       from being a UQ Technical Report entitled `Experiments in coset
+       enumeration' to an Ohio State University ``Incollection'' entitled
+       `Groups and Computation III'.
+
 8 Mar, 2000 [ These changes by Greg Gamble ]:
 
  * The citation keys in each .tex file and the database were modified to
