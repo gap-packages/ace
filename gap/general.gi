@@ -35,7 +35,7 @@ InstallValue(ACETCENUM, rec(
 #F  InfoACELevel . . . . . . . . . . . . . . .  Get the InfoLevel for InfoACE
 ##
 ##
-InstallGlobalFunction("InfoACELevel", function()
+InstallGlobalFunction(InfoACELevel, function()
   return InfoLevel(InfoACE);
 end);
 
@@ -45,23 +45,34 @@ end);
 #F  SetInfoACELevel . . . . . . . . . . . . . . Set the InfoLevel for InfoACE
 ##
 ##
-InstallGlobalFunction("SetInfoACELevel", function(level)
+InstallGlobalFunction(SetInfoACELevel, function(level)
   SetInfoLevel(InfoACE, level);
 end);
 
 #############################################################################
 ####
 ##
-#F  CALL_ACE . . . . . . . . . Called by ACECosetTable, ACEStats and StartACE
+#F  CALL_ACE . . . . . . . . . Called by ACECosetTable, ACEStats and ACEStart
 ##
 ##
 InstallGlobalFunction(CALL_ACE, function(ACEfname, fgens, rels, sgens)
 local optnames, echo, n, infile, instream, outfile, ToACE, 
       IsLowercaseOneCharGen, acegens, ignored;
 
+  if ValueOption("aceexampleoptions") = true and
+     IsBound(ACEData.aceexampleoptions) then
+    SANITISE_ACE_OPTIONS(OptionsStack[ Length(OptionsStack) ],
+                         ACEData.aceexampleoptions);
+    PushOptions(ACEData.aceexampleoptions);
+    Unbind(ACEData.aceexampleoptions);
+    ACEData.options := OptionsStack[ Length(OptionsStack) ];
+    PopOptions();
+    OptionsStack[ Length(OptionsStack) ] := ACEData.options;
+    Unbind(ACEData.options);
+  fi;
   optnames := ACE_OPT_NAMES();
   # We have hijacked ACE's echo option ... we don't actually pass it to ACE
-  echo := VALUE_ACE_OPTION(optnames, 0, "echo");
+  echo := ACE_VALUE_ECHO(optnames);
 
   n := Length(fgens);
   if ForAny(fgens, i -> NumberSyllables(i)<>1 or ExponentSyllable(i, 1)<>1) then
@@ -75,8 +86,11 @@ local optnames, echo, n, infile, instream, outfile, ToACE,
     Print(" Subgroup generators : ", sgens, "\n");
   fi;
   
-  if ACEfname = "StartACE" then
+  if ACEfname = "ACEStart" then
     instream := InputOutputLocalProcess(ACEData.tmpdir, ACEData.binary, []);
+    FLUSH_ACE_STREAM_UNTIL(instream, 3, 3, READ_NEXT_LINE, 
+                           line -> line{[3..6]} = "name");
+    ToACE := function(list) INTERACT_TO_ACE_WITH_ERRCHK(instream, list); end;
   else 
     if ACEfname = "ACECosetTableFromGensAndRels" then
       # If option "aceinfile" is set we only want to produce an ACE input file
@@ -85,15 +99,10 @@ local optnames, echo, n, infile, instream, outfile, ToACE,
       infile := ACEData.infile; # If option "aceinfile" is set ... we ignore it
     fi;
     instream := OutputTextFile(infile, false);
+    ToACE := function(list) WRITE_LIST_TO_ACE_STREAM(instream, list); end;
   fi;
-  ToACE := function(list) WRITE_LIST_TO_STREAM(instream, list); end;
   outfile := VALUE_ACE_OPTION(optnames, ACEData.outfile, "aceoutfile");
 
-  # Give a name to the group ACE will be dealing with (this is not
-  # actually necessary ... ACE essentially treats it as a comment)
-  ToACE([ "Group Name: ", 
-          VALUE_ACE_OPTION(optnames, "G", "enumeration"), ";\n" ]);
-  
   IsLowercaseOneCharGen := function(g)
     local gstring;
     gstring := String(g);
@@ -101,7 +110,6 @@ local optnames, echo, n, infile, instream, outfile, ToACE,
   end;
 
   # Define the generators ACE will use
-  ToACE([ "Group Generators: " ]);
   if n <= 26 then
     # if #generators <= 26 tell ACE to use alphabetic generators: a ...
     if ForAll(fgens, g -> IsLowercaseOneCharGen(g)) then
@@ -110,50 +118,45 @@ local optnames, echo, n, infile, instream, outfile, ToACE,
     else
       acegens := List([1..n], i -> WordAlp(CHARS_LALPHA, i));
     fi;
-    ToACE( [ Flat([acegens, ";\n"]) ] );
+    ToACE( [ Flat([ "Group Generators: ", acegens, ";"]) ] );
   else
     # if #generators > 26 tell ACE to use numerical generators: 1 ...
-    ToACE([ n, ";\n" ]);
+    ToACE([ "Group Generators: ", n, ";" ]);
     acegens := List([1..n], i -> String(i));
   fi;
 
   # Define the group relators ACE will use
-  ToACE([ "Group Relators: ", ACE_WORDS(rels, fgens, acegens), ";\n" ]);
+  ToACE([ "Group Relators: ", ACE_WORDS(rels, fgens, acegens), ";" ]);
 
-  # Give a name to the subgroup ACE will be dealing with (this is not
-  # actually necessary ... ACE essentially treats it as a comment)
-  ToACE([ "Subgroup Name: ", 
-          VALUE_ACE_OPTION(optnames, "H", "subgroup"), ";\n" ]);
-  
   # Define the subgroup generators ACE will use
-  ToACE([ "Subgroup Generators: ", ACE_WORDS(sgens, fgens, acegens), ";\n" ]);
+  ToACE([ "Subgroup Generators: ", ACE_WORDS(sgens, fgens, acegens), ";" ]);
 
   if ACEfname  = "ACECosetTableFromGensAndRels" then
     ignored := [ ];
   else 
     ignored := [ "aceinfile" ];
   fi;
-  if ACEfname  = "StartACE" then
+  if ACEfname  = "ACEStart" then
     Add(ignored, "aceoutfile");
   fi;
 
   PROCESS_ACE_OPTIONS(
-      ACEfname, optnames, echo, ToACE, 
+      ACEfname, optnames, optnames, echo, ToACE, 
       rec(group      := ACE_ERRORS.argnotopt, # disallowed options
           generators := ACE_ERRORS.argnotopt,
           relators   := ACE_ERRORS.argnotopt), 
       ignored
       );
               
-  if ACEfname <> "StartACE" then
+  if ACEfname <> "ACEStart" then
     # Direct ACE output to outfile if called via
     # ACECosetTableFromGensAndRels or ACEStats
-    ToACE([ "Alter Output:", outfile, ";\n" ]);
-    ToACE([ "End;\n" ]); # (one of) the ACE directives that initiate
+    ToACE([ "Alter Output:", outfile, ";" ]);
+    ToACE([ "Start;" ]); # (one of) the ACE directives that initiate
                          # an enumeration
 
     if ACEfname = "ACECosetTableFromGensAndRels" then
-      ToACE([ "Print Table;\n" ]);
+      ToACE([ "Print Table;" ]);
     fi;
 
     if ACEfname = "ACEStats" or infile = ACEData.infile then
@@ -171,7 +174,7 @@ local optnames, echo, n, infile, instream, outfile, ToACE,
                silent := VALUE_ACE_OPTION(optnames, false, "silent"));
   elif ACEfname = "ACEStats" then
     return outfile;
-  else # ACEfname = "StartACE"
+  else # ACEfname = "ACEStart"
     Add(ACEData.io, 
         rec(args := rec(fgens := fgens, rels := rels, sgens := sgens),
             options := ACE_OPTIONS(),
@@ -227,7 +230,8 @@ end);
 ##  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . is displayed.
 ##
 InstallGlobalFunction(ACEExample, function(arg)
-    local name, infoACElevel, file, instream, line, ACEfunc;
+    local name, infoACElevel, file, instream, line, ACEfunc,
+          EnquoteIfString, optnames, lastoptname, optname;
 
     if IsEmpty(arg) then
       name := "index";
@@ -237,6 +241,11 @@ InstallGlobalFunction(ACEExample, function(arg)
         ACEfunc := arg[2];
       else
         ACEfunc := ACECosetTableFromGensAndRels;
+      fi;
+      if not IsEmpty(OptionsStack) then
+        ACEData.aceexampleoptions := OptionsStack[ Length(OptionsStack) ];
+        PopOptions();
+        PushOptions( rec(aceexampleoptions := true) );
       fi;
     fi;
     infoACElevel := InfoACELevel();
@@ -261,6 +270,36 @@ InstallGlobalFunction(ACEExample, function(arg)
       Info(InfoACE, 1, 
            CHOMP(ReplacedString(line, "return ACEfunc", NameFunction(ACEfunc)))
            );
+      if IsBound(ACEData.aceexampleoptions) then
+        line := FLUSH_ACE_STREAM_UNTIL( instream, 1, 3, ReadLine, 
+                                        line -> ForAny(
+                                                    [1..Length(line)],
+                                                    i -> line{[i..i+1]} = ");"
+                                                    ) );
+        Info(InfoACE, 1, CHOMP(ReplacedString(line, ");", ", ")));
+        Info(InfoACE, 1, "    # User Options");
+        optnames := ShallowCopy( RecNames(ACEData.aceexampleoptions) );
+        lastoptname := optnames[ Length(optnames) ];
+        Unbind(optnames[ Length(optnames) ]);
+
+        EnquoteIfString := function(optval)
+        # Puts quotes around optval if it's a string
+          if IsString(optval) then
+            return Concatenation(["\"", optval, "\""]);
+          else
+            return optval;
+          fi;
+        end;
+
+        for optname in optnames do
+          Info(InfoACE, 1, "      ", optname, " := ", 
+                           EnquoteIfString(
+                               ACEData.aceexampleoptions.(optname) ), ",");
+        od;
+        Info(InfoACE, 1, "      ", lastoptname, " := ", 
+                         EnquoteIfString(
+                             ACEData.aceexampleoptions.(lastoptname) ), ");");
+      fi;
     fi;
     FLUSH_ACE_STREAM_UNTIL( instream, 1, 3, ReadLine, line -> line = fail );
     SetInfoACELevel( infoACElevel );

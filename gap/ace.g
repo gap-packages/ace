@@ -27,7 +27,7 @@ Revision.ace_g :=
 ##
 ##    "binary"  . . the path of the ACE binary
 ##    "tmpdir"  . . the path of the temporary directory for ACE i/o files
-##    "io . . . . . list of data records for StartACE IO Streams
+##    "io . . . . . list of data records for ACEStart IO Streams
 ##    "infile"  . . the path of the ACE input file
 ##    "outfile" . . the path of the ACE output file
 ##    "banner"  . . the path of the file where ACE's banner is directed
@@ -35,7 +35,7 @@ Revision.ace_g :=
 ##
 ACEData := rec( binary := Filename(DirectoriesPackagePrograms("ace"), "ace"),
                 tmpdir := DirectoryTemporary(),
-                io := [] # Initially no StartACE IO Streams
+                io := [] # Initially no ACEStart IO Streams
               );
 ACEData.infile  := Filename(ACEData.tmpdir, "in"); 
 ACEData.outfile := Filename(ACEData.tmpdir, "out");
@@ -69,9 +69,9 @@ Info(InfoWarning,1,"                 ACE binary version: ", ACEData.version);
 
 #############################################################################
 ####
-##  Ensure no zombie ACE processes from interactive (StartACE)  sessions  are 
+##  Ensure no zombie ACE processes from interactive (ACEStart)  sessions  are 
 ##  . . . . .  . . . . . . . . . . . .  left lying around when user quits GAP
 ##
-InstallAtExit( QuitAllACE );
+InstallAtExit( ACEQuitAll );
 
 #E  ace.g . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ends here 

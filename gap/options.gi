@@ -64,8 +64,9 @@ InstallValue(KnownACEOptions, rec(
   aceignore := [5, x -> IsList(x) and ForAll(x, xi -> IsString(xi))],
   aceignoreunknown := [10, x -> IsList(x) and ForAll(x, xi -> IsString(xi))],
   acenowarnings := [6, [0,1]],
-  aceecho := [7, [0,1]],
+  aceecho := [7, [""]],
   aceincomment := [6, IsString],
+  aceexampleoptions := [17, [0,1]],
   silent := [6, [0,1]],
   sg := [2, x -> IsList(x) and ForAll(x, xi -> IsWord(xi)) ],
   rl := [2, x -> IsList(x) and ForAll(x, xi -> IsWord(xi)) ],
@@ -133,7 +134,7 @@ InstallValue(KnownACEOptions, rec(
   pmode := [4, [0..3]],
   psize := [4, x -> x = 0 or 
                     (IsInt(x) and IsEvenInt(x) and IsPrimePowerInt(x))],
-  sr := [2, [0,1]],
+  sr := [2, ["",0,1]],
   print := [2, x -> (IsList(x) and Length(x) <= 3 and
                     ForAll(x, IsInt)) or IsInt(x)],
   purec := [5, [""]],       # the ACE option is "pure c"
@@ -207,7 +208,8 @@ InstallValue(ACEOptionSynonyms, rec(
 
 InstallValue(NonACEbinOptions,
   [ "aceinfile",     "aceoutfile", "aceignore",    "aceignoreunknown",
-    "acenowarnings", "aceecho"   , "aceincomment", "echo",       "silent" ]
+    "acenowarnings", "aceecho",    "aceincomment", "aceexampleoptions",
+    "echo",          "silent" ]
 );
 
 #############################################################################
@@ -277,6 +279,40 @@ InstallValue(ACEParameterOptions, rec(
 InstallValue(ACEStrategyOptions,
   [ "default", "easy", "felsch", "hard", "hlt", "purec", "purer", "sims" ]
 );
+
+#############################################################################
+####
+##
+#V  ACE_OPT_TRANSLATIONS  . . . . . record of ACE interface options for which
+##  . . . . . . . . . . . . . . . . . the  ACE  binary has a different  name; 
+##  . . . . . . . . . . . . . . . . . its fields are the ACE interface names,
+##  . . . . . . . . . . . . . . . . . its values are the  ACE  binary  names.
+##
+
+InstallValue(ACE_OPT_TRANSLATIONS, rec(
+  purec := "pure c", # These first two haven't been called NonACEbinOptions
+  purer := "pure r", 
+  aceoutfile := "ao",
+  aceecho := "echo", 
+  aceincomment := "#"
+));
+
+#############################################################################
+####
+##
+#V  ACE_OPT_ACTIONS . . . . . . . record of special actions  of  ACE  options
+##  . . . . . . . . . . . . . . . its fields are the ACE  option  names  with
+##  . . . . . . . . . . . . . . . special actions, its values are the actions
+##
+
+InstallValue(ACE_OPT_ACTIONS, rec(
+  purec := "passed to ACE via option: pure c",
+  purer := "passed to ACE via option: pure r", 
+  aceoutfile := "passed to ACE via option: ao",
+  aceecho := "passed to ACE via option: echo",
+  aceincomment := "passed as an ACE comment, behind a '#'",
+  aceexampleoptions := "inserted by ACEExample, not passed to ACE"
+));
 
 #############################################################################
 ####
@@ -359,8 +395,8 @@ end);
 ##  . . . . . . sets opt.fullname to be the unabbreviated version of opt.name
 ##  . . . . . . . . . . .  if one exists among the fields of KnownACEOptions,
 ##  . . . . . . . . . . . . . . in which case, opt.known is also set to true;
-##  . . . . . . . . . . .  otherwise,  opt.fullname is set to  opt.name,  and
-##  . . . . . . . . . . . . . . . . . . . . . . .  opt.known is set to false.
+##  . . . . . . . . . . .  otherwise,  opt.fullname  is set  to  opt.name  in 
+##  . . . . . . . . . . . . . . lower case,  and  opt.known  is set to false.
 ##
 InstallGlobalFunction(FULL_ACE_OPT_NAME, function(opt)
 local lcaseoptname, list;
@@ -371,7 +407,7 @@ local lcaseoptname, list;
   if opt.known then
     opt.fullname := list[1];  # We assume any match is unique!
   else
-    opt.fullname := opt.name;
+    opt.fullname := lcaseoptname;
   fi;
 end);
 
@@ -423,6 +459,24 @@ end);
 #############################################################################
 ####
 ##
+#F  ACE_VALUE_ECHO  . . . . . . . . . . . . . . . . . . . . Internal function
+##
+##
+InstallGlobalFunction(ACE_VALUE_ECHO, function(optnames)
+local echoval;
+  echoval := VALUE_ACE_OPTION(optnames, 0, "echo");
+  if echoval in KnownACEOptions.echo[2] then
+    return echoval;
+  elif echoval = true then
+    return 1;
+  else
+    return 0;
+  fi;
+end);
+  
+#############################################################################
+####
+##
 #F  ACE_WORDS . . . . . . . . . . . . . . . . . . . . . . . Internal function
 ##  . . . . . . . . . .  returns the translation of words in generators fgens
 ##  . . . . . . . . . . .  to words in ACEgens (the generators ACE will use),
@@ -444,17 +498,24 @@ end);
 ##
 #F  PROCESS_ACE_OPTIONS . . . . . . . . . . . . . . . . .  Internal procedure
 ##  . . . . . . . . . for the ACE function with name ACEfname process options
-##  . . . . . . . . . . by sending them to ACE after appropriate  translation
-##  . . . . . . . . . . where  necessary  by writing via the function  ToACE,
-##  . . . . . . . . . . mostly in the order specified by the  user.  If  echo
-##  . . . . . . . . . . is  set  then  all options are echoed along  with  an 
-##  . . . . . . . . . . indication of how they were handled by the interface.
-##  . . . . . . . . . . If the InfoLevel of  InfoACE  or  InfoWarning  is  at 
-##  . . . . . . . . . . least one then a warning message is issued  for  each
-##  . . . . . . . . . . optname that is in the RecNames of disallowed  or  is 
-##  . . . . . . . . . . . . . in ignored or for some other reason is ignored.
+##  . . . . . . . . . (on the top of OptionsStack)  with  names  newoptnames,
+##  . . . . . . . . . other than those  that  are  fields  of  disallowed  or
+##  . . . . . . . . . listed in ignored, by sending them to ACE via the write
+##  . . . . . . . . . function ToACE,  after  appropriate  translation  where
+##  . . . . . . . . . necessary, mostly in the order specified by  the  user.
+##  . . . . . . . . . The list optnames contains the names of  all  currently
+##  . . . . . . . . . active options i.e. the fields of all options on top of
+##  . . . . . . . . . the OptionsStack. If  echo  is  set  then  all  options
+##  . . . . . . . . . processed are echoed along with an  indication  of  how
+##  . . . . . . . . . they were handled by the interface. If the InfoLevel of
+##  . . . . . . . . . InfoACE or InfoWarning is at least 1 and the  user  has
+##  . . . . . . . . . not passed the  acenowarnings  option  then  a  warning
+##  . . . . . . . . . message is issued for each optname that is a  field  of
+##  . . . . . . . . . disallowed or is in ignored or for some other reason is
+##  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .  ignored.
+##
 InstallGlobalFunction(PROCESS_ACE_OPTIONS, 
-function(ACEfname, optnames, echo, ToACE, disallowed, ignored)
+function(ACEfname, optnames, newoptnames, echo, ToACE, disallowed, ignored)
 local IsValidOptionValue, CheckValidOption, ProcessOption, 
       AddIgnoreOptionsToIgnored, nowarnings, ignoreunknown, 
       paramoptnames, strategy, opt, optname;
@@ -493,37 +554,16 @@ local IsValidOptionValue, CheckValidOption, ProcessOption,
   end;
 
   ProcessOption := function(val)
-    # Pass opt.ace (which is opt.name except for "purer" and "purec")
-    # to ACE with value val, except if opt.name is to be ignored or 
-    # is a NonACEbinOption. We also echo what we do, if the user has
-    # set the echo option.
-    if not opt.donothing and not opt.ignore then
-      if opt.fullname{[1..4]} = "pure" then
-        # Options "pure r" and "pure c" are the only ACE options
-        # for which ACE did not have a single-word alternative.
-        # So the corresponding GAP options are "purer" and "purec",
-        # respectively. Here we reconstruct what ACE expects.
-        opt.ace := Concatenation(opt.name{[1..4]}, " ", opt.name{[5]});
-      else
-        # The ACE optname is the same as the GAP optname
-        opt.ace := opt.name;
-      fi;
-      if val = "" then
-        ToACE([ opt.ace, ";\n" ]);
-      else
-        ToACE([ opt.ace, ":", val, ";\n" ]);
-      fi;
-    fi;
+    # Echo what we are about to do first, if the user has set the echo
+    # option.
     if echo > 0 then
       if opt.ignore then
         Print(" ", opt.name, " := ", opt.value, " (ignored)\n");
+      elif opt.fullname in RecNames(ACE_OPT_ACTIONS) then
+        Print(" ", opt.name, " := ", opt.value, 
+              " (", ACE_OPT_ACTIONS.(opt.fullname), ")\n");
       elif opt.fullname in NonACEbinOptions then
-        if opt.fullname = "aceoutfile" then
-          Print(" ", opt.name, " := ", opt.value, 
-                " (passed to ACE via option: ao)\n");
-        else
-          Print(" ", opt.name, " := ", opt.value, " (not passed to ACE)\n");
-        fi;
+        Print(" ", opt.name, " := ", opt.value, " (not passed to ACE)\n");
       elif val = "" then
         Print(" ", opt.name, " (no value)\n");
       else
@@ -531,7 +571,27 @@ local IsValidOptionValue, CheckValidOption, ProcessOption,
       fi;
     fi;
     # Warn user if opt.name is an unknown optname or has an unexpected value
+    # if they want to know.
     CheckValidOption(val);
+    # Now do it ... pass opt.ace (which is opt.name except when the ACE and
+    # GAP optnames differ) to ACE with value val,  except if opt.name is to
+    # be ignored or is a NonACEbinOption without a translation.
+    if not opt.donotpass and not opt.ignore then
+      if opt.fullname in RecNames(ACE_OPT_TRANSLATIONS) then
+        # The ACE optname differs from the GAP optname
+        opt.ace := ACE_OPT_TRANSLATIONS.(opt.fullname);
+      else
+        # The ACE optname is the same as the GAP optname
+        opt.ace := opt.name;
+      fi;
+      if val = "" then
+        ToACE([ opt.ace, ";" ]);
+      elif opt.fullname = "aceincomment" then
+        ToACE([ opt.ace, val, ";" ]);
+      else
+        ToACE([ opt.ace, ":", val, ";" ]);
+      fi;
+    fi;
   end;
 
   AddIgnoreOptionsToIgnored := function()
@@ -562,7 +622,7 @@ local IsValidOptionValue, CheckValidOption, ProcessOption,
   ignoreunknown := VALUE_ACE_OPTION(optnames, false, "aceignoreunknown");
   AddIgnoreOptionsToIgnored();
 
-  for optname in optnames do
+  for optname in newoptnames do
     if echo = 2 then
       opt := ACEOptionData(optname); # sets opt.name, opt.known, opt.fullname
                                      # and opt.synonyms
@@ -581,13 +641,10 @@ local IsValidOptionValue, CheckValidOption, ProcessOption,
       FULL_ACE_OPT_NAME(opt); # sets opt.known and opt.fullname
       opt.value := ValueOption(opt.name);
     fi;
-    # We don't pass the options in the RHS list following to ACE, here
-    # (i.e. within this `for' loop). The NonACEbinOptions "echo", 
-    # "aceinfile" and "silent" are not passed to ACE at all, and 
-    # "aceoutfile" is only passed to the ACE as "ao" (and if available
-    # to the calling function, has already been dealt with).
-    opt.donothing := opt.fullname in ["echo", "aceinfile", "ao", "aceoutfile",
-                                      "silent", "enumeration", "subgroup" ];
+    # We don't pass the NonACEbinOptions options to ACE unless they
+    # have a translation (i.e. are fields of ACE_OPT_TRANSLATIONS)
+    opt.donotpass := (opt.fullname in NonACEbinOptions) and
+                     not (opt.fullname in RecNames(ACE_OPT_TRANSLATIONS));
     opt.ignore := opt.fullname in RecNames(disallowed) or
                   opt.fullname in ignored or
                   (ignoreunknown and not opt.known);
@@ -607,15 +664,15 @@ local IsValidOptionValue, CheckValidOption, ProcessOption,
     elif not IsString(opt.value) and IsList(opt.value) then
       # ProcessOption() is not designed to cope with a list
       # ... we do it `manually'.
-      if not opt.donothing then
-        ToACE([ opt.name,":", 
-                ACE_JOIN( ACE_STRINGS(opt.value), "," ), ";\n" ]);
-      fi;
       if echo > 0 then 
         Print(" ", opt.name, " := ", opt.value, 
               " (brackets are not passed to ACE)\n");
       fi;
       CheckValidOption(opt.value);
+      if not opt.donotpass then
+        ToACE([ opt.name,":", 
+                ACE_JOIN( ACE_STRINGS(opt.value), "," ), ";" ]);
+      fi;
     else
       ProcessOption(opt.value);
     fi;
@@ -649,12 +706,13 @@ end);
 ##    known . . . .  true iff optname is a valid mixed case abbreviation of a 
 ##                   KnownACEOption field;
 ##    fullname  . .  the lower case unabbreviated  form  of  optname  if  the
-##                   `known' field is set `true', or optname otherwise;
+##                   `known' field is set `true',  or optname in  lower case, 
+##                   otherwise;
 ##    synonyms  . .  a list of KnownACEOptions fields that are  option  names
 ##                   synonymous with optname, if the  `known'  field  is  set
-##                   set `true', or `[ optname ]' otherwise;
+##                   set `true', or list with just fullname otherwise;
 ##    abbrev  . . .  the shortest lowercase abbreviation of  optname  if  the 
-##                   `known' field is set `true', or optname otherwise.
+##                   `known' field is set `true', or fullname otherwise.
 ##
 InstallGlobalFunction(ACEOptionData, function(optname)
 local opt;
@@ -664,8 +722,8 @@ local opt;
     opt.synonyms := ACE_OPTION_SYNONYMS(opt.fullname);
     opt.abbrev := opt.fullname{[1 ..  KnownACEOptions.(opt.fullname)[1]]};
   else
-    opt.synonyms := [ optname ];
-    opt.abbrev := optname;
+    opt.synonyms := [ opt.fullname ];
+    opt.abbrev := opt.fullname;
   fi;
   return opt;
 end);
@@ -673,19 +731,17 @@ end);
 #############################################################################
 ####
 ##
-#F  CurrentACEOptions . . . . . . . . . . .  Displays the current ACE options
+#F  CURRENT_ACE_OPTIONS . . . . . . . . . . . . . . . . .  Internal procedure
+##  . . . . . . . . . . . . . . . . . . . . . . . Called by CurrentACEOptions
 ##
+##  CurrentACEOptions has two forms: the interactive version (below) and  the
+##  non-interactive version defined locally  within  ACECosetTable.  For  the
+##  interactive version the data record datarec  is  ACEData.io[ioIndex]  for
+##  some integer ioIndex. For the non-interactive version, which will only be
+##  invoked from within a break-loop, datarec is ACEData.
 ##
-InstallGlobalFunction(CurrentACEOptions, function(arg)
-local datarec;
-  if IsEmpty(arg) and IsBound(ACEData.options) then
-    # This is the case where CurrentACEOptions is called
-    # from a break-loop when a coset enumeration for
-    # ACECosetTableFromGensAndRels has failed
-    datarec := ACEData;
-  else
-    datarec := ACEData.io[ ACE_STREAM(arg) ];
-  fi;
+InstallGlobalFunction(CURRENT_ACE_OPTIONS, function(datarec)
+
   if datarec.options = rec() then
     Print("No options.\n");
   else
@@ -697,36 +753,121 @@ end);
 #############################################################################
 ####
 ##
-#F  SetACEOptions . . . . . . . . . . . . . . . . . .  Updates stored options
+#F  CurrentACEOptions . . . . . . . . . . .  Displays the current ACE options
 ##
+##
+InstallGlobalFunction(CurrentACEOptions, function(arg)
+
+  CURRENT_ACE_OPTIONS( ACEData.io[ ACE_STREAM(arg) ] );
+end);
+
+#############################################################################
+####
+##
+#F  SANITISE_ACE_OPTIONS  . . . . . . . . . . . . . . . .  Internal procedure
+##  . . . . . . . . . . . . . . . . . . . . . . . .  Called by SetACEOptions,
+##  . . . . . . . . . . . . . . . . . or by CALL_ACE when CALL_ACE is invoked
+##  . . . . . . . . . . . . . . . . . by   ACEExample   with   user   options
+##
+##  Scrubs any option  names  in  optsrec  that match  those  in  newoptsrec,
+##  to ensure that *all* new options are at the end of  optsrec  when  it  is 
+##  updated with options from newoptsrec.
+##
+InstallGlobalFunction(SANITISE_ACE_OPTIONS, function(optsrec, newoptsrec)
+local newoptnames, optname, opt;
+    newoptnames := Concatenation(
+                       List(RecNames(newoptsrec),
+                            optname -> ACEOptionData(optname).synonyms)
+                       );
+    for optname in RecNames(optsrec) do
+      opt := rec(name := optname);
+      FULL_ACE_OPT_NAME(opt); # Sets opt.fullname
+      if opt.fullname in newoptnames then
+        Unbind(optsrec.(optname));
+      fi;
+    od;
+end);
+
+#############################################################################
+####
+##
+#F  SET_ACE_OPTIONS . . . . . . . . . . . . . . . . . . .  Internal procedure
+##  . . . . . . . . . . . . . . . . . . . . . . . . . Called by SetACEOptions
+##
+##  SetACEOptions has two forms: the  interactive  version  (below)  and  the
+##  non-interactive version defined locally  within  ACECosetTable.  For  the
+##  interactive version the data record datarec  is  ACEData.io[ioIndex]  for
+##  some integer ioIndex. For the non-interactive version, which will only be
+##  invoked from within a break-loop, datarec is ACEData.
+##
+##  enumResult, stats fields of ACEData.io[ioIndex] if user passed  some  new
+##  options
+##
+InstallGlobalFunction(SET_ACE_OPTIONS, function(datarec)
+
+  datarec.newoptions := OptionsStack[ Length(OptionsStack) ];
+  # First we need to scrub any option names in datarec.options that
+  # match those in datarec.newoptions ... to ensure that *all* new
+  # options are at the end of the stack
+  SANITISE_ACE_OPTIONS(datarec.options, datarec.newoptions);
+  # datarec.options contains the previous options 
+  # We have to pop off newoptions and then push back
+  # options and newoptions, to get an updated options
+  PopOptions();
+  PushOptions(datarec.options);
+  PushOptions(datarec.newoptions);
+  # The following is needed when SetACEOptions is invoked via ACEExample
+  Unbind(OptionsStack[ Length(OptionsStack) ].aceexampleoptions);
+  datarec.options := OptionsStack[ Length(OptionsStack) ];
+  # We pop options here, to ensure OptionsStack is the same length
+  # as before the call to SET_ACE_OPTIONS
+  PopOptions();
+  Unbind(datarec.newoptions);
+end);
+
+#############################################################################
+####
+##
+#F  INTERACT_SET_ACE_OPTIONS  . . . . . . . . . . . . . .  Internal procedure
+##  . . . . . . . . . . . . . . . . . . . . . . .  Passes new options to  ACE
+##  . . . . . . . . . . . . . . . . . . . . . . .  and updates stored options
+##
+##  Called by the ACE function with name ACEfname and with datarec  equal  to
+##  ACEData.io[ioIndex] for some integer ioIndex,  the  updated  options  are
+##  stored in datarec.options.
+##
+InstallGlobalFunction(INTERACT_SET_ACE_OPTIONS, function(ACEfname, datarec)
+local newoptnames, optnames;
+  if not IsEmpty(OptionsStack) then
+    newoptnames := ShallowCopy(RecNames(OptionsStack[ Length(OptionsStack) ]));
+    SET_ACE_OPTIONS(datarec);
+    OptionsStack[ Length(OptionsStack) ] := datarec.options;
+    optnames := ACE_OPT_NAMES();
+    PROCESS_ACE_OPTIONS(ACEfname, optnames, newoptnames,
+                        # echo
+                        ACE_VALUE_ECHO(optnames),
+                        # ToACE
+                        function(list) 
+                          WRITE_LIST_TO_ACE_STREAM(datarec.stream, list);
+                        end,
+                        # disallowed (options)
+                        rec(group      := ACE_ERRORS.argnotopt,
+                            generators := ACE_ERRORS.argnotopt,
+                            relators   := ACE_ERRORS.argnotopt), 
+                        # ignored
+                        [ "aceinfile", "aceoutfile" ]);
+  fi;
+end);
+  
+#############################################################################
+####
+##
+#F  SetACEOptions . . . . . . . . . . . .  Interactively, passes  new options 
+##  . . . . . . . . . . . . . . . . . . .  to ACE and updates stored  options
 ##
 InstallGlobalFunction(SetACEOptions, function(arg)
-local datarec;
-  if IsEmpty(arg) and IsBound(ACEData.options) then
-    # This is the case where SetACEOptions is called
-    # from a break-loop when a coset enumeration for
-    # ACECosetTableFromGensAndRels has failed
-    datarec := ACEData;
-  else
-    datarec := ACEData.io[ ACE_STREAM(arg) ];
-  fi;
-  if Length(OptionsStack) > 0 and
-     (datarec <> ACEData or datarec.optionsStackDepth = Length(OptionsStack)) 
-  then
-    # User added some new options ...
-    # since options is no longer on the OptionsStack
-    # we have to pop off newoptions and then push back
-    # options and newoptions, to get an updated options
-    datarec.newoptions := OptionsStack[ Length(OptionsStack) ];
-    PopOptions();
-    PushOptions(datarec.options);
-    PushOptions(datarec.newoptions);
-    datarec.options := OptionsStack[ Length(OptionsStack) ];
-    # We pop options here, to ensure OptionsStack is the same length
-    # as before the call to SetACEOptions
-    PopOptions();
-    Unbind(datarec.newoptions);
-  fi;
+
+  INTERACT_SET_ACE_OPTIONS("SetACEOptions", ACEData.io[ ACE_STREAM(arg) ]);
 end);
 
 #############################################################################
@@ -739,33 +880,6 @@ InstallGlobalFunction(FlushOptionsStack, function()
   while not(IsEmpty(OptionsStack)) do
     PopOptions();
   od;
-end);
-
-#############################################################################
-####
-##
-#F  SET_ACE_OPTION  . . . . . . . . . . . . . . . . . . .  Internal procedure
-##  . . . . . .  (No longer used, but retained in case a use is found for it)
-##  . . . . . . . . . . .  Scans fields of options for matches with opt.name, 
-##  . . . . . . . . . . .  unbinds them  and  sets  options.(opt.name) := val
-##
-InstallGlobalFunction(SET_ACE_OPTION, function(options, opt, val)
-local optname;
-  FULL_ACE_OPT_NAME(opt); # Sets opt.known and opt.fullname
-  if opt.known then
-    for optname in RecNames(options) do
-      if MATCHES_KNOWN_ACE_OPT_NAME(opt.fullname, optname) then
-        Unbind(options.(optname));
-      fi;
-    od;
-  else
-    for optname in RecNames(options) do
-      if LowercaseString(opt.name) = LowercaseString(optname) then
-        Unbind(options.(optname));
-      fi;
-    od;
-  fi;
-  options.(opt.name) := val;
 end);
 
 #E  options.gi  . . . . . . . . . . . . . . . . . . . . . . . . . . ends here 

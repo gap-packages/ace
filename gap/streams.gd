@@ -25,6 +25,6 @@ DeclareGlobalFunction("ACE_STRINGS");
 DeclareGlobalFunction("CHOMP");
 DeclareGlobalFunction("READ_ALL_LINE");
 DeclareGlobalFunction("READ_NEXT_LINE");
-DeclareGlobalFunction("WRITE_LIST_TO_STREAM");
+DeclareGlobalFunction("WRITE_LIST_TO_ACE_STREAM");
 
 #E  streams.gd  . . . . . . . . . . . . . . . . . . . . . . . . . . ends here 

@@ -50,6 +50,18 @@ DeclareGlobalVariable("ACEStrategyOptions",
   "A list of known ACE (interface) options that are strategy options"
   );
 
+DeclareGlobalVariable("ACE_OPT_TRANSLATIONS",
+  Concatenation([
+    "A record whose fields are the known ACE (interface) options for which\n",
+    "the ACE binary has a different name; its values are the ACE binary names"])
+  );
+
+DeclareGlobalVariable("ACE_OPT_ACTIONS",
+  Concatenation([
+    "A record whose fields are the known ACE (interface) options for which\n",
+    "their is a special action; its values are the actions (as strings)"])
+  );
+
 DeclareGlobalVariable("ACE_ERRORS",
   "A record of ACE (interface) error messages"
   );
@@ -66,12 +78,16 @@ DeclareGlobalFunction("MATCHES_KNOWN_ACE_OPT_NAME");
 DeclareGlobalFunction("FULL_ACE_OPT_NAME");
 DeclareGlobalFunction("ACE_OPTION_SYNONYMS");
 DeclareGlobalFunction("VALUE_ACE_OPTION");
+DeclareGlobalFunction("ACE_VALUE_ECHO");
 DeclareGlobalFunction("ACE_WORDS");
 DeclareGlobalFunction("PROCESS_ACE_OPTIONS");
 DeclareGlobalFunction("ACEOptionData");
+DeclareGlobalFunction("CURRENT_ACE_OPTIONS");
 DeclareGlobalFunction("CurrentACEOptions");
+DeclareGlobalFunction("SANITISE_ACE_OPTIONS");
+DeclareGlobalFunction("SET_ACE_OPTIONS");
+DeclareGlobalFunction("INTERACT_SET_ACE_OPTIONS");
 DeclareGlobalFunction("SetACEOptions");
 DeclareGlobalFunction("FlushOptionsStack");
-DeclareGlobalFunction("SET_ACE_OPTION");
 
 #E  options.gd  . . . . . . . . . . . . . . . . . . . . . . . . . . ends here 

@@ -16,14 +16,15 @@ Revision.interact_gi :=
 #############################################################################
 ####
 ##
-#F  ACE_STREAM  . . . . . . . . . . . . . . . Get the index of the ACEData.io
-##  . . . . . . . . . . . . . . . . . . . list for an interactive ACE session
+#F  ACE_STREAM  . . . . . . . . . . . .  Get the index of the ACEData.io list
+##  . . . . . . . . . . . . . . . . . . . . . for an interactive ACE session.
 ##
-InstallGlobalFunction("ACE_STREAM", function(arg)
+InstallGlobalFunction(ACE_STREAM, function(arg)
 local ioIndex;
 
   arg := arg[1];
-  if Length(arg) = 0 then
+  if IsEmpty(arg) then
+    # Find the first bound ioIndex
     ioIndex := 1;
     while not(IsBound(ACEData.io[ioIndex])) and ioIndex < Length(ACEData.io) do
       ioIndex := ioIndex + 1;
@@ -41,11 +42,80 @@ end);
 #############################################################################
 ####
 ##
-#F  FLUSH_ACE_STREAM_UNTIL  . . . . . . . Read lines in iostream via function 
-##  . . . . . . . . . . .  readline and print them  via Info at  InfoACELevel
-##  . . . . . . . . . . .  infoLevelFlushed  until  IsMyLine(line)  is  true,
-##  . . . . . . . . . . .  print `MyLine' via Info at InfoACELevel infoLevel-
-##  . . . . . . . . . . . . . . . . . . . . . .  MyLine and return that line.
+#F  ACEStream . . . . . . . . . . . . . . . . . .  User version of ACE_STREAM
+##
+##  If given a single integer argument returns that integer if it corresponds
+##  to an active interactive process, otherwise it returns the default active
+##  interactive process or an error.
+##
+InstallGlobalFunction(ACEStream, function(arg)
+local ioIndex;
+
+  if Length(arg) <= 1 then
+    return ACE_STREAM(arg);
+  else
+    Error("Expected 0 or 1 arguments ... not ", Length(arg), " arguments\n");
+  fi;
+end);
+
+#############################################################################
+####
+##
+#F  ACEStreams  . . . . . . . . . . . . .  Returns the list of indices of all
+##  . . . . . . . . . . . . . . . . . . .  active interactive  ACE  processes
+##
+##
+InstallGlobalFunction(ACEStreams, function()
+local ioIndex;
+
+  return Filtered( [1..Length(ACEData.io)], i -> IsBound( ACEData.io[i] ) );
+end);
+
+#############################################################################
+####
+##
+#F  READ_ACE_ERRORS . . . . . . . . . . . . . . . . . . .  Internal procedure
+##  . . . . . . . . . . . . . . . . . . . . . .  reads interactive ACE output
+##  . . . . . . . . . . . . . . . . . . . . . . . . . . when none is expected
+##
+##  Writes any output read to Info at InfoACE + InfoWarning level 1.
+##
+InstallGlobalFunction(READ_ACE_ERRORS, function(stream)
+local line;
+
+  line := READ_ALL_LINE(stream);
+  while line <> fail do
+    Info(InfoACE + InfoWarning, 1, CHOMP(line));
+    line := READ_ALL_LINE(stream);
+  od;
+end);
+
+#############################################################################
+####
+##
+#F  INTERACT_TO_ACE_WITH_ERRCHK . . . . . . . . . . . . .  Internal procedure
+##  . . . . . . . . . . . . . .  interactive ToACE procedure with error check
+##
+##  Writes list to the interactive ACE iostream stream and reads from  stream
+##  to check for errors. Any output read is written  to  Info  at  InfoACE  +
+##  InfoWarning level 1. Used where no output is expected.
+##
+InstallGlobalFunction(INTERACT_TO_ACE_WITH_ERRCHK, function(stream, list)
+
+  WRITE_LIST_TO_ACE_STREAM(stream, list);
+  READ_ACE_ERRORS(stream);
+end);
+
+#############################################################################
+####
+##
+#F  FLUSH_ACE_STREAM_UNTIL  . . . . . . . . . . . . . . . . Internal function
+##  . . . . . . . . . . . . reads lines in iostream via function readline and
+##  . . . . . . . . . . . . prints   them   via    Info    at    InfoACELevel
+##  . . . . . . . . . . . . infoLevelFlushed until  IsMyLine(line)  is  true,
+##  . . . . . . . . . . . . prints line for which IsMyLine(line) is true  via
+##  . . . . . . . . . . . . Info at InfoACELevel infoLevelMyLine and  returns
+##  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .  that line.
 ##
 ##
 InstallGlobalFunction(FLUSH_ACE_STREAM_UNTIL, 
@@ -69,7 +139,8 @@ end);
 #F  ACE_ENUMERATION_RESULT  . . . . . Flush iostream until line ends in ")\n"
 ##
 ##  This is potentially flaky ... it relies on ACE enumeration  result  lines
-##  remaining unique with regard to the property of ending in a close bracket
+##  being unique with regard to the property of not starting  with  "** "  or
+##  "   " (as ACE error diagnostics do) and ending in a close bracket.
 ##
 InstallGlobalFunction(ACE_ENUMERATION_RESULT, function(iostream, readline)
 local line;
@@ -77,13 +148,119 @@ local line;
   return CHOMP(FLUSH_ACE_STREAM_UNTIL(iostream, 2, 1,
                                       readline,
                                       line -> Length(line) > 1 and
+                                              # not ACE error lines
+                                              not (line{[1..3]} 
+                                                   in [ "** ", "   " ]) and
                                               line[Length(line) - 1] = ')'));
 end);
 
 #############################################################################
 ####
 ##
-#F  ACE_STATS . . . . . . . . . . . . . . . . Called by StartACE and ACEStats
+#F  ACEWrite  . . . . . . . . . . . . . . . . . . . .  Primitive write to ACE
+##
+##  Writes the last argument to the i-th interactive ACE process, where i  is
+##  the first argument if there are 2 arguments or  the  default  process  if
+##  there is only 1 argument. The action is echoed via Info at InfoACE  level
+##  3 (with a `ToACE> ' prompt).
+##
+InstallGlobalFunction(ACEWrite, function(arg)
+local ioIndex, line;
+
+  if Length(arg) in [1, 2] then
+    ioIndex := ACE_STREAM(arg{[1..Length(arg) - 1]});
+    WRITE_LIST_TO_ACE_STREAM( ACEData.io[ioIndex].stream,
+                              arg{[Length(arg)..Length(arg)]} );
+  else
+    Error("Expected 1 or 2 arguments ... not ", Length(arg), " arguments\n");
+  fi;
+end);
+
+#############################################################################
+####
+##
+#F  ACERead . . . . . . . . . . . . . . . . . . . . . Primitive read from ACE
+##
+##  Reads a complete line of  ACE  output,  from  the  i-th  interactive  ACE
+##  process, if there is output to be read and returns fail otherwise,  where
+##  i is the first argument if there is 1 argument or the default process  if
+##  there are no arguments.
+##
+InstallGlobalFunction(ACERead, function(arg)
+
+  if Length(arg) <= 1 then
+    return READ_ALL_LINE( ACEData.io[ ACE_STREAM(arg) ].stream );
+  else
+    Error("Expected 0 or 1 arguments ... not ", Length(arg), " arguments\n");
+  fi;
+end);
+
+#############################################################################
+####
+##
+#F  ACEReadAll  . . . . . . . . . . . . . . . . . . . Primitive read from ACE
+##
+##  Reads and returns as many complete lines of ACE  output,  from  the  i-th
+##  interactive ACE process, as there are to be read, as a  list  of  strings
+##  with the trailing newlines removed and returns the empty list  otherwise,
+##  where i is the first argument if there  is  1  argument  or  the  default
+##  process if there are no arguments. Also writes via Info at InfoACE  level
+##  2 each line read.
+##
+InstallGlobalFunction(ACEReadAll, function(arg)
+local lines, stream, line;
+
+  lines := [];
+  if Length(arg) <= 1 then
+    stream := ACEData.io[ ACE_STREAM(arg) ].stream;
+    line := READ_ALL_LINE(stream);
+    while line <> fail do
+      line := CHOMP(line);
+      Info(InfoACE, 2, line);
+      Add(lines, line);
+      line := READ_ALL_LINE(stream);
+    od;
+  else
+    Error("Expected 0 or 1 arguments ... not ", Length(arg), " arguments\n");
+  fi;
+  return lines;
+end);
+
+#############################################################################
+####
+##
+#F  ACEReadUntil  . . . . . . . . . . . . . . . . . . Primitive read from ACE
+##
+##  Reads complete lines  of  ACE  output,  from  the  i-th  interactive  ACE
+##  process, until a line for which IsMyLine(line) is true, where  i  is  the
+##  first argument if there are 2 arguments or the default process  if  there
+##  is one argument. The lines read are returned as a list  of  strings  with
+##  the  trailing  newlines  removed.  If  IsMyLine(line)   is   never   true
+##  ACEReadUntil will wait indefinitely. Also  writes  via  Info  at  InfoACE
+##  level 2 each line read.
+##
+InstallGlobalFunction(ACEReadUntil, function(arg)
+local lines, IsMyLine, stream, line;
+
+  lines := [];
+  if Length(arg) in [1, 2] then
+    IsMyLine := arg[1];
+    stream := ACEData.io[ ACE_STREAM(arg{[1..Length(arg) - 1]}) ].stream;
+    repeat
+      line := CHOMP( READ_NEXT_LINE(stream) );
+      Info(InfoACE, 2, line);
+      Add(lines, line);
+    until IsMyLine(line);
+  else
+    Error("Expected 1 or 2 arguments ... not ", Length(arg), " arguments\n");
+  fi;
+  return lines;
+end);
+
+#############################################################################
+####
+##
+#F  ACE_STATS . . . . . . . . . . . . . . . . Called by ACEStart and ACEStats
 ##  
 ##
 InstallGlobalFunction(ACE_STATS, function(line)
@@ -93,7 +270,7 @@ local stats;
   stats := Filtered(line, char -> char in ". " or char in CHARS_DIGITS);
   if line{[1..5]}<>"INDEX" then
     # Enumeration failed so the index is missing 
-    # ... shove a 0 index on the front of a
+    # ... shove a 0 index on the front of stats
     stats := Concatenation("0 ", stats);
   fi;
   stats := SplitString(stats, "", " .");
@@ -166,11 +343,12 @@ end);
 #############################################################################
 ####
 ##
-#F  START_ACE . . . . . . . . . . . . . . . . . . . . .  Start an enumeration
+#F  ACE_START . . . . . . . . . . . . . . . . . . . . .  Start an enumeration
 ##  . . . . . . . . . . . . . . . sets enumResult and stats fields of datarec
 ##
-InstallGlobalFunction(START_ACE, function(datarec)
-  WriteLine(datarec.stream, "End;"); # Start the enumeration
+InstallGlobalFunction(ACE_START, function(datarec)
+  READ_ACE_ERRORS(datarec.stream);
+  WRITE_LIST_TO_ACE_STREAM(datarec.stream, [ "Start;" ]); # Start the enumerat'n
   datarec.enumResult := ACE_ENUMERATION_RESULT(datarec.stream, READ_NEXT_LINE);
   datarec.stats := ACE_STATS(datarec.enumResult);
 end);
@@ -178,49 +356,42 @@ end);
 #############################################################################
 ####
 ##
-#F  SET_ACE_OPTIONS . . . . . . . Update options, enumResult, stats fields of
-##  . . . . . . . . . . . ACEData.io[ioIndex] if user passed some new options
+#F  ACEStart . . . . . . . . . . . . . .  Initiate an interactive ACE session
 ##
-InstallGlobalFunction(SET_ACE_OPTIONS, function(ioIndex)
-local datarec;
+##
+InstallGlobalFunction(ACEStart, function(arg)
+local ioIndex;
 
-  datarec := ACEData.io[ ioIndex ];
-  if Length(OptionsStack) > 0 then
-    # User passed some new options
-    SetACEOptions(ioIndex);
-    if datarec.stats.index = 0 then
-      START_ACE(datarec);
-    fi;
-  fi;
-end);
-  
-#############################################################################
-####
-##
-#F  StartACE . . . . . . . . . . . . . .  Initiate an interactive ACE session
-##
-##
-InstallGlobalFunction(StartACE, function(arg)
-local ioIndex, line;
-
-  if Length(arg) <= 1 then 
+  if Length(arg) = 1 and arg[1] = 0 then
+    # Allocate an ioIndex and initiate a stream for ACEStart with 0 args
+    # ... the user is on their own, having to use ACEWrite, ACERead to
+    # communicate with ACE.
+    Add(ACEData.io, 
+        rec(#args := rec(),
+            #options := ACE_OPTIONS(),
+            #acegens := [], 
+            stream := InputOutputLocalProcess(
+                          ACEData.tmpdir, ACEData.binary, []
+                          ) ) );
+    return Length(ACEData.io); # ioIndex
+  elif Length(arg) <= 1 then 
     ioIndex := ACE_STREAM(arg);
-    SetACEOptions(ioIndex); # In case user passed some new options
+    INTERACT_SET_ACE_OPTIONS("ACEStart", ACEData.io[ioIndex]);
   elif Length(arg) = 3 then #args are: fgens,   rels,  sgens
-    ioIndex := CALL_ACE( "StartACE", arg[1], arg[2], arg[3] );
+    ioIndex := CALL_ACE( "ACEStart", arg[1], arg[2], arg[3] );
   else
     Error("Expected 0, 1 or 3 arguments ... not ", Length(arg), " arguments\n");
   fi;
 
-  START_ACE( ACEData.io[ioIndex] );
+  ACE_START( ACEData.io[ioIndex] );
   return ioIndex;
 end);
 
 #############################################################################
 ##
-#F  QuitACE . . . . . . . . . . . . . . . .  Close an interactive ACE session
+#F  ACEQuit . . . . . . . . . . . . . . . .  Close an interactive ACE session
 ##
-InstallGlobalFunction(QuitACE, function(arg)
+InstallGlobalFunction(ACEQuit, function(arg)
 local ioIndex;
 
   ioIndex := ACE_STREAM(arg);
@@ -230,9 +401,9 @@ end);
 
 #############################################################################
 ##
-#F  QuitAllACE . . . . . . . . . . . . . . Close all interactive ACE sessions
+#F  ACEQuitAll . . . . . . . . . . . . . . Close all interactive ACE sessions
 ##
-InstallGlobalFunction(QuitAllACE, function()
+InstallGlobalFunction(ACEQuitAll, function()
 local ioIndex;
 
   for ioIndex in [1 .. Length(ACEData.io)] do
@@ -245,15 +416,63 @@ end);
 
 #############################################################################
 ##
+#F  ACEModes  . . . . . . . . . . . .  Returns a record of which of the modes
+##  . . . . . . . . . . . . .  ACEContinue, ACERedo and ACEStart are possible
+##
+InstallGlobalFunction(ACEModes, function(arg)
+local stream, modes;
+
+  stream := ACEData.io[ ACE_STREAM(arg) ].stream;
+  READ_ACE_ERRORS(stream);
+  WRITE_LIST_TO_ACE_STREAM(stream, [ "mode;" ]);
+  modes := SplitString(FLUSH_ACE_STREAM_UNTIL(
+                           stream, 3, 1, READ_NEXT_LINE,
+                           line -> line{[1..8]} = "start = "
+                           ),
+                       "",
+                       " =,\n");
+  return rec(ACEStart    := modes[2] = "yes",
+             ACEContinue := modes[4] = "yes",
+             ACERedo     := modes[6] = "yes");
+end);
+
+#############################################################################
+##
 #F  ACECosetTable  . . . . . . . . . . . .  Extracts the coset table from ACE
 ##
 InstallGlobalFunction(ACECosetTable, function(arg)
 local ioIndex, enumIndex, ACEout, iostream, infoACElevel, datarec,
-      cosettable, ACEOnBreak, NormalOnBreak;
+      cosettable, ACEOnBreak, NormalOnBreak, SetACEOptions, CurrentACEOptions;
 
   if Length(arg) = 2 or Length(arg) > 3 then
     Error("Expected 0, 1 or 3 arguments ... not ", Length(arg), " arguments\n");
+  elif Length(arg) <= 1 then
+    # Called as an interactive ACE command
+    datarec := ACEData.io[ ACE_STREAM(arg) ];
+    INTERACT_SET_ACE_OPTIONS("ACECosetTable", datarec);
+    if datarec.stats.index = 0 and not IsEmpty(OptionsStack) then
+      ACE_START(datarec); # TODO: Replace by check mode 
+                          #       ... and do: Continue, Redo, Start
+    fi;
+    if datarec.stats.index = 0 then
+      Info(InfoACE + InfoWarning, 1, 
+           "The `ACE' coset enumeration failed with the result:");
+      Info(InfoACE + InfoWarning, 1, datarec.enumResult);
+      Info(InfoACE + InfoWarning, 1, "Try relaxing any restrictive options.");
+      Info(InfoACE + InfoWarning, 1, "For interactive ACE process <i>,");
+      Info(InfoACE + InfoWarning, 1, 
+           "type: 'CurrentACEOptions(<i>);' to see current ACE options.");
+      return fail;
+    else
+      WRITE_LIST_TO_ACE_STREAM(datarec.stream, [ "Print Table;" ]);
+      return ACE_COSET_TABLE(datarec.stats.index, 
+                             datarec.acegens, 
+                             datarec.stream, 
+                             READ_NEXT_LINE);
+    fi;
   else
+    # Called non-interactively
+
     NormalOnBreak := OnBreak;
     ACEOnBreak := function()
       local infoACElevel;
@@ -261,7 +480,7 @@ local ioIndex, enumIndex, ACEout, iostream, infoACElevel, datarec,
       infoACElevel := InfoACELevel();
       SetInfoACELevel(1);
       Info(InfoACE, 1, "The `ACE' coset enumeration failed with the result:");
-      Info(InfoACE, 1, datarec.enumResult);
+      Info(InfoACE, 1, ACEData.enumResult);
       Info(InfoACE, 1, "Try relaxing any restrictive options:");
       Info(InfoACE, 1, "type: 'CurrentACEOptions();' ",
                        "to see current ACE options;");
@@ -273,60 +492,57 @@ local ioIndex, enumIndex, ACEout, iostream, infoACElevel, datarec,
       SetInfoACELevel(infoACElevel);
       OnBreak := NormalOnBreak;
     end;
-    if Length(arg) <= 1 then
-      # Called as an interactive ACE command
-      ioIndex := ACE_STREAM(arg);
-      SET_ACE_OPTIONS(ioIndex);
-      datarec := ACEData.io[ ioIndex ];
-      while datarec.stats.index = 0 do
-        Error(": No coset table ...");
-        START_ACE(datarec);
-      od;
-      WriteLine(datarec.stream, "Print Table;");
-      return ACE_COSET_TABLE(
-                 enumIndex, datarec.acegens, datarec.stream, READ_NEXT_LINE);
-    else
-      # Called non-interactively ... args are:         fgens,   rels,  sgens
-      datarec := ACEData;
-      repeat
-        ACEout := CALL_ACE( 
-                      "ACECosetTableFromGensAndRels", arg[1], arg[2], arg[3] );
-        if ACEout.infile <> datarec.infile then
-          # User only wanted an ACE input file to use directly with standalone
-          infoACElevel := InfoACELevel();
-          SetInfoACELevel(1);
-          Info(InfoACE, 1, "ACE standalone input file: ", ACEout.infile);
-          SetInfoACELevel(infoACElevel);
-          return;
-        fi;
-        iostream := InputTextFile(ACEout.outfile);
-        datarec.enumResult := ACE_ENUMERATION_RESULT(iostream, ReadLine);
-        enumIndex := ACE_STATS(datarec.enumResult).index;
-        if enumIndex = 0 then
-          CloseStream(iostream);
-          if ACEout.silent then
-            return fail;
-          else
-            datarec.options := ACE_OPTIONS();
-            datarec.optionsStackDepth := Length(OptionsStack);
-            if datarec.optionsStackDepth > 0 then
-              # We pop options here, in case the user decides to quit
-              PopOptions();
-            fi;
-            OnBreak := ACEOnBreak;
-            Error(": No coset table ...");
-            if datarec.options <> rec() then
-              PushOptions(datarec.options);
-            fi;
-          fi;
+
+    SetACEOptions := function()
+      if not IsEmpty(OptionsStack) and 
+         ACEData.optionsStackDepth = Length(OptionsStack) then
+        SET_ACE_OPTIONS(ACEData);
+      fi;
+    end;
+
+    CurrentACEOptions := function()
+      CURRENT_ACE_OPTIONS( ACEData );
+    end;
+
+    repeat
+      ACEout := CALL_ACE(        # args are:         fgens,   rels,  sgens
+                    "ACECosetTableFromGensAndRels", arg[1], arg[2], arg[3] );
+      if ACEout.infile <> ACEData.infile then
+        # User only wanted an ACE input file to use directly with standalone
+        infoACElevel := InfoACELevel();
+        SetInfoACELevel(1);
+        Info(InfoACE, 1, "ACE standalone input file: ", ACEout.infile);
+        SetInfoACELevel(infoACElevel);
+        return;
+      fi;
+      iostream := InputTextFile(ACEout.outfile);
+      ACEData.enumResult := ACE_ENUMERATION_RESULT(iostream, ReadLine);
+      enumIndex := ACE_STATS(ACEData.enumResult).index;
+      if enumIndex = 0 then
+        CloseStream(iostream);
+        if ACEout.silent then
+          return fail;
         else
-          cosettable := ACE_COSET_TABLE(
-                            enumIndex, ACEout.acegens, iostream, ReadLine);
-          CloseStream(iostream);
-          return cosettable;
+          ACEData.options := ACE_OPTIONS();
+          ACEData.optionsStackDepth := Length(OptionsStack);
+          if ACEData.optionsStackDepth > 0 then
+            # We pop options here, in case the user decides to quit
+            PopOptions();
+          fi;
+          OnBreak := ACEOnBreak;
+          Error(": No coset table ...");
+          if ACEData.options <> rec() then
+            PushOptions(ACEData.options);
+            Unbind(ACEData.options);
+          fi;
         fi;
-      until false;
-    fi;
+      else
+        cosettable := ACE_COSET_TABLE(
+                          enumIndex, ACEout.acegens, iostream, ReadLine);
+        CloseStream(iostream);
+        return cosettable;
+      fi;
+    until false;
   fi;
 end);
 
@@ -336,15 +552,19 @@ end);
 #F  ACEStats  . . . Get the subgroup index, time and number of cosets defined
 ##  . . . . . . . . . .  during an interactive or non-interactive ACE session
 ##
-InstallGlobalFunction("ACEStats", function(arg)
-local ioIndex, iostream, line, stats;
+InstallGlobalFunction(ACEStats, function(arg)
+local datarec, iostream, line, stats;
 
   if Length(arg) <= 1 then 
     # Called as an interactive ACE command
-    ioIndex := ACE_STREAM(arg);
-    SET_ACE_OPTIONS(ioIndex);
-    return ACEData.io[ioIndex].stats;
-  elif Length(arg) = 3 then #args are: fgens,   rels,  sgens
+    datarec := ACEData.io[ ACE_STREAM(arg) ];
+    INTERACT_SET_ACE_OPTIONS("ACEStats", datarec);
+    if datarec.stats.index = 0 and not IsEmpty(OptionsStack) then
+      ACE_START(datarec); # TODO: Replace by check mode 
+                          #       ... and do: Continue, Redo, Start
+    fi;
+    return datarec.stats;
+  elif Length(arg) = 3 then              # args are: fgens,   rels,  sgens
     # Called non-interactively
     iostream := InputTextFile( CALL_ACE("ACEStats", arg[1], arg[2], arg[3]) );
     stats := ACE_STATS( ACE_ENUMERATION_RESULT( iostream, ReadLine) );

@@ -111,15 +111,17 @@ end);
 #############################################################################
 ####
 ##
-#F  WRITE_LIST_TO_STREAM . . . . . . . . . . . . . . . . .  Internal function
+#F  WRITE_LIST_TO_ACE_STREAM . . . . . . . . . . . . . . .  Internal function
 ##
+##  Writes list to stream and with a `ToACE> '  prompt  to  Info  at  InfoACE
+##  level 3
 ##
-InstallGlobalFunction(WRITE_LIST_TO_STREAM, function(stream, list)
-local x;
+InstallGlobalFunction(WRITE_LIST_TO_ACE_STREAM, function(stream, list)
+local string;
 
-  for x in list do
-    WriteAll(stream, String(x));
-  od;
+  string := Concatenation( List(list, x -> String(x)) );
+  Info(InfoACE, 3, "ToACE> ", string);
+  WriteLine(stream, string);
 end);
 
 #E  streams.gd  . . . . . . . . . . . . . . . . . . . . . . . . . . ends here 
