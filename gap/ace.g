@@ -1,7 +1,8 @@
 #############################################################################
 ####
 ##
-#W  ace.g                   ACE Share Package                     Greg Gamble
+#W  ace.g                   ACE Share Package                Alexander Hulpke
+#W                                                                Greg Gamble
 ##
 ##  This  file  contains the interface to the ACE (Advanced Coset Enumerator)
 ##  binary, written by George Havas and Colin Ramsay.  The original interface
@@ -20,50 +21,52 @@ Revision.ace_g :=
 #############################################################################
 ####
 ##
-#V  ACEinfo . . . . record used by various functions of the ACE share package
+#V  ACEData . . . . record used by various functions of the ACE share package
 ##
-##  The fields of ACEinfo are:
+##  The fields of ACEData are:
 ##
-##    "binary"  . . the path to the ACE binary
-##    "tmpdir"  . . the path to the temporary directory for ACE i/o files
+##    "binary"  . . the path of the ACE binary
+##    "tmpdir"  . . the path of the temporary directory for ACE i/o files
+##    "io . . . . . list of data records for StartACE IO Streams
 ##    "infile"  . . the path of the ACE input file
 ##    "outfile" . . the path of the ACE output file
-##    "banner"  . . the path to the file where ACE's banner is directed
+##    "banner"  . . the path of the file where ACE's banner is directed
 ##    "version" . . the version of the current ACE binary
-##    "scratch" . . a field for storing temporary data
 ##
-ACEinfo := rec( binary := Filename(DirectoriesPackagePrograms("ace"), "ace"),
-                tmpdir := DirectoryTemporary()
-              ); # to store file and directory names
-ACEinfo.infile  := Filename(ACEinfo.tmpdir,"in");
-ACEinfo.outfile := Filename(ACEinfo.tmpdir,"out");
-ACEinfo.banner := Filename(ACEinfo.tmpdir,"banner");
+ACEData := rec( binary := Filename(DirectoriesPackagePrograms("ace"), "ace"),
+                tmpdir := DirectoryTemporary(),
+                io := [] # Initially no StartACE IO Streams
+              );
+ACEData.infile  := Filename(ACEData.tmpdir,"in"); 
+ACEData.outfile := Filename(ACEData.tmpdir,"out");
+ACEData.banner := Filename(ACEData.tmpdir,"banner");
 
-PrintTo(ACEinfo.infile, "\n");
-# Fire up ACE with a null input (ACEinfo.infile contains only a "\n")
+PrintTo(ACEData.infile, "\n");
+# Fire up ACE with a null input (ACEData.infile contains only a "\n")
 # ... to generate a banner (which has ACE's current version)
-Exec( Concatenation("cd ", Filename(ACEinfo.tmpdir, ""), "; ",
-                    ACEinfo.binary, " < in > banner") );
-# For now use ACEinfo.scratch to record an input stream
-ACEinfo.scratch := InputTextFile(ACEinfo.banner);
+Exec( Concatenation("cd ", Filename(ACEData.tmpdir, ""), "; ",
+                    ACEData.binary, " < in > banner") );
+# For now use ACEData.scratch to record an input stream
+ACEData.scratch := InputTextFile(ACEData.banner);
 # Grab the first line of banner, which begins like: "ACE N.nnn   "
-ACEinfo.version := ReadLine(ACEinfo.scratch);
-CloseStream(ACEinfo.scratch);
+ACEData.version := ReadLine(ACEData.scratch);
+CloseStream(ACEData.scratch);
 # We just want the N.nnn part of the first line of banner
-# ... ACEinfo.scratch now records where N.nnn starts
-ACEinfo.scratch := PositionSublist(ACEinfo.version, "ACE") + 4;
-ACEinfo.version := ACEinfo.version{[ACEinfo.scratch ..
-                                    Position(ACEinfo.version, ' ', 
-                                             ACEinfo.scratch) - 1]};
+# ... ACEData.scratch now records where N.nnn starts
+ACEData.scratch := PositionSublist(ACEData.version, "ACE") + 4;
+ACEData.version := ACEData.version{[ACEData.scratch ..
+                                    Position(ACEData.version, ' ', 
+                                             ACEData.scratch) - 1]};
+Unbind(ACEData.scratch); # We don't need ACEData.scratch, anymore.
 
 #############################################################################
 ####
-##  Print a banner
+##  Print a banner . . . . . .  using InfoWarning (so a user can turn it off)
 ##
-Print("#I  Loading the ACE (Advanced Coset Enumerator) share package,\n");
-Print("#I           by George Havas <havas@csee.uq.edu.au> and\n");
-Print("#I              Colin Ramsay <cram@csee.uq.edu.au>\n");
-Print("#I  Using ACE binary version ", ACEinfo.version, "\n");
+Info(InfoWarning,1,"Loading the ACE (Advanced Coset Enumerator) share package");
+Info(InfoWarning,1,"         by George Havas <havas@csee.uq.edu.au> and");
+Info(InfoWarning,1,"            Colin Ramsay <cram@csee.uq.edu.au>");
+Info(InfoWarning,1,"                 ACE binary version: ", ACEData.version);
 
 #############################################################################
 ####
@@ -99,35 +102,35 @@ IS_INC_POS_INT_LIST
 ##  value for that option.
 ##
 ##  Only single-word versions of options can be used by a user of ACE via the 
-##  GAP4 interface e.g. "cc" is a synonym for "coset coincidence" as  an  ACE
-##  option,  but the latter,  being 2 words,  is not available via  the  GAP4 
+##  GAP interface e.g. "cc" is a synonym for "coset coincidence"  as  an  ACE
+##  option,  but the latter,  being 2 words,  is  not available via  the  GAP 
 ##  interface.
 ##
 ##  The commented out options are known ACE options that probably  won't work
-##  via the GAP4 interface ... if the user uses these the  interface  program
-##  CallACE will flag these as `unknown (possibly new) or bad' but still pass 
+##  via the GAP interface ... if the user uses these  the  interface  program
+##  START_ACE will complain: `unknown (possibly new) or bad'  but  still pass 
 ##  these options to ACE ... at least the user will then know if ACE does not
 ##  respond as expected that the options should not be used.  We usually only 
 ##  warn that certain options might be bad, so that this interface has a good
 ##  chance of still being functional if new options are added to the ACE bin-
 ##  ary.
 ##
-##  Some  options  are  `GAP4-introduced'  i.e. technically they are not  ACE 
+##  Some  options  are  `GAP-introduced'  i.e. technically they are  not  ACE 
 ##  options  ...  there is a comment beside such options;  and  they are also 
 ##  listed in NonACEbinOptions below.
 ##
 
 KnownACEoptions := rec(
-  ACEinfile := [9, IsString], # This is a GAP4-introduced option 
+  aceinfile := [9, IsString], # This is a GAP-introduced option 
                               # (not an ACE binary option)
-  nowarn := [6, [0,1]],       # This is a GAP4-introduced option 
+  nowarn := [6, [0,1]],       # This is a GAP-introduced option 
                               # (not an ACE binary option)
   #sg := [2, <word list>],
   #rl := [2, <relation list>],
   aep  := [3, [1..7]],
   #ai := [2, <filename>],
-  ao   := [2, IsString],      # "ACEoutfile" is a GAP4-introduced 
-  ACEoutfile := [8, IsString],# `synonym' for "ao"
+  ao   := [2, IsString],      # "ACEoutfile" is a GAP-introduced 
+  aceoutfile := [8, IsString],# `synonym' for "ao"
   asis := [2, [0,1]],
   #begin := [3, [""]], start := [5, [""]], end := [3, [""]],
   #bye := [3, [""]], exit := [4, [""]], quit := [1, [""]],
@@ -152,9 +155,9 @@ KnownACEoptions := rec(
   felsch := [3, ["",0,1]],
   ffactor := [1, x -> IsZero(x) or IsPosInt(x)],# "ffactor" and "fill"
   fill := [3, x -> IsZero(x) or IsPosInt(x)],   # are synonyms ... there is
-                                                # no "fi" since it's a GAP4
+                                                # no "fi" since it's a GAP
                                                 # keyword
-  ## The next 3 ACE options are done via CallACE arguments
+  ## The next 3 ACE options are done via START_ACE arguments
   #group := [2, [<letter list> / int] ],        # For group generators
   #generators := [3, <word list>],              # For subgroup generators
   #relators := [3, <word list>],                # For group relators
@@ -180,7 +183,7 @@ KnownACEoptions := rec(
   pmode := [4, [0..3]],
   psize := [4, x -> IsZero(x) or 
                    (IsEvenInt(x) and IsPrimePowerInt(x))],
-  silent := [6, [0,1]],     # This is a GAP4-introduced option 
+  silent := [6, [0,1]],     # This is a GAP-introduced option 
                             # (not an ACE binary option)
   #sr := [2, [0,1]],
   #print := [2, x -> (IsList(x) and Length(x) <= 3 and
@@ -192,7 +195,7 @@ KnownACEoptions := rec(
   recover := [4, [""]],     # "recover" and "contiguous"
   contiguous := [6, [""]],  # are synonyms ... "rec" is
                             # not an allowed abbreviation
-                            # since it's a GAP4  keyword
+                            # since it's a GAP  keyword
   rep  := [2, x -> (IsList(x) and Length(x) <= 2 and
                    ForAll(x, IsInt) and x[1] in [1..7]) or
                    x in [1..7]],
@@ -225,32 +228,39 @@ KnownACEoptions := rec(
 ##  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . binary options.
 ##
 
-NonACEbinOptions := [ "ACEinfile", "nowarn", "echo", "ACEoutfile", "silent" ];
+NonACEbinOptions := [ "aceinfile", "nowarn", "echo", "aceoutfile", "silent" ];
 
 #############################################################################
 ####
 ##
-#F  CALL_ACE  . . . . .  The function that actually does the work when either
-##  . . . . . . . . . . . . . . . . CallACE or ACEStats is called by the user
+#F  WRITE_LIST_TO_STREAM 
 ##
-BindGlobal("CALL_ACE", function(arg)
-local fgens,rels,sgens,a,i,j,k,n,nums,fullopt,opt,optval,options,known,
-      donothing,echo,gens,CheckValidOption,DoWords,FullOptionName,
-      GetOptionValue,IsValidOptionValue,MatchesKnownOption,ProcessOption,
-      infile,outfile,instream,line,col,ok,p,rowentries,table,cosettable,
-      stats,words,ACEfname;
+##
+BindGlobal("WRITE_LIST_TO_STREAM", function(writefn, iostream, list)
+local s, Massage;
 
-  fgens := arg[1];
-  rels := arg[2];
-  sgens := arg[3];
-  # only do stats
-  stats := Length(arg)>3 and arg[4]=1;
-
-  if stats then 
-    ACEfname := "ACEStats";
+  if writefn = AppendTo then
+    Massage := s -> s;
   else
-    ACEfname := "CallACE";
+    Massage := String;
   fi;
+
+  for s in list do
+    writefn(iostream, Massage(s));
+  od;
+end);
+
+#############################################################################
+####
+##
+#F  START_ACE . . . . . . . .  Called by ACECosetTable, ACEStats and StartACE
+##
+##
+BindGlobal("START_ACE", function(ACEfname, fgens, rels, sgens)
+local n, nums, options, MatchesKnownOption, FullOptionName, known, echo,
+      GetOptionValue, input, ToACE, outfile, IsLowercaseOneCharGen, gens, 
+      DoWords, IsValidOptionValue, CheckValidOption, ProcessOption, opt, 
+      fullopt, optval, donothing, i; 
 
   n := Length(fgens);
   if ForAny(fgens, i -> NumberSyllables(i)<>1 or ExponentSyllable(i, 1)<>1) then
@@ -329,64 +339,81 @@ local fgens,rels,sgens,a,i,j,k,n,nums,fullopt,opt,optval,options,known,
     return optval;
   end;
   
-  # If option "ACEinfile" is set we only want to produce an ACE input file
-  infile := GetOptionValue(ACEinfo.infile, [ "ACEinfile" ]);
+  if ACEfname <> "StartACE" then
+    if ACEfname = "ACECosetTableFromGensAndRels" then
+      # If option "ACEinfile" is set we only want to produce an ACE input file
+      input := GetOptionValue(ACEData.infile, [ "aceinfile" ]);
+    elif ACEfname = "ACEStats" then
+      input := ACEData.infile; # If ACEinfile option used ... we ignore it
+    fi;
+    PrintTo(input, ""); # Just so we can use AppendTo from here on
+    ToACE := function(list) WRITE_LIST_TO_STREAM(AppendTo, input, list); end;
+  else  # ACEfname = "StartACE"
+    input := InputOutputLocalProcess(ACEData.tmpdir, ACEData.binary, []);
+    ToACE := function(list) WRITE_LIST_TO_STREAM(WriteAll, input, list); end;
+  fi;
+  outfile := GetOptionValue(ACEData.outfile, [ "ao", "aceoutfile" ]);
 
-  outfile := GetOptionValue(ACEinfo.outfile, [ "ao", "ACEoutfile" ]);
-    
   # Give a name to the group ACE will be dealing with (this is not
   # actually necessary ... ACE essentially treats it as a comment)
-  PrintTo(infile, "Group Name: ", 
-          GetOptionValue("G", ["enumeration"]), 
-          ";\n");
+  ToACE([ "Group Name: ", GetOptionValue("G", ["enumeration"]), ";\n" ]);
   
+  IsLowercaseOneCharGen := function(g)
+    local gstring;
+    gstring := String(g);
+    return Length(gstring) = 1 and LowercaseString(gstring) = gstring;
+  end;
+
   # Define the generators ACE will use
-  AppendTo(infile,"Group Generators: ");
+  ToACE([ "Group Generators: " ]);
   if n <= 26 then
     # if #generators <= 26 tell ACE to use alphabetic generators: a ...
-    AppendTo(infile, CHARS_LALPHA{[1..n]}, ";\n");
-    gens := List([1..n], i -> WordAlp(CHARS_LALPHA{[1..n]}, i));
+    if ForAll(fgens, g -> IsLowercaseOneCharGen(g)) then
+      # Try to use the user's set of generators for ACE ... if we can
+      gens := List(fgens, g -> String(g));
+    else
+      gens := List([1..n], i -> WordAlp(CHARS_LALPHA, i));
+    fi;
+    ToACE( [ Flat([gens, ";\n"]) ] );
   else
     # if #generators > 26 tell ACE to use numerical generators: 1 ...
-    AppendTo(infile, n, ";\n");
+    ToACE([ n, ";\n" ]);
     gens := [1..n];
   fi;
 
   DoWords := function(words)
     # Takes a GAP List of words and produces the corresponding ACE list
-    local i,j,m,e,p;
+    local i, j, m, e, p;
     for i in [1..Length(words)] do
       m := NumberSyllables(words[i]);
       for j in [1..m] do
         p := Position(nums, GeneratorSyllable(words[i], j));
         e := ExponentSyllable(words[i], j);
-        AppendTo(infile, gens[p]);
+        ToACE([ gens[p] ]);
         if e<>1 then
-          AppendTo(infile, "^", e);
+          ToACE([ "^", e ]);
         fi;
         if j<m then
-          AppendTo(infile,"*");
+          ToACE([ "*" ]);
         fi;
       od;
       if i<Length(words) then
-        AppendTo(infile,",");
+        ToACE([ "," ]);
       fi;
     od;
-    AppendTo(infile,";\n");
+    ToACE([ ";\n" ]);
   end;
 
   # Define the group relators ACE will use
-  AppendTo(infile,"Group Relators: ");
+  ToACE([ "Group Relators: " ]);
   DoWords(rels);
 
   # Give a name to the subgroup ACE will be dealing with (this is not
   # actually necessary ... ACE essentially treats it as a comment)
-  AppendTo(infile, "Subgroup Name: ", 
-           GetOptionValue("H", ["subgroup"]),
-           ";\n");
+  ToACE([ "Subgroup Name: ", GetOptionValue("H", ["subgroup"]), ";\n" ]);
   
-  # define the subgroup generators ACE will use
-  AppendTo(infile,"Subgroup Generators:");
+  # Define the subgroup generators ACE will use
+  ToACE([ "Subgroup Generators:" ]);
   DoWords(sgens);
 
   # Now we look at options other than "enum...", "subg..." and "echo".
@@ -436,24 +463,28 @@ local fgens,rels,sgens,a,i,j,k,n,nums,fullopt,opt,optval,options,known,
       if fullopt{[1..4]} = "pure" then
         # Options "pure r" and "pure c" are the only ACE options
         # for which ACE did not have a single-word alternative.
-        # So the corresponding GAP4 options are "purer" and "purec",
+        # So the corresponding GAP options are "purer" and "purec",
         # respectively. Here we reconstruct what ACE expects.
         aceopt := Concatenation(opt{[1..4]}, " ", opt{[5]});
       else
-        # The ACE option is the same as the GAP4 option
+        # The ACE option is the same as the GAP option
         aceopt := opt;
       fi;
       if value = "" then
-        AppendTo(infile, aceopt, ";\n");
+        ToACE([ aceopt, ";\n" ]);
       else
-        AppendTo(infile, aceopt, ":", value, ";\n");
+        ToACE([ aceopt, ":", value, ";\n" ]);
       fi;
     fi;
     if echo then
       if fullopt in NonACEbinOptions then
         # First deal with the non-ACE binary options
-        if fullopt = "ACEoutfile" then
+        if fullopt = "aceoutfile" and ACEfname<>"StartACE" then
           Print(" ", opt, " := ", optval, " (passed to ACE via option: ao)\n");
+        elif (fullopt = "aceoutfile" and ACEfname = "StartACE") or
+             (fullopt = "aceinfile" and
+              ACEfname<>"ACECosetTableFromGensAndRels") then
+          Print(" ", opt, " := ", optval, " (ignored)\n");
         else
           Print(" ", opt, " := ", optval, " (not passed to ACE)\n");
         fi;
@@ -475,15 +506,15 @@ local fgens,rels,sgens,a,i,j,k,n,nums,fullopt,opt,optval,options,known,
     # binary at all, and "ACEoutfile" is only passed to the ACE binary as "ao".
     # We have already dealt with the options  "ACEinfile",  "ao", "ACEoutfile", 
     # "enumeration" and "subgroup".
-    donothing := fullopt in ["echo", "ACEinfile", "ao", "ACEoutfile",
+    donothing := fullopt in ["echo", "aceinfile", "ao", "aceoutfile",
                              "silent", "enumeration", "subgroup" ];
     optval := ValueOption(opt);
     if optval = true then
-      # An option detected by GAP4 as boolean may in fact be a no-value
+      # An option detected by GAP as boolean may in fact be a no-value
       # option of ACE ... unknown ACE options detected as being true are
       # assumed to be no-value options (since the user can still over-ride
       # this behaviour by entering values of 0 or 1 explicitly e.g. 
-      # CallACE(... : opt := 1) )
+      # ACEStats(... : opt := 1) )
       if not known or IsValidOptionValue("") then
         ProcessOption("");
       else
@@ -497,11 +528,11 @@ local fgens,rels,sgens,a,i,j,k,n,nums,fullopt,opt,optval,options,known,
       # ProcessOption() is not designed to cope with a list
       # ... we do it `manually'.
       if not donothing then
-        AppendTo(infile, opt,":", optval[1]);
+        ToACE([ opt,":", optval[1] ]);
         for i in [2..Length(optval)] do
-          AppendTo(infile, ",",optval[i]);
+          ToACE([ ",",optval[i] ]);
         od;
-        AppendTo(infile, ";\n");
+        ToACE([ ";\n" ]);
       fi;
       if echo then 
         Print(" ",opt," := ", optval, " (brackets are not passed to ACE)\n");
@@ -512,160 +543,67 @@ local fgens,rels,sgens,a,i,j,k,n,nums,fullopt,opt,optval,options,known,
     fi;
   od;
               
-  # If we only want stats then "messages" needs to be 0.
-  # We set it here explicitly, in order to override any settings made
-  # by the user.
-  if stats then
-    AppendTo(infile, "Messages:0;\n");
-  fi;
+  if ACEfname <> "StartACE" then
+    # Direct ACE output to outfile if called via
+    # ACECosetTableFromGensAndRels or ACEStats
+    ToACE([ "Alter Output:", outfile, ";\n" ]);
+    ToACE([ "End;\n" ]); # (one of) the ACE directives that initiate
+                         # an enumeration
 
-  # Direct ACE output to outfile
-  AppendTo(infile, "Alter Output:", outfile, ";\n");
-  AppendTo(infile, "End;\n"); # (one of) the ACE directives that initiate
-                              # an enumeration
-  if stats = false then
-    AppendTo(infile, "Print Table;\n");
-  fi;
-
-  if infile<>ACEinfo.infile then
-    # We only wanted to write an ACE input file
-    return;
-  fi;
-
-  # Run ACE on the constructed infile 
-  # ... the ACE output will appear in outfile 
-  #     (except for the banner which is directed to ACEinfo.banner)
-  Exec(Concatenation("cd ", Filename(ACEinfo.tmpdir, ""), "; ",
-                     ACEinfo.binary, " < in > banner"));
-
-  # We now have a look at the ACE output
-  instream := InputTextFile(outfile);
-  line := ReadLine(instream);
-
-  if stats then # CALL_ACE called via ACEStats
-    # Parse the line for statistics and return
-    a := Filtered(line,i->i in ". " or i in CHARS_DIGITS);
-    if line{[1..5]}<>"INDEX" then
-      # Enumeration failed so the index is missing 
-      # ... shove a 0 index on the front of a
-      a := Concatenation("0 ", a);
+    if ACEfname = "ACECosetTableFromGensAndRels" then
+      ToACE([ "Print Table;\n" ]);
     fi;
-    a := SplitString(a, "", " .");
 
-    CloseStream(instream);
-    return rec(index     := Int(a[1]),
-               cputime   := Int(a[7])*10^Length(a[8])+Int(a[8]),
-               cputimeUnits :=Concatenation("10^-", String(Length(a[8])),
-                                            " seconds"),
-               maxcosets := Int(a[9]),
-               totcosets := Int(a[10]));
-  fi;
-
-  # Skip some header until the ` coset ' line
-  while line<>fail and line{[1..6]}<>" coset" do
-    line := ReadLine(instream);
-  od;
-
-  if line = fail then
-    PopOptions();
-    Error("no coset table output from ACE?");
-  fi;
-
-  # Look at the coset table header and determine the column
-  # corresponding to each generator:
-  #   col[i] = column(gens[i])
-  col := Filtered(List(gens,i -> 
-                       Position(# List of coset table column headers
-                                SplitString(line, "", " |\n"),
-                                String(i))),
-                  x -> x<>fail );
-
-  # Discard the `---' line
-  line := ReadLine(instream);
-
-  # Now read the body of the coset table into table as a GAP4 list
-  table := List([1..n],i -> []);
-  p := 0;
-  ok := true;
-  line := ReadLine(instream);
-  while ok and line<>fail and Length(line)>1 and line[1]<>'=' do
-    p := p+1;
-    rowentries := SplitString(line, ""," :|\n");
-    # Syntax check
-    if Int(rowentries[1])=fail or Int(rowentries[1])<>p then
-      PopOptions();
-      Error("syntax error in ACE output file");
+    if ACEfname = "ACEStats" or input = ACEData.infile then
+      # Run ACE on the constructed input
+      # ... the ACE output will appear in outfile 
+      #     (except for the banner which is directed to ACEData.banner)
+      Exec(Concatenation(ACEData.binary, "<", input, ">", ACEData.banner));
     fi;
-    for i in [1..n] do
-      a := Int(rowentries[ col[i] ]);
-      ok := a<>0;
-      Add(table[i], a);
-    od;
-
-    line := ReadLine(instream);
-  od;
-
-  CloseStream(instream);
-  if not ok then
-    return fail;
   fi;
 
-  cosettable := [];
-  n := Length(table[1]);
-  for i in table do
-    Add(cosettable, i);
-    if ForAll([1..n], j->i[i[j]] = j) then
-      Add(cosettable, i);
-    else
-      j := [];
-      for k in [1..n] do
-        j[i[k]] := k;
-      od;
-      Add(cosettable, j);
-    fi;
-  od;
-  return cosettable;
+  if ACEfname = "ACECosetTableFromGensAndRels" then
+    return rec(gens := gens, 
+               infile := input, 
+               outfile := outfile,
+               silent := GetOptionValue(false, ["silent"]));
+  elif ACEfname = "ACEStats" then
+    return outfile;
+  else # ACEfname = "StartACE"
+    Add(ACEData.io, rec(gens := gens, stream := input));
+    return Length(ACEData.io);
+  fi;
 end);
 
 #############################################################################
 ####
 ##
-#F  CallACE . . . . . . . . .  The ACE version of the coset enumerator TCENUM
+#F  ACECosetTableFromGensAndRels . . . . . . .  Non-interactive ACECosetTable
 ##
-BindGlobal("CallACE", function(fgens,rels,sgens)
-  local cosettable,silent;
-  silent:=ValueOption("silent")=true;
-  repeat
-    cosettable := CALL_ACE(fgens,rels,sgens);
-    if cosettable=fail then
-      if silent then return fail;fi;
-      Error("the coset enumeration using the `ACE' enumerator did not ",
-            "complete.\n If you called the command with restrictive",
-            "options relax these. Otherwise increase the memory available",
-            "to `ACE'.\nType `quit;' to exit to the main loop.");
-    fi;
-  until cosettable<>fail;
-  StandardizeTable(cosettable);
-  return cosettable;
+BindGlobal("ACECosetTableFromGensAndRels", function(fgens, rels, sgens)
+  # Use ACECosetTable non-interactively
+  return ACECosetTable(fgens, rels, sgens);
 end);
 
 #############################################################################
 ####
 ##
 #V  ACETCENUM . . . . . . . .  The ACE version of the coset enumerator TCENUM
-##  . . . . . . . . . . . . . . . CosetTableFromGensAndRels is set to CallACE
+##  . . . .  CosetTableFromGensAndRels is set to ACECosetTableFromGensAndRels
 ##
-BindGlobal("ACETCENUM",rec(name:="ACE-enumerator",
-        CosetTableFromGensAndRels:=CallACE));
+BindGlobal("ACETCENUM", rec(name := "ACE-enumerator",
+                            CosetTableFromGensAndRels 
+                                := ACECosetTableFromGensAndRels));
 
 #############################################################################
 ####
 ##
-#F  ACEStats  . . . . . . . . . . . . . . . Runs CALL_ACE for statistics only
-##  . . . . . . . . . . . . . . . . . . . . . . . no coset table is generated
+#F  CallACE . . . . . . . . . . . . . . . . . . . . . . . . . . .  deprecated
 ##
-BindGlobal("ACEStats", function(fgens,rels,sgens)
-  return CALL_ACE(fgens,rels,sgens,1);
+BindGlobal("CallACE", function(arg)
+
+  Error("CallACE is deprecated: Use `ACECosetTableFromGensAndRels' or\n",
+        "`ACECosetTable'.\n");
 end);
 
 #############################################################################

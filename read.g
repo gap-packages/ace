@@ -9,8 +9,9 @@
 #Y                      Department of Computer Science & Electrical Eng.
 #Y                      University of Queensland, Australia.
 ##
-##  Read the installation file for the examples.
+##  Read the installation files.
 
+ReadPkg("ace", "gap/interact.gi");
 ReadPkg("ace", "gap/example.gi");
 
 #E  read.g  . . . . . . . . . . . . . . . . . . . . . . . . . . .  ends here 

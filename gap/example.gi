@@ -40,9 +40,9 @@ InstallGlobalFunction(ACEexample0, function()
   f := FreeGroup("a","b","c"); a := f.1; b := f.2; c := f.3;
   M12 := f / [a^11, b^2, c^2, (a*b)^3, (a*c)^3, (b*c)^10,
               c*b*c*b*a*b*c*b*c*a^-5];
-  # 3rd argument to CallACE() are the generators of the Identity subgroup
-  return CallACE(FreeGeneratorsOfFpGroup(M12), RelatorsOfFpGroup(M12), [] :
-                 # Options that CallACE processes first anyway
+  # 3rd argument to ACECosetTable() are the generators of the Identity subgroup
+  return ACECosetTable(FreeGeneratorsOfFpGroup(M12), RelatorsOfFpGroup(M12), [] :
+                 # Options that ACECosetTable processes first anyway
                  echo, enum := "M_12", subg := "Id", 
                  # Other options
                  mess := 25000, hlt, wo := "1250k");
@@ -59,9 +59,9 @@ InstallGlobalFunction(ACEexample0a, function()
   f := FreeGroup("a","b","c"); a := f.1; b := f.2; c := f.3;
   M12 := f / [a^11, b^2, c^2, (a*b)^3, (a*c)^3, (b*c)^10,
               c*b*c*b*a*b*c*b*c*a^-5];
-  # 3rd argument to CallACE() is the generators of the Identity subgroup
-  return CallACE(FreeGeneratorsOfFpGroup(M12), RelatorsOfFpGroup(M12), [] :
-                 # Options that CallACE processes first anyway
+  # 3rd argument to ACECosetTable() is the generators of the Identity subgroup
+  return ACECosetTable(FreeGeneratorsOfFpGroup(M12), RelatorsOfFpGroup(M12), [] :
+                 # Options that ACECosetTable processes first anyway
                  echo, enum := "M_12", subg := "Id", 
                  # Other options
                  mess := 25000, felsch := 1, wo := "1250k",
@@ -79,10 +79,10 @@ InstallGlobalFunction(ACEexample1, function()
   f := FreeGroup("a","b","c"); a := f.1;  b := f.2;  c := f.3;
                                A := a^-1; B := b^-1; C := c^-1;
   g := f / [a*B*C*b*a*c, b*A*C*b*a*a*c*A, a*c*c*A*A*B*a*b];
-  # 3rd argument to CallACE() is the generators of the subgroup
-  return CallACE(FreeGeneratorsOfFpGroup(g), RelatorsOfFpGroup(g), 
+  # 3rd argument to ACECosetTable() is the generators of the subgroup
+  return ACECosetTable(FreeGeneratorsOfFpGroup(g), RelatorsOfFpGroup(g), 
                  [a*B*C*b*a*c, b*A*C*b*a*a*c*A, a*c*c*A*A*B*a*b] :
-                 # Options that CallACE processes first anyway
+                 # Options that ACECosetTable processes first anyway
                  echo, enum := "G (order 2^17)", subg := "H (index 1)", 
                  # Other options
                  mess := 10000, felsch := 1, wo := "2500k");
@@ -100,10 +100,10 @@ InstallGlobalFunction(ACEexample1a, function()
                                    A := a^-1; B := b^-1; C := c^-1;
   g := f / [a*B*C*b*a*c, b*A*C*b*a*a*c*A, a*c*c*A*A*B*a*b,
             x^2, Comm(a,x), Comm(b,x), Comm(c,x)];
-  # 3rd argument to CallACE() is the generators of the subgroup
-  return CallACE(FreeGeneratorsOfFpGroup(g), RelatorsOfFpGroup(g), 
+  # 3rd argument to ACECosetTable() is the generators of the subgroup
+  return ACECosetTable(FreeGeneratorsOfFpGroup(g), RelatorsOfFpGroup(g), 
                  [a*B*C*b*a*c, b*A*C*b*a*a*c*A, a*c*c*A*A*B*a*b] :
-                 # Options that CallACE processes first anyway
+                 # Options that ACECosetTable processes first anyway
                  echo, enum := "G (order 2^18)", subg := "H (index 2)", 
                  # Other options
                  mess := 50000, felsch := 1, wo := "2500k");
@@ -123,10 +123,10 @@ InstallGlobalFunction(ACEexample1b, function()
   g := f / [a*B*C*b*a*c, b*A*C*b*a*a*c*A, a*c*c*A*A*B*a*b,
             x^2, Comm(a,x), Comm(b,x), Comm(c,x),
             y^3, Comm(a,y), Comm(b,y), Comm(c,y), Comm(x,y)];
-  # 3rd argument to CallACE() is the generators of the subgroup
-  return CallACE(FreeGeneratorsOfFpGroup(g), RelatorsOfFpGroup(g), 
+  # 3rd argument to ACECosetTable() is the generators of the subgroup
+  return ACECosetTable(FreeGeneratorsOfFpGroup(g), RelatorsOfFpGroup(g), 
                  [a*B*C*b*a*c, b*A*C*b*a*a*c*A, a*c*c*A*A*B*a*b] :
-                 # Options that CallACE processes first anyway
+                 # Options that ACECosetTable processes first anyway
                  echo, enum := "G (order 2^18.3)", subg := "H (index 6)", 
                  # Other options
                  mess := 100000, felsch := 1, wo := "2500k");
@@ -146,10 +146,10 @@ InstallGlobalFunction(ACEexample1c, function()
   g := f / [a*B*C*b*a*c, b*A*C*b*a*a*c*A, a*c*c*A*A*B*a*b,
             x^2, Comm(a,x), Comm(b,x), Comm(c,x),
             y^3, Comm(a,y), Comm(b,y), Comm(c,y), Comm(x,y)];
-  # 3rd argument to CallACE() is the generators of the subgroup
-  return CallACE(FreeGeneratorsOfFpGroup(g), RelatorsOfFpGroup(g), 
+  # 3rd argument to ACECosetTable() is the generators of the subgroup
+  return ACECosetTable(FreeGeneratorsOfFpGroup(g), RelatorsOfFpGroup(g), 
                  [a*B*C*b*a*c, b*A*C*b*a*a*c*A, a*c*c*A*A*B*a*b] :
-                 # Options that CallACE processes first anyway
+                 # Options that ACECosetTable processes first anyway
                  echo, enum := "G (order 2^18.3)", subg := "H (index 6)", 
                  # Other options
                  hard, mend, ct := 2000, no := 11, pmod := 2, fill := 2, 
@@ -169,9 +169,9 @@ InstallGlobalFunction(ACEexample2, function()
        e := f.5;  x := f.6;  y := f.7;
   g := f / [a*b*c^-1, b*c*d^-1, c*d*e^-1, d*e*x^-1, 
             e*x*y^-1, x*y*a^-1, y*a*b^-1];
-  # 3rd argument to CallACE() are the generators of the Identity subgroup
-  return CallACE(FreeGeneratorsOfFpGroup(g), RelatorsOfFpGroup(g), [] :
-                 # Options that CallACE processes first anyway
+  # 3rd argument to ACECosetTable() are the generators of the Identity subgroup
+  return ACECosetTable(FreeGeneratorsOfFpGroup(g), RelatorsOfFpGroup(g), [] :
+                 # Options that ACECosetTable processes first anyway
                  echo, enum := "F(2,7), aka C_29", subg := "Id", 
                  # Other options
                  wo := "2m", mess := 25000, purec);
@@ -190,9 +190,9 @@ InstallGlobalFunction(ACEexample2a, function()
        e := f.5;  x := f.6;  y := f.7;
   g := f / [a*b*c^-1, b*c*d^-1, c*d*e^-1, d*e*x^-1, 
             e*x*y^-1, x*y*a^-1, y*a*b^-1];
-  # 3rd argument to CallACE() are the generators of the Identity subgroup
-  return CallACE(FreeGeneratorsOfFpGroup(g), RelatorsOfFpGroup(g), [] :
-                 # Options that CallACE processes first anyway
+  # 3rd argument to ACECosetTable() are the generators of the Identity subgroup
+  return ACECosetTable(FreeGeneratorsOfFpGroup(g), RelatorsOfFpGroup(g), [] :
+                 # Options that ACECosetTable processes first anyway
                  echo, enum := "F(2,7), aka C_29", subg := "Id", 
                  # Other options
                  wo := "2m", mess := 25000, felsch);
@@ -211,9 +211,9 @@ InstallGlobalFunction(ACEexample2b, function()
        e := f.5;  x := f.6;  y := f.7;
   g := f / [a*b*c^-1, b*c*d^-1, c*d*e^-1, d*e*x^-1, 
             e*x*y^-1, x*y*a^-1, y*a*b^-1];
-  # 3rd argument to CallACE() are the generators of the Identity subgroup
-  return CallACE(FreeGeneratorsOfFpGroup(g), RelatorsOfFpGroup(g), [] :
-                 # Options that CallACE processes first anyway
+  # 3rd argument to ACECosetTable() are the generators of the Identity subgroup
+  return ACECosetTable(FreeGeneratorsOfFpGroup(g), RelatorsOfFpGroup(g), [] :
+                 # Options that ACECosetTable processes first anyway
                  echo, enum := "F(2,7), aka C_29", subg := "Id", 
                  # Other options
                  wo := "2m", mess := 25000, felsch := 1);
@@ -229,9 +229,9 @@ InstallGlobalFunction(ACEexample5, function()
   # We define C_5 on 2 generators
   f := FreeGroup("a","b"); a := f.1;  b := f.2;
   g := f / [a^5, b];
-  # 3rd argument to CallACE() are the generators of the Identity subgroup
-  return CallACE(FreeGeneratorsOfFpGroup(g), RelatorsOfFpGroup(g), [] :
-                 # Options that CallACE processes first anyway
+  # 3rd argument to ACECosetTable() are the generators of the Identity subgroup
+  return ACECosetTable(FreeGeneratorsOfFpGroup(g), RelatorsOfFpGroup(g), [] :
+                 # Options that ACECosetTable processes first anyway
                  echo, enum := "C_5", subg := "Id", 
                  # Other options
                  mess := -1, felsch);
@@ -248,9 +248,9 @@ InstallGlobalFunction(ACEexample6, function()
   f := FreeGroup("x","y"); x := f.1;  y := f.2; 
                            X := x^-1; Y := y^-1;
   g := f / [x*Y*X*Y*X*Y, Y*X*X*y*x*x, x*y^4*x*y^10*x*y^4*x*y^29*x^12];
-  # 3rd argument to CallACE() are the generators of the subgroup H 
-  return CallACE(FreeGeneratorsOfFpGroup(g), RelatorsOfFpGroup(g), [y] :
-                 # Options that CallACE processes first anyway
+  # 3rd argument to ACECosetTable() are the generators of the subgroup H 
+  return ACECosetTable(FreeGeneratorsOfFpGroup(g), RelatorsOfFpGroup(g), [y] :
+                 # Options that ACECosetTable processes first anyway
                  echo, enum := "SL(2,19)", subg := "H (index 180)", 
                  # Other options
                  mess := 50000, hard, mend, pmod := 2);
@@ -267,9 +267,9 @@ InstallGlobalFunction(ACEexample7, function()
   f := FreeGroup("a","b","c"); a := f.1;  b := f.2;  c := f.3;
                                A := a^-1; B := b^-1; C := c^-1;
   g := f / [a*B*C*b*a*c, b*A*C*b*a*a*c*A, a*c*c*A*A*B*a*b];
-  # 3rd argument to CallACE() are the generators of the Identity subgroup
-  return CallACE(FreeGeneratorsOfFpGroup(g), RelatorsOfFpGroup(g), [] :
-                 # Options that CallACE processes first anyway
+  # 3rd argument to ACECosetTable() are the generators of the Identity subgroup
+  return ACECosetTable(FreeGeneratorsOfFpGroup(g), RelatorsOfFpGroup(g), [] :
+                 # Options that ACECosetTable processes first anyway
                  echo, enum := "cfd0R7 (order 2^17)", subg := "Id", 
                  # Other options
                  wo := "6m", felsch := 1, mend,   dmod := 3, dsiz := 1000,
@@ -287,9 +287,9 @@ InstallGlobalFunction(ACEexample7a, function()
   f := FreeGroup("a","b","c"); a := f.1;  b := f.2;  c := f.3;
                                A := a^-1; B := b^-1; C := c^-1;
   g := f / [a*B*C*b*a*c, b*A*C*b*a*a*c*A, a*c*c*A*A*B*a*b];
-  # 3rd argument to CallACE() are the generators of the subgroup H
-  return CallACE(FreeGeneratorsOfFpGroup(g), RelatorsOfFpGroup(g), [b*c] :
-                 # Options that CallACE processes first anyway
+  # 3rd argument to ACECosetTable() are the generators of the subgroup H
+  return ACECosetTable(FreeGeneratorsOfFpGroup(g), RelatorsOfFpGroup(g), [b*c] :
+                 # Options that ACECosetTable processes first anyway
                  echo, enum := "cfd0R7 (order 2^17)", 
                  subg := "H (index 2^14)", 
                  # Other options
@@ -308,10 +308,10 @@ InstallGlobalFunction(ACEexample7b, function()
   f := FreeGroup("a","b","c"); a := f.1;  b := f.2;  c := f.3;
                                A := a^-1; B := b^-1; C := c^-1;
   g := f / [a*B*C*b*a*c, b*A*C*b*a*a*c*A, a*c*c*A*A*B*a*b];
-  # 3rd argument to CallACE() are the generators of the subgroup H
-  return CallACE(FreeGeneratorsOfFpGroup(g), RelatorsOfFpGroup(g), 
+  # 3rd argument to ACECosetTable() are the generators of the subgroup H
+  return ACECosetTable(FreeGeneratorsOfFpGroup(g), RelatorsOfFpGroup(g), 
                  [b*c, A*B*A*A*b*c*a*b*C] :
-                 # Options that CallACE processes first anyway
+                 # Options that ACECosetTable processes first anyway
                  echo, enum := "cfd0R7 (order 2^17)", 
                  subg := "H (index 2^3)", 
                  # Other options
@@ -330,10 +330,10 @@ InstallGlobalFunction(ACEexample7c, function()
   f := FreeGroup("a","b","c"); a := f.1;  b := f.2;  c := f.3;
                                A := a^-1; B := b^-1; C := c^-1;
   g := f / [a*B*C*b*a*c, b*A*C*b*a*a*c*A, a*c*c*A*A*B*a*b];
-  # 3rd argument to CallACE() are the generators of the subgroup H
-  return CallACE(FreeGeneratorsOfFpGroup(g), RelatorsOfFpGroup(g), 
+  # 3rd argument to ACECosetTable() are the generators of the subgroup H
+  return ACECosetTable(FreeGeneratorsOfFpGroup(g), RelatorsOfFpGroup(g), 
                  [b*c, A*B*A*A*b*c*a*b*C, A*c*c*c*a*c*B*c*A] :
-                 # Options that CallACE processes first anyway
+                 # Options that ACECosetTable processes first anyway
                  echo, enum := "cfd0R7 (order 2^17)", 
                  subg := "H (index 1)", 
                  # Other options

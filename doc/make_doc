@@ -13,10 +13,8 @@
 echo "TeXing documentation"
 # TeX the manual and build its bibliography
 tex manual;bibtex manual
-# TeX the manual again to incorporate the ToC and build the index
-# ... we don't use GAP's manualindex to build the index, since this 
-#     lowercases options ACEinfile and ACEoutfile in the index 
-tex manual;makeindex manual
+# TeX the manual again to incorporate the ToC ... and build the index
+tex manual; ../../../doc/manualindex manual
 # Finally TeX the manual again to get cross-references right
 tex manual
 # Create the PostScript version (comment out next line, if not needed)
