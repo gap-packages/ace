@@ -62,6 +62,8 @@ DeclareGlobalFunction("ACE_READ_AS_FUNC");
 DeclareGlobalFunction("ACEExample");
 DeclareGlobalFunction("ACEReadResearchExample");
 DeclareGlobalFunction("ACEPrintResearchExample");
+DeclareGlobalFunction("ACEDirectoryTemporary");
+DeclareGlobalFunction("ACE_ERROR");
 
 #############################################################################
 ##

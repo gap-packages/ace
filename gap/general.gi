@@ -507,6 +507,97 @@ end);
 #############################################################################
 ####
 ##
+#F  ACEDirectoryTemporary( <dir> )
+##
+##  calls the UNIX command `mkdir' to create <dir>, which must be  a  string,
+##  and if successful a directory  object  for  <dir>  is  both  assigned  to
+##  `ACEData.tmpdir'  and   returned.   The   fields   `ACEData.infile'   and
+##  `ACEData.outfile' are also set to be files in  `ACEData.tmpdir',  and  on
+##  exit from {\GAP} <dir> is removed.
+##
+InstallGlobalFunction(ACEDirectoryTemporary, function(dir)
+local created;
+
+  # check arguments
+  if not IsString(dir) then
+    Error("usage: ACEDirectoryTemporary( <dir> ) : <dir> must be a string.\n");
+  fi; 
+
+  # create temporary directory
+  created := Process(DirectoryCurrent(),
+                     Filename( DirectoriesSystemPrograms(), "sh" ),
+                     InputTextUser(),
+                     OutputTextUser(),
+                     [ "-c", Concatenation("mkdir ", dir) ]);
+  if created = fail then
+    return fail;
+  fi;
+
+  Add( DIRECTORIES_TEMPORARY, dir );
+  ACEData.tmpdir := Directory(dir);
+  ACEData.infile := Filename(ACEData.tmpdir, "in");
+  ACEData.outfile := Filename(ACEData.tmpdir, "out");
+  return ACEData.tmpdir;
+end);
+
+#############################################################################
+####
+##
+#F  ACE_ERROR(<errdiag>, <errcause>, <onbreakmsg>)
+##
+##  essentially does Error(<errdiag>) followed by <errcause>, a list of lines
+##  (strings), and <onbreakmsg>, also a list of lines (strings). We make  use
+##  of OnBreak and OnBreakMessage (in case of GAP 4.3+) to generate a one-off
+##  user-friendly message of how the user may recover from the error.
+##
+InstallGlobalFunction(ACE_ERROR, function(errdiag, errcause, onbreakmsg)
+local ACEOnBreak, ACEOnBreakMessage, NormalOnBreak, NormalOnBreakMessage;
+
+  if IsFunction(OnBreakMessage) then
+    # what we do in GAP 4.3+
+    NormalOnBreak := OnBreak;
+    ACEOnBreak := function()
+      Where(0);
+      OnBreak := NormalOnBreak;
+    end;
+
+    NormalOnBreakMessage := OnBreakMessage;
+    onbreakmsg[1]{[1]} := LowercaseString( onbreakmsg[1]{[1]} );
+    ACEOnBreakMessage := function()
+      local s;
+
+      for s in onbreakmsg do
+        Print(" ", s, "\n");
+      od;
+      OnBreakMessage := NormalOnBreakMessage;
+    end;
+
+    OnBreak := ACEOnBreak;
+    OnBreakMessage := ACEOnBreakMessage;
+    Error( ACE_JOIN(Concatenation([errdiag], errcause), "\n "), "\n" );
+  else
+    # what we do in GAP 4.2 where OnBreakMessage is not available
+    NormalOnBreak := OnBreak;
+    ACEOnBreak := function()
+      local s;
+
+      for s in errcause do
+        Info(InfoACE + InfoWarning, 1, s);
+      od;
+      for s in onbreakmsg do
+        Info(InfoACE + InfoWarning, 1, s);
+      od;
+      OnBreak := NormalOnBreak;
+    end;
+
+    OnBreak := ACEOnBreak;
+    Error(errdiag, "\n");
+  fi;
+end);
+
+#############################################################################
+####
+##
 #F  CallACE . . . . . . . . . . . . . . . . . . . . . . . . . . .  deprecated
 ##
 InstallGlobalFunction(CallACE, function(arg)

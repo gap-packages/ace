@@ -17,7 +17,7 @@
 The ``Advanced Coset Enumerator'' {\ACE}:
 
 \begintt
-ACE coset enumerator (C) 1995-1999 by George Havas and Colin Ramsay
+ACE coset enumerator (C) 1995-2001 by George Havas and Colin Ramsay
 \endtt
 \URL{http://www.csee.uq.edu.au/~havas/ace3.tar.gz}
 
@@ -669,7 +669,8 @@ within {\GAP} is stored; its fields are:
 \quad`binary' & the path of the {\ACE} binary;
 
 \quad`tmpdir' & the path of the  temporary  directory  containing  the
-non-interactive {\ACE} input and output files;
+non-interactive   {\ACE}   input   and   output   files   (also    see
+"ACEDirectoryTemporary" below);
 
 \quad`io'     & list  of  data  records  for  `ACEStart'   (see  below 
 and~"ACEStart") processes;
@@ -713,6 +714,20 @@ from {\ACE};
 \quad`stats'  & a record as output by the function `ACEStats'.
 
 \enditems
+
+\>ACEDirectoryTemporary( <dir> ) F
+
+calls the UNIX command `mkdir'  to  create  <dir>,  which  must  be  a
+string, and if  successful  a  directory  object  for  <dir>  is  both
+assigned to `ACEData.tmpdir' and returned. The fields `ACEData.infile'
+and `ACEData.outfile' are also set to be  files  in  `ACEData.tmpdir',
+and on exit from {\GAP} <dir> is removed. Most users will  never  need
+this command;  by  default,  {\GAP}  typically  chooses  a  ``random''
+subdirectory of `/tmp' for  `ACEData.tmpdir'  which  may  occasionally
+have limits on what  may  be  written  there.  `ACEDirectoryTemporary'
+permits the user to choose a directory (object) where one  is  not  so
+limited.
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{Setting the Verbosity of ACE via Info and InfoACE}

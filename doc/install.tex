@@ -42,17 +42,18 @@ to compile the binary and to install it in the appropriate place.
 
 Note that the  current version of the configuration  process only sets
 up  directory paths.  If you  need a  different compiler  or different
-compiler options, you need  to edit `src/Makefile.in' prior to calling
-`make' yourself.
+compiler options, you need to edit `src/Makefile.in'  yourself,  prior
+to calling `make'.
 
 If you use this installation of {\GAP} on different hardware platforms
 you will have to compile the binary for each platform separately. This
-is  done  by calling  `configure'  and  `make'  for the  package  anew
-immediately   after  compiling  {\GAP}   itself  for   the  respective
-architecture.  If your version of  {\GAP} is already compiled (and has
-last  been compiled  on  the same  architecture)  you do  not need  to
-compile {\GAP} again, it is  sufficient to call the `configure' script
-in the {\GAP} home directory.
+is done by calling `configure',  editing  `src/Makefile.in'  possibly,
+and calling `make' for the package anew  immediately  after  compiling
+{\GAP} itself for the respective  architecture.  If  your  version  of
+{\GAP} is already compiled (and has last been  compiled  on  the  same
+architecture)  you  do  not  need  to  compile  {\GAP}  again,  it  is
+sufficient  to  call  the  `configure'  script  in  the  {\GAP}   home
+directory.
 
 The manual you are currently reading describes how to use  the  {\ACE}
 Share Package; it can be  found  in  the  `doc'  subdirectory  of  the
@@ -107,7 +108,7 @@ messages by temporarily setting the `InfoLevel' of `InfoWarning' to 0,
 and a duplicated semicolon will suppress the `true' result:
 
 \beginexample
-gap> SetInfoLevel(InfoWarning, 0); RequirePackage(" ace ");;
+gap> SetInfoLevel(InfoWarning, 0); RequirePackage( "ace" );;
 gap> SetInfoLevel(InfoWarning, 1);
 \endexample
 
