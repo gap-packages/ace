@@ -937,6 +937,7 @@ The following duplicates the ``Total''  (`totcosets'  in  {\ACE})  and
 strategy.
 
 \beginexample
+gap> SetInfoACELevel(1); # No behind-the-scenes info. please
 gap> F := FreeGroup("r", "s", "t");; r := F.1;; s := F.2;; t := F.3;;
 gap> ACEStats([r, s, t], [(r^t*r^-2)^-1, (s^r*s^-2)^-1, (t^s*t^-2)^-1], []
 >             : sims := 3);
