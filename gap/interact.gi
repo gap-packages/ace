@@ -530,6 +530,164 @@ end);
 #############################################################################
 ####
 ##
+#F  ACE_EQUIV_PRESENTATIONS . . . . . . . . . . . . . . . . Internal function
+##  . . . . . . . . . . . . . . . . . . called  by   ACEAllEquivPresentations
+##  . . . . . . . . . . . . . . . . . . and ACERandomEquivPresentations where
+##  . . . . . . . . . . . . . . . . . . . . string matches the last line read
+##
+InstallGlobalFunction(ACE_EQUIV_PRESENTATIONS, function(ioIndex, string)
+local datarec, out, run;
+  datarec := ACEData.io[ ioIndex ];
+  out := rec(line := FLUSH_ACE_STREAM_UNTIL(
+                         datarec.stream, 3, 3, READ_NEXT_LINE, 
+                         line -> line{[1..6]} in [ "Group ", "** ERR" ] 
+                         ),
+             runs := []);
+  if out.line{[1..6]} = "** ERR" then
+    # Can only happen for ACERandomEquivPresentations
+    out.line := ACEReadUntil(ioIndex, line -> line{[1..12]} = string)[1];
+    Error("ACERandomEquivPresentations:", out.line{[3..Length(out.line)]});
+  fi;
+  while out.line{[1..12]} <> string do
+    run := rec(rels := ACE_GAP_WORDS(datarec,
+                                     ACE_PARAMETER_WITH_LINE(ioIndex, 
+                                                             "Group Relators",
+                                                             out.line)),
+               enumResult := ACE_ENUMERATION_RESULT(datarec.stream,
+                                                    READ_NEXT_LINE));
+    run.stats := ACE_STATS(run.enumResult);
+    Add(out.runs, run);
+    out.line := READ_NEXT_LINE(datarec.stream);
+    Info(InfoACE, 3, CHOMP(out.line));
+  od;
+  return out;
+end);
+#############################################################################
+####
+##
+#F  ACEAllEquivPresentations . . . . . . . Tests all equivalent presentations
+##
+##  For the i-th interactive ACE process, generates and tests an  enumeration
+##  for combinations of relator  ordering,  relator  rotations,  and  relator
+##  inversions, according to the value of optval,  where  i  and  optval  are
+##  determined by arg. The argument optval is considered as a binary  number;
+##  its three bits are treated as flags, and control relator  rotations  (the
+##  2^0 bit), relator inversions (the 2^1 bit) and relator orderings (the 2^2
+##  bit), respectively; 1 means `active' and 0 means `inactive'.
+##
+##  Outputs a record with fields:
+##
+##    primingResult 
+##        the ACE enumeration result message of the priming run;
+##
+##    primingStats
+##        the enumeration result of the priming run as  a  GAP  ACEStats-like
+##        record;
+##
+##    equivRuns
+##        a list of data records, one for each run,  where  each  record  has
+##        fields:
+##
+##      rels
+##        the relators in the order used for the run,
+##
+##      enumResult
+##        the ACE enumeration result message of the run, and
+##
+##      stats
+##        the enumeration result as a GAP ACEStats-like record;
+##
+##    summary
+##        a record with fields:
+##
+##      successes
+##        the total number of  successful  (i.e.  having  finite  enumeration
+##        index) runs,
+##
+##      runs
+##        the total number of equivalent presentation runs executed,
+##
+##      maxcosetsRange
+##        the  range  of  values  as   a   GAP   list   inside   which   each
+##        `equivRuns[i].maxcosets' lies, and
+##
+##      totcosetsRange
+##        the  range  of  values  as  a  {\GAP}  list   inside   which   each
+##        `equivRuns[i].totcosets' lies.
+##
+InstallGlobalFunction(ACEAllEquivPresentations, function(arg)
+local ioIndexAndOptval, ioIndex, datarec, aep, epRec, line;
+  ioIndexAndOptval := IOINDEX_AND_ONE_VALUE(arg);
+  ioIndex := ioIndexAndOptval[1];
+  datarec := ACEData.io[ ioIndex ];
+
+  line := EXEC_ACE_DIRECTIVE_OPTION(ioIndexAndOptval, "aep", 3, 
+                                    line -> line{[1..3]} = "* P", "", false);
+  if line{[1..3]} <> "* P" then
+    Error("ACEAllEquivPresentations:", line{[3..Length(line)]});
+  fi;
+
+  aep := rec(primingResult := ACE_ENUMERATION_RESULT(datarec.stream,
+                                                     READ_NEXT_LINE));
+  aep.primingStats := ACE_STATS(aep.primingResult);
+
+  epRec := ACE_EQUIV_PRESENTATIONS(ioIndex, "* There were");
+  aep.equivRuns := epRec.runs;
+
+  line := SplitString(epRec.line, "", "* Therwsucinu:\n");
+  aep.summary := rec(successes := Int(line[1]), runs := Int(line[2]));
+  line := CHOMP( READ_NEXT_LINE(datarec.stream) );
+  Info(InfoACE, 3, line);
+  line := SplitString(line, "", "* maxcost=,");
+  aep.summary.maxcosetsRange
+       := ACE_EVAL_STRING_EXPR( Concatenation( "[", line[1], "]" ) );
+  aep.summary.totcosetsRange
+       := ACE_EVAL_STRING_EXPR( Concatenation( "[", line[2], "]" ) );
+  return aep;
+end);
+
+#############################################################################
+####
+##
+#F  ACERandomEquivPresentations . . . . . Tests a number of random equivalent 
+##  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . presentations
+##
+##  For the i-th interactive  ACE  process,  generates  and  tests  n  random
+##  enumeration for combinations of relator ordering, relator rotations,  and
+##  relator inversions,  according  to  the  value  of  optval,  where  n  is
+##  determined by optval, and  i  and  optval  are  determined  by  arg.  The
+##  argument optval is considered as a binary  number;  its  three  bits  are
+##  treated as flags, and control relator rotations (the  2^0  bit),  relator
+##  inversions  (the  2^1  bit)  and  relator  orderings   (the   2^2   bit),
+##  respectively; 1 means `active' and 0 means `inactive'.
+##
+##  Outputs a list of records, each record of which has fields:
+##
+##    rels
+##        the relators in the order used for a presentation run,
+##
+##    enumResult
+##        the ACE enumeration result message of the run, and
+##
+##    stats
+##        the enumeration result of the run as a GAP ACEStats-like record.
+##
+InstallGlobalFunction(ACERandomEquivPresentations, function(arg)
+local ioIndexAndOptval, ioIndex, stream;
+  ioIndexAndOptval := IOINDEX_AND_ONE_VALUE(arg);
+  ioIndex := ioIndexAndOptval[1];
+  stream := ACEData.io[ ioIndex ].stream;
+
+  READ_ACE_ERRORS(stream); # purge any output not yet collected
+  PROCESS_ACE_OPTION(stream, "rep", ioIndexAndOptval[2]);
+  PROCESS_ACE_OPTION(stream, "text", "------------------------------------");
+
+  return ACE_EQUIV_PRESENTATIONS(ioIndex, "------------").runs;
+end);
+
+#############################################################################
+####
+##
 #F  ACEGroupGenerators  . . . . . . . . . . . Return the GAP group generators
 ##  . . . . . . . . . . . . . . . . . . . . . . of an interactive ACE session
 ##
@@ -608,7 +766,7 @@ end);
 #############################################################################
 ####
 ##
-#F  GetACEOptions . . . . . . . . . . .  Returns the current ACE options
+#F  GetACEOptions . . . . . . . . . . . . . . Returns the current ACE options
 ##
 ##
 InstallGlobalFunction(GetACEOptions, function(arg)
@@ -733,16 +891,12 @@ end);
 #############################################################################
 ####
 ##
-#F  ACE_PARAMETER . . . . . . . . . . . . . . . . . . . . . Internal function
-##  . . . . . . . . . . . . . . . . . .  for the ACE process of index ioIndex
-##  . . . . . . . . . . . . . . . . . .  returns ACE's value of the parameter
-##  . . . . . . . . . . . . . . . . . . . . . . . . . .  identified by string
+#F  ACE_PARAMETER_WITH_LINE . . . . . . . . . . . . . . . . Internal function
+##  . . . . . . . . . . . . . . . . . for the ACE process  of  index  ioIndex
+##  . . . . . . . . . . . . . . . . . returns ACE's value  of  the  parameter
+##  . . . . . . . . . . . . . . . . . identified by string starting with line
 ##
-InstallGlobalFunction(ACE_PARAMETER, function(ioIndex, string)
-local line;
-  line := FLUSH_ACE_STREAM_UNTIL(ACEData.io[ ioIndex ].stream, 3, 3, 
-                                 READ_NEXT_LINE, 
-                                 line -> line{[1..Length(string)]} = string);
+InstallGlobalFunction(ACE_PARAMETER_WITH_LINE, function(ioIndex, string, line)
   # Remove "<string>: " and trailing newline
   line := line{[Length(string) + 3 .. Length(line) - 1]};
   if line = "" or line[ Length(line) ] <> ';' then
@@ -754,6 +908,22 @@ local line;
   fi;
   # Remove any blanks after commas and trailing ';'
   return ReplacedString(line{[1..Length(line) - 1]}, ", ", ",");
+end);
+
+#############################################################################
+####
+##
+#F  ACE_PARAMETER . . . . . . . . . . . . . . . . . . . . . Internal function
+##  . . . . . . . . . . . . . . . . . .  for the ACE process of index ioIndex
+##  . . . . . . . . . . . . . . . . . .  returns ACE's value of the parameter
+##  . . . . . . . . . . . . . . . . . . . . . . . . . .  identified by string
+##
+InstallGlobalFunction(ACE_PARAMETER, function(ioIndex, string)
+local line;
+  line := FLUSH_ACE_STREAM_UNTIL(ACEData.io[ ioIndex ].stream, 3, 3, 
+                                 READ_NEXT_LINE, 
+                                 line -> line{[1..Length(string)]} = string);
+  return ACE_PARAMETER_WITH_LINE(ioIndex, string, line);
 end);
 
 #############################################################################
@@ -1282,6 +1452,8 @@ local ioIndex, stream, error, cycles;
                              posEq := Position(line, '=');
                              if posEq = fail then
                                return line;
+                             elif line{[posEq..posEq + 9]} = "= identity" then
+                               return ", ()";
                              else
                                return ReplacedString(line, 
                                                      line{[1..posEq]}, ",");
