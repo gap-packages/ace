@@ -105,7 +105,7 @@ these generators giving relators for a finitely presented  group,  and
 the free generators. All these are given in the standard {\GAP} format
 (see Chapter~"ref:Finitely Presented Groups" of the  {\GAP}  Reference
 Manual). Note that `ACECosetTable' may be called with 0 or 1 arguments
-after  a  call  to  `StartACE',  in  which  case  it  is  being   used
+after  a  call  to  `ACEStart',  in  which  case  it  is  being   used
 interactively (see Chapter~"Using ACE Interactively").
 
 Behind the colon any  selection  of  the  options  available  for  the
@@ -266,7 +266,7 @@ interactive work in the standalone.
 
 An interactive {\ACE} process is initiated with the command
 
-\>StartACE( <fgens>, <rels>, <sgens> [:<options>] ) F
+\>ACEStart( <fgens>, <rels>, <sgens> [:<options>] ) F
 
 whose    arguments    and    options    are     exactly     as     for
 `ACECosetTableFromGensAndRels'  and  `ACEStats',   as   discussed   in
@@ -283,9 +283,9 @@ should be applied to.
 
 An interactive{\ACE} process is terminated with the command
 
-\>QuitACE( <i> ) F
+\>ACEQuit( <i> ) F
 
-where <i> is the integer returned by `StartACE' when the  process  was
+where <i> is the integer returned by `ACEStart' when the  process  was
 begun.
 
 We discuss each of these commands, as well as the range  of  functions
@@ -311,31 +311,35 @@ where  <examplename>  is  a  string,  the  name  of  an  example  (and
 corresponding file in the `examples' directory); and <ACEfunc> is  the
 {\ACE} function with which the example is to be executed. 
 
-Observe, that one *can* add additional options to those  already  used
-in an example (but since the example's options are \lq{}seen'  *after*
-any added options, one can't over-ride any of  the  example's  options
-\dots\ not directly, anyhow).  What  one  *can*  do,  is  to  force  a
-`break'-loop{\undoquotes\atindex{break-loop}{@`break'-loop}}, and then
-use the `SetACEOptions' function that becomes available to reset *any*
-options as one likes (see Section~"Fun with ACEExample  Example").  On
-the other hand, for `<ACEfunc> = StartACE', one doesn't need to  force
-a `break'-loop; since the {\ACE} session is still alive,  new  options
-can be added (and  the  enumeration  re-started)  via  the  `StartACE'
-function.
-
-
 If `ACEExample' is called with no arguments,  or  with  the  argument:
 `"index"', or with a non-existent example name, an index of  available
 examples is displayed.
 
 By default, examples are executed via  `ACECosetTableFromGensAndRels'.
 However, if `ACEExample' is called with a second argument (choose from
-the (other) alternatives: `ACEStats', or `StartACE'), the  example  is
+the (other) alternatives: `ACEStats', or `ACEStart'), the  example  is
 executed using that function, instead. Note that,  whereas  the  first
 argument appears in double quotes (since it's a  string),  the  second
 argument does not (since it's a function).
 
-Considering the example `"A5"', the effect of running
+`ACEExample' also accepts user options, which  may  be  passed  either
+globally  (i.e.~by  using  `PushOptions'  to  push   them   onto   the
+`OptionsStack') or locally  behind  a  colon  after  the  `ACEExample'
+arguments, and they are passed  to  `ACECosetTableFromGensAndRels'  or
+<ACEfunc> as if they  were  *appended*  to  the  existing  options  of
+<examplename>; in this way, the user may *over-ride* any or all of the
+options  of  <examplename>.  This  is  done  by  passing   an   option
+`aceexampleoptions' (see~"Option `aceexampleoptions'"), which sets  up
+a mechanism to reverse the usual order in which options of recursively
+called functions  are  pushed  onto  the  `OptionsStack'.  The  option
+`aceexampleoptions' is *not* a user option; it is  intended  only  for
+*internal* use by `ACEExample', for the above purpose. In the  portion
+of the output due to the `echo' option, if one has passed  options  to
+`ACEExample', one will see `aceexampleoptions' listed  first  and  the
+result  of  the  interaction  of  <examplename>'s  options   and   the
+additional options.
+
+Consider the example `"A5"'. The effect of running
 
 \beginexample
 gap> ACEExample("A5", ACEStats);
@@ -351,9 +355,18 @@ ReadAsFunction(file)();
 
 except that  some  internal  \lq{}magic'  of  `ACEExample'  edits  the
 example file and  displays  equivalent  commands  a  user  \lq{}would'
-execute.
+execute. If the user has passed options to `ACEExample'  these  appear
+in a \lq{}`\# User Options'' block after the original options  of  the
+example in the `Info' portion of the output.  By  comparing  with  the
+portion of the output from the `echo'  option  (unless  the  user  has
+over-ridden the `echo' option), the  user  may  directly  observe  any
+over-riding effects of user-passed options.
+
+Please see Section~"Fun with ACEExample" for some sample  interactions
+with `ACEExample'.
 
 *Notes*
+
 Most examples use the `mess'  ($=  `messages'$)  option.  To  see  the
 effect of this, it is recommended to do: `SetInfoACELevel(2);'  before
 calling `ACEExample', with an example.
@@ -366,6 +379,19 @@ a double semicolon (`;;').
 
 Also, try `SetInfoACELevel(1);' before  calling `ACEExample', with  an
 example.
+
+If you unexpectedly observe `aceexampleoptions' in your  output,  then
+most probably you have unintentionally passed options  by  the  global
+method, by having a non-empty `OptionsStack'. One possible  remedy  is
+to use `FlushOptionsStack();' (see~"FlushOptionsStack"), before trying
+your `ACEExample' call again.
+
+As discussed in Section~"Interpretation  of  ACE  Options",  there  is
+generally no sensible meaning that can  be  attributed  to  setting  a
+strategy option (see Chapter~"Strategy Options for ACE")  to  `false';
+if you wish to nullify the effect of a strategy option,  pass  another
+strategy option,  e.g.~pass  the  `default'  (see~"Option  `default'")
+strategy option.
 
 \enditems
 
@@ -435,8 +461,8 @@ whose fields are:
 \quad`tmpdir' & the path of the  temporary  directory  containing  the
 non-interactive {\ACE} input and output files;
 
-\quad`io'     & list  of  data  records  for  `StartACE'   (see  below 
-and~"StartACE") processes;
+\quad`io'     & list  of  data  records  for  `ACEStart'   (see  below 
+and~"ACEStart") processes;
 
 \quad`infile' & the full path of the  (non-interactive)  {\ACE}  input
 file;
@@ -448,8 +474,8 @@ file; and
 
 \enditems
 
-Each time an interactive {\ACE} process is  initiated  via  `StartACE'
-(see~"StartACE"), an identifying number <ioIndex> is generated for the
+Each time an interactive {\ACE} process is  initiated  via  `ACEStart'
+(see~"ACEStart"), an identifying number <ioIndex> is generated for the
 interactive process and  a  record  `ACEData.io[<ioIndex>]'  with  the
 following fields is created:
 
@@ -457,18 +483,18 @@ following fields is created:
 
 \quad`args'   & a record with fields: `fgens', `rels',  `sgens'  whose
 values  are  the  corresponding   arguments   passed   originally   to
-`StartACE';
+`ACEStart';
 
 \quad`options'& the current options record of the interactive process;
 
 \quad`acegens'& a list of strings representing the generators used  by
 {\ACE} (if the names of the generators passed via the  first  argument
-<fgens> of `StartACE' were all lowercase alphabetic  characters,  then
+<fgens> of `ACEStart' were all lowercase alphabetic  characters,  then
 `acegens' is the `String' equivalent of <fgens>,  i.e.~`acegens[1]   =
 String(<fgens>[1])' etc.);
 
 \quad`stream' & the IOStream opened for an interactive {\ACE}  process
-initiated via `StartACE'; and
+initiated via `ACEStart'; and
 
 \quad`enumResult' 
               & the enumeration result (string) without  the  trailing
@@ -519,7 +545,18 @@ whereas
 gap> SetInfoACELevel(2);
 \endtt
 
-enables the display of *all* of the output from {\ACE}.
+enables the display of all of  the  output  from  {\ACE},  except  the
+{\ACE} banner (including the host machine information). Finally,
+
+\begintt
+gap> SetInfoACELevel(3);
+\endtt
+
+enables the display of all the input  directed  to  {\ACE}  (behind  a
+\lq{}`ToACE> '' prompt, so you can distinguish it from  other  output)
+and, interactively, the {\ACE}  banner  (including  the  host  machine
+information). The `InfoACELevel' of 3 is  really  for  gurus  who  are
+familiar with the {\ACE} standalone.
 
 \enditems
 
@@ -963,7 +1000,7 @@ in turn have options of their own.
 
 In general, if {\ACE} is to be used  interactively  one  should  avoid
 using the global method of passing options. In fact, it is recommended
-that prior to calling `StartACE' that the `OptionsStack' be empty.
+that prior to calling `ACEStart' that the `OptionsStack' be empty.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{Warnings regarding Options}
@@ -1019,7 +1056,7 @@ Section~"The KnownACEOptions Record").
 
 Options      for      the       {\ACE}       interface       functions
 `ACECosetTableFromGensAndRels',   `ACECosetTable',   `ACEStats'    and
-`StartACE' (see  Chapter~"Functions  for  Using  ACE  Interactively"),
+`ACEStart' (see  Chapter~"Functions  for  Using  ACE  Interactively"),
 comprise the few  non-{\ACE}-binary  options  (`silent',  `aceinfile',
 `aceoutfile',   `aceignore',   `aceignoreunknown',    `acenowarnings',
 `aceincomment',     `aceecho'     and     `echo')     discussed     in
@@ -1058,7 +1095,7 @@ one prevails.
 passed}
 
 If  an  {\ACE}  interface  function   (`ACECosetTableFromGensAndRels',
-`ACEStats',  `ACECosetTable'  or  `StartACE')  is  given  no  strategy
+`ACEStats',  `ACECosetTable'  or  `ACEStart')  is  given  no  strategy
 option, the `default'  strategy  (see  Chapter~"Strategy  Options  for
 ACE") is selected, and a number of options that {\ACE} needs to have a
 value for are given default values, *prior* to the  execution  of  any
@@ -1093,7 +1130,7 @@ by passing without a value  (e.g.  the  `hard'  strategy  option)  and
 others that are boolean in the C-sense (taking on just the values 0 or
 1).   The   behaviour    of    the    {\ACE}    interface    functions
 (`ACECosetTableFromGensAndRels',   `ACEStats',   `ACECosetTable'    or
-`StartACE') is essentially  to  restore  as  much  as  is  possible  a
+`ACEStart') is essentially  to  restore  as  much  as  is  possible  a
 behaviour that mimics the {\ACE} standalone; a `false' value is always
 translated to 0 and `true' may be translated to any of no-value, 0  or
 1. Any option passed with an assigned value <val> other  than  `false'
@@ -1229,14 +1266,17 @@ of one) returns a record with the following fields:
 of a known {\ACE} option, and false otherwise;
 
 \quad`fullname'& the lower case unabbreviated form of <optname> if the
-`known' field is set `true', or <optname> otherwise;
+`known'  field  is  set  `true',  or  <optname>  in  all  lower  case,
+otherwise;
 
 \quad`synonyms'& a  list  of  known  {\ACE}  options  synonymous  with
 <optname>, in lowercase unabbreviated form, if the  `known'  field  is
-set `true', or `[ <optname> ]' otherwise;
+set `true', or a list containing just <optname>  in  all  lower  case,
+otherwise;
 
 \quad`abbrev' & the shortest lowercase abbreviation  of  <optname>  if
-the `known' field is set `true', or <optname> otherwise.
+the `known' field is set `true',  or  <optname>  in  all  lower  case,
+otherwise.
 
 \enditems
 
@@ -1314,7 +1354,7 @@ only;  <filename>  should  be  a  string.
 
 This option is only relevant to `ACECosetTableFromGensAndRels' and  is
 ignored if included as an option for  invocations  of  `ACEStats'  and
-`StartACE'. If this option is used, {\GAP} creates an input file  with
+`ACEStart'. If this option is used, {\GAP} creates an input file  with
 filename <filename> only, and then exits (i.e.~the  {\ACE}  binary  is
 not called). This option is  provided  for  users  who  wish  to  work
 directly (and interactively) with the {\ACE} standalone. The full path
@@ -1393,6 +1433,15 @@ Print comment <string> in the {\ACE} input; <string> must be a string.
 This option prints the comment <string> behind a sharp sign (`\#')  in
 the input to {\ACE}. Only useful  for  adding  comments  (that  {\ACE}
 ignores) to standalone input files.
+
+\>`aceexampleoptions'{Option `aceexampleoptions'}&
+An *internal* option for `ACEExample'.
+
+This option is passed  *internally*  by  `ACEExample'  to  the  {\ACE}
+interface function  it  calls,  when  one  invokes  `ACEExample'  with
+options. Its purpose is to provide a mechanism for the over-riding  of
+an example's options by the user. The option name is deliberately long
+and has no abbreviation to discourage user use.
 
 \enditems
 
@@ -2157,7 +2206,7 @@ Start an enumeration. (Shortest abbreviation of `begin' is `beg'.)
 Any existing information in the table is cleared, and the  enumeration
 starts from coset 1 (i.e., the subgroup).
 
-Interactively, use `StartACE' (see~"StartACE").
+Interactively, use `ACEStart' (see~"ACEStart").
 
 \>`bye'{Option `bye'}
 \>`exit'{Option `exit'}
@@ -2168,7 +2217,7 @@ This quits {\ACE} nicely, printing the date and  the  time.  An  `EOF'
 (end-of-file; i.e., `\^{}d') has the same effect, so proper termination
 occurs if {\ACE} is taking its input from a script file.
 
-Interactively, use `QuitACE' (see~"QuitACE").
+Interactively, use `ACEQuit' (see~"ACEQuit").
 
 Note  that  `qui'  actually  abbreviates  the   corresponding   {\ACE}
 directive `quit', but since `quit' is  a  {\GAP}  keyword  it  is  not
@@ -2721,9 +2770,9 @@ setting the `InfoLevel' of  `InfoACE'  to  2  (see~"SetInfoACELevel"),
 particularly if she uses the `messages' option with a non-zero value.
 
 All functions that manipulate an interactive process  (that  has  been
-initiated by `StartACE', with three arguments), have a form where  the
+initiated by `ACEStart', with three arguments), have a form where  the
 first  argument  is  the  integer  <i>  returned  by  the   initiating
-`StartACE' command, and a second form with one fewer arguments  (where
+`ACEStart' command, and a second form with one fewer arguments  (where
 the integer <i> is  discovered  by  a  default  mechanism,  namely  by
 determining the least integer <i>  for  which  there  is  a  currently
 active interactive {\ACE} process). In each case, it is an  error,  if
@@ -2737,7 +2786,7 @@ be  used  with  any  of  the  interactive  functions.  In  fact,   the
 `OptionsStack' should be empty at the  time  any  of  the  interactive
 functions is called.
 
-On `quit'ting {\GAP}, `QuitAllACE();' is  executed,  which  terminates
+On `quit'ting {\GAP}, `ACEQuitAll();' is  executed,  which  terminates
 all active interactive {\ACE} processes. If {\GAP} is  killed  without
 `quit'ting, before all interactive {\ACE}  processes  are  terminated,
 *zombie* processes (still living  *child*  processes  whose  *parents*
@@ -2753,66 +2802,76 @@ kill' if these hints are unhelpful).
 
 \beginitems
 
-\>StartACE( <fgens>, <rels>, <sgens> [:<options>] ) F
-\>StartACE( <i> [:<options>] ) F
-\>StartACE( [:<options>] ) F
+\>ACEStart( 0 ) F
+\>ACEStart( <fgens>, <rels>, <sgens> [:<options>] ) F
+\>ACEStart( <i> [:<options>] ) F
+\>ACEStart( [:<options>] ) F
 
-The first form of `StartACE' (on three arguments) is used to start  an
+The first form of `ACEStart' (on the  one  argument:  0)  is  used  to
+initiate an interactive {\ACE} process, but does  nothing  more.  This
+form is for gurus who are familiar with the {\ACE} standalone who wish
+to communicate with {\ACE} using the  primitive  read/write  tools  of
+Section~"Primitive  ACE  Read/Write  Functions".  In  this  case,  the
+translation of the strings output from {\ACE}  into  a  useful  {\GAP}
+form is completely up to the user.
+
+The second form of `ACEStart' (on three arguments) is used to start an
 interactive process; here <fgens> is a list of free generators, <rels>
 a list of words in these generators giving  relators  for  a  finitely
 presented group, and <sgens> the list of  subgroup  generators,  again
 expressed as words in the free generators. All these are given in  the
 standard {\GAP} format (See Chapter~"ref:Finitely Presented Groups" of
-the {\GAP} Reference Manual). If you intend to use options  these  are
-listed behind a colon; any selection of the options available for  the
-interface (see Chapters~"Options for ACE"  and~"Strategy  Options  for
-ACE") can be given, separated by commas like record  components.  Note
-that strategies are simply special options that set a  number  of  the
-options, detailed in Chapter~"Options for ACE", all at once. These can
-be used e.g.~to preset limits of space and time to be used, to  modify
-input and output and to modify the enumeration procedure.  Please  see
-Section~"General  Warnings  regarding  the  Use  of  Options"  for   a
-discussion regarding global and local  passing  of  options,  and  the
-non-orthogonal  nature  of  {\ACE}'s  options.  However,  the   global
-mechanism (`PushOptions') should *not* be  used  to  include  options;
-please ensure the `OptionsStack' is empty before calling `StartACE'.
+the {\GAP} Reference Manual).
 
-The return value (for all three forms of  `StartACE')  is  an  integer
+When `ACEStart' is called with one positive integer  argument  <i>  it
+starts a new enumeration on the <i>th running process, i.e.~it  scrubs
+a previously generated table and starts from  scratch  with  the  same
+parameters (i.e.~the same arguments and options); except that  if  new
+options are included these will modify  those  given  previously.  The
+only reason for doing such a thing, without new options, is to perhaps
+compare timings of runs (a second run is quicker  because  memory  has
+already been allocated).  If  you  are  interested  in  this  sort  of
+information, however, you may be better off dealing directly with  the
+standalone.
+
+When `ACEStart' is  called  with  no  arguments  it  finds  the  least
+positive integer <i> for which an interactive process is  running  and
+applies `ACEStart(<i>)'. (Most users will  only  run  one  interactive
+process at a time. Hence, `ACEStart()' will be a useful  shortcut  for
+`ACEStart(1)'.)
+
+If you intend to use options these are  listed  behind  a  colon;  any
+selection  of  the  options   available   for   the   interface   (see
+Chapters~"Options for ACE" and~"Strategy  Options  for  ACE")  can  be
+given,  separated  by  commas  like  record  components.   Note   that
+strategies are simply  special  options  that  set  a  number  of  the
+options, detailed in Chapter~"Options  for  ACE",  all  at  once.  The
+reader is strongly encouraged to read  the  introductory  sections  of
+Chapter~"Options for ACE". The global mechanism (via `PushOptions') of
+passing options is *not* recommended  for  use  with  the  interactive
+{\ACE} interface functions; please ensure the `OptionsStack' is  empty
+before calling an interactive {\ACE} interface function.
+
+The return value (for all four forms  of  `ACEStart')  is  an  integer
 (numbering from  1)  which  represents  the  running  process.  It  is
 possible to have more than one interactive process  running  at  once.
 The integer returned may be used to index which of these processes  an
-interactive function {\ACE} function should be applied to.
-
-When `StartACE' is called with  one  argument  <i>  it  starts  a  new
-enumeration on the <i>th running process, i.e.~it scrubs a  previously
-generated table and starts  from  scratch  with  the  same  parameters
-(i.e.~the same arguments and options); except that if new options  are
-included these will modify those given previously. The only reason for
-doing such a thing, without new options, is to perhaps compare timings
-of runs (a second run is  quicker  because  memory  has  already  been
-allocated). If  you  are  interested  in  this  sort  of  information,
-however, you may be better off dealing directly with the standalone.
-
-When `StartACE' is  called  with  no  arguments  it  finds  the  least
-positive integer <i> for which an interactive process is  running  and
-applies `StartACE(<i>)'. (Most users will  only  run  one  interactive
-process at a time. Hence, `StartACE()' will be a useful  shortcut  for
-`StartACE(1)'.)
+interactive {\ACE} interface function should be applied to.
 
 Each of
 
-\>QuitACE( <i> ) F
-\>QuitACE() F
+\>ACEQuit( <i> ) F
+\>ACEQuit() F
 
 terminates an interactive {\ACE} process, where  <i>  is  the  integer
-returned by `StartACE' when the process was  started.  If  the  second
+returned by `ACEStart' when the process was  started.  If  the  second
 form is used (i.e.~without arguments) then the interactive process  of
 least index that is still running is terminated.
 
 As a convenience, to terminate all active interactive {\ACE} processes
 at once, we provide:
 
-\>QuitAllACE() F
+\>ACEQuitAll() F
 
 %T return an exit status if possible?
 %  Hmm! ... CloseStream doesn't give an exit status? ... suggestions?
@@ -2823,17 +2882,108 @@ at once, we provide:
 \>CurrentACEOptions() F
 
 display the options of the  <i>th  (or  default)  process  started  by
-`StartACE'. In fact, `CurrentACEOptions(<i>)' is just a pretty-printer
+`ACEStart'. In fact, `CurrentACEOptions(<i>)' is just a pretty-printer
 of the `ACEData.io[<i>].options' record.
 
 \>SetACEOptions( <i> [:<options>] ) F
 \>SetACEOptions( [:<options>] ) F
 
 modify the current options of the <i>th (or default)  process  started
-by `StartACE'. Please ensure that the `OptionsStack' is  empty  before
+by `ACEStart'. Please ensure that the `OptionsStack' is  empty  before
 calling  `SetACEOptions'  (or  any  interactive  function  that  calls
 `SetACEOptions'; any interactive function  that  accepts  new  options
-actually calls `SetACEOptions').
+actually calls an internal version of `SetACEOptions').
+
+When `ACECosetTableFromGensAndRels' enters a  `break'-loop{\undoquotes
+\atindex {break-loop} {@`break'-loop}} local versions  of  the  second
+form  of  each  of  `CurrentACEOptions'  and  `SetACEOptions'   become
+available. (Even though the names are similar and  their  function  is
+analogous they are in fact different functions.)
+
+\enditems
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{Primitive ACE Read/Write Functions}
+
+For those familiar with the  workings  of  the  {\ACE}  standalone  we
+provide primitive read/write tools to  communicate  directly  with  an
+interactive {\ACE} process,  started  via  `ACEStart'  (possibly  with
+argument 0, but this is not essential).  It  is  up  to  the  user  to
+translate the output strings from {\ACE} into a form useful in {\GAP}.
+
+\beginitems
+
+\>ACEWrite( <i>, <string> ) F
+\>ACEWrite( <string> ) F
+
+Writes <string> to the <i>th or default  interactive  {\ACE}  process;
+<string> must be in exactly the form the  {\ACE}  standalone  expects.
+The command is  echoed  via  `Info'  at  `InfoACE'  level  3  (with  a
+\lq{}`ToACE> '' prompt); i.e.~do `SetInfoACELevel(3);' to see what  is
+transmitted to the {\ACE} binary.
+
+
+\>ACERead( <i> ) F
+\>ACERead() F
+
+Reads a complete line of {\ACE} output,  from  the  <i>th  or  default
+interactive {\ACE} process, if there is output to be read and  returns
+`fail' otherwise. When successful, the line is returned  as  a  string
+complete with trailing newline  character.  Please  note  that  it  is
+possible to be \lq{}too quick' (i.e.~the return can be  `fail'  purely
+because the output from {\ACE} is not there  yet),  but  if  `ACERead'
+finds any output at all, it waits for a complete line.
+
+\>ACEReadAll( <i> ) F
+\>ACEReadAll() F
+
+Reads and returns as many *complete* lines of {\ACE} output, from  the
+<i>th or default interactive {\ACE} process, as there are to be  read,
+*at the time of the call*, as a list  of  strings  with  the  trailing
+newlines removed and returns the empty  list  otherwise.  `ACEReadAll'
+also writes each line read via `Info' at `InfoACE' level  2.  Whenever
+`ACEReadAll' finds only a partial line,  it  waits  for  the  complete
+line, thus increasing the probability that it  has  captured  all  the
+output to be had from {\ACE}.
+
+\>ACEReadUntil( <i>, <IsMyLine> ) F
+\>ACEReadUntil( <IsMyLine> ) F
+
+Reads complete lines of {\ACE}  output,  from  the  <i>th  or  default
+interactive  {\ACE}  process,  until   a   line   <line>   for   which
+`<IsMyLine>(<line>)' is true, i.e.~<IsMyLine>  should  take  a  single
+argument that should be a string and should  return  a  boolean.  Like
+`ACEReadAll', `ACEReadUntil'  returns  a  list  of  strings  with  the
+trailing newlines removed and writes each  line  read  via  `Info'  at
+`InfoACE' level 2.
+
+*Notes:* 
+
+<IsMyLine> is applied to each line *after* the trailing new  line  has
+been removed.
+
+If  `<IsMyLine>(<line>)'  is  never  true,  `ACEReadUntil'  will  wait
+indefinitely.
+
+\enditems
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{Some Interactive ACE Process Utilities}
+
+\beginitems
+
+\>ACEStream( <i> ) F
+\>ACEStream() F
+
+With argument <i> which must be a positive  integer  argument  returns
+<i> if it corresponds to an active interactive process, or  raises  an
+error. With no arguments it returns  the  default  active  interactive
+process or raises an error.
+
+\>ACEStreams() F
+
+Returns the list of integer indices of all active  interactive  {\ACE}
+processes.
 
 \enditems
 
@@ -2847,16 +2997,16 @@ actually calls `SetACEOptions').
 
 perform  the  same  function  as  `ACECosetTableFromGensAndRels'   and
 `ACECosetTable' on three arguments, albeit interactively, on the <i>th
-(or default) process started by `StartACE'.
+(or default) process started by `ACEStart'.
 
 \>ACEStats( <i> [:<options>] ) F
 \>ACEStats( [:<options>] ) F
 
 perform the same function as `ACEStats'  on  three  arguments,  albeit
 interactively,  on  the  <i>th  (or  default)   process   started   by
-`StartACE'.
+`ACEStart'.
 
-See Section~"Example of Using ACE Interactively (Using StartACE)"  for
+See Section~"Example of Using ACE Interactively (Using ACEStart)"  for
 an example demonstrating both these functions  within  an  interactive
 process.
 
@@ -2866,6 +3016,14 @@ process.
 \Section{Steering ACE Interactively}
 
 \beginitems
+
+\>ACEModes( <i> ) F
+\>ACEModes() F
+
+For the <i>th (or default) interactive {\ACE} process returns a record
+whose fields are the modes `ACEStart',  `ACEContinue'  and  `ACERedo',
+and whose values are `true' if the mode is possible  for  the  process
+and `false' otherwise.
 
 \>ACECheck( <aceobj> ) F
 \>ACERedo( <aceobj> ) F
@@ -3477,7 +3635,7 @@ gap> table := ACECosetTableFromGensAndRels(
 \endexample
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\Section{Example of Using ACE Interactively (Using StartACE)}
+\Section{Example of Using ACE Interactively (Using ACEStart)}
 
 Now we illustrate a simple interactive process, with an enumeration of
 an index 12 subgroup (isomorphic to $C_5$) within $A_5$. Observe  that
@@ -3487,24 +3645,24 @@ information. Interactively, {\ACE}'s banner is not redirected  and  so
 it is observed when the `InfoLevel' of `InfoACE' is 2. We have however
 used the option `echo', so that we can see how the  interface  handled
 the  arguments  and   options.   On-line   try:   `SetInfoACELevel(2);
-ACEExample("A5-C5", StartACE);' to emulate the session  prior  to  the
-`QuitACE' command.
+ACEExample("A5-C5", ACEStart);' to emulate the session  prior  to  the
+`ACEQuit' command.
 
 \beginexample
 gap> SetInfoACELevel(2);
 gap> F := FreeGroup("a","b");; a := F.1;;  b := F.2;;
 gap> G := F / [a^2, b^3, (a*b)^5 ];
 <fp group on the generators [ a, b ]>
-gap> StartACE(FreeGeneratorsOfFpGroup(G), RelatorsOfFpGroup(G), [a*b]
+gap> ACEStart(FreeGeneratorsOfFpGroup(G), RelatorsOfFpGroup(G), [a*b]
 >          # Options
 >          : echo, # Echo handled by GAP (not ACE)
 >            enum := "A_5",  # Give the group G a meaningful name
 >            subg := "C_5"); # Give the subgroup a meaningful name
-StartACE called with the following arguments:
+ACEStart called with the following arguments:
  Group generators : [ a, b ]
  Group relators : [ a^2, b^3, a*b*a*b*a*b*a*b*a*b ]
  Subgroup generators : [ a*b ]
-StartACE called with the following options:
+ACEStart called with the following options:
  echo := true (not passed to ACE)
  enum := A_5
  subg := C_5
@@ -3547,17 +3705,17 @@ gap> ACECosetTable(); # Interactive version of ACECosetTableFromGensAndRels()
   [ 3, 1, 2, 5, 7, 8, 4, 9, 6, 11, 12, 10 ], 
   [ 2, 3, 1, 7, 4, 9, 5, 6, 8, 12, 10, 11 ] ]
 gap> # To terminate the interactive process we do:
-gap> QuitACE(1); # Again, we could have omitted the 1
+gap> ACEQuit(1); # Again, we could have omitted the 1
 gap> # If we had more than one interactive process we could have 
 gap> # terminated them all in one go with:
-gap> QuitAllACE();
+gap> ACEQuitAll();
 \endexample
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\Section{Fun with ACEExample Example}
+\Section{Fun with ACEExample}
 
-First let's see the `ACEExample' index (obtained with no argument,
-with `"index"' as argument, or with a non-existent example as
+First let's see the `ACEExample' index  (obtained  with  no  argument,
+with  `"index"'  as  argument,  or  with  a  non-existent  example  as
 argument):
 
 \beginexample
@@ -3598,7 +3756,7 @@ gap> ACEExample();
 #I  2. The enumeration for each of the *-ed examples fails. (See Note 3.)
 #I  3. Try altering the ACE function used, by calling  ACEExample with  a
 #I     2nd argument; choose from: ACECosetTableFromGensAndRels (default),
-#I     or ACEStats, or StartACE. The 2nd argument is *not* quoted.
+#I     or ACEStats, or ACEStart. The 2nd argument is *not* quoted.
 #I  4. Try `SetInfoACELevel(2);' before calling  ACEExample,  to  see the
 #I     effect of setting the "mess" (= "messages") option.
 #I  5. To suppress a long output, use a double semicolon (`;;') after the
@@ -3691,18 +3849,28 @@ your generator names. Note, also that capitalisation is used by {\ACE}
 as a short-hand for inverses, e.g.~`C = c^-1' (see `Group Relators' in
 the {\ACE} \lq{}Run Parameters' block).
 
-Now let's observe that we can add some new options;  but  first  we'll
-reduce the output a bit by setting the `InfoLevel' of `InfoACE' to  1,
-use the default function `ACECosetTableFromGensAndRels'  and  so  it's
-like our first encounter with F(2,7) we'll add the subgroup  generator
-`c' via `sg := [c]' (see "Option `sg'"); and while we're at it,  we'll
-force     a     `break'-loop{\undoquotes     \atindex     {break-loop}
-{@`break'-loop}}, to demonstrate how we can over-ride any options  the
-example already sets.
+Now let's observe that we can add some new  options,  even  ones  that
+over-ride the example's options; but first we'll reduce the  output  a
+bit by setting the `InfoLevel' of `InfoACE' to 1 and since we are  not
+going toobserve any progress mesages form {\ACE} with  that  `InfoACE'
+level we'll set `messages := 0'; also we'll use the  default  function
+`ACECosetTableFromGensAndRels' and so it's like  our  first  encounter
+with F(2,7) we'll add the subgroup generator `c'  via  `sg  :=  ["c"]'
+(see "Option `sg'"). This is a bit of a cheat. Observe that `"c"' is a
+string not a {\GAP} group generator; so a warning message  appears  in
+the output. Nevertheless, the {\ACE} binary is passed the string `"c"'
+which is what it uses to  identify  the  {\GAP}  group  generator;  so
+{\ACE} itself doesn't complain. (You *can* rely on this,  so  long  as
+all the {\GAP} group generators are single lower case letter  strings;
+and for this example, it's fortunate that we  could  since  the  group
+generators of each `ACEExample' example are *local* variables and  are
+so not accessible.) For  good  measure,  we  also  change  the  string
+identifying the subgroup (since it  will  no  longer  be  the  trivial
+group), via the `subgroup' option (see "Option `subgroup'").
 
 \beginexample
-gap> SetInfoACELevel(1);                               
-gap> ACEExample("F27-purec" : max := 2, sg := [c]);
+gap> SetInfoACELevel(1);                                                       
+gap> ACEExample("F27-purec" : sg := ["c"], subgroup := "< c >", messages := 0);
 #I  # ACEExample "F27-purec" : enumeration of cosets of H in G,
 #I  # where G = F(2,7) = C_29, H = Id, using purec strategy.
 #I  #
@@ -3720,21 +3888,100 @@ gap> ACEExample("F27-purec" : max := 2, sg := [c]);
 #I      # Options that don't affect the enumeration
 #I      : echo, enum := "F(2,7), aka C_29", subg := "Id", 
 #I      # Other options
-#I      wo := "2M", mess := 25000, purec);
+#I      wo := "2M", mess := 25000, purec, 
+#I      # User Options
+#I        sg := [ "c" ],
+#I        subgroup := "< c >",
+#I        messages := 0);
 ACECosetTableFromGensAndRels called with the following arguments:
  Group generators : [ a, b, c, d, e, x, y ]
  Group relators : [ a*b*c^-1, b*c*d^-1, c*d*e^-1, d*e*x^-1, e*x*y^-1, 
   x*y*a^-1, y*a*b^-1 ]
  Subgroup generators : [  ]
 ACECosetTableFromGensAndRels called with the following options:
- max := 2
- sg := [ c ] (brackets are not passed to ACE)
+ aceexampleoptions := true (inserted by ACEExample, not passed to ACE)
  echo := true (not passed to ACE)
  enum := F(2,7), aka C_29
- subg := Id
+ wo := 2M
+ purec (no value)
+ sg := [ "c" ] (brackets are not passed to ACE)
+#I  ACE Warning: [ "c" ]: possibly not an allowed value of sg
+ subgroup := < c >
+ messages := 0
+#I  INDEX = 1 (a=1 r=2 h=2 n=2; l=4 c=0.00; m=332 t=332)
+[ [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], 
+  [ 1 ], [ 1 ], [ 1 ], [ 1 ] ]
+gap>
+\endexample
+
+Observe that in the block of `Info' output all  the  original  example
+options are listed along with our new options `sg := [ "c" ], messages
+:= 0' after the tag \lq{}`\#  User  Options''.  Following  the  `Info'
+block there is the block due to `echo'; in its listing of the  options
+first up there is `aceexampleoptions' alerting us that we passed  some
+`ACEExample' options. Observe that `subg := Id' and  `mess  :=  25000'
+have disappeared (they were over-ridden by  `subgroup  :=  "\<  c  >",
+messages := 0', but the quotes for the value  of  `subgroup'  are  not
+visible); note that we didn't have to use the  same  abbreviations  to
+over-ride them. Also observe that our  new  options  *are*  last,  and
+observe the warning due to the value of `sg' not being a {\GAP}  group
+word.
+
+Now following on from our last example we shall  demonstrate  how  one
+can recover  from  a  `break'-loop{\undoquotes  \atindex  {break-loop}
+{@`break'-loop}} (see Section~"Using ACE Directly to Generate a  Coset
+Table"). To force the `break'-loop we pass  `max  :=  2'  (see~"Option
+`max'"),  while  using   the   default   {\ACE}   interface   function
+`ACECosetTableFromGensAndRels' of `ACEExample'; in  this  way,  {\ACE}
+will not be able to complete  the  enumeration,  and  hence  enters  a
+`break'-loop when it tries to provide a complete  coset  table.  While
+we're at it we'll pass the `hlt' (see~"Option `hlt'") strategy  option
+(which will over-ride `purec'). (The `InfoACE' level is still 1.) Note
+that there are some \lq{}user-input' comments inserted at  the  `brk>'
+prompt.
+
+\beginexample
+gap> ACEExample("F27-purec" : sg := ["c"], subgroup := "< c >", max := 2, hlt);
+#I  # ACEExample "F27-purec" : enumeration of cosets of H in G,
+#I  # where G = F(2,7) = C_29, H = Id, using purec strategy.
+#I  #
+#I  # F, G, a, b, c, d, e, x, y are local to ACEExample
+#I  # We define F(2,7) on 7 generators
+#I  F := FreeGroup("a","b","c","d","e", "x", "y"); 
+#I       a := F.1;  b := F.2;  c := F.3;  d := F.4; 
+#I       e := F.5;  x := F.6;  y := F.7;
+#I  G := F / [a*b*c^-1, b*c*d^-1, c*d*e^-1, d*e*x^-1, 
+#I            e*x*y^-1, x*y*a^-1, y*a*b^-1];
+#I  ACECosetTableFromGensAndRels(
+#I      FreeGeneratorsOfFpGroup(G), 
+#I      RelatorsOfFpGroup(G), 
+#I      [] # Generators of identity subgroup (empty list)
+#I      # Options that don't affect the enumeration
+#I      : echo, enum := "F(2,7), aka C_29", subg := "Id", 
+#I      # Other options
+#I      wo := "2M", mess := 25000, purec, 
+#I      # User Options
+#I        sg := [ "c" ],
+#I        subgroup := "< c >",
+#I        max := 2,
+#I        hlt := true);
+ACECosetTableFromGensAndRels called with the following arguments:
+ Group generators : [ a, b, c, d, e, x, y ]
+ Group relators : [ a*b*c^-1, b*c*d^-1, c*d*e^-1, d*e*x^-1, e*x*y^-1, 
+  x*y*a^-1, y*a*b^-1 ]
+ Subgroup generators : [  ]
+ACECosetTableFromGensAndRels called with the following options:
+ aceexampleoptions := true (inserted by ACEExample, not passed to ACE)
+ echo := true (not passed to ACE)
+ enum := F(2,7), aka C_29
  wo := 2M
  mess := 25000
  purec (no value)
+ sg := [ "c" ] (brackets are not passed to ACE)
+#I  ACE Warning: [ "c" ]: possibly not an allowed value of sg
+ subgroup := < c >
+ max := 2
+ hlt (no value)
 #I  OVERFLOW (a=2 r=1 h=1 n=3; l=4 c=0.00; m=2 t=2)
 Error : No coset table ... at
 Error( ": No coset table ..." );
@@ -3749,39 +3996,40 @@ Error( ": No coset table ..." );
 #I  Otherwise, type: 'quit;' to quit the enumeration.
 Entering break read-eval-print loop, you can 'quit;' to quit to outer loop,
 or you can return to continue
-brk> # Observe how `max := 2' which forced the break, was seen first
-brk> # ... so if we had entered the `hlt' option it would just have
-brk> # been over-ridden by `purec', but we are in the break-loop now
-brk> # ... so we are free to change to `hlt' now:
-brk> SetACEOptions(: hlt := false, hlt, echo := 2, max := 0);
-brk> # Let's check what the options are now:
-brk> CurrentACEOptions();
+brk> # Let's give ACE enough coset numbers to work with ...                    
+brk> # and while we're at it see the effect of 'echo := 2' :                   
+brk> SetACEOptions(: max := 0, echo := 2);                                     
+brk> # Let's check what the options are now:                                   
+brk> CurrentACEOptions();                                                      
 rec(
-  max := 0,
-  sg := [ c ],
-  echo := 2,
   enum := "F(2,7), aka C_29",
-  subg := "Id",
   wo := "2M",
   mess := 25000,
   purec := true,
-  hlt := true )
-brk> return;
+  sg := [ "c" ],
+  subgroup := "< c >",
+  hlt := true,
+  max := 0,
+  echo := 2 )
+brk> # That's ok ... so now we 'return;' to escape the break-loop              
+brk> return;                                                                   
 ACECosetTableFromGensAndRels called with the following arguments:
  Group generators : [ a, b, c, d, e, x, y ]
  Group relators : [ a*b*c^-1, b*c*d^-1, c*d*e^-1, d*e*x^-1, e*x*y^-1, 
   x*y*a^-1, y*a*b^-1 ]
  Subgroup generators : [  ]
 ACECosetTableFromGensAndRels called with the following options:
- max := 0
- sg := [ c ] (brackets are not passed to ACE)
- echo := 2 (not passed to ACE)
+ aceexampleoptions := true (inserted by ACEExample, not passed to ACE)
  enum := F(2,7), aka C_29
- subg := Id
  wo := 2M
  mess := 25000
  purec (no value)
+ sg := [ "c" ] (brackets are not passed to ACE)
+#I  ACE Warning: [ "c" ]: possibly not an allowed value of sg
+ subgroup := < c >
  hlt (no value)
+ max := 0
+ echo := 2 (not passed to ACE)
 Other options set via ACE defaults:
  asis := 0
  compaction := 10
@@ -3806,29 +4054,22 @@ Other options set via ACE defaults:
 gap>
 \endexample
 
-Observe the \lq{}`Other options set via ACE defaults'' list of options
-that has resulted from having the  `echo  :=  2'  option  (see~"Option
-`echo'"). Observe, also, that `hlt' is nowhere near as good, here,  as
-`purec' (check with Section~"Using ACE Directly to  Generate  a  Coset
-Table").
+Observe that  `purec'  did  *not*  disappear  from  the  option  list;
+nevertheless, it *is* over-ridden by the `hlt' option (at  the  {\ACE}
+level). Observe the \lq{}`Other options set via ACE defaults'' list of
+options  that  has  resulted  from  having  the  `echo  :=  2'  option
+(see~"Option `echo'"). Observe, also, that `hlt' is  nowhere  near  as
+good, here, as  `purec'  (refer  to  Section~"Using  ACE  Directly  to
+Generate  a  Coset  Table"):  whereas  `purec'  completed   the   same
+enumeration with a total number of coset numbers  of  332,  the  `hlt'
+strategy required 3127.
 
-If we had passed `hlt' initially,  and  then  tried  from  within  the
-`break'-loop to over-ride `purec', by the passing `hlt',  it  wouldn't
-have worked, because the way {\GAP}'s `OptionsStack'  works  it  would
-have remained in the same position in the  stack  (and  `purec'  would
-have again over-ridden it); but we can trick {\GAP}! What we can do is
-use the fact that {\ACE} interface options can be uppercase, lowercase
-or even mixed case. So, if we pass `HLT' via  `SetACEOptions'  in  the
-`break'-loop, {\GAP} won't know that it's the same as `hlt'  and  push
-it onto the end of the stack, in which case `hlt' will be  over-ridden
-by `purec' which will in turn be over-ridden by `HLT'.
-
-Of course, running `ACEExample' with  `StartACE'  as  second  argument
+Of course, running `ACEExample' with  `ACEStart'  as  second  argument
 opens up far more flexibility. Try it! Have fun!  Play  with  as  many
-options as you can. (For the moment you will sometimes need  the  hint
-regarding changing case to enforce the order of options you want, even
-with `StartACE'; in the next  revision  however  this  *bug*  will  be
-fixed.)
+options as you can. Also, note that the `*'-ed examples of  the  index
+fail  to  give  a  coset  table;  so  these  give  you  non-artificial
+`break'-loop examples for you to try.
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
