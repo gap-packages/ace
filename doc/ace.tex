@@ -27,11 +27,10 @@ Alexander Hulpke and Greg Gamble, which is described in this manual.
 
 The interface links to an external binary and therefore is only usable
 under UNIX (see  Section~"Installing  the  ACE  Package"  for  how  to
-install {\ACE}). It will not work on  Windows  or  the  Macintosh.  It
-requires at least {\GAP}~4.2. Examples, where they occur, show results
-and output from {\GAP}~4.3, which may differ  slightly  from  what  is
-obtained with {\GAP}~4.2. {\ACE} can be used through this interface in
-a variety of ways:
+install  {\ACE}).  It  will  not  work  on  Windows  or  a  pre-MacOSX
+Macintosh. The current version  requires  at  least  {\GAP}~4.3.  (The
+first versions supported {\GAP}~4.2.) {\ACE} can be used through  this
+interface in a variety of ways:
 
 \beginlist%unordered
 
@@ -858,11 +857,13 @@ A reasonably comprehensive history of  the  evolution  of  pre-release
 versions of the {\ACE} Package, is contained in the file `CHANGES'  in
 the `gap' directory. 
 
-The {\ACE} Package is compatible with {\GAP} 4.2, but has  been  built
-for use with {\GAP} 4.3. One important change in  {\GAP}  from  {\GAP}
-4.2 to {\GAP} 4.3 that has relevance for {\ACE} Package users  is  the
-change of the default standard for the numbering of cosets in a  coset
-table (see Section~"Coset Table Standardisation Schemes").
+The `3.xxx' versions of the {\ACE} Package were compatible with {\GAP}
+4.2, but were built for use with  {\GAP}  4.3.  However,  the  current
+version of the {\ACE}  Package  requires  at  least  {\GAP}  4.3.  One
+important change in {\GAP} from {\GAP} 4.2  to  {\GAP}  4.3  that  has
+relevance for {\ACE} Package  users  is  the  change  of  the  default
+standard  for  the  numbering  of  cosets  in  a  coset   table   (see
+Section~"Coset Table Standardisation Schemes").
 
 \>ACEPackageVersion() F
 
@@ -897,6 +898,18 @@ invoke iostreams .
 \item{}
 Option `pkgbanner' used to control  the  printing  of  the  banner  on
 loading (see~"Loading the ACE Package").
+
+\item{`4.0'}
+Revised for {\GAP} 4.4, for which the option `pkgbanner' is no  longer
+available (most of its function is now provided by the third  argument
+of the `LoadPackage' function; see~"ref:LoadPackage").
+
+\item{}
+The package version number now has a single decimal  place,  to  avoid
+being confused with the binary version number.
+
+\item{`4.1'}
+Release version.
 
 \endlist
 

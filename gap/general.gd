@@ -11,7 +11,7 @@
 #Y                      Department of Computer Science & Electrical Eng.
 #Y                      University of Queensland, Australia.
 ##
-Revision.ace_general_gd :=
+Revision.("ace/gap/general_gd") :=
     "@(#)$Id$";
 
 
@@ -37,7 +37,6 @@ DeclareGlobalVariable("ACETCENUM",
 
 DeclareGlobalFunction("InfoACELevel");
 DeclareGlobalFunction("SetInfoACELevel");
-Unbind(ACEPackageVersion); #We set this temporarily in init.g
 DeclareGlobalFunction("ACEPackageVersion");
 DeclareGlobalFunction("CALL_ACE");
 DeclareGlobalFunction("ACECosetTableFromGensAndRels");

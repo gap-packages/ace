@@ -11,7 +11,7 @@
 #Y                      Department of Computer Science & Electrical Eng.
 #Y                      University of Queensland, Australia.
 ##
-Revision.ace_options_gd :=
+Revision.("ace/gap/options_gd") :=
     "@(#)$Id$";
 
 

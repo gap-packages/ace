@@ -11,7 +11,9 @@ from within GAP 4.
 The GAP interface (package) has been written by Alexander  Hulpke  and
 Greg Gamble. In order to install the ACE  package  you  must  get  the
 archive file `ace-XXX.zoo', for  some  version  number  `XXX',  (which
-includes the C source code of Havas and Ramsay).
+includes the C source code of Havas and Ramsay). The  current  version
+of the ACE package is 4.1 (which interfaces with version 3.001 of  the
+ACE C program of Havas and Ramsay).
 
 The  ACE  package  provides  a  mechanism  to  replace   GAP's   usual
 Todd-Coxeter coset enumerator by ACE, so that  functions  that  behind
@@ -20,30 +22,34 @@ enumerator may also be used  explicitly;  both  non-interactively  and
 interactively. However the package is used, a plethora of options  and
 strategies are available to assist the  user  in  avoiding  incomplete
 coset  enumerations.  The  interactive  functions  provided  use   the
-IOStream functionality first introduced in GAP 4.2.  (Hence,  the  ACE
-package requires at least GAP 4.2.)
+IOStream functionality  first  introduced  in  GAP 4.2;  however,  the
+current version requires at least GAP 4.3.
 
 You can download `ace-XXX.zoo' (where `XXX'  is  the  package  version
-number) from the same places as GAP. The main FTP servers are:
+number) from the home page for the ACE package
 
-ftp://ftp-gap.dcs.st-and.ac.uk/pub/gap/gap4/share/
-ftp://ftp.math.rwth-aachen.de/pub/gap4/share/
-ftp://ftp.ccs.neu.edu/pub/mirrors/ftp-gap.dcs.st-and.ac.uk/pub/gap/gap4/share/
+http://www.math.rwth-aachen.de/~Greg.Gamble/ACE/ (Germany)
 
-`ace-XXX.zoo' is also available via the GAP www page at
+or the Australian mirrors
 
-http://www-gap.dcs.st-and.ac.uk/~gap/Info4/share.html
-http://aldebaran.math.rwth-aachen.de/~GAP/Info4/share.html
-http://mirrors.ccs.neu.edu/GAP/NEU/Info4/share.html
+http://www.maths.curtin.edu.au/~gregg/ACE/       (Perth, Australia)
+http://www.itee.uq.edu.au/~gregg/ACE/            (Queensland, Australia)
 
-or, alternatively, from one of the authors' home page at
+or via the Packages links from the GAP sites
 
-http://www.itee.uq.edu.au/~gregg/ACE/home.html
+http://www.gap-system.org/                       (UK)
+http://www.math.rwth-aachen.de/~GAP/             (Germany)
+http://mirrors.ccs.neu.edu/GAP/NEU/              (USA)
+
+or the GAP ftp servers 
+
+ftp://ftp-gap.dcs.st-and.ac.uk/pub/gap/gap4/accpkg/
+ftp://ftp.math.rwth-aachen.de/pub/gap4/accpkg/
+ftp://ftp.ccs.neu.edu/pub/mirrors/ftp-gap.dcs.st-and.ac.uk/pub/gap/gap4/accpkg/
 
 Since the ACE package interfaces to an external  binary,  it  is  only
 usable under UNIX or a UNIX-like environment.  It  will  not  work  on
-Windows or the Macintosh.
-
+Windows or a pre-MacOSX Macintosh.
 
                          Installing the ACE package
 
@@ -87,17 +93,18 @@ directory.
 
 That's it. Now start GAP and type
 
-  RequirePackage("ace");
+  LoadPackage("ace");
 
 The ACE banner should appear on the screen.
 
 For  details  on  how  to  use  the  ACE  package  see   the   package
-documentation in the `doc' subdirectory (execute `make_doc'  and  then
-view either `manual.dvi' via `xdvi' or `manual.ps'  via  `ghostview'),
-which gives information on how to use ACE from within GAP, and the ACE
-user manual (`ace3001.dvi' created by executing `latex ace3001'  three
-times) in the `standalone-doc' directory, which gives  information  on
-how to use the ACE binary as a stand-alone.
+documentation in the `doc' subdirectory (view either `manual.dvi'  via
+`xdvi' or `manual.ps'  via  `ghostview'  or  `manual.pdf'  via  a  PDF
+viewer), which gives information on how to use ACE  from  within  GAP.
+The  ACE  user  manual  (`ace3001.ps'   or   `ace3001.pdf')   in   the
+`standalone-doc' directory, explains how to use the ACE  binary  (i.e.
+the C program that is interfaced with by the package from within  GAP)
+as a stand-alone.
 
 The `src' subdirectory contains a copy of the C source code  for  ACE.
 The only modification are those listed in src/CHANGES. In particular,
@@ -123,6 +130,7 @@ ACE has been compiled successfully with the following C compilers:
    gcc 2.95.2 19990906  Linux                 (prerelease)
    gcc 2.95.2 19991024  Solaris 2.51, 2.8     (release)
    gcc 2.95.2 20000220  Linux                 (release)
+   gcc 2.95.3 20010315  Linux                 (release)
 
 (Since April 1999, egcs has been the official Gnu cc supplier. This is
 why the numbering now follows egcs' numbering.)
@@ -158,4 +166,4 @@ reproduce the problem; so please include:
     Australia
     e-mail: gregg@itee.uq.edu.au
     www:    http://www.itee.uq.edu.au/~gregg
-  -- 30 April, 2002.
+  -- 30 April, 2002, 22 December, 2003.

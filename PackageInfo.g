@@ -1,19 +1,19 @@
 #############################################################################
 ##
-#W  PkgInfo.g                ACE Package                          Greg Gamble
+#W  PackageInfo.g            ACE Package                          Greg Gamble
 #W                                                               Frank Lübeck
 ##
 #H  @(#)$Id$
 
 SetPackageInfo( rec(
 
-  PkgName := "ACE",
-  Version := "4.0",
-  Date    := "7/12/2002",
-  ArchiveURL 
-          := "http://www.math.rwth-aachen.de/~Greg.Gamble/ACE/ace-4.0",
+  PackageName := "ACE",
+  Subtitle    := "Advanced Coset Enumerator",
+  Version     := "4.1",
+  Date        := "22/12/2003",
+  ArchiveURL  := "http://www.math.rwth-aachen.de/~Greg.Gamble/ACE/ace-4.1",
   ArchiveFormats 
-          := ".zoo",
+              := ".zoo",
 
 ##    - if no 'TextFiles' or 'BinaryFiles' are given and a .zoo archive is
 ##      provided, then the files in that archive with a "!TEXT!" comment are
@@ -25,7 +25,6 @@ SetPackageInfo( rec(
 ##  These entries are *optional*.
 #TextFiles := ["init.g", ......],
 #BinaryFiles := ["doc/manual.dvi", ......],
-
 
   Persons := [ 
     rec( 
@@ -100,11 +99,10 @@ SetPackageInfo( rec(
     )
   ],  
 
-  Status  := "accepted",
+  Status      := "accepted",
   CommunicatedBy 
-          := "Joachim Neubüser (Aachen)",
-  AcceptDate 
-          := "04/2001",
+              := "Joachim Neubüser (Aachen)",
+  AcceptDate  := "04/2001",
 
 ##  For a central overview of all packages and a collection of all package
 ##  archives it is necessary to have two files accessible which should be
@@ -117,8 +115,9 @@ SetPackageInfo( rec(
 ##  and updating of the package in the GAP distribution.
 ##  
 
-  README_URL := "http://www.math.rwth-aachen.de/~Greg.Gamble/ACE/README",
-  PkgInfoURL := "http://www.math.rwth-aachen.de/~Greg.Gamble/ACE/PkgInfo.g",
+  README_URL  := "http://www.math.rwth-aachen.de/~Greg.Gamble/ACE/README",
+  PackageInfoURL 
+              := "http://www.math.rwth-aachen.de/~Greg.Gamble/ACE/PkgInfo.g",
 
 ##  Here you  must provide a short abstract explaining the package content 
 ##  in HTML format (used on the package overview Web page) and an URL 
@@ -154,12 +153,14 @@ SetPackageInfo( rec(
 ##  
 # in case of several help books give a list of such records here:
 
-  PackageDoc := rec(
+  PackageDoc  := rec(
     # use same as in GAP            
     BookName  := "ACE",
     # format/extension can be one of .zoo, .tar.gz, .tar.bz2, -win.zip
     Archive   := 
-      "http://www.math.rwth-aachen.de/~Greg.Gamble/ACE/ace-4.0.zoo",
+      "http://www.math.rwth-aachen.de/~Greg.Gamble/ACE/ace-4.1.zoo",
+    ArchiveURLSubset 
+              := ["doc", "htm"],
     HTMLStart := "htm/chapters.htm",
     PDFFile   := "doc/manual.pdf",
     # the path to the .six file used by GAP's help system
@@ -169,7 +170,7 @@ SetPackageInfo( rec(
     LongTitle := "Advanced Coset Enumerator",
     # Should this help book be autoloaded when GAP starts up? This should
     # usually be 'true', otherwise say 'false'. 
-    AutoLoad := true
+    Autoload  := true
   ),
 
 ##  Are there restrictions on the operating system for this package? Or does
@@ -214,6 +215,26 @@ SetPackageInfo( rec(
       return true;
     end,
 
+##  The LoadPackage mechanism can produce a default banner from the info
+##  in this file. If you are not happy with it, you can provide a string
+##  here that is used as a banner. GAP decides when the banner is shown and
+##  when it is not shown. *optional* (note the ~-syntax in this example)
+  BannerString := Concatenation(
+  "---------------------------------------------------------------------------",
+  "\n",
+  "Loading    ", ~.PackageName, " (", ~.Subtitle, ") ", ~.Version, "\n",
+  "GAP code by ", ~.Persons[1].FirstNames, " ", ~.Persons[1].LastName,
+        " <", ~.Persons[1].Email, "> (address for correspondence)\n",
+  "       ", ~.Persons[2].FirstNames, " ", ~.Persons[2].LastName,
+        " (", ~.Persons[2].WWWHome, ")\n",
+  "           [uses ACE binary (C code program) version: 3.001]\n",
+  "C code by  ", ~.Persons[3].FirstNames, " ", ~.Persons[3].LastName,
+        " (", ~.Persons[3].WWWHome, ")\n",
+  "           ", ~.Persons[4].FirstNames, " ", ~.Persons[4].LastName,
+         " (", ~.Persons[4].WWWHome, ")\n\n",
+  "                 For help, type: ?ACE\n",
+  "---------------------------------------------------------------------------",
+  "\n" ),
 
 ##  Suggest here if the package should be *automatically loaded* when GAP is 
 ##  started.  This should usually be 'false'. Say 'true' only if your package 
@@ -224,7 +245,8 @@ SetPackageInfo( rec(
 
 ##  *Optional*, but recommended: path relative to package root to a file which 
 ##  contains as many tests of the package functionality as sensible.
-#TestFile := "tst/testall.g",
+
+  TestFile := "tst/aceds.tst",
 
 ##  *Optional*: Here you can list some keyword related to the topic 
 ##  of the package.

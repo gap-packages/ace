@@ -14,7 +14,7 @@
 #Y                      Department of Computer Science & Electrical Eng.
 #Y                      University of Queensland, Australia.
 ##
-Revision.ace_general_gi :=
+Revision.("ace/gap/general_gi") :=
     "@(#)$Id$";
 
 
@@ -62,7 +62,7 @@ end);
 ##
 InstallGlobalFunction(ACEPackageVersion, function()
 
-  return PACKAGES_VERSIONS.ace;
+  return GAPInfo.PackagesInfo.ace[1].Version;
 end);
 
 #############################################################################
@@ -524,7 +524,7 @@ local created;
     return fail;
   fi;
 
-  Add( DIRECTORIES_TEMPORARY, dir );
+  Add( GAPInfo.DirectoriesTemporary, dir );
   ACEData.tmpdir := Directory(dir);
   ACEData.infile := Filename(ACEData.tmpdir, "in");
   ACEData.outfile := Filename(ACEData.tmpdir, "out");
@@ -536,10 +536,9 @@ end);
 ##
 #F  ACE_ERROR(<errmsg>, <onbreakmsg>)
 ##
-##  sets OnBreak (in GAP 4.2) and OnBreakMessage (in case  of  GAP  4.3+)  to
-##  print <onbreakmsg> in order to generate a one-off  user-friendly  message
-##  of how the user may recover from the error, and returns an error  message
-##  formed from <errmsg> to be used by Error.
+##  sets `OnBreakMessage' to  print  <onbreakmsg>  in  order  to  generate  a
+##  one-off user-friendly message of how the user may recover from the error,
+##  and returns an error message formed from <errmsg> to be used by Error.
 ##
 ##  <errmsg> and <onbreakmsg> should be lists of strings;  <onbreakmsg>  must
 ##  be non-empty and its first member must not be a null string.
@@ -548,35 +547,18 @@ InstallGlobalFunction(ACE_ERROR, function(errmsg, onbreakmsg)
 local NormalOnBreak, NormalOnBreakMessage;
 
   errmsg := JoinStringsWithSeparator(errmsg, "\n ");
-  if IsFunction(OnBreakMessage) then
-    # what we do in GAP 4.3+
-    NormalOnBreakMessage := OnBreakMessage;
-    onbreakmsg[1]{[1]} := LowercaseString( onbreakmsg[1]{[1]} );
-    OnBreakMessage := function()
-      local s;
+  NormalOnBreakMessage := OnBreakMessage;
+  onbreakmsg[1]{[1]} := LowercaseString( onbreakmsg[1]{[1]} );
+  OnBreakMessage := function()
+    local s;
 
-      for s in onbreakmsg do
-        Print(" ", s, "\n");
-      od;
-      OnBreakMessage := NormalOnBreakMessage;
-    end;
+    for s in onbreakmsg do
+      Print(" ", s, "\n");
+    od;
+    OnBreakMessage := NormalOnBreakMessage;
+  end;
 
-    return errmsg;
-  else
-    # what we do in GAP 4.2 where OnBreakMessage is not available
-    NormalOnBreak := OnBreak;
-    OnBreak := function()
-      local s;
-
-      NormalOnBreak();
-      for s in onbreakmsg do
-        Info(InfoACE + InfoWarning, 1, s);
-      od;
-      OnBreak := NormalOnBreak;
-    end;
-
-    return Concatenation(": ", errmsg);
-  fi;
+  return errmsg;
 end);
 
 #############################################################################

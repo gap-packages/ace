@@ -14,7 +14,7 @@
 #Y                      Department of Computer Science & Electrical Eng.
 #Y                      University of Queensland, Australia.
 ##
-Revision.ace_g :=
+Revision.("ace/gap/ace_g") :=
     "@(#)$Id$";
 
 
@@ -64,7 +64,8 @@ SetInfoLevel(InfoACE, 1);
 ####
 ##  Print a banner . . . . . .  using InfoWarning (so a user can turn it off)
 ##
-if not QUIET and BANNER then
+if not CompareVersionNumbers(VERSION, "4.4") and
+   not QUIET and BANNER then
 
   ACEData.banner := ValueOption("pkgbanner");
   if ACEData.banner = "short" then

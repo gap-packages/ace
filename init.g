@@ -8,14 +8,15 @@
 
 ##  Announce the package version and test for the existence of the binary
 
-ACEPackageVersion := function()
-  local versionfile, version;
-  versionfile := Filename( DirectoriesPackageLibrary("ace", ""), "VERSION" );
-  version := StringFile(versionfile);
-  return version{[1..Length(version) - 1]};
-end;
-
-DeclarePackage( "ace", ACEPackageVersion(),
+if not IsBound(GAPInfo) then
+  BindGlobal("GAPInfo", 
+    rec(DirectoriesTemporary := DIRECTORIES_TEMPORARY,
+        PackagesInfo := rec(ace := [rec(Version :=
+          Chomp(StringFile(Filename( DirectoriesPackageLibrary("ace", ""),
+                                     "VERSION" ))))])
+       ));
+fi;
+DeclarePackage( "ace", GAPInfo.PackagesInfo.ace[1].Version,
   function()
     # Check that the version no. of GAP is ok.
     if not(IsBound( CompareVersionNumbers ) and 
@@ -35,7 +36,8 @@ DeclarePackage( "ace", ACEPackageVersion(),
 );
 
 ##  Install the documentation
-DeclarePackageAutoDocumentation( "ace", "doc" );
+DeclarePackageAutoDocumentation( "ACE", "doc", "ACE",
+                                 "Advanced Coset Enumerator" );
 
 #############################################################################
 ##

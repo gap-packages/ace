@@ -11,7 +11,7 @@
 #Y                      Department of Computer Science & Electrical Eng.
 #Y                      University of Queensland, Australia.
 ##
-Revision.ace_streams_gd :=
+Revision.("ace/gap/streams_gd") :=
     "@(#)$Id$";
 
 

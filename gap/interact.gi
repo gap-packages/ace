@@ -10,7 +10,7 @@
 #Y                      Department of Computer Science & Electrical Eng.
 #Y                      University of Queensland, Australia.
 ##
-Revision.ace_interact_gi :=
+Revision.("ace/gap/interact_gi") :=
     "@(#)$Id$";
 
 #############################################################################
@@ -2348,16 +2348,11 @@ local ioIndex, iostream, datarec, fgens, standard, incomplete,
     until false;
   fi;
   if incomplete then
-    if "CosetTableStandard" in NamesGVars() then
-      StandardizeTable(cosettable, "lenlex");
-      Info(InfoACE + InfoWarning, 1, 
-           "ACECosetTable: Coset table is incomplete, reduced ",
-           "& lenlex standardised.");
-    else
-      Info(InfoACE + InfoWarning, 1, 
-           "ACECosetTable: Warning: Coset table is incomplete.");
-    fi;
-  elif standard = "semilenlex" and "CosetTableStandard" in NamesGVars() then
+    StandardizeTable(cosettable, "lenlex");
+    Info(InfoACE + InfoWarning, 1, 
+         "ACECosetTable: Coset table is incomplete, reduced ",
+         "& lenlex standardised.");
+  elif standard = "semilenlex" then
     StandardizeTable(cosettable, "semilenlex");
   elif IsMatchingSublist(standard, "GAP") or standard = "semilenlex" then
     StandardizeTable(cosettable);
