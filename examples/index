@@ -19,14 +19,14 @@ H of a group G, the cosets of H in G are enumerated):
   "M12-fel1"       M_12 (Matthieu group)  Id             felsch := 1
   "SL219-hard"     SL(2,19)               |G : H| = 180  hard
   "perf602p5"      PerfectGroup(60*2^5,2) |G : H| = 480  default
-* "2p17-fel1"      |G| = 2^17             |G : H| = 1    felsch := 1
+* "2p17-fel1"      |G| = 2^17             Id             felsch := 1
+  "2p17-fel1a"     |G| = 2^17             |G : H| = 1    felsch := 1
+  "2p17-2p3-fel1"  |G| = 2^17             |G : H| = 2^3  felsch := 1
+  "2p17-2p14-fel1" |G| = 2^17             |G : H| = 2^14 felsch := 1
+  "2p17-id-fel1"   |G| = 2^17             Id             felsch := 1
 * "2p18-fel1"      |G| = 2^18             |G : H| = 2    felsch := 1
 * "big-fel1"       |G| = 2^18.3           |G : H| = 6    felsch := 1
 * "big-hard"       |G| = 2^18.3           |G : H| = 6    hard
-  "2p17-id-fel1"   |G| = 2^17             Id             felsch := 1
-  "2p17-2p14-fel1" |G| = 2^17             |G : H| = 2^14 felsch := 1
-  "2p17-2p3-fel1"  |G| = 2^17             |G : H| = 2^3  felsch := 1
-  "2p17-fel1a"     |G| = 2^17             |G : H| = 1    felsch := 1
 
 Notes
 -----
