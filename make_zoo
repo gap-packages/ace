@@ -39,8 +39,7 @@ system( "find $pname -path '*/CVS' -prune -o -print | egrep -v '$prune' |".
 # Mark some files as text files
 for $file ( @files ) {
   chomp $file;
-  if ($file =~ /[.](txt|in|g(|[id])|htm(|l)|[ch]|xml|tex|bib|six|tst|mst)$/ ||
-      $file =~ /(VERSION|README|INSTALL|Makefile|configure|make[.])/ ||
+  if ($file =~ /[.](txt|in|out|g(|[id])|htm(|l)|[ch]|xml|tex|bib|six|tst|mst)$/       || $file =~ /(VERSION|README|INSTALL|Makefile|configure|make[.])/ ||
       $file =~ /([Cc](hanges|HANGES)|examples\/)/) {
     system( "(echo '!TEXT!'; echo '/END') | zoo c $pname-$version.zoo $file" );
   }
