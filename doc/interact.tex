@@ -176,6 +176,15 @@ interactive {\ACE} process, with a new presentation. There is no  form
 of `ACEStart' with the same functionality as this form, where the  <i>
 argument is omitted.
 
+*Note:*
+When an interactive  {\ACE}  process  is  initiated  by  `ACEStart'  a
+process number <i> is assigned to it (the integer <i> returned by  the
+`ACEStart' command), an {\ACE} (binary) process (in the UNIX sense) is
+started up, a {\GAP} iostream is  assigned  to  communicate  with  the
+{\ACE}  (binary)  process,  and  the   essential   ``defining''   data
+associated  with  the  interactive  {\ACE}   process   is   saved   in
+`ACEData.io[<i>]' (see~"ACEData" for precisely what is saved).
+
 \>ACEQuit( <i> )!{details} F
 \>ACEQuit() F
 
@@ -184,10 +193,29 @@ returned by `ACEStart' when the process was  started.  If  the  second
 form is used (i.e.~without arguments) then the interactive process  of
 least index that is still running is terminated.
 
-As a convenience, to terminate all active interactive {\ACE} processes
-at once, we provide:
+*Note:*
+`ACEQuit(<i>)' terminates the {\ACE} (binary) process  of  interactive
+{\ACE} process <i>, and closes its {\GAP} iostream,  and  unbinds  the
+record `ACEData.io[<i>]' (see~"ACEStart" note).
+
+It can happen that the {\ACE} (binary) process, and hence  the  {\GAP}
+iostream assigned to communicate with it, can die,  e.g.~by  the  user
+typing a `Ctrl-C' while the {\ACE} (binary) process is  engaged  in  a
+long  calculation.  `IsACEProcessAlive'  (see~"IsACEProcessAlive")  is
+provided to check the status of the {\GAP}  iostream  (and  hence  the
+status of the {\ACE} (binary) process it was communicating  with);  in
+the   case   that   it   is   indeed    dead,    `ACEResurrectProcess'
+(see~"ACEResurrectProcess") may be used to start a new {\ACE} (binary)
+process and assign a new {\GAP} iostream to communicate  with  it,  by
+using the ``defining'' data of the interactive {\ACE} process saved in
+`ACEData.io[<i>]'.
 
 \>ACEQuitAll() F
+
+is provided as a convenience,  to  terminate  all  active  interactive
+{\ACE} processes with a single command. It is equivalent to  executing
+`ACEQuit(<i>)'  for  all  active  interactive  {\ACE}  processes   <i>
+(see~"ACEQuit").
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{General ACE Modes}
@@ -273,20 +301,33 @@ raises an error. With no  arguments  it  returns  the  default  active
 interactive process or returns `fail' and emits a warning  message  to
 `Info' at `InfoACE' or `InfoWarning' level 1.
 
+*Note:*
+Essentially, an  interactive  {\ACE}  process  <i>  is  ``active''  if
+`ACEData.io[<i>]' is bound (i.e.~we still have some  data  telling  us
+about it). Also see~"ACEStart" note.
+
 \>ACEProcessIndices() F
 
 returns the list of integer indices of all active  interactive  {\ACE}
-processes.
+processes (see~"ACEProcessIndex" for the meaning of ``active'').
+
+\>IsACEProcessAlive( <i> ) F
+\>IsACEProcessAlive() F
+
+return `true' if  the  {\GAP}  iostream  of  the  <i>th  (or  default)
+interactive {\ACE} process started by `ACEStart'  is  alive  (i.e.~can
+still  be  written  to),  or  `false',  otherwise.  (See   the   notes
+for~"ACEStart" and~"ACEQuit".)
 
 \atindex{interruption}{@interruption of an interactive ACE process}
 \atindex{break-loop}{@\noexpand`break'-loop}
 If the user does not yet have a `gap>' prompt then usually  {\ACE}  is
 still away doing something and an {\ACE} interface function  is  still
-waiting for a reply from {\ACE}. Typing a `Ctrl-C' (i.e. holding  down
+waiting for a reply from {\ACE}. Typing a `Ctrl-C' (i.e.~holding  down
 the `Ctrl' key and typing `c') will stop the waiting and  send  {\GAP}
 into a `break'-loop, from which one has no option but to `quit;'.  The
 typing of `Ctrl-C', in such a circumstance, usually causes the  stream
-of the the interactive {\ACE} process to die; to check this we provide
+of the interactive {\ACE} process to die; to  check  this  we  provide
 `IsACEProcessAlive' (see~"IsACEProcessAlive"). If  the  stream  of  an
 interactive {\ACE} process, indexed by <i>,  say,  has  died,  it  may
 still be possible to recover enough of the state, before the death  of
@@ -294,21 +335,22 @@ the stream, from  the  information  stored  in  the  `ACEData.io[<i>]'
 record (see Section~"The ACEData Record"). For such a purpose, we have
 provided `ACEResurrectProcess' (see~"ACEResurrectProcess").
 
-\>IsACEProcessAlive( <i> ) F
-\>IsACEProcessAlive() F
-
-return `true' if the stream of  the  <i>th  (or  default)  interactive
-{\ACE} process started by  `ACEStart'  is  alive  (i.e.~can  still  be
-written to), or `false', otherwise.
+The {\GAP} iostream of an interactive {\ACE} process will also die  if
+the {\ACE} binary has a segmentation fault. We do hope that this never
+happens to you, but if it does and the failure is  reproducible,  then
+it's a bug and we'd like to know about it. Please  read  the  `README'
+that comes with the {\ACE} share package to find out what  to  include
+in a bug report and who to email it to.
 
 \>ACEResurrectProcess( <i> [: <options>] ) F
 \>ACEResurrectProcess( [: <options>] ) F
 
-re-generate the stream of the <i>th (or  default)  interactive  {\ACE}
-process started by `ACEStart' (see~"ACEStart"), and tries  to  recover
-as much as possible of the previous state from  saved  values  of  the
-process's arguments and parameter options. The possible <options> here
-are `use' and `useboth' which are described in detail below.
+re-generate the {\GAP} iostream of the <i>th (or default)  interactive
+{\ACE} process started by `ACEStart' (see~"ACEStart", the final  note,
+in particular), and try to recover as much as possible of the previous
+state from saved values  of  the  process's  arguments  and  parameter
+options. The possible <options> here are `use' and `useboth' which are
+described in detail below.
 
 The arguments of the <i>th interactive {\ACE} process  are  stored  in
 `ACEData.io[<i>].args', a  record  with  fields  `fgens',  `rels'  and
@@ -392,13 +434,13 @@ defined in Section~"General ACE Modes".
 
 for the <i>th (or default) interactive {\ACE} process,  generates  and
 tests an enumeration for combinations  of  relator  ordering,  relator
-rotations, and relator inversions; <val> is in the integer range 0  to
+rotations, and relator inversions; <val> is in the integer range 1  to
 7.
 
 The argument <val> is considered as a binary number.  Its  three  bits
 are treated as flags, and control relator rotations (the  $2^0$  bit),
 relator inversions (the $2^1$ bit) and relator  orderings  (the  $2^2$
-bit),  respectively;  where  $1$  means  ``active''  and  $0$  means
+bit),  respectively;  where  $1$  means  ``active''  and   $0$   means
 ``inactive''. (See below for an example).
 
 Before we describe the {\GAP} output of `ACEAllEquivPresentations' let
@@ -414,11 +456,13 @@ It  then  turns  `asis'  (see~"option   asis")   on   and   `messages'
 and tests the requested  equivalent  presentations.  The  maximum  and
 minimum values attained by `m' (the maximum number  of  coset  numbers
 defines at any stage) and `t'  (the  total  number  of  coset  numbers
-defined) are tracked, and each time a new  ``record''  is  found,  the
-relators  used  and  the  summary  result  line   are   printed.   See
-Appendix~"The Meanings of ACE's output messages" for a  discussion  of
-the statistics  `m'  and  `t'.  To  observe  these  messages  set  the
-`InfoLevel' of `InfoACE' to 3.
+defined) are tracked, and each time the  statistics  are  better  than
+what we've already seen, the {\ACE} binary emits a summary result line
+for the relators used. See  Appendix~"The  Meanings  of  ACE's  output
+messages" for a discussion of the statistics `m' and `t'.  To  observe
+these messages set  the  `InfoLevel'  of  `InfoACE'  to  3;  and  it's
+*recommended* that you do this so that you get some idea of  what  the
+{\ACE} binary is doing.
 
 The order in which the  equivalent  presentations  are  generated  and
 tested has no particular significance, but note that the  presentation
@@ -467,8 +511,8 @@ Section~"Results Messages") of the priming run;
 `activecosets', `maxcosets' and `totcosets', exactly as for the record
 returned by `ACEStats' (see~"ACEStats");
 
-\quad`equivRuns' & a list of data records, one  for  each  run,  where
-each record has fields:
+\quad`equivRuns' & a list of data records, one for each  progressively
+``best'' run, where each record has fields:
 
 \qquad`rels'& the relators in the order used for the run,
 
@@ -495,6 +539,9 @@ which each `equivRuns[<i>].totcosets' lies.
 \enditems
 
 *Notes:*
+In general, the length of the `equivRuns' field list will be less than
+the number of runs executed.
+
 There is no way to stop the `ACEAllEquivPresentations' command  before
 it has completed, other than killing the task. So do a  reality  check
 beforehand on the size of the search  space  and  the  time  for  each
@@ -850,14 +897,14 @@ If you actually wanted {\ACE}'s  coset  representative,  then,  for  a
 \>ACEOrders(: suborder := <suborder> ) F
 
 for the <i>th (or  default)  interactive  {\ACE}  process  started  by
-`ACEStart', search for coset  numbers  whose  representatives'  orders
+`ACEStart', search for all coset numbers whose representatives' orders
 (modulo the subgroup) are either  finite,  or,  if  invoked  with  the
 `suborder' option,  are  multiples  of  <suborder>,  where  <suborder>
 should be a positive integer. `ACEOrders' returns a  (possibly  empty)
 list of records, each with fields `coset', `order'  and  `rep',  which
 are respectively, the coset number, its order modulo the subgroup, and
 a representative for each coset number satisfying the criteria of  the
-search. 
+search.
 
 *Note:*
 You may wish to compact {\ACE}'s coset table first, either  explicitly
@@ -868,17 +915,17 @@ call that invokes {\ACE}'s compaction routine (see~"ACERecover" note).
 \>ACEOrder( <suborder> ) F
 
 for the <i>th (or  default)  interactive  {\ACE}  process  started  by
-`ACEStart', search for coset numbers whose coset representatives  have
-order modulo the subgroup a multiple of <suborder>. When <suborder> is
-a positive integer, `ACEOrder' returns a record with  fields  `coset',
-`order' and `rep', which are respectively, the coset number, its order
-modulo the subgroup, and a representative for the first  coset  number
-satisfying the criteria of the search, or `fail' if there is  no  such
-coset number. The value of <suborder> may also be a negative  integer,
-in  which  case,  `ACEOrder(  <i>,  <suborder>  )'  is  equivalent  to
-`ACEOrders( <i> : suborder := |<suborder>|)';  or  <suborder>  may  be
-zero, in which case, `ACEOrder( <i>, 0 )' is equivalent to `ACEOrders(
-<i> )'.
+`ACEStart', search for coset  number(s)  whose  coset  representatives
+have  order  modulo  the  subgroup  a  multiple  of  <suborder>.  When
+<suborder> is a positive integer, `ACEOrder' returns just  one  record
+with fields `coset', `order' and `rep', which  are  respectively,  the
+coset number, its order modulo the subgroup, and a representative  for
+the first coset number satisfying  the  criteria  of  the  search,  or
+`fail' if there is no such coset number. The value of  <suborder>  may
+also be a negative integer, in which case, `ACEOrder( <i>,  <suborder>
+)' is equivalent to `ACEOrders( <i> : suborder :=  |<suborder>|)';  or
+<suborder> may be zero,  in  which  case,  `ACEOrder(  <i>,  0  )'  is
+equivalent to `ACEOrders( <i> )'.
 
 *Note:*
 You may wish to compact {\ACE}'s coset table first, either  explicitly

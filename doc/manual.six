@@ -226,10 +226,10 @@ S 6.3. Interactive ACE Process Utility Functions and Interruption of an Interact
 F 6.3. ACEProcessIndex
 F 6.3. ACEProcessIndex
 F 6.3. ACEProcessIndices
+F 6.3. IsACEProcessAlive
+F 6.3. IsACEProcessAlive
 I 6.3. interruption
 I 6.3. break-loop
-F 6.3. IsACEProcessAlive
-F 6.3. IsACEProcessAlive
 F 6.3. ACEResurrectProcess
 F 6.3. ACEResurrectProcess
 F 6.3. ToACEGroupGenerators
