@@ -51,9 +51,10 @@ if IsBound(IsACEResExampleOK) and IsACEResExampleOK() then
             Concatenation(
                 "PGRelFind(L28.fgens, L28.rels, L28.sgens\n",
                 "                       : ",
-                ACE_JOIN(List(ACEResExample.option, 
-                              i -> ACEResExample.options[i]),
-                         ",\n                         "),
+                JoinStringsWithSeparator(
+                    List(ACEResExample.option, 
+                         i -> ACEResExample.options[i]),
+                    ",\n                         "),
                 ")"
                 )
             );

@@ -34,7 +34,8 @@ if IsBound(IsACEResExampleOK) and IsACEResExampleOK() then
         Concatenation(
             "PGRelFind(PSp44.fgens, PSp44.rels, PSp44.sgens\n",
             "                         : ",
-            ACE_JOIN(["head := x*y*x*y^-6*x*y^7",
+            JoinStringsWithSeparator(
+                     ["head := x*y*x*y^-6*x*y^7",
                       "maxTailLength := 4",
                       "minMiddleLength := 2",
                       "maxMiddleLength := 60",

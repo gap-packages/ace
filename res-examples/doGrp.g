@@ -24,7 +24,8 @@ if IsBound(IsACEResExampleOK) and IsACEResExampleOK() then
     ACEResExample.G :=
         ACE_PRINT_AND_EVAL(
             "ACEResExample.G",
-            ACE_JOIN(["TranslatePresentation([a, b],",
+            JoinStringsWithSeparator(
+                     ["TranslatePresentation([a, b],",
                       "ACEResExample.grp.rels,",
                       "ACEResExample.grp.sgens,",
                       "ACEResExample.newgens)"],
@@ -33,7 +34,8 @@ if IsBound(IsACEResExampleOK) and IsACEResExampleOK() then
     ACEResExample.Gn :=
         ACE_PRINT_AND_EVAL(
             "ACEResExample.Gn",
-            ACE_JOIN(["PGRelFind(ACEResExample.G.fgens,",
+            JoinStringsWithSeparator(
+                     ["PGRelFind(ACEResExample.G.fgens,",
                       "ACEResExample.G.rels,",
                       "ACEResExample.G.sgens)"],
                      "\n                                   ")
@@ -42,7 +44,8 @@ if IsBound(IsACEResExampleOK) and IsACEResExampleOK() then
     ACEResExample.G :=
         ACE_PRINT_AND_EVAL(
             "ACEResExample.G",
-            ACE_JOIN(["PGRelFind([a, b],",
+            JoinStringsWithSeparator(
+                     ["PGRelFind([a, b],",
                       "ACEResExample.grp.rels,",
                       "ACEResExample.grp.sgens)"],
                      "\n                                  ")
