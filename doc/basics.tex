@@ -328,7 +328,7 @@ by  deleting  subgroup  generators  via  `ACEDeleteSubgroupGenerators'
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{Coset Table Standardisation Schemes}
 
-The   default   standardisation   scheme   of   {\GAP}~4.3   and   the
+The default standardisation scheme for {\GAP} from {\GAP}~4.3 and  the
 standardisation    scheme    provided     by     {\ACE}     is     the
 `lenlex'{\undoquotes\atindex{lenlex standardisation scheme} {@`lenlex'
 standardisation scheme}} scheme, of Charles  Sims~\cite{Sims94}.  This
@@ -460,6 +460,26 @@ maximum number of *alive* cosets at any point of an enumeration.
 In practice, the statistics *maxcosets* and *totcosets* tend to be  of
 a similar order, though, of course, *maxcosets* can never be more than
 *totcosets*.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{Other Terminology}
+
+In  various  places  in  this  manual,  we  will  refer  to  a  (main)
+*loop*\index{loop} or a *pass*\index{pass} through  such  a  loop.  We
+don't intend to give a precise meaning to these terms. The reader will
+need to forgive us for giving somewhat  circular  definitions  in  our
+attempt to make  these  terms  less  nebulous.  It  is  sufficient  to
+appreciate that the {\ACE} enumerator is organised as a state machine,
+where each *state*\index{state (machine)} is  a  value  of  the  coset
+table held internally by {\ACE} at the end of  each  \lq{}main  loop'.
+Each step from one state to the next (i.e.~each  passage  through  the
+main loop) performs an \lq{}action' (i.e., `lookahead',  `compaction';
+see~"option lookahead" and~"option compaction") or a block of  actions
+(i.e.,  $|`ct'|$  coset  number  definitions,  $|`rt'|$  coset  number
+applications). {\ACE} counts the number of  passes  through  the  main
+loop; if the option `loop' (see~"option loop") to a positive  integer,
+{\ACE} makes an early return when the loop count  hits  the  value  of
+`loop'.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%

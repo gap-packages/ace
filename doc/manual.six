@@ -91,6 +91,10 @@ I 3.5. totcosets
 I 3.5. coincidence
 I 3.5. dead coset (number)
 I 3.5. alive coset number
+S 3.6. Other Terminology
+I 3.6. loop
+I 3.6. pass
+I 3.6. state (machine)
 C options.tex 4. Options for ACE
 S 4.1. Passing ACE Options
 S 4.2. Warnings regarding Options
@@ -194,17 +198,13 @@ F 6.1. ACEStart
 F 6.1. ACEQuit
 F 6.1. ACEQuit
 F 6.1. ACEQuitAll
-S 6.2. Primitive ACE Read/Write Functions
-F 6.2. ACEWrite
-F 6.2. ACEWrite
-F 6.2. ACERead
-F 6.2. ACERead
-F 6.2. ACEReadAll
-F 6.2. ACEReadAll
-F 6.2. ACEReadUntil
-F 6.2. ACEReadUntil
-F 6.2. ACEReadUntil
-F 6.2. ACEReadUntil
+S 6.2. General ACE Modes
+F 6.2. ACEModes
+F 6.2. ACEModes
+F 6.2. ACEContinue
+F 6.2. ACEContinue
+F 6.2. ACERedo
+F 6.2. ACERedo
 S 6.3. Interactive ACE Process Utility Functions and Interruption of an Interactive ACE Process
 F 6.3. ACEProcessIndex
 F 6.3. ACEProcessIndex
@@ -217,13 +217,7 @@ F 6.3. ACEResurrectProcess
 F 6.3. ACEResurrectProcess
 F 6.3. ToACEGroupGenerators
 F 6.3. ToACEWords
-S 6.4. General and Experimentation ACE Modes
-F 6.4. ACEModes
-F 6.4. ACEModes
-F 6.4. ACEContinue
-F 6.4. ACEContinue
-F 6.4. ACERedo
-F 6.4. ACERedo
+S 6.4. Experimentation ACE Modes
 F 6.4. ACEAllEquivPresentations
 F 6.4. ACEAllEquivPresentations
 F 6.4. ACERandomEquivPresentations
@@ -254,28 +248,16 @@ F 6.5. SetACEOptions
 I 6.5. break-loop
 F 6.5. ACEParameters
 F 6.5. ACEParameters
-F 6.5. ACEVersion
-F 6.5. ACEVersion
-F 6.5. ACEDumpVariables
-F 6.5. ACEDumpVariables
-F 6.5. ACEDumpVariables
-F 6.5. ACEDumpVariables
-F 6.5. ACEDumpVariables
-F 6.5. ACEDumpVariables
-F 6.5. ACEDumpStatistics
-F 6.5. ACEDumpStatistics
-F 6.5. ACEStyle
-F 6.5. ACEStyle
-F 6.5. ACEDisplayCosetTable
-F 6.5. ACEDisplayCosetTable
-F 6.5. ACEDisplayCosetTable
-F 6.5. ACEDisplayCosetTable
-F 6.5. ACEDisplayCosetTable
-F 6.5. ACEDisplayCosetTable
-F 6.5. ACEDisplayCosetTable
-F 6.5. ACEDisplayCosetTable
 F 6.5. IsCompleteACECosetTable
 F 6.5. IsCompleteACECosetTable
+F 6.5. ACEDisplayCosetTable
+F 6.5. ACEDisplayCosetTable
+F 6.5. ACEDisplayCosetTable
+F 6.5. ACEDisplayCosetTable
+F 6.5. ACEDisplayCosetTable
+F 6.5. ACEDisplayCosetTable
+F 6.5. ACEDisplayCosetTable
+F 6.5. ACEDisplayCosetTable
 F 6.5. ACECosetRepresentative
 F 6.5. ACECosetRepresentative
 F 6.5. ACECosetRepresentatives
@@ -294,10 +276,20 @@ F 6.5. ACEOrders
 F 6.5. ACEOrders
 F 6.5. ACEOrder
 F 6.5. ACEOrder
-F 6.5. ACECosetsThatStabiliseSubgroup
-F 6.5. ACECosetsThatStabiliseSubgroup
 F 6.5. ACECosetsThatNormaliseSubgroup
 F 6.5. ACECosetsThatNormaliseSubgroup
+F 6.5. ACEStyle
+F 6.5. ACEStyle
+F 6.5. ACEDumpVariables
+F 6.5. ACEDumpVariables
+F 6.5. ACEDumpVariables
+F 6.5. ACEDumpVariables
+F 6.5. ACEDumpVariables
+F 6.5. ACEDumpVariables
+F 6.5. ACEDumpStatistics
+F 6.5. ACEDumpStatistics
+F 6.5. ACEVersion
+F 6.5. ACEVersion
 S 6.6. Interactive Versions of Non-interactive ACE Functions
 F 6.6. ACECosetTable
 F 6.6. ACECosetTable
@@ -332,6 +324,17 @@ F 6.7. ACEConjugatesForSubgroupNormalClosure
 F 6.7. ACEConjugatesForSubgroupNormalClosure
 F 6.7. ACEConjugatesForSubgroupNormalClosure
 F 6.7. ACEConjugatesForSubgroupNormalClosure
+S 6.8. Primitive ACE Read/Write Functions
+F 6.8. ACEWrite
+F 6.8. ACEWrite
+F 6.8. ACERead
+F 6.8. ACERead
+F 6.8. ACEReadAll
+F 6.8. ACEReadAll
+F 6.8. ACEReadUntil
+F 6.8. ACEReadUntil
+F 6.8. ACEReadUntil
+F 6.8. ACEReadUntil
 C messages.tex 7. The Meanings of ACE's output messages
 S 7.1. Progress Messages
 S 7.2. Results Messages

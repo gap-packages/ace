@@ -579,19 +579,26 @@ representatives are printed also.
 
 \>`sc:=<val>'{option sc}@{option `sc'}
 \>`stabilising:=<val>'{option stabilising}@{option `stabilising'}&
-Print out the coset numbers whose elements stabilise  (i.e.~normalise)
-the subgroup; <val> must be an integer.
+Print out the coset numbers whose elements normalise the subgroup; 
+<val> must be an integer.
 (Shortest abbreviation of `stabilising' is `stabil'.)
 
 If `<val> > 0', the first `<val>' non-trivial (i.e.~other  than  coset
-1) coset numbers whose elements stabilise the subgroup are printed. If
-`<val> = 0', all non-trivial coset numbers  whose  elements  stabilise
+1) coset numbers whose elements normalise the subgroup are printed. If
+`<val> = 0', all non-trivial coset numbers  whose  elements  normalise
 the subgroup, plus their representatives, are printed.  If  `<val>  \<
 0', the first  `|<val>|'  non-trivial  coset  numbers  whose  elements
-stabilise the subgroup, plus their representatives, are printed.
+normalise the subgroup, plus their representatives, are printed.
 
-Interactively,          use           `ACECosetsThatStabiliseSubgroup'
-(see~"ACECosetsThatStabiliseSubgroup").
+*Note:*
+The name of this option is an historical hangover. It is named for the
+property that elements that \lq{}normalise' a subgroup, may be said to
+\lq{}stabilise' that subgroup  when  they  act  \lq{}by  conjugation'.
+Also, the option `normal' (see~"option  normal")  already  performs  a
+different function.
+
+Interactively,          use           `ACECosetsThatNormaliseSubgroup'
+(see~"ACECosetsThatNormaliseSubgroup").
 
 \>`statistics'{option statistics}@{option `statistics'}
 \>`stats'{option stats}@{option `stats'}&

@@ -101,14 +101,14 @@ remain there  until  an  explicit  `PopOptions()'  call  is  made.  In
 contrast, options passed in the usual way behind a colon  following  a
 function's arguments (see "ref:Function Calls" in the {\GAP} Reference
 Manual)  are  local,  and  disappear  from  `OptionsStack'  after  the
-function has executed successfully; nevertheless,  a  function  passed
-options this way will also see  any  global  options  or  any  options
-passed down recursively from functions calling that  function,  unless
-over-ridden by an option passed  via  the  function.  Also  note  that
-duplication of  option  names  for  different  programs  may  lead  to
-misinterpretations. Considering how much of a potential  mine-field  a
-non-empty `OptionsStack'  might  be  for  the  unwary  user,  we  have
-provided
+function has executed successfully; nevertheless, a function, that  is
+passed options this way, will also  see  any  global  options  or  any
+options passed down recursively from functions calling that  function,
+unless those  options  are  over-ridden  by  options  passed  via  the
+function. Also note that duplication of  option  names  for  different
+programs may lead to misinterpretations. Considering  how  much  of  a
+potential mine-field a  non-empty  `OptionsStack'  might  be  for  the
+unwary user, we have provided
 
 \>FlushOptionsStack()
 
@@ -269,7 +269,7 @@ assigning `true' or  `false'),  whereas  strategy  (no-value)  options
 should *not* be thought of as boolean (a `false' assignment will *not*
 give you what you might have expected).
 
-Options that are unknown to the {\ACE} interface  functions  that  are
+Options, that are unknown to the {\ACE} interface  functions,  that  are
 passed without a value, are *always* passed to the  {\ACE}  binary  as
 no-value options (except when the options are ignored); the  user  can
 over-ride this behaviour simply by assigning the  intended  value.  An
@@ -316,10 +316,10 @@ The {\ACE} options known to the {\ACE} interface are the fields of the
 record          `KnownACEOptions'{\undoquotes\atindex{KnownACEOptions}
 {@`KnownACEOptions'}}; each field (known {\ACE} option) is assigned to
 a list of the  form  `[<i>,  <ListOrFunction>]',  where  `<i>'  is  an
-integer representing the  shortest  abbreviation  of  the  option  and
-`<ListOrFunction>' is either a list of (known)  allowed  values  or  a
-boolean function that may be used to determine if the given value is a
-(known) valid value e.g.
+integer representing the length of the shortest  abbreviation  of  the
+option and `<ListOrFunction>' is either  a  list  of  (known)  allowed
+values or a boolean function that may be  used  to  determine  if  the
+given value is a (known) valid value e.g.
 
 \beginexample
 gap> KnownACEOptions.compaction;
@@ -422,7 +422,7 @@ Section~"The                ACEStrategyOptions                 list").
 \Section{The ACEStrategyOptions List}
 
 For  convenience,  the  {\GAP}  list  `ACEStrategyOptions'{\undoquotes
-\atindex{ACEStrategyOptions}{@`ACEStrategyOptions'}},   contains   the
+\atindex{ACEStrategyOptions}{@`ACEStrategyOptions'}}   contains    the
 strategy options known to the {\ACE} interface functions:
 
 \beginexample
@@ -453,7 +453,7 @@ gap> Concatenation( [ "messages" ], ACEOptionSynonyms.("messages") );
 \endexample
 
 More generally, for an arbitrary option name  <optname>  its  list  of
-synonyms (which maybe a list of one element)  maybe  obtained  as  the
+synonyms (which may be a list of one element) may be obtained  as  the
 `synonyms' field of the record returned by  `ACEOptionData(<optname>)'
 (see~"ACEOptionData").
 
@@ -540,30 +540,34 @@ used by {\GAP} (see also~"option lenlex").
 Allows the return  of  an  `incomplete'  coset  table,  when  a  coset
 enumeration does not finish within preset limits.
 
-If a coset  enumeration  that  invokes  `ACECosetTableFromGensAndRels'
-does not finish within the preset limits, an error is  raised  by  the
-interface to {\GAP}, unless the option `silent' (see~"option  silent")
-or `incomplete' has been set; in the  latter  case,  a  partial  coset
-table, that is a valid {\GAP} list  of  lists,  is  returned.  If  the
-option `silent' is also set, `incomplete'  prevails.  When  a  partial
-table is returned, a warning is emitted at `InfoACE' or  `InfoWarning'
-level 1; the partial table is then returned unstandardised unless  the
-`lenlex' option (see~"option lenlex") is also set, with zeros at  each
-position of the table without a valid coset number entry.
+If a coset enumeration that invokes `ACECosetTableFromGensAndRels'  or
+`ACECosetTable' does not finish within the preset limits, an error  is
+raised  by  the  interface  to  {\GAP},  unless  the  option  `silent'
+(see~"option silent") or `incomplete' has  been  set;  in  the  latter
+case, a partial coset table, that is a valid {\GAP} list of lists,  is
+returned. Each position of the table  without  a  valid  coset  number
+entry is filled with a zero. If  the  option  `silent'  is  also  set,
+`incomplete' prevails. For {\GAP}~4.3 and later, an  incomplete  table
+is returned reduced (i.e.~with insignificant coset numbers  ---  those
+appearing only in there place of definition --- removed) and  `lenlex'
+standardised (regardless of whether  the  `semilenlex'  option  is  in
+force). For GAP~4.2, an incomplete table  is  returned  unstandardised
+unless the `lenlex' option (see~"option lenlex") is also set, and  the
+table is also not reduced. When an incomplete  table  is  returned,  a
+warning is emitted at `InfoACE' or `InfoWarning' level 1.
 
 \>`aceinfile:=<filename>'{option aceinfile}@{option `aceinfile'}&
-Creates an {\ACE} input file <filename> for use with  the  standalone,
-only;  <filename>  should  be  a  string.
-(Shortest abbreviation: `acein'.)
+Creates an {\ACE} input file <filename> for use  with  the  standalone
+only; <filename> should be a string. (Shortest abbreviation: `acein'.)
 
 This option is only relevant to `ACECosetTableFromGensAndRels' and  is
 ignored if included as an option for  invocations  of  `ACEStats'  and
 `ACEStart'. If this option is used, {\GAP} creates an input file  with
 filename <filename> only, and then exits (i.e.~the  {\ACE}  binary  is
 not called). This option is  provided  for  users  who  wish  to  work
-directly (and interactively) with the {\ACE} standalone. The full path
-to  the  input  file  normally  used  by  {\ACE}   (i.e.~when   option
-`aceinfile' is not used) is stored in `ACEData.infile'.
+directly with the {\ACE} standalone. The full path to the  input  file
+normally used by {\ACE} (i.e.~when option `aceinfile' is not used)  is
+stored in `ACEData.infile'.
 
 
 \>`aceoutfile:=<filename>'{option aceoutfile}@{option `aceoutfile'}&
@@ -652,33 +656,40 @@ and has no abbreviation to discourage user use.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{ACE Parameter Options}
 
-The \lq{}{\ACE} Parameter Options' are options which if not supplied a
-value by the user are supplied a default value  by  {\ACE}.  For  user
-convenience, we  have  defined  the  `ACEParameterOptions'{\undoquotes
+The \lq{}{\ACE} Parameter Options' are options which, if not  supplied
+a value by the user, are supplied a default value by {\ACE}. In  fact,
+the \lq{}{\ACE} Parameter  Options'  are  those  options  that  appear
+(along  with  `Group  Generators',  `Group  Relators'  and   `Subgroup
+Generators',  which  are  defined  from  {\ACE}   interface   function
+arguments) in the \lq{}Run Parameters' block of {\ACE}  output,  when,
+for example, the `messages' option is non-zero.
+
+For convenience, we have defined the `ACEParameterOptions'{\undoquotes
 \atindex{ACEParameterOptions}{@`ACEParameterOptions'}}   record,   the
 fields of which are the \lq{}{\ACE} Parameter Options' and the  values
-of which are the default  values  (or  a  record  of  default  values)
-that are supplied by {\ACE} when those options are not given values by
-the  user  (either  indirectly  by  selecting  a  strategy  option  or
-directly).
+of which are the default values (or a record of default  values)  that
+are supplied by {\ACE} when those options are not given values by  the
+user (either indirectly by selecting a strategy option or directly).
 
-For the case that the value of a field  of  the  `ACEParameterOptions'
-record is itself a record, the fields of that record are `default' and
-strategies for which the value assigned by that strategy differs  from
-the `default' strategy; a \lq{}strategy', here, is the strategy option
-itself, if it is only  a  no-value  option,  or  the  strategy  option
-concatenated with any of its integer values  (as  strings),  otherwise
-(e.g.~`felsch0' and `sims9'  are  strategies,  and  `hlt'  is  both  a
-strategy and a strategy option). As an exercise, the reader might like
-to try to reproduce the table at the  beginning  of  Chapter~"Strategy
-Options for ACE" using the `ACEParameterOptions'  record.  (Hint:  you
-first need to select those fields of the `ACEParameterOptions'  record
-whose values are records with at least two fields.)
+In some cases, the value  of  a  field  of  the  `ACEParameterOptions'
+record is itself a record. In such cases, the fields  of  that  record
+are `default' and strategies for which  the  value  assigned  by  that
+strategy differs from the `default' strategy. A \lq{}strategy',  here,
+is the strategy option itself, if it is only a no-value option, or the
+strategy option concatenated  with  any  of  its  integer  values  (as
+strings), otherwise (e.g.~`felsch0' and `sims9'  are  strategies,  and
+`hlt' is both a strategy and a strategy option). As an  exercise,  the
+reader might like to try to reproduce the table at  the  beginning  of
+Chapter~"Strategy Options for  ACE"  using  the  `ACEParameterOptions'
+record.  (Hint:  you  first  need  to  select  those  fields  of   the
+`ACEParameterOptions' record whose values are records  with  at  least
+two fields.)
 
-Note,  however,  that  where  an  \lq{}{\ACE}  Parameter  Option'  has
-synonyms only the \lq{}preferred' option name (see Section~"ACE Option
-Synonyms") appears as a field of `ACEParameterOptions'.  The  complete
-list of \lq{}{\ACE} Parameter Options' may be obtained by
+*Note:*
+Where  an  \lq{}{\ACE}  Parameter  Option'  has  synonyms,  only   the
+\lq{}preferred'  option  name  (see  Section~"ACE  Option   Synonyms")
+appears as a field of  `ACEParameterOptions'.  The  complete  list  of
+\lq{}{\ACE} Parameter Options' may be obtained by
 
 \beginexample
 gap> Concatenation( List(RecNames(ACEParameterOptions),                    
@@ -688,12 +699,6 @@ gap> Concatenation( List(RecNames(ACEParameterOptions),
   "messages", "monitor", "no", "path", "pmode", "psize", "rt", "rfactor", 
   "row", "subgroup", "time", "workspace" ]
 \endexample
-
-The \lq{}{\ACE} Parameter Options'  are  those  options  which  appear
-(along  with  `Group  Generators',  `Group  Relators'  and   `Subgroup
-Generators'  which  are  defined  from   {\ACE}   interface   function
-arguments), in the \lq{}Run Parameters' block of {\ACE} output,  when,
-for example, the `messages' option is non-zero.
 
 We   describe   the   \lq{}{\ACE}   Parameter    Options'    in    the
 Sections~"General ACE Parameter Options that  Modify  the  Enumeration
@@ -1030,7 +1035,7 @@ the run may run over the limit by a large amount.
 
 *Notes:*
 The time limit is CPU-time, not wall-time.  As  in  all  timing  under
-Unix, the clock's granularity  (usually  $10$  milliseconds)  and  the
+UNIX, the clock's granularity  (usually  $10$  milliseconds)  and  the
 system load can  affect  the  timing;  so  the  number  of  main  loop
 iterations in a given time may vary.
 
