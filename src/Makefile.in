@@ -6,9 +6,11 @@
 # -pedantic : be bloody picky
 # -ansi     : enforce ANSII compliance
 
-# on a SGI ozone machine, the following assignement needs to be replaced by:
-# CC = cc -64 -O2 -ansi
+# With most UNIX operating systems set CC to gcc e.g. for Linux, Solaris.
+# For SGIs use the native compiler cc; if 64bit is supported use cc -64
 CC  = gcc -Wall -pedantic -ansi -O2
+# CC = cc -O2 -ansi
+# CC = cc -64 -O2 -ansi
 
 # ACE Level 0, 1 & 2 switches 
 #
@@ -34,7 +36,7 @@ SRC0A = enum00.c enum01.c enum02.c
 # Note the setting of (THE)DATE, so that we can record the time/date of
 # this build in the executable (usage: "fprint(fop, "%s\n", DATE);")
 
-THEDATE := "'@DATE@'"
+THEDATE = "'@DATE@'"
 
 ace: al2.h $(SRC2) al1.h $(SRC1) al0.h $(SRC0) $(SRC0A)
 	$(CC) $(FLAGS) -DDATE="\"$(THEDATE)\"" -o ace \

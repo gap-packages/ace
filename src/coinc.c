@@ -475,7 +475,7 @@ static Logic al0_cols12(int low, int high, Logic saved)
 
 int al0_coinc(int low, int high, Logic saved)
   { 
-  int i, j, l;				/* Temps / for macros */
+  int i, j;				/* Temps / for macros */
   int lowi, highi;
   int chigh, clow, crep;		/* current high, low & rep */
 

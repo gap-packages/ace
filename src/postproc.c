@@ -294,22 +294,23 @@ void al2_cycles(void)
 	group generators g and all subgroup generator words w, noting 
 	whether we get back to coset 1 or not.  Note that 1.w^g = 1 iff
         1.Gwg = 1 iff 1.Gw = 1.G (hence the apparent switch in the sense of
-        first when we set it).  If build is T, then the non-normalising
-	conjugates are added to the list of subgroup generators; the _user_
-	has rerun the enumeration.  Note that coset #1 is never redundant;
-	however, others may be, and the table may be incomplete.
+        first when we set it).  If build is T, then conjugates of subgroup
+        generators by group generators that cannot be traced to the subgroup
+	are added to the list of subgroup generators; the _user_ has rerun 
+        the enumeration.  Note that coset #1 is never redundant; however, 
+        others may be, and the table may be incomplete.
 
         Note: if g has a finite order, say n, then G=g^{n-1}.  So either 
-        both or neither of g/G normalise w (ie, we need check only one).
-	However, g may have infinite/unknown order so, in general, we have
-	to check both.
+        both or neither of gwG and Gwg are in the subgroup (ie, we need 
+        check only one). However, g may have infinite/unknown order so, 
+        in general, we have to check both.
 
 	Remark: we choose to ignore those g/w pairs where the trace does
 	not complete.  It could be argued that we should include them in 
-	the list of non-normalising conjugates (as ACE2 did).  If we did, 
-	this would require definitions to be made during the rerun of the 
-	SG phase.  By including only those pairs which do trace, but not 
-	to 1, we effectively introduce coincidences.
+	the list of added conjugates (as ACE2 did).  If we did, this would 
+        require definitions to be made during the rerun of the SG phase.  
+        By including only those pairs which do trace, but not to 1, we 
+        effectively introduce coincidences.
 	******************************************************************/
 
 void al2_normcl(Logic build)
@@ -342,21 +343,21 @@ void al2_normcl(Logic build)
         { continue; }			/* closes, next gen */
 
       /* At this point, we know that the trace of s^col completes but does
-      not get back to 1.  So we have a non-normalising combo. */
+      not get back to 1.  So we have a conjugate that's not in the subgrp. */
 
-      found = TRUE; 			/* at least one non-normalised */
+      found = TRUE; 			/* at least 1 conjugate not in sgp */
 
       k = colgen[col];			/* (signed) generator number */
       if (!galpha) 
         { 
-        fprintf(fop, "Grp gen'r \"%d\" does not normalise", k); 
+        fprintf(fop, "Conjugate by grp gen'r \"%d\" of", k); 
         fprintf(fop, " subgrp gen'r \"");
         for (pi = beg; pi <= end; pi++)
           { fprintf(fop, " %d", colgen[*pi]); }
         }
       else 
         { 
-        fprintf(fop, "Grp gen'r \"%c\" does not normalise",
+        fprintf(fop, "Conjugate by grp gen'r \"%c\" of",
                      (k > 0) ? algen[k] : toupper(algen[-k]));
         fprintf(fop, " subgrp gen'r \"");
         for (pi = beg; pi <= end; pi++)
@@ -367,7 +368,7 @@ void al2_normcl(Logic build)
             { fprintf(fop, "%c", toupper(algen[-l])); }
           }
         }
-      fprintf(fop, "\"\n");
+      fprintf(fop, "\" not in subgrp\n");
 
       if (build)
         {

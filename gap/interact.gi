@@ -2639,7 +2639,10 @@ local ACEfname, ioIndex, add, lines, line, datarec;
       CHEAPEST_ACE_MODE(datarec);
       ACE_ARGS(ioIndex, "sgens"); # Update saved subgroup generators
     fi;
-    return List(Filtered(lines, line -> IS_ACE_MATCH(line, "Grp")),
+    return List(Filtered(lines, 
+                         line -> IS_ACE_MATCH(line, "Conjugate by grp") or
+                                 # in case we have an old src for ACE
+                                 IS_ACE_MATCH(line, "Grp")),
                 function(line)
                   line := SplitString(line, '"');
                   return ACE_GAP_WORDS(datarec, line[4])[1]

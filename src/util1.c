@@ -701,6 +701,7 @@ Logic al1_bldrep(int cos)
   low = slow = cos;
   while (low > 1)
     {
+    scol = 0;
     for (col = 1; col <= ncol; col++)
       {
       if ((i = CT(low,col)) > 0)
@@ -710,7 +711,7 @@ Logic al1_bldrep(int cos)
           slow = i;
           scol = col;
           }
-        else if (i == slow)		/* Same row; earlier column? */
+        else if (i == slow && scol)	/* Same row; earlier column? */
           {
           if (invcol[col] < invcol[scol])
             { scol = col; }
