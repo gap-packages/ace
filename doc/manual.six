@@ -108,6 +108,8 @@ S 4.3. Abbreviations and mixed case for ACE Options
 S 4.4. Honouring of the order in which ACE Options are passed
 S 4.5. What happens if no ACE Strategy Option or if no ACE Option is passed
 S 4.6. Interpretation of ACE Options
+I 4.6. debugging
+I 4.6. ACEIgnoreUnknownDefault!use as debugging tool
 S 4.7. An Example of passing Options
 S 4.8. The KnownACEOptions Record
 F 4.8. KnownACEOptions
