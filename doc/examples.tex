@@ -767,7 +767,7 @@ gap> ACEReadResearchExample();
 #I    IsACEResExampleOK
 #I  Variables:
 #I    ACEResExample, ALLRELS, newrels, F, a, b, newF, x, y,
-#I    L2_8, L2_16, L3_3s, U3_3s, M11, L2_32,
+#I    L2_8, L2_16, L3_3s, U3_3s, M11, M12, L2_32,
 #I    U3_4s, J1s, L3_5s, PSp4_4s, presentations
 #I  
 #I  Also:
@@ -986,6 +986,7 @@ gap> ?Using ACEReadResearchExample
 %\>`L3_3s' V
 %\>`U3_3s' V
 %\>`M11' V
+%\>`M12' V
 %\>`L2_32' V
 %\>`U3_4s' V
 %\>`J1s' V
@@ -993,10 +994,10 @@ gap> ?Using ACEReadResearchExample
 %\>`PSp4_4s' V
 %
 %contain  presentations  for  the  perfect  simple   groups   $L_2(8)$,
-%$L_2(16)$, $L_3(3)$, $U_3(3)$, $M_{11}$, $L_2(32)$,  $U_3(4)$,  $J_1$,
-%$L_3(5)$ and $PSp_4(4)$, respectively. Those with names ending in  `s'
-%contain lists of records (the `s' is meant to suggest ``plural''), and
-%those with no `s' are just single records, where each record  has  the
+%$L_2(16)$, $L_3(3)$, $U_3(3)$, $M_{11}$, $M_{12}$, $L_2(32)$, $U_3(4)$,
+%$J_1$, $L_3(5)$ and $PSp_4(4)$, respectively. Those with names  ending
+%in `s'contain lists of records (the `s' is meant to suggest ``plural''),
+%and those with no `s' are just single records, where each record has the
 %following fields:
 %
 %\beginitems
@@ -1004,7 +1005,8 @@ gap> ?Using ACEReadResearchExample
 %\quad`source' & 
 %a citation giving the source from which the presentation was obtained,
 %where `CCN85', `CMY79' and `CR84' indicate \cite{CCN85},  \cite{CMY79}
-%and \cite{CR84}, respectively;
+%and \cite{CR84}, respectively, and `Bray' indicates the website
+%\URL{http://www.cix.co.uk/~vicarage/};
 %
 %\quad`rels' & 
 %the relators of the group in terms  of  the  generators  `a'  and  `b'
