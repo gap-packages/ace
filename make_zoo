@@ -1,0 +1,2 @@
+#!/bin/sh
+( cd .. ; find ace -type f | egrep -v 'CVS|sedf|acedoc|bin|zoo|[.]gz|[.]cvs|[.]bbl|[.]aux|[.]blg|[.]log|[.]lab|[.]ind|[.]idx' | zoo ahI ace.zoo )
