@@ -524,7 +524,12 @@ local n, line, genColIndex, invColIndex, table, i, rowi, j, colj, invcolj;
 
   # Skip some header until the ` coset ' line
   line := FLUSH_ACE_STREAM_UNTIL(iostream, 3, 3, readline, 
-                                 line -> line{[1..6]} = " coset");
+                                 line -> line{[1..6]} in [" coset", "** ERR"]);
+  if line{[1..6]} = "** ERR" then
+    line := CHOMP(readline(iostream));
+    Info(InfoACE, 1, line);
+    Error(line{[3..Length(line)]}, ". Try running ACEStart first.\n");
+  fi;
   # Extract the coset table column headers
   rowi := SplitString(line, "", " |\n");
 
@@ -1355,7 +1360,8 @@ InstallGlobalFunction(ACE_PARAMETER, function(ioIndex, string)
 local line;
   line := FLUSH_ACE_STREAM_UNTIL(ACEData.io[ ioIndex ].stream, 3, 3, 
                                  READ_NEXT_LINE, 
-                                 line -> line{[1..Length(string)]} = string);
+                                 line -> Length(line) >= Length(string) and
+                                         line{[1..Length(string)]} = string);
   return ACE_PARAMETER_WITH_LINE(ioIndex, string, line);
 end);
 
@@ -1612,7 +1618,7 @@ end);
 ##  defined to be true if a line matches closeline; in this way closeline  is
 ##  a sentinel. If both IsMyLine and  closeline  are  null  strings  then  we
 ##  expect no ACE output and  just  check  for  error  output  from  ACE.  If
-##  IsMyLine is the null string, closeline is a non-null string and  allLines
+##  IsMyLine is the null string, closeline is a non-null string and readUntil
 ##  is true then all lines read are returned rather than just the last line.
 ##
 InstallGlobalFunction(EXEC_ACE_DIRECTIVE_OPTION, 
@@ -2116,18 +2122,18 @@ local ACEfname, ioIndexAndValue, lines, line, datarec;
   ioIndexAndValue := ACE_IOINDEX_AND_ONE_VALUE(arg);
   lines := EXEC_ACE_DIRECTIVE_OPTION(
                ioIndexAndValue, "sc", 3, "", "---------------------", true);
-  if Length(lines) > 2 and lines[Length(lines) - 2]{[1..8]} = "** ERROR" then
+  if Length(lines) > 2 and lines[Length(lines) - 2]{[1..6]} = "** ERR" then
     line := lines[Length(lines) - 1];
     Error(ACEfname, ":", line{[3..Length(line)]}, "\n",
           "(most probably the value passed to ", ACEfname, 
           "\nwas inappropriate)\n");
   else
-    if lines[Length(lines) - 1]{[1:15]} = "* Nothing found" then
+    if lines[Length(lines) - 1]{[1..6]} = "* Noth" then      # Nothing found
       lines := [];
       Info(InfoACE + InfoWarning, 1, "no nontrivial normalising cosets found");
     else
       lines := lines{[First([1..Length(lines)], 
-                            i -> lines[i]{[1..11]} = "Stabilising") + 1 ..
+                            i -> lines[i]{[1..6]} = "Stabil") + 1 ..
                       Length(lines) - 1]};
     fi;
     if ioIndexAndValue[2] > 0 then
@@ -2160,7 +2166,7 @@ local ioIndex, ACEout, iostream, datarec, fgens, standard, incomplete,
     ioIndex := ACE_IOINDEX(arg);
     datarec := ACEData.io[ ioIndex ];
     INTERACT_SET_ACE_OPTIONS("ACECosetTable", datarec);
-    if not IsEmpty(OptionsStack) then
+    if not IsEmpty(OptionsStack) or not IsBound(datarec.stats) then
       CHEAPEST_ACE_MODE(datarec); 
     fi;
     standard := ACE_LENLEX_CHK(ioIndex, true);
@@ -2464,7 +2470,7 @@ local ioIndexAndOptval;
   ioIndexAndOptval[2] := WORDS_OR_UNSORTED(ioIndexAndOptval[2],
                                            ACERelators(ioIndexAndOptval[1]),
                                            "relators");
-  EXEC_ACE_DIRECTIVE_OPTION(ioIndexAndOptval, "dr", 3, "", "");
+  EXEC_ACE_DIRECTIVE_OPTION(ioIndexAndOptval, "dr", 3, "", "", false);
   CHEAPEST_ACE_MODE(ACEData.io[ ioIndexAndOptval[1] ]);
   return ACE_ARGS(ioIndexAndOptval[1], "rels");
 end);
