@@ -51,6 +51,12 @@ DeclareGlobalFunction("INTERACT_SET_ACE_OPTIONS");
 DeclareGlobalFunction("SetACEOptions");
 DeclareGlobalFunction("ACEParameters");
 DeclareGlobalFunction("ACEVersion");
+DeclareGlobalFunction("ACEDumpVariables");
+DeclareGlobalFunction("EXEC_NO_ARG_ACE_DIRECTIVE_OPTION");
+DeclareGlobalFunction("ACEDumpStatistics");
+DeclareGlobalFunction("ACERecover");
+DeclareGlobalFunction("ACEStyle");
+DeclareGlobalFunction("ACEStandardCosetNumbering");
 DeclareGlobalFunction("ACECosetTable");
 DeclareGlobalFunction("ACEStats");
 

@@ -791,6 +791,149 @@ local ioIndex, stream, infoACELevel, infoWarningLevel;
 end);
 
 #############################################################################
+####
+##
+#F  ACEDumpVariables . . . . . . . . . . . . . Dumps ACE's internal variables
+##
+##
+InstallGlobalFunction(ACEDumpVariables, function(arg)
+local stream, optval, infoACELevel, error;
+  if Length(arg) > 2 then
+    Error("Expected 0, 1 or 2 arguments ... not ", Length(arg), " arguments\n");
+  elif Length(arg) in [1, 2] and IsList( arg[Length(arg)] ) then
+    stream := ACEData.io[ ACE_STREAM(arg{[1..Length(arg) - 1]}) ].stream;
+    optval := arg[Length(arg)];
+  elif Length(arg) <= 1 then
+    stream := ACEData.io[ ACE_STREAM(arg) ].stream;
+    optval := "";
+  else
+    Error("2nd argument should have been a list\n");
+  fi;
+
+  READ_ACE_ERRORS(stream); # purge any output not yet collected
+                           # e.g. error messages due to unknown options
+  error := PROCESS_ACE_OPTION(stream, "dump", optval);
+  infoACELevel := InfoLevel(InfoACE);
+  SetInfoLevel(InfoACE, 1);
+  FLUSH_ACE_STREAM_UNTIL(stream, 1, 1, READ_NEXT_LINE,
+                         line -> line{[1..7]} = "  #----"
+                                 or (error and line{[1..3]} = "   "));
+  SetInfoLevel(InfoACE, infoACELevel);
+end);
+
+#############################################################################
+####
+##
+#F  EXEC_ACE_DIRECTIVE_OPTION . . . . . . . . . . . . . .  Internal Procedure
+##  . . . . . . . . . . . . . . . . . . .  executes an ACE `directive' option
+##
+##  For the stream defined by arglist pass optname (the name of a no argument
+##  option) to ACE and flush the output until a line for which IsMyLine(line)
+##  is true.
+##
+#InstallGlobalFunction(EXEC_ACE_DIRECTIVE_OPTION, 
+#function(stream, optname, optval, IsMyLine)
+#local infoACELevel;
+#  READ_ACE_ERRORS(stream); # purge any output not yet collected
+#                           # e.g. error messages due to unknown options
+#  PROCESS_ACE_OPTION(stream, optname, optval);
+#  infoACELevel := InfoLevel(InfoACE);
+#  SetInfoLevel(InfoACE, 1);
+#  FLUSH_ACE_STREAM_UNTIL(stream, 1, 1, READ_NEXT_LINE, IsMyLine)
+#  SetInfoLevel(InfoACE, infoACELevel);
+#end);
+
+#############################################################################
+####
+##
+#F  EXEC_NO_ARG_ACE_DIRECTIVE_OPTION  . . . . . . . . . .  Internal Procedure
+##  . . . . . . . . . . . . . . executes a no-argument ACE `directive' option
+##
+##  For the stream defined by arglist pass optname (the name of a no argument
+##  option) to ACE and flush the output until a line for which IsMyLine(line)
+##  is true. As a special case, if IsMyLine = '#', a sentinel '#' is  printed
+##  to the ACE output and then IsMyLine is reassigned to return true when the
+##  '#' is found.
+##
+InstallGlobalFunction(EXEC_NO_ARG_ACE_DIRECTIVE_OPTION, 
+function(arglist, optname, IsMyLine)
+local stream, infoACELevel, infoLevelMyLine, line;
+  ACE_STREAM_ARG_CHK(arglist);
+  stream := ACEData.io[ ACE_STREAM(arglist) ].stream;
+  READ_ACE_ERRORS(stream); # purge any output not yet collected
+                           # e.g. error messages due to unknown options
+  PROCESS_ACE_OPTION(stream, optname, "");
+  if IsMyLine = '#' then
+    PROCESS_ACE_OPTION(stream, "text", "#"); # A sentinel
+    IsMyLine := line -> line[1] = '#';
+    infoLevelMyLine := 3;
+  else
+    infoLevelMyLine := 1;
+  fi;
+  infoACELevel := InfoLevel(InfoACE);
+  SetInfoLevel(InfoACE, 1);
+  line := FLUSH_ACE_STREAM_UNTIL(stream, 1, infoLevelMyLine, 
+                                 READ_NEXT_LINE, IsMyLine);
+  SetInfoLevel(InfoACE, infoACELevel);
+  return line;
+end);
+
+#############################################################################
+####
+##
+#F  ACEDumpStatistics . . . . . . . . . . . . Dumps ACE's internal statistics 
+##
+##
+InstallGlobalFunction(ACEDumpStatistics, function(arg)
+  EXEC_NO_ARG_ACE_DIRECTIVE_OPTION(
+      arg, "statistics", line -> line{[1..7]} = "  #----");
+end);
+
+#############################################################################
+####
+##
+#F  ACERecover . . . . . . . . . . . .  Recover space from dead coset numbers
+##
+##
+InstallGlobalFunction(ACERecover, function(arg)
+  EXEC_NO_ARG_ACE_DIRECTIVE_OPTION(
+      arg, "recover", line -> line{[1..2]} in ["CO", "co"]);
+end);
+
+#############################################################################
+####
+##
+#F  ACEStyle . . . . . . . . . . . . .  Returns the current enumeration style
+##
+##
+InstallGlobalFunction(ACEStyle, function(arg)
+local splitstyle;
+  splitstyle := SplitString(
+                    EXEC_NO_ARG_ACE_DIRECTIVE_OPTION(
+                        arg, "style", line -> line{[1..5]} = "style"
+                        ),
+                    "", " =\n"
+                    );
+  if Length(splitstyle) = 2 then
+    return splitstyle[2];
+  else
+    return Flat([ splitstyle[2], " (defaulted)" ]);
+  fi;
+end);
+
+#############################################################################
+####
+##
+#F  ACEStandardCosetNumbering  . .  Reassigns coset numbers in standard order
+##
+##
+InstallGlobalFunction(ACEStandardCosetNumbering, function(arg)
+local stream, infoACELevel;
+  EXEC_NO_ARG_ACE_DIRECTIVE_OPTION(
+      arg, "standard", line -> line{[1..2]} in ["CO", "co"]);
+end);
+
+#############################################################################
 ##
 #F  ACECosetTable  . . . . . . . . . . . .  Extracts the coset table from ACE
 ##

@@ -81,6 +81,7 @@ DeclareGlobalFunction("VALUE_ACE_OPTION");
 DeclareGlobalFunction("ACE_VALUE_ECHO");
 DeclareGlobalFunction("ACE_WORDS");
 DeclareGlobalFunction("PROCESS_ACE_OPTIONS");
+DeclareGlobalFunction("PROCESS_ACE_OPTION");
 DeclareGlobalFunction("ACEOptionData");
 DeclareGlobalFunction("DISPLAY_ACE_OPTIONS");
 DeclareGlobalFunction("SANITISE_ACE_OPTIONS");

@@ -94,9 +94,9 @@ InstallValue(KnownACEOptions, rec(
   default := [3, [""]],
   ds := [2, IS_INC_POS_INT_LIST],
   dr := [2, IS_INC_POS_INT_LIST],
-  dump := [1, x -> (IsList(x) and x[1] in [0..2] and
-                    (Length(x) = 1 or (Length(x) = 2 and x[2] in [0,1]))) or
-                   x in [0..2]],
+  dump := [1, x -> x in ["",0,1,2] or
+                   (IsList(x) and x[1] in [0..2] and
+                    (Length(x) = 1 or (Length(x) = 2 and x[2] in [0,1])))],
   easy := [4, [""]],
   echo := [4, [0,1,2]],       # hijacked! ... we don't pass this to ACE
   enumeration := [4, IsString],
@@ -145,9 +145,9 @@ InstallValue(KnownACEOptions, rec(
   contiguous := [6, [""]],  # are synonyms ... "rec" is
                             # not an allowed abbreviation
                             # since it's a GAP  keyword
-  rep  := [2, x -> (IsList(x) and Length(x) <= 2 and
-                   ForAll(x, IsInt) and x[1] in [1..7]) or
-                   x in [1..7]],
+  rep  := [2, x -> x in [1..7] or
+                   (IsList(x) and Length(x) <= 2 and
+                    ForAll(x, IsInt) and x[1] in [1..7])],
   #restart := [7, [""]],    # decommissioned ACE option
   rfactor := [1, IsInt],    # "rfactor" and "rt" are synonyms
   rt   := [2, IsInt],
@@ -694,6 +694,54 @@ local IsValidOptionValue, CheckValidOption, ProcessOption,
     od;
   fi;
 
+end);
+
+#############################################################################
+####
+##
+#F  PROCESS_ACE_OPTION  . . . . . . . . . . . . . . . . .  Internal procedure
+##  . . . . . . . . . . . . . . . . . . . . . process  a  single  ACE  option
+##  . . . . . . . . . . . . . . . . . . . . . that  hasn't  been  passed  via
+##  . . . . . . . . . . . . . . . . . . . . . . . . .  GAP's option mechanism
+##
+##  Checks optval is a valid value of optname (which must  be  lowercase  and
+##  unabbreviated) and pass it ACE by writing to stream.
+##
+InstallGlobalFunction(PROCESS_ACE_OPTION, function(stream, optname, optval)
+local aceoptname, error;
+
+  # Check that optval is a valid value of optname.
+  if IsFunction(KnownACEOptions.(optname)[2]) then
+    error := not KnownACEOptions.(optname)[2](optval);
+  else
+    error := not (optval in KnownACEOptions.(optname)[2]);
+  fi;
+  
+  if error then
+    Info(InfoACE + InfoWarning, 1, 
+         "ACE Warning: ", optval, ": ",
+         "possibly not an allowed value of ", optname);
+  fi;
+
+  if optname in RecNames(ACE_OPT_TRANSLATIONS) then
+    # The ACE optname differs from the GAP optname
+    aceoptname := ACE_OPT_TRANSLATIONS.(optname);
+  else
+    # The ACE optname is the same as the GAP optname
+    aceoptname := optname;
+  fi;
+
+  if optval = "" then
+    WRITE_LIST_TO_ACE_STREAM(stream, [ aceoptname, ";" ]);
+  elif not IsString(optval) and IsList(optval) then
+    WRITE_LIST_TO_ACE_STREAM(
+        stream, [ aceoptname,":", ACE_JOIN( ACE_STRINGS(optval), "," ), ";" ]
+        );
+  else
+    WRITE_LIST_TO_ACE_STREAM(stream, [ aceoptname, ":", optval, ";" ]);
+  fi;
+
+  return error;
 end);
 
 #############################################################################
