@@ -345,8 +345,8 @@ The {\GAP} iostream of an interactive {\ACE} process will also die  if
 the {\ACE} binary has a segmentation fault. We do hope that this never
 happens to you, but if it does and the failure is  reproducible,  then
 it's a bug and we'd like to know about it. Please  read  the  `README'
-that comes with the {\ACE} share package to find out what  to  include
-in a bug report and who to email it to.
+that comes with the {\ACE} package to find out what to  include  in  a
+bug report and who to email it to.
 
 \>ACEResurrectProcess( <i> [: <options>] ) F
 \>ACEResurrectProcess( [: <options>] ) F
@@ -484,10 +484,14 @@ enumeration. For this command, we are interested in this variation.
 After  the  final  presentation  is  run,   some   additional   status
 information messages are printed to the {\ACE} output:
 
-\beginlist
+\beginlist%unordered
+
 \item{--}  the number of runs which yielded a finite index; 
+
 \item{--}  the total number of runs (excluding the priming run); and 
+
 \item{--}  the range of values observed for `m' and `t'.
+
 \endlist
 
 As an example (drawn from the discussion in \cite{HR99a}) consider the
@@ -746,8 +750,8 @@ Since a user will sometimes have options  in  the  form  of  a  record
 alternative to the behind-the-colon syntax for the passing of  options
 via `SetACEOptions':
 
-\>SetACEOptions( <i>, <optionsRec> ) F
-\>SetACEOptions( <optionsRec> ) F
+\>SetACEOptions( <i>, <optionsRec> )!{record version} F
+\>SetACEOptions( <optionsRec> )!{record version} F
 
 In this form, the record <optionsRec> is used to  update  the  current
 options of the <i>th (or default) process started by `ACEStart'.  Note
@@ -965,7 +969,7 @@ for the <i>th (or  default)  interactive  {\ACE}  process  started  by
 `ACEStart', determine non-trivial  (i.e.~other  than  coset  1)  coset
 numbers whose representatives normalise the subgroup.
 
-\beginlist
+\beginlist%unordered
 
 \item{--} If <n> $> 0$, the list of the first  <n>  non-trivial  coset
 numbers whose representatives normalise the subgroup is returned.
@@ -1068,8 +1072,8 @@ active  interactive  {\ACE}  processes;   and,   in   such   a   case,
 `ACEBinaryVersion();' emits a warning that there  are  no  interactive
 {\ACE} sessions currently active and initiates (and closes again)  its
 own stream to obtain the information from the {\ACE} binary.  For  the
-current  version  of  the  {\ACE}  share  package  (the  {\GAP}   code
-component) use `ACEPackageVersion();' (see~"ACEPackageVersion").
+current version of the {\ACE} package (the {\GAP} code component)  use
+`ACEPackageVersion();' (see~"ACEPackageVersion").
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{Interactive Versions of Non-interactive ACE Functions}

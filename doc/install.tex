@@ -12,22 +12,22 @@
 %%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\Chapter{Installing and Loading the ACE Share Package}
+\Chapter{Installing and Loading the ACE Package}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\Section{Installing the ACE Share Package}
+\Section{Installing the ACE Package}
 
 To install, unpack the archive file, which should have a name of  form
 `ace-<XXX>.zoo'  for  some  package  version  number   <XXX>,   as   a
 sub-directory in the `pkg' hierarchy of your version of {\GAP}~4. This
 might be the `pkg' directory of the {\GAP}~4  home  directory;  it  is
 however also possible to keep an additional `pkg'  directory  in  your
-private directories, see Section~"ref:Installing a  Share  Package  in
-your home directory". (The only essential difference  with  installing
-{\ACE} in a `pkg' directory different to the {\GAP}~4  home  directory
-is that one must start {\GAP}  with  the  `-l'  switch,  e.g.~if  your
-private `pkg' directory is a subdirectory  of  `mygap'  in  your  home
-directory you might type:
+private directories, see Section~"ref:Installing a GAP Package in your
+home directory". (The only essential difference with installing {\ACE}
+in a `pkg' directory different to the {\GAP}~4 home directory is  that
+one must start {\GAP} with the `-l' switch, e.g.~if your private `pkg'
+directory is a subdirectory of `mygap'  in  your  home  directory  you
+might type:
 
 %begintt
 \){\kernttindent}gap -l ";<myhomedir>/mygap"
@@ -71,10 +71,10 @@ sufficient  to  call  the  `configure'  script  in  the  {\GAP}   home
 directory.
 
 The manual you are currently reading describes how to use  the  {\ACE}
-Share Package; it can be  found  in  the  `doc'  subdirectory  of  the
-package. If your manual does not have a table of contents or index, or
-has these but with invalid page numbers please re-generate the  manual
-by executing
+Package; it can be found in the `doc' subdirectory of the package.  If
+your manual does not have a table of contents or index, or  has  these
+but with  invalid  page  numbers  please  re-generate  the  manual  by
+executing
 
 \begintt
 ./make_doc
@@ -97,19 +97,19 @@ compiling.
 If you encounter problems in installation please read the `README'.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\Section{Loading the ACE Share Package}
+\Section{Loading the ACE Package}
 
-To use the {\ACE} Share Package you have  to  request  it  explicitly.
-This is done by calling
+To use the {\ACE} Package you have to request it explicitly.  This  is
+done by calling
 
 \beginexample
-#I    The ACE (Advanced Coset Enumerator) share package
+#I      The ACE (Advanced Coset Enumerator) Package
 #I    C code by George Havas <havas@csee.uq.edu.au> and
 #I              Colin Ramsay <cram@csee.uq.edu.au>
 #I                   ACE binary version: 3.001
 #I    GAP code by Greg Gamble <gregg@csee.uq.edu.au> and
 #I           Alexander Hulpke <hulpke@math.colostate.edu>
-#I                   ACE package version: 3.002
+#I                   ACE package version: 3.003
 #I  
 #I                   For help, type: ?ACE
 true
@@ -122,7 +122,7 @@ If {\GAP} cannot find a working binary, the call  to  `RequirePackage'
 will fail.
 
 If you know you have a working {\ACE} binary, as well as  a  correctly
-installed {\ACE} Share Package, it is possible to suppress the  `Info'
+installed {\ACE} Package,  it  is  possible  to  suppress  the  `Info'
 messages by temporarily setting the `InfoLevel' of `InfoWarning' to 0,
 and a duplicated semicolon will suppress the `true' result:
 

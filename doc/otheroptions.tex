@@ -79,10 +79,14 @@ enumeration. For this command, we are interested in this variation.
 After  the  final  presentation  is  run,   some   additional   status
 information messages are printed to the {\ACE} output file:
 
-\beginlist
+\beginlist%unordered
+
 \item{--}  the number of runs which yielded a finite index; 
+
 \item{--}  the total number of runs (excluding the priming run); and 
+
 \item{--}  the range of values observed for `m' and `t'.
+
 \endlist
 
 As an example (drawn from the discussion in \cite{HR99a}) consider the
@@ -735,7 +739,8 @@ Please avoid using this option to insert comments starting with  three
 asterisks: `***', since this string is used as a  sentinel  internally
 in flushing output from {\ACE}.
 
-\>`aceincomment:=<string>'{option aceincomment}@{option `aceincomment'}&
+\>`aceincomment:=<string>'{option aceincomment!different to option text}%
+@{option `aceincomment'!different to option `text'}&
 Prints comment <string> in the {\ACE} input; <string> must be a string.
 (Shortest abbreviation: `aceinc'.)
 

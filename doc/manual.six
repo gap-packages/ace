@@ -1,4 +1,4 @@
-C ace.tex 1. The ACE Share Package
+C ace.tex 1. The ACE Package
 I 1.0. ACE
 S 1.1. Using ACE as a Default for Coset Enumerations
 S 1.2. Using ACE Directly to Generate a Coset Table
@@ -42,9 +42,9 @@ F 1.9. SetInfoACELevel
 S 1.10. Acknowledgements
 S 1.11. Changes from earlier versions
 F 1.11. ACEPackageVersion
-C install.tex 2. Installing and Loading the ACE Share Package
-S 2.1. Installing the ACE Share Package
-S 2.2. Loading the ACE Share Package
+C install.tex 2. Installing and Loading the ACE Package
+S 2.1. Installing the ACE Package
+S 2.2. Loading the ACE Package
 I 2.2. banner!suppression
 C basics.tex 3. Some Basics
 I 3.0. strategy
@@ -259,8 +259,8 @@ F 6.5. GetACEOptions
 F 6.5. GetACEOptions
 F 6.5. SetACEOptions
 F 6.5. SetACEOptions
-F 6.5. SetACEOptions
-F 6.5. SetACEOptions
+F 6.5. SetACEOptions!record version
+F 6.5. SetACEOptions!record version
 I 6.5. break-loop
 F 6.5. ACEParameters
 F 6.5. ACEParameters
@@ -440,4 +440,4 @@ F 10.6. option contiguous
 F 10.6. option standard
 S 10.7. Options for Comments
 F 10.7. option text
-F 10.7. option aceincomment
+F 10.7. option aceincomment!different to option text

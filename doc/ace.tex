@@ -12,7 +12,7 @@
 %%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\Chapter{The ACE Share Package}
+\Chapter{The ACE Package}
 
 \index{ACE}
 The ``Advanced Coset Enumerator'' {\ACE}:
@@ -26,15 +26,14 @@ can  be called  from within  {\GAP} through  an interface,  written by
 Alexander Hulpke and Greg Gamble, which is described in this manual.
 
 The interface links to an external binary and therefore is only usable
-under UNIX (see Section~"Installing the ACE Share Package" for how  to
-install {\ACE}).  It will not work  on  Windows  or the Macintosh.  It
+under UNIX (see  Section~"Installing  the  ACE  Package"  for  how  to
+install {\ACE}). It will not work on  Windows  or  the  Macintosh.  It
 requires at least {\GAP}~4.2. Examples, where they occur, show results
 and output from {\GAP}~4.3, which may differ  slightly  from  what  is
-obtained with {\GAP}~4.2.
+obtained with {\GAP}~4.2. {\ACE} can be used through this interface in
+a variety of ways:
 
-{\ACE} can be used through this interface in a variety  of  ways:
-
-\beginlist
+\beginlist%unordered
 
 \item{--} one may supplant the  usual  {\GAP}  coset  enumerator  (see
 Section~"Using ACE as a Default for Coset Enumerations"),
@@ -76,11 +75,11 @@ of the functions provided by this interface to the {\ACE} binary.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{Using ACE as a Default for Coset Enumerations}
 
-After loading  {\ACE}   (see Section~"Loading the ACE Share Package"),
-if you  want to use the {\ACE}  coset enumerator as a  default for all
-coset  enumerations  done  by   {\GAP}  (which  may  also  get  called
-indirectly),  you can  achieve  this by  setting  the global  variable
-`TCENUM' to `ACETCENUM'.
+After loading {\ACE} (see Section~"Loading the ACE Package"),  if  you
+want to use the {\ACE} coset enumerator as a  default  for  all  coset
+enumerations done by {\GAP} (which may also  get  called  indirectly),
+you can achieve this  by  setting  the  global  variable  `TCENUM'  to
+`ACETCENUM'.
 
 \beginexample
 gap> TCENUM:=ACETCENUM;;
@@ -170,7 +169,7 @@ another standardisation scheme.
 If the determination of a coset table is unsuccessful, then one of the
 following occurs:
 
-\beginlist
+\beginlist%unordered
 
 \item{--} with the `incomplete' option  (see~"option  incomplete")  an
 incomplete coset table is returned (as a list of lists), with zeros in
@@ -629,10 +628,10 @@ the  decks''   in   such   circumstances,   why   we   have   provided
 to  an  *interactive*  {\ACE}  process;  Section~"Warnings   regarding
 Options" discusses that too.
 
-Note, that the  {\ACE}  share  package  treatment  of  options  is  an
+Note,  that  the  {\ACE}  package   treatment   of   options   is   an
 ``enhancement'' over the general way {\GAP} treats  options.  Firstly,
 the {\ACE} binary allows abbreviations and mixed case of  options  and
-so the {\ACE}  share  package  does  also,  as  much  as  is  possible
+so  the  {\ACE}  package  does  also,   as   much   as   is   possible
 (see~"Abbreviations and mixed case for ACE Options"). Secondly,  since
 {\ACE}'s options are in general not orthogonal,  the  order  in  which
 they are put to {\ACE} is, in general, honoured (see~"Honouring of the
@@ -798,16 +797,16 @@ directory.
 
 Many thanks to Joachim Neub{\accent127u}ser who not only provided  one
 of the early manual drafts and hence a template for the style  of  the
-manual and conceptual hooks for the design of the Share Package  code,
-but also meticulously proof-read all drafts and made  many  insightful
+manual and conceptual hooks for the design of the  Package  code,  but
+also meticulously proof-read  all  drafts  and  made  many  insightful
 comments.
 
-Many thanks also to Volkmar Felsch who, in testing  the  {\ACE}  Share
-Package, discovered a number of  bugs,  made  a  number  of  important
-suggestions on code improvement, thoroughly checked all the  examples,
-and    provided    the    example    found    at    the     end     of
-Section~"Steering ACE Interactively" which demonstrates rather  nicely
-how one can use the function `ACEConjugatesForSubgroupNormalClosure'.
+Many thanks also to Volkmar Felsch who, in testing the {\ACE} Package,
+discovered a number of bugs, made a number of important suggestions on
+code improvement, thoroughly checked all the  examples,  and  provided
+the example found at the end of Section~"Steering  ACE  Interactively"
+which  demonstrates  rather  nicely  how  one  can  use  the  function
+`ACEConjugatesForSubgroupNormalClosure'.
 
 Finally, we wish to acknowledge the contribution of Charles Sims.  The
 inclusion of the `incomplete' (see "option incomplete")  and  `lenlex'
@@ -821,24 +820,40 @@ him.
 \Section{Changes from earlier versions}
 
 A reasonably comprehensive history of  the  evolution  of  pre-release
-versions of the  {\ACE}  Share  Package,  is  contained  in  the  file
-`CHANGES' in the `gap' directory. One important change for  users  who
-only have knowledge of  the  release  versions  of  the  {\ACE}  Share
-Package has to do with the change of  the  default  standard  for  the
-numbering of cosets in a coset table from {\GAP}  4.2  to  {\GAP}  4.3
-(see Section~"Coset Table Standardisation Schemes"). The {\ACE}  Share
-Package is compatible with {\GAP} 4.2, but has been built for use with
-{\GAP} 4.3. Since the first release  version  (3.001)  of  the  {\ACE}
-Share     Package,     the     variable      `ACEIgnoreUnknownDefault'
-(see~"ACEIgnoreUnknownDefault") has been added; and because `continue'
-is now (as  of  {\GAP}  4.3)  a  {\GAP}  keyword,  the  {\ACE}  option
-`continue' has been changed to `continu' (see~"option continu").
+versions of the {\ACE} Package, is contained in the file `CHANGES'  in
+the `gap' directory. 
+
+The {\ACE} Package is compatible with {\GAP} 4.2, but has  been  built
+for use with {\GAP} 4.3. One important change in  {\GAP}  from  {\GAP}
+4.2 to {\GAP} 4.3 that has relevance for {\ACE} Package users  is  the
+change of the default standard for the numbering of cosets in a  coset
+table (see Section~"Coset Table Standardisation Schemes").
 
 \>ACEPackageVersion() F
 
-gives the current version of the {\ACE} Share Package (i.e.~the {\GAP}
-code      component;       the       function       `ACEBinaryVersion'
-(see~"ACEBinaryVersion") gives details of the C code compilation).
+gives the current version of the {\ACE} Package (i.e.~the {\GAP}  code
+component; the  function  `ACEBinaryVersion'  (see~"ACEBinaryVersion")
+gives details of the C code compilation).
+
+*History of release versions*
+
+\beginlist
+
+\item{`3.001'}
+First release.
+
+\item{`3.002'}
+`ACEIgnoreUnknownDefault' (see~"ACEIgnoreUnknownDefault")  added.
+
+\item{}
+Option `continue'  changed  to  `continu'  (see~"option  continu")  --
+`continue' is a keyword in {\GAP} 4.3.
+
+\item{`3.003'}
+Non-interactive calls to {\ACE} functions invoke iostreams (previously
+files were used).
+
+\endlist
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%

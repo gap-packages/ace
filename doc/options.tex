@@ -16,17 +16,17 @@
 
 {\ACE} offers a wide range of options to  direct  and  guide  a  coset
 enumeration, most of which  are  available  from  {\GAP}  through  the
-interface provided by the {\ACE} Share Package. We  describe  most  of
-the options  available  via  the  interface  in  this  chapter;  other
-options, termed strategies, are defined in  Chapter~"Strategy  Options
-for ACE". (Strategies are merely special options of {\ACE} that set  a
-number of options described in this chapter, all at once.)  Yet  other
-options, for which interactive function alternatives are  provided  in
+interface provided by the {\ACE} Package.  We  describe  most  of  the
+options available via the interface in this  chapter;  other  options,
+termed strategies, are defined in Chapter~"Strategy Options for  ACE".
+(Strategies are merely special options of {\ACE} that set a number  of
+options described in this chapter, all at once.)  Yet  other  options,
+for  which  interactive  function   alternatives   are   provided   in
 Chapter~"Functions for Using ACE Interactively", or which most  {\GAP}
 users are unlikely to  need,  are  described  in  Appendix~"Other  ACE
 Options". From within a {\GAP} session, one may see the complete  list
-of {\ACE}  options,  after  loading  the  {\ACE}  Share  Package  (see
-Section~"Loading the ACE Share Package"), by typing
+of  {\ACE}  options,   after   loading   the   {\ACE}   Package   (see
+Section~"Loading the ACE Package"), by typing
 
 \beginexample
 gap> RecNames(KnownACEOptions);
@@ -73,7 +73,7 @@ gap> ?>
 Options are passed to the {\ACE} interface functions in either of the
 two usual mechanisms provided by {\GAP}, namely:
 
-\beginlist
+\beginlist%unordered
 
 \item{--} options may be set globally using the function `PushOptions'
 (see Chapter~"ref:Options Stack" in the {\GAP} Reference  Manual); or
@@ -112,9 +112,9 @@ Reference Manual) is now in the {\GAP} library and
 
 \>FlushOptionsStack() F
 
-introduced in version 3.001 of the {\ACE} Share Package to perform the
-same function, is now a synonym  for  `ResetOptionsStack';  it  simply
-executes `PopOptions()' until `OptionsStack' is empty.
+introduced in version 3.001 of the {\ACE} Package to perform the  same
+function, is now a synonym for `ResetOptionsStack'; it simply executes
+`PopOptions()' until `OptionsStack' is empty.
 
 However, `ResetOptionsStack' (or `FlushOptionsStack')  does  not  wipe
 out the options already passed to an *interactive* {\ACE} process.  We
@@ -235,7 +235,7 @@ translated to 0 and `true' may be translated to any of no-value, 0  or
 or `true' is passed with the value <val> to the {\ACE}  binary.  Since
 this may appear confusing, let's consider some examples.
 
-\beginlist
+\beginlist%unordered
 
 \item{--} The `hard' strategy option  (see~"option  hard")  should  be
 passed without a value, which in turn is passed to the  {\ACE}  binary
@@ -437,7 +437,7 @@ See Chapter~"Strategy Options  for  ACE"  for  details  regarding  the
 {\ACE} strategy options.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\Section{ACE Option Synonyms}
+\Section{ACE Option Synonyms}\nolabel
 
 \>`ACEOptionSynonyms' V
 
@@ -467,9 +467,9 @@ synonyms (which may be a list of one element) may be obtained  as  the
 \>`NonACEbinOptions' V
 
 is a {\GAP} list of options that have  meaning  only  for  the  {\ACE}
-Share Package interface, i.e.~options in  `KnownACEOptions'  that  are
-*not* {\ACE} binary options; each such option is described  in  detail
-below. *Except* for the options listed in `NonACEbinOptions' and those
+Package interface, i.e.~options in `KnownACEOptions'  that  are  *not*
+{\ACE} binary options; each such option is described in detail  below.
+*Except* for  the  options  listed  in  `NonACEbinOptions'  and  those
 options that are excluded via the `aceignore'  and  `aceignoreunknown'
 options  (described  below),   *all*   options   that   are   on   the
 `OptionsStack' when an {\ACE} interface function is called, are passed
@@ -487,13 +487,13 @@ section, the following.
 \>`ACEIgnoreUnknownDefault' V
 
 is a global variable (*not* an option) that is initially  set  by  the
-{\ACE} share package to `false', and is the default action that {\ACE}
-takes for options that are unknown to the {\ACE}  share  package  (but
-may be new options provided in a new version of the {\ACE} binary). If
-the user sets `ACEIgnoreUnknownDefault := true', then for any function
-call requiring {\ACE} for which the user does not want options unknown
-to the share package to be ignored, the user  pass  among  the  option
-list `aceignoreunknown  :=  false'  (see  "option  aceignoreunknown"),
+{\ACE} package to `false', and is the default action that {\ACE} takes
+for options that are unknown to the {\ACE} package  (but  may  be  new
+options provided in a new version of the {\ACE} binary). If  the  user
+sets `ACEIgnoreUnknownDefault := true', then  for  any  function  call
+requiring {\ACE} for which the user does not want options  unknown  to
+the package to be  ignored,  the  user  pass  among  the  option  list
+`aceignoreunknown   :=   false'   (see   "option   aceignoreunknown"),
 explicitly (thus reversing the usual behaviour).
 
 Here now, are the  few  options  that  are  available  to  the  {\GAP}
@@ -678,7 +678,7 @@ and has no abbreviation to discourage user use.
 \enditems
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\Section{ACE Parameter Options}
+\Section{ACE Parameter Options}\nolabel
 
 \>`ACEParameterOptions' V
 
@@ -931,7 +931,7 @@ definitions in all essentially different positions).
 
 The following are the effects of the possible values of `lookahead':
 
-\beginlist
+\beginlist%unordered
 
 \item{--} 0 disables lookahead;
 \item{--} 1 does a partial table lookahead, R style; 
@@ -970,7 +970,7 @@ a collapse, it can become very large.
 This command allows the user  to  specify  how  deductions  should  be
 handled. The value <val> has the following interpretations:
 
-\beginlist
+\beginlist%unordered
 
 \item{--} $0$:  
 discard deductions if there is no stack space left;
