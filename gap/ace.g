@@ -28,25 +28,33 @@ Revision.ace_g :=
 ##    "tmpdir"  . . the path to the temporary directory for ACE i/o files
 ##    "infile"  . . the path of the ACE input file
 ##    "outfile" . . the path of the ACE output file
-##    "file"  . . . the input stream (file-handle) of ACEinfo.outfile
+##    "banner"  . . the path to the file where ACE's banner is directed
 ##    "version" . . the version of the current ACE binary
+##    "scratch" . . a field for storing temporary data
 ##
 ACEinfo := rec( binary := Filename(DirectoriesPackagePrograms("ace"), "ace"),
                 tmpdir := DirectoryTemporary()
               ); # to store file and directory names
 ACEinfo.infile  := Filename(ACEinfo.tmpdir,"in");
 ACEinfo.outfile := Filename(ACEinfo.tmpdir,"out");
+ACEinfo.banner := Filename(ACEinfo.tmpdir,"banner");
 
 PrintTo(ACEinfo.infile, "\n");
-# Fire up ACE to extract the version of the current binary
+# Fire up ACE with a null input (ACEinfo.infile contains only a "\n")
+# ... to generate a banner (which has ACE's current version)
 Exec( Concatenation("cd ", Filename(ACEinfo.tmpdir, ""), "; ",
-                    ACEinfo.binary, " < in > out") );
-ACEinfo.file := InputTextFile(ACEinfo.outfile);
-ACEinfo.version := ReadLine(ACEinfo.file);
-CloseStream(ACEinfo.file);
-ACEinfo.file := PositionSublist(ACEinfo.version, "ACE") + 3;
-ACEinfo.version := ACEinfo.version{[ACEinfo.file+1..Position(ACEinfo.version,
-                                    ' ', ACEinfo.file)-1]};
+                    ACEinfo.binary, " < in > banner") );
+# For now use ACEinfo.scratch to record an input stream
+ACEinfo.scratch := InputTextFile(ACEinfo.banner);
+# Grab the first line of banner, which begins like: "ACE N.nnn   "
+ACEinfo.version := ReadLine(ACEinfo.scratch);
+CloseStream(ACEinfo.scratch);
+# We just want the N.nnn part of the first line of banner
+# ... ACEinfo.scratch now records where N.nnn starts
+ACEinfo.scratch := PositionSublist(ACEinfo.version, "ACE") + 4;
+ACEinfo.version := ACEinfo.version{[ACEinfo.scratch ..
+                                    Position(ACEinfo.version, ' ', 
+                                             ACEinfo.scratch) - 1]};
 
 #############################################################################
 ####
@@ -104,18 +112,25 @@ IS_INC_POS_INT_LIST
 ##  chance of still being functional if new options are added to the ACE bin-
 ##  ary.
 ##
+##  Some  options  are  `GAP4-introduced'  i.e. technically they are not  ACE 
+##  options  ...  there is a comment beside such options;  and  they are also 
+##  listed in NonACEbinOptions below.
+##
+
 KnownACEoptions := rec(
+  ACEinfile := [9, IsString], # This is a GAP4-introduced option 
+                              # (not an ACE binary option)
   #sg := [2, <word list>],
   #rl := [2, <relation list>],
   aep  := [3, [1..7]],
   #ai := [2, <filename>],
-  ao   := [2, IsString], # "messfile" is a GAP4-introduced `synonym' for "ao"
-  messfile := [8, IsString],
+  ao   := [2, IsString],      # "ACEoutfile" is a GAP4-introduced 
+  ACEoutfile := [8, IsString],# `synonym' for "ao"
   asis := [2, [0,1]],
   #begin := [3, [""]], start := [5, [""]], end := [3, [""]],
   #bye := [3, [""]], exit := [4, [""]], quit := [1, [""]],
   cc   := [2, x -> IsInt(x) and x > 1],
-  cfactor := [1, IsInt],    # "cfactor" and "ct" are synonyms
+  cfactor := [1, IsInt],      # "cfactor" and "ct" are synonyms
   ct   := [2, IsInt],
   #check := [5, [""]], redo := [4, [""]],
   compaction := [3, [0..100]],
@@ -130,7 +145,7 @@ KnownACEoptions := rec(
   #                  (Length(x) = 1 or (Length(x) = 2 and x[2] in [0,1])) or
   #                 x in [0..2]],
   easy := [4, [""]],
-  echo := [4, [0,1]],       # hijacked! ... we don't pass this to ACE
+  echo := [4, [0,1]],         # hijacked! ... we don't pass this to ACE
   enumeration := [4, IsString],
   felsch := [3, ["",0,1]],
   ffactor := [1, x -> IsZero(x) or IsPosInt(x)],# "ffactor" and "fill"
@@ -158,13 +173,13 @@ KnownACEoptions := rec(
   #options := [3, [""]],
   oo   := [2, IsInt],       # "oo" and "order" are synonyms
   order := [2, IsInt],
-  outfile := [7, IsString], # This is a GAP4-introduced
-                            # option (not an ACE option)
   #parameters := [3, [""]], # decommissioned ACE option
   path := [4, [0,1]],
   pmode := [4, [0..3]],
   psize := [4, x -> IsZero(x) or 
                    (IsEvenInt(x) and IsPrimePowerInt(x))],
+  silent := [6, [0,1]],     # This is a GAP4-introduced option 
+                            # (not an ACE binary option)
   #sr := [2, [0,1]],
   #print := [2, x -> (IsList(x) and Length(x) <= 3 and
   #                  ForAll(x, IsInt)) or IsInt(x)],
@@ -204,15 +219,24 @@ KnownACEoptions := rec(
 #############################################################################
 ####
 ##
+#V  NonACEbinOptions . . . . . . . list of known ACE options that are not ACE
+##  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . binary options.
+##
+
+NonACEbinOptions := [ "ACEinfile", "echo", "ACEoutfile", "silent" ];
+
+#############################################################################
+####
+##
 #F  CALL_ACE  . . . . .  The function that actually does the work when either
 ##  . . . . . . . . . . . . . . . . CallACE or ACEStats is called by the user
 ##
 BindGlobal("CALL_ACE", function(arg)
 local fgens,rels,sgens,a,i,j,k,n,nums,fullopt,opt,optval,options,known,
       donothing,echo,gens,CheckValidOption,DoWords,FullOptionName,
-      GetOptionValue,IsValidOptionValue,MatchesKnownOption,ProcessOption,infile,
-      line,col,ok,p,rowentries,table,cosettable,redir,stats,statval,words,
-      ACEfname;
+      GetOptionValue,IsValidOptionValue,MatchesKnownOption,ProcessOption,
+      infile,outfile,instream,line,col,ok,p,rowentries,table,cosettable,
+      stats,statval,words,ACEfname;
 
   fgens := arg[1];
   rels := arg[2];
@@ -234,6 +258,11 @@ local fgens,rels,sgens,a,i,j,k,n,nums,fullopt,opt,optval,options,known,
   IsSSortedList(nums); # force sort flag
 
   options := RecNames(OptionsStack[ Length(OptionsStack) ]);
+  if "messfile" in options then
+    Error("Option `messfile' deprecated: use `ACEoutfile' instead");
+  elif "outfile" in options then
+    Error("Option `outfile' deprecated: use `ACEinfile' instead");
+  fi;
 
   MatchesKnownOption := function(knownoption, option)
     # Checks if option is a valid abbreviation of knownoption
@@ -274,14 +303,6 @@ local fgens,rels,sgens,a,i,j,k,n,nums,fullopt,opt,optval,options,known,
     Print(" Subgroup generators : ", sgens, "\n");
   fi;
   
-  # If option "outfile" is set then we only want to produce an ACE input file
-  optval := ValueOption("outfile");
-  if optval<>fail and IsString(optval) then
-    infile := optval;
-  else
-    infile := ACEinfo.infile;
-  fi;
-
   GetOptionValue := function(defaultvalue, list)
     # Check among options (a CALL_ACE variable defined above) for any 
     # settings of the known option synonyms in list. The latest such
@@ -301,6 +322,11 @@ local fgens,rels,sgens,a,i,j,k,n,nums,fullopt,opt,optval,options,known,
     od;
     return optval;
   end;
+  
+  # If option "ACEinfile" is set we only want to produce an ACE input file
+  infile := GetOptionValue(ACEinfo.infile, [ "ACEinfile" ]);
+
+  outfile := GetOptionValue(ACEinfo.outfile, [ "ao", "ACEoutfile" ]);
     
   # Give a name to the group ACE will be dealing with (this is not
   # actually necessary ... ACE essentially treats it as a comment)
@@ -418,9 +444,13 @@ local fgens,rels,sgens,a,i,j,k,n,nums,fullopt,opt,optval,options,known,
       fi;
     fi;
     if echo then
-      if fullopt in ["echo", "outfile"] then
-        # First deal with the non-ACE options
-        Print(" ", opt, " := ", optval, " (not passed to ACE)\n");
+      if fullopt in NonACEbinOptions then
+        # First deal with the non-ACE binary options
+        if fullopt = "ACEoutfile" then
+          Print(" ", opt, " := ", optval, " (passed to ACE via option: ao)\n");
+        else
+          Print(" ", opt, " := ", optval, " (not passed to ACE)\n");
+        fi;
       elif value = "" then
         Print(" ", opt, " (no value)\n");
       else
@@ -435,11 +465,12 @@ local fgens,rels,sgens,a,i,j,k,n,nums,fullopt,opt,optval,options,known,
     fullopt := FullOptionName(opt); # known is set here as a side-effect
     # We don't pass the options in the RHS list following to the
     # ACE infile, here (i.e. within this `for' loop).
-    # The options "echo", "outfile" and "silent" are not passed to the ACE 
-    # binary at all, and "messfile" is only passed to the ACE binary as "ao".
-    donothing := fullopt in ["echo", "outfile", "ao", "messfile", 
-                             "enumeration", "subgroup", "silent",
-                             "messages", "monitor"];
+    # The options "echo", "ACEinfile" and "silent" are not passed to the ACE 
+    # binary at all, and "ACEoutfile" is only passed to the ACE binary as "ao".
+    # We have already dealt with the options  "ACEinfile",  "ao", "ACEoutfile", 
+    # "enumeration" and "subgroup".
+    donothing := fullopt in ["echo", "ACEinfile", "ao", "ACEoutfile",
+                             "silent", "enumeration", "subgroup" ];
     optval := ValueOption(opt);
     if optval = true then
       # An option detected by GAP4 as boolean may in fact be a no-value
@@ -475,25 +506,15 @@ local fgens,rels,sgens,a,i,j,k,n,nums,fullopt,opt,optval,options,known,
     fi;
   od;
               
-  # Set the verbosity of the ACE output
-  optval := GetOptionValue(fail, ["messages", "monitor"] );
-  if optval<>fail and not stats then
-    if IsInt(optval) and (optval<-1 or optval>1) then
-      AppendTo(infile, "Mess:", optval, ";\n");
-    fi;
-    redir := "";
-  else
-    redir := "> temp";
+  # If we only want stats then "messages" needs to be 0.
+  # We set it here explicitly, in order to override any settings made
+  # by the user.
+  if stats then
+    AppendTo(infile, "Messages:0;\n");
   fi;
 
-  # The user may wish to direct the ACE output to a file
-  optval := GetOptionValue(fail, ["ao", "messfile"] );
-  if optval<>fail then
-    AppendTo(infile, "AO:", optval, ";\n");
-    redir := "> temp";
-  fi;
-
-  AppendTo(infile, "AO:", ACEinfo.outfile, ";\n");
+  # Direct ACE output to outfile
+  AppendTo(infile, "Alter Output:", outfile, ";\n");
   AppendTo(infile, "End;\n"); # (one of) the ACE directives that initiate
                               # an enumeration
   if stats = false then
@@ -505,14 +526,15 @@ local fgens,rels,sgens,a,i,j,k,n,nums,fullopt,opt,optval,options,known,
     return;
   fi;
 
-  # Run ACE on the constructed infile ... the ACE output will
-  # appear in ACEinfo.outfile
+  # Run ACE on the constructed infile 
+  # ... the ACE output will appear in outfile 
+  #     (except for the banner which is directed to ACEinfo.banner)
   Exec(Concatenation("cd ", Filename(ACEinfo.tmpdir, ""), "; ",
-                     ACEinfo.binary, " <in ", redir));
+                     ACEinfo.binary, " < in > banner"));
 
   # We now have a look at the ACE output
-  infile := InputTextFile(ACEinfo.outfile);
-  line := ReadLine(infile);
+  instream := InputTextFile(outfile);
+  line := ReadLine(instream);
 
   # Parse the line for statistics
   a := Filtered(line,i->i in ". " or i in CHARS_DIGITS);
@@ -520,18 +542,18 @@ local fgens,rels,sgens,a,i,j,k,n,nums,fullopt,opt,optval,options,known,
   if stats then 
     if line{[1..5]}="INDEX" then
       statval:=[Int(a[1]),Int(a[7])+Int(a[8])/10^Length(a[8]),
-		Int(a[9]),Int(a[10])];
+                Int(a[9]),Int(a[10])];
     else
       statval:=[0,Int(a[6])+Int(a[7])/10^Length(a[7]),Int(a[8]),Int(a[9])];
     fi;
 
-    CloseStream(infile);
+    CloseStream(instream);
     return statval;
   fi;
 
   # Skip some header until the ` coset ' line
   while line<>fail and line{[1..6]}<>" coset" do
-    line := ReadLine(infile);
+    line := ReadLine(instream);
   od;
 
   if line = fail then
@@ -549,13 +571,13 @@ local fgens,rels,sgens,a,i,j,k,n,nums,fullopt,opt,optval,options,known,
                   x -> x<>fail );
 
   # Discard the `---' line
-  line := ReadLine(infile);
+  line := ReadLine(instream);
 
   # Now read the body of the coset table into table as a GAP4 list
   table := List([1..n],i -> []);
   p := 0;
   ok := true;
-  line := ReadLine(infile);
+  line := ReadLine(instream);
   while ok and line<>fail and Length(line)>1 and line[1]<>'=' do
     p := p+1;
     rowentries := SplitString(line, ""," :|\n");
@@ -570,10 +592,10 @@ local fgens,rels,sgens,a,i,j,k,n,nums,fullopt,opt,optval,options,known,
       Add(table[i], a);
     od;
 
-    line := ReadLine(infile);
+    line := ReadLine(instream);
   od;
 
-  CloseStream(infile);
+  CloseStream(instream);
   if not ok then
     return fail;
   fi;
