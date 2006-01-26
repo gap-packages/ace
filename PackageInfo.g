@@ -9,9 +9,9 @@ SetPackageInfo( rec(
 
   PackageName := "ACE",
   Subtitle    := "Advanced Coset Enumerator",
-  Version     := "4.1",
-  Date        := "22/12/2003",
-  ArchiveURL  := "http://www.math.rwth-aachen.de/~Greg.Gamble/ACE/ace-4.1",
+  Version     := "5.0",
+  Date        := "26/01/2006",
+  ArchiveURL  := "http://www.math.rwth-aachen.de/~Greg.Gamble/ACE/ace-5.0",
   ArchiveFormats 
               := ".zoo",
 
@@ -158,7 +158,7 @@ SetPackageInfo( rec(
     BookName  := "ACE",
     # format/extension can be one of .zoo, .tar.gz, .tar.bz2, -win.zip
     Archive   := 
-      "http://www.math.rwth-aachen.de/~Greg.Gamble/ACE/ace-4.1.zoo",
+      "http://www.math.rwth-aachen.de/~Greg.Gamble/ACE/ace-5.0.zoo",
     ArchiveURLSubset 
               := ["doc", "htm"],
     HTMLStart := "htm/chapters.htm",
@@ -179,7 +179,7 @@ SetPackageInfo( rec(
   Dependencies := rec(
     # GAP version, use version strings for specifying exact versions,
     # prepend a '>=' for specifying a least version.
-    GAP := ">= 4.3",
+    GAP := ">= 4.4",
     # list of pairs [package name, (least) version],  package name is case
     # insensitive, least version denoted with '>=' prepended to version string.
     # without these, the package will not load
