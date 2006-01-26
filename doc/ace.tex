@@ -7,7 +7,7 @@
 %H  $Id$
 %%
 %Y  Copyright (C) 2000  Centre for Discrete Mathematics and Computing
-%Y                      Department of Computer Science & Electrical Eng.
+%Y                      Department of Information Tech. & Electrical Eng.
 %Y                      University of Queensland, Australia.
 %%
 
@@ -28,9 +28,10 @@ Alexander Hulpke and Greg Gamble, which is described in this manual.
 The interface links to an external binary and therefore is only usable
 under UNIX (see  Section~"Installing  the  ACE  Package"  for  how  to
 install  {\ACE}).  It  will  not  work  on  Windows  or  a  pre-MacOSX
-Macintosh. The current version  requires  at  least  {\GAP}~4.3.  (The
-first versions supported {\GAP}~4.2.) {\ACE} can be used through  this
-interface in a variety of ways:
+Macintosh. The current version requires at least {\GAP}~4.4. Users who
+still have {\GAP}~4.3,  must  use  {\ACE}  4.1.  (The  first  versions
+supported {\GAP}~4.2.) {\ACE} can be used through this interface in  a
+variety of ways:
 
 \beginlist%unordered
 
@@ -156,14 +157,14 @@ standardisations schemes were possible: `lenlex' and `semilenlex' (see
 Section~"Coset Table Standardisation Schemes"). The user  may  control
 which standardisation scheme is used by selecting either the  `lenlex'
 (see~"option  lenlex")  or  `semilenlex'   (see~"option   semilenlex")
-option; otherwise the table  is  standardised  according  to  {\GAP}'s
-default standardisation scheme which is `semilenlex'  for  {\GAP}~4.2,
-or the value of `CosetTableStandard' (which by  default  is  `lenlex')
-for  {\GAP}~4.3  (or  later).  We  provide   `IsACEStandardCosetTable'
-(see~"IsACEStandardCosetTable") to determine whether a table (list  of
-lists)  is  standard  relative  to  {\GAP}'s  default  standardisation
-scheme, or with the use of options (e.g.~`lenlex' or `semilenlex')  to
-another standardisation scheme.
+option;  otherwise  (since  {\GAP}~4.3)  the  table  is   standardised
+according to {\GAP}'s the  value  of  `CosetTableStandard'  (which  by
+default is `lenlex'; for {\GAP}~4.2, the variable `CosetTableStandard'
+didn't exist and the default standardisation scheme was `semilenlex').
+We provide  `IsACEStandardCosetTable'  (see~"IsACEStandardCosetTable")
+to determine whether a table (list of lists) is standard  relative  to
+{\GAP}'s default standardisation scheme, or with the  use  of  options
+(e.g.~`lenlex' or `semilenlex') to another standardisation scheme.
 
 If the determination of a coset table is unsuccessful, then one of the
 following occurs:
@@ -378,11 +379,10 @@ will assume is `x') has order  at  most  2,  as:  `x*x'  (rather  than
 necessary, when `ACECosetTable' is called with the `lenlex' option.
 
 The user may avoid all the technicalities  by  either  not  using  the
-`lenlex' option (and in {\GAP}~4.3 or later, allowing {\GAP}  to  take
-care of the `lenlex' standardisation), or by swapping  the  first  two
-generators          in           those           cases           where
-`IsACEGeneratorsInPreferredOrder(<gens>,   <rels>)'    would    return
-`false'.
+`lenlex' option (and allowing {\GAP} to  take  care  of  the  `lenlex'
+standardisation), or by swapping the first  two  generators  in  those
+cases where  `IsACEGeneratorsInPreferredOrder(<gens>,  <rels>)'  would
+return `false'.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{Using ACE Directly to Test whether a Coset Enumeration Terminates}
@@ -859,11 +859,12 @@ the `gap' directory.
 
 The `3.xxx' versions of the {\ACE} Package were compatible with {\GAP}
 4.2, but were built for use with  {\GAP}  4.3.  However,  the  current
-version of the {\ACE}  Package  requires  at  least  {\GAP}  4.3.  One
-important change in {\GAP} from {\GAP} 4.2  to  {\GAP}  4.3  that  has
-relevance for {\ACE} Package  users  is  the  change  of  the  default
-standard  for  the  numbering  of  cosets  in  a  coset   table   (see
-Section~"Coset Table Standardisation Schemes").
+version of the {\ACE} Package requires at least {\GAP} 4.4. Users  who
+still have {\GAP} 4.3 will need  to  use  {\ACE}  4.1.  One  important
+change in {\GAP} from {\GAP} 4.2 to {\GAP} 4.3 that has relevance  for
+{\ACE} Package users is the change of the  default  standard  for  the
+numbering of  cosets  in  a  coset  table  (see  Section~"Coset  Table
+Standardisation Schemes").
 
 \>ACEPackageVersion() F
 
@@ -910,6 +911,10 @@ being confused with the binary version number.
 
 \item{`4.1'}
 Added $M_{12}$ presentation to `res-examples/pgrelfind.g'.
+
+\item{`5.0'}
+Pre-{\GAP} 4.4 compatibility removed.  Now  at  least  {\GAP}  4.4  is
+required. Option `pkgbanner' has been completely removed.
 
 \endlist
 

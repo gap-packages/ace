@@ -7,7 +7,7 @@
 %H  $Id$
 %%
 %Y  Copyright (C) 2000  Centre for Discrete Mathematics and Computing
-%Y                      Department of Computer Science & Electrical Eng.
+%Y                      Department of Information Tech. & Electrical Eng.
 %Y                      University of Queensland, Australia.
 %%
 
@@ -578,10 +578,10 @@ invoked, a side-effect is that any setting of the `asis'  (see~"option
 asis") option by the user is ignored.
 
 The  `lenlex'  standardisation  scheme  is  the  default  coset  table
-standardisation scheme of {\GAP}~4.3. However,  `semilenlex'  was  the
-standardisation scheme for versions of {\GAP} up to  {\GAP}~4.2.  Both
-schemes   are   described   in   detail   in   Section~"Coset    Table
-Standardisation Schemes".
+standardisation  scheme  of  {\GAP}  (since  version  4.3).   However,
+`semilenlex' was the standardisation scheme for versions of {\GAP}  up
+to {\GAP}~4.2. Both schemes are described in detail in  Section~"Coset
+Table Standardisation Schemes".
 
 \>`semilenlex'{option semilenlex}@{option `semilenlex'}& 
 Ensures that `ACECosetTable' and `ACECosetTableFromGensAndRels' output
@@ -607,13 +607,13 @@ raised  by  the  interface  to  {\GAP},  unless  the  option  `silent'
 case, a partial coset table, that is a valid {\GAP} list of lists,  is
 returned. Each position of the table  without  a  valid  coset  number
 entry is filled with a zero. If  the  option  `silent'  is  also  set,
-`incomplete' prevails. For {\GAP}~4.3 and later, an  incomplete  table
-is returned reduced (i.e.~with insignificant coset numbers  ---  those
+`incomplete'  prevails.  Since  {\GAP}~4.3,  an  incomplete  table  is
+returned reduced (i.e.~with  insignificant  coset  numbers  ---  those
 appearing only in their place of definition --- removed) and  `lenlex'
 standardised (regardless of whether  the  `semilenlex'  option  is  in
-force). For GAP~4.2, an incomplete table  is  returned  unstandardised
-unless the `lenlex' option (see~"option lenlex") is also set, and  the
-table is also not reduced. When an incomplete  table  is  returned,  a
+force). (For GAP~4.2, an incomplete table was returned  unstandardised
+unless the `lenlex' option (see~"option lenlex") was also set, and the
+table was also not reduced.) When an incomplete table is  returned,  a
 warning is emitted at `InfoACE' or `InfoWarning' level 1.
 
 \>`aceinfile:=<filename>'{option aceinfile}@{option `aceinfile'}&

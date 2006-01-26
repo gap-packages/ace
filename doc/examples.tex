@@ -7,7 +7,7 @@
 %H  $Id$
 %%
 %Y  Copyright (C) 2000  Centre for Discrete Mathematics and Computing
-%Y                      Department of Computer Science & Electrical Eng.
+%Y                      Department of Information Tech. & Electrical Eng.
 %Y                      University of Queensland, Australia.
 %%
 
@@ -260,9 +260,9 @@ rec( index := 12, cputime := 0, cputimeUnits := "10^-2 seconds",
 
 Similarly, we may use `ACECosetTable' with 0 or 1 arguments, which  is
 the interactive version of `ACECosetTableFromGensAndRels',  and  which
-returns a standard table (with {\GAP} 4.2 that  means  a  `semilenlex'
-standard table, but with {\GAP} 4.3, as  below,  a  `lenlex'  standard
-table is returned).
+returns a standard table (since {\GAP} 4.3,  a  standard  table  is  a
+`lenlex' standard table;  with  {\GAP}  4.2,  it  was  a  `semilenlex'
+standard table).
 
 \beginexample
 gap> ACECosetTable(); # Interactive version of ACECosetTableFromGensAndRels()

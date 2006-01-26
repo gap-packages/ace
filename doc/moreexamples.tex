@@ -6,7 +6,7 @@
 %H  $Id$
 %%
 %Y  Copyright (C) 2000  Centre for Discrete Mathematics and Computing
-%Y                      Department of Computer Science & Electrical Eng.
+%Y                      Department of Information Tech. & Electrical Eng.
 %Y                      University of Queensland, Australia.
 %%
 
@@ -15,7 +15,7 @@
 
 The examples in this chapter  are  intended  to  provide  the  nearest
 {\GAP} equivalent of the similarly named  sections  in  Appendix~A  of
-`ace3001.dvi' (the standalone manual in  directory  `standalone-doc').
+`ace3001.ps' (the standalone manual  in  directory  `standalone-doc').
 There is a *lot* of detail here, which the novice {\ACE} Package  user
 won't want to know about.  Please,  despite  the  name  of  the  first
 section of this chapter,  read  the  examples  in  Appendix~"Examples"
@@ -264,13 +264,14 @@ did that with the example above, the result would be an enormous table
 `max' (see~"option max") option, in order that we should  get  a  more
 modestly sized partial table. Finally, we  will  use  `print  :=  -12'
 since it is a shorter equivalent alternative to `print :=  [-1,  12]'.
-Note that the output here was obtained with {\GAP}  4.3.  With  {\GAP}
-4.2 the output is similar  except  that  the  last  `Info'-ed  message
-(before the final output)  states  that  the  coset  table  result  is
-incomplete only, since no standardisation is done. It turns  out  that
-the table displayed via the `print'  option  is  already  in  `lenlex'
-standard form; so despite the differences in the {\GAP} versions, both
-{\GAP} 4.2 and {\GAP} 4.3 output the same table.
+Note that the output here was obtained with {\GAP}  4.3  (and  is  the
+same with {\GAP} 4.4). With {\GAP} 4.2 the output was  similar  except
+that the last `Info'-ed message (before the final output) states  that
+the coset table result is incomplete only, since no standardisation is
+done. It turns out that the table displayed via the `print' option  is
+already in `lenlex' standard form; so despite the differences  in  the
+{\GAP} versions, each version of {\GAP} since {\GAP}  4.2  has  output
+the same table.
 
 \beginexample
 gap> ACECosetTableFromGensAndRels(fgens, [], [] : max := 12,
