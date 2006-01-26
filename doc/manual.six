@@ -45,8 +45,8 @@ F 1.11. ACEPackageVersion
 C install.tex 2. Installing and Loading the ACE Package
 S 2.1. Installing the ACE Package
 S 2.2. Loading the ACE Package
-I 2.2. banner!suppression
 I 2.2. option pkgbanner
+I 2.2. banner!suppression
 C basics.tex 3. Some Basics
 I 3.0. strategy
 I 3.0. Felsch strategy
