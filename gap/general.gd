@@ -8,18 +8,12 @@
 #H  @(#)$Id$
 ##
 #Y  Copyright (C) 2000  Centre for Discrete Mathematics and Computing
-#Y                      Department of Computer Science & Electrical Eng.
+#Y                      Department of Information Technology & Electrical Eng.
 #Y                      University of Queensland, Australia.
 ##
 Revision.("ace/gap/general_gd") :=
     "@(#)$Id$";
 
-
-#############################################################################
-##
-#I  InfoClass
-##
-DeclareInfoClass("InfoACE");
 
 #############################################################################
 ##

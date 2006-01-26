@@ -8,7 +8,7 @@
 #H  @(#)$Id$
 ##
 #Y  Copyright (C) 2000  Centre for Discrete Mathematics and Computing
-#Y                      Department of Computer Science & Electrical Eng.
+#Y                      Department of Information Technology & Electrical Eng.
 #Y                      University of Queensland, Australia.
 ##
 Revision.("ace/gap/options_gi") :=
@@ -694,9 +694,9 @@ end);
 ##  A check among options for any settings of `lenlex' or  `semilenlex'.  The
 ##  latest such optname that is set to true is returned, or if  there  is  no
 ##  such setting a string representing the current GAP default  is  returned:
-##  for GAP 4.2 "GAPsemilenlex" is returned; and for GAP 4.3 (or any  version
-##  of GAP for which CosetTableStandard is  defined)  "GAPCosetTableStandard"
-##  is returned.
+##  for  GAP  4.2  "GAPsemilenlex"  was  returned;  since  GAP   4.3,   "GAP"
+##  concatenated  with  the  value  of  `CosetTableStandard'   (by   default,
+##  "lenlex") is returned.
 ##
 InstallGlobalFunction(ACE_COSET_TABLE_STANDARD, function(options)
 local optname;
@@ -713,11 +713,7 @@ local optname;
       return ACEPreferredOptionName(optname);
     fi;
   od;
-  if "CosetTableStandard" in NamesGVars() then
-    return Flat(["GAP", EvalString("CosetTableStandard")]);
-  else
-    return "GAPsemilenlex";
-  fi;
+  return Concatenation("GAP", CosetTableStandard);
 end);
   
 #############################################################################

@@ -1,7 +1,7 @@
 #############################################################################
 ####
 ##
-#W  ace.g                      ACE Package                   Alexander Hulpke
+#W  ace.gi                     ACE Package                   Alexander Hulpke
 #W                                                                Greg Gamble
 ##
 ##  `Head' file for the GAP interface to the ACE (Advanced Coset Enumerator),
@@ -11,10 +11,10 @@
 #H  @(#)$Id$
 ##
 #Y  Copyright (C) 2000  Centre for Discrete Mathematics and Computing
-#Y                      Department of Computer Science & Electrical Eng.
+#Y                      Department of Information Technology & Electrical Eng.
 #Y                      University of Queensland, Australia.
 ##
-Revision.("ace/gap/ace_g") :=
+Revision.("ace/gap/ace_gi") :=
     "@(#)$Id$";
 
 
@@ -33,9 +33,6 @@ Revision.("ace/gap/ace_g") :=
 ##    "outfile" . . the path of the ACE output file
 ##    "version" . . the version of the current ACE binary
 ##
-DeclareGlobalVariable( "ACEData",
-  "A record containing various data associated with the ACE package."
-  );
 InstallValue( ACEData,
   rec( binary := Filename(DirectoriesPackagePrograms("ace"), "ace"),
        tmpdir := DirectoryTemporary(),
@@ -57,38 +54,12 @@ ACEData.version := ACEData.version{[ACEData.scratch ..
                                              ACEData.scratch) - 1]};
 Unbind(ACEData.scratch); # We don't need ACEData.scratch, anymore.
 
+#############################################################################
+##  
+#I  InfoClass
+##
 # Set the default level of InfoACE
 SetInfoLevel(InfoACE, 1);
-
-#############################################################################
-####
-##  Print a banner . . . . . .  using InfoWarning (so a user can turn it off)
-##
-if not CompareVersionNumbers(VERSION, "4.4") and
-   not QUIET and BANNER then
-
-  ACEData.banner := ValueOption("pkgbanner");
-  if ACEData.banner = "short" then
-
-    Info(InfoWarning,1,"Loading ACE Package Version ", PACKAGES_VERSIONS.ace);
-
-  elif ACEData.banner <> "none" then
-
-    Info(InfoWarning,1,"    The ACE (Advanced Coset Enumerator) Package");
-    Info(InfoWarning,1,"  C code by George Havas <havas@itee.uq.edu.au> and");
-    Info(InfoWarning,1,"            Colin Ramsay <cram@itee.uq.edu.au>");
-    Info(InfoWarning,1,"                 ACE binary version: ",ACEData.version);
-    Info(InfoWarning,1,"  GAP code by Greg Gamble <gregg@itee.uq.edu.au> and");
-    Info(InfoWarning,1,"         Alexander Hulpke <hulpke@math.colostate.edu>");
-    Info(InfoWarning,1,"                 ACE package version: ", 
-                                         PACKAGES_VERSIONS.ace);
-    Info(InfoWarning,1,"");
-    Info(InfoWarning,1,"                 For help, type: ?ACE");
-
-  fi;
-  Unbind(ACEData.banner);
-
-fi;
 
 #############################################################################
 ####
@@ -105,4 +76,4 @@ ACEIgnoreUnknownDefault := true;
 ##
 InstallAtExit( ACEQuitAll );
 
-#E  ace.g . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ends here 
+#E  ace.gi . . . . . . . . . . . . . . . . . . . . . . . . . . . .  ends here 
