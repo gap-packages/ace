@@ -15,7 +15,7 @@ else
 fi
 rm -f Makefile sedfile
 cat $GAPPATH/sysinfo.gap > Makefile
-echo "echo s/@GAPARCH@/\$GAParch/g >sedfile" >> Makefile
+echo "echo s|@GAPARCH@|\$GAParch|g >sedfile" >> Makefile
 chmod +x Makefile
 ./Makefile
 rm -f Makefile
