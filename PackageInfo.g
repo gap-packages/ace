@@ -158,7 +158,7 @@ SetPackageInfo( rec(
     BookName  := "ACE",
     # format/extension can be one of .zoo, .tar.gz, .tar.bz2, -win.zip
     Archive   := 
-      "http://school.maths.uwa.edu.au/~gregg/ACE/ace-5.1.zoo",
+      "http://school.maths.uwa.edu.au/~gregg/ACE/ace-5.1.tar.gz",
     ArchiveURLSubset 
               := ["doc", "htm"],
     HTMLStart := "htm/chapters.htm",
