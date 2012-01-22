@@ -13,7 +13,7 @@ SetPackageInfo( rec(
   Date        := "22/01/2012",
   ArchiveURL  := "http://school.maths.uwa.edu.au/~gregg/ACE/ace-5.1",
   ArchiveFormats 
-              := ".zoo",
+              := ".tar.gz",
 
 ##    - if no 'TextFiles' or 'BinaryFiles' are given and a .zoo archive is
 ##      provided, then the files in that archive with a "!TEXT!" comment are
