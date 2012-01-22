@@ -1,0 +1,37 @@
+#!/usr/bin/env perl
+
+#A  Greg Gamble ... based in part on Frank Lübeck's packpack
+## 
+##  Usage: pack_pkg
+##
+##  Uses perl, tar and gzip to create just the <pname>-<version>.tar.gz
+##  archive and copies the README to README.<pname> (both are placed in
+##  the pkg directory).
+##
+
+#set values of <pname> and <version>
+$pname = "ace";
+$version = `cat VERSION`;
+chomp $version;
+
+#remove files created during installation
+system( "make clean" );
+
+#remove old .zoo file
+system( "rm -f ../$pname-$version.tar.gz" );
+
+#copy README in pkg directory 
+system( "cp -f README ../README.$pname" );
+
+### Create new .tar.gz file in pkg directory ################################
+chdir "..";
+
+$prune = ".*\\(/CVS\\|CVS/.*\\|~\\|\\.log\\|\\.\\(_cvs\\|cvsignore\\|bbl".
+         "\\|aux\\|[ib]lg\\|ind\\|idx\\|sw[op]\\)\\|pack_pkg\\|zoo\\|make_.*".
+         "\\|[.-]bak\\|\\.#.*\\|".
+         "\\(3000\\|acedoc\\|doc3001\\|compat4r2\\|doc/test\\)".
+         ".*\\|doc/.*\\.tst\\)";
+
+system( "find $pname -regex \"$prune\" |".
+        "tar cv $pname --exclude-from - |gzip -c -9 > $pname-$version.tar.gz" );
+

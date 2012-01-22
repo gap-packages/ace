@@ -12,8 +12,12 @@ The GAP interface (package) has been written by Alexander Hulpke and Greg
 Gamble. In order to install the ACE package you must get the archive file
 `ace-XXX.zoo', for some version  number  `XXX',  (which  includes  the  C
 source code of Havas and Ramsay). The current version of the ACE  package
-is 5.0 (which interfaces with version 3.001 of the ACE C program of Havas
-and Ramsay).
+is 5.1 (which interfaces with version 3.001 of the ACE C program of Havas
+and Ramsay). This is the last version for GAP 4.4.   It has been produced
+to include all updates and have HTML manual links that work with the last
+gapmacro-compiled versions of the main GAP 4.4 manuals. The next  version
+ACE 5.2 will have no functional change, but the HTML manual links will be
+compatible with the new GAP 4.5 manuals.
 
 The ACE package provides a mechanism to replace GAP's usual  Todd-Coxeter
 coset enumerator by ACE, so that functions that  behind  the  scenes  use
@@ -25,20 +29,19 @@ The interactive functions provided use the IOStream  functionality  first
 introduced in GAP 4.2; however, the current version requires at least GAP
 4.4.
 
-Version 5.0 of ACE removes all deprecated code, particularly with respect
+Version 5.0 of ACE removed all deprecated code, particularly with respect
 to the package loading mechanism.  It  is  not  backward-compatible  with
 pre-4.4 versions of GAP. If  you  are  still  using  GAP  4.3,  you  must
-continues to use the previous version (4.1) of ACE.
+continue to use the previous version (4.1) of ACE.
 
 You can download  `ace-XXX.zoo'  (where  `XXX'  is  the  package  version
 number) from the home page for the ACE package
 
 http://www.math.rwth-aachen.de/~Greg.Gamble/ACE/ (Germany)
 
-or the Australian mirrors
+or the Australian mirror
 
-http://www.maths.uwa.edu.au/~gregg/ACE/          (Perth, Australia)
-http://www.itee.uq.edu.au/~gregg/ACE/            (Queensland, Australia)
+http://school.maths.uwa.edu.au/~gregg/ACE/          (Perth, Australia)
 
 or via the Packages links from the GAP sites
 
@@ -121,33 +124,18 @@ was  reported  with  fix  by  Volker  Gebhardt  (thanks!)  and  caused  a
 segmentation fault when ACE output  coset  representatives.  The  fix  is
 incorporated in ACE 3.001 which we now use.
 
-ACE has been compiled successfully with the following C compilers:
+ACE has been compiled successfully with the following C compiler:
 
-   compiler             platform              comments
-   --------             --------              --------
-   gcc 2.7.2.1          Linux
-   gcc 2.7.2.3          Linux
-   gcc 2.8.1            Solaris 2.51/IRIX 6.5 
-   cc MIPSpro 7.2.1     IRIX 6.5
-   cc MIPSpro 7.3.1.1m  IRIX 6.5              (compiled with -64 = 64bit)
-   gcc 2.91.66 19990314 Linux                 (egcs 1.1.2 release)
-   gcc 2.95.2 19990906  Linux                 (prerelease)
-   gcc 2.95.2 19991024  Solaris 2.51, 2.8     (release)
-   gcc 2.95.2 20000220  Linux                 (release)
-   gcc 2.95.3 20010315  Linux                 (release)
-   gcc 2.95.4 20011002  Linux                 (Debian prerelease)
-   gcc 2.96 20000731    Red Hat Linux 7.2     (2.96-112.7.2)
-   gcc 3.2 20020903     Red Hat Linux 8.0     (3.2-7)
+   gcc (GCC) 4.2.4 (Ubuntu 4.2.4-1ubuntu4)
 
-(Since April 1999, egcs has been the official Gnu cc  supplier.  This  is
-why the numbering now follows egcs' numbering.)
+and is presumed to compile with any modern version of C compiler.
 
 If you encounter problems with the ACE binary, please contact one of  the
 C code authors:  George  Havas  <havas@itee.uq.edu.au>  or  Colin  Ramsay
 <cram@itee.uq.edu.au>.
 
 If you encounter problems at the GAP level, please contact one of the ACE
-package authors: Greg Gamble <gregg@itee.uq.edu.au> or  Alexander  Hulpke
+package authors: Greg Gamble <Greg.Gamble@uwa.edu.au> or Alexander Hulpke
 <hulpke@math.colostate.edu>.
 
 When sending a bug report, remember we will need to be able to  reproduce
@@ -166,11 +154,11 @@ the problem; so please include:
    standalone ACE, begin with a #).
 
   - Greg Gamble 
-    Centre for Discrete Mathematics and Computing, 
-    Department of Information Technology and Electrical Engineering,
-    The University of Queensland,
-    Brisbane, Queensland, 4072
+    Department of Mathematics and Statistics,
+    Curtin University,
+    GPO Box U 1987,
+    Perth WA 6845,
     Australia
-    e-mail: gregg@itee.uq.edu.au
-    www:    http://www.itee.uq.edu.au/~gregg
-  -- 30 April, 2002; 22 December, 2003; 26 January, 2006.
+    e-mail: Greg.Gamble@uwa.edu.au
+    www:    http://school.maths.uwa.edu.au/~gregg
+  -- 30 April, 2002; 22 December, 2003; 26 January, 2006; 22 January, 2012.

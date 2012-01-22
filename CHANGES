@@ -2,10 +2,22 @@ In this file we record the changes since the 3.xxx versions of the ACE
 package. Also look at gap/CHANGES  for  a  history  of  the  pre-3.xxx
 development.
 
-Version 5.? (YYYY-MM-DD)
-   o Made configure and Makefile.in more robust, to ensure that they
-     work well with both GAP 4.4 and 4.5.
-
+Version 5.1 (2012-01-22)
+   Last GAP 4.4 version.
+   o make_zoo,pack_pkg:
+     - make_zoo is deprecated
+     - (newly created) pack_pkg now creates a tar.gz archive
+   o configure,Makefile.in:
+     - made more robust, to ensure that they work well with both 
+       GAP 4.4 and 4.5
+   o doc/manual.bib:
+     - some typos. fixed
+   o doc/make_doc:
+     - the current HTML converter etc/convert.pl fails to include /htm
+       in the main GAP manual links, since it is attuned for GAP 4.5; 
+       a temporary perl command was added to fix this
+   o PackageInfo.g,README,VERSION,doc/{manual,ace,install}.tex:
+     - routine changes including an update to address and email address
 Version 5.0 (2006-01-26)
   o pre-GAP 4.4 compatibility features removed:
     - gap/ace.g:
@@ -26,7 +38,7 @@ Version 5.0 (2006-01-26)
   o PackageInfo.g,README,VERSION,doc/{ace,install,examples}.tex:
     - routine changes as per above
 Version 4.1:
-  Release version.
+  GAP 4.4 Release version.
   o PkgInfo.g replaced by PackageInfo.g
     - `Pkg...' fields replaced by `Package...' fields
     - `AutoLoad' fields replaced by `Autoload'

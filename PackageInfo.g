@@ -9,9 +9,9 @@ SetPackageInfo( rec(
 
   PackageName := "ACE",
   Subtitle    := "Advanced Coset Enumerator",
-  Version     := "5.0",
-  Date        := "26/01/2006",
-  ArchiveURL  := "http://www.math.rwth-aachen.de/~Greg.Gamble/ACE/ace-5.0",
+  Version     := "5.1",
+  Date        := "22/01/2012",
+  ArchiveURL  := "http://school.maths.uwa.edu.au/~gregg/ACE/ace-5.1",
   ArchiveFormats 
               := ".zoo",
 
@@ -32,17 +32,17 @@ SetPackageInfo( rec(
       FirstNames    := "Greg",
       IsAuthor      := true,
       IsMaintainer  := true,
-      Email         := "gregg@itee.uq.edu.au",
-      WWWHome       := "http://www.math.rwth-aachen.de/~Greg.Gamble",
+      Email         := "Greg.Gamble@uwa.edu.au",
+      WWWHome       := "http://school.maths.uwa.edu.au/~gregg",
       PostalAddress := Concatenation( [
                          "Greg Gamble\n",
-                         "School of Mathematics and Statistics\n",
-                         "Curtin University of Technology\n",
+                         "Department of Mathematics and Statistics\n",
+                         "Curtin University\n",
                          "GPO Box U 1987\n",
                          "Perth WA 6845\n",
                          "Australia" ] ),
       Place         := "Perth",
-      Institution   := "Curtin University of Technology"
+      Institution   := "Curtin University"
     ),
     rec( 
       LastName      := "Hulpke",
@@ -115,9 +115,9 @@ SetPackageInfo( rec(
 ##  and updating of the package in the GAP distribution.
 ##  
 
-  README_URL := "http://www.math.rwth-aachen.de/~Greg.Gamble/ACE/README",
+  README_URL := "http://school.maths.uwa.edu.au/~gregg/ACE/README",
   PackageInfoURL 
-             := "http://www.math.rwth-aachen.de/~Greg.Gamble/ACE/PackageInfo.g",
+             := "http://school.maths.uwa.edu.au/~gregg/ACE/PackageInfo.g",
 
 ##  Here you  must provide a short abstract explaining the package content 
 ##  in HTML format (used on the package overview Web page) and an URL 
@@ -132,7 +132,7 @@ SetPackageInfo( rec(
      interactive and non-interactive interface with the Todd-Coxeter coset\
      enumeration functions of the ACE (Advanced Coset Enumerator) C program.",
 
-  PackageWWWHome := "http://www.math.rwth-aachen.de/~Greg.Gamble/ACE/",
+  PackageWWWHome := "http://school.maths.uwa.edu.au/~gregg/ACE/",
                   
 ##  On the GAP Website there is an online version of all manuals in the
 ##  GAP distribution. To handle the documentation of a package it is
@@ -158,7 +158,7 @@ SetPackageInfo( rec(
     BookName  := "ACE",
     # format/extension can be one of .zoo, .tar.gz, .tar.bz2, -win.zip
     Archive   := 
-      "http://www.math.rwth-aachen.de/~Greg.Gamble/ACE/ace-5.0.zoo",
+      "http://school.maths.uwa.edu.au/~gregg/ACE/ace-5.1.zoo",
     ArchiveURLSubset 
               := ["doc", "htm"],
     HTMLStart := "htm/chapters.htm",
