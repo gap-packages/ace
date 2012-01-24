@@ -1,6 +1,6 @@
-                               The ACE package
+                              The ACE package
 
-The ACE package provides functions  associated  with  Todd-Coxeter  coset
+The  ACE  package  provides  functions associated  with  Todd-Coxeter  coset
 enumeration by interfacing with the Advanced Coset Enumerator (ACE),
 
 ACE coset enumerator (C) 1995-2001 by George Havas and Colin Ramsay
@@ -8,33 +8,32 @@ ACE coset enumerator (C) 1995-2001 by George Havas and Colin Ramsay
 
 from within GAP 4.
 
-The GAP interface (package) has been written by Alexander Hulpke and Greg
-Gamble. In order to install the ACE package you must get the archive file
-`ace-XXX.zoo', for some version  number  `XXX',  (which  includes  the  C
-source code of Havas and Ramsay). The current version of the ACE  package
-is 5.1 (which interfaces with version 3.001 of the ACE C program of Havas
-and Ramsay). This is the last version for GAP 4.4.   It has been produced
-to include all updates and have HTML manual links that work with the last
-gapmacro-compiled versions of the main GAP 4.4 manuals. The next  version
-ACE 5.2 will have no functional change, but the HTML manual links will be
+The GAP  interface (package) has been  written by Alexander Hulpke  and Greg
+Gamble. In order  to install the ACE  package you must get  the archive file
+e.g. `ace-XXX.tar.gz', for some version  number `XXX', (which includes the C
+source code of Havas and Ramsay). The  current version of the ACE package is
+5.1 (which interfaces with  version 3.001 of the ACE C  program of Havas and
+Ramsay). This  is the  last version  for GAP  4.4. It  has been  produced to
+include  all updates  and have  HTML manual  links that  work with  the last
+gapmacro-compiled versions of the main GAP 4.4 manuals. The next version ACE
+5.2  will have  no functional  change,  but the  HTML manual  links will  be
 compatible with the new GAP 4.5 manuals.
 
-The ACE package provides a mechanism to replace GAP's usual  Todd-Coxeter
-coset enumerator by ACE, so that functions that  behind  the  scenes  use
-coset enumeration will use the ACE enumerator.  The  ACE  enumerator  may
-also  be  used  explicitly;  both  non-interactively  and  interactively.
-However the package is used, a plethora of  options  and  strategies  are
-available to assist the user in avoiding incomplete  coset  enumerations.
-The interactive functions provided use the IOStream  functionality  first
-introduced in GAP 4.2; however, the current version requires at least GAP
-4.4.
+The ACE  package provides  a mechanism to  replace GAP's  usual Todd-Coxeter
+coset enumerator by ACE, so that  functions that behind the scenes use coset
+enumeration will use the ACE enumerator. The ACE enumerator may also be used
+explicitly; both non-interactively and interactively. However the package is
+used,  a plethora  of options  and strategies  are available  to assist  the
+user in  avoiding incomplete  coset enumerations. The  interactive functions
+provided  use  the  IOStream  functionality first  introduced  in  GAP  4.2;
+however, the current version requires at least GAP 4.4.
 
-Version 5.0 of ACE removed all deprecated code, particularly with respect
-to the package loading mechanism.  It  is  not  backward-compatible  with
-pre-4.4 versions of GAP. If  you  are  still  using  GAP  4.3,  you  must
-continue to use the previous version (4.1) of ACE.
+Version 5.0 of ACE removed all deprecated code, particularly with respect to
+the package  loading mechanism. It  is not backward-compatible  with pre-4.4
+versions of GAP.  If you are still  using GAP 4.3, you must  continue to use
+the previous version (4.1) of ACE.
 
-You can download  `ace-XXX.zoo'  (where  `XXX'  is  the  package  version
+You can download  `ace-XXX.tar.gz'  (where  `XXX'  is  the  package  version
 number) from the home page for the ACE package
 
 http://www.math.rwth-aachen.de/~Greg.Gamble/ACE/ (Germany)
@@ -43,43 +42,41 @@ or the Australian mirror
 
 http://school.maths.uwa.edu.au/~gregg/ACE/          (Perth, Australia)
 
-or via the Packages links from the GAP sites
+or via the Packages links from the GAP sites, which also gives other archive
+types (.bz2, .zip etc.)
 
 http://www.gap-system.org/                       (UK)
 http://www.math.rwth-aachen.de/~GAP/             (Germany)
 
-or the GAP ftp servers
+If  you prefer  zoo,  zip  or tar.bz2  to  tar.gz  archives, substitute  the
+appropriate suffix in the above paths.
 
-ftp://ftp-gap.dcs.st-and.ac.uk/pub/gap/gap4/zoo/packages/
-ftp://ftp.math.rwth-aachen.de/pub/gap4/zoo/packages/
-
-If you prefer tar.gz or tar.bz2 to zoo  archives,  substitute  tar.gz  or
-tar.bz2 (as appropriate) for zoo in the above paths.
-
-Since the ACE package interfaces to an external binary, it is only usable
-under UNIX or a UNIX-like environment. It will not work on Windows  or  a
-pre-MacOSX Macintosh.
+Since the ACE package interfaces to an external binary, it is only usable in
+an  environment that  supports compiling  of the  binary, e.g.  a UNIX  or a
+UNIX-like environment.
 
                          Installing the ACE package
 
-To install the ACE package, move the file `ace-XXX.zoo'  into  the  `pkg'
-directory in which you plan to install ACE. Usually,  this  will  be  the
-directory `pkg' in the hierarchy of your version of GAP 4.  (However,  it
-is also possible to keep an additional `pkg' directory  in  your  private
-directories, see section "ref:Installing  GAP  Packages"  of  the  GAP  4
+To install  the ACE package, move  the file `ace-XXX.tar.gz' into  the `pkg'
+directory  in which  you plan  to  install ACE.  Usually, this  will be  the
+directory `pkg' in the  hierarchy of your version of GAP  4. (However, it is
+also  possible  to  keep  an  additional `pkg'  directory  in  your  private
+directories,  see  section  "ref:Installing  GAP  Packages"  of  the  GAP  4
 reference manual for details on how to do this.)
 
-Then unzoo `ace-XXX.zoo' by
+Then unpack `ace-XXX.tar.gz',  which in most Linux environments  can be done
+by
 
-  unzoo -x ace-XXX
+  tar zxf ace-XXX.tar.gz
 
-Go to the newly created `ace' directory and call `configure <path>' where
-<path> is the path to the GAP home  directory.  So  for  example  if  you
-install the package in the main `pkg' directory call
+Go to  the newly created `ace'  directory and call `configure  <path>' where
+<path> is the path to the GAP  home directory. So for example if you install
+the package in the main `pkg' directory call
 
   ./configure ../..
 
-This will fetch the architecture type for which  GAP  has  been  compiled
+In fact `../..'  is the default path.  So, if this is correct,  you may omit
+it. This  will fetch the architecture  type for which GAP  has been compiled
 last and create a `Makefile'. Now simply call
 
   make
@@ -161,4 +158,4 @@ the problem; so please include:
     Australia
     e-mail: Greg.Gamble@uwa.edu.au
     www:    http://school.maths.uwa.edu.au/~gregg
-  -- 30 April, 2002; 22 December, 2003; 26 January, 2006; 22 January, 2012.
+  -- 30 April, 2002; 22 December, 2003; 26 January, 2006; 25 January, 2012.
