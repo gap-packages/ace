@@ -6,14 +6,10 @@
 ##  Provides some easy applications of the pgrelfind.g functions,  using  the
 ##  perfect simple group J_1.
 ##
-#H  @(#)$Id$
-##
 #Y  Copyright (C) 2001  Centre for Discrete Mathematics and Computing
 #Y                      Department of Computer Science & Electrical Eng.
 #Y                      University of Queensland, Australia.
 ##
-Revision.doJ1_g :=
-    "@(#)$Id$";
 
 ACEResExample := rec(filename := "doJ1.g", print := false);
 if IsBound(IsACEResExampleOK) and IsACEResExampleOK() then

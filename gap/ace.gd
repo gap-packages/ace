@@ -8,14 +8,10 @@
 ##  by George Havas and Colin Ramsay.  The original interface was written  by 
 ##  Alexander Hulpke and extensively modified by Greg Gamble.
 ##    
-#H  @(#)$Id$
-##
 #Y  Copyright (C) 2006  Centre for Discrete Mathematics and Computing
 #Y                      Department of Information Technology & Electrical Eng.
 #Y                      University of Queensland, Australia.
 ##
-Revision.("ace/gap/ace_gd") :=
-    "@(#)$Id$";
 
 
 #############################################################################

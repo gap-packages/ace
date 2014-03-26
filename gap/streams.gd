@@ -5,14 +5,10 @@
 ##
 ##  This file declares non-user functions used in interactions with streams.
 ##    
-#H  @(#)$Id$
-##
 #Y  Copyright (C) 2000  Centre for Discrete Mathematics and Computing
 #Y                      Department of Information Technology & Electrical Eng.
 #Y                      University of Queensland, Australia.
 ##
-Revision.("ace/gap/streams_gd") :=
-    "@(#)$Id$";
 
 
 #############################################################################

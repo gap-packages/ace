@@ -6,14 +6,10 @@
 ##  Provides some easy applications of the pgrelfind.g functions,  using  the
 ##  perfect simple group L_3(5).
 ##
-#H  @(#)$Id$
-##
 #Y  Copyright (C) 2001  Centre for Discrete Mathematics and Computing
 #Y                      Department of Computer Science & Electrical Eng.
 #Y                      University of Queensland, Australia.
 ##
-Revision.doL35_g :=
-    "@(#)$Id$";
 
 ACEResExample := rec(filename := "doL35.g", print := false);
 if IsBound(IsACEResExampleOK) and IsACEResExampleOK() then

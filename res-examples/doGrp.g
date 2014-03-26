@@ -6,14 +6,10 @@
 ##  Provides  a  generic  way  of  trying  some  easy  applications  of   the
 ##  pgrelfind.g functions.
 ##
-#H  @(#)$Id$
-##
 #Y  Copyright (C) 2001  Centre for Discrete Mathematics and Computing
 #Y                      Department of Computer Science & Electrical Eng.
 #Y                      University of Queensland, Australia.
 ##
-Revision.doGrp_g :=
-    "@(#)$Id$";
 
 ACEResExample := rec(filename := "doGrp.g", print := false);
 if IsBound(IsACEResExampleOK) and IsACEResExampleOK() then

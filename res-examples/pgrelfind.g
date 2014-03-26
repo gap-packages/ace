@@ -14,14 +14,10 @@
 ##  enable it to work with the  latest  ACE Package.  Names of some functions
 ##  and variables were also changed.
 ##
-#H  @(#)$Id$
-##
 #Y  Copyright (C) 2000  Centre for Discrete Mathematics and Computing
 #Y                      Department of Computer Science & Electrical Eng.
 #Y                      University of Queensland, Australia.
 ##
-Revision.pgrelfind_g :=
-    "@(#)$Id$";
 
 ## Begin
 if not(IsBound(ACEResExample) and IsBound(ACEResExample.reread)) then

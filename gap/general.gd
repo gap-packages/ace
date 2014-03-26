@@ -5,14 +5,10 @@
 ##
 ##  This file declares mainly non-interactive ACE variables and functions.
 ##    
-#H  @(#)$Id$
-##
 #Y  Copyright (C) 2000  Centre for Discrete Mathematics and Computing
 #Y                      Department of Information Technology & Electrical Eng.
 #Y                      University of Queensland, Australia.
 ##
-Revision.("ace/gap/general_gd") :=
-    "@(#)$Id$";
 
 
 #############################################################################

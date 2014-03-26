@@ -6,14 +6,10 @@
 ##  Provides some easy applications of the pgrelfind.g functions,  using  the
 ##  perfect simple group L_2(8).
 ##
-#H  @(#)$Id$
-##
 #Y  Copyright (C) 2000  Centre for Discrete Mathematics and Computing
 #Y                      Department of Computer Science & Electrical Eng.
 #Y                      University of Queensland, Australia.
 ##
-Revision.doL28_g :=
-    "@(#)$Id$";
 
 ACEResExample := rec(filename := "doL28.g", print := false);
 if IsBound(IsACEResExampleOK) and IsACEResExampleOK() then

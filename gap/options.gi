@@ -5,14 +5,10 @@
 ##
 ##  This file installs functions and records for manipulating ACE options.
 ##    
-#H  @(#)$Id$
-##
 #Y  Copyright (C) 2000  Centre for Discrete Mathematics and Computing
 #Y                      Department of Information Technology & Electrical Eng.
 #Y                      University of Queensland, Australia.
 ##
-Revision.("ace/gap/options_gi") :=
-    "@(#)$Id$";
 
 
 #############################################################################
