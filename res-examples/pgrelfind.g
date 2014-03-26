@@ -22,7 +22,7 @@
 ## Begin
 if not(IsBound(ACEResExample) and IsBound(ACEResExample.reread)) then
   ACEResExample := rec(filename := "pgrelfind.g");
-  RequirePackage("ace", "3.0");
+  LoadPackage("ace", "3.0");
 fi;
 # Use ACE for CosetTableFromGensAndRels coset enumerations
 TCENUM := ACETCENUM;;
@@ -1176,7 +1176,7 @@ local head, grp, n, newgens, ok, saved,
   elif ACEResExample.filename = "doGrp.g" and
        not(IsGroupOK() and IsnOK() and IsNewgensOK()) then
     ACEResExample.reread := true;
-    RequirePackage("ace", "3.0");
+    LoadPackage("ace", "3.0");
     ACEReadResearchExample("pgrelfind.g");
     ACEResExample := saved;
     Unbind(ACEResExample.reread);
@@ -1209,7 +1209,7 @@ local head, grp, n, newgens, ok, saved,
     elif not(IsFunctionsOK() and IsBound(a) and IsBound(b) and 
              IsGensOK(a, b)) then
       ACEResExample.reread := true;
-      RequirePackage("ace", "3.0");
+      LoadPackage("ace", "3.0");
       ACEReadResearchExample("pgrelfind.g");
       ACEResExample := saved;
       Unbind(ACEResExample.reread);

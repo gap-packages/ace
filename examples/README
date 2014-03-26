@@ -1,7 +1,7 @@
 The  examples  in  this  directory  are  designed  to  work  with  the
 ACEExample function ... though the following  sequence,  for  example,
 will also work (after the  ACE  Share  Package  has  been  loaded  via
-`RequirePackage("ace");'):
+`LoadPackage("ace");'):
 
   file := Filename(DirectoriesPackageLibrary("ace", "examples"), "A5");
   ACEfunc := ACECosetTableFromGensAndRels;
