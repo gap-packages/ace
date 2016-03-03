@@ -83,7 +83,11 @@ void  al2_init(void);
 char *al2_strdup(char*);
 int   al2_outlen(int);
 void  al2_continue(char*);
+#ifdef __GNUC__
+void  al2_restart(char*) __attribute__ ((noreturn));
+#else
 void  al2_restart(char*);
+#endif
 void  al2_abort(char*);
 
 void al2_aip(char*);
