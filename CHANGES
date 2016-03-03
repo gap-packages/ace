@@ -2,6 +2,11 @@ In this file we record the changes since the 3.xxx versions of the ACE
 package. Also look at gap/CHANGES  for  a  history  of  the  pre-3.xxx
 development.
 
+Version 5.2 (2016-XX-YY)
+   o All parts of ACE (including the GAP package, and the original C
+   standalone executable) are now licensed under the so-called MIT license.
+   For details, refer to the LICENSE file.
+
 Version 5.1 (2012-01-22)
    Last GAP 4.4 version.
    o make_zoo,pack_pkg:
