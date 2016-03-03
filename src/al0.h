@@ -264,7 +264,7 @@ extern float ffactor;
         ******************************************************************/
 
 extern int pdsiz;
-#define NEXTPD(i)  ((++i) & (pdsiz-1))
+#define NEXTPD(i)  ((i+1) & (pdsiz-1))
 
 extern int *pdqcol, *pdqrow;
 extern int toppd, botpd;
