@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/sh -e
 #########################################################################
 ##
 #W  make_doc        make ACE Package documentation       Alexander Hulpke
