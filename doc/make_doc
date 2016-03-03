@@ -27,9 +27,6 @@ pdftex manual
 mkdir -p ../htm
 echo "Creating HTML documentation"
 ../../../etc/convert.pl -t -c -n ACE . ../htm
-# Current convert.pl fails to include /htm in main GAP 4.4 manual links
-# Temporary modiffication to be removed for GAP 4.5
-perl -p -i -e 's#(href="[.][.]/[.][.]/[.][.]/doc)#$1/htm#' ../htm/*.htm
 
 #########################################################################
 ##
