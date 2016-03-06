@@ -94,7 +94,24 @@ SetPackageInfo( rec(
                          "Australia" ] ),
       Place         := "Brisbane",
       Institution   := "The University of Queensland"
-    )
+    ),
+    rec(
+      LastName      := "Horn",
+      FirstNames    := "Max",
+      IsAuthor      := false,
+      IsMaintainer  := true,
+      Email         := "max.horn@math.uni-giessen.de",
+      WWWHome       := "http://www.quendi.de/math",
+      PostalAddress := Concatenation(
+                         "AG Algebra\n",
+                         "Mathematisches Institut\n",
+                         "Justus-Liebig-Universit‰t Gieﬂen\n",
+                         "Arndtstraﬂe 2\n",
+                         "35392 Gieﬂen\n",
+                         "Germany" ),
+      Place         := "Gieﬂen, Germany",
+      Institution   := "Justus-Liebig-Universit‰t Gieﬂen"
+    ),
   ],  
 
   Status      := "accepted",
@@ -236,7 +253,9 @@ SetPackageInfo( rec(
   "C code by  ", ~.Persons[3].FirstNames, " ", ~.Persons[3].LastName,
         " (", ~.Persons[3].WWWHome, ")\n",
   "           ", ~.Persons[4].FirstNames, " ", ~.Persons[4].LastName,
-         " <", ~.Persons[4].Email, ">\n\n",
+         " <", ~.Persons[4].Email, ">\n",
+  "Co-maintainer: ", ~.Persons[5].FirstNames, " ", ~.Persons[5].LastName,
+        " <", ~.Persons[5].Email, ">\n\n",
   "                 For help, type: ?ACE\n",
   "---------------------------------------------------------------------------",
   "\n" ),

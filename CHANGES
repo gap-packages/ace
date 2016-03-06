@@ -8,6 +8,8 @@ Version 5.2 (2016-XX-YY)
      - All parts of ACE (including the GAP package, and the original C
        standalone executable) are now licensed under the so-called MIT 
        license. For details, refer to the LICENSE file.
+   o PackageInfo.g,doc/install.tex
+     - Max Horn listed as co-maintainer.
    o PackageInfo.g,doc/{{ace,install}.tex,manual.bib},src/al[012].h,
      src/{ace,coinc,control,enum,enum0[012],parser,postproc,util[012]}.c
      - updated email address for Colin Ramsay, and web address for 
