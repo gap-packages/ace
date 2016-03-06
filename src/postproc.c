@@ -2,7 +2,7 @@
 /**************************************************************************
 
         postproc.c
-        Colin Ramsay (cram@csee.uq.edu.au)
+        Colin Ramsay (cram@itee.uq.edu.au)
         2 Mar 01
 
         ADVANCED COSET ENUMERATOR, Version 3.001
@@ -12,7 +12,7 @@
         Department of Mathematics and 
           Department of Computer Science & Electrical Engineering,
         The University of Queensland, QLD 4072.
-	(http://www.csee.uq.edu.au/~havas/cdmc.html)
+	(http://staff.itee.uq.edu.au/havas)
 
 This is the post (enumeration) processing stuff for stand-alone ACE.  Note
 that many of the routines here could be considered as Level 0 or Level 1

@@ -2,7 +2,7 @@
 /**************************************************************************
 
         util2.c
-        Colin Ramsay (cram@csee.uq.edu.au)
+        Colin Ramsay (cram@itee.uq.edu.au)
         6 Dec 00
 
         ADVANCED COSET ENUMERATOR, Version 3.001
@@ -12,7 +12,7 @@
         Department of Mathematics and 
           Department of Computer Science & Electrical Engineering,
         The University of Queensland, QLD 4072.
-	(http://www.csee.uq.edu.au/~havas/cdmc.html)
+	(http://staff.itee.uq.edu.au/havas)
 
 These are the utilities for Level 2 of ACE.
 

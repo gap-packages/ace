@@ -10,7 +10,7 @@ SetPackageInfo( rec(
   PackageName := "ACE",
   Subtitle    := "Advanced Coset Enumerator",
   Version     := "5.2",
-  Date        := "24/02/2016",
+  Date        := "07/03/2016",
   ArchiveFormats 
               := ".tar.gz",
 
@@ -66,7 +66,7 @@ SetPackageInfo( rec(
       IsAuthor      := true,
       IsMaintainer  := false,
       Email         := "havas@itee.uq.edu.au",
-      WWWHome       := "http://www.itee.uq.edu.au/~havas",
+      WWWHome       := "http://staff.itee.uq.edu.au/havas",
       PostalAddress := Concatenation( [
                          "George Havas\n",
                          "Centre for Discrete Mathematics and Computing\n",
@@ -84,7 +84,6 @@ SetPackageInfo( rec(
       IsAuthor      := true,
       IsMaintainer  := false,
       Email         := "cram@itee.uq.edu.au",
-      WWWHome       := "http://www.itee.uq.edu.au/~cram",
       PostalAddress := Concatenation( [
                          "Colin Ramsay\n",
                          "Centre for Discrete Mathematics and Computing\n",
@@ -237,7 +236,7 @@ SetPackageInfo( rec(
   "C code by  ", ~.Persons[3].FirstNames, " ", ~.Persons[3].LastName,
         " (", ~.Persons[3].WWWHome, ")\n",
   "           ", ~.Persons[4].FirstNames, " ", ~.Persons[4].LastName,
-         " (", ~.Persons[4].WWWHome, ")\n\n",
+         " <", ~.Persons[4].Email, ">\n\n",
   "                 For help, type: ?ACE\n",
   "---------------------------------------------------------------------------",
   "\n" ),

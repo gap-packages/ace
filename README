@@ -4,7 +4,7 @@ The  ACE  package  provides  functions associated  with  Todd-Coxeter  coset
 enumeration by interfacing with the Advanced Coset Enumerator (ACE),
 
 ACE coset enumerator (C) 1995-2001 by George Havas and Colin Ramsay
-    http://www.itee.uq.edu.au/~cram/ce.html
+    http://staff.itee.uq.edu.au/havas
 
 from within GAP 4.
 
@@ -39,7 +39,7 @@ http://www.math.rwth-aachen.de/~Greg.Gamble/ACE/ (Germany)
 
 or the Australian mirror
 
-http://school.maths.uwa.edu.au/~gregg/ACE/          (Perth, Australia)
+http://http://staffhome.ecm.uwa.edu.au/~00021149/ACE/     (Perth, Australia)
 
 or via the Packages links from the GAP sites, which also gives other archive
 types (.bz2, .zip etc.)
@@ -158,4 +158,4 @@ the problem; so please include:
     e-mail: Greg.Gamble@uwa.edu.au
     www:    http://staffhome.ecm.uwa.edu.au/~00021149
   -- 30 April, 2002; 22 December, 2003; 26 January, 2006; 25 January, 2012,
-     24 February, 2016.
+     7 March, 2016.

@@ -2,7 +2,7 @@
 /**************************************************************************
 
         parser.c
-        Colin Ramsay (cram@csee.uq.edu.au)
+        Colin Ramsay (cram@itee.uq.edu.au)
 	2 Mar 01
 
         ADVANCED COSET ENUMERATOR, Version 3.001
@@ -12,7 +12,7 @@
         Department of Mathematics and 
           Department of Computer Science & Electrical Engineering,
         The University of Queensland, QLD 4072.
-	(http://www.csee.uq.edu.au/~havas/cdmc.html)
+	(http://staff.itee.uq.edu.au/havas)
 
 Parser and dispatcher code for stand-alone ACE.  We try to ensure that we
 only change things in response to a command if the entire command is ok.

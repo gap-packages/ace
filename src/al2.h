@@ -2,7 +2,7 @@
 /**************************************************************************
 
         al2.h
-        Colin Ramsay (cram@csee.uq.edu.au)
+        Colin Ramsay (cram@itee.uq.edu.au)
         25 Feb 00
 
         ADVANCED COSET ENUMERATOR, Version 3.001
@@ -12,7 +12,7 @@
         Department of Mathematics and 
 	  Department of Computer Science & Electrical Engineering,
         The University of Queensland, QLD 4072.
-        (http://www.csee.uq.edu.au/~havas/cdmc.html)
+        (http://staff.itee.uq.edu.au/havas)
 
 This is the header file for Level 2 of ACE; that is, a demonstration
 application in the form of a stand alone, interactive interface.

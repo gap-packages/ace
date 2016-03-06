@@ -2,7 +2,7 @@
 /**************************************************************************
 
 	enum00.c
-	Colin Ramsay (cram@csee.uq.edu.au)
+	Colin Ramsay (cram@itee.uq.edu.au)
         25 Feb 00
 
 	ADVANCED COSET ENUMERATOR, Version 3.001
@@ -12,7 +12,7 @@
 	Department of Mathematics and 
 	  Department of Computer Science & Electrical Engineering,
 	The University of Queensland, QLD 4072.
-	(http://www.csee.uq.edu.au/~havas/cdmc.html)
+	(http://staff.itee.uq.edu.au/havas)
 
 This is the include file for the enumerator's finite automata.  The 
 transition tables take the current state & the previous action's result, 

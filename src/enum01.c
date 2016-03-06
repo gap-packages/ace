@@ -2,7 +2,7 @@
 /**************************************************************************
 
 	enum01.c
-	Colin Ramsay (cram@csee.uq.edu.au)
+	Colin Ramsay (cram@itee.uq.edu.au)
         18 Oct 00
 
 	ADVANCED COSET ENUMERATOR, Version 3.001
@@ -12,7 +12,7 @@
 	Department of Mathematics and 
 	  Department of Computer Science & Electrical Engineering,
 	The University of Queensland, QLD 4072.
-	(http://www.csee.uq.edu.au/~havas/cdmc.html)
+	(http://staff.itee.uq.edu.au/havas)
 
 This is the code for the al0_rpefn() routine; i.e., R*-style.  In concept,
 it's closest to C-style; except that the defns are done using relator
