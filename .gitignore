@@ -13,6 +13,8 @@
 /doc/*.example-8.tst
 /doc/*.example-9.tst
 /doc/*.idx
+/doc/*.ilg
+/doc/*.ind
 /doc/*.lab
 /doc/*.log
 /doc/*.toc
