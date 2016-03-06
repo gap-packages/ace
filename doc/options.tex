@@ -30,19 +30,20 @@ Section~"Loading the ACE Package"), by typing
 
 \beginexample
 gap> RecNames(KnownACEOptions);
-[ "aceinfile", "aceignore", "aceignoreunknown", "acenowarnings", "aceecho", 
-  "aceincomment", "aceexampleoptions", "silent", "lenlex", "semilenlex", 
-  "incomplete", "sg", "rl", "aep", "ai", "ao", "aceoutfile", "asis", "begin", 
-  "start", "bye", "exit", "qui", "cc", "cfactor", "ct", "check", "redo", 
-  "compaction", "continu", "cycles", "dmode", "dsize", "default", "ds", "dr", 
-  "dump", "easy", "echo", "enumeration", "felsch", "ffactor", "fill", 
-  "group", "generators", "relators", "hard", "help", "hlt", "hole", 
-  "lookahead", "loop", "max", "mendelsohn", "messages", "monitor", "mode", 
-  "nc", "normal", "no", "options", "oo", "order", "path", "pmode", "psize", 
-  "sr", "print", "purec", "purer", "rc", "recover", "contiguous", "rep", 
-  "rfactor", "rt", "row", "sc", "stabilising", "sims", "standard", 
-  "statistics", "stats", "style", "subgroup", "system", "text", "time", "tw", 
+[ "default", "help", "check", "generators", "start", "path", "cycles", 
+  "normal", "ds", "group", "subgroup", "relators", "order", "max", "rep", 
+  "system", "silent", "time", "begin", "text", "options", "fill", 
+  "aceinfile", "aceignore", "aceignoreunknown", "acenowarnings", "aceecho", 
+  "aceincomment", "aceexampleoptions", "lenlex", "semilenlex", "incomplete", 
+  "sg", "rl", "aep", "ai", "ao", "aceoutfile", "asis", "bye", "exit", "qui", 
+  "cc", "cfactor", "ct", "redo", "compaction", "continu", "dmode", "dsize", 
+  "dr", "dump", "easy", "echo", "enumeration", "felsch", "ffactor", "hard", 
+  "hlt", "hole", "lookahead", "loop", "mendelsohn", "messages", "monitor", 
+  "mode", "nc", "no", "oo", "pmode", "psize", "sr", "print", "purec", 
+  "purer", "rc", "recover", "contiguous", "rfactor", "rt", "row", "sc", 
+  "stabilising", "sims", "standard", "statistics", "stats", "style", "tw", 
   "trace", "workspace" ]
+
 \endexample
 
 (See Section~"The KnownACEOptions Record".) Also, from within a {\GAP}
@@ -152,7 +153,7 @@ functions, their abbreviations and the values that they are  known  to
 take  may  be  gleaned  from   the   `KnownACEOptions'   record   (see
 Section~"The KnownACEOptions Record").
 
-Options      for      the       {\ACE}       interface       functions
+Options  for each of  the       {\ACE}       interface       functions
 `ACECosetTableFromGensAndRels',   `ACECosetTable',   `ACEStats'    and
 `ACEStart' (see  Chapter~"Functions  for  Using  ACE  Interactively"),
 comprise the few  non-{\ACE}-binary  options  (`silent',  `aceinfile',
@@ -376,6 +377,7 @@ boolean function that may be used to determine if the given value is a
 \beginexample
 gap> KnownACEOptions.compaction;
 [ 3, [ 0 .. 100 ] ]
+
 \endexample
 
 indicates that the option `compaction' may be  abbreviated  to  `com'
@@ -383,7 +385,8 @@ and the (known) valid values are in the (integer) range 0 to 100; and
 
 \beginexample
 gap> KnownACEOptions.ct;
-[ 2, <Operation "IS_INT"> ]
+[ 2, <Category "IsInt"> ]
+
 \endexample
 
 indicates that there is essentially no abbreviation of `ct' (since its
@@ -468,6 +471,7 @@ is a {\GAP} list that contains  the  strategy  options  known  to  the
 \beginexample
 gap> ACEStrategyOptions;
 [ "default", "easy", "felsch", "hard", "hlt", "purec", "purer", "sims" ]
+
 \endexample
 
 See Chapter~"Strategy Options  for  ACE"  for  details  regarding  the
@@ -491,6 +495,7 @@ obtained     by     concatenating     `[     <optname>     ]'      and
 \beginexample
 gap> Concatenation( [ "messages" ], ACEOptionSynonyms.("messages") );
 [ "messages", "monitor" ]
+
 \endexample
 
 More generally, for an arbitrary option name  <optname>  its  list  of
@@ -762,10 +767,11 @@ Options'' may be obtained by
 \beginexample
 gap> Concatenation( List(RecNames(ACEParameterOptions),
 >                        optname -> ACEOptionData(optname).synonyms) );
-[ "asis", "ct", "cfactor", "compaction", "dmode", "dsize", "enumeration", 
-  "fill", "ffactor", "hole", "lookahead", "loop", "max", "mendelsohn", 
-  "messages", "monitor", "no", "path", "pmode", "psize", "rt", "rfactor", 
-  "row", "subgroup", "time", "workspace" ]
+[ "path", "subgroup", "max", "time", "fill", "ffactor", "asis", "ct", 
+  "cfactor", "compaction", "dmode", "dsize", "enumeration", "hole", 
+  "lookahead", "loop", "mendelsohn", "messages", "monitor", "no", "pmode", 
+  "psize", "rt", "rfactor", "row", "workspace" ]
+
 \endexample
 
 We describe the ``{\ACE} Parameter Options'' in the  Sections~"General
@@ -878,7 +884,7 @@ Controls the preferred definition strategy by setting the fill factor;
 of `ffactor' is `f'.)
 
 Unless prevented by the fill factor, gaps of length one  found  during
-deduction  testing  are  preferentially   filled   (see~\cite{Hav91}).
+deduction  testing  are  preferentially   filled   (see \cite{Hav91}).
 However, this potentially violates the  formal  requirement  that  all
 rows in the coset table are eventually filled (and tested against  the
 relators). The fill factor  is  used  to  ensure  that  some  constant
@@ -1269,6 +1275,7 @@ situation both interactively and   non-interactively  by  setting  the
 
 \beginexample
 gap> SetInfoACELevel(3);
+
 \endexample
 
 Then {\ACE}'s messages are  displayed  prepended  with  ```\#I  '''.
@@ -1313,7 +1320,7 @@ The default `Subgroup Name' is `"H"'.
 Redirects (`a'lters) `o'utput to <filename>; <filename>  should  be  a
 string.
 
-Non-interactively, {\ACE}'s output is normally directed to a temporary
+Non-interactively, output from {\ACE} is normally directed to a temporary
 file whose full path is stored in `ACEData.outfile', which  is  parsed
 to produce a coset table or a list of statistics. This  option  causes
 {\ACE}'s output to  be  directed  to  <filename>  instead,  presumably

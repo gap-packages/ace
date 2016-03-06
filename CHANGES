@@ -2,6 +2,27 @@ In this file we record the changes since the 3.xxx versions of the ACE
 package. Also look at gap/CHANGES  for  a  history  of  the  pre-3.xxx
 development.
 
+Version 5.2 (2016-02-24)
+   Mainly cosmetic changes to improve compatibility with GAP 4.7.
+   o doc/manual.bib
+     - some references now in the main .bib file
+   o doc/manual.tex
+     - two \def s added to ensure GAP's manualbib.xml.bib (prev. manual.bib)
+       is compatible with gapmacro compilation.
+   o doc/install.tex
+     - changed Reference manual reference to `gap.ini' and `gaprc' files,
+       from `.gaprc' file.
+     - removed reference to `make_doc', which is not included in
+       downloadable archives.
+   o doc/{ace,install,options}.tex:
+     - added blank line before each \endexample line, to account for
+       changed behaviour which was not tabbing the last line of an example
+   o PackageInfo.g,README,VERSION,doc/{manual,ace,install}.tex:
+     - routine changes
+   o tst/aceds.tst
+     - Info lines in example only appear when `InfoACELevel' is set to 3.
+       This has been wrong for a while. It was wrong in Version 5.0.
+       Line `SetInfoACELevel(3)' added.
 Version 5.1 (2012-01-22)
    Last GAP 4.4 version.
    o make_zoo,pack_pkg:

@@ -366,8 +366,8 @@ The arguments of the <i>th interactive {\ACE} process  are  stored  in
 generators, respectively (see Section~"The  ACEData  Record").  Option
 information is saved in `ACEData.io[<i>].options' when a user uses  an
 interactive  {\ACE}  interface   function   with   options   or   uses
-`SetACEOptions' (see~"SetACEOptions"). Option information is saved  in
-`ACEData.io[<i>].parameters' if `ACEParameters'  (see~"ACEParameters")
+`SetACEOptions' (see~"SetACEOptions"). Parameter option information is
+saved in `ACEData.io[<i>].parameters' if `ACEParameters' (see~"ACEParameters")
 is used to extract from  {\ACE}  the  current  values  of  the  {\ACE}
 parameter options (this is generally less reliable unless one  of  the
 general {\ACE} modes (see Section~"General ACE Modes"), has  been  run
@@ -747,10 +747,10 @@ After setting the options passed, the first  mode  of  the  following:
 `ACEStart' (see~"ACEStart"), that may  be  applied,  is  automatically
 invoked.
 
-Since a user will sometimes have options  in  the  form  of  a  record
-(e.g.~via   `GetACEOptions'),   we   provide   a    `PushOptions'-like
-alternative to the behind-the-colon syntax for the passing of  options
-via `SetACEOptions':
+Since  a  user  will   sometimes have options in the form  of a record 
+(e.g.~via `GetACEOptions'),   we    provide  an  alternative  to   the
+behind-the-colon  syntax,  in a  manner .like  `PushOptions', for  the
+passing of options via `SetACEOptions':
 
 \>SetACEOptions( <i>, <optionsRec> )!{record version} F
 \>SetACEOptions( <optionsRec> )!{record version} F
@@ -768,6 +768,7 @@ you have a process like that started by:
 
 \beginexample
 gap> ACEExample("A5", ACEStart);
+
 \endexample
 
 then the following demonstrates both usages of `SetACEOptions':
@@ -775,6 +776,7 @@ then the following demonstrates both usages of `SetACEOptions':
 \beginexample
 gap> SetACEOptions( rec(echo := 2) );
 gap> SetACEOptions( : hlt);
+
 \endexample
 
 Each of the three commands above generates output; for brevity it  has
@@ -1060,9 +1062,14 @@ A typical output, illustrating the default build, is:
 
 \beginexample
 gap> ACEBinaryVersion();
+#I  No interactive ACE sessions are currently active
 #I  ACE Binary Version: 3.001
+#I  ACE 3.001        Sat Feb 27 11:27:15 2016
+#I  =========================================
+#I  Host information:
+#I    name = banksia
 #I  ACE 3.001 executable built:
-#I    Mon Aug 20 20:10:07 CEST 2001
+#I    Wed Feb 24 15:25:26 AWST 2016
 #I  Level 0 options:
 #I    statistics package = on
 #I    coinc processing messages = on
@@ -1072,6 +1079,7 @@ gap> ACEBinaryVersion();
 #I  Level 2 options:
 #I    host info = on
 "3.001"
+
 \endexample
 
 *Notes:*
@@ -1433,6 +1441,7 @@ false
 gap> ACEConjugatesForSubgroupNormalClosure( i : add );
 #I  ACEConjugatesForSubgroupNormalClosure: All (traceable) conjugates in subgp
 [  ]
+
 \endexample
 
 Though we know that $H$ is not equal to its normal closure, we did not
@@ -1450,6 +1459,7 @@ gap> IsCompleteACECosetTable( i );
 true
 gap> ACEStats( i ).index;
 20
+
 \endexample
 
 This time we got a new element, and after adding it  to  the  subgroup
@@ -1463,6 +1473,7 @@ gap> ACEConjugatesForSubgroupNormalClosure( i : add );
 [ b^-2*a*b^5, b*a*b^2 ]
 gap> ACEStats( i ).index;
 2
+
 \endexample
 
 Now we have the index that we expected. Another call to  the  function
@@ -1476,6 +1487,7 @@ gap> ACEConjugatesForSubgroupNormalClosure( i : add );
 [  ]
 gap> ACESubgroupGenerators( i );
 [ a*b^3, b*a*b^2, b^-1*a*b^4, b^-2*a*b^5 ]
+
 \endexample
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1506,9 +1518,9 @@ options (see~"ACEParameterOptions"), some of the  values  reported  by
 write <string> to the <i>th or  default  interactive  {\ACE}  process;
 <string> must be in exactly the form the  {\ACE}  standalone  expects.
 The command is  echoed  via  `Info'  at  `InfoACE'  level  4  (with  a
-```ToACE> ''' prompt); i.e.~do `SetInfoACELevel(4);' to  see  what  is
-transmitted  to  the  {\ACE}  binary.  `ACEWrite'  returns  `true'  if
-successful in writing to the stream of the interactive {\ACE} process,
+```ToACE> ''' prompt); i.e.~`SetInfoACELevel(4);'  will  allow  you to
+see what is transmitted to the {\ACE} binary. `ACEWrite' returns `true'
+if successful in writing to the stream of the interactive {\ACE} process,
 and `fail' otherwise.
 
 *Note:*

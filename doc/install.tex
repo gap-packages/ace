@@ -72,16 +72,19 @@ sufficient  to  call  the  `configure'  script  in  the  {\GAP}   home
 directory.
 
 The manual you are currently reading describes how to use  the  {\ACE}
-Package; it can be found in the `doc' subdirectory of the package.  If
-your manual does not have a table of contents or index, or  has  these
-but with  invalid  page  numbers  please  re-generate  the  manual  by
-executing
-
-\begintt
-./make_doc
-\endtt
-
-in the `doc' subdirectory.
+Package; it can be found in the `doc' subdirectory of the package. %If
+%your manual does not have a table of contents or index, or  has  these
+%but with  invalid  page  numbers  please  re-generate  the  manual  by
+%executing
+%
+%\begintt
+%./make_doc
+%\endtt
+%
+%in the `doc' subdirectory.
+%% The above commented out because we don't ordinarily ship `make_doc'
+%% and in any case they would need `tools.tar.gz' and various other
+%% things to run it.
 
 The subdirectory `standalone-doc' contains the file `ace3001.ps' which
 holds a version of the user manual for the {\ACE} standalone; it forms
@@ -100,13 +103,13 @@ If you encounter problems in installation please read the `README'.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{Loading the ACE Package}
 
-To use the {\ACE} Package you have  to  request  it  explicitly.  With
+To use the {\ACE} Package you have  to  request  it  explicitly. Since
 {\GAP} 4.4, this is done by calling
 
 \beginexample
 gap> LoadPackage("ace");
 ---------------------------------------------------------------------------
-Loading    ACE (Advanced Coset Enumerator) 5.1
+Loading    ACE (Advanced Coset Enumerator) 5.2
 GAP code by Greg Gamble <Greg.Gamble@uwa.edu.au> (address for correspondence)
        Alexander Hulpke (http://www.math.colostate.edu/~hulpke)
            [uses ACE binary (C code program) version: 3.001]
@@ -116,6 +119,7 @@ C code by  George Havas (http://www.itee.uq.edu.au/~havas)
                  For help, type: ?ACE
 ---------------------------------------------------------------------------
 true
+
 \endexample
 
 \atindex{option pkgbanner}{@option \noexpand`pkgbanner'}
@@ -126,7 +130,7 @@ now requires at least {\GAP}~4.4, this option has been removed. If you
 still have {\GAP}~4.3, you will need to use {\ACE}~4.1.
 
 \index{banner!suppression}
-The banner may be suppressed by providing the version string (`"5.1"')
+The banner may be suppressed by providing the version string (`"5.2"')
 as second argument and `false' as third argument to the  `LoadPackage'
 command.    The    `LoadPackage'    command    is     described     in
 Section~"ref:LoadPackage" in the {\GAP} Reference Manual.
@@ -134,9 +138,9 @@ Section~"ref:LoadPackage" in the {\GAP} Reference Manual.
 If {\GAP} cannot find a working binary, the call to `LoadPackage' will
 fail.
 
-If you want to load the {\ACE} package by default,  you  can  put  the
-`LoadPackage' command into your `.gaprc'  file  (see  Section~"ref:The
-.gaprc file" in the {\GAP} Reference Manual).
+If you want to load  the  {\ACE}  package  by   default,  you  can  put
+the  `LoadPackage' command into your `gaprc' (or  `.gaprc'  file)  (see
+Section~"ref:The gap.ini and gaprc files" in the {\GAP} Reference Manual).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%

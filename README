@@ -12,12 +12,11 @@ The GAP  interface (package) has been  written by Alexander Hulpke  and Greg
 Gamble. In order  to install the ACE  package you must get  the archive file
 e.g. `ace-XXX.tar.gz', for some version  number `XXX', (which includes the C
 source code of Havas and Ramsay). The  current version of the ACE package is
-5.1 (which interfaces with  version 3.001 of the ACE C  program of Havas and
-Ramsay). This  is the  last version  for GAP  4.4. It  has been  produced to
-include  all updates  and have  HTML manual  links that  work with  the last
-gapmacro-compiled versions of the main GAP 4.4 manuals. The next version ACE
-5.2  will have  no functional  change,  but the  HTML manual  links will  be
-compatible with the new GAP 4.5 manuals.
+5.2 (which interfaces with  version 3.001 of the ACE C  program of Havas and
+Ramsay). This  version has mainly been  produced to include all  updates and
+have HTML  manual links that work  with the GAPDoc-compiled versions  of the
+main  GAP 4.7  manuals. The  next version  ACE 5.3  will have  no functional
+change, but is planned to have GAPDoc generated manuals.
 
 The ACE  package provides  a mechanism to  replace GAP's  usual Todd-Coxeter
 coset enumerator by ACE, so that  functions that behind the scenes use coset
@@ -123,7 +122,7 @@ incorporated in ACE 3.001 which we now use.
 
 ACE has been compiled successfully with the following C compiler:
 
-   gcc (GCC) 4.2.4 (Ubuntu 4.2.4-1ubuntu4)
+   gcc version 4.8.4 (Ubuntu 4.8.4-2ubuntu1~14.04.1)
 
 and is presumed to compile with any modern version of C compiler.
 
@@ -157,5 +156,6 @@ the problem; so please include:
     Perth WA 6845,
     Australia
     e-mail: Greg.Gamble@uwa.edu.au
-    www:    http://school.maths.uwa.edu.au/~gregg
-  -- 30 April, 2002; 22 December, 2003; 26 January, 2006; 25 January, 2012.
+    www:    http://staffhome.ecm.uwa.edu.au/~00021149
+  -- 30 April, 2002; 22 December, 2003; 26 January, 2006; 25 January, 2012,
+     24 February, 2016.
