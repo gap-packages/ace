@@ -9,9 +9,8 @@ SetPackageInfo( rec(
 
   PackageName := "ACE",
   Subtitle    := "Advanced Coset Enumerator",
-  Version     := "5.1",
-  Date        := "22/01/2012",
-  ArchiveURL  := "http://school.maths.uwa.edu.au/~gregg/ACE/ace-5.1",
+  Version     := "5.2",
+  Date        := "24/02/2016",
   ArchiveFormats 
               := ".tar.gz",
 
@@ -33,7 +32,7 @@ SetPackageInfo( rec(
       IsAuthor      := true,
       IsMaintainer  := true,
       Email         := "Greg.Gamble@uwa.edu.au",
-      WWWHome       := "http://school.maths.uwa.edu.au/~gregg",
+      WWWHome       := "http://staffhome.ecm.uwa.edu.au/~00021149",
       PostalAddress := Concatenation( [
                          "Greg Gamble\n",
                          "Department of Mathematics and Statistics\n",
@@ -115,9 +114,18 @@ SetPackageInfo( rec(
 ##  and updating of the package in the GAP distribution.
 ##  
 
-  README_URL := "http://school.maths.uwa.edu.au/~gregg/ACE/README",
-  PackageInfoURL 
-             := "http://school.maths.uwa.edu.au/~gregg/ACE/PackageInfo.g",
+  SourceRepository := rec(
+    Type := "git",
+    URL := Concatenation( "https://github.com/gap-packages/", ~.PackageName ),
+  ),
+  IssueTrackerURL := Concatenation( ~.SourceRepository.URL, "/issues" ),
+  PackageWWWHome  := Concatenation( "https://gap-packages.github.io/", 
+                                    ~.PackageName ),
+  README_URL      := Concatenation( ~.PackageWWWHome, "/README" ),
+  PackageInfoURL  := Concatenation( ~.PackageWWWHome, "/PackageInfo.g" ),
+  ArchiveURL      := Concatenation( ~.SourceRepository.URL,
+                                    "/releases/download/v", ~.Version,
+                                    "/", ~.PackageName ,"-", ~.Version ),
 
 ##  Here you  must provide a short abstract explaining the package content 
 ##  in HTML format (used on the package overview Web page) and an URL 
@@ -132,8 +140,6 @@ SetPackageInfo( rec(
      interactive and non-interactive interface with the Todd-Coxeter coset\
      enumeration functions of the ACE (Advanced Coset Enumerator) C program.",
 
-  PackageWWWHome := "http://school.maths.uwa.edu.au/~gregg/ACE/",
-                  
 ##  On the GAP Website there is an online version of all manuals in the
 ##  GAP distribution. To handle the documentation of a package it is
 ##  necessary to have:
@@ -158,7 +164,7 @@ SetPackageInfo( rec(
     BookName  := "ACE",
     # format/extension can be one of .zoo, .tar.gz, .tar.bz2, -win.zip
     Archive   := 
-      "http://school.maths.uwa.edu.au/~gregg/ACE/ace-5.1.tar.gz",
+      "http://staffhome.ecm.uwa.edu.au/~00021149/ACE/ace-5.2.tar.gz",
     ArchiveURLSubset 
               := ["doc", "htm"],
     HTMLStart := "htm/chapters.htm",
@@ -256,4 +262,5 @@ SetPackageInfo( rec(
 
 ));
 
-
+#E
+#############################################################################
