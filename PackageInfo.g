@@ -159,7 +159,7 @@ BannerString := Concatenation(
 "           ", ~.Persons[4].FirstNames, " ", ~.Persons[4].LastName,
        " <", ~.Persons[4].Email, ">\n",
 "Co-maintainer: ", ~.Persons[5].FirstNames, " ", ~.Persons[5].LastName,
-      " <", ~.Persons[5].Email, ">\n\n",
+       " <", ~.Persons[5].Email, ">\n\n",
 "                 For help, type: ?ACE\n",
 "---------------------------------------------------------------------------",
 "\n" ),
