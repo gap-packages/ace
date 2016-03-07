@@ -4,8 +4,6 @@ PackageName := "ACE",
 Subtitle    := "Advanced Coset Enumerator",
 Version     := "5.2",
 Date        := "07/03/2016",
-ArchiveFormats
-            := ".tar.gz",
 
 Persons := [
   rec(
@@ -95,7 +93,8 @@ README_URL      := Concatenation( ~.PackageWWWHome, "/README" ),
 PackageInfoURL  := Concatenation( ~.PackageWWWHome, "/PackageInfo.g" ),
 ArchiveURL      := Concatenation( ~.SourceRepository.URL,
                                   "/releases/download/v", ~.Version,
-                                  "/", ~.PackageName ,"-", ~.Version ),
+                                  "/", ~.PackageName, "-", ~.Version ),
+ArchiveFormats  := ".tar.gz",
 
 AbstractHTML :=
   "The <span class=\"pkgname\">ACE</span> package provides both an \
