@@ -122,8 +122,8 @@ AvailabilityTest :=
   function()
     # Test for existence of the compiled binary
     if Filename(DirectoriesPackagePrograms("ace"), "ace") = fail then
-      Info(InfoWarning, 1,
-           "Package ``ACE'': The program `ace' is not compiled");
+      LogPackageLoadingMessage( PACKAGE_WARNING,
+          [ "The program `ace' is not compiled." ] );
       return fail;
     fi;
     return true;
