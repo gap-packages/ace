@@ -9,7 +9,7 @@
 
 gap> START_TEST( "Testing ACEDeleteSubgroupGenerators with bad input" );
 gap> G := PerfectGroup( 2^5*60, 2 );                 
-A5 2^4 E N 2^1                      
+A5 2^4 E N 2^1
 gap> F := FreeGroupOfFpGroup( G );
 <free group on the generators [ a, b, s, t, u, v, d ]>
 gap> a:=F.1;; b:=F.2;; s:=F.3;; t:=F.4;; u:=F.5;; v:=F.6;; d:=F.7;;
@@ -22,12 +22,12 @@ gap> rels := RelatorsOfFpGroup( G );
   b^-1*v*b*u^-1, d^-1*a^-1*d*a, d^-1*b^-1*d*b, d^-1*s^-1*d*s, d^-1*t^-1*d*t, 
   d^-1*u^-1*d*u, d^-1*v^-1*d*v ]
 gap> i := ACEStart( fgens, rels, [ b, t ] );
-1                                           
+1
 gap> ACEStats( i );
 rec( activecosets := 80, cputime := 0, cputimeUnits := "10^-2 seconds", 
   index := 80, maxcosets := 123, totcosets := 187 )
 gap> ACEDeleteSubgroupGenerators( i, [ t ] );             
-[ b ]                                        
+[ b ]
 gap> lev := InfoACELevel();
 1
 gap> SetInfoACELevel(3);
