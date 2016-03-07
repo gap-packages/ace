@@ -1,7 +1,7 @@
 #############################################################################
 ##
 #W  PackageInfo.g            ACE Package                          Greg Gamble
-#W                                                               Frank Lübeck
+#W                                                               Frank LÃ¼beck
 ##
 #H  @(#)$Id$
 
@@ -99,7 +99,7 @@ SetPackageInfo( rec(
 
   Status      := "accepted",
   CommunicatedBy 
-              := "Joachim Neubüser (Aachen)",
+              := "Joachim NeubÃ¼ser (Aachen)",
   AcceptDate  := "04/2001",
 
 ##  For a central overview of all packages and a collection of all package
