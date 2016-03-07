@@ -84,16 +84,15 @@ AcceptDate  := "04/2001",
 
 SourceRepository := rec(
   Type := "git",
-  URL := Concatenation( "https://github.com/gap-packages/", ~.PackageName ),
+  URL := "https://github.com/gap-packages/ace",
 ),
 IssueTrackerURL := Concatenation( ~.SourceRepository.URL, "/issues" ),
-PackageWWWHome  := Concatenation( "https://gap-packages.github.io/",
-                                  ~.PackageName ),
+PackageWWWHome  := "https://gap-packages.github.io/ace",
 README_URL      := Concatenation( ~.PackageWWWHome, "/README" ),
 PackageInfoURL  := Concatenation( ~.PackageWWWHome, "/PackageInfo.g" ),
 ArchiveURL      := Concatenation( ~.SourceRepository.URL,
                                   "/releases/download/v", ~.Version,
-                                  "/", ~.PackageName, "-", ~.Version ),
+                                  "/ace-", ~.Version ),
 ArchiveFormats  := ".tar.gz",
 
 AbstractHTML :=
