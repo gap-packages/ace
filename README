@@ -15,8 +15,12 @@ source code of Havas and Ramsay). The  current version of the ACE package is
 5.2 (which interfaces with  version 3.001 of the ACE C  program of Havas and
 Ramsay). This  version has mainly been  produced to include all  updates and
 have HTML  manual links that work  with the GAPDoc-compiled versions  of the
-main  GAP 4.7  manuals. The  next version  ACE 5.3  will have  no functional
-change, but is planned to have GAPDoc generated manuals.
+main  GAP  4.7 manuals.  The  next  version ACE  5.3  will  fix a  bug  that
+eventuated at  the time of ACE  5.1 with changes  to GAP brought in  for GAP
+4.5: in order to  enforce the ordering of options put  to ACE functions, ACE
+exploited an undocumented feature of GAP  record fields: up to GAP 4.4 their
+ordering was fixed, but  since GAP 4.5 this has no longer  been the case. We
+may also migrate to GAPDoc generated manuals in ACE 5.3.
 
 The ACE  package provides  a mechanism to  replace GAP's  usual Todd-Coxeter
 coset enumerator by ACE, so that  functions that behind the scenes use coset
@@ -35,20 +39,15 @@ the previous version (4.1) of ACE.
 You can download  `ace-XXX.tar.gz'  (where  `XXX'  is  the  package  version
 number) from the home page for the ACE package
 
-http://www.math.rwth-aachen.de/~Greg.Gamble/ACE/ (Germany)
+http://gap-packages.github.io/ace/
 
-or the Australian mirror
+or via the GAP web site
 
-http://http://staffhome.ecm.uwa.edu.au/~00021149/ACE/     (Perth, Australia)
+http://www.gap-system.org/Packages/ace.html
 
-or via the Packages links from the GAP sites, which also gives other archive
-types (.bz2, .zip etc.)
-
-http://www.gap-system.org/                       (UK)
-http://www.math.rwth-aachen.de/~GAP/             (Germany)
-
-If  you prefer  zoo,  zip  or tar.bz2  to  tar.gz  archives, substitute  the
-appropriate suffix in the above paths.
+If you prefer .zip or tar.bz2 to tar.gz archives, substitute the appropriate
+suffix in the  above paths. (Note that .zoo archives  haven't been supported
+since GAP 4.5.)
 
 Since the ACE package interfaces to an external binary, it is only usable in
 an  environment that  supports compiling  of the  binary, e.g.  a UNIX  or a
@@ -158,4 +157,4 @@ the problem; so please include:
     e-mail: Greg.Gamble@uwa.edu.au
     www:    http://staffhome.ecm.uwa.edu.au/~00021149
   -- 30 April, 2002; 22 December, 2003; 26 January, 2006; 25 January, 2012,
-     7 March, 2016.
+     11 March, 2016.

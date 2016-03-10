@@ -3,7 +3,7 @@ SetPackageInfo( rec(
 PackageName := "ACE",
 Subtitle    := "Advanced Coset Enumerator",
 Version     := "5.2",
-Date        := "07/03/2016",
+Date        := "11/03/2016",
 
 Persons := [
   rec(
@@ -128,7 +128,7 @@ PackageDoc  := rec(
 ),
 
 Dependencies := rec(
-  GAP := ">= 4.4",
+  GAP := ">= 4.7",
   NeededOtherPackages := [],
   SuggestedOtherPackages := [],
   ExternalConditions := []

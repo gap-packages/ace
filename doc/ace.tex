@@ -935,14 +935,17 @@ required. Option `pkgbanner' has been completely removed.
 
 \item{`5.1'}
 The files `configure' and `Makefile.in' were made more robust to ensure
-they will work well with both {\GAP} 4.4 and {\GAP} 4.
+they will work well with both {\GAP} 4.4 and {\GAP} 4. At the advent of
+{\GAP} 4.5, which was about the time {\ACE} 5.1  was  released,  option
+order behind the colon was no longer respected, but went unnoticed.
 
 \item{`5.2'}
 Added `SetInfoACELevel(3)' to `tst/aceds.tst', so that the ERROR message
 is visible. This mistake in the test file probably goes back to  version
 4.0. Other changes are due to making the documentation  compatible  with
 {\GAP} 4.7 manuals and {\ACE}'s new home on `GitHub' and using `git' for
-version control.
+version control. Fixing the lack of respect  for the ordering of options 
+is deferred to the next version of {\ACE}.
 
 \endlist
 

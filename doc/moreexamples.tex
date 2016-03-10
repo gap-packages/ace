@@ -46,6 +46,7 @@ brk> fgens := FreeGeneratorsOfFpGroup(FreeGroup("a"));
 brk> return;
 rec( index := 0, cputime := 13, cputimeUnits := "10^-2 seconds", 
   activecosets := 499998, maxcosets := 499998, totcosets := 499998 )
+
 \endexample
 
 The example shows that the {\ACE} package does allow  you  to  recover
@@ -56,6 +57,7 @@ points; so let us re-define `fgens' and start again:
 
 \beginexample
 gap> F := FreeGroup("a", "b");; fgens := FreeGeneratorsOfFpGroup(F);;
+
 \endexample
 
 \atindex{ACEStats}{@\noexpand`ACEStats'!example}
@@ -69,6 +71,7 @@ unless   we   set   `InfoACE'   to   a   level   of   at    least    2
 
 \beginexample
 gap> SetInfoACELevel(2);
+
 \endexample
 
 Calling `ACEStats' with arguments `fgens', `[]', `[]', defines a  free
@@ -83,6 +86,7 @@ gap> ACEStats(fgens, [], []);
 98)
 rec( index := 0, cputime := 10, cputimeUnits := "10^-2 seconds", 
   activecosets := 249998, maxcosets := 249998, totcosets := 249998 )
+
 \endexample
 
 The  line  starting  with   ```\#I  '''.  is  the  `Info'-ed  *results
@@ -128,6 +132,7 @@ gap> ACEStats(fgens, [], [] : start, sr := 1);
 #I    #---------------------------------
 rec( index := 0, cputime := 9, cputimeUnits := "10^-2 seconds", 
   activecosets := 249998, maxcosets := 249998, totcosets := 249998 )
+
 \endexample
 
 Observe that at `InfoACE' level 3, one also gets {\ACE}'s  banner.  We
@@ -151,6 +156,7 @@ gap> ACEStats(fgens, [], [] : print := [-1, 12]);
 98)
 rec( index := 0, cputime := 9, cputimeUnits := "10^-2 seconds", 
   activecosets := 249998, maxcosets := 249998, totcosets := 249998 )
+
 \endexample
 
 Essentially, because {\ACE} had  not  done  an  enumeration  prior  to
@@ -189,6 +195,7 @@ gap> ACEStats(fgens, [], [] : start, print := [-1, 12]);
 #I  ***
 rec( index := 0, cputime := 10, cputimeUnits := "10^-2 seconds", 
   activecosets := 249998, maxcosets := 249998, totcosets := 249998 )
+
 \endexample
 
 The values we gave to the `print' option, told  {\ACE}  to  print  the
@@ -252,6 +259,7 @@ gap> ACECosetTableFromGensAndRels(fgens, [], [] : start, print := [-1, 12],
 #I      12 ||     36      4     37     38       0   ba
 #I  ***
 fail
+
 \endexample
 
 Since, the enumeration overflowed and the  `silent'  option  was  set,
@@ -272,6 +280,14 @@ done. It turns out that the table displayed via the `print' option  is
 already in `lenlex' standard form; so despite the differences  in  the
 {\GAP} versions, each version of {\GAP} since {\GAP}  4.2  has  output
 the same table.
+
+*Note:* Sinec the order options are passed to {\ACE} behind the colon,
+has  not been honoured since {\GAP} 4.5 (at about the time {\ACE}  5.1
+was released in 2012), the  behaviour  exhibited  below is  no  longer 
+observed. To approximately  get  the behaviour below,  omit the option
+`start'.  This option is inserted  anyway,  if  a user  omits it,  and 
+importantly is inserted after the `max' option is  put  to  the {\ACE}
+binary.
 
 \beginexample
 gap> ACECosetTableFromGensAndRels(fgens, [], [] : max := 12,
@@ -318,6 +334,7 @@ gap> ACECosetTableFromGensAndRels(fgens, [], [] : max := 12,
   [ 3, 1, 9, 0, 0, 2, 0, 0, 0, 0, 0, 4 ], 
   [ 4, 7, 10, 0, 1, 0, 0, 2, 0, 0, 3, 0 ], 
   [ 5, 8, 11, 1, 0, 0, 2, 0, 0, 3, 0, 0 ] ]
+
 \endexample
 
 Observe, that despite the fact that {\ACE} is  able  to  define  coset
@@ -384,6 +401,7 @@ rec( enumeration := "G", subgroup := "H", workspace := 1000000,
   path := 0, row := 1, mendelsohn := 0, no := 0, lookahead := 0, 
   compaction := 10, ct := 0, rt := 0, fill := 7, pmode := 3, psize := 256, 
   dmode := 4, dsize := 1000 )
+
 \endexample
 
 Observe that the `ACEStart' call returned an integer (1, here). All  8
@@ -410,6 +428,7 @@ version of `ACEStats' (see~"ACEStats!interactive") :
 gap> ACEStats(1); # The interactive version of ACEStats takes 1 or no arg'ts
 rec( index := 0, cputime := 10, cputimeUnits := "10^-2 seconds", 
   activecosets := 249998, maxcosets := 249998, totcosets := 249998 )
+
 \endexample
 
 To display 12 lines of the  coset  table  with  coset  representatives
@@ -437,6 +456,7 @@ gap> ACEDisplayCosetTable(1, [-1, 12]);
 #I      11 ||     33     34      3     35       0   AB
 #I      12 ||     36      4     37     38       0   ba
 #I  ------------------------------------------------------------
+
 \endexample
 
 Still with the same interactive {\ACE} process we can now emulate  the
@@ -455,6 +475,7 @@ gap> ACEStart(1 : max := 12);
 #I  ***
 #I  OVERFLOW (a=12 r=4 h=4 n=13; l=5 c=0.00; m=12 t=12)
 1
+
 \endexample
 
 Now the following `ACEDisplayCosetTable' command does  the  equivalent
@@ -478,6 +499,7 @@ gap> ACEDisplayCosetTable(1, [-1, 12]);
 #I      11 ||      0      0      3      0       0   AB
 #I      12 ||      0      4      0      0       0   ba
 #I  ------------------------------------------------------------
+
 \endexample
 
 Finally, we call `ACECosetTable' with 1 argument  (which  invokes  the
@@ -509,6 +531,7 @@ gap> ACECosetTable(1 : incomplete);
   [ 3, 1, 9, 0, 0, 2, 0, 0, 0, 0, 0, 4 ], 
   [ 4, 7, 10, 0, 1, 0, 0, 2, 0, 0, 3, 0 ], 
   [ 5, 8, 11, 1, 0, 0, 2, 0, 0, 3, 0, 0 ] ]
+
 \endexample
 
 Observe the line beginning ```\#I start = yes,'''  (the  first line in
@@ -581,6 +604,7 @@ gap> ACEStart(1, fgens, [a^2, b^3, (a*b)^5], []
 #I    #---------------------------------
 #I  INDEX = 60 (a=60 r=77 h=1 n=77; l=3 c=0.00; m=66 t=76)
 1
+
 \endexample
 
 Observe that the `fgens' and  subgroup  generators  (the  empty  list)
@@ -641,6 +665,7 @@ gap> ACEStart(1 : relators := ToACEWords(fgens, [a^2, b^3, (a*b)^5]),
 #I    #---------------------------------
 #I  INDEX = 60 (a=60 r=77 h=1 n=77; l=3 c=0.00; m=66 t=76)
 1
+
 \endexample
 
 Note the usage  of  `ToACEWords'  (see~"ToACEWords")  to  provide  the
@@ -668,6 +693,7 @@ generators:
 \beginexample
 gap> ACEGroupGenerators(1) = fgens;
 false
+
 \endexample
 
 Groan! We will just have to re-instantiate everything:
@@ -675,6 +701,7 @@ Groan! We will just have to re-instantiate everything:
 \beginexample
 gap> fgens := ACEGroupGenerators(1);;
 gap> F := GroupWithGenerators(fgens);; a := F.1;; b := F.2;;
+
 \endexample
 
 We now define a non-trivial subgroup, of small enough index,  to  make
@@ -724,6 +751,7 @@ gap> ACEStart(1, ACEGroupGenerators(1), ACERelators(1), [ a*b ]
 #I  CC: a=12 r=6 h=1 n=16; l=2 c=+0.00; d=0
 #I  INDEX = 12 (a=12 r=16 h=1 n=16; l=3 c=0.00; m=14 t=15)
 1
+
 \endexample
 
 Observe that we used `ACERelators(1)' (see~"ACERelators") to grab  the
@@ -760,6 +788,7 @@ gap> ACEDumpStatistics();
 #I    cdgap=0 cdidefn=0 cdidedn=0 cdpdl=0 cdpof=0
 #I    cdpdead=0 cdpdefn=0 cddefn=0
 #I    #---------------------------------
+
 \endexample
 
 The statistic `qcoinc=3' states what we had already observed,  namely,
@@ -792,6 +821,7 @@ gap> ACEDisplayCosetTable([-12]);
 #I      11 ||     10     12     12       2   baBabaB
 #I      12 ||     11     10     11       3   baBabab
 #I  ------------------------------------------------------------
+
 \endexample
 
 Note  how  the  pre-printout  compaction  phase  now  does  some  work
@@ -831,6 +861,7 @@ gap> ACEDisplayCosetTable([-12]);
 #I      11 ||     12     10     12       3   babaBab
 #I      12 ||     10     11     11       2   babaBaB
 #I  ------------------------------------------------------------
+
 \endexample
 
 Of course, the table above is not `lenlex' with respect to  the  order
@@ -885,6 +916,7 @@ gap> ACEDisplayCosetTable([-12]);
 #I      11 ||     12     12     12     10       3   babaBab
 #I      12 ||     11     11     10     11       2   babaBaB
 #I  ------------------------------------------------------------
+
 \endexample
 
 You may have noticed the use of {\ACE}'s `text' option  several  times
@@ -944,6 +976,7 @@ gap> ACEStats([r, s, t], [(r^t*r^-2)^-1, (s^r*s^-2)^-1, (t^s*t^-2)^-1], []
 >             : sims := 3);
 rec( index := 1, cputime := 0, cputimeUnits := "10^-2 seconds", 
   activecosets := 1, maxcosets := 673, totcosets := 673 )
+
 \endexample
 
 By replacing `sims := 3' with `sims := <i>' for <i> equal to~1,  5,  7
@@ -972,6 +1005,7 @@ gap> ACEEvenSims := function(fgens, rels, sgens, i, maxstart, maxstep)
 >      od;
 >      return ACEStats(j);
 >    end;;
+
 \endexample
 
 It turns out that one can duplicate the Sims' strategy 4 statistics in
@@ -983,6 +1017,7 @@ gap> ACEEvenSims([r, s, t], [(r^t*r^-2)^-1, (s^r*s^-2)^-1, (t^s*t^-2)^-1],
 >                [], 3, 14, 50);
 rec( index := 1, cputime := 0, cputimeUnits := "10^-2 seconds", 
   activecosets := 1, maxcosets := 393, totcosets := 393 )
+
 \endexample
 
 Setting `<maxstep> = 60' (and leaving the other parameters  the  same)
@@ -994,6 +1029,7 @@ gap> ACEEvenSims([r, s, t], [(r^t*r^-2)^-1, (s^r*s^-2)^-1, (t^s*t^-2)^-1],
 >                [], 3, 64, 80);
 rec( index := 1, cputime := 0, cputimeUnits := "10^-2 seconds", 
   activecosets := 1, maxcosets := 352, totcosets := 352 )
+
 \endexample
 
 Even though the (`lenlex') standardisation steps in the above examples

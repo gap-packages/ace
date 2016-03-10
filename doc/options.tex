@@ -176,6 +176,12 @@ standalone users.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{Honouring of the order in which ACE Options are passed}
 
+*Note:* Below we describe the intended behaviour,  but  unfortunately,
+since {\GAP} 4.5  (approximately  when  {\ACE} 5.1  was  released) the
+order of options  behind  the colon  is no longer honoured. Until this
+is fixed, if the order of {\ACE} options needs to be respected,  users
+should use {\ACE} interactively (see~"ACEStart").
+
 It  is  important  to  realize  that  {\ACE}'s   options   (even   the
 non-strategy options) are not orthogonal, i.e.\  the  order  in  which
 they are put to {\ACE} can be important. For this reason, except for a
