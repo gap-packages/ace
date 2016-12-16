@@ -1705,6 +1705,7 @@ int al0_enum(int mode, int style)
       case 58:
         if (result == -1 || result == 0)
           { cdapp = FALSE; }
+        break;
       case 59:
         if (result == -1)
           { cdapp = TRUE; }
