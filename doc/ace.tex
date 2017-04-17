@@ -94,7 +94,16 @@ which then can be called with all the options defined for  the  {\ACE}
 interface, not just the options `max' and `silent'. If `TCENUM' is set
 to `ACETCENUM' without any  further  action,  the  `default'  strategy
 (option) of the {\ACE} enumerator will be used (see  Chapter~"Strategy
-Options for ACE").
+Options for ACE"). This and other options can be modified in the  ways 
+described in Chapter~"Options for ACE". For instance,
+
+\beginexample 
+gap> FactorCosetAction(G,H : workspace:=10^9);
+
+\endexample
+
+will result in {\ACE} called with workspace of size $10^9$, instead of
+the default value.
 
 You can switch back to the coset  enumerator  built  into  the  {\GAP}
 library by assigning `TCENUM' to `GAPTCENUM'.
