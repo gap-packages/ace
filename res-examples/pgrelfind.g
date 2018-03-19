@@ -63,7 +63,7 @@ PGRelFind := function(Fgens, rels, sgens)
 ##      index check of the large subgroup. If the index is right,
 ##      double this workspace is used to check the index of <b>.
 ##     Value: a positive integer
-##     Default: 10^6
+##     Default: 10^8
 ##   Ntails : Approximate no. of tails generated. It is used to set
 ##      maxTailLength.
 ##     Value: a positive integer
@@ -112,7 +112,7 @@ local SetConstFromOption, NewRelator, F, a, b, t, permSgens, idx, orderS,
         w, Nwbisyllables;
 
     # Constants ... read `Length' as #a,b-bisyllables
-    ACEworkspace := SetConstFromOption("ACEworkspace", 10^6);
+    ACEworkspace := SetConstFromOption("ACEworkspace", 10^8);
     Nrandom := SetConstFromOption("Nrandom", 0);
     headLength := ExponentSumWord(whead, a);
     minTailLength := (headLength - 1) mod 2;

@@ -1080,7 +1080,7 @@ given machine.
 \beginitems
 
 \>`workspace:=<val>'{option workspace}@{option `workspace'}&
-Workspace size in words (default $10^6$);
+Workspace size in words (default $10^8$);
 `<val>' should be an expression that evaluates to a positive  integer,
 or a string of digits ending in a  `k',  `M'  or  `G'  representing  a
 multiplication  factor  of  $10^3$,  $10^6$  or  $10^9$,  respectively
@@ -1089,8 +1089,8 @@ workspace  of  $2\times10^6$  words.  Actually,  if   the   value   of
 `workspace' is entered as a string, each of `k', `M' or  `G'  will  be
 accepted in either upper or lower case. (Shortest abbreviation: `wo'.)
 
-By default, {\ACE} has a physical table size of $10^6$ words (i.e., $4
-\times 10^6$ bytes in the  default 32-bit environment).  The number of
+By default, {\ACE} has a physical table size of $10^8$ words (i.e., $4
+\times 10^8$ bytes in the  default 32-bit environment).  The number of
 coset numbers in the table is  the table size divided by the number of
 columns.   Although  the  number   of  coset  numbers  is  limited  to
 $2^{31}-1$ (if the C `int' type is 32 bits), the table size can exceed
