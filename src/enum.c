@@ -508,7 +508,7 @@ static int al0_rdefn(int cnt, Logic fillr, Logic saved)
 
   /* Forward scan, leaving ifront set to coset at left of leftmost hole in
   relator or to the last coset in the relator if no hole. */
-
+  l = 0;
   for (fwd = beg; fwd <= end; fwd++) 
     { 
     if ((l = CT(ifront, *fwd)) > 0) 
@@ -1206,6 +1206,7 @@ int al0_enum(int mode, int style)
   enough, then we'll never lose dedn's; but we could end up having to
   process _very_ large dedn stacks, which can be expensive. */
 
+  isave = FALSE;
   switch(style)
     {
     case 0:

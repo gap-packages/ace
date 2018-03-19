@@ -757,6 +757,7 @@ void al2_cmdloop(void)
   Wlist *p;
   Logic f, li, lj;
 
+  f = FALSE;
   while (TRUE)
     {
     /* Do the necessary for the next command (or end-of-file).  Note that

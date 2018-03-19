@@ -250,6 +250,7 @@ static Logic al0_cols12(int low, int high, Logic saved)
     { return(FALSE); }
 
   low1s = low2s = 0;
+  high1s = high2s = 0;
 
   inv1 = invcol[1];			/* Make these globals ? */
   inv2 = invcol[2];

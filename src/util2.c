@@ -247,7 +247,10 @@ void al2_aop(char *name)
   if (strcmp(name, "stdout") != 0)  
     { 
     if ((fop = fopen(name, "w")) == NULL)
-      { fprintf(fop, "can't open new output, using 'stdout'"); }
+      {
+      fop = stdout;
+      fprintf(fop, "can't open new output, using 'stdout'");
+      }
     else
       { setvbuf(fop, NULL, _IOLBF, 0); }	/* line buffered o/p */
     }

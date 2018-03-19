@@ -649,7 +649,7 @@ void al0_dump(Logic allofit)
   if (allofit)
     {
     if (fop == NULL)
-      { fprintf(fop, "fop=NULL"); }
+      { fop = stdout; fprintf(fop, "fop=NULL"); }
     else if (fop == stdout)
       { fprintf(fop, "fop=stdout"); }
     else if (fop == stderr)
