@@ -30,7 +30,7 @@
 ##    "version" . . the version of the current ACE binary
 ##
 InstallValue( ACEData,
-  rec( binary := Filename(DirectoriesPackagePrograms("ace"), "ace"),
+  rec( binary := ExternalFilename(DirectoriesPackagePrograms("ace"), "ace"),
        tmpdir := DirectoryTemporary(),
        ni     := rec(),
        io     := [] # Initially no ACEStart IO Streams
