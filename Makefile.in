@@ -3,7 +3,7 @@ CC=cc
 
 all: src/Makefile.in
 	mkdir -p bin/@GAPARCH@;
-	sed -e "s/@DATE@/`date`/g" src/Makefile.in >src/Makefile
+	sed -e "s/@DATE@/`date -u -r CHANGES`/g" src/Makefile.in >src/Makefile
 	(cd src; make)
 	mv src/ace bin/@GAPARCH@/ace
 
