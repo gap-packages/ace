@@ -329,11 +329,7 @@ void al2_dump(Logic allofit)
 
 void al2_opt(void)
   {
-#ifdef DATE
-  fprintf(fop, "%s executable built:\n  %s\n", ACE_VER, DATE);
-#else
-  fprintf(fop, "%s executable built: ??\n", ACE_VER);
-#endif
+  fprintf(fop, "%s executable\n", ACE_VER);
 
   fprintf(fop, "Level 0 options:\n");
 #ifdef AL0_STAT

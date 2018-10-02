@@ -83,13 +83,7 @@ SRC0  = coinc.c enum.c util0.c
 SRC0A = enum00.c enum01.c enum02.c
 
 # Level 2 (interactive interface)
-#
-# Note the setting of (THE)DATE, so that we can record the time/date of
-# this build in the executable (usage: "fprint(fop, "%s\n", DATE);")
-
-THEDATE = "'@DATE@'"
 
 ace: al2.h $(SRC2) al1.h $(SRC1) al0.h $(SRC0) $(SRC0A)
-	$(CC) $(FLAGS) $(EXTRA_CFLAGS) $(CFLAGS) -DDATE="\"$(THEDATE)\"" -o ace \
+	$(CC) $(FLAGS) $(EXTRA_CFLAGS) $(CFLAGS) -o ace \
 		$(SRC2) $(SRC1) $(SRC0) $(LDFLAGS)
-
