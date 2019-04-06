@@ -46,8 +46,7 @@ or via the GAP web site
 http://www.gap-system.org/Packages/ace.html
 
 If you prefer .zip or tar.bz2 to tar.gz archives, substitute the appropriate
-suffix in the  above paths. (Note that .zoo archives  haven't been supported
-since GAP 4.5.)
+suffix in the  above paths.
 
 Since the ACE package interfaces to an external binary, it is only usable in
 an  environment that  supports compiling  of the  binary, e.g.  a UNIX  or a
