@@ -21,7 +21,8 @@
 # -g        : for xxgdb debugger
 # -pg       : profiling info for gprof
 ########################################################################
-CC = gcc -Wall -pedantic -ansi -O2
+CC ?= gcc
+EXTRA_CFLAGS ?= -Wall -pedantic -ansi -O2
 
 ########################################################################
 # SunOS 5.5 boxes with `native' cc.
@@ -89,6 +90,6 @@ SRC0A = enum00.c enum01.c enum02.c
 THEDATE = "'@DATE@'"
 
 ace: al2.h $(SRC2) al1.h $(SRC1) al0.h $(SRC0) $(SRC0A)
-	$(CC) $(FLAGS) -DDATE="\"$(THEDATE)\"" -o ace \
-		$(SRC2) $(SRC1) $(SRC0)
+	$(CC) $(FLAGS) $(EXTRA_CFLAGS) $(CFLAGS) -DDATE="\"$(THEDATE)\"" -o ace \
+		$(SRC2) $(SRC1) $(SRC0) $(LDFLAGS)
 
