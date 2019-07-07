@@ -39,11 +39,11 @@ the previous version (4.1) of ACE.
 You can download  `ace-XXX.tar.gz'  (where  `XXX'  is  the  package  version
 number) from the home page for the ACE package
 
-http://gap-packages.github.io/ace/
+https://gap-packages.github.io/ace/
 
 or via the GAP web site
 
-http://www.gap-system.org/Packages/ace.html
+https://www.gap-system.org/Packages/ace.html
 
 If you prefer .zip or tar.bz2 to tar.gz archives, substitute the appropriate
 suffix in the  above paths.

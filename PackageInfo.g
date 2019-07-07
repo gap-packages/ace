@@ -30,7 +30,7 @@ Persons := [
     IsAuthor      := true,
     IsMaintainer  := false,
     Email         := "hulpke@math.colostate.edu",
-    WWWHome       := "http://www.math.colostate.edu/~hulpke",
+    WWWHome       := "https://www.math.colostate.edu/~hulpke",
     PostalAddress := Concatenation( [
                        "Alexander Hulpke\n",
                        "Department of Mathematics\n",
