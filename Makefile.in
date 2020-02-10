@@ -1,14 +1,17 @@
 # sample makefile
 CC=cc
+GAPPATH=@GAPPATH@
 
-all: src/Makefile.in
-	mkdir -p bin/@GAPARCH@;
-	sed -e "" src/Makefile.in >src/Makefile
-	(cd src; make)
-	mv src/ace bin/@GAPARCH@/ace
+all:
+	@mkdir -p bin/@GAPARCH@
+	cd src && make
+	@cp src/ace bin/@GAPARCH@/ace
 
 clean:	
-	rm -rf bin src/Makefile Makefile
+	rm -rf bin src/ace
+
+distclean: clean
+	rm -rf Makefile htm
 
 # use this target only if you want to build the manual from scratch.
 doc:
@@ -19,7 +22,7 @@ otherdoc:
 	(cd standalone-doc;dvips ace3001 -o)
 	(cd standalone-doc;rm ace3001.{toc,blg,log,aux})
 
-Makefile: configure Makefile.in
-	./configure "@GAPPATH@"
+Makefile: configure Makefile.in $(GAPPATH)/sysinfo.gap
+	./configure "$(GAPPATH)"
 
-.PHONY: all clean doc otherdoc
+.PHONY: all clean distclean doc otherdoc
