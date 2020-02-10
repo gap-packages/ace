@@ -2,8 +2,6 @@
 ##
 #W  CHANGES              ACE share package implementation         Greg Gamble
 ##
-#H  $Id$
-##
 
 ##  More properly, this should properly be called `HISTORY'. Here, I  give  a
 ##  brief history of the evolution of the ACE share package, mainly  so  that
