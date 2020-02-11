@@ -890,66 +890,6 @@ gives the current version of the {\ACE} Package (i.e.~the {\GAP}  code
 component; the  function  `ACEBinaryVersion'  (see~"ACEBinaryVersion")
 gives details of the C code compilation).
 
-*History of release versions*
-
-\beginlist
-
-\item{`3.001'}
-First release.
-
-\item{`3.002'}
-`ACEIgnoreUnknownDefault' (see~"ACEIgnoreUnknownDefault")  added.
-
-\item{}
-Option `continue'  changed  to  `continu'  (see~"option  continu")  --
-`continue' is a keyword in {\GAP} 4.3.
-
-\item{`3.003'}
-Initial value of `ACEIgnoreUnknownDefault' is now  `true'  (previously
-it was `false').
-
-\item{}
-`ACECosetTableFromGensAndRels' and the non-interactive `ACECosetTable'
-(except when producing an input script via  option  `ACEinfile'),  and
-the non-interactive `ACEStats' which previously  used  files  all  now
-invoke iostreams.
-
-\item{}
-Option `pkgbanner' used to control  the  printing  of  the  banner  on
-loading (see~"Loading the ACE Package").
-
-\item{`4.0'}
-Revised for {\GAP} 4.4, for which the option `pkgbanner' is no  longer
-available (most of its function is now provided by the third  argument
-of the `LoadPackage' function; see~"ref:LoadPackage").
-
-\item{}
-The package version number now has a single decimal  place,  to  avoid
-being confused with the binary version number.
-
-\item{`4.1'}
-Added $M_{12}$ presentation to `res-examples/pgrelfind.g'.
-
-\item{`5.0'}
-Pre-{\GAP} 4.4 compatibility removed.  Now  at  least  {\GAP}  4.4  is
-required. Option `pkgbanner' has been completely removed.
-
-\item{`5.1'}
-The files `configure' and `Makefile.in' were made more robust to ensure
-they will work well with both {\GAP} 4.4 and {\GAP} 4. At the advent of
-{\GAP} 4.5, which was about the time {\ACE} 5.1  was  released,  option
-order behind the colon was no longer respected, but went unnoticed.
-
-\item{`5.2'}
-Added `SetInfoACELevel(3)' to `tst/aceds.tst', so that the ERROR message
-is visible. This mistake in the test file probably goes back to  version
-4.0. Other changes are due to making the documentation  compatible  with
-{\GAP} 4.7 manuals and {\ACE}'s new home on `GitHub' and using `git' for
-version control. Fixing the lack of respect  for the ordering of options 
-is deferred to the next version of {\ACE}.
-
-\endlist
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
 %E
