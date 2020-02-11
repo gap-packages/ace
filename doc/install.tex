@@ -31,10 +31,9 @@ might type:
 \){\kernttindent}gap -l ";<myhomedir>/mygap"
 %endtt
 
-where <myhomedir> is the path to your  home  directory,  which  (since
-{\GAP}~4.3) may be replaced by a tilde.  The  empty  path  before  the
-semicolon is filled in by  the  default  path  of  the  {\GAP}~4  home
-directory.
+where <myhomedir> is the  path to your  home  directory,  which may be
+replaced by a tilde.  The empty path before the semicolon is filled in
+by the default path of the {\GAP}~4 home directory.
 
 After unpacking the archive, go to the newly created  `ace'  directory
 and call `./configure <path>' where <path> is the path to  the  {\GAP}
@@ -101,8 +100,8 @@ If you encounter problems in installation please read the `README'.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{Loading the ACE Package}
 
-To use the {\ACE} Package you have  to  request  it  explicitly. Since
-{\GAP} 4.4, this is done by calling
+To use the {\ACE} Package you have  to  request  it  explicitly.
+This is done by calling
 
 \beginexample
 gap> LoadPackage("ace");
@@ -120,13 +119,6 @@ Co-maintainer: Max Horn <max.horn@uni-siegen.de>
 true
 
 \endexample
-
-\atindex{option pkgbanner}{@option \noexpand`pkgbanner'}
-In version 4.1 of the {\ACE} package there was an  option  `pkgbanner'
-that allowed the user  some  control  on  how  the  banner  above  was
-displayed. This only worked with {\GAP}~4.3. Since, the {\ACE} package
-now requires at least {\GAP}~4.4, this option has been removed. If you
-still have {\GAP}~4.3, you will need to use {\ACE}~4.1.
 
 \index{banner!suppression}
 The banner may be suppressed by providing the version string (`"5.2"')

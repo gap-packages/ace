@@ -26,10 +26,7 @@ Alexander Hulpke and Greg Gamble, which is described in this manual.
 The interface links to an external binary and therefore is only usable
 under UNIX (see  Section~"Installing  the  ACE  Package"  for  how  to
 install  {\ACE}).  It  will  not  work  on  Windows.
-The current version requires at least {\GAP}~4.4. Users who
-still have {\GAP}~4.3,  must  use  {\ACE}  4.1.  (The  first  versions
-supported {\GAP}~4.2.) {\ACE} can be used through this interface in  a
-variety of ways:
+The current version requires at least {\GAP}~4.4.
 
 \beginlist%unordered
 
@@ -166,10 +163,8 @@ standardisations schemes were possible: `lenlex' and `semilenlex' (see
 Section~"Coset Table Standardisation Schemes"). The user  may  control
 which standardisation scheme is used by selecting either the  `lenlex'
 (see~"option  lenlex")  or  `semilenlex'   (see~"option   semilenlex")
-option;  otherwise  (since  {\GAP}~4.3)  the  table  is   standardised
-according to {\GAP}'s the  value  of  `CosetTableStandard'  (which  by
-default is `lenlex'; for {\GAP}~4.2, the variable `CosetTableStandard'
-didn't exist and the default standardisation scheme was `semilenlex').
+option;  otherwise  the  table  is  standardised according to {\GAP}'s
+the  value  of  `CosetTableStandard'  (which  by default is `lenlex').
 We provide  `IsACEStandardCosetTable'  (see~"IsACEStandardCosetTable")
 to determine whether a table (list of lists) is standard  relative  to
 {\GAP}'s default standardisation scheme, or with the  use  of  options
@@ -255,9 +250,8 @@ brk> return;
 \endexample
 
 Observe how the lines  after  the  ```Entering  break  read-eval-print
-loop''' announcement tell you *exactly* what to  do  (for  {\GAP}  4.2
-these  lines  are  instead   `Info'-ed   *before*   the   `break'-loop
-announcement). At  the  `break'-loop  prompt  `brk>'  we  relaxed  all
+loop''' announcement tell you *exactly* what to  do. At  the  
+`break'-loop  prompt  `brk>'  we  relaxed  all
 restrictions on `max' (by re-setting it to 0) and typed  `return;'  to
 leave the `break'-loop. The coset  enumeration  was  then  successful,
 allowing the computation of what turned out  to  be  a  trivial  coset

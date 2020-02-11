@@ -86,7 +86,7 @@ InstallValue(KnownACEOptions, rec(
   check := [5, [""]],
   redo := [4, [""]],
   compaction := [3, [0..100]],
-  continu := [4, [""]],       # "continue" is a GAP 4.3+ keyword
+  continu := [4, [""]],       # "continue" is a keyword
   cycles := [2, [""]],
   dmode := [4, [0..4]],
   dsize := [4, x -> x = 0 or IsPosInt(x)],
@@ -690,8 +690,7 @@ end);
 ##  A check among options for any settings of `lenlex' or  `semilenlex'.  The
 ##  latest such optname that is set to true is returned, or if  there  is  no
 ##  such setting a string representing the current GAP default  is  returned:
-##  for  GAP  4.2  "GAPsemilenlex"  was  returned;  since  GAP   4.3,   "GAP"
-##  concatenated  with  the  value  of  `CosetTableStandard'   (by   default,
+##  "GAP" concatenated  with the  value of  `CosetTableStandard' (by default,
 ##  "lenlex") is returned.
 ##
 InstallGlobalFunction(ACE_COSET_TABLE_STANDARD, function(options)
