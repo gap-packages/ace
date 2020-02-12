@@ -2,8 +2,9 @@ In this file we record the changes since the 3.xxx versions of the ACE
 package. Also look at gap/CHANGES  for  a  history  of  the  pre-3.xxx
 development.
 
-## Version 5.3 (2020-MM-DD)
+## Version 5.3 (2020-02-12)
   * Increase default workspace from 10^6 to 10^8 words
+  * Fix compatibility with Cygwin
   * Drop build date from binary
   * Allow overriding CC and use CFLAGS and LDFLAGS
   * Various janitorial changes
