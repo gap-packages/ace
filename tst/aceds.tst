@@ -23,9 +23,9 @@ gap> rels := RelatorsOfFpGroup( G );
   d^-1*u^-1*d*u, d^-1*v^-1*d*v ]
 gap> i := ACEStart( fgens, rels, [ b, t ] );
 1
-gap> ACEStats( i );
-rec( activecosets := 80, cputime := 0, cputimeUnits := "10^-2 seconds", 
-  index := 80, maxcosets := 123, totcosets := 187 )
+gap> stats:=ACEStats( i );; Unbind(stats.cputime); stats;
+rec( activecosets := 80, cputimeUnits := "10^-2 seconds", index := 80, 
+  maxcosets := 123, totcosets := 187 )
 gap> ACEDeleteSubgroupGenerators( i, [ t ] );             
 [ b ]
 gap> lev := InfoACELevel();
