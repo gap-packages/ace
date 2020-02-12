@@ -30,7 +30,7 @@
 ##    "version" . . the version of the current ACE binary
 ##
 InstallValue( ACEData,
-  rec( binary := ExternalFilename(DirectoriesPackagePrograms("ace"), "ace"),
+  rec( binary := Filename(DirectoriesPackagePrograms("ace"), "ace"),
        tmpdir := DirectoryTemporary(),
        ni     := rec(),
        io     := [] # Initially no ACEStart IO Streams
@@ -40,10 +40,10 @@ ACEData.infile  := Filename(ACEData.tmpdir, "in");
 ACEData.outfile := Filename(ACEData.tmpdir, "out");
 
 PrintTo(ACEData.infile, "\n");
-# Fire up ACE with a null input (ACEData.infile contains only a "\n")
-# ... to generate a banner (which has ACE's current version)
-Exec(Concatenation(ACEData.binary, "<", ACEData.infile, ">", ACEData.outfile));
-ACEData.version := StringFile( ACEData.outfile );
+# Fire up ACE with an empty input to generate a banner (which has ACE's
+# current version)
+ACEData.version := "";
+Process( DirectoryCurrent(), ACEData.binary, InputTextNone(), OutputTextString( ACEData.version, false ), [ ] );
 ACEData.scratch := PositionSublist(ACEData.version, "ACE") + 4;
 ACEData.version := ACEData.version{[ACEData.scratch ..
                                     Position(ACEData.version, ' ', 
