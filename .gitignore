@@ -17,6 +17,7 @@
 /doc/*.ind
 /doc/*.lab
 /doc/*.log
+/doc/*.six
 /doc/*.toc
 /doc/manual.pdf
 /doc/tthmacros.tex
