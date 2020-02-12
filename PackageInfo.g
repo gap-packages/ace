@@ -2,8 +2,9 @@ SetPackageInfo( rec(
 
 PackageName := "ACE",
 Subtitle    := "Advanced Coset Enumerator",
-Version     := "5.2",
-Date        := "11/03/2016",
+Version     := "5.3",
+Date        := "12/02/2020", # dd/mm/yyyy format
+License     := "MIT",
 
 Persons := [
   rec(
@@ -29,7 +30,7 @@ Persons := [
     IsAuthor      := true,
     IsMaintainer  := false,
     Email         := "hulpke@math.colostate.edu",
-    WWWHome       := "http://www.math.colostate.edu/~hulpke",
+    WWWHome       := "https://www.math.colostate.edu/~hulpke",
     PostalAddress := Concatenation( [
                        "Alexander Hulpke\n",
                        "Department of Mathematics\n",
@@ -80,17 +81,16 @@ Persons := [
     FirstNames    := "Max",
     IsAuthor      := false,
     IsMaintainer  := true,
-    Email         := "max.horn@math.uni-giessen.de",
-    WWWHome       := "http://www.quendi.de/math",
+    Email         := "max.horn@uni-siegen.de",
+    WWWHome       := "https://www.quendi.de/math",
     PostalAddress := Concatenation(
-                       "AG Algebra\n",
-                       "Mathematisches Institut\n",
-                       "Justus-Liebig-Universität Gießen\n",
-                       "Arndtstraße 2\n",
-                       "35392 Gießen\n",
+                       "Department Mathematik\n",
+                       "Universität Siegen\n",
+                       "Walter-Flex-Straße 3\n",
+                       "57072 Siegen\n",
                        "Germany" ),
-    Place         := "Gießen, Germany",
-    Institution   := "Justus-Liebig-Universität Gießen"
+    Place         := "Siegen, Germany",
+    Institution   := "Universität Siegen"
   )
 ],
 
@@ -105,7 +105,7 @@ SourceRepository := rec(
 ),
 IssueTrackerURL := Concatenation( ~.SourceRepository.URL, "/issues" ),
 PackageWWWHome  := "https://gap-packages.github.io/ace",
-README_URL      := Concatenation( ~.PackageWWWHome, "/README" ),
+README_URL      := Concatenation( ~.PackageWWWHome, "/README.md" ),
 PackageInfoURL  := Concatenation( ~.PackageWWWHome, "/PackageInfo.g" ),
 ArchiveURL      := Concatenation( ~.SourceRepository.URL,
                                   "/releases/download/v", ~.Version,

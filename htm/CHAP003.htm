@@ -292,7 +292,7 @@ group relators in  this  way  has  been  shown  to  produce  generally
 beneficial results in terms of the maximum number  of  cosets  numbers
 defined at any one time and the total number of coset numbers defined.
 In&nbsp;<a href="biblio.htm#CDHW73"><cite>CDHW73</cite></a>, it  was  reported  that  for  some  Macdonald  group
-<i>G</i>(<font face="symbol">a</font>,<font face="symbol">b</font>) examples, (pure) Felsch-type strategies (that  don't
+<i>G</i>(&#945;,&#946;) examples, (pure) Felsch-type strategies (that  don't
 include the given group  relators  as  subgroup  generators)  e.g.&nbsp;the
 <code>felsch := 0</code> strategy  (see&nbsp;<a href="CHAP005.htm#SSEC001.3">option  felsch</a>)  defined  significantly
 more coset numbers than HLT-type (e.g.&nbsp;the <code>hlt</code> strategy, see&nbsp;<a href="CHAP005.htm#SSEC001.5">option hlt</a>) strategies. The comparison of these strategies in terms of total
@@ -384,7 +384,7 @@ by  deleting  subgroup  generators  via  <code>ACEDeleteSubgroupGenerators</code
 <p><p>
 <a name = "I35"></a>
 
-The default standardisation scheme for <font face="Gill Sans,Helvetica,Arial">GAP</font> from <font face="Gill Sans,Helvetica,Arial">GAP</font>&nbsp;4.3 and  the
+The default standardisation scheme for <font face="Gill Sans,Helvetica,Arial">GAP</font> and  the
 standardisation scheme provided by <font face="Gill Sans,Helvetica,Arial">ACE</font> is the <code>lenlex</code>  scheme,  of
 Charles Sims&nbsp;<a href="biblio.htm#Sim94"><cite>Sim94</cite></a>. This scheme numbers cosets first  according
 to word-length and then according  to  a  lexical  ordering  of  coset
@@ -394,7 +394,7 @@ lexical ordering of <code>lenlex</code> is that implied by ordering that alphabe
 so that each generator is followed by its inverse, and the  generators
 appear in user-supplied order. See below for an  example  which  gives
 the first 20 lines  of  the  <code>lenlex</code>  standard  coset  table  of  the
-(infinite) group with presentation <font face="symbol">á</font><i>x</i>, <i>y</i>, <i>a</i>, <i>b</i>  | <i>x</i><sup>2</sup>, <i>y</i><sup>3</sup>, <i>a</i><sup>4</sup>, <i>b</i><sup>2</sup><font face="symbol">ñ</font>.
+(infinite) group with presentation &#9001;<i>x</i>, <i>y</i>, <i>a</i>, <i>b</i>  | <i>x</i><sup>2</sup>, <i>y</i><sup>3</sup>, <i>a</i><sup>4</sup>, <i>b</i><sup>2</sup>&#9002;.
 <p>
 In the table each  inverse  of  a  generator  is  represented  by  the
 corresponding uppercase letter (<i>X</i>  represents  the  inverse  of  <i>x</i>
@@ -441,13 +441,12 @@ according to the <code>lenlex</code> scheme.
 <p>
 <a name = "I36"></a>
 
-Another standardisation scheme for coset tables (the default scheme of
-versions of <font face="Gill Sans,Helvetica,Arial">GAP</font> up to  <font face="Gill Sans,Helvetica,Arial">GAP</font>&nbsp;4.2),  numbers  cosets  according  to
+Another standardisation scheme for coset tables numbers cosets according to
 coset representative word-length in the group generators  and  lexical
 ordering  imposed  by  the  user-supplied  ordering   of   the   group
 generators; it is known as <code>semilenlex</code> since  though  like  <code>lenlex</code>,
 generator inverses do not feature. Here again is 20 lines of the coset
-table of the group with presentation <font face="symbol">á</font><i>x</i>, <i>y</i>, <i>a</i>, <i>b</i>  | <i>x</i><sup>2</sup>, <i>y</i><sup>3</sup>, <i>a</i><sup>4</sup>, <i>b</i><sup>2</sup><font face="symbol">ñ</font>, this time <code>semilenlex</code> standardised.
+table of the group with presentation &#9001;<i>x</i>, <i>y</i>, <i>a</i>, <i>b</i>  | <i>x</i><sup>2</sup>, <i>y</i><sup>3</sup>, <i>a</i><sup>4</sup>, <i>b</i><sup>2</sup>&#9002;, this time <code>semilenlex</code> standardised.
 <p>
 <pre>
  coset no. |      x      y      a      b    rep've
@@ -558,5 +557,5 @@ hits the value of <code>loop</code>.
 <p>
 [<a href = "chapters.htm">Up</a>] [<a href ="CHAP002.htm">Previous</a>] [<a href ="CHAP004.htm">Next</a>] [<a href = "theindex.htm">Index</a>]
 <P>
-<address>ACE manual<br>March 2016
+<address>ACE manual<br>February 2020
 </address></body></html>

@@ -85,11 +85,11 @@ generators <var>fgens</var> giving relators for a finitely presented group; and
 <var>sgens</var>, a list of subgroup generators, again expressed  as  words  in
 the free generators <var>fgens</var>. Each of <var>fgens</var>, <var>rels</var> and  <var>sgens</var>  are
 given in the standard <font face="Gill Sans,Helvetica,Arial">GAP</font> format for finitely presented groups (See
-Chapter&nbsp;<a href="badlink:ref:Finitely Presented Groups">Finitely  Presented  Groups</a>  of  the  <font face="Gill Sans,Helvetica,Arial">GAP</font>   Reference
+Chapter&nbsp;<a href="https://www.gap-system.org/Manuals/doc/ref/chap47.html#X7AA982637E90B35A">Finitely  Presented  Groups</a>  of  the  <font face="Gill Sans,Helvetica,Arial">GAP</font>   Reference
 Manual).
 <p>
 All forms of <code>ACEStart</code> accept options described in  Chapters&nbsp;<a href="CHAP004.htm">Options for ACE</a> and&nbsp;<a href="CHAP005.htm">Strategy  Options  for  ACE</a>,  and  Appendix&nbsp;<a href="CHAP00D.htm">Other  ACE Options</a>, which are listed behind  a  colon  in  the  usual  way  (see
-<a href="badlink:ref:Function Calls">Function Calls</a> in the <font face="Gill Sans,Helvetica,Arial">GAP</font> Reference Manual).  The  reader  is
+<a href="https://www.gap-system.org/Manuals/doc/ref/chap4.html#X78C70489791FDF43">Function Calls</a> in the <font face="Gill Sans,Helvetica,Arial">GAP</font> Reference Manual).  The  reader  is
 strongly   encouraged   to   read   the   introductory   sections   of
 Chapter&nbsp;<a href="CHAP004.htm">Options  for  ACE</a>,  with  regard  to  options.  The   global
 mechanism (via <code>PushOptions</code>) of passing options is <strong>not</strong>  recommended
@@ -355,7 +355,7 @@ provided <code>ACEResurrectProcess</code> (see&nbsp;<a href="CHAP006.htm#SSEC003
 The <font face="Gill Sans,Helvetica,Arial">GAP</font> iostream of an interactive <font face="Gill Sans,Helvetica,Arial">ACE</font> process will also die  if
 the <font face="Gill Sans,Helvetica,Arial">ACE</font> binary has a segmentation fault. We do hope that this never
 happens to you, but if it does and the failure is  reproducible,  then
-it's a bug and we'd like to know about it. Please  read  the  <code>README</code>
+it's a bug and we'd like to know about it. Please read the file <code>README.md</code>
 that comes with the <font face="Gill Sans,Helvetica,Arial">ACE</font> package to find out what to  include  in  a
 bug report and who to email it to.
 <p>
@@ -510,8 +510,8 @@ information messages are printed to the <font face="Gill Sans,Helvetica,Arial">A
 <p>
 As an example (drawn from the discussion in <a href="biblio.htm#HR99ace"><cite>HR99ace</cite></a>) consider the
 enumeration   of   the   448   coset   numbers   of   the   subgroup
-<font face="symbol">á</font><i>a</i><sup>2</sup>,<i>a</i><sup><font face="symbol">-</font>1</sup><i>b</i> <font face="symbol">ñ</font> of the group
-<br clear="all" /><table border="0" width="100%"><tr><td><table align="center" cellspacing="0"  cellpadding="2"><tr><td nowrap="nowrap" align="center"> (8,7  | 2,3) = <font face="symbol">á</font><i>a</i>,<i>b</i>  | <i>a</i><sup>8</sup> = <i>b</i><sup>7</sup> = (<i>ab</i>)<sup>2</sup> = (<i>a</i><sup><font face="symbol">-</font>1</sup><i>b</i>)<sup>3</sup> = 1 <font face="symbol">ñ</font>&#183;</td></tr></table></td></tr></table>
+&#9001;<i>a</i><sup>2</sup>,<i>a</i><sup>&#8722;1</sup><i>b</i> &#9002; of the group
+<br clear="all" /><table border="0" width="100%"><tr><td><table align="center" cellspacing="0"  cellpadding="2"><tr><td nowrap="nowrap" align="center"> (8,7  | 2,3) = &#9001;<i>a</i>,<i>b</i>  | <i>a</i><sup>8</sup> = <i>b</i><sup>7</sup> = (<i>ab</i>)<sup>2</sup> = (<i>a</i><sup>&#8722;1</sup><i>b</i>)<sup>3</sup> = 1 &#9002;&#183;</td></tr></table></td></tr></table>
 There are 4!=24  relator  orderings  and  2<sup>4</sup>=16  combinations  of
 relator or inverted relator. Exponents are  taken  into  account  when
 rotating relators, so the relators given give rise to 1, 1,  2  and  2
@@ -654,7 +654,7 @@ establishes <code>ACEData.io[</code><var>i</var><code>].args.fgens</code>, if  n
 <code>ACEData.io[</code><var>i</var><code>].args.fgens</code>.  As  a  side-effect,  if  any   of   the
 remaining       fields       of       <code>ACEData.io[</code><var>i</var><code>].args</code>        or
 <code>ACEData.io[</code><var>i</var><code>].acegens</code> are unset, they  are  also  set.  Note  that
-<font face="Gill Sans,Helvetica,Arial">GAP</font> provides  <code>GroupWithGenerators</code>  (see&nbsp;<a href="badlink:ref:GroupWithGenerators">GroupWithGenerators</a>
+<font face="Gill Sans,Helvetica,Arial">GAP</font> provides  <code>GroupWithGenerators</code>  (see&nbsp;<a href="https://www.gap-system.org/Manuals/doc/ref/chap39.html#X8589EF9C7B658B94">GroupWithGenerators</a>
 in the <font face="Gill Sans,Helvetica,Arial">GAP</font> Reference Manual) to establish a free group on  a  given
 set of already-defined generators.
 <p>
@@ -1463,9 +1463,9 @@ where we know pretty well what to expect.
 <p>
 Let <i>G</i> be the group, isomorphic to the symmetric  group  <i>S</i><sub>6</sub>,  with
 the presentation
-<br clear="all" /><table border="0" width="100%"><tr><td><table align="center" cellspacing="0"  cellpadding="2"><tr><td nowrap="nowrap" align="center"> { <i>a</i>, <i>b</i>  | <i>a</i><sup>2</sup>, <i>b</i><sup>6</sup>, (<i>ab</i><sup><font face="symbol">-</font>1</sup><i>ab</i>)<sup>3</sup>, (<i>ab</i><sup><font face="symbol">-</font>1</sup><i>ab</i><sup>2</sup>)<sup>4</sup>, (<i>ab</i>)<sup>5</sup>, (<i>ab</i><sup><font face="symbol">-</font>2</sup><i>ab</i><sup>2</sup>)<sup>2</sup> } </td></tr></table></td></tr></table>
-(from  <a href="biblio.htm#CM72"><cite>CM72</cite></a>),  and  let  <i>H</i>  be  the  subgroup  <font face="symbol">á</font><i>ab</i><sup>3</sup> <font face="symbol">ñ</font>. There is an isomorphism <font face="symbol">f</font> from <i>G</i> to <i>S</i><sub>6</sub> mapping <i>a</i>
-onto (1,2) and <i>ab</i><sup>3</sup> onto (1,2,3,4,5,6). It follows  that  <font face="symbol">f</font>
+<br clear="all" /><table border="0" width="100%"><tr><td><table align="center" cellspacing="0"  cellpadding="2"><tr><td nowrap="nowrap" align="center"> { <i>a</i>, <i>b</i>  | <i>a</i><sup>2</sup>, <i>b</i><sup>6</sup>, (<i>ab</i><sup>&#8722;1</sup><i>ab</i>)<sup>3</sup>, (<i>ab</i><sup>&#8722;1</sup><i>ab</i><sup>2</sup>)<sup>4</sup>, (<i>ab</i>)<sup>5</sup>, (<i>ab</i><sup>&#8722;2</sup><i>ab</i><sup>2</sup>)<sup>2</sup> } </td></tr></table></td></tr></table>
+(from  <a href="biblio.htm#CM72"><cite>CM72</cite></a>),  and  let  <i>H</i>  be  the  subgroup  &#9001;<i>ab</i><sup>3</sup> &#9002;. There is an isomorphism &#981; from <i>G</i> to <i>S</i><sub>6</sub> mapping <i>a</i>
+onto (1,2) and <i>ab</i><sup>3</sup> onto (1,2,3,4,5,6). It follows  that  &#981;
 maps <i>ab</i><sup>3</sup> into <i>A</i><sub>6</sub>. So we know that the normal closure of <i>H</i>  has
 index 2 in <i>G</i>. Let us observe this via <font face="Gill Sans,Helvetica,Arial">ACE</font>.
 <p>
@@ -1625,5 +1625,5 @@ wait indefinitely.
 <p>
 [<a href = "chapters.htm">Up</a>] [<a href ="CHAP005.htm">Previous</a>] [<a href ="CHAP00A.htm">Next</a>] [<a href = "theindex.htm">Index</a>]
 <P>
-<address>ACE manual<br>March 2016
+<address>ACE manual<br>February 2020
 </address></body></html>

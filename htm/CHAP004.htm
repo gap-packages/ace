@@ -60,7 +60,7 @@ gap&gt; RecNames(KnownACEOptions);
 </pre>
 <p>
 (See Section&nbsp;<a href="CHAP004.htm#SECT008">The KnownACEOptions Record</a>.) Also, from within a <font face="Gill Sans,Helvetica,Arial">GAP</font>
-session, you may use <font face="Gill Sans,Helvetica,Arial">GAP</font>'s help browser (see Chapter&nbsp;<a href="badlink:ref:The Help System">The  Help System</a> in the  <font face="Gill Sans,Helvetica,Arial">GAP</font>  Reference  Manual);  to  find  out  about  any
+session, you may use <font face="Gill Sans,Helvetica,Arial">GAP</font>'s help browser (see Chapter&nbsp;<a href="https://www.gap-system.org/Manuals/doc/ref/chap2.html#X8755A2C67B197C63">The  Help System</a> in the  <font face="Gill Sans,Helvetica,Arial">GAP</font>  Reference  Manual);  to  find  out  about  any
 particular <font face="Gill Sans,Helvetica,Arial">ACE</font> option, simply type: ``<code>?option  </code><var>option</var><code></code>'',  where
 <var>option</var> is one of the options listed above without any quotes, e.g.
 <p>
@@ -89,10 +89,10 @@ two usual mechanisms provided by <font face="Gill Sans,Helvetica,Arial">GAP</fon
 <ul>
 <p>
 <li> options may be set globally using the function <code>PushOptions</code>
-(see Chapter&nbsp;<a href="badlink:ref:Options Stack">Options Stack</a> in the <font face="Gill Sans,Helvetica,Arial">GAP</font> Reference  Manual); or
+(see Chapter&nbsp;<a href="https://www.gap-system.org/Manuals/doc/ref/chap8.html#X7FD84061873F72A2">Options Stack</a> in the <font face="Gill Sans,Helvetica,Arial">GAP</font> Reference  Manual); or
 <p>
 <li> options may be appended to the argument list of any function
-call, separated by a colon from the argument list  (see  <a href="badlink:ref:Function Calls">Function Calls</a> in the <font face="Gill Sans,Helvetica,Arial">GAP</font> Reference Manual), in which case  they  are  then
+call, separated by a colon from the argument list  (see  <a href="https://www.gap-system.org/Manuals/doc/ref/chap4.html#X78C70489791FDF43">Function Calls</a> in the <font face="Gill Sans,Helvetica,Arial">GAP</font> Reference Manual), in which case  they  are  then
 passed on recursively to any subsequent inner function call, which may
 in turn have options of their own.
 <p>
@@ -106,11 +106,11 @@ that prior to calling <code>ACEStart</code> the <code>OptionsStack</code> be emp
 <h2><a name="SECT002">4.2 Warnings regarding Options</a></h2>
 <p><p>
 As mentioned above, one can set options globally  using  the  function
-<code>PushOptions</code> (see Chapter&nbsp;<a href="badlink:ref:Options Stack">Options Stack</a> in the <font face="Gill Sans,Helvetica,Arial">GAP</font> Reference
+<code>PushOptions</code> (see Chapter&nbsp;<a href="https://www.gap-system.org/Manuals/doc/ref/chap8.html#X7FD84061873F72A2">Options Stack</a> in the <font face="Gill Sans,Helvetica,Arial">GAP</font> Reference
 Manual); however, options pushed onto  <code>OptionsStack</code>,  in  this  way,
 remain there  until  an  explicit  <code>PopOptions()</code>  call  is  made.  In
 contrast, options passed in the usual way behind a colon  following  a
-function's arguments (see <a href="badlink:ref:Function Calls">Function Calls</a> in the <font face="Gill Sans,Helvetica,Arial">GAP</font> Reference
+function's arguments (see <a href="https://www.gap-system.org/Manuals/doc/ref/chap4.html#X78C70489791FDF43">Function Calls</a> in the <font face="Gill Sans,Helvetica,Arial">GAP</font> Reference
 Manual)  are  local,  and  disappear  from  <code>OptionsStack</code>  after  the
 function has executed successfully; nevertheless, a function, that  is
 passed options this way, will also  see  any  global  options  or  any
@@ -119,7 +119,7 @@ unless those  options  are  over-ridden  by  options  passed  via  the
 function. Also note that duplication of  option  names  for  different
 programs  may  lead   to   misinterpretations.   Since   a   non-empty
 <code>OptionsStack</code> is potentially a mine-field for the  unwary  user,  the
-function  <code>ResetOptionsStack</code>  (see&nbsp;<a href="badlink:ref:ResetOptionsStack">ResetOptionsStack</a>   in   the
+function  <code>ResetOptionsStack</code>  (see&nbsp;<a href="https://www.gap-system.org/Manuals/doc/ref/chap8.html#X83D1190984DA3B85">ResetOptionsStack</a>   in   the
 Reference Manual) is now in the <font face="Gill Sans,Helvetica,Arial">GAP</font> library and
 <p>
 <a name = "SSEC002.1"></a>
@@ -613,9 +613,8 @@ is   described   in   the   notes   for    <code>ACEStandardCosetNumbering</code
 invoked, a side-effect is that any setting of the <code>asis</code>  (see&nbsp;<a href="CHAP004.htm#SSEC013.1">option asis</a>) option by the user is ignored.
 <p>
 The  <code>lenlex</code>  standardisation  scheme  is  the  default  coset  table
-standardisation  scheme  of  <font face="Gill Sans,Helvetica,Arial">GAP</font>  (since  version  4.3).   However,
-<code>semilenlex</code> was the standardisation scheme for versions of <font face="Gill Sans,Helvetica,Arial">GAP</font>  up
-to <font face="Gill Sans,Helvetica,Arial">GAP</font>&nbsp;4.2. Both schemes are described in detail in  Section&nbsp;<a href="CHAP003.htm#SECT004">Coset Table Standardisation Schemes</a>.
+standardisation  scheme  of  <font face="Gill Sans,Helvetica,Arial">GAP</font>. Alternatively, <code>semilenlex</code> can
+be used. Both schemes are described in detail in  Section&nbsp;<a href="CHAP003.htm#SECT004">Coset Table Standardisation Schemes</a>.
 <p>
 <dt><a name = "SSEC011.5"></a>
 <dt><li><code>semilenlex <dd></code>
@@ -626,10 +625,6 @@ The <code>semilenlex</code> scheme, numbers cosets  in  such  a  way  that  thei
 ``preferred'' (coset) representatives, in an  alphabet  consisting  of
 only the user-submitted generators, are  ordered  first  according  to
 <code>length</code> and then according to a <code>lexical</code> ordering.
-<p>
-<strong>Note:</strong>
-Up to <font face="Gill Sans,Helvetica,Arial">GAP</font>&nbsp;4.2, <code>semilenlex</code> was the default standardisation  scheme
-used by <font face="Gill Sans,Helvetica,Arial">GAP</font> (see also&nbsp;<a href="CHAP004.htm#SSEC011.4">option lenlex</a>).
 <p>
 <dt><a name = "SSEC011.6"></a>
 <dt><li><code>incomplete <dd></code>
@@ -643,13 +638,11 @@ raised  by  the  interface  to  <font face="Gill Sans,Helvetica,Arial">GAP</font
 case, a partial coset table, that is a valid <font face="Gill Sans,Helvetica,Arial">GAP</font> list of lists,  is
 returned. Each position of the table  without  a  valid  coset  number
 entry is filled with a zero. If  the  option  <code>silent</code>  is  also  set,
-<code>incomplete</code>  prevails.  Since  <font face="Gill Sans,Helvetica,Arial">GAP</font>&nbsp;4.3,  an  incomplete  table  is
+<code>incomplete</code>  prevails.  An  incomplete  table  is
 returned reduced (i.e.&nbsp;with  insignificant  coset  numbers  ---  those
 appearing only in their place of definition --- removed) and  <code>lenlex</code>
 standardised (regardless of whether  the  <code>semilenlex</code>  option  is  in
-force). (For GAP&nbsp;4.2, an incomplete table was returned  unstandardised
-unless the <code>lenlex</code> option (see&nbsp;<a href="CHAP004.htm#SSEC011.4">option lenlex</a>) was also set, and the
-table was also not reduced.) When an incomplete table is  returned,  a
+force). When an incomplete table is  returned,  a
 warning is emitted at <code>InfoACE</code> or <code>InfoWarning</code> level 1.
 <p>
 <dt><a name = "SSEC011.7"></a>
@@ -867,12 +860,12 @@ Section&nbsp;<a href="CHAP003.htm#SECT001">Enumeration Style</a>.
 <dt><a name = "SSEC013.4"></a>
 <dt><li><code>no:=</code><var>val</var><code> <dd></code>
 The number of group relators to include in the subgroup;  
-<code></code><var>val</var><code></code> should be an integer greater than or equal to <font face="symbol">-</font>1.
+<code></code><var>val</var><code></code> should be an integer greater than or equal to &#8722;1.
 <p>
 It is sometimes helpful to include the group relators into the list of
 the subgroup generators, in the sense that they are applied  to  coset
 number 1 at the start of an enumeration. A value of 0 for this  option
-turns this feature off and the (default) argument of <font face="symbol">-</font>1 includes all
+turns this feature off and the (default) argument of &#8722;1 includes all
 the relators. A positive argument includes  the  specified  number  of
 relators,  in  order.  The  <code>no</code>  option  affects  only  the   C style
 procedures.
@@ -940,7 +933,7 @@ total size of the table  and,  if  not,  fills  coset  table  rows  in
 standard order (i.e.&nbsp;C style; see Section&nbsp;<a href="CHAP003.htm#SECT001">Enumeration Style</a>) instead
 of filling gaps.
 <p>
-An  argument of  0  selects  the default  value  of <font face="symbol">ë</font>5(<i>n</i>+2)/4 <font face="symbol">û</font>,  where <i>n</i>  is the  number of  columns in  the  table.  This
+An  argument of  0  selects  the default  value  of &#x23A3;5(<i>n</i>+2)/4 &#x23A6;,  where <i>n</i>  is the  number of  columns in  the  table.  This
 default  fill factor  allows  a moderate  amount  of gap-filling.   If
 <code>fill</code> is  1, then there is  no gap-filling.  A large  value of <code>fill</code>
 can cause  what is in effect  infinite looping (resolved  by the coset
@@ -983,7 +976,7 @@ some integer <i>n</i> &gt; 0. (Shortest abbreviation: <code>psiz</code>.)
 The  preferred definition  queue is  implemented as  a  ring, dropping
 earliest entries. An argument of 0 selects  the default size of 256.
 Each  queue slot takes two words (i.e., 8 bytes),  and the  queue  can
-store up to 2<sup><i>n</i></sup><font face="symbol">-</font>1 entries.
+store up to 2<sup><i>n</i></sup>&#8722;1 entries.
 <p>
 </dl>
 <p>
@@ -1127,7 +1120,7 @@ given machine.
 <p>
 <dt><a name = "SSEC017.1"></a>
 <dt><li><code>workspace:=</code><var>val</var><code> <dd></code>
-Workspace size in words (default 10<sup>6</sup>);
+Workspace size in words (default 10<sup>8</sup>);
 <code></code><var>val</var><code></code> should be an expression that evaluates to a positive  integer,
 or a string of digits ending in a  <code>k</code>,  <code>M</code>  or  <code>G</code>  representing  a
 multiplication  factor  of  10<sup>3</sup>,  10<sup>6</sup>  or  10<sup>9</sup>,  respectively
@@ -1136,25 +1129,25 @@ workspace  of  2&times;10<sup>6</sup>  words.  Actually,  if   the   value   of
 <code>workspace</code> is entered as a string, each of <code>k</code>, <code>M</code> or  <code>G</code>  will  be
 accepted in either upper or lower case. (Shortest abbreviation: <code>wo</code>.)
 <p>
-By default, <font face="Gill Sans,Helvetica,Arial">ACE</font> has a physical table size of 10<sup>6</sup> words (i.e., 4 &times;10<sup>6</sup> bytes in the  default 32-bit environment).  The number of
+By default, <font face="Gill Sans,Helvetica,Arial">ACE</font> has a physical table size of 10<sup>8</sup> words (i.e., 4 &times;10<sup>8</sup> bytes in the  default 32-bit environment).  The number of
 coset numbers in the table is  the table size divided by the number of
 columns.   Although  the  number   of  coset  numbers  is  limited  to
-2<sup>31</sup><font face="symbol">-</font>1 (if the C <code>int</code> type is 32 bits), the table size can exceed
+2<sup>31</sup>&#8722;1 (if the C <code>int</code> type is 32 bits), the table size can exceed
 the 4GByte 32-bit limit if a suitable machine is used.
 <p>
 <dt><a name = "SSEC017.2"></a>
 <dt><li><code>time:=</code><var>val</var><code> <dd></code>
 Maximum execution time in seconds; <code></code><var>val</var><code></code> must be an integer  greater
-than or equal to <font face="symbol">-</font>1. (Shortest abbreviation: <code>ti</code>.)
+than or equal to &#8722;1. (Shortest abbreviation: <code>ti</code>.)
 <p>
 The <code>time</code> command  puts a time limit (in seconds) on  the length of a
-run. The default is <font face="symbol">-</font>1  which is no  time limit. If the  argument is
- <font face="symbol">³</font> 0 then the total elapsed time for this call is checked at the end
+run. The default is &#8722;1  which is no  time limit. If the  argument is
+ &#8805; 0 then the total elapsed time for this call is checked at the end
 of each pass through the enumerator's main loop, and if it's more than
 the limit the run is stopped and the current table returned.
 <p>
 Note that a limit of 0 performs exactly one pass  through  the  main
-loop, since 0  <font face="symbol">³</font> 0.
+loop, since 0  &#8805; 0.
 <p>
 The time  limit is approximate, in  the sense that  the enumerator may
 run for a longer, but never a shorter, time.  So, if there is, e.g., a
@@ -1173,7 +1166,7 @@ Loop limit; <code></code><var>val</var><code></code> should be a non-negative in
 <p>
 The core enumerator is organised as a state machine,  with  each  step
 performing an ``action'' (i.e., lookahead, compaction) or a  block  of
-actions (i.e.,  <font face="symbol">|</font><tt>ct</tt><font face="symbol">|</font>  coset  number  definitions,  <font face="symbol">|</font><tt>rt</tt><font face="symbol">|</font>  coset
+actions (i.e.,  &#124;<tt>ct</tt>&#124;  coset  number  definitions,  &#124;<tt>rt</tt>&#124;  coset
 number applications). The number  of  passes  through  the  main  loop
 (i.e., steps) is counted, and the enumerator can make an early  return
 when this count hits the value of <code>loop</code>. A value of 0, the default,
@@ -1290,14 +1283,14 @@ terminology: <strong>activecosets</strong> and <strong>maxcosets</strong>.
 <dt><a name = "SSEC017.7"></a>
 <dt><li><code>hole:=</code><var>val</var><code> <dd></code>
 Maximum percentage of holes allowed during an enumeration;
-<code></code><var>val</var><code></code> should be an integer in the range <font face="symbol">-</font>1 to 100.
+<code></code><var>val</var><code></code> should be an integer in the range &#8722;1 to 100.
 (Shortest abbreviation: <code>ho</code>.)
 <p>
 This is an experimental feature which  allows  an  enumeration  to  be
 terminated when the percentage of holes in the table exceeds  a  given
 value. In practice, calculating this is very expensive, and  it  tends
 to remain constant or  decrease  throughout  an  enumeration.  So  the
-feature doesn't seem very useful. The default value of <font face="symbol">-</font>1 turns this
+feature doesn't seem very useful. The default value of &#8722;1 turns this
 feature off. If you want more details, read the source code.
 <p>
 </dl>
@@ -1416,5 +1409,5 @@ used directly via the <font face="Gill Sans,Helvetica,Arial">ACE</font> standalo
 <p>
 [<a href = "chapters.htm">Up</a>] [<a href ="CHAP003.htm">Previous</a>] [<a href ="CHAP005.htm">Next</a>] [<a href = "theindex.htm">Index</a>]
 <P>
-<address>ACE manual<br>March 2016
+<address>ACE manual<br>February 2020
 </address></body></html>

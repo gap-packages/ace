@@ -33,10 +33,7 @@ Alexander Hulpke and Greg Gamble, which is described in this manual.
 The interface links to an external binary and therefore is only usable
 under UNIX (see  Section&nbsp;<a href="CHAP002.htm#SECT001">Installing  the  ACE  Package</a>  for  how  to
 install  <font face="Gill Sans,Helvetica,Arial">ACE</font>).  It  will  not  work  on  Windows.
-The current version requires at least <font face="Gill Sans,Helvetica,Arial">GAP</font>&nbsp;4.4. Users who
-still have <font face="Gill Sans,Helvetica,Arial">GAP</font>&nbsp;4.3,  must  use  <font face="Gill Sans,Helvetica,Arial">ACE</font>  4.1.  (The  first  versions
-supported <font face="Gill Sans,Helvetica,Arial">GAP</font>&nbsp;4.2.) <font face="Gill Sans,Helvetica,Arial">ACE</font> can be used through this interface in  a
-variety of ways:
+The current version requires at least <font face="Gill Sans,Helvetica,Arial">GAP</font>&nbsp;4.4.
 <p>
 <ul>
 <p>
@@ -86,13 +83,22 @@ gap&gt; TCENUM:=ACETCENUM;;
 </pre>
 <p>
 This    sets    the    function    <code>CosetTableFromGensAndRels</code>    (see
-Section&nbsp;<a href="badlink:ref:Coset Tables and Coset Enumeration">Coset  Tables  and  Coset  Enumeration</a>  in  the   <font face="Gill Sans,Helvetica,Arial">GAP</font>
+Section&nbsp;<a href="https://www.gap-system.org/Manuals/doc/ref/chap47.html#X7BD0CEBA7B225416">Coset  Tables  and  Coset  Enumeration</a>  in  the   <font face="Gill Sans,Helvetica,Arial">GAP</font>
 Reference Manual) to be  the  function  <code>ACECosetTableFromGensAndRels</code>
 (described in Section&nbsp;<a href="CHAP001.htm#SECT002">Using ACE Directly to Generate a Coset Table</a>),
 which then can be called with all the options defined for  the  <font face="Gill Sans,Helvetica,Arial">ACE</font>
 interface, not just the options <code>max</code> and <code>silent</code>. If <code>TCENUM</code> is set
 to <code>ACETCENUM</code> without any  further  action,  the  <code>default</code>  strategy
-(option) of the <font face="Gill Sans,Helvetica,Arial">ACE</font> enumerator will be used (see  Chapter&nbsp;<a href="CHAP005.htm">Strategy Options for ACE</a>).
+(option) of the <font face="Gill Sans,Helvetica,Arial">ACE</font> enumerator will be used (see  Chapter&nbsp;<a href="CHAP005.htm">Strategy Options for ACE</a>). This and other options can be modified in the  ways 
+described in Chapter&nbsp;<a href="CHAP004.htm">Options for ACE</a>. For instance,
+<p>
+<pre>
+gap&gt; FactorCosetAction(G,H : workspace:=10^9);
+
+</pre>
+<p>
+will result in <font face="Gill Sans,Helvetica,Arial">ACE</font> called with workspace of size 10<sup>9</sup>, instead of
+the default value.
 <p>
 You can switch back to the coset  enumerator  built  into  the  <font face="Gill Sans,Helvetica,Arial">GAP</font>
 library by assigning <code>TCENUM</code> to <code>GAPTCENUM</code>.
@@ -132,7 +138,7 @@ Here <var>fgens</var> is a list of free generators, <var>rels</var> a list of  w
 these generators giving relators for a finitely presented  group,  and
 <var>sgens</var> the list of subgroup generators, again expressed as  words  in
 the free generators. All these are given in the standard <font face="Gill Sans,Helvetica,Arial">GAP</font> format
-(see Chapter&nbsp;<a href="badlink:ref:Finitely Presented Groups">Finitely Presented Groups</a> of the  <font face="Gill Sans,Helvetica,Arial">GAP</font>  Reference
+(see Chapter&nbsp;<a href="https://www.gap-system.org/Manuals/doc/ref/chap47.html#X7AA982637E90B35A">Finitely Presented Groups</a> of the  <font face="Gill Sans,Helvetica,Arial">GAP</font>  Reference
 Manual). Note that the 3-argument form  of  <code>ACECosetTable</code>  described
 here is merely a synonym for <code>ACECosetTableFromGensAndRels</code>, and  that
 <code>ACECosetTable</code> may be called in a different  way  in  an  interactive
@@ -157,10 +163,8 @@ standardisations schemes were possible: <code>lenlex</code> and <code>semilenlex
 Section&nbsp;<a href="CHAP003.htm#SECT004">Coset Table Standardisation Schemes</a>). The user  may  control
 which standardisation scheme is used by selecting either the  <code>lenlex</code>
 (see&nbsp;<a href="CHAP004.htm#SSEC011.4">option  lenlex</a>)  or  <code>semilenlex</code>   (see&nbsp;<a href="CHAP004.htm#SSEC011.5">option   semilenlex</a>)
-option;  otherwise  (since  <font face="Gill Sans,Helvetica,Arial">GAP</font>&nbsp;4.3)  the  table  is   standardised
-according to <font face="Gill Sans,Helvetica,Arial">GAP</font>'s the  value  of  <code>CosetTableStandard</code>  (which  by
-default is <code>lenlex</code>; for <font face="Gill Sans,Helvetica,Arial">GAP</font>&nbsp;4.2, the variable <code>CosetTableStandard</code>
-didn't exist and the default standardisation scheme was <code>semilenlex</code>).
+option;  otherwise  the  table  is  standardised according to <font face="Gill Sans,Helvetica,Arial">GAP</font>'s
+the  value  of  <code>CosetTableStandard</code>  (which  by default is <code>lenlex</code>).
 We provide  <code>IsACEStandardCosetTable</code>  (see&nbsp;<a href="CHAP001.htm#SSEC002.2">IsACEStandardCosetTable</a>)
 to determine whether a table (list of lists) is standard  relative  to
 <font face="Gill Sans,Helvetica,Arial">GAP</font>'s default standardisation scheme, or with the  use  of  options
@@ -248,9 +252,8 @@ brk&gt; return;
 </pre>
 <p>
 Observe how the lines  after  the  ``<code>Entering  break  read-eval-print
-loop</code>'' announcement tell you <strong>exactly</strong> what to  do  (for  <font face="Gill Sans,Helvetica,Arial">GAP</font>  4.2
-these  lines  are  instead   <code>Info</code>-ed   <strong>before</strong>   the   <code>break</code>-loop
-announcement). At  the  <code>break</code>-loop  prompt  <code>brk&gt;</code>  we  relaxed  all
+loop</code>'' announcement tell you <strong>exactly</strong> what to  do. At  the  
+<code>break</code>-loop  prompt  <code>brk&gt;</code>  we  relaxed  all
 restrictions on <code>max</code> (by re-setting it to 0) and typed  <code>return;</code>  to
 leave the <code>break</code>-loop. The coset  enumeration  was  then  successful,
 allowing the computation of what turned out  to  be  a  trivial  coset
@@ -362,7 +365,7 @@ level, should be aquainted with the following function.
 <p>
 returns <code>true</code> if <var>gens</var>, a list of free group generators, are  in  an
 order which will  not  be  changed  by  <font face="Gill Sans,Helvetica,Arial">ACE</font>,  for  the  group  with
-presentation <font face="symbol">á</font><i>gens</i>   | <i>rels</i> <font face="symbol">ñ</font>, where  <var>rels</var>  is  a
+presentation &#9001;<i>gens</i>   | <i>rels</i> &#9002;, where  <var>rels</var>  is  a
 list   of   relators   (i.e.&nbsp;words   in   the   generators    <var>gens</var>).
 <code>IsACEGeneratorsInPreferredOrder</code> may also be called  in  a  different
 way         for         interactive          <font face="Gill Sans,Helvetica,Arial">ACE</font>          processes
@@ -409,8 +412,8 @@ result of which is parsed and returned as a <font face="Gill Sans,Helvetica,Aria
 <p>
 <dl compact>
 <p>
-<dt>&nbsp;<code>index</code> <dd>the index of the subgroup <font face="symbol">á</font><i>sgens</i>  <font face="symbol">ñ</font>  in
-<font face="symbol">á</font><i>fgens</i>   | <i>rels</i>  <font face="symbol">ñ</font>, or 0 if the enumeration  does
+<dt>&nbsp;<code>index</code> <dd>the index of the subgroup &#9001;<i>sgens</i>  &#9002;  in
+&#9001;<i>fgens</i>   | <i>rels</i>  &#9002;, or 0 if the enumeration  does
 not succeed;
 <p>
 <dt>&nbsp;<code>cputime</code> <dd>the total CPU  time  used  as  an  integer  number  of
@@ -617,7 +620,7 @@ Also provided are:
 <li><code>ACEReadResearchExample( </code><var>filename</var><code> ) F</code>
 <li><code>ACEReadResearchExample() F</code>
 <p>
-which perform <code>Read</code> (see Section&nbsp;<a href="badlink:ref:Read">Read</a> in the  <font face="Gill Sans,Helvetica,Arial">GAP</font>  Reference
+which perform <code>Read</code> (see Section&nbsp;<a href="https://www.gap-system.org/Manuals/doc/ref/chap9.html#X8373AC6B7D5F9167">Read</a> in the  <font face="Gill Sans,Helvetica,Arial">GAP</font>  Reference
 Manual) on <var>filename</var> or, with no argument,  the  file  with  filename
 <code>"pgrelfind.g"</code> in the <code>res-examples</code> directory;  e.g.&nbsp;the  effect  of
 running
@@ -778,7 +781,7 @@ limited.
 <p>
 The output of the <font face="Gill Sans,Helvetica,Arial">ACE</font> binary is, by default, not displayed. However
 the user may choose to see some, or all, of this output. This is  done
-via the <code>Info</code> mechanism  (see  Chapter&nbsp;<a href="badlink:ref:Info Functions">Info  Functions</a>  in  the
+via the <code>Info</code> mechanism  (see  Chapter&nbsp;<a href="https://www.gap-system.org/Manuals/doc/ref/chap7.html#X7A9C902479CB6F7C">Info  Functions</a>  in  the
 <font face="Gill Sans,Helvetica,Arial">GAP</font> Reference Manual). For this purpose, there is  the  <var>InfoClass</var>
 <code>InfoACE</code>. Each line of output from <font face="Gill Sans,Helvetica,Arial">ACE</font> is directed to  a  call  to
 <code>Info</code> and will be displayed for the user to see if the <code>InfoLevel</code> of
@@ -895,68 +898,8 @@ gives the current version of the <font face="Gill Sans,Helvetica,Arial">ACE</fon
 component; the  function  <code>ACEBinaryVersion</code>  (see&nbsp;<a href="CHAP006.htm#SSEC005.25">ACEBinaryVersion</a>)
 gives details of the C code compilation).
 <p>
-<strong>History of release versions</strong>
-<p>
-<dl compact>
-<p>
-<dt><code>3.001</code><dd>
-First release.
-<p>
-<dt><code>3.002</code><dd>
-<code>ACEIgnoreUnknownDefault</code> (see&nbsp;<a href="CHAP004.htm#SSEC011.2">ACEIgnoreUnknownDefault</a>)  added.
-<p>
-<dt><dd>
-Option <code>continue</code>  changed  to  <code>continu</code>  (see&nbsp;<a href="CHAP00D.htm#SSEC003.4">option  continu</a>)  --
-<code>continue</code> is a keyword in <font face="Gill Sans,Helvetica,Arial">GAP</font> 4.3.
-<p>
-<dt><code>3.003</code><dd>
-Initial value of <code>ACEIgnoreUnknownDefault</code> is now  <code>true</code>  (previously
-it was <code>false</code>).
-<p>
-<dt><dd>
-<code>ACECosetTableFromGensAndRels</code> and the non-interactive <code>ACECosetTable</code>
-(except when producing an input script via  option  <code>ACEinfile</code>),  and
-the non-interactive <code>ACEStats</code> which previously  used  files  all  now
-invoke iostreams.
-<p>
-<dt><dd>
-Option <code>pkgbanner</code> used to control  the  printing  of  the  banner  on
-loading (see&nbsp;<a href="CHAP002.htm#SECT002">Loading the ACE Package</a>).
-<p>
-<dt><code>4.0</code><dd>
-Revised for <font face="Gill Sans,Helvetica,Arial">GAP</font> 4.4, for which the option <code>pkgbanner</code> is no  longer
-available (most of its function is now provided by the third  argument
-of the <code>LoadPackage</code> function; see&nbsp;<a href="badlink:ref:LoadPackage">LoadPackage</a>).
-<p>
-<dt><dd>
-The package version number now has a single decimal  place,  to  avoid
-being confused with the binary version number.
-<p>
-<dt><code>4.1</code><dd>
-Added <i>M</i><sub>12</sub> presentation to <code>res-examples/pgrelfind.g</code>.
-<p>
-<dt><code>5.0</code><dd>
-Pre-<font face="Gill Sans,Helvetica,Arial">GAP</font> 4.4 compatibility removed.  Now  at  least  <font face="Gill Sans,Helvetica,Arial">GAP</font>  4.4  is
-required. Option <code>pkgbanner</code> has been completely removed.
-<p>
-<dt><code>5.1</code><dd>
-The files <code>configure</code> and <code>Makefile.in</code> were made more robust to ensure
-they will work well with both <font face="Gill Sans,Helvetica,Arial">GAP</font> 4.4 and <font face="Gill Sans,Helvetica,Arial">GAP</font> 4. At the advent of
-<font face="Gill Sans,Helvetica,Arial">GAP</font> 4.5, which was about the time <font face="Gill Sans,Helvetica,Arial">ACE</font> 5.1  was  released,  option
-order behind the colon was no longer respected, but went unnoticed.
-<p>
-<dt><code>5.2</code><dd>
-Added <code>SetInfoACELevel(3)</code> to <code>tst/aceds.tst</code>, so that the ERROR message
-is visible. This mistake in the test file probably goes back to  version
-4.0. Other changes are due to making the documentation  compatible  with
-<font face="Gill Sans,Helvetica,Arial">GAP</font> 4.7 manuals and <font face="Gill Sans,Helvetica,Arial">ACE</font>'s new home on <code>GitHub</code> and using <code>git</code> for
-version control. Fixing the lack of respect  for the ordering of options 
-is deferred to the next version of <font face="Gill Sans,Helvetica,Arial">ACE</font>.
-<p>
-</dl>
-<p>
 <p>
 [<a href = "chapters.htm">Up</a>] [<a href ="CHAP002.htm">Next</a>] [<a href = "theindex.htm">Index</a>]
 <P>
-<address>ACE manual<br>March 2016
+<address>ACE manual<br>February 2020
 </address></body></html>

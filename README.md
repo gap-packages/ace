@@ -1,267 +1,134 @@
-# GitHubPagesForGAP
+[![Travis build Status](https://travis-ci.org/gap-packages/ace.svg)](https://travis-ci.org/gap-packages/ace/builds)
+[![AppVeyor build Status](https://ci.appveyor.com/api/projects/status/github/gap-packages/ace?branch=master&svg=true)](https://ci.appveyor.com/project/gap-packages/ace)
+[![Code Coverage](https://codecov.io/github/gap-packages/ace/coverage.svg)](https://codecov.io/gh/gap-packages/ace)
 
-This repository can be used to quickly set up a website hosted by
-[GitHub](https://github.com/) for GAP packages using a GitHub repository.
-Specifically, this uses [GitHub pages](https://pages.github.com/)
-by adding a `gh-pages` branch to your package repository which
-contains data generated from the `PackageInfo.g` file of your package.
 
-## Initial setup
+# The ACE package
 
-The easiest way to do this is to run the `setup-gh-pages` shell script
-provided in the [GitHubPagesForGAP]() from within a git clone of your
-package's GitHub repository.
+The  ACE  package  provides  functions associated  with  Todd-Coxeter  coset
+enumeration by interfacing with the Advanced Coset Enumerator (ACE),
 
-In case this does not work, or if you want to really know what's going
-on, you can also follow the manual instructions described after the fold.
+ACE coset enumerator (C) 1995-2001 by George Havas and Colin Ramsay
+<http://staff.itee.uq.edu.au/havas>
 
-------
+from within GAP 4.
 
-The following instructions assume you do not already have a `gh-pages`
-branch in your repository. If you do have one, you should delete it before
-following these instructions.
+The GAP  interface (package) has been  written by Alexander Hulpke  and Greg
+Gamble. In order  to install the ACE  package you must get  the archive file
+e.g. `ace-XXX.tar.gz`, for some version  number `XXX`, (which includes the C
+source code of Havas and Ramsay).
 
-1. Go into your clone of your package repository.
+The ACE  package provides  a mechanism to  replace GAP's  usual Todd-Coxeter
+coset enumerator by ACE, so that  functions that behind the scenes use coset
+enumeration will use the ACE enumerator. The ACE enumerator may also be used
+explicitly; both non-interactively and interactively. However the package is
+used,  a plethora  of options  and strategies  are available  to assist  the
+user in  avoiding incomplete  coset enumerations.
 
-2. Setup a `gh-pages` branch in a `gh-pages` subdirectory.
+You can download  `ace-XXX.tar.gz`  (where  `XXX`  is  the  package  version
+number) from the home page for the ACE package
 
-   Users with a recent enough git version (recommended is >= 2.7.0)
-   can do this using a "worktree", via the following commands:
+https://gap-packages.github.io/ace/
 
-   ```sh
-   # Add a new remote pointing to the GitHubPagesForGAP repository
-   git remote add -f gh-gap https://github.com/gap-system/GitHubPagesForGAP
+or via the GAP web site
 
-   # Create a fresh gh-pages branch from the new remote
-   git branch gh-pages gh-gap/gh-pages --no-track
+https://www.gap-system.org/Packages/ace.html
 
-   # Create a new worktree and change into it
-   git worktree add gh-pages gh-pages
-   cd gh-pages
-   ```
+If you prefer .zip or tar.bz2 to tar.gz archives, substitute the appropriate
+suffix in the  above paths.
 
-   Everybody else should instead do the following, with the URL
-   in the initial clone command suitably adjusted:
+Since the ACE package interfaces to an external binary, it is only usable in
+an  environment that  supports compiling  of the  binary, e.g.  a UNIX  or a
+UNIX-like environment.
 
-   ```sh
-   # Create a fresh clone of your repository, and change into it
-   git clone https://github.com/USERNAME/REPOSITORY gh-pages
-   cd gh-pages
+## Installing the ACE package
 
-   # Add a new remote pointing to the GitHubPagesForGAP repository
-   git remote add gh-gap https://github.com/gap-system/GitHubPagesForGAP
-   git fetch gh-gap
+To install  the ACE package, move  the file `ace-XXX.tar.gz` into  the `pkg`
+directory  in which  you plan  to  install ACE.  Usually, this  will be  the
+directory `pkg` in the  hierarchy of your version of GAP  4. (However, it is
+also  possible  to  keep  an  additional `pkg`  directory  in  your  private
+directories,  see  section  "ref:Installing  GAP  Packages"  of  the  GAP  4
+reference manual for details on how to do this.)
 
-   # Create a fresh gh-pages branch from the new remote
-   git checkout -b gh-pages gh-gap/gh-pages --no-track
-   ```
+Then unpack `ace-XXX.tar.gz`,  which in most Linux environments  can be done
+by
 
-5. Add in copies of your `PackageInfo.g`, `README` (or `README.md`) and manual:
+    tar zxf ace-XXX.tar.gz
 
-   ```
-   cp -f ../PackageInfo.g ../README* .
-   cp -f ../doc/*.{css,html,js,txt} doc/
-   ```
+Go to  the newly created `ace`  directory and call `configure  <path>` where
+<path> is the path to the GAP  home directory. So for example if you install
+the package in the main `pkg` directory call
 
-6. Now run the `update.g` GAP script. This extracts data from your
-   `PackageInfo.g` file and puts that data into `_data/package.yml`.
-   From this, the website template can populate the web pages with
-   some sensible default values.
+    ./configure ../..
 
-   ```
-   gap update.g
-   ```
+In fact `../..`  is the default path.  So, if this is correct,  you may omit
+it. This  will fetch the architecture  type for which GAP  has been compiled
+last and create a `Makefile`. Now simply call
 
-7. Commit and push everything.
+    make
 
-   ```
-   git add PackageInfo.g README* doc/ _data/package.yml
-   git commit -m "Setup gh-pages based on GitHubPagesForGAP"
-   git push --set-upstream origin gh-pages
-   ```
+to compile the binary and to install it in the appropriate place.
 
-That's it. You can now see your new package website under
-https://USERNAME.github.io/REPOSITORY/ (of course after
-adjusting USERNAME and REPOSITORY suitably).
+Note that the current version of the configuration process only  sets  up
+directory paths. If you need a different compiler or  different  compiler
+options, you need to  edit  `src/Makefile`  prior  to  calling  `make`
+yourself.
 
+If you use this installation of GAP on different hardware  platforms  you
+will have to compile the binary for each  platform  separately.  This  is
+done by calling `configure` and `make` for the package  anew  immediately
+after compiling GAP itself  for  the  respective  architecture.  If  your
+version of GAP is already compiled (and has last  been  compiled  on  the
+same architecture) you do not need to compile GAP again, it is sufficient
+to call the `configure` script in the GAP home directory.
 
-## Using an existing gh-pages branch
+That's it. Now start GAP and type
 
-If you previously set up [GitHubPagesForGAP]() and thus already have a `gh-pages`
-branch, you may on occasion have need to make a fresh clone of your package
-repository, and then also would like to recreate the `gh-pages` directory.
+    LoadPackage("ace");
 
-The easiest way to do this is to run the `setup-gh-pages` shell script
-provided in the [GitHubPagesForGAP]() from within a git clone of your
-package's GitHub repository.
+The ACE banner should appear on the screen.
 
-In case this does not work, or if you want to really know what's going
-on, you can also follow the manual instructions described after the fold.
+For details on how to use the ACE package see the  package  documentation
+in the  `doc`  subdirectory  (view  either  `manual.dvi`  via  `xdvi`  or
+`manual.ps` via `ghostview` or `manual.pdf`  via  a  PDF  viewer),  which
+gives information on how to use ACE from within GAP. The ACE user  manual
+(`ace3001.ps`  or  `ace3001.pdf`)  in  the  `standalone-doc`   directory,
+explains how to use the ACE binary (i.e. the C program that is interfaced
+with by the package from within GAP) as a stand-alone.
 
-------
-
-Users with a recent enough git version (recommended is >= 2.7)
-can do this using a "worktree", via the following commands:
-
-   ```sh
-   git branch gh-pages origin/gh-pages
-   git worktree add gh-pages gh-pages
-   ```
-
-If you are using an older version of git, you can instead use a second clone
-of your repository instead:
-
-   ```sh
-   git clone -b gh-pages https://github.com/USERNAME/REPOSITORY gh-pages
-   ```
-
-
-## Adjusting the content and layout
-
-[GitHubPagesForGAP]() tries to automatically provide good defaults for
-most packages. However, you can tweak everything about it:
-
-* To adjust the page layout, edit the files `stylesheets/styles.css`
-and `_layouts/default.html`.
-
-* To adjust the content of the front page, edit `index.md` (resp.
-  for the content of the sidebar, edit `_layouts/default.html`
-
-* You can also add additional pages, in various formats (HTML,
-Markdown, Textile, ...).
-
-For details, please consult the [Jekyll](http://jekyllrb.com/)
-manual.
-
-
-## Testing the site locally
-
-If you would like to test your site on your own machine, without
-uploading it to GitHub (where it is visible to the public), you can do
-so by installing [Jekyll](http://jekyllrb.com/), the static web site
-generator used by GitHub to power GitHub Pages.
-
-Once you have installed Jekyll as described on its homepage, you can
-test the website locally as follows:
-
-1. Go to the `gh-pages` directory we created above.
-
-2. Run jekyll (this launches a tiny web server on your machine):
-
-   ```
-   jekyll serve -w
-   ```
-
-3. Visit the URL http://localhost:4000 in a web browser.
-
-
-## Updating after you made a release
-
-Whenever you make a release of your package (and perhaps more often than
-that), you will want to update your website. The easiest way is to use
-the `release` script from the [ReleaseTools][], which performs all
-the necessary steps for you, except for the very last of actually
-publishing the package (and it can do even that for you, if you
-pass the `-p` option to it).
-
-However, you can also do it manually. The steps for doing it are quite
-similar to the above:
-
-1. Go to the `gh-pages` directory we created above.
-
-2. Add in copies of your `PackageInfo.g`, `README` (or `README.md`) and manual:
-
-   ```
-   cp -f ../PackageInfo.g ../README* .
-   cp -f ../doc/*.{css,html,js,txt} doc/
-   ```
-
-3. Now run the `update.g` GAP script.
-
-4. Commit and push the work we have just done.
-
-   ```
-   git add PackageInfo.g README* doc/ _data/package.yml
-   git commit -m "Update web pages"
-   git push
-   ```
-
-A few seconds after you have done this, your changes will be online
-under https://USERNAME.github.io/REPOSITORY/ .
-
-
-## Updating to a newer version of GitHubPagesForGAP
-
-Normally you should not have to ever do this. However, if you really want to,
-you can attempt to update to the most recent version of [GitHubPagesForGAP]() via
-the following instructions. The difficulty of such an update depends on how
-much you tweaked the site after initially cloning [GitHubPagesForGAP]().
-
-1. Go to the `gh-pages` directory we created above.
-   Make sure that there are no uncommitted changes, as they will be lost
-   when following these instructions.
-
-2. Make sure the `gh-gap` remote exists and has the correct URL. If in doubt,
-   just re-add it:
-   ```
-   git remote remove gh-gap
-   git remote add gh-gap https://github.com/gap-system/GitHubPagesForGAP
-   ```
-
-3. Attempt to merge the latest GitHubPagesForGAP.
-   ```
-   git pull gh-gap gh-pages
-   ```
-
-4. If this produced no errors and just worked, skip to the next step.
-   But it is quite likely that you will have conflicts in the file
-   `_data/package.yml`, or in your `README` or `PackageInfo.g` files.
-   These can usually be resolved by entering this:
-   ```
-   cp ../PackageInfo.g ../README* .
-   gap update.g
-   git add PackageInfo.g README* _data/package.yml
-   ```
-   If you are lucky, these were the only conflicts (check with `git status`).
-   If no merge conflicts remain, finish with this command:
-   ```
-   git commit -m "Merge gh-gap/gh-pages"
-   ```
-   If you still have merge conflicts, and don't know how to resolve them, or
-   get stuck some other way, you can abort the merge process and revert to the
-   original state by issuing this command:
-   ```
-   git merge --abort
-   ```
-
-5. You should be done now. Don't forget to push your changes if you want them
-   to become public.
-
-
-## Packages using GitHubPagesForGAP
-
-The majority of packages listed on <https://gap-packages.github.io> use
-[GitHubPagesForGAP](). If you want some specific examples, here are some:
-
-* <https://gap-packages.github.io/anupq>
-* <https://gap-packages.github.io/cvec>
-* <https://gap-packages.github.io/genss>
-* <https://gap-packages.github.io/io>
-* <https://gap-packages.github.io/NormalizInterface>
-* <https://gap-packages.github.io/nq>
-* <https://gap-packages.github.io/orb>
-* <https://gap-packages.github.io/polenta>
-* <https://gap-packages.github.io/recog>
-
-
-## Contact
-
-Please submit bug reports, suggestions for improvements and patches via
-the [issue tracker](https://github.com/gap-system/GitHubPagesForGAP/issues).
-
-You can also contact me directly via [email](max@quendi.de).
-
-Copyright (c) 2013-2019 Max Horn
-
-[GitHubPagesForGAP]: https://github.com/gap-system/GitHubPagesForGAP
-[ReleaseTools]: https://github.com/gap-system/ReleaseTools
+The `src` subdirectory contains a copy of the C source code for ACE.  The
+only modification are those listed in  src/CHANGES.  In  particular,  the
+the following bug was fixed on 25 February, 2001.
+
+A bug was  discovered  in  ACE  3.000  on  22  December,  2000  that  was
+particularly manifested by the Linux gcc compilers listed below. The  bug
+was  reported  with  fix  by  Volker  Gebhardt  (thanks!)  and  caused  a
+segmentation fault when ACE output  coset  representatives.  The  fix  is
+incorporated in ACE 3.001 which we now use.
+
+ACE has been compiled successfully with the following C compiler:
+
+   gcc version 4.8.4 (Ubuntu 4.8.4-2ubuntu1~14.04.1)
+
+and is presumed to compile with any modern version of C compiler.
+
+If you encounter problems with the ACE binary, please contact one of  the
+C code authors:  George  Havas  <havas@itee.uq.edu.au>  or  Colin  Ramsay
+<cram@itee.uq.edu.au>.
+
+If you encounter problems at the GAP level, please submit an issue to
+<https://github.com/gap-packages/ace/issues>
+
+When sending a bug report, remember we will need to be able to  reproduce
+the problem; so please include:
+
+ * The version of GAP you are using; either look at  the  header  when
+   you start up GAP, or at the gap> prompt type: VERSION;
+ * The operating system you are using e.g. Linux, macOS, Windows, ...
+ * The compiler you used to compile ACE  and  the  options  you  used.
+   Type: gcc -v or: cc -version, and  look  in  src/Makefile  for  the
+   value of CC to find out.
+ * A script, either in GAP or standalone ACE,  that  demonstrates  the
+   bug, along with a description of why it's a  bug  (e.g.  by  adding
+   comments  to  the  script  -  recall,  comments,  both  in  GAP  or
+   standalone ACE, begin with a #).
