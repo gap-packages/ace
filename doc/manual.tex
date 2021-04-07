@@ -9,12 +9,7 @@
 %Y                      University of Queensland, Australia.
 %%
 \input ../../../doc/gapmacro
-\def\textendash{--}
-\def\a#1{\'}
 \Package{ACE}
-
-% HACK: compatibility with manualbib.xml.bib
-\def\textendash{--}
 
 \BeginningOfBook{ace}
 
@@ -22,7 +17,6 @@
 %%
 %F  UseReferences . . . . . . . . . . . . . . . . . .  specify references
 %%
-\UseReferences{../../../doc/ext}
 \UseReferences{../../../doc/ref}
 %
 %
@@ -58,7 +52,7 @@
 %
 \TableOfContents
 \FrontMatter
-\immediate\write\citeout{\bs bibdata{./manual,../../../doc/mrabbrev,../../../doc/manualbib.xml}}
+\immediate\write\citeout{\bs bibdata{./manual}}
 \Chapters
 \Input{ace}
 \Input{install}
