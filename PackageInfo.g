@@ -124,7 +124,6 @@ PackageDoc  := rec(
   PDFFile   := "doc/manual.pdf",
   SixFile   := "doc/manual.six",
   LongTitle := "Advanced Coset Enumerator",
-  Autoload  := true
 ),
 
 Dependencies := rec(
