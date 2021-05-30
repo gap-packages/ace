@@ -1,5 +1,5 @@
 # sample makefile
-CC=cc
+CC?=cc
 GAPPATH=@GAPPATH@
 
 all:
