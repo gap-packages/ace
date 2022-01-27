@@ -1,5 +1,4 @@
 [![Build Status](https://github.com/gap-packages/ace/workflows/CI/badge.svg?branch=master)](https://github.com/gap-packages/ace/actions?query=workflow%3ACI+branch%3Amaster)
-[![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/gap-packages/ace?branch=master&svg=true)](https://ci.appveyor.com/project/gap-packages/ace)
 [![Code Coverage](https://codecov.io/github/gap-packages/ace/coverage.svg)](https://codecov.io/gh/gap-packages/ace)
 
 
