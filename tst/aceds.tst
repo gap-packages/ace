@@ -8,7 +8,7 @@
 ##
 
 gap> START_TEST( "Testing ACEDeleteSubgroupGenerators with bad input" );
-gap> G := PerfectGroup( 2^5*60, 2 );                 
+gap> G := PerfectGroup( IsSubgroupFpGroup, 2^5*60, 2 );
 A5 2^4 E N 2^1
 gap> F := FreeGroupOfFpGroup( G );
 <free group on the generators [ a, b, s, t, u, v, d ]>
