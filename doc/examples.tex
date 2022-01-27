@@ -140,7 +140,7 @@ that the final table output here is `lenlex'  standardised.)
 
 \beginexample
 gap> SetInfoACELevel(3);           # So we can see the progress messages
-gap> G := PerfectGroup(2^5*60, 2);;# See previous example:
+gap> G := PerfectGroup(IsSubgroupFpGroup,2^5*60, 2);;# See previous example:
 gap>                               # "Example where ACE is made the
 gap>                               #  Standard Coset Enumerator"
 gap> fgens := FreeGeneratorsOfFpGroup(G);;
