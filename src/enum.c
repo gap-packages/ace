@@ -264,7 +264,7 @@ int al0_apply(int cos, int *beg, int *end, Logic defn, Logic save)
 
 static int al0_rl(int first, int last, Logic saved)
   {
-  int row,rel,i,ii,j,k,l;
+  int row,rel,i,ii,j,k,l = 0;
   int *pj, *pk, *fwd, *bwd;
   int ifront, iback;
 
@@ -359,7 +359,7 @@ static int al0_rl(int first, int last, Logic saved)
 
 static int al0_cl(int first, int last, Logic saved)
   {
-  int row,col,beg,end,i,j,ji,k;
+  int row,col,beg,end,i,j,ji,k = 0;
   int *pj, *pk, *fwd, *bwd;
   int ifront, iback;
 
