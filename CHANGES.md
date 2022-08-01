@@ -2,6 +2,12 @@ In this file we record the changes since the 3.xxx versions of the ACE
 package. Also look at gap/CHANGES  for  a  history  of  the  pre-3.xxx
 development.
 
+## Version 5.5 (2022-08-01)
+  * Work around a bug in the GAP help system that prevents it from finding
+    the HTML version of the ACE manual appendices. This affects searches in
+    these appendices when GAP is configured to open help in a web browser
+    instead of the terminal.
+
 ## Version 5.4 (2022-03-09)
   * Adapt test suite to changes to the library of perfect groups
   * Allow overriding compiler by setting the `CC` environment variable
