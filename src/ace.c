@@ -27,6 +27,9 @@ obtained!
 **************************************************************************/
 
 #include "al2.h"
+#ifdef AL2_HINFO
+#include <sys/utsname.h>
+#endif
 
 	/******************************************************************
         Stuff declared in al2.h
@@ -57,17 +60,20 @@ int main(void)
   fprintf(fop, "%s        %s", ACE_VER, al0_date());
   fprintf(fop, "=========================================\n");
 
-  /* If we're working on a `normal' Unix box, "uname -n" returns the name 
-  of the host, which we print out neatly at the start of a run.  (Of 
-  course, we could also access this using the "sys:...;" ACE command.)  If 
-  required, define AL2_HINFO in the make file.  We assume that the system()
-  call's output will go to fop!  This code could be expanded to print out 
-  any other information regarding the current host that is required. */
+  /* On POSIX systems, the uname() function retrieves the name of the host,
+  which we print out neatly at the start of a run.  (Of course, we could
+  also access this using the "sys:...;" ACE command.)  If required, define
+  AL2_HINFO in the make file.  This code could be expanded to print out any
+  other information regarding the current host that is required. */
 
 #ifdef AL2_HINFO
   fprintf(fop, "Host information:\n");
+  {
+    struct utsname name;
+    if (uname(&name) == 0)
+      fprintf(fop, "  name = %s\n", name.nodename);
+  }
   fflush(fop);
-  system("echo \"  name = `uname -n`\"");
 #endif
 
   switch(setjmp(env))
