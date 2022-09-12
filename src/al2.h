@@ -23,6 +23,14 @@ application in the form of a stand alone, interactive interface.
 
 #include <setjmp.h>	/* Needed for setjmp/longjmp jmp_buf type */
 
+#if __STDC_VERSION__ >= 202311L
+#define Noreturn [[noreturn]]
+#elif __STDC_VERSION__ >= 201112L
+#define Noreturn _Noreturn
+#else
+#define Noreturn
+#endif
+
 extern jmp_buf env;	/* Environment for error-recovery jump */
 
 	/******************************************************************
@@ -82,13 +90,9 @@ extern int intcnt, intarr[32];
 void  al2_init(void);
 char *al2_strdup(char*);
 int   al2_outlen(int);
-void  al2_continue(char*);
-#ifdef __GNUC__
-void  al2_restart(char*) __attribute__ ((noreturn));
-#else
-void  al2_restart(char*);
-#endif
-void  al2_abort(char*);
+Noreturn void  al2_continue(char*);
+Noreturn void  al2_restart(char*);
+Noreturn void  al2_abort(char*);
 
 void al2_aip(char*);
 void al2_aop(char*);
