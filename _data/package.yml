@@ -1,7 +1,7 @@
 name: ACE
-version: "5.5"
+version: "5.6"
 license: "MIT"
-date: 2022-08-01
+date: 2022-09-15
 description: |
     Advanced Coset Enumerator
 
@@ -29,7 +29,7 @@ packageinfo: https://gap-packages.github.io/ace/PackageInfo.g
 
 downloads:
     - name: .tar.gz
-      url: https://github.com/gap-packages/ace/releases/download/v5.5/ace-5.5.tar.gz
+      url: https://github.com/gap-packages/ace/releases/download/v5.6/ace-5.6.tar.gz
 
 abstract: |
     The <span class="pkgname">ACE</span> package provides both an    interactive and non-interactive interface with the Todd-Coxeter coset   enumeration functions of the ACE (Advanced Coset Enumerator) C program.
@@ -43,7 +43,7 @@ citeas: |
     <p class='BibEntry'>
     [<span class='BibKey'>GHHRH22</span>]   <b class='BibAuthor'>Gamble, G., Hulpke, A., Havas, G., Ramsay, C. and Horn, M.</b>,
      <i class='BibTitle'>ACE, Advanced Coset Enumerator,
-             Version 5.5</i>
+             Version 5.6</i>
      (<span class='BibYear'>2022</span>)<br />
     (<span class='BibNote'>Refereed GAP package</span>),
     <span class='BibHowpublished'><a href="https://gap-packages.github.io/ace">https://gap-packages.github.io/ace</a></span>.
@@ -51,11 +51,11 @@ citeas: |
     
 
 bibtex: |
-    @misc{ ACE5.5,
+    @misc{ ACE5.6,
       author =           {Gamble, G. and Hulpke, A. and Havas, G. and Ramsay, C.
                           and Horn, M.},
-      title =            {{ACE}, Advanced Coset Enumerator, {V}ersion 5.5},
-      month =            {Aug},
+      title =            {{ACE}, Advanced Coset Enumerator, {V}ersion 5.6},
+      month =            {Sep},
       year =             {2022},
       note =             {Refereed GAP package},
       howpublished =     {\href             {https://gap-packages.github.io/ace}
