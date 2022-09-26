@@ -2,8 +2,8 @@ SetPackageInfo( rec(
 
 PackageName := "ACE",
 Subtitle    := "Advanced Coset Enumerator",
-Version     := "5.6",
-Date        := "15/09/2022", # dd/mm/yyyy format
+Version     := "5.6.1",
+Date        := "26/09/2022", # dd/mm/yyyy format
 License     := "MIT",
 
 Persons := [
