@@ -2,6 +2,9 @@ In this file we record the changes since the 3.xxx versions of the ACE
 package. Also look at gap/CHANGES  for  a  history  of  the  pre-3.xxx
 development.
 
+## Version 5.6.1 (2022-09-26)
+  * Re-release of 5.6 to avoid an issue with the GAP release process
+
 ## Version 5.6 (2022-09-15)
   * Various minor improvements to the C code
 
