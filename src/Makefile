@@ -16,13 +16,12 @@
 #
 # -Wall     : print all warnings
 # -pedantic : be bloody picky
-# -ansi     : enforce ANSI compliance
 # -O2/3     : optimise quite a bit / a lot
 # -g        : for xxgdb debugger
 # -pg       : profiling info for gprof
 ########################################################################
 CC ?= gcc
-EXTRA_CFLAGS ?= -Wall -pedantic -ansi -O2
+EXTRA_CFLAGS ?= -Wall -pedantic -O2
 
 ########################################################################
 # SunOS 5.5 boxes with `native' cc.
