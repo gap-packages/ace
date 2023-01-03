@@ -33,4 +33,7 @@ fi
 echo "Using settings from $GAPPATH/sysinfo.gap"
 rm -f Makefile
 . "$GAPPATH/sysinfo.gap"
-sed -e "s;@GAPARCH@;$GAParch;g" -e "s;@GAPPATH@;$GAPPATH;g" Makefile.in >Makefile
+sed \
+    -e "s;@GAPARCH@;$GAParch;g" \
+    -e "s;@GAPPATH@;$GAPPATH;g" \
+    Makefile.in >Makefile
