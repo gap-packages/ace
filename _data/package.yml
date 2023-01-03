@@ -1,7 +1,7 @@
 name: ACE
-version: "5.6.1"
+version: "5.6.2"
 license: "MIT"
-date: 2022-09-26
+date: 2023-01-03
 description: |
     Advanced Coset Enumerator
 
@@ -29,7 +29,7 @@ packageinfo: https://gap-packages.github.io/ace/PackageInfo.g
 
 downloads:
     - name: .tar.gz
-      url: https://github.com/gap-packages/ace/releases/download/v5.6.1/ace-5.6.1.tar.gz
+      url: https://github.com/gap-packages/ace/releases/download/v5.6.2/ace-5.6.2.tar.gz
 
 abstract: |
     The <span class="pkgname">ACE</span> package provides both an    interactive and non-interactive interface with the Todd-Coxeter coset   enumeration functions of the ACE (Advanced Coset Enumerator) C program.
@@ -41,28 +41,28 @@ keywords: |
     coset enumeration, Felsch strategy, HLT strategy, coset table, index, maxcosets, activecosets.
 citeas: |
     <p class='BibEntry'>
-    [<span class='BibKey'>GHHRH22</span>]   <b class='BibAuthor'>Gamble, G., Hulpke, A., Havas, G., Ramsay, C. and Horn, M.</b>,
+    [<span class='BibKey'>GHHRH23</span>]   <b class='BibAuthor'>Gamble, G., Hulpke, A., Havas, G., Ramsay, C. and Horn, M.</b>,
      <i class='BibTitle'>ACE, Advanced Coset Enumerator,
-             Version 5.6.1</i>
-     (<span class='BibYear'>2022</span>)<br />
+             Version 5.6.2</i>
+     (<span class='BibYear'>2023</span>)<br />
     (<span class='BibNote'>Refereed GAP package</span>),
     <span class='BibHowpublished'><a href="https://gap-packages.github.io/ace">https://gap-packages.github.io/ace</a></span>.
     </p>
     
 
 bibtex: |
-    @misc{ ACE5.6.1,
+    @misc{ ACE5.6.2,
       author =           {Gamble, G. and Hulpke, A. and Havas, G. and Ramsay, C.
                           and Horn, M.},
-      title =            {{ACE}, Advanced Coset Enumerator, {V}ersion 5.6.1},
-      month =            {Sep},
-      year =             {2022},
+      title =            {{ACE}, Advanced Coset Enumerator, {V}ersion 5.6.2},
+      month =            {Jan},
+      year =             {2023},
       note =             {Refereed GAP package},
       howpublished =     {\href             {https://gap-packages.github.io/ace}
                           {\texttt{https://gap-packages.github.io/}\discretionary
                           {}{}{}\texttt{ace}}},
       keywords =         {coset  enumeration;  Felsch  strategy;  HLT  strategy;
                           coset table; index; maxcosets; activecosets},
-      printedkey =       {GHHRH22}
+      printedkey =       {GHHRH23}
     }
 
