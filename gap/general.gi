@@ -121,7 +121,7 @@ local optnames, echo, errmsg, onbreakmsg, infile, datarec, ToACE, gens,
       ACEData.ni := datarec;
     fi;
     FLUSH_ACE_STREAM_UNTIL(datarec.stream, 3, 3, ACE_READ_NEXT_LINE, 
-                           line -> IsMatchingSublist(line, "name", 3));
+                           line -> IsMatchingSublist(line, "====", 1));
     ToACE := function(list) 
                  INTERACT_TO_ACE_WITH_ERRCHK(datarec, list);
              end;
@@ -174,9 +174,7 @@ local optnames, echo, errmsg, onbreakmsg, infile, datarec, ToACE, gens,
       ToACE([ "Start;" ]);
     fi;
     if ACEfname = "ACECosetTableFromGensAndRels" then
-      if standard = "lenlex" then
-        ToACE([ "Standard;" ]);
-      fi;
+      ToACE([ "Standard;" ]);
       ToACE([ "Print Table;" ]);
     fi;
     CloseStream(datarec.stream);

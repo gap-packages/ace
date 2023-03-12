@@ -2253,6 +2253,7 @@ local ioIndex, iostream, datarec, fgens, standard, incomplete,
            "type: 'DisplayACEOptions(<i>);' to see current ACE options.");
       return fail;
     else
+      WRITE_LIST_TO_ACE_STREAM(datarec.stream, [ "Standard;" ]);
       WRITE_LIST_TO_ACE_STREAM(datarec.stream, [ "Print Table;" ]);
       cosettable := ACE_COSET_TABLE(datarec.stats.activecosets, 
                                     datarec.acegens, 
@@ -2324,6 +2325,7 @@ local ioIndex, iostream, datarec, fgens, standard, incomplete,
           cosettable := datarec.cosettable;
           Unbind(datarec.cosettable);
         else
+          WRITE_LIST_TO_ACE_STREAM(datarec.stream, [ "Standard;" ]);
           WRITE_LIST_TO_ACE_STREAM(datarec.stream, [ "Print Table;" ]);
           cosettable := ACE_COSET_TABLE(datarec.stats.activecosets,
                                         datarec.acegens, 
