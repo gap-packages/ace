@@ -1014,27 +1014,6 @@ The next two functions of this section are really intended for  {\ACE}
 standalone gurus. To fully understand their output you  will  need  to
 consult the standalone manual and the C source code.
 
-\>ACEDumpVariables( <i> ) F
-\>ACEDumpVariables() F
-\>ACEDumpVariables( <i>, [<level>] ) F
-\>ACEDumpVariables( [<level>] ) F
-\>ACEDumpVariables( <i>, [<level>, <detail>] ) F
-\>ACEDumpVariables( [<level>, <detail>] ) F
-
-dump the internal variables  of  {\ACE}  of  the  <i>th  (or  default)
-process started by `ACEStart'; <level> should be one of 0,  1,  or  2,
-and <detail> should be 0 or 1.
-
-The value of <level> determines which of the three levels of {\ACE} to
-dump. (You will need to read the standalone manual to understand  what
-Levels 0, 1 and 2 are all about.) The value of <detail> determines the
-amount of detail (`<detail> = 0' means less  detail).  The  first  two
-forms of `ACEDumpVariables' (with no list argument) selects `<level> =
-0, <detail> = 0'. The third and fourth forms  (with  a  list  argument
-containing the integer <level>) makes `<detail> = 0'. This command  is
-intended for gurus; the source code should be consulted  to  see  what
-the output means.
-
 \>ACEBinaryVersion( <i> ) F
 \>ACEBinaryVersion() F
 

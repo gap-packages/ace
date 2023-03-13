@@ -93,9 +93,6 @@ InstallValue(KnownACEOptions, rec(
   default := [3, [""]],
   ds := [2, IS_INC_POS_INT_LIST],
   dr := [2, IS_INC_POS_INT_LIST],
-  dump := [1, x -> x in ["",0,1,2] or
-                   (IsList(x) and x[1] in [0..2] and
-                    (Length(x) = 1 or (Length(x) = 2 and x[2] in [0,1])))],
   easy := [4, [""]],
   echo := [4, [0,1,2]],       # hijacked! ... we don't pass this to ACE
   enumeration := [4, IsString],
@@ -364,8 +361,7 @@ InstallValue(ACE_OPT_SENTINELS, rec(
   mode := line -> IsMatchingSublist(line, "start ="),
   nc   := fail,
   order := fail,
-  options := line -> IsMatchingSublist(line, "  host info"),
-  dump  := line -> IsMatchingSublist(line, "  #----"),
+  options := line -> IsMatchingSublist(line, "  ---"),
   sr    := line -> IsMatchingSublist(line, "  #----"),
   stats := line -> IsMatchingSublist(line, "  #----"),
   print := fail,

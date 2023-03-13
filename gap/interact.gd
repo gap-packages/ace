@@ -72,7 +72,6 @@ DeclareGlobalFunction("ACE_IOINDEX_AND_NO_VALUE");
 DeclareGlobalFunction("ACE_IOINDEX_AND_ONE_VALUE");
 DeclareGlobalFunction("ACE_IOINDEX_AND_ONE_LIST");
 DeclareGlobalFunction("ACE_IOINDEX_AND_LIST");
-DeclareGlobalFunction("ACEDumpVariables");
 DeclareGlobalFunction("ACEStyle");
 DeclareGlobalFunction("ACEDisplayCosetTable");
 DeclareGlobalFunction("IsCompleteACECosetTable");

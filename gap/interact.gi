@@ -1750,18 +1750,6 @@ end);
 #############################################################################
 ####
 ##
-#F  ACEDumpVariables . . . . . . . . . . . . . Dumps ACE's internal variables
-##
-##
-InstallGlobalFunction(ACEDumpVariables, function(arg)
-  EXEC_ACE_DIRECTIVE_OPTION(
-      ACE_IOINDEX_AND_LIST(arg), "dump", 1, 
-      line -> IsMatchingSublist(line, "  #----"), "", false);
-end);
-
-#############################################################################
-####
-##
 #F  ACEStyle . . . . . . . . . . . . .  Returns the current enumeration style
 ##
 ##
