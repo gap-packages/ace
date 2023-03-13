@@ -1762,18 +1762,6 @@ end);
 #############################################################################
 ####
 ##
-#F  ACEDumpStatistics . . . . . . . . . . . . Dumps ACE's internal statistics 
-##
-##
-InstallGlobalFunction(ACEDumpStatistics, function(arg)
-  EXEC_ACE_DIRECTIVE_OPTION(
-      ACE_IOINDEX_AND_NO_VALUE(arg), "statistics", 1, 
-      line -> IsMatchingSublist(line, "  #----"), "", false);
-end);
-
-#############################################################################
-####
-##
 #F  ACEStyle . . . . . . . . . . . . .  Returns the current enumeration style
 ##
 ##

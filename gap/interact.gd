@@ -73,7 +73,6 @@ DeclareGlobalFunction("ACE_IOINDEX_AND_ONE_VALUE");
 DeclareGlobalFunction("ACE_IOINDEX_AND_ONE_LIST");
 DeclareGlobalFunction("ACE_IOINDEX_AND_LIST");
 DeclareGlobalFunction("ACEDumpVariables");
-DeclareGlobalFunction("ACEDumpStatistics");
 DeclareGlobalFunction("ACEStyle");
 DeclareGlobalFunction("ACEDisplayCosetTable");
 DeclareGlobalFunction("IsCompleteACECosetTable");

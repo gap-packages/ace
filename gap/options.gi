@@ -160,8 +160,6 @@ InstallValue(KnownACEOptions, rec(
   stabilising := [6, IsInt],
   sims := [4, [1,3,5,7,9]],
   standard := [2, [""]],
-  statistics := [4, [""]],  # "statistics" and "stats" are synonyms
-  stats := [5, [""]],
   style := [5, [""]],
   subgroup := [4, IsString],
   system := [3, IsString],

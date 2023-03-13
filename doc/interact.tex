@@ -1035,17 +1035,6 @@ containing the integer <level>) makes `<detail> = 0'. This command  is
 intended for gurus; the source code should be consulted  to  see  what
 the output means.
 
-\>ACEDumpStatistics( <i> ) F
-\>ACEDumpStatistics() F
-
-dump {\ACE}'s internal statistics accumulated during the  most  recent
-enumeration of the <i>th (or default) process started  by  `ACEStart',
-provided the {\ACE} binary  was  built  with  the  statistics  package
-(which    it    is    by    default).    Use     `ACEBinaryVersion();'
-(see~"ACEBinaryVersion") to check for the inclusion of the  statistics
-package.  See  the  `enum.c'  source  file  for  the  meaning  of  the
-variables.
-
 \>ACEBinaryVersion( <i> ) F
 \>ACEBinaryVersion() F
 
@@ -1061,22 +1050,10 @@ A typical output, illustrating the default build, is:
 \beginexample
 gap> ACEBinaryVersion();
 #I  No interactive ACE sessions are currently active
-#I  ACE Binary Version: 3.001
-#I  ACE 3.001        Sat Feb 27 11:27:15 2016
-#I  =========================================
-#I  Host information:
-#I    name = banksia
-#I  ACE 3.001 executable built:
-#I    Wed Feb 24 15:25:26 AWST 2016
-#I  Level 0 options:
-#I    statistics package = on
-#I    coinc processing messages = on
-#I    dedn processing messages = on
-#I  Level 1 options:
-#I    workspace multipliers = decimal
-#I  Level 2 options:
-#I    host info = on
-"3.001"
+#I  ACE Binary Version: 4.100
+#I  ACE 4.100                       Mon Mar 13 14:28:52 2023
+#I  ========================================================
+"4.100"
 
 \endexample
 
