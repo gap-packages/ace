@@ -152,7 +152,7 @@ BannerString := Concatenation(
       " <", ~.Persons[1].Email, "> (address for correspondence)\n",
 "       ", ~.Persons[2].FirstNames, " ", ~.Persons[2].LastName,
       " (", ~.Persons[2].WWWHome, ")\n",
-"           [uses ACE binary (C code program) version: 3.001]\n",
+"           [uses ACE binary (C code program) version: 4.1]\n",
 "C code by  ", ~.Persons[3].FirstNames, " ", ~.Persons[3].LastName,
       " (", ~.Persons[3].WWWHome, ")\n",
 "           ", ~.Persons[4].FirstNames, " ", ~.Persons[4].LastName,
