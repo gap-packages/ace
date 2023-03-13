@@ -1609,7 +1609,7 @@ local ioIndex, datarec;
   Info(InfoACE, 1, "ACE Binary Version: ", ACEData.version);
   WRITE_LIST_TO_ACE_STREAM(datarec.stream, [ "options;" ]);
   FLUSH_ACE_STREAM_UNTIL(datarec.stream, 1, 1, ACE_READ_NEXT_LINE,
-                         line -> IsMatchingSublist(line, "  host info ="));
+                         line -> IsMatchingSublist(line, "===="));
   if ioIndex = fail then 
     CloseStream(datarec.stream);
   fi;
