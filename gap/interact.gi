@@ -1585,40 +1585,6 @@ end);
 #############################################################################
 ####
 ##
-#F  ACEBinaryVersion 
-##
-##  Infos the version and component compilation details of  the  ACE  binary,
-##  and returns the version of the ACE binary.
-##
-InstallGlobalFunction(ACEBinaryVersion, function(arg)
-local ioIndex, datarec;
-
-  ACE_IOINDEX_ARG_CHK(arg);
-  ioIndex := ACE_IOINDEX(arg);
-  if ioIndex = fail then 
-    # Fire up a new stream ... which we'll close when we're finished
-    datarec := ACEData.ni;
-    datarec.stream 
-        := InputOutputLocalProcess( ACEData.tmpdir, ACEData.binary, [] );
-  else
-    # Use interactive ACE process: ioIndex
-    datarec := ACEData.io[ ioIndex ];
-  fi;
-  READ_ACE_ERRORS(datarec); # purge any output not yet collected
-                            # e.g. error messages due to unknown options
-  Info(InfoACE, 1, "ACE Binary Version: ", ACEData.version);
-  WRITE_LIST_TO_ACE_STREAM(datarec.stream, [ "options;" ]);
-  FLUSH_ACE_STREAM_UNTIL(datarec.stream, 1, 1, ACE_READ_NEXT_LINE,
-                         line -> IsMatchingSublist(line, "===="));
-  if ioIndex = fail then 
-    CloseStream(datarec.stream);
-  fi;
-  return ACEData.version;
-end);
-
-#############################################################################
-####
-##
 #F  EXEC_ACE_DIRECTIVE_OPTION . . . . . . . . . . . . . . . Internal Function
 ##  . . . . . . . . . . . . . . . . . . .  executes an ACE `directive' option
 ##

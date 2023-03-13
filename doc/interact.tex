@@ -1014,41 +1014,6 @@ The next two functions of this section are really intended for  {\ACE}
 standalone gurus. To fully understand their output you  will  need  to
 consult the standalone manual and the C source code.
 
-\>ACEBinaryVersion( <i> ) F
-\>ACEBinaryVersion() F
-
-for the <i>th (or default) process started by `ACEStart',  print,  via
-`Info' (at `InfoACE' level 1), version details of  the  {\ACE}  binary
-you are currently running, including what compiler flags were set when
-the executable was built, and also returns the version number  of  the
-binary as a string. Essentially the information obtained  is  what  is
-obtained via {\ACE}'s `options' option (see~"option options"), and the
-returned value is what is stored in `ACEData.version' (see~"ACEData").
-A typical output, illustrating the default build, is:
-
-\beginexample
-gap> ACEBinaryVersion();
-#I  No interactive ACE sessions are currently active
-#I  ACE Binary Version: 4.100
-#I  ACE 4.100                       Mon Mar 13 14:28:52 2023
-#I  ========================================================
-"4.100"
-
-\endexample
-
-*Notes:*
-The {\ACE} binary's banner may also appear in the output  (if  it  has
-not already appeared). Unlike other {\ACE}  interface  functions,  the
-information   obtained   via   `ACEBinaryVersion();'   is   absolutely
-independent  of  any  enumeration.  For  this  reason,  we   make   it
-permissible to run `ACEBinaryVersion();' when there are  no  currently
-active  interactive  {\ACE}  processes;   and,   in   such   a   case,
-`ACEBinaryVersion();' emits a warning that there  are  no  interactive
-{\ACE} sessions currently active and initiates (and closes again)  its
-own stream to obtain the information from the {\ACE} binary.  For  the
-current version of the {\ACE} package (the {\GAP} code component)  use
-`ACEPackageVersion();' (see~"ACEPackageVersion").
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{Interactive Versions of Non-interactive ACE Functions}
 
