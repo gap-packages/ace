@@ -1501,7 +1501,7 @@ local datarec, line;
                                                       "Subgroup Generators"));
   fi;
   FLUSH_ACE_STREAM_UNTIL(datarec.stream, 3, 3, ACE_READ_NEXT_LINE, 
-                         line -> IsMatchingSublist(line, "  #--"));
+                         line -> IsMatchingSublist(line, "  ---"));
   return datarec.args.(field);
 end);
 
