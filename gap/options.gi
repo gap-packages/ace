@@ -127,7 +127,6 @@ InstallValue(KnownACEOptions, rec(
   oo   := [2, IsInt],       # "oo" and "order" are synonyms
   order := [5, IsInt],
   path := [4, [0,1]],
-  pmode := [4, [0..3]],
   psize := [4, x -> x = 0 or 
                     (IsInt(x) and IsEvenInt(x) and IsPrimePowerInt(x))],
   sr := [2, ["",0,1,2,3,4,5]],
@@ -261,9 +260,6 @@ InstallValue(ACEParameterOptions, rec(
               purec := 0,    purer := 0, sims1 := 0,   sims3 := 0,
               sims5 := 0,    sims7 := 0, sims9 := 0),
   path := rec(default := 0),
-  pmode := rec(default := 3, easy := 0,  felsch0 := 0, hlt := 0,
-               purec := 0,   purer := 0, sims1 := 0,   sims3 := 0,
-               sims5 := 0,   sims7 := 0, sims9 := 0),
   psize := rec(default := 256),
   # `rt' is synonymous with `rfactor' but here we list just once.
   rt   := rec(default := 0,   easy := 1000,  hard := 1, 

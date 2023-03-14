@@ -37,7 +37,7 @@ gap> RecNames(KnownACEOptions);
   "cc", "cfactor", "ct", "redo", "compaction", "continu", "dmode", "dsize", 
   "dr", "easy", "echo", "enumeration", "felsch", "ffactor", "hard", 
   "hlt", "lookahead", "loop", "mendelsohn", "messages", "monitor",
-  "mode", "nc", "no", "oo", "pmode", "psize", "sr", "print", "purec", 
+  "mode", "nc", "no", "oo", "psize", "sr", "print", "purec", 
   "purer", "rc", "recover", "contiguous", "rfactor", "rt", "row", "sc", 
   "stabilising", "sims", "standard", "style", "tw",
   "trace", "workspace" ]
@@ -759,7 +759,7 @@ gap> Concatenation( List(RecNames(ACEParameterOptions),
 >                        optname -> ACEOptionData(optname).synonyms) );
 [ "path", "subgroup", "max", "time", "fill", "ffactor", "asis", "ct", 
   "cfactor", "compaction", "dmode", "dsize", "enumeration",
-  "lookahead", "loop", "mendelsohn", "messages", "monitor", "no", "pmode", 
+  "lookahead", "loop", "mendelsohn", "messages", "monitor", "no",
   "psize", "rt", "rfactor", "row", "workspace" ]
 
 \endexample
@@ -857,8 +857,8 @@ definitions* (see Section~"Enumeration Style"). Making definitions  in
 C style, that is filling the coset table line by line, it can be  very
 advantageous to  switch  to  making  definitions  from  the  preferred
 definition stack. Possible definitions  can  be  extracted  from  this
-stack in  various  ways  and  the  two  options  `pmode'  and  `psize'
-(see~"option pmode" and~"option psize"  respectively)  regulate  this.
+stack in  various  ways  and  the option `psize' (see~"option psize")
+regulate  this.
 However it should be clearly understood that  making  all  definitions
 from a preferred definition stack one may  violate  the  condition  of
 Mendelsohn's theorem, and the option `fill' (see~"option fill") can be
@@ -900,27 +900,6 @@ This option is identified as `Fi'  in  the  ``Run  Parameters''  block
 the {\ACE} binary, `fi' is an allowed abbreviation of `fill'. However,
 `fi' is a {\GAP} keyword and so the shortest  abbreviation  of  `fill'
 allowed by the interface functions is `fil'.
-
-\>`pmode:=<val>'{option pmode}@{option `pmode'}&
-Option for preferred definitions; `<val>' should  be  in  the  integer
-range 0 to 3. (Shortest abbreviation: `pmod'.)
-
-The  value of  the  `pmode' option  determines  which definitions  are
-preferred.  If  the argument is  0, then Felsch style  definitions are
-made using  the next empty table  slot.  If the  argument is non-zero,
-then gaps of length one found during relator scans in Felsch style are
-preferentially  filled  (subject to  the  value  of  `fill').  If  the
-argument  is 1,  they are  filled  immediately, and  if it  is 2,  the
-consequent deduction  is also made  immediately (of course,  these are
-also put on the deduction stack).  If the argument is 3, then the gaps
-of length one are noted in the preferred definition queue.
-
-Provided such a gap survives (and no coincidence occurs, which  causes
-the queue to be discarded) the next coset number will  be  defined  to
-fill the oldest gap of length one. The default value is either 0 or 3,
-depending on the strategy selected (see Chapter~"Strategy Options  for
-ACE"). If you want to know more details, read the code.
-
 
 \>`psize:=<val>'{option psize}@{option `psize'}&
 Size of preferred definition queue; `<val>' *must* be 0 or $2^n$,  for
