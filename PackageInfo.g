@@ -13,7 +13,7 @@ Persons := [
     IsAuthor      := true,
     IsMaintainer  := true,
     Email         := "Greg.Gamble@uwa.edu.au",
-    WWWHome       := "http://staffhome.ecm.uwa.edu.au/~00021149",
+    WWWHome       := "https://research-repository.uwa.edu.au/en/persons/gregory-gamble",
     PostalAddress := Concatenation( [
                        "Greg Gamble\n",
                        "Department of Mathematics and Statistics\n",
@@ -91,7 +91,22 @@ Persons := [
                        "Germany" ),
     Place         := "Kaiserslautern, Germany",
     Institution   := "RPTU Kaiserslautern-Landau"
-  )
+  ),
+  rec(
+    LastName      := "Pasechnik",
+    FirstNames    := "Dmitrii",
+    IsAuthor      := false,
+    IsMaintainer  := true,
+    Email         := "dima@pasechnik.info",
+    WWWHome       := "https://www.pasechnik.info",
+    PostalAddress := Concatenation(
+                       "Department of Computer Science\n",
+		       "University of Oxford\n",
+		       "Wolfson Building, Parks Road\n",
+                       "Oxford OX1 3QD\n",
+                       "UK" ),
+    Place         := "Oxford, UK",
+    Institution   := "University of Oxford"
 ],
 
 Status      := "accepted",
