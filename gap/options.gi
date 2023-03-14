@@ -190,7 +190,6 @@ InstallValue(ACEOptionSynonyms, rec(
   rt   := ["rfactor"],
   sc   := ["stabilising"],
   tw   := ["trace"],
-  stats := ["statistics"],
   start := ["begin"],
   bye  := ["exit", "qui"],
   redo := ["check"]
@@ -363,7 +362,6 @@ InstallValue(ACE_OPT_SENTINELS, rec(
   order := fail,
   options := line -> IsMatchingSublist(line, "  ---"),
   sr    := line -> IsMatchingSublist(line, "  #----"),
-  stats := line -> IsMatchingSublist(line, "  #----"),
   print := fail,
   rc   := line -> Length(line) > 12 and
                   line{[1..13]} in ["* No success;", "* An appropri",
