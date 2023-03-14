@@ -107,6 +107,7 @@ Persons := [
                        "UK" ),
     Place         := "Oxford, UK",
     Institution   := "University of Oxford"
+  )
 ],
 
 Status      := "accepted",
