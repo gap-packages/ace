@@ -7,7 +7,8 @@
 # CC is the compiler to use, along with the 'standard' flags.  
 # This is common to all the programmes.
 
-CC = gcc -std=c99 -pedantic -Wall
+CC ?= gcc
+EXTRA_CFLAGS ?= -Wall -pedantic -std=c99
 
 # Optional FLAGS, for ace and ace dependents, are
 #   optimisation: -O0, -O1, -O2, -O3
@@ -17,7 +18,7 @@ CC = gcc -std=c99 -pedantic -Wall
 #FLAGS = -O2 -DB8S8C8 -DCLK64
 #FLAGS = -O2 -DB8S4C8 -DCLK64
 #FLAGS = -O2 -DB8S4C5 -DCLK64
- FLAGS = -O2 -DB8S4C4 -DCLK64
+ FLAGS = -O2 -DB8S4C4 -DCLK64 $(EXTRA_CFLAGS)
 
 #FLAGS = -O2 -DB8S4C5 -DCLK32
 #FLAGS = -O2 -DB4S4C4 -DCLK32
