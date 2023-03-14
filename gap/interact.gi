@@ -1281,7 +1281,7 @@ local newoptnames, s, optnames, echo, ignored;
                         # disallowed (options) ... none
                         rec(),
                         # ignored
-                        Concatenation( [ "aceinfile", "aceoutfile" ],
+                        Concatenation( [ "aceinfile" ],
                                        ignored,
                                        ACE_IF_EXPR(
                                            IsBound(datarec.enforceAsis)

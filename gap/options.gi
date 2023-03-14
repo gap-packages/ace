@@ -53,9 +53,9 @@
 ##
 
 InstallValue(KnownACEOptions, rec(
-  # aceinfile, aceignore, aceignoreunknown, acenowarnings, silent (and 
-  # further down: aceoutfile) are GAP-introduced options ... they  are
-  # not ACE binary options.
+  # aceinfile, aceignore, aceignoreunknown, acenowarnings, silent
+  # are GAP-introduced options ...
+  # they are not ACE binary options.
   aceinfile := [5, IsString],
   aceignore := [5, x -> IsList(x) and ForAll(x, xi -> IsString(xi))],
   aceignoreunknown := [10, x -> IsList(x) and ForAll(x, xi -> IsString(xi))],
@@ -71,8 +71,6 @@ InstallValue(KnownACEOptions, rec(
   rl := [2, IS_ACE_STRINGS],
   aep  := [3, [1..7]],
   ai := [2, IsString],
-  ao   := [2, IsString],      # "aceoutfile" is a GAP-introduced 
-  aceoutfile := [4, IsString],# synonym for "ao"
   asis := [2, [0,1]],
   begin := [3, [""]],         # "begin" and "start" are synomyms
   start := [5, [""]],         # ... "end" synonym omitted (it is a GAP keyword)
@@ -180,7 +178,6 @@ InstallValue(KnownACEOptions, rec(
 ##
 
 InstallValue(ACEOptionSynonyms, rec(
-  ao   := ["aceoutfile"],
   ct   := ["cfactor"],
   fill := ["ffactor"],
   messages := ["monitor"],
@@ -203,7 +200,7 @@ InstallValue(ACEOptionSynonyms, rec(
 ##
 
 InstallValue(NonACEbinOptions,
-  [ "aceinfile",     "aceoutfile", "aceignore",    "aceignoreunknown",
+  [ "aceignore",    "aceignoreunknown",
     "acenowarnings", "aceecho",    "aceincomment", "aceexampleoptions",
     "echo",          "silent",     "lenlex",       "semilenlex",
     "incomplete" ]
@@ -305,7 +302,6 @@ InstallValue(ACEStrategyOptions,
 InstallValue(ACE_OPT_TRANSLATIONS, rec(
   purec := "pure c", # These first two haven't been called NonACEbinOptions
   purer := "pure r", 
-  aceoutfile := "ao",
   aceecho := "echo", 
   aceincomment := "#"
 ));
@@ -321,7 +317,6 @@ InstallValue(ACE_OPT_TRANSLATIONS, rec(
 InstallValue(ACE_OPT_ACTIONS, rec(
   purec := "passed to ACE via option: pure c",
   purer := "passed to ACE via option: pure r", 
-  aceoutfile := "passed to ACE via option: ao",
   aceecho := "passed to ACE via option: echo",
   aceincomment := "passed as an ACE comment, behind a '#'",
   aceexampleoptions := "inserted by ACEExample, not passed to ACE"

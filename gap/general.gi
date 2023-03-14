@@ -107,7 +107,7 @@ local optnames, echo, errmsg, onbreakmsg, infile, datarec, ToACE, gens,
   if ACEfname = "ACECosetTableFromGensAndRels" and infile <> fail then
     datarec := rec(
         infile  := infile,
-        outfile := VALUE_ACE_OPTION(optnames, ACEData.outfile, "aceoutfile"),
+        outfile := ACEData.outfile,
         stream  := OutputTextFile(infile, false) );
     ToACE := function(list) WRITE_LIST_TO_ACE_STREAM(datarec.stream, list); end;
   else
@@ -146,14 +146,7 @@ local optnames, echo, errmsg, onbreakmsg, infile, datarec, ToACE, gens,
   ToACE([ "Subgroup Generators: ", 
           ACE_WORDS(sgens, fgens, datarec.acegens), ";" ]);
 
-  if ACEfname  = "ACECosetTableFromGensAndRels" then
-    ignored := [ ];
-  else 
-    ignored := [ "aceinfile" ];
-  fi;
-  if ACEfname  = "ACEStart" then
-    Add(ignored, "aceoutfile");
-  fi;
+  ignored := [ ];
   if datarec.enforceAsis then
     Add(ignored, "asis");
     ToACE([ "Asis: 1;" ]);

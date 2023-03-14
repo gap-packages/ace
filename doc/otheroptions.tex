@@ -52,8 +52,7 @@ numbers defined) are tracked, and each time a new ``record'' is found,
 the relators  used  and  the  summary  result  line  is  printed.  See
 Appendix~"The Meanings of ACE's output messages" for a  discussion  of
 the statistics `m' and `t'. To observe these messages either  set  the
-`InfoLevel' of `InfoACE' to 3 or non-interactively you can peruse  the
-{\ACE} output file (see~"option aceoutfile").
+`InfoLevel' of `InfoACE' to 3.
 
 Normally when a non-interactive {\ACE} interface function  is  called,
 the option `start' (see~"option start"), is quietly inserted after all
@@ -136,9 +135,7 @@ The routine first  turns  `asis'  on  and  `messages'  off  (i.e.~sets
 `messages' to 0), and then generates and tests the requested number of
 random equivalent presentations. For each presentation,  the  relators
 used and the  summary  result  line  are  printed.  To  observe  these
-messages either set the `InfoLevel' of `InfoACE'  to  at  least  3  or
-non-interactively you can peruse the {\ACE} output  file  (see~"option
-aceoutfile").
+messages either set the `InfoLevel' of `InfoACE'  to  at  least  3.
 
 Normally when a non-interactive {\ACE} interface function  is  called,
 the option `start' (see~"option start"), is quietly inserted after all
@@ -407,22 +404,6 @@ is a {\GAP} keyword, and so {\GAP} users  must  use
 \Section{Options that Interact with the Operating System}
 
 \beginitems
-
-\>`ai'{option ai}@{option `ai'}
-\>`ai:=<filename>'{option ai}@{option `ai'}&
-`A'lter `i'nput to standard input or <filename>; <filename> must be  a
-string.
-
-By default, commands to {\ACE} are read from standard input (i.e., the
-keyboard). With no value `ai' causes {\ACE} to revert to reading  from
-standard input; otherwise, the `ai' command closes the  current  input
-file,  and  opens  `<filename>'  as  the  source   of   commands.   If
-`<filename>' can't be opened, input reverts to standard input.
-
-*Notes:*
-If you switch to taking input from (another) file, remember to  switch
-back before the end of that file; otherwise the `EOF' there will cause
-{\ACE} to terminate.
 
 \>`bye'{option bye}@{option `bye'}
 \>`exit'{option exit}@{option `exit'}
