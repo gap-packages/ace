@@ -127,7 +127,6 @@ InstallValue(KnownACEOptions, rec(
   options := [3, [""]],
   oo   := [2, IsInt],       # "oo" and "order" are synonyms
   order := [5, IsInt],
-  #parameters := [3, [""]], # decommissioned ACE option
   path := [4, [0,1]],
   pmode := [4, [0..3]],
   psize := [4, x -> x = 0 or 
@@ -147,7 +146,6 @@ InstallValue(KnownACEOptions, rec(
   rep  := [2, x -> x in [1..7] or
                    (IsList(x) and Length(x) <= 2 and x[1] in [1..7] and
                     ForAll(x{[2..Length(x)]}, IsInt))],
-  #restart := [7, [""]],    # decommissioned ACE option
   rfactor := [1, IsInt],    # "rfactor" and "rt" are synonyms
   rt   := [2, IsInt],
   row  := [3, [0,1]],
