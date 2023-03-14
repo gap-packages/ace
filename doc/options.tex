@@ -36,7 +36,7 @@ gap> RecNames(KnownACEOptions);
   "sg", "rl", "aep", "asis", "bye", "exit", "qui", 
   "cc", "cfactor", "ct", "redo", "compaction", "continu", "dmode", "dsize", 
   "dr", "easy", "echo", "enumeration", "felsch", "ffactor", "hard", 
-  "hlt", "hole", "lookahead", "loop", "mendelsohn", "messages", "monitor", 
+  "hlt", "lookahead", "loop", "mendelsohn", "messages", "monitor",
   "mode", "nc", "no", "oo", "pmode", "psize", "sr", "print", "purec", 
   "purer", "rc", "recover", "contiguous", "rfactor", "rt", "row", "sc", 
   "stabilising", "sims", "standard", "style", "tw",
@@ -758,7 +758,7 @@ Options'' may be obtained by
 gap> Concatenation( List(RecNames(ACEParameterOptions),
 >                        optname -> ACEOptionData(optname).synonyms) );
 [ "path", "subgroup", "max", "time", "fill", "ffactor", "asis", "ct", 
-  "cfactor", "compaction", "dmode", "dsize", "enumeration", "hole", 
+  "cfactor", "compaction", "dmode", "dsize", "enumeration",
   "lookahead", "loop", "mendelsohn", "messages", "monitor", "no", "pmode", 
   "psize", "rt", "rfactor", "row", "workspace" ]
 
@@ -1220,18 +1220,6 @@ enumeration) and  *maxcosets*  (the  maximum  number  of  alive  coset
 numbers at any point of an enumeration)  are  bounded  by  `max'.  See
 Section~"Coset  Statistics  Terminology",  for  a  discussion  of  the
 terminology: *activecosets* and *maxcosets*.
-
-\>`hole:=<val>'{option hole}@{option `hole'}&
-Maximum percentage of holes allowed during an enumeration;
-`<val>' should be an integer in the range $-1$ to 100.
-(Shortest abbreviation: `ho'.)
-
-This is an experimental feature which  allows  an  enumeration  to  be
-terminated when the percentage of holes in the table exceeds  a  given
-value. In practice, calculating this is very expensive, and  it  tends
-to remain constant or  decrease  throughout  an  enumeration.  So  the
-feature doesn't seem very useful. The default value of $-1$ turns this
-feature off. If you want more details, read the source code.
 
 \enditems
 
