@@ -1,0 +1,157 @@
+
+% ace41.tex, Colin Ramsay, 27 May 14 
+%
+% Guide to ACE 4.1xx.  Note that it is intended that this uses the cramrpt.cls &
+% cram12.clo files in its home directory, so the bulk of the required setup is
+% folded into those.  Any other stuff is put into the defns.tex file.
+%
+%   5   10   15   20   25   30   35   40   45   50   55   60   65   70   75   80
+% ..|....|....|....|....|....|....|....|....|....|....|....|....|....|....|....|
+
+\documentclass[12pt,a4paper,twoside]{cramrpt}
+%\usepackage{amssymb}
+%\usepackage{latexsym}
+\usepackage{graphics}
+\usepackage{url}
+
+\input{defns} 
+
+\begin{document}
+
+% COVER PAGE
+
+\pagestyle{empty}
+
+\vspace*{40mm}
+
+\begin{center}
+{\sffamily\bfseries\Large ACE 4.1}
+\\[1.25ex] {\bfseries\large The Rough Guide}
+\\[3.0ex] {\large Colin Ramsay} 
+\\[1.0ex] {\today\ (for release 00)}
+%\\[1.0ex] {(Version 1:\ \today)}
+%\\[1.0ex] {(Version 1.1:\ April 25, 2014)}
+\\[5ex] {\sffamily\bfseries\Large THIS IS AN INCOMPLETE DRAFT}
+\end{center}
+
+% COPYRIGHT PAGE
+
+\newpage
+\pagestyle{plain}
+\pagenumbering{roman}
+\setcounter{page}{2}
+
+\vspace*{\fill}
+
+Copyright (c) 2014\ \   Centre for Discrete Mathematics and Computing, 
+                    The University of Queensland, Australia.
+
+Permission is granted to copy, distribute and/or modify this document
+  under the terms of the MIT License.
+See \url{http://opensource.org/licenses/MIT} to obtain a copy of the license.
+
+% CONTENTS PAGES
+
+\newpage
+\addcontentsline{toc}{chapter}{Contents}
+\tableofcontents
+
+\newpage
+\addcontentsline{toc}{chapter}{List of figures}
+\listoffigures
+
+\newpage
+\addcontentsline{toc}{chapter}{List of tables}
+\listoftables
+
+% INTRODUCTION
+
+\newpage
+\setcounter{page}{1}
+\pagenumbering{arabic}
+
+\chapter{Introduction}
+\input{intro}
+
+% BACKGROUND
+
+\chapter{Background}
+\input{back}
+
+% INTERACTIVE INTERFACE
+
+\chapter{\ace\ Level 2: \\ an interactive interface}
+\input{al2}
+
+% CORE WRAPPER
+
+\chapter{\ace\ Level 1: \\ a core wrapper}
+\input{al1}
+
+% CORE ENUMERATOR
+
+\chapter{\ace\ Level 0: \\ the core enumerator}
+%\input{al0}
+
+TBA: \dots
+
+% % CONCLUSIONS
+% 
+% \chapter{Conclusions}
+
+% APPENDICES
+
+\clearpage
+\appendix
+
+\chapter{Changes}\label{app:ch}
+\input{changes}
+
+\chapter{Examples}\label{app:ex}
+\input{ex}
+
+\chapter{Command summary}\label{app:cmd}
+\input{cmd}
+
+\chapter{State machine details}\label{app:smd}
+\input{smd}
+
+\chapter{Abbreviations}\label{app:abb}
+\input{aaa}
+
+% REFERENCES
+
+\clearpage
+
+\addcontentsline{toc}{chapter}{References}
+ 
+%\nocite{gcc}          % GNU gcc 4.8.2 manual
+%\nocite{?}            % ISO/IEC 9899:1999 + 3xTechCorr
+
+%\nocite{?}            % bigrunXY.in & UV.inUV
+\nocite{Sim}           % ex001.in
+\nocite{War}           % ex002.in
+%\nocite{?}            % g25.in
+\nocite{HR3}           % lyons.in
+\nocite{CHRR1}         % nep.in
+\nocite{CoxMos}        % test000.in
+\nocite{Hav}           % test003.in
+\nocite{Ede,New}       % test004.in
+\nocite{CH}            % test005.in
+\nocite{HR5}           % test006.in
+\nocite{Moo,Dic}       % test007.in
+\nocite{Lee3}          % test008.in
+\nocite{Litt}          % test011.in, test012.in
+\nocite{CDHW}          % test017.in
+\nocite{Hav3}          % test020.in
+\nocite{HR4}           % test103.in.gz
+\nocite{GAP}           % test105.in
+\nocite{HSW}           % th001.in
+
+\nocite{HR2}           % ex1d.c
+
+\bibliographystyle{plain}
+\bibliography{biblio}
+
+\end{document}
+

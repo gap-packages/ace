@@ -1,0 +1,147 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%W  ace3001.tex        ACE standalone documentation          Colin Ramsay
+%W                                                            Greg Gamble
+%%
+%H  $Id$
+%%
+
+%%  Colin Ramsay - 20 Sep 1999  is the true author of this document
+%%  Greg Gamble  -  3 Jan 2000, 28-29 Feb 2000 made minor modifications:
+%%                * included Colin's pt.tex of 17 Jun 1999 [Proof Table]
+%%                * renamed Colin's version of report.cls to repcram.cls
+%%                * renamed Colin's version of size12.cls to cramsz12.clo
+%%                * edited (slightly) the text in the .tex files inputted
+%%                * put headers at the top of .tex/.cls/.clo files for CVS
+
+%%  [Mainly] Colin's description:
+%%   Technical Report on ACE 3.001. Note that it is intended that this 
+%%   uses the repcram.cls/cramsz12.clo files in its home directory, 
+%%   so the bulk of required setup is folded into these. Any other 
+%%   stuff is put into the the defns.tex file.
+%%
+%%  5   10   15   20   25   30   35   40   45   50   55   60   65   70   75
+%%..|....|....|....|....|....|....|....|....|....|....|....|....|....|....|
+
+\documentclass[12pt,a4paper,twoside]{repcram}
+%\usepackage{amssymb}
+%\usepackage{latexsym}
+
+\input{defns} 
+
+% COVER PAGE
+
+\begin{document}
+
+\pagestyle{empty}
+
+\begin{center}\large
+\tsc{Centre for Discrete Mathematics and Computing} \\[2.0ex]
+Department of Computer Science {\normalsize\&} Electrical Engineering \\
+and Department of Mathematics, \\
+The University of Queensland, QLD 4072
+\end{center}
+
+\vspace*{3.5in}
+
+\begin{center}\large
+{\parbox{75mm}{\begin{tabbing}
+xxxxxxxxx \= \kill
+         \> Technical Report \#14 \\[2.25ex]
+Title:   \> \ace\ for Amateurs (Version 3.001) \\[0.75ex]
+Author:  \> Colin Ramsay \\
+Date:    \> \today \\
+Version: \> working draft (incomplete)
+\end{tabbing}}}
+\end{center}
+
+% BLANK PAGE
+
+\newpage
+\pagestyle{plain}
+\pagenumbering{roman}
+\setcounter{page}{2}
+
+\ 
+
+% CONTENTS PAGES
+
+\newpage
+
+\addcontentsline{toc}{chapter}{Contents}
+\tableofcontents
+
+\newpage
+\addcontentsline{toc}{chapter}{List of figures}
+\listoffigures
+
+\newpage
+\addcontentsline{toc}{chapter}{List of tables}
+\listoftables
+
+% INTRODUCTION
+
+\newpage
+\setcounter{page}{1}
+\pagenumbering{arabic}
+
+\chapter{Introduction}
+\input{intro}
+
+% BACKGROUND
+
+\chapter{Background}
+\input{back}
+
+% INTERACTIVE INTERFACE
+
+\chapter{\ace\ Level 2: \\ an interactive interface}
+\input{al2}
+
+% CORE WRAPPER
+
+\chapter{\ace\ Level 1: \\ a core wrapper}
+\input{al1}
+
+% CORE ENUMERATOR
+
+\chapter{\ace\ Level 0: \\ the core enumerator}
+%\input{al0}
+
+TBA: \dots
+
+% PROOF TABLE
+
+\chapter{Proof Tables}
+
+\input{pt}
+
+% % CONCLUSIONS
+% 
+% \chapter{Conclusions}
+% 
+% \acet\ is a wonderful programme, and the person who wrote it should be
+%   given a (very valuable) medal.
+
+% APPENDICES
+
+\clearpage
+\appendix
+
+\chapter{Examples}\label{app:ex}
+\input{ex}
+
+% REFERENCES
+
+\clearpage
+
+\addcontentsline{toc}{chapter}{References}
+
+\bibliographystyle{plain}
+\bibliography{biblio}
+
+\end{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%E

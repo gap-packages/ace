@@ -22,6 +22,10 @@ doc:
 #	(cd standalone-doc;latex ace3001;bibtex ace3001;latex ace3001;latex ace3001)
 #	(cd standalone-doc;dvips ace3001 -o)
 #	(cd standalone-doc;rm ace3001.{toc,blg,log,aux})
+#
+# TeX sources of ace41 manual: to build the manual with xelatex and metapost
+stadoc:
+	cd standalone-doc && make
 
 Makefile: configure Makefile.in $(GAPPATH)/sysinfo.gap
 	./configure "$(GAPPATH)"

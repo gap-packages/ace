@@ -1,0 +1,164 @@
+
+% aaa.tex - Colin Ramsay - 2 Feb 01
+%
+% Abbreviations And Acronyms + technical/(P(E))ACE terms etc.
+%
+%   5   10   15   20   25   30   35   40   45   50   55   60   65   70   75
+% ..|....|....|....|....|....|....|....|....|....|....|....|....|....|....|
+
+This appendix lists:
+  the abbreviations and acronyms we use;
+  the technical terms we use;
+  the various terms used in describing \ace, and in explicating
+    its internals;
+  any terms specific to \pace\ or \peace\ which are used.
+Note that this list includes both terms used in this manual and terms 
+  commonly used in the source code.
+
+\begin{tabbing}
+xxxxxxxxxx 	\= \kill
+\ace       	\> advanced coset enumerator \\ 
+aka        	\> also known as \\
+alive      	\> an active (non-pending/dead) coset \\
+ANSI       	\> American national standards institute \\
+arg        	\> argument \\
+asap       	\> as soon as possible \\
+ave	   	\> average \\
+barrier	   	\> sync point at which all threads wait until all are ready \\
+\ttt{beg(in)} 	\> starts an enumeration ab initio \\
+bn	   	\> between \\
+BSD        	\> Berkeley standard distribution \\
+C	   	\> the best programming language, \emph{ever} \\
+CC         	\> coinc coset processed (enumeration message/phase) \\
+CD         	\> coset table definition (enumeration message/phase) \\
+cds	   	\> complete definition sequence \\
+\ttt{check}	\> synonym for \ttt{redo} \\
+Chk        	\> result checking (enumeration message/phase) \\
+CL         	\> coset table based lookahead (enumeration message/phase) \\
+cmd        	\> command \\
+CO         	\> table compaction (enumeration message/phase) \\
+coinc      	\> coincidence.  Primary coinc -- occurs during defns/scans. \\
+	   	\> Secondary coinc -- consequence of a primary one \\
+col	   	\> column \\
+concurrent 	\> potentially at the same time, or virtual parallelism \\
+\ttt{cont(inue)}\> continues the current enumeration \\
+cos  	   	\> coset \\
+C(PU)	   	\> aggregated CPU time for an enumeration \\
+CPU        	\> central processor unit \\
+CRG        	\> the \pace\ style -- coset table, relator tables \amp gap filling \\
+CT	   	\> coset table \\
+DD         	\> serial deduction stack processing (enumeration message/phase) \\
+dead       	\> a fully processed coinc coset \\
+dedn       	\> deduction.  Formally -- a deduction made during relator scanning. \\
+	   	\> Loosely -- any (new/altered) table entry which is stacked \\
+defn       	\> definition \\
+defn seq   	\> definition sequence \\
+DG         	\> serial gap-filling (enumeration message/phase) \\
+\ttt{DOSTK}	\> dedn processing macro, calls appropriate handler \\
+DS         	\> definition sequence \\
+\ttt{dtime}	\> total elapsed time in \ttt{DOSTK} macro (part of stats) \\
+DTT        	\> special debug/test/trace code \\
+edp        	\> essentially different position(s) \\
+eg	   	\> exempli gratio, for example \\
+elt	   	\> element \\
+\ttt{end}	\> synonym for \ttt{begin} (don't blame me!) \\
+EOF	   	\> end-of-file \\
+EOL	   	\> end-of-line \\
+Err        	\> error (enumeration message/phase) \\
+etc	   	\> et cetera \\
+F          	\> FALSE \\
+$G$	   	\> the group \\
+gen	   	\> generator, either of grp or of subgrp \\
+GNU	   	\> GNU's not Unix -- quality `freeware' \\
+$g(p)$     	\> growth function of $T$ with $p$ \\
+grp	   	\> group \\
+$H$	   	\> the subgroup \\
+HD         	\> heuristic definition (enumeration message/phase) \\
+ie	   	\> id est, that is \\
+inc(l)     	\> include/including \\
+inc(r)     	\> increase/increasing \\
+inv        	\> inverse \\
+invol(n)   	\> involution \\
+I/O        	\> input/output \\
+IP, i/p	   	\> input \\
+item       	\> PWs are sequences of items \\
+KISS	   	\> keep it simple, stupid \\
+\ttt{(kn)h} 	\> coset table rows $<$\ttt{knh} are guaranteed to be complete \\
+\ttt{(kn)r} 	\> coset table rows $<$\ttt{knr} are guaranteed to scan at all relators \\
+LC	   	\> lower-case \\
+len        	\> length \\
+lst	   	\> list \\
+LWP	   	\> lightweight process -- sorta like a thread, but not quite \\
+\ttt{m}, $M$ 	\> MaxCos, the maximum number of cosets active \\
+mode	   	\> start, continue or redo an enumeration \\
+mutex	   	\> POSIX mutual exclusion lock \\
+$n$        	\> the number of slaves/threads (i.e., the argument of \ttt{beg}) \\
+n/a	   	\> not applicable \\
+\ttt{n(extdf)} 	\> number of next coset to be defined \\
+\ttt{nproc}	\> global variable containing value of $n$ \\
+NW         	\> non-whitespace (ie, not space, tab, or (maybe) newline \\ 
+OP, o/p	   	\> output \\
+OS         	\> operating system \\
+$p$        	\> the dedn stack batching factor (i.e., the argument of \ttt{pf}) \\
+\pace      	\> parallel \ace \\
+\tsc{Par}  	\> the parallelisable portion of the running time \\
+para       	\> paragraph \\
+parallel   	\> actually at the same time, or real parallelism \\
+parallel   	\> a \pace\ run with $n \ne 0$ \\
+parentheses	\> the ``('' \amp ``)'' characters \\
+PC         	\> proof certificate \\
+pdl        	\> preferred definition list \\
+\peace	   	\> proof extraction after coset enumeration \\
+pending    	\> a coset on the coinc queue but not yet processed \\
+\ttt{pfactor}	\> global variable containing value of $p$ \\
+pthread    	\> POSIX thread \\
+PD	   	\> parallel deduction stack processing (enumeration message/phase) \\
+PG         	\> parallel gap-filling (enumeration message/phase) \\
+pos(n)     	\> position \\
+POSIX      	\> portable operating system interface \\
+PPP        	\> paranoia prevent problems (ie, belts'n'braces) \\
+pri	   	\> primary \\
+PT         	\> proof table \\
+ptr	   	\> pointer \\
+PW	   	\> proof word \\
+RD         	\> relator table definition (enumeration message/phase) \\
+RA         	\> relator application check (enumeration message/phase) \\
+\ttt{redo}	\> redo the current enumeration (keeping the table) \\
+red(n)     	\> reduction \\
+redundant  	\> a dead coset \\
+rel	   	\> relator and/or relation \\
+rep        	\> the (current) representative of a coincident coset \\
+RS         	\> relators in subgroup (enumeration message/phase) \\
+sec	   	\> secondary \\
+semaphore  	\> sync primitive allowing signalling between threads \\
+seq	   	\> sequence \\
+\tsc{Ser}  	\> the serial portion of the running time \\
+serial	   	\> a \pace\ run using \ttt{beg:0}, or an \ace\ run \\
+SG         	\> subgroup generator (enumeration message/phase) \\
+SMP        	\> shared memory multiprocessor and/or symmetric multiprocessing \\
+spin-lock  	\> sync via sitting in tight loop until a condition is met \\
+square 	   	\> the ``['' \amp ``]'' characters \\
+\ brackets 	\> \\
+src	   	\> source \\
+stats      	\> statistics (package) \\
+\ttt{start}	\> synonym for \ttt{begin} \\
+strategy   	\> the overall enumeration method (ie, HLT, Felsch, Sims:n, etc) \\
+style	   	\> which of the state machines is active (ie, R, C, CR, etc) \\
+subgrp	   	\> subgroup \\
+\tsc{Sync} 	\> the master-slave synchronisation overhead time \\
+sync       	\> synchronous, synchronisation \\
+\ttt{t}, $T$	\> TotCos, the total number of cosets defined \\
+T          	\> TRUE \\
+TAB	   	\> tabulate character \\
+TBA	   	\> to be announced/advised \\
+thread	   	\> an independent execution sequence within a process \\
+tuple      	\> 4-element record of significant scan, see the \ttt{Dlelt} type (in \ttt{al0.h}) \\
+UC	   	\> upper-case \\
+UH         	\> update hole count check (enumeration message/phase) \\
+vs	   	\> versus \\
+\tsc{W(all)}	\> elapsed, or wall, time for an enumeration \\
+wrd        	\> word \\
+WS	   	\> white-space; ie, blanks, tabs, \amp newlines (maybe) 
+\end{tabbing}
+
+%TBA ...  
