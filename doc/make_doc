@@ -3,13 +3,13 @@ set -e
 
 echo "TeXing documentation"
 # TeX the manual and build its bibliography
-tex manual;bibtex manual
+xetex manual;bibtex manual
 # TeX the manual again to incorporate the ToC ... and build the index
-tex manual; ../../../doc/manualindex manual
+xetex manual; ../../../doc/manualindex manual
 # Finally TeX the manual again to get cross-references right
-tex manual
 # Create PDF version
-pdftex manual; pdftex manual
+xetex manual
+xetex manual
 
 # The HTML version of the manual
 rm -rf ../htm
