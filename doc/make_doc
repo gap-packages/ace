@@ -17,6 +17,12 @@ mkdir ../htm
 echo "Creating HTML documentation"
 ../../../etc/convert.pl -i -u -c -n ACE . ../htm
 
+# Build docs of the standalone ACE
+cd ../standalone-doc
+make
+cp ace41.pdf ../doc/
+cd ../doc
+
 #########################################################################
 ##
 #E
