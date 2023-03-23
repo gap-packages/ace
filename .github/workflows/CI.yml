@@ -61,7 +61,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: gap-actions/setup-gap@v2
-      - uses: gap-actions/build-pkg-docs@v1
+      - uses: dimpase/build-pkg-docs@v1
         with:
           use-latex: 'true'
       - name: 'Upload documentation'
@@ -69,4 +69,10 @@ jobs:
         with:
           name: manual
           path: ./doc/manual.pdf
+          if-no-files-found: error
+      - name: 'Upload ACE binary documentation'
+        uses: actions/upload-artifact@v3
+        with:
+          name: ace41 
+          path: ./doc/ace41.pdf
           if-no-files-found: error
