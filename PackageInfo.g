@@ -46,7 +46,7 @@ Persons := [
     FirstNames    := "George",
     IsAuthor      := true,
     IsMaintainer  := false,
-    Email         := "havas@itee.uq.edu.au",
+    Email         := "georgehavas@gmail.com",
     WWWHome       := "http://staff.itee.uq.edu.au/havas",
     PostalAddress := Concatenation( [
                        "George Havas\n",
@@ -64,7 +64,7 @@ Persons := [
     FirstNames    := "Colin",
     IsAuthor      := true,
     IsMaintainer  := false,
-    Email         := "cram@itee.uq.edu.au",
+    Email         := "cramsay1954@gmail.com",
     PostalAddress := Concatenation( [
                        "Colin Ramsay\n",
                        "Centre for Discrete Mathematics and Computing\n",

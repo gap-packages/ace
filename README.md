@@ -102,8 +102,8 @@ The `src` subdirectory contains a copy of the C source code for ACE.
 only modification there is for make.linux
 
 If you encounter problems with the ACE binary, please contact one of  the
-C code authors:  George  Havas  <havas@itee.uq.edu.au>  or  Colin  Ramsay
-<cram@itee.uq.edu.au>.
+C code authors:  George  Havas  <georgehavas@gmail.com>  or  Colin  Ramsay
+<cramsay1954@gmail.com>.
 
 If you encounter problems at the GAP level, please submit an issue to
 <https://github.com/gap-packages/ace/issues>
