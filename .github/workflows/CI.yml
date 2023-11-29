@@ -64,6 +64,7 @@ jobs:
       - uses: dimpase/build-pkg-docs@v1
         with:
           use-latex: 'true'
+          use-xetex-and-metapost: 'true'
       - name: 'Upload documentation'
         uses: actions/upload-artifact@v3
         with:
