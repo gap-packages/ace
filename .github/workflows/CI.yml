@@ -60,11 +60,14 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+      - name: 'Install xetex and metapost'
+        run: |
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends texlive-xetex texlive-metapost
       - uses: gap-actions/setup-gap@v2
-      - uses: dimpase/build-pkg-docs@v1
+      - uses: gap-actions/build-pkg-docs@v1
         with:
           use-latex: 'true'
-          use-xetex-and-metapost: 'true'
       - name: 'Upload documentation'
         uses: actions/upload-artifact@v3
         with:
