@@ -7,12 +7,13 @@
 # <https://github.com/gap-system/gap/issues/4430>.
 #
 # don't package ACE binary doc sources
+rm -rf standalone-doc/
+
 # Note: we used to create symlinks instead of copying the files, which
 # seems conceptually cleaner, but caused breakage in the GAP release
 # process. Figuring out the details does not seem worth the hassle, so
 # just copy the files instead. For details, please refer to
 # <https://github.com/gap-system/gap/issues/5011>.
-rm -rf standalone-doc/
 cp -f htm/CHAP00A.htm htm/CHAP007.htm
 cp -f htm/CHAP00B.htm htm/CHAP008.htm
 cp -f htm/CHAP00C.htm htm/CHAP009.htm
