@@ -99,7 +99,7 @@ explains how to use the ACE binary (i.e. the C program that is interfaced
 with by the package from within GAP) as a stand-alone.
 
 The `src` subdirectory contains a copy of the C source code for ACE.
-only modification there is for make.linux
+The only modifications made were for `make.linux`.
 
 If you encounter problems with the ACE binary, please contact one of  the
 C code authors:  George  Havas  <georgehavas@gmail.com>  or  Colin  Ramsay
