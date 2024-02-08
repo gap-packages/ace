@@ -1,26 +1,41 @@
 
-/**************************************************************************
+/*****************************************************************************
 
-	enum00.c
-	Colin Ramsay (cram@itee.uq.edu.au)
-        25 Feb 00
+  enum00.inc
+  25 Oct 03, 18 Apr 14
+  Colin Ramsay, uqcramsa@uq.edu.au
 
-	ADVANCED COSET ENUMERATOR, Version 3.001
+  ACE 4.100: Advanced Coset Enumerator, Version 4.1, Release 00
 
-	Copyright 2000
-	Centre for Discrete Mathematics and Computing,
-	Department of Mathematics and 
-	  Department of Computer Science & Electrical Engineering,
-	The University of Queensland, QLD 4072.
-	(http://staff.itee.uq.edu.au/havas)
+Copyright (c)  2014  Centre for Discrete Mathematics and Computing, 
+                     The University of Queensland, Australia
 
-This is the include file for the enumerator's finite automata.  The 
-transition tables take the current state & the previous action's result, 
-and give the next action & the next state.  Note that the complete state
-machine also includes an initialisation phase & some special actions at the
-exiting of a state with a particular result.  These are coded into the 
-start of the _enum() function and a switch() at the end of the machine's 
-main loop respectively.
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+
+
+This is the include file for the enumerator's finite automaton, and is used by
+enum.c.  The transition tables take the current state & the previous action's 
+result, and give the next action (al0_act[][]) & the next state (al0_st[][]).  
+Note that the complete state machine also includes an initialisation phase & 
+some special actions at the exiting of a state with a particular result.  These 
+are coded into the start of the al0_enum() function and a switch() at the end of
+al0_enum()'s main loop respectively.
 
 States:
 0	catch-all dummy/invalid state (forces return with fatal error)
@@ -105,9 +120,9 @@ Actions (may cause state machine exit & force return from al0_enum()):
 8	apply relators to coset 1
 9	definitions/deductions (R*-style)
 
-**************************************************************************/
+*****************************************************************************/
 
-static int al0_act[63][3] =
+static SInt al0_act[63][3] =
   { 
     {-1, -1, -1},	/*  0 */
     {-1,  7, -1},	/*  1 */
@@ -174,7 +189,7 @@ static int al0_act[63][3] =
     {-1,  9, -1}	/* 62 */
   };
 
-static int al0_st[63][3] =
+static SInt al0_st[63][3] =
   {
     { 0,  0,  0},	/*  0 */
     { 0, 44,  0},	/*  1 */

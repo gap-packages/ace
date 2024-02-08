@@ -1,0 +1,101 @@
+
+# .../ACE4/doc/ToDo, 24 Jun 14
+
+Add notes re hole check (UH) in ex002
+
+Discussion re 32/64 bit data/address `problem' ...
+Table organisation & access methods ...
+
+Chapter on system/compiler specific `utilities'
+Chapter on `post-processing' package
+
+History: FORTRAN, TC ... 4.06, (A)CE 1.0 & 1.1, ACE 2xxx, ACE 3000,
+  PACE, PEACE, ACE3001
+
+Stuff from GAP & Magma manuals
+
+The division into `notes' & `guru notes' is somewhat arbitrary,
+  and ...
+
+Discussion re the `table access' speed problem.
+
+Add note to the effect that `pure c' yields a standard table!
+Prove that a compact & standard table yields coset reps which :-
+i) are Schreier (ie, have the prefix property)
+ii) are in order (ie, length + column lex order)
+iii) are minimal (ie, no shorter rep)
+
+General note re some commands ?? ...
+Add a note to `rc' to the effect that it is `delicate' and that the 
+  result should be checked before use.
+It may also have altered some of the parameters if it returns 
+  unexpectedly.
+
+Update examples to 3.001
+
+Put in a section about the `big collapse' problem, `ded siz' & `ded mode'
+  parameters, etc.
+Also, some examples about dropping some/many dedns can be profitable.
+However, still problem with deduction handling - all or nothing.
+Possible parallelisation - see PACE.
+Discussion of `types' for collapses - #sec coincs, #dedns, #dedns when
+  processing dedn list _after_ collapse, etc.
+
+Make a note of the fact that progress messages are activity based, in an
+  attempt to standardise the amount of work (& hence the time interval)
+  that each step represents.
+It's pretty good (much better than the old system), but still leaves a bit
+  to be desired.
+
+Acknowledgements to people & organisations:
+  GH, GregG, Sims, VolkmarG, ITEE/Ozone/Aitken
+
+Chapters (or whatever) on:
+  Preface
+  Using Level 0
+  Using Levels 1/2
+  Guru Magic
+
+ToDo:
+  indentation in verbatim environment?
+  update biblio: ACE/PACE/PEACE manuals, PACE paper, GAP/XGAP/ITC, Magma,
+	RKBP, ?Holts, Genetic, Cooperman ideas, ...
+  in al2 chapter, change C-style for C-method etc!
+
+`look' entry in cmd.tex.
+2 of the 4 modes are the *same*!
+Comment upon, and change the machine(s).
+
+17May14
+- Intro, BGnd, etc
+- Overview L0/l1/l2, refer to cmds chapter, flowchart appendix
+- test programmes, l0/1 examples
+- level 2 input
+- building, testing, optimisation/mem model
+- caveats, gotchas, todo, ...
+
+- I'm not 100% sure that there's not a memory leak when doing a long series of
+  runs, where the presentation is constantly being redefined; see nep.in, where
+  the memory usage goes up (and down), but this could be due (in part) to the
+  dedn stack being realloc'd
+
+9Jun14
+- possible text to fold in ...
+  - SW27MAR12/GAP/ACEmanual.pdf
+    - sect3.4 for lenlex  ** HMM, discuss in manual along with Schrier System;
+        see, eg, email example; see also p91/92
+    - sect6.7p60 for normal  ** DONE, see test105
+    - App B5  ** IGNORE
+  - /WORK23MAR12/pc00328/Orig30Jun09/Archive3/mail9Apr09/
+    - "gregg" refs in sm-feb-00, jul-00, aug-00, dec-00, mar-01 & apr-01
+  - WORK23MAR12/pc00328/Orig30Jun09/GroupOrig/grp/... ?
+    - gh/gh2.in|out
+    - j4
+    - klmq
+    - man3001
+
+pgrp census4 & census15 are the bigrun* source!
+
+Talk about Errors/Warnings.txt
+
+

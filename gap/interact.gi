@@ -1281,7 +1281,7 @@ local newoptnames, s, optnames, echo, ignored;
                         # disallowed (options) ... none
                         rec(),
                         # ignored
-                        Concatenation( [ "aceinfile", "aceoutfile" ],
+                        Concatenation( [ "aceinfile" ],
                                        ignored,
                                        ACE_IF_EXPR(
                                            IsBound(datarec.enforceAsis)
@@ -1501,7 +1501,7 @@ local datarec, line;
                                                       "Subgroup Generators"));
   fi;
   FLUSH_ACE_STREAM_UNTIL(datarec.stream, 3, 3, ACE_READ_NEXT_LINE, 
-                         line -> IsMatchingSublist(line, "  #--"));
+                         line -> IsMatchingSublist(line, "  ---"));
   return datarec.args.(field);
 end);
 
@@ -1580,40 +1580,6 @@ local ioIndex, datarec, line, fieldsAndValues, parameters, sgens, i, opt, val;
     i := i + 2;
   od;
   return parameters;
-end);
-
-#############################################################################
-####
-##
-#F  ACEBinaryVersion 
-##
-##  Infos the version and component compilation details of  the  ACE  binary,
-##  and returns the version of the ACE binary.
-##
-InstallGlobalFunction(ACEBinaryVersion, function(arg)
-local ioIndex, datarec;
-
-  ACE_IOINDEX_ARG_CHK(arg);
-  ioIndex := ACE_IOINDEX(arg);
-  if ioIndex = fail then 
-    # Fire up a new stream ... which we'll close when we're finished
-    datarec := ACEData.ni;
-    datarec.stream 
-        := InputOutputLocalProcess( ACEData.tmpdir, ACEData.binary, [] );
-  else
-    # Use interactive ACE process: ioIndex
-    datarec := ACEData.io[ ioIndex ];
-  fi;
-  READ_ACE_ERRORS(datarec); # purge any output not yet collected
-                            # e.g. error messages due to unknown options
-  Info(InfoACE, 1, "ACE Binary Version: ", ACEData.version);
-  WRITE_LIST_TO_ACE_STREAM(datarec.stream, [ "options;" ]);
-  FLUSH_ACE_STREAM_UNTIL(datarec.stream, 1, 1, ACE_READ_NEXT_LINE,
-                         line -> IsMatchingSublist(line, "  host info ="));
-  if ioIndex = fail then 
-    CloseStream(datarec.stream);
-  fi;
-  return ACEData.version;
 end);
 
 #############################################################################
@@ -1745,30 +1711,6 @@ InstallGlobalFunction(ACE_IOINDEX_AND_LIST, function(arglist)
   else
     Error("2nd argument should have been a list\n");
   fi;
-end);
-
-#############################################################################
-####
-##
-#F  ACEDumpVariables . . . . . . . . . . . . . Dumps ACE's internal variables
-##
-##
-InstallGlobalFunction(ACEDumpVariables, function(arg)
-  EXEC_ACE_DIRECTIVE_OPTION(
-      ACE_IOINDEX_AND_LIST(arg), "dump", 1, 
-      line -> IsMatchingSublist(line, "  #----"), "", false);
-end);
-
-#############################################################################
-####
-##
-#F  ACEDumpStatistics . . . . . . . . . . . . Dumps ACE's internal statistics 
-##
-##
-InstallGlobalFunction(ACEDumpStatistics, function(arg)
-  EXEC_ACE_DIRECTIVE_OPTION(
-      ACE_IOINDEX_AND_NO_VALUE(arg), "statistics", 1, 
-      line -> IsMatchingSublist(line, "  #----"), "", false);
 end);
 
 #############################################################################
@@ -2253,6 +2195,7 @@ local ioIndex, iostream, datarec, fgens, standard, incomplete,
            "type: 'DisplayACEOptions(<i>);' to see current ACE options.");
       return fail;
     else
+      WRITE_LIST_TO_ACE_STREAM(datarec.stream, [ "Standard;" ]);
       WRITE_LIST_TO_ACE_STREAM(datarec.stream, [ "Print Table;" ]);
       cosettable := ACE_COSET_TABLE(datarec.stats.activecosets, 
                                     datarec.acegens, 
@@ -2324,6 +2267,7 @@ local ioIndex, iostream, datarec, fgens, standard, incomplete,
           cosettable := datarec.cosettable;
           Unbind(datarec.cosettable);
         else
+          WRITE_LIST_TO_ACE_STREAM(datarec.stream, [ "Standard;" ]);
           WRITE_LIST_TO_ACE_STREAM(datarec.stream, [ "Print Table;" ]);
           cosettable := ACE_COSET_TABLE(datarec.stats.activecosets,
                                         datarec.acegens, 

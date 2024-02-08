@@ -11,7 +11,8 @@ enumeration by interfacing with the Advanced Coset Enumerator (ACE),
 ACE coset enumerator (C) 1995-2001 by George Havas and Colin Ramsay
 <http://staff.itee.uq.edu.au/havas>
 
-from within GAP 4.
+from within GAP 4. The current version uses
+[ACE 4.1](https://outbox.eait.uq.edu.au/uqcramsa/ace4100.tar.gz).
 
 The GAP  interface (package) has been  written by Alexander Hulpke  and Greg
 Gamble. In order  to install the ACE  package you must get  the archive file
@@ -92,29 +93,17 @@ For details on how to use the ACE package see the  package  documentation
 in the  `doc`  subdirectory  (view  either  `manual.dvi`  via  `xdvi`  or
 `manual.ps` via `ghostview` or `manual.pdf`  via  a  PDF  viewer),  which
 gives information on how to use ACE from within GAP. The ACE user  manual
-(`ace3001.ps`  or  `ace3001.pdf`)  in  the  `standalone-doc`   directory,
+(`ace3001.ps` for old ACE 3  or for the more recent one `ace4.pdf`,
+used in the current package version)  in  the  `standalone-doc`   directory,
 explains how to use the ACE binary (i.e. the C program that is interfaced
 with by the package from within GAP) as a stand-alone.
 
-The `src` subdirectory contains a copy of the C source code for ACE.  The
-only modification are those listed in  src/CHANGES.  In  particular,  the
-the following bug was fixed on 25 February, 2001.
-
-A bug was  discovered  in  ACE  3.000  on  22  December,  2000  that  was
-particularly manifested by the Linux gcc compilers listed below. The  bug
-was  reported  with  fix  by  Volker  Gebhardt  (thanks!)  and  caused  a
-segmentation fault when ACE output  coset  representatives.  The  fix  is
-incorporated in ACE 3.001 which we now use.
-
-ACE has been compiled successfully with the following C compiler:
-
-   gcc version 4.8.4 (Ubuntu 4.8.4-2ubuntu1~14.04.1)
-
-and is presumed to compile with any modern version of C compiler.
+The `src` subdirectory contains a copy of the C source code for ACE.
+The only modifications made were for `make.linux`.
 
 If you encounter problems with the ACE binary, please contact one of  the
-C code authors:  George  Havas  <havas@itee.uq.edu.au>  or  Colin  Ramsay
-<cram@itee.uq.edu.au>.
+C code authors:  George  Havas  <georgehavas@gmail.com>  or  Colin  Ramsay
+<cramsay1954@gmail.com>.
 
 If you encounter problems at the GAP level, please submit an issue to
 <https://github.com/gap-packages/ace/issues>
