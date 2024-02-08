@@ -24,7 +24,7 @@ doc:
 #	(cd standalone-doc;rm ace3001.{toc,blg,log,aux})
 #
 # TeX sources of ace41 manual: to build the manual with xelatex and metapost
-stadoc:
+otherdoc:
 	cd standalone-doc && make
 
 Makefile: configure Makefile.in $(GAPPATH)/sysinfo.gap

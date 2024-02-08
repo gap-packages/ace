@@ -4,6 +4,10 @@ development.
 
 ## Version 5.7.0 (2023-03-12)
   * use ACE 4.1 sources, adjust GAP interface accordingly
+    in particular, take care of  ACE's pmode option removed,
+    remove aceoutfile ACE GAP package option. 
+  * build and install docs for the standalone ACE program
+
 
 ## Version 5.6.2 (2023-01-03)
   * Enhance the `configure` script to accept `--with-gaproot=PATH`
