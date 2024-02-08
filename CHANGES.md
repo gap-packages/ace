@@ -2,7 +2,7 @@ In this file we record the changes since the 3.xxx versions of the ACE
 package. Also look at gap/CHANGES  for  a  history  of  the  pre-3.xxx
 development.
 
-## Version 5.7.0 (2023-03-12)
+## Version 5.7.0DEV (2023-03-12)
   * use ACE 4.1 sources, adjust GAP interface accordingly
     in particular, take care of  ACE's pmode option removed,
     remove aceoutfile ACE GAP package option. 
