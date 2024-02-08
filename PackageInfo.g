@@ -101,8 +101,8 @@ Persons := [
     WWWHome       := "https://www.pasechnik.info",
     PostalAddress := Concatenation(
                        "Department of Computer Science\n",
-		       "University of Oxford\n",
-		       "Wolfson Building, Parks Road\n",
+                       "University of Oxford\n",
+                       "Wolfson Building, Parks Road\n",
                        "Oxford OX1 3QD\n",
                        "UK" ),
     Place         := "Oxford, UK",
