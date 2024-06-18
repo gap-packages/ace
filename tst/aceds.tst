@@ -28,9 +28,9 @@ rec( activecosets := 80, cputimeUnits := "10^-2 seconds", index := 80,
   maxcosets := 123, totcosets := 187 )
 gap> ACEDeleteSubgroupGenerators( i, [ t ] );             
 [ b ]
-gap> lev := InfoACELevel();
+gap> lev := InfoLevel(InfoACE);
 1
-gap> SetInfoACELevel(3);
+gap> SetInfoLevel(InfoACE, 3);
 gap> ACEDeleteSubgroupGenerators( i, [ 2 ] );
 #I  ** ERROR (continuing with next line)
 #I     first argument out of range
@@ -47,6 +47,6 @@ gap> ACEDeleteSubgroupGenerators( i, [ 2 ] );
 #I  Subgroup Generators: b;
 #I    #---------------------------------
 [ b ]
-gap> SetInfoACELevel(lev);
+gap> SetInfoLevel(InfoACE, lev);
 gap> ACEQuit(i);
 gap> STOP_TEST( "aceds.tst", 1000000 );

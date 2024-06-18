@@ -70,7 +70,7 @@ Let's redo that part of the above  example  after  first  setting  the
 going on behind the scenes.
 
 \beginexample
-gap> SetInfoACELevel(3); # Just to see what's going on behind the scenes
+gap> SetInfoLevel(InfoACE, 3); # Just to see what's going on behind the scenes
 gap> # Recall that we did: TCENUM:=ACETCENUM;;
 gap> G := PerfectGroup(IsPermGroup, 16*60, 1   # Arguments ... as per usual
 >                      : max := 50, mess := 10 # ... but we use ACE options
@@ -128,7 +128,7 @@ A5 2^4
 The following example calls {\ACE} for up to 800 coset  numbers  (`max
 := 800') using Mendelsohn style relator processing (`mendelsohn')  and
 sets progress messages to be printed every 500  iterations  (`messages
-:=500'); we do ```SetInfoACELevel(3);''' so  that  we  may  see  these
+:=500'); we do ```SetInfoLevel(InfoACE, 3);''' so  that  we  may  see  these
 messages.  The  value  of  `table',  i.e.~the  {\GAP}   coset   table,
 immediately follows the last {\ACE}  message  (```\#I ''')  line,  but
 both the coset table from {\ACE} and the {\GAP} coset table have  been
@@ -139,7 +139,7 @@ ACEExample("perf602p5");'. You may wish to peruse  the  notes  in  the
 that the final table output here is `lenlex'  standardised.)
 
 \beginexample
-gap> SetInfoACELevel(3);           # So we can see the progress messages
+gap> SetInfoLevel(InfoACE, 3);     # So we can see the progress messages
 gap> G := PerfectGroup(IsSubgroupFpGroup,2^5*60, 2);;# See previous example:
 gap>                               # "Example where ACE is made the
 gap>                               #  Standard Coset Enumerator"
@@ -208,15 +208,15 @@ we  have  relied  on  the  default  level  of  messaging  from  {\ACE}
 here) only, without parameter information. The result line is  visible
 in the `Info'-ed component of the output  below  because  we  set  the
 `InfoLevel' of `InfoACE' to a value of at least 2 (in fact we  set  it
-to 3; doing ```SetInfoACELevel(2);''' would  make  *only*  the  result
+to 3; doing ```SetInfoLevel(InfoACE, 2);''' would  make  *only*  the  result
 line visible). We have however used the option `echo', so that we  can
 see how the interface handled the arguments and options. On-line  try:
-`SetInfoACELevel(3); ACEExample("A5-C5", ACEStart);' (this  is  nearly
+`SetInfoLevel(InfoACE, 3); ACEExample("A5-C5", ACEStart);' (this  is  nearly
 equivalent to the sequence following, but the variables `F', `a', `b',
 `G' are not accessible, being ``local'' to `ACEExample').
 
 \beginexample
-gap> SetInfoACELevel(3); # So we can see output from ACE binary
+gap> SetInfoLevel(InfoACE, 3); # So we can see output from ACE binary
 gap> F := FreeGroup("a","b");; a := F.1;;  b := F.2;;
 gap> G := F / [a^2, b^3, (a*b)^5 ];
 <fp group on the generators [ a, b ]>
@@ -345,12 +345,12 @@ gap> ACEExample();
 #I  4. Try the *-ed examples to explore how to modify options when an
 #I     enumeration fails (just follow the instructions you get within the
 #I     break-loop, or see Notes 2. and 3.).
-#I  5. Try `SetInfoACELevel(3);' before calling ACEExample, to see the
+#I  5. Try `SetInfoLevel(InfoACE, 3);' before calling ACEExample, to see the
 #I     effect of setting the "mess" (= "messages") option.
 #I  6. To suppress a long output, use a double semicolon (`;;') after the
 #I     ACEExample command. (However, this does not suppress Info-ed output.)
-#I  7. Also, try `SetInfoACELevel(2);' or `SetInfoACELevel(4);' before 
-#I     calling ACEExample.
+#I  7. Also, try `SetInfoLevel(InfoACE, 2);' or `SetInfoLevel(InfoACE, 4);'
+#I     before calling ACEExample.
 gap> 
 
 \endexample
@@ -382,7 +382,7 @@ short-hand for inverses, e.g.~`C = c^-1' (see `Group Relators' in  the
 {\ACE} ``Run Parameters'' block).
 
 \beginexample
-gap> SetInfoACELevel(3);
+gap> SetInfoLevel(InfoACE, 3);
 gap> ACEExample("F27-purec");
 #I  # ACEExample "F27-purec" : enumeration of cosets of H in G,
 #I  # where G = F(2,7) = C_29, H = Id, using purec strategy.
@@ -481,7 +481,7 @@ same abbreviations for options to over-ride them.  Also  observe  that
 our new options are *last*.
 
 \beginexample
-gap> SetInfoACELevel(2);
+gap> SetInfoLevel(InfoACE, 2);
 gap> ACEExample("F27-purec", ACECosetTableFromGensAndRels
 >               : sg := ["c"], subgroup := "< c >", messages := 0);
 #I  # ACEExample "F27-purec" : enumeration of cosets of H in G,
@@ -791,7 +791,7 @@ gap>
 \endexample
 
 %display{nontext}
-The output (`Info'-ed at `InfoACELevel' 1) states that a number of new
+The output (`Info'-ed at `InfoACE' level 1) states that a number of new
 functions are defined. During a  {\GAP}  session,  you  can  find  out
 details of these functions by typing:
 
@@ -801,7 +801,7 @@ gap> ?Using ACEReadResearchExample
 
 %enddisplay
 %display{nonhtml}
-%The output (`Info'-ed at `InfoACELevel' 1) states  that  a  number  of
+%The output (`Info'-ed at `InfoACE' level 1) states  that  a  number  of
 %functions and variables have been defined, which we will now describe.
 %
 %\>PGRelFind( <fgens>, <rels>, <sgens> ) F
