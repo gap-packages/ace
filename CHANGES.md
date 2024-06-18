@@ -63,10 +63,10 @@ development.
   * PackageInfo.g,README,VERSION,doc/{manual,ace,install}.tex:
     - routine changes
   * tst/aceds.tst
-    - Info lines in example only appear when `InfoACELevel` is set to 3.
+    - Info lines in example only appear when `InfoACE` is set to 3.
       This has been wrong for a while. It was wrong in Version 5.0.
       Line `SetInfoACELevel(3)` added. Some additional lines also appear
-      at this `InfoACELevel`. These and some further tidy-ups done.
+      at this `InfoACE` level. These and some further tidy-ups done.
 
 ## Version 5.1 (2012-01-22)
   Last GAP 4.4 version.

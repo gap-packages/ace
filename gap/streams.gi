@@ -47,9 +47,9 @@ end);
 ##    <readline>, <IsMyLine>) . . . . . . flush a stream until a desired line
 ##
 ##  reads lines in iostream <iostream> via function  <readline>  and  `Info's
-##  those lines at `InfoACELevel' <infoLevelFlushed> until a line <line>  for
+##  those lines at `InfoACE' level <infoLevelFlushed> until a line <line>  for
 ##  which `<IsMyLine>(<line>) is `true'. The line <line> is then `Info'-ed at
-##  `InfoACELevel' <infoLevelMyLine> and returned.
+##  `InfoACE' level <infoLevelMyLine> and returned.
 ##
 InstallGlobalFunction(FLUSH_ACE_STREAM_UNTIL, 
 function(iostream, infoLevelFlushed, infoLevelMyLine, readline, IsMyLine)

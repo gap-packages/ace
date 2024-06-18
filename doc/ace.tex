@@ -259,11 +259,11 @@ table. Despite the fact that the eventual coset  table  only  has  one
 line (i.e.~there is exactly one coset number)  {\ACE}  *did*  need  to
 define more than 2 coset numbers. To  find  out  just  how  many  were
 required before the final  collapse,  let's  set  the  `InfoLevel'  of
-`InfoACE' (see~"SetInfoACELevel") to 2, so that the {\ACE} enumeration
+`InfoACE' (see~"InfoACE") to 2, so that the {\ACE} enumeration
 result is printed.
 
 \beginexample
-gap> SetInfoACELevel(2);
+gap> SetInfoLevel(InfoACE, 2);
 gap> ACECosetTable(fgens, rels, [c]);
 #I  INDEX = 1 (a=1 r=2 h=2 n=2; l=6 c=0.00; m=2049 t=3127)
 [ [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], 
@@ -585,16 +585,16 @@ with `ACEExample'.
 *Notes*
 
 Most examples use the `mess'  ($=  `messages'$)  option.  To  see  the
-effect of this, it is recommended to do: `SetInfoACELevel(3);'  before
-calling `ACEExample', with an example.
+effect of this, it is recommended to do: `SetInfoLevel(InfoACE, 3);'
+before calling `ACEExample', with an example.
 
 The coset table output from `ACEExample', when called with many of the
 examples and with the {\ACE}  function  `ACECosetTableFromGensAndRels'
 is often quite long. Recall that  the  output  may  be  suppressed  by
 following the (`ACEExample') command with a double semicolon (`;;').
 
-Also, try `SetInfoACELevel(2);' before  calling `ACEExample', with  an
-example.
+Also, try `SetInfoLevel(InfoACE, 2);' before  calling `ACEExample',
+with an example.
 
 If you unexpectedly observe `aceexampleoptions' in your  output,  then
 most probably you have unintentionally passed options  by  the  global
@@ -783,28 +783,14 @@ via the `Info' mechanism  (see  Chapter~"ref:Info  Functions"  in  the
 1, and it is recommended that you leave it at this level,  or  higher.
 Only messages which we think that the user will really want to see are
 directed to `Info' at `InfoACE' level 1. To turn off  *all*  `InfoACE'
-messaging, set the `InfoACE' level to 0  (see~"SetInfoACELevel").  For
-convenience, we provide the function
+messaging, set the `InfoACE' level to 0  (see~"InfoACE").
 
-\>InfoACELevel() F
-
-which returns the current `InfoLevel' of `InfoACE', i.e.~it is  simply
-a shorthand for `InfoLevel(InfoACE)'.
-
-To set the `InfoLevel' of `InfoACE' we also provide
-
-\>SetInfoACELevel( <level> ) F
-\>SetInfoACELevel() F
-
-which for a non-negative integer  <level>,  sets  the  `InfoLevel'  of
-`InfoACE'    to    <level>    (i.e.~it    is    a    shorthand     for
-`SetInfoLevel(InfoACE, <level>)'),  or  with  no  arguments  sets  the
-`InfoACE' level to the default value 1.  Currently,  information  from
+Currently,  information  from
 {\ACE} is directed to `Info' at four `InfoACE' levels: 1, 2, 3 and  4.
 The command
 
 \beginexample
-gap> SetInfoACELevel(2);
+gap> SetInfoLevel(InfoACE, 2);
 
 \endexample
 
@@ -812,7 +798,7 @@ enables the display of the results line of an enumeration from {\ACE},
 whereas
 
 \beginexample
-gap> SetInfoACELevel(3);
+gap> SetInfoLevel(InfoACE, 3);
 
 \endexample
 
@@ -823,7 +809,7 @@ particular,  the  progress  messages,  emitted  by  {\ACE}  when   the
 will be displayed via `Info'. Finally,
 
 \beginexample
-gap> SetInfoACELevel(4);
+gap> SetInfoLevel(InfoACE, 4);
 
 \endexample
 
