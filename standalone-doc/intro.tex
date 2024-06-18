@@ -1,0 +1,102 @@
+
+% intro.tex - Colin Ramsay - 27 Sep 03, 1 May 14
+%
+% The introductory chapter.
+%
+%   5   10   15   20   25   30   35   40   45   50   55   60   65   70   75   80
+% ..|....|....|....|....|....|....|....|....|....|....|....|....|....|....|....|
+
+\ace\ is designed to work with partial tables, as well as complete tables
+  exhibiting a finite index.
+TBA:
+Intended user groups ...
+
+\ace\ is divided into three `levels'\kern-1.5pt.
+The actual enumerator, called the ``core enumerator''\kern-2pt, is \ace\ 
+  Level 0, while the standard driver for the enumerator, the ``core 
+  wrapper''\kern-2pt, is \ace\ Level 1.
+A stand-alone `example' application, called the ``interactive 
+  interface''\kern-2pt, is \ace\ Level 2.
+To assist those interested in the actual source code, the function and 
+  variable names are prepended with \ttt{AL0\_}\kern+1pt, \ttt{AL1\_} \amp
+  \ttt{AL2\_} respectively.
+%
+\ace\ also includes the ``proof table'' package (PT for short), which can
+  be compiled into the executable if required.
+The proof table cuts across the level structure, and can only be used as
+  part of the interactive interface.
+Function and variable names of the PT package are prepended with 
+  \ttt{PT\_}\kern+1pt.
+TBA: this package ...
+
+TBA: version history, 3.000 vs 3.001, ...
+TBA: default build ...
+
+\section{Administrivia}
+
+It is assumed that \ace\ is run on a Unix-box of some description.
+TBA: how to compile ...
+
+In order not to clutter-up the body of the text with examples, the bulk of
+  these are gathered into a separate appendix.
+These examples illustrate many of the features of \ace, and can also serve
+  as a source of interesting enumerations.
+Some are referred to in the text, but they can all be read independently.
+\ace\ script input generating these examples is available in the 
+  \ttt{ex***.in} files, as part of the documentation.
+
+\section{Code comments}
+
+$\bullet$
+One of the main goals when developing \ace\ 4 was to allow more than the 2G
+  cosets allowed by earlier versions.
+To do this, we moved to \ttt{long} \ttt{long} types for cosets and various
+  counters/integers.
+This is not ANSI, but is no real problem since most modern compilers
+  support this (and it'll probably be ANSI sometime real-soon).
+
+64 bits is wasteful of memory however (and time too), so we use `packed' 
+  data for the coset table entries (typically, we need only go from 4 to 5 
+  bytes).
+GNU's \ttt{gcc} supports a \ttt{packed} attribute, and is widely available,
+  so we used this.
+This is very non-ANSI, and so some tinkering may be necessary for other
+  compilers (if, indeed, porting is possible).
+However, the code is fairly localised, with \ttt{typedef}'s \&
+  \ttt{\#define}'s.
+
+One subtletly is that, in some circumstances, we may wish to use 
+  \emph{less} than 32 bits for cosets (eg, to save space if tables have few
+  rows, but \emph{lots} of columns).
+Thus, the \ttt{Coset} type may not be the biggest integer type around, and
+  may not be big enough for some purposes.
+Further, some integers \emph{may} contain cosets (so need to be as big as
+  the biggest \ttt{Coset} type possible) but may contain other things
+  (which are bigger than the current \ttt{Coset} type).
+So we use \ttt{Coset} types when we're dealing with cosets, \ttt{long} 
+  \ttt{long} types when there's a potential size `problem', and \ttt{int} 
+  types otherwise.
+TBA:\ we should probably define types for all these, to make correcting
+  the inevitable mistakes easier!
+
+$\bullet$
+The source code is heavily commented, and is considered to be part of the
+  documentation.
+Conceptually, coset enumeration is straightforward, but there are tricky 
+  details and subtle performance issues -- you need to read the source 
+  code, to experiment, and to think to appreciate these.
+
+$\bullet$
+No attempt is made to cope fancy character codings for the input.
+It is \emph{assumed} that the input character stream is a stream of ASCII
+  bytes.
+
+\section{References}
+
+The references section of the guide includes various items mentioned in the
+  comments in the source code or the example files.
+These may not be referred to explicitly in the body of the guide, but they are
+  considered part of the documentation and included in the list of references.
+
+
+
