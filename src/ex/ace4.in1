@@ -1,0 +1,33 @@
+# Sims:3; mode uses fewer cosets, while still having coincidences.
+# Felsch mode doesn't have any coincidences (and produces a standardised table).
+# All generators treated as involutions (ie, single columns).
+# First two columns are the 'coincidence queue' (for redundant coset numbers).
+
+Gr: abcdew;
+Rel: b^2,c^2,d^2,e^2,(b*c)^3,(b*d)^2,(b*e)^2,(c*d)^4,(c*e)^2,(d*e)^3,w^2,
+  (w*a)^3,(w*b)^2,(w*c)^2,(w*d)^2,(w*e)^2,
+  (a*b^-1*c^-1*d*c*b*e^-1*d^-1*c*d*e)^4,a^2,(a*b)^3,(a*c)^2,(a*d)^2,(a*e)^2;
+Gen: a,b,c,d,e;
+Wo: 1M;
+Mess: 10000;
+Sims: 3;
+
+Text;  Beg;
+Text;  Pr:1,32;              # coincident cosets suppressed, non-standardised
+Text;  Pr:-1,32;             # adds order/representative columns
+Text;  Pr:1,-32;             # includes coincident coset rows
+Text;  Pr:-1,-32;            # both 'extra' rows & columns
+
+Text;  St;                   # standardises and compacts (if any coincidences)
+Text;  Pr:-1,32;
+Text;  Pr:-140,160;
+
+Fel: 0;
+
+Text;  Beg;  
+Text;  Pr:-1,32;
+Text;  Pr:-140,160;
+
+Text;  Bye;
+
+

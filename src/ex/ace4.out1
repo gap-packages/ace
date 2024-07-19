@@ -1,0 +1,278 @@
+# ~/outOfBand/ace4 $ cat ace4.in1 | ./ace4100 >ace4.out1
+
+ACE 4.100                       Tue Mar 14 09:38:32 2023
+========================================================
+
+  -- Run Parameters ----------------------------------
+Group Name: G;
+Group Generators: abcdew;
+Group Relators: (b)^2, (c)^2, (d)^2, (e)^2, (w)^2, (a)^2, (bd)^2, (be)^2, 
+  (ce)^2, (wb)^2, (wc)^2, (wd)^2, (we)^2, (ac)^2, (ad)^2, (ae)^2, (bc)^3, 
+  (de)^3, (wa)^3, (ab)^3, (cd)^4, (abcdcbedcde)^4;
+Subgroup Name: H;
+Subgroup Generators: a, b, c, d, e;
+Wo:1M; Max:166664; Mess:10000; Loop:0;
+As:0; Path:0; Row:1; Mend:0; No:0; Look:0; Com:10;
+C:0; R:-1000; PDef:0; PSiz:256; Fi:1; DMod:4; DSiz:1000;
+  ----------------------------------------------------
+SG: a=1 r=1 h=1 n=2; l=1 c=+0.00; m=1 t=1
+INDEX = 160 (a=160 r=339 h=355 n=355; l=3 c=0.00; m=169 t=354)
+
+ coset |      a      b      c      d      e      w
+-------+------------------------------------------
+     1 |      1      1      1      1      1      2
+     2 |      3      2      2      2      2      1
+     3 |      2      5      3      3      3      3
+     5 |      5      3      7      5      5      5
+     7 |      7      7      5      8      7      7
+     8 |      8      8      9      7     31      8
+     9 |      9     10      8      9     33      9
+    10 |     11      9     10     10     26     10
+    11 |     10     11     11     11     12     91
+    12 |     26     12     12     13     11    111
+    13 |     25     13     14     12     13    112
+    14 |     24    113     13     15     14    131
+    15 |     23    128     15     14     16    137
+    16 |     22     17     16     16     15    139
+    17 |     43     16     18     17    128    140
+    18 |     44     18     17     18    127    141
+    22 |     16     48     22     22     23     22
+    23 |     15     49     23     24     22     23
+    24 |     14     50     25     23     24     24
+    25 |     13     34     24     26     25     25
+    26 |     12     33     26     25     10     26
+    31 |     31     31     33     31      8     31
+
+ coset |      a      b      c      d      e      w   order   rep've
+-------+-----------------------------------------------------------
+     1 |      1      1      1      1      1      2
+     2 |      3      2      2      2      2      1       2   w
+     3 |      2      5      3      3      3      3       3   wa
+     5 |      5      3      7      5      5      5       4   wab
+     7 |      7      7      5      8      7      7       5   wabc
+     8 |      8      8      9      7     31      8      10   wabcd
+     9 |      9     10      8      9     33      9       8   wabcdc
+    10 |     11      9     10     10     26     10       6   wabcdcb
+    11 |     10     11     11     11     12     91       4   wabcdcba
+    12 |     26     12     12     13     11    111       6   wabcdcbae
+    13 |     25     13     14     12     13    112       8   wabcdcbaed
+    14 |     24    113     13     15     14    131       8   wabcdcbaedc
+    15 |     23    128     15     14     16    137      12   wabcdcbaedcd
+    16 |     22     17     16     16     15    139       4   wabcdcbaedcde
+    17 |     43     16     18     17    128    140      12   wabcdcbaedcdeb
+    18 |     44     18     17     18    127    141       8   wabcdcbaedcdebc
+    22 |     16     48     22     22     23     22      12   wabcdcbaedcdea
+    23 |     15     49     23     24     22     23      12   wabcdcbaedcda
+    24 |     14     50     25     23     24     24      24   wabcdcbaedca
+    25 |     13     34     24     26     25     25      12   wabcdcbaeda
+    26 |     12     33     26     25     10     26      12   wabcdcbe
+    31 |     31     31     33     31      8     31      30   wabcde
+
+ coset |      a      b      c      d      e      w
+-------+------------------------------------------
+     1 |      1      1      1      1      1      2
+     2 |      3      2      2      2      2      1
+     3 |      2      5      3      3      3      3
+     4 |     -3      0      0      0      0      3
+     5 |      5      3      7      5      5      5
+     6 |     -5      0      0      0      0      0
+     7 |      7      7      5      8      7      7
+     8 |      8      8      9      7     31      8
+     9 |      9     10      8      9     33      9
+    10 |     11      9     10     10     26     10
+    11 |     10     11     11     11     12     91
+    12 |     26     12     12     13     11    111
+    13 |     25     13     14     12     13    112
+    14 |     24    113     13     15     14    131
+    15 |     23    128     15     14     16    137
+    16 |     22     17     16     16     15    139
+    17 |     43     16     18     17    128    140
+    18 |     44     18     17     18    127    141
+    19 |    -18      0      0     18      0      0
+    20 |    -17      0     19      0      0      0
+    21 |    -16     20      0      0      0      0
+    22 |     16     48     22     22     23     22
+    23 |     15     49     23     24     22     23
+    24 |     14     50     25     23     24     24
+    25 |     13     34     24     26     25     25
+    26 |     12     33     26     25     10     26
+    27 |    -10      0      0      0     26      0
+    28 |     -9     27      0      0      0      0
+    29 |     -8      0     28      0      0      0
+    30 |     -7      0      5     29      0      0
+    31 |     31     31     33     31      8     31
+    32 |    -31      0     33      0      0      0
+
+ coset |      a      b      c      d      e      w   order   rep've
+-------+-----------------------------------------------------------
+     1 |      1      1      1      1      1      2
+     2 |      3      2      2      2      2      1       2   w
+     3 |      2      5      3      3      3      3       3   wa
+     4 |     -3      0      0      0      0      3       -   -
+     5 |      5      3      7      5      5      5       4   wab
+     6 |     -5      0      0      0      0      0       -   -
+     7 |      7      7      5      8      7      7       5   wabc
+     8 |      8      8      9      7     31      8      10   wabcd
+     9 |      9     10      8      9     33      9       8   wabcdc
+    10 |     11      9     10     10     26     10       6   wabcdcb
+    11 |     10     11     11     11     12     91       4   wabcdcba
+    12 |     26     12     12     13     11    111       6   wabcdcbae
+    13 |     25     13     14     12     13    112       8   wabcdcbaed
+    14 |     24    113     13     15     14    131       8   wabcdcbaedc
+    15 |     23    128     15     14     16    137      12   wabcdcbaedcd
+    16 |     22     17     16     16     15    139       4   wabcdcbaedcde
+    17 |     43     16     18     17    128    140      12   wabcdcbaedcdeb
+    18 |     44     18     17     18    127    141       8   wabcdcbaedcdebc
+    19 |    -18      0      0     18      0      0       -   -
+    20 |    -17      0     19      0      0      0       -   -
+    21 |    -16     20      0      0      0      0       -   -
+    22 |     16     48     22     22     23     22      12   wabcdcbaedcdea
+    23 |     15     49     23     24     22     23      12   wabcdcbaedcda
+    24 |     14     50     25     23     24     24      24   wabcdcbaedca
+    25 |     13     34     24     26     25     25      12   wabcdcbaeda
+    26 |     12     33     26     25     10     26      12   wabcdcbe
+    27 |    -10      0      0      0     26      0       -   -
+    28 |     -9     27      0      0      0      0       -   -
+    29 |     -8      0     28      0      0      0       -   -
+    30 |     -7      0      5     29      0      0       -   -
+    31 |     31     31     33     31      8     31      30   wabcde
+    32 |    -31      0     33      0      0      0       -   -
+
+CO/ST: a=160 r=157 h=161 n=161; c=+0.00
+
+ coset |      a      b      c      d      e      w   order   rep've
+-------+-----------------------------------------------------------
+     1 |      1      1      1      1      1      2
+     2 |      3      2      2      2      2      1       2   w
+     3 |      2      4      3      3      3      3       3   wa
+     4 |      4      3      5      4      4      4       4   wab
+     5 |      5      5      4      6      5      5       5   wabc
+     6 |      6      6      7      5      8      6      10   wabcd
+     7 |      7      9      6      7     10      7       8   wabcdc
+     8 |      8      8     10      8      6      8      30   wabcde
+     9 |     11      7      9      9     12      9       6   wabcdcb
+    10 |     10     12      8     13      7     10      24   wabcdce
+    11 |      9     11     11     11     14     15       4   wabcdcba
+    12 |     14     10     12     16      9     12      12   wabcdcbe
+    13 |     13     16     17     10     13     13      16   wabcdced
+    14 |     12     14     14     18     11     19       6   wabcdcbae
+    15 |     15     15     15     15     19     11       2   wabcdcbaw
+    16 |     18     13     20     12     16     16      12   wabcdcbed
+    17 |     17     21     13     17     17     17      10   wabcdcedc
+    18 |     16     18     22     14     18     23       8   wabcdcbaed
+    19 |     19     19     19     23     15     14       3   wabcdcbaew
+    20 |     22     24     16     25     20     20      24   wabcdcbedc
+    21 |     26     17     24     21     21     21       8   wabcdcedcb
+    22 |     20     27     18     28     22     29       8   wabcdcbaedc
+    23 |     23     23     29     19     23     18       4   wabcdcbaedw
+    24 |     30     20     21     31     24     24      10   wabcdcbedcb
+    25 |     28     31     25     20     32     25      12   wabcdcbedcd
+    26 |     21     26     30     26     26     33       6   wabcdcedcba
+    27 |     34     22     27     35     27     36      24   wabcdcbaedcb
+    28 |     25     35     28     22     37     38      12   wabcdcbaedcd
+    29 |     29     36     23     38     29     22       8   wabcdcbaedcw
+    30 |     24     34     26     39     30     40       8   wabcdcbedcba
+    31 |     39     25     41     24     42     31      15   wabcdcbedcbd
+    32 |     37     42     32     32     25     32      12   wabcdcbedcde
+
+ coset |      a      b      c      d      e      w   order   rep've
+-------+-----------------------------------------------------------
+   140 |    140    140    140    140    131    147       4   wabcdcbaedcbdcdwabcde
+   141 |    148    141    135    141    141    132       4   wabcdcbedcbadcbedcbaw
+   142 |    133    149    136    142    142    148       8   wabcdcbedcbadcbedcbwa
+   143 |    149    134    143    143    143    143      12   wabcdcbedcbadcbedcwab
+   144 |    135    144    148    144    144    136       4   wabcdcbedcbadcedcbawa
+   145 |    145    138    137    150    145    145      16   wabcdcbaedcbadcbdcwabc
+   146 |    139    150    146    138    151    146      30   wabcdcbaedcbadcbdwabcd
+   147 |    151    147    147    147    139    140       6   wabcdcbaedcbadcdwabcde
+   148 |    141    152    144    148    148    142       6   wabcdcbedcbadcbedcbawa
+   149 |    143    142    149    149    149    152      10   wabcdcbedcbadcbedcbwab
+   150 |    150    146    153    145    154    150      24   wabcdcbaedcbadcbdcwabcd
+   151 |    147    154    151    151    146    151      10   wabcdcbaedcbadcbdwabcde
+   152 |    152    148    152    152    152    149       4   wabcdcbedcbadcbedcbawab
+   153 |    153    153    150    153    155    153       6   wabcdcbaedcbadcbdcwabcdc
+   154 |    154    151    155    154    150    154      16   wabcdcbaedcbadcbdcwabcde
+   155 |    155    155    154    156    153    155       8   wabcdcbaedcbadcbdcwabcdce
+   156 |    156    156    157    155    156    156       4   wabcdcbaedcbadcbdcwabcdced
+   157 |    157    158    156    157    157    157       8   wabcdcbaedcbadcbdcwabcdcedc
+   158 |    159    157    158    158    158    158       5   wabcdcbaedcbadcbdcwabcdcedcb
+   159 |    158    159    159    159    159    160       6   wabcdcbaedcbadcbdcwabcdcedcba
+   160 |    160    160    160    160    160    159       2   wabcdcbaedcbadcbdcwabcdcedcbaw
+
+  -- Run Parameters ----------------------------------
+Group Name: G;
+Group Generators: abcdew;
+Group Relators: (b)^2, (c)^2, (d)^2, (e)^2, (w)^2, (a)^2, (bd)^2, (be)^2, 
+  (ce)^2, (wb)^2, (wc)^2, (wd)^2, (we)^2, (ac)^2, (ad)^2, (ae)^2, (bc)^3, 
+  (de)^3, (wa)^3, (ab)^3, (cd)^4, (abcdcbedcde)^4;
+Subgroup Name: H;
+Subgroup Generators: a, b, c, d, e;
+Wo:1M; Max:166664; Mess:10000; Loop:0;
+As:0; Path:0; Row:0; Mend:0; No:0; Look:0; Com:10;
+C:1000; R:0; PDef:0; PSiz:256; Fi:1; DMod:4; DSiz:1000;
+  ----------------------------------------------------
+SG: a=1 r=1 h=1 n=2; l=1 c=+0.00; m=1 t=1
+INDEX = 160 (a=160 r=1 h=161 n=161; l=4 c=0.00; m=160 t=160)
+
+ coset |      a      b      c      d      e      w   order   rep've
+-------+-----------------------------------------------------------
+     1 |      1      1      1      1      1      2
+     2 |      3      2      2      2      2      1       2   w
+     3 |      2      4      3      3      3      3       3   wa
+     4 |      4      3      5      4      4      4       4   wab
+     5 |      5      5      4      6      5      5       5   wabc
+     6 |      6      6      7      5      8      6      10   wabcd
+     7 |      7      9      6      7     10      7       8   wabcdc
+     8 |      8      8     10      8      6      8      30   wabcde
+     9 |     11      7      9      9     12      9       6   wabcdcb
+    10 |     10     12      8     13      7     10      24   wabcdce
+    11 |      9     11     11     11     14     15       4   wabcdcba
+    12 |     14     10     12     16      9     12      12   wabcdcbe
+    13 |     13     16     17     10     13     13      16   wabcdced
+    14 |     12     14     14     18     11     19       6   wabcdcbae
+    15 |     15     15     15     15     19     11       2   wabcdcbaw
+    16 |     18     13     20     12     16     16      12   wabcdcbed
+    17 |     17     21     13     17     17     17      10   wabcdcedc
+    18 |     16     18     22     14     18     23       8   wabcdcbaed
+    19 |     19     19     19     23     15     14       3   wabcdcbaew
+    20 |     22     24     16     25     20     20      24   wabcdcbedc
+    21 |     26     17     24     21     21     21       8   wabcdcedcb
+    22 |     20     27     18     28     22     29       8   wabcdcbaedc
+    23 |     23     23     29     19     23     18       4   wabcdcbaedw
+    24 |     30     20     21     31     24     24      10   wabcdcbedcb
+    25 |     28     31     25     20     32     25      12   wabcdcbedcd
+    26 |     21     26     30     26     26     33       6   wabcdcedcba
+    27 |     34     22     27     35     27     36      24   wabcdcbaedcb
+    28 |     25     35     28     22     37     38      12   wabcdcbaedcd
+    29 |     29     36     23     38     29     22       8   wabcdcbaedcw
+    30 |     24     34     26     39     30     40       8   wabcdcbedcba
+    31 |     39     25     41     24     42     31      15   wabcdcbedcbd
+    32 |     37     42     32     32     25     32      12   wabcdcbedcde
+
+ coset |      a      b      c      d      e      w   order   rep've
+-------+-----------------------------------------------------------
+   140 |    140    140    140    140    131    147       4   wabcdcbaedcbdcdwabcde
+   141 |    148    141    135    141    141    132       4   wabcdcbedcbadcbedcbaw
+   142 |    133    149    136    142    142    148       8   wabcdcbedcbadcbedcbwa
+   143 |    149    134    143    143    143    143      12   wabcdcbedcbadcbedcwab
+   144 |    135    144    148    144    144    136       4   wabcdcbedcbadcedcbawa
+   145 |    145    138    137    150    145    145      16   wabcdcbaedcbadcbdcwabc
+   146 |    139    150    146    138    151    146      30   wabcdcbaedcbadcbdwabcd
+   147 |    151    147    147    147    139    140       6   wabcdcbaedcbadcdwabcde
+   148 |    141    152    144    148    148    142       6   wabcdcbedcbadcbedcbawa
+   149 |    143    142    149    149    149    152      10   wabcdcbedcbadcbedcbwab
+   150 |    150    146    153    145    154    150      24   wabcdcbaedcbadcbdcwabcd
+   151 |    147    154    151    151    146    151      10   wabcdcbaedcbadcbdwabcde
+   152 |    152    148    152    152    152    149       4   wabcdcbedcbadcbedcbawab
+   153 |    153    153    150    153    155    153       6   wabcdcbaedcbadcbdcwabcdc
+   154 |    154    151    155    154    150    154      16   wabcdcbaedcbadcbdcwabcde
+   155 |    155    155    154    156    153    155       8   wabcdcbaedcbadcbdcwabcdce
+   156 |    156    156    157    155    156    156       4   wabcdcbaedcbadcbdcwabcdced
+   157 |    157    158    156    157    157    157       8   wabcdcbaedcbadcbdcwabcdcedc
+   158 |    159    157    158    158    158    158       5   wabcdcbaedcbadcbdcwabcdcedcb
+   159 |    158    159    159    159    159    160       6   wabcdcbaedcbadcbdcwabcdcedcba
+   160 |    160    160    160    160    160    159       2   wabcdcbaedcbadcbdcwabcdcedcbaw
+
+========================================================
+ACE 4.100                       Tue Mar 14 09:38:32 2023
+

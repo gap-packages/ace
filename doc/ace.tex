@@ -705,9 +705,7 @@ and~"ACEStart") processes;
 
 \quad`outfile'& the full path of the {\ACE} output file; and
 
-\quad`version'& the  version  of  the  current  {\ACE}  binary.   More
-detailed information regarding the compilation of the binary is  given
-by `ACEBinaryVersion' (see~"ACEBinaryVersion").
+\quad`version'& the  version  of  the  current  {\ACE}  binary.
 
 \enditems
 
@@ -802,11 +800,10 @@ gap> SetInfoLevel(InfoACE, 3);
 
 \endexample
 
-enables the display of  all  of  the  output  from  {\ACE}  (including
-{\ACE}'s  banner,  containing  the  host  machine   information);   in
-particular,  the  progress  messages,  emitted  by  {\ACE}  when   the
-`messages' option (see~"option messages") is set to a non-zero  value,
-will be displayed via `Info'. Finally,
+enables the display of  all  of  the  output  from  {\ACE}  (including {\ACE}'s
+banner);   in particular,  the  progress  messages,  emitted  by  {\ACE}  when
+the `messages' option (see~"option messages") is set to a non-zero  value, will
+be displayed via `Info'. Finally,
 
 \beginexample
 gap> SetInfoLevel(InfoACE, 4);
@@ -873,8 +870,7 @@ Standardisation Schemes").
 \>ACEPackageVersion() F
 
 gives the current version of the {\ACE} Package (i.e.~the {\GAP}  code
-component; the  function  `ACEBinaryVersion'  (see~"ACEBinaryVersion")
-gives details of the C code compilation).
+component).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%

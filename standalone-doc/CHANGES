@@ -1,0 +1,88 @@
+#########################################################################
+##
+#W  CHANGES            ACE standalone documentation           Greg Gamble
+##
+#H  $Id$
+##
+
+##  Just `detailing' (to some extent) the various changes I've made to
+##  the various files in this directory ... hopefully, most changes are
+##  for the better; but you know to blame me if they aren't!
+
+Changes to Stand-alone documentation:
+
+29 Feb, 2000 [ These changes by Greg Gamble ]:
+
+ * Added headers to each .tex/.cls/.clo/.bib file and to this file
+   ... so that they could explicitly be listed with a version no.
+       at the GAP4 CVS repository
+
+28 Feb, 2000 [ These changes by Greg Gamble ]:
+
+ * back.tex : added section `Groups notation'
+              [G : H] now represents the set of right cosets of H in G
+              ## George will hate me for that ... but I really can't live
+              ## with the G/H notation that suggests `quotient' when it 
+              ## ain't one
+ * al2.tex : Table 3.2 changed each `n' to `0' and each `y' to `1' in table body
+               ... was there a reason for using `y' and `n'?
+             Replaced `/' notation for cosets, by plain English
+             Added a glossary of possible parameter values to 3.3 Commands.
+             Moved the BNF for <words> from section 3.3.28 group relators to
+               3.3 Commands
+             Put angle brackets around all `int's etc. in keeping with the
+               glossary of 3.3 Command
+ * pt.tex : Replaced `. / .' notation for cosets, by `[ . : . ]'.
+            In 6.1 Example (4th paragraph) added sentences/clauses:
+
+              - Cosets appear as subscripts.
+              - ... $\alpha,\beta,\gamma$ are cosets at some stage of an
+                enumeration and ...
+              - ...; the meaning of this proof word is:
+                $\beta A=\alpha, \alpha C=\gamma, \gamma Cab = \gamma$
+          
+ * biblio.tex : added books by - Coxeter & Moser
+                               - Magnus, Karrass & Solitar
+
+3 Jan, 2000 [ These changes by Greg Gamble ]:
+
+ * Directory of Stand-alone documentation changed from `acedoc'
+   to `standalone-doc'.
+
+ * Included the file `pt.tex' from the 17 Jun 99 version of the
+   `acedoc' directory, adding the following lines:
+
+ * `ace3001.tex' modified to input `pt.tex' at the same place
+   that it was input in the 17 Jun 99 version of the `acedoc' 
+   directory, adding the following lines:
+
+     % PROOF TABLE
+   
+     \chapter{Proof Tables}
+   
+     \input{pt}
+
+ * Modified `report.cls' and `size12.clo' underwent a namechange;
+   they are now called: `repcram.cls' and `cramsz12.clo',
+   respectively. Consequently, `repcram.cls' was modified to
+   input `cramsz12.clo' rather than `size12.clo'. The reason
+   for the name changes, is that modification of LaTeX class/
+   class option/package files is *only* permitted if the file-
+   names are also changed. Also, all uses of the word `standard'
+   were deleted ... again this word is reserved for the official
+   base LaTeX class/class option/package files.
+
+ * `ace3001.tex' modified to use the `repcram.cls' rather than
+   `report.cls' (changing `report' to `repcram' in line ):
+
+     \documentclass[12pt,a4paper,twoside]{report}
+                                             ^^^
+   and some comments at the top of the file were changed in line with this.
+
+ * `Alternate' replaced by `Alternative' in al2.tex:
+
+     Alternate forms of a command are separated by a \ttt{/}\kern-1pt, while
+             ^
+###################### End of CHANGES ######################################
+##
+#E
