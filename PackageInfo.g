@@ -139,7 +139,7 @@ AvailabilityTest :=
     if Filename(DirectoriesPackagePrograms("ace"), "ace") = fail then
       LogPackageLoadingMessage( PACKAGE_WARNING,
           [ "The program `ace' is not compiled." ] );
-      return fail;
+      return false;
     fi;
     return true;
   end,
