@@ -1,0 +1,1073 @@
+
+% cmd.tex  -  Colin Ramsay  -  1 Nov 03
+%
+% The command summary appendix.
+%
+%   5   10   15   20   25   30   35   40   45   50   55   60   65   70   75
+% ..|....|....|....|....|....|....|....|....|....|....|....|....|....|....|
+
+This appendix gives details of all the commands available when
+  using the interactive interface.
+The section headings match the help screen produced by the \ttt{help}
+  command, and are in the same order.
+%
+Alternate forms of a command are separated by a \ttt{/}\kern-1pt, while
+  any optional part of a command is denoted by \ttt{[\dots]}.
+Case is not significant in command names, but that part of a command
+  actually present must be correct, modulo white space.
+%
+Appendix~\ref{app:ex} contains many examples of how to correctly drive
+  \ace.
+
+Parameters to a command are supplied after a colon (\ttt{:}).  
+Each command is terminated by a newline or a semicolon (\ttt{;}), except
+  in some cases where the argument may be a list of words, in which case
+  newlines are ignored and a semicolon is the only terminator.
+(E.g., the \ttt{add gen}, \ttt{add rel}, \ttt{rel} \amp \ttt{gen}
+  commands.)
+In many cases the parameters are optional, and entering the command
+  without an argument prints the parameter's current value.
+If the no-argument form has a special meaning, this is noted in its entry
+  below.
+Where there is no danger of confusion, the \ttt{:} and/or the \ttt{;} can
+  usually be dispensed with.
+
+\tsc{Note:}
+Some of the command names or synonyms might strike you as peculiar.
+These names were \emph{not} chosen by me, but were dictated by the need
+  for compatability with previous coset enumerators (ie, \ttt{tc} \amp
+  \ttt{ce}/\ttt{ace}).
+
+\quad\ttt{add\ gen[erators]\ /\ sg\ :\ <word\ list>\ ;}
+
+Adds the words in the list to any subgroup generators already present.
+The enumeration must be (re)started or redone, it cannot be continued.
+
+\quad\ttt{add\ rel[ators]\ /\ rl\ :\ <relation\ list>\ ;}
+
+Adds the words in the list to any relators already present.
+The enumeration must be (re)started or redone, it cannot be continued.
+
+$\bullet$
+Be aware that the entire list of relators is reprocessed if relators are
+  added.
+As part of this, if one of the added relators is an involution, inverses
+  are rewritten.
+If the added relator is later deleted (eg, as part of a chain of \ttt{add}
+  \ttt{rel}, \ttt{del} \ttt{rel}, \ttt{add} \ttt{rel}, \dots, commands
+  when considering one relator quotients of something), the inverses are
+  \emph{not} restored.
+So you may not get what you expect.
+To avoid this, set \ttt{asis} on.
+
+\quad\ttt{aep\ :\ 1..7\ ;}
+
+The \ttt{aep} (all equivalent presentations) option runs an enumeration
+  for each possible combination of relator ordering, relator rotations,
+  and relator inversions.
+As discussed by Cannon, Dimino, Havas \amp Watson \cite{CDHW} and Havas
+  \amp Ramsay \cite{HR1} such equivalent presentations can yield large
+  variations in the number of cosets required in an enumeration.
+For this command, we are interested in this variation.
+
+The \ttt{aep} option first performs a `priming run' using the parameters
+  as they stand.
+In particular, the \ttt{asis} \amp \ttt{mess} parameters are honoured.
+It then turns \ttt{asis} on and \ttt{mess} off, and generates and tests
+  the requested equivalent presentations.
+The maximum and minimum values attained by \ttt{maxcos} \amp \ttt{totcos}
+  are tracked, and each time a new `record' is found the relators used and
+  the summary result line is printed.
+At the end, some additional status information is printed: 
+  the number of runs which yielded a finite index; 
+  the total number of runs (excluding the priming run); 
+  and the range of values observed for \ttt{maxcos} \amp \ttt{totcos}.
+\ttt{asis} \amp \ttt{mess} are now restored to their original values, and 
+  the system is ready for further commands.
+
+The mandatory argument is considered as a binary number.
+Its three bits are treated as flags, and control relator rotations (the
+  $2^0$ bit), relator inversions (the $2^1$ bit) and relator orderings
+  (the $2^2$ bit); ``1'' means `active' and ``0'' means
+  `inactive'\kern-1.5pt.
+The order in which the equivalent presentations are generated and tested
+  has no particular significance, but note that the presentation as given
+  (\kern-1.5pt\tit{after} the initial priming run) is the \tit{last}
+  presentation to be generated and tested, so that the group's relators are
+  left `unchanged' by running the \ttt{aep} option.
+
+As an example (drawn from the discussion in \cite{HR1}) consider the index
+  $448$ enumeration of $(8,7 \mid 2,3) / \langle a^2,Ab \rangle$,
+  where $$ (8,7 \mid 2,3) 
+    = \langle a,b \mid a^8 = b^7 = (ab)^2 = (Ab)^3 = 1 \rangle . $$
+There are $4!=24$ relator orderings and $2^4=16$ combinations of relator or
+  inverted relator.
+Exponents are taken into account when rotating relators, so the relators
+  given give rise to 1, 1, 2 \amp 2 rotations respectively, for a total
+  of $1.1.2.2=4$ combinations.
+So the command \ttt{aep:7} would generate and test $24.16.4=1536$ 
+  equivalent presentations, while \ttt{aep:3} would generate and test 
+  $16.4=64$ equivalent presentations.
+
+%\tsc{Guru Note:}
+\tsc{Notes:}
+There is no way to stop the \ttt{aep} option before it has completed,
+  other than killing the task.
+So do a reality check beforehand on the size of the search space and the 
+  time for each enumeration.
+If you are interested in finding a `good' enumeration, it can be very
+  helpful, in terms of running time, to put a tight limit on the number of
+  cosets via the \ttt{max} parameter.
+(You may also have to set \ttt{com:100} to prevent time-wasting attempts
+  to recover space via compaction.)
+This maximises throughput by causing the `bad' enumerations, which are in
+  the majority, to overflow quickly and abort.
+If you wish to explore a very large search-space, consider firing up many
+  copies of \ace, and starting each with a `random' equivalent
+  presentation.
+Alternatively, you could use the \ttt{rep} command.
+
+\quad\ttt{as[is]\ :\ [0/1]\ ;}
+
+By default, \ace\ freely \amp cyclically reduces the relators, freely
+  reduces the subgroup generators, and sorts relators \amp generators
+  in length-increasing order (a stable insertion sort is used).
+If you do not want this, you can switch it off by \ttt{asis:1}.
+
+\tsc{Notes:}
+As well as allowing you to process the presentation in the form given, this
+  is useful for forcing definitions to be made in a prespecified order, by
+  introducing dummy (i.e., freely trivial) subgroup generators.
+Note also that the exact form of the presentation can have a significant
+  impact on the enumeration statistics; it is not the case that the 
+  default option always yields the best enumeration.
+
+\tsc{Guru Notes:}
+When \ttt{asis:0}, a (reduced) relator of the form \ttt{aa} or \ttt{AA} 
+  causes that generator to be treated as an involution.
+In the relators and subgroup generators, the inverses of involutionary
+  generators are automatically replaced with the generator.
+When \ttt{asis:1}, only relators of the form \ttt{a\^{}2} cause the 
+  generator to be treated as an involution.
+The forms \ttt{aa} \amp \ttt{a\^{}2} are preserved in any printout, so
+  that you can track \ace's behaviour.
+
+\quad\ttt{beg[in]\ /\ end\ /\ start\ ;}
+
+Start an enumeration.
+Any existing information in the table is cleared, and the enumeration
+  starts from coset \#1 (i.e., the subgroup).
+
+\quad\ttt{bye\ /\ exit\ /\ q[uit]\ ;}
+
+This exits \ace\ nicely, printing the date and the time.
+An \ttt{EOF} (end-of-file; i.e., \ttt{\^{}d}) has the same effect, so 
+  proper termination occurs if \ace\ is taking its input from a script
+  file.
+
+\quad\ttt{cc\ /\ coset\ coinc[idence]\ :\ int\ ;}
+
+Print out the representative of coset \#\ttt{int}, and add it to the
+  subgroup generators; i.e., equates this coset with coset \#1, the
+  subgroup.
+
+\quad\ttt{c[factor]\ /\ ct[\ factor]\ :\ [int]\ ;}
+
+The value of this parameter sets the `blocking factor' for C-style
+  definitions; i.e., the number of coset definitions made by filling the
+  next empty coset table position during each pass through the enumerator's
+  main loop.
+The absolute value of \ttt{int} is the value used.
+The enumeration style is selected by the values of the \ttt{ct} \amp
+  \ttt{rt} parameters; see Section~\ref{sec:style}.
+
+\quad\ttt{check\ /\ redo\ ;}
+
+An extant enumeration is redone, using the current parameters.
+Any existing information in the table is retained, and the enumeration
+  is restarted from coset \#1 (i.e., the subgroup).
+
+\tsc{Notes:}
+This option is really intended for the case where additional relators
+  and/or subgroup generators have been introduced.
+The current table, which may be incomplete or exhibit a finite index, is
+  still `valid'\kern-1.5pt.
+However, the additional data may allow the enumeration to complete, or
+  cause a collapse to a smaller index.
+
+\quad\ttt{com[paction]\ :\ [0..100]\ ;}
+
+The key word \ttt{com} controls compaction of the coset table during an
+  enumeration.
+Compaction recovers the space allocated to cosets which are flagged as 
+  dead (i.e., which were found to be coincident with lower-numbered
+  cosets). 
+It results in a table where all the active cosets are numbered contiguously
+  from \#1, and with the remainder of the table available for new cosets.
+
+The coset table is compacted when a coset definition is required, there is
+  no space for a new coset available, and provided that the given 
+  percentage of the coset table contains dead cosets.
+For example, \ttt{com:20} means compaction will occur only if 20\% or more
+  of the cosets in the table are dead.
+The argument can be any integer in the range 0--100, and the default value
+  is 10 or 100; see Section~\ref{sec:strat}.
+An argument of 100 means that compaction is never performed, while an
+  argument of 0 means always compact, no matter how few dead cosets there
+  are (provided there is at least one, of course).
+
+Compaction may be performed multiple times during an enumeration, and the
+  table that results from an enumeration may or may not be compact,
+  depending on whether or not there have been any coincidences since the
+  last compaction (or from the start of the enumeration, if there have been
+  no compactions).
+If messaging is enabled (i.e., $\ttt{mess} \ne 0$), then a progress
+  message (labelled \ttt{CO}) is printed each time the compaction routine
+  is actually called (as opposed to each time it is potentially called).
+
+\tsc{Notes:}
+In some strategies (e.g., HLT) a lookahead phase may be run before
+  compaction is attempted.
+In other strategies (e.g., \ttt{Sims:3}) compaction may be performed while
+  there are outstanding deductions; since deductions are discarded during
+  compaction, a final \ttt{RA} phase will (automatically) be performed.
+%
+Compacting a table `destroys' information and history, in the sense that
+  the table entries for any dead cosets are deleted, along with their
+  coincidence list data.
+At Level 2, it is not possible to access the `data' in dead cosets; in
+  fact, most options that require table data compact the table 
+  automatically before they run.
+
+\quad\ttt{cont[inue]\ ;}
+
+Continue the current enumeration, building upon the existing table.
+If a previous run stopped without producing a finite index you can, in
+  principle, change any of the parameters and continue on.
+Of course, if you make any changes which invalidate the current table, you
+  won't be allowed to continue, although you may be allowed to redo.
+
+\quad\ttt{cy[cles]\ ;}
+
+Print out the table in cycles; i.e., the permutation representation.
+
+\quad\ttt{ded\ mo[de]\ /\ dmod[e]\ :\ [0..4]\ ;}
+
+A completed table is only valid if every table entry has been tested in
+  all essentially different positions in all relators.
+This testing can either be done directly (Felsch strategy) or via relator
+  scanning (HLT strategy).
+If it is done directly, then more than one deduction (i.e., table entry)
+  can be outstanding at any one time.
+So the untested deductions are stored in a stack.
+Normally this stack is fairly small but, during a collapse, it can become
+  very large.
+
+This command allows the user to specify how deductions should be handled.
+The options are:
+\ttt{0}, discard deductions if there is no stack space left;
+\ttt{1}, as \ttt{0}, but purge redundant cosets off the top of the stack
+  at every coincidence;
+\ttt{2}, as \ttt{0}, but purge all redundant cosets from the stack at 
+  every coincidence;
+\ttt{3}, discard the entire stack if it overflows;
+\ttt{4}, if the stack overflows, then double the stack size and purge all
+  redundant cosets from the stack.
+
+The default deduction mode is either $0$ or $4$, depending on the strategy
+  selected (see Section~\ref{sec:strat}), and it is recommended that you
+  stay with the default.
+If you want to know more details, read the code.
+
+\tsc{Notes:}
+If deductions are discarded for any reason, then a final \ttt{RA} phase
+  will be run automatically at the end of the enumeration, if necessary, to
+  check the result.
+
+\quad\ttt{ded\ si[ze]\ /\ dsiz[e]\ :\ [0/1..]\ ;}
+
+Sets the size of the (initial) allocation for the deduction stack.
+The size is in terms of the number of deductions, with one deduction
+  taking two words (i.e., 8 bytes).
+The default size, of $1000$, can be selected by a \ttt{0} argument.
+See the \ttt{dmod} entry for a (brief) discussion of deduction handling.
+
+\quad\ttt{def[ault]\ ;}
+
+This selects the default strategy, which is based on the defaulted
+  R/C style; see Sections~\ref{sec:style} \amp \ref{sec:strat}.
+The idea here is that we assume that the enumeration is `easy'\kern-1.5pt,
+  and start out in R style.
+If it turns out not to be easy, then we regard it as `hard'\kern-1.5pt,
+  and switch to CR style, after performing a lookahead on the entire
+  table.
+
+\quad\ttt{del\ gen[erators]\ /\ ds\ :\ <int\ list>\ ;}
+
+This command allows subgroup generators to be deleted from the
+  presentation.
+If the generators are numbered from one in the output of, say, the
+  \ttt{sr} command, then the generators listed in \ttt{int\ list} are
+  deleted.
+\ttt{int\ list} must be a strictly increasing sequence.
+
+\quad\ttt{del\ rel[ators]\ /\ dr\ :\ <int\ list>\ ;}
+
+As \ttt{del gen}, but for the group's relators.
+
+\quad\ttt{easy\ ;}
+
+If this strategy is selected, we run in R style (i.e., HLT) and turn
+  lookahead \amp compaction off.
+For small and/or easy enumerations, this mode is likely to be the fastest.
+
+\quad\ttt{echo\ :\ [0/1]\ ;}
+
+By default, \ace\ does not echo its commands.
+If you wish it to do so, turn this feature on with \ttt{echo:1}.
+This feature can be used to render output files from \ace\ less
+  incomprehensible.
+
+\quad\ttt{enum[eration]\ /\ group\ name\ :\ <string>\ ;}
+
+This command defines the name by which the current enumeration (i.e.,
+  the group being used) will be identified in any printout.
+It has no effect on the actual enumeration, and defaults to \ttt{G}.
+An empty name is accepted; to see what the current name is, use the
+  \ttt{sr} command.
+
+\quad\ttt{fel[sch]\ :\ [0/1]\ ;}
+
+An argument of \ttt{0} or no argument selects the Felsch strategy, while
+  an argument of \ttt{1} selects Felsch with all relators in the subgroup
+  and turns gap-filling on; see Section~\ref{sec:strat}.
+
+\quad\ttt{f[factor]\ /\ fi[ll\ factor]\ :\ [0/1..]\ ;}
+
+If gap-filling is on, then gaps of length one found during deduction
+  testing are preferentially filled (see \cite{Hav}).
+However, this potentially violates the formal requirement that all rows
+  in the table are eventually filled (and tested against the relators).
+The fill factor is used to ensure that some constant proportion of the
+  coset table is always kept filled.
+Before defining a coset to fill a gap of length one, the enumerator checks 
+  whether \ttt{fi} times the completed part of the table is at least the
+  total size of the table and, if not, fills rows in standard order
+  instead of the gap.
+
+An argument of \ttt{0} selects the default value of
+  $\lfloor 5(n+2)/4 \rfloor$, where $n$ is the number of columns in the
+  table.
+All other things being equal, we'd expect the ratio of the total size
+  of the table to the completed part of the table to be $n+1$, so the 
+  default fill factor allows a moderate amount of gap-filling.
+
+\tsc{Notes:}
+If \ttt{fi} is smaller than $n$, then there is generally no gap-filling,
+  although its processing overhead is still incurred.
+A large value of \ttt{fi} can cause infinite looping.
+However, in general, a large value does work well.
+The effects of the various gap-filling stategies vary widely.  
+It is not clear which values are good general defaults or, indeed, whether
+  any strategy is always `not too bad'\kern-1.5pt.
+
+\quad\ttt{gen[erators]\ /\ subgroup\ gen[erators]\ 
+  :\ <word\ list>\ ;}
+
+By default, there are no subgroup generators and the subgroup is trivial.
+This command allows a list of subgroup generating words to be entered.
+The format is the same as for relators, except that `genuine' relations
+  (i.e., $w_1 = w_2$) are not allowed.
+
+\quad\ttt{gr[oup\ generators]:\ [<letter\ list>\ /\ int]\ ;}
+
+This command introduces the group generators, which may be represented in
+  one of two ways.
+They may be presented as a list of lower-case letters, optionally
+  separated by commas.
+This is the usual method, and gives up to $26$ generators.
+Subsequently, upper-case letters can be used, if desired, to stand for the
+  inverse of their lower-case versions; 
+  e.g., \ttt{A} for \ttt{a\^{}-1}, \ttt{B} for \ttt{b\^{}-1}, etc.
+Alternatively, a positive integer can be used to indicate the number of
+  generators.
+For example, \ttt{gr:5} indicates that there are five generators, 
+  designated \ttt{1}, \ttt{2}, \ttt{3}, \ttt{4} \amp \ttt{5}, with
+  inverses \ttt{-1}, etc.
+
+\tsc{Notes:}
+Any use of the \ttt{gr} command which actually defines generators
+  invalidates any previous enumeration, and stays in effect until the next
+  \ttt{gr} command.
+Any words for the group or subgroup must be entered using the nominated
+  generator format, and all printout will use this format.
+%
+This command is not optional, nor is there any default.
+A valid set of generators is the minimum information necessary before
+  \ace\ will attempt an enumeration.
+
+\tsc{Guru Notes:}
+The columns of the coset table are allocated in the same order as the 
+  generators are listed, insofar as this is possible, given that the first
+  two columns must be a generator/inverse pair or a pair of involutions.
+(This is an implementation issue, and is not formally necessary; see
+  \cite{Bee}.)
+The ordering of the columns can, in some cases, effect the definition
+  sequence of cosets and impact the statistics of an enumeration.
+
+\quad\ttt{group\ relators\ /\ rel[ators]\ :\ <relation\ list>\ ;}
+
+By default, or if an empty argument to this command is used, the group
+  is free.
+Otherwise, this command is used to introduce the group's defining
+  relators.
+In order to allow \ace\ to accept presentations from a variety of
+  sources, many kinds of word representations are allowed. 
+\ace\ accepts words in the nominated generators, allowing \ttt{*} for
+  multiplication, \ttt{\^{}} for exponentiation and conjugation, and
+  brackets for precedence specification. 
+Round or square brackets may be used for commutation. 
+(There is no danger of confusion between \ttt{[a,b]}/\ttt{(a,b)} and
+  \ttt{(ab)}, since a \ttt{,} implies commutation, while no comma implies a
+  word.)
+If letter generators are used, multiplication and exponentiation signs
+  (but \tit{not} conjugation signs) may be omitted; e.g., \ttt{a3} is the
+  same as \ttt{a\^{}3} and \ttt{ab} is the same as \ttt{a*b}.
+Also, the exponent \ttt{-1} can be abbreviated to \ttt{-},
+  so \ttt{a-} stands for \ttt{A}.
+Inverses can also be denoted by \ttt{'} or \ttt{/}, so
+  $w_1w_2\ttt{'} = w_1\ttt{/}w_2 = w_1w^{-1}_2$\kern-1.5pt.
+The \ttt{*} can also be dropped for numeric generators; but of course two
+  numeric generators, or a numeric exponent and a numeric generator, must
+  be separated by whitespace. 
+Remember that \ttt{A} stands for \ttt{a\^{}-1}, \ttt{a\^{}b} for
+  \ttt{Bab} and \ttt{[a,b]} \amp \ttt{[a,b,c]} for \ttt{ABab} \amp
+  \ttt{[[a,b],c]}.
+
+\ttt{relation\ list} is a comma-separated list of relations.
+A relation is either a word $w$ (equivalent to the relation $w=1$) or
+  a set of equivalent words, $w_1=w_2=w_3$ say (equivalent to
+  $w_1w^{-1}_2=1$ and $w_1w^{-1}_3=1$).
+A (somewhat sketchy) BNF for the words is:
+
+\bv\begin{verbatim}
+  <word>    = <factor> { "*" | "/" <factor> }
+  <factor>  = <element> [ ["^"] <integer> | "^" <element> ]
+  <element> = <generator> ["'"]
+            | "(" <word> { "," <word> } ")" ["'"]
+            | "[" <word> { "," <word> } "]" ["'"]
+\end{verbatim}\ev
+
+\quad\ttt{hard\ ;}
+
+In many `hard' enumerations, a mixture of R-style and C-style definitions,
+  all tested in all essentially different positions, is appropriate.
+This option selects such a mixed strategy; see Section~\ref{sec:strat}.
+The idea here is that most of the work is done C-style (with the relators
+  in the subgroup and with gap-filling active), but that every $1000$
+  C-style definitions a further coset is applied to all relators.
+
+\tsc{Guru Notes:}
+The \ttt{1000}/\ttt{1} mix is not necessarily optimal, and some
+  experimentation may be needed to find an acceptable balance (see, for
+  example, \cite{HR1}).
+Note also that, the longer the total length of the presentation, the more
+  work needs to be done for each coset application to the relators; one
+  coset application can result in more than $1000$ definitions, reversing
+  the balance between R-style and C-style definitions.
+
+\quad\ttt{h[elp]\ ;}
+
+Prints the help screen; i.e., all the headings in this appendix.
+Note that this list is fairly long, so its top may disappear off the top 
+  of the screen.
+
+\quad\ttt{hlt\ ;}
+
+Selects the standard HLT strategy; see Section~\ref{sec:strat}.
+
+\quad\ttt{look[ahead]\ :\ [0/1..4]\ ;}
+
+Although HLT-style strategies are fast, they are local, in the sense that
+  the implications of any definitions/deductions made while applying cosets
+  may not become apparent until much later.
+One way to alleviate this problem is to perform lookaheads occasionally;
+  that is, to test the information in the table, looking for deductions
+  or concidences.
+\ace\ can perform a lookahead when the table overflows, before the
+  compaction routine is called.
+An argument of \ttt{0} disables lookahead.
+Lookahead can be done using the entire table or only that part of the table
+  above the current coset, and it can be done R-style (scanning cosets
+  from the beginning of relators) or C-style (testing all definitions in
+  all essentially different positions).
+An argument of \ttt{1} does a partial table, R-style lookahead; \ttt{2}
+  does all the table, C-style; \ttt{3} does all the table, R-style; and 
+  \ttt{4} does a partial table, C-style.
+The default is either \ttt{0} or \ttt{1}; see Section~\ref{sec:strat}.
+
+\tsc{Notes:}
+A lookahead can do a significant amount of work, so this phase may take a
+  long time.
+The value of \ttt{mend} is honoured during R-style lookaheads.
+
+\quad\ttt{loop[\ limit]\ :\ [0/1..]\ ;}
+
+The core enumerator is organised as a state machine, with each step
+  performing an `action' (i.e., lookahead, compaction) or a block of
+  actions (i.e., $|\ttt{ct}|$ coset definitions, $|\ttt{rt}|$ coset
+  applications).
+The number of passes through the main loop (i.e., steps) is counted, and
+  the enumerator can make an early return when this count hits the
+  value of \ttt{loop}.
+A value of \ttt{0}, the default, turns this feature off.
+
+\tsc{Guru Notes:}
+You can do lots of really neat things using this feature, but you need
+  some understanding of the internals of \ace\ to get real benefit from
+  it.
+Read the code!
+
+\quad\ttt{max[\ cosets]\ :\ [0/2..]\ ;}
+
+By default, all of the workspace is used, if necessary, in building the
+  coset table.
+So the table size is an upper bound on how many cosets can be active at
+  any one time.
+The \ttt{max} option allows a limit to be placed on how much of the
+  physical table space is made available to the enumerator.
+Enough space for at least two cosets (i.e., the subgroup and one other)
+  must be made available.
+An argument of \ttt{0} selects all of the workspace.
+
+\quad\ttt{mend[elsohn]\ :\ [0/1]\ ;}
+
+Mendelsohn style processing during relator scanning/closing is turned on by
+  \ttt{mend:1} and off by \ttt{mend:0}.
+Off is the default, and here coset applications are done only at the start
+  (and end) of a relator.
+Mendelsohn on means that coset applications are done at all cyclic
+  permutations of the (base) relator.
+The effect of the Mendelsohn parameter is case-specific.
+It can mean the difference between success or failure, or it can impact
+  the number of cosets required, or it can have no effect on an
+  enumeration's statistics.
+
+\tsc{Notes:}
+Processing all cyclic permutations of the relators can be very
+  time-consuming, especially if the presentation if large.
+So, all other things being equal, the Mendelsohn flag should normally be
+  left off.
+Note that Mendelsohn's paper \cite{Men} discusses tracing all cyclic 
+  shifts of both the relators and their formal inverses.
+\ace\ only process the relators.
+However, since relators are scanned from both the front and the rear, we
+  effectively process the inverses.
+%TBA: \\
+% cyclic stuff in \ttt{index}, \tbf{not} equivalent to EDF!
+
+\quad\ttt{mess[ages]\ /\ mon[itor]\ :\ [0/+int]\ ;}
+
+By default, or if the argument is \ttt{0}, \ace\ prints out only a single
+  line of information giving the result of each enumeration.
+If \ttt{mess} is positive then the presentation \amp the parameters are
+  echoed at the start of the run, and messages on the enumeration's status
+  as it progresses are also printed out.
+The value of \ttt{int} sets the frequency of the progress messages.
+The initial printout of the presentation \amp the parameters is the same
+  as that produced by the \ttt{sr:1} command; see Appendix~\ref{app:ex}
+  for some examples.
+
+The result line gives the result of the call to the enumerator and some
+  basic statistics (see Appendix~\ref{app:ex} for some examples).
+The possible results are given in Table~\ref{tab:rslts}; any result not
+  listed represents an internal error and should be reported.
+The statistics given are, in order: 
+  \ttt{a}, number of active cosets; 
+  \ttt{r}, number of applied cosets;
+  \ttt{h}, first (potentially) incomplete row;
+  \ttt{n}, next coset definition number; 
+  \ttt{l}, number of main loop passes;
+  \ttt{c}, total CPU time;
+  \ttt{m}, maximum active cosets;
+  and \ttt{t}, total cosets defined.
+
+\begin{table}
+\hrule
+\caption{Possible enumeration results}
+\label{tab:rslts}
+\smallskip
+\renewcommand{\arraystretch}{0.875}
+\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}lll} 
+\hline\hline
+result & level & meaning \\
+\hline
+\ttt{INDEX = x}         & 0 & finite index of \ttt{x} obtained \\
+\ttt{OVERFLOW}          & 0 & out of table space \\
+\ttt{SG PHASE OVERFLOW} & 0 & out of space (processing subgroup
+				generators) \\
+\ttt{ITERATION LIMIT}   & 0 & \ttt{loop} limit triggered \\
+\ttt{TIME LIMT}         & 0 & \ttt{ti} limit triggered \\
+\ttt{HOLE LIMIT}        & 0 & \ttt{ho} limit triggered \\
+\ttt{INCOMPLETE TABLE}  & 0 & all cosets applied, but table has holes \\
+\ttt{MEMORY PROBLEM}    & 1 & out of memory (building data structures) \\
+\hline\hline
+\end{tabular*}
+\end{table}
+
+The progress message lines consist of an initial tag, some fixed
+  statistics, and some variable statistics.
+The possible message tags are listed in Table~\ref{tab:prog}, along
+  with their meanings.
+The tags indicate the function just completed by the enumerator.
+The tags with a `y' in the `action' column represent functions which are
+  aggregated and counted.
+Every time this count overflows the value of \ttt{mess}, a message line
+  is printed and the count is zeroed.
+Those tags flagged with a `y*' are only present if the appropriate option
+  has been included in the build (see the \ttt{opt} command).
+Tags with an `n' in the `action' column are not counted, and cause a
+  message line to be output every time they occur.
+They also cause the action count to be reset.
+
+The fixed portion of the statistics consists of the \ttt{a}, \ttt{r}, 
+  \ttt{h}, \ttt{n}, \ttt{l} \amp \ttt{c} values, as for the
+  result line, except that \ttt{c} is the time since the previous message
+  line. 
+If $\ttt{mess} < 0$ then hole monitoring is active, and an \ttt{h}
+  statistic (representing the percentage of holes in the table) is inserted
+  between the \ttt{n} \amp \ttt{l} values.
+The variable portion of the statistics can be:
+  the \ttt{m} \amp \ttt{t} values, as for the result line;
+  \ttt{d}, the current size of the deduction stack;
+  \ttt{s}, \ttt{d} \amp \ttt{c} (with \ttt{DS} tag), the new stack size,
+    the non-redundant deductions retained, and the redundant deductions
+    discarded.
+
+\begin{table}
+\hrule
+\caption{Possible progress messages}
+\label{tab:prog}
+\smallskip
+\renewcommand{\arraystretch}{0.875}
+\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}lll} 
+\hline\hline
+message & action & meaning \\
+\hline
+\ttt{AD} & y  & coset \#1 application definition 
+			(\ttt{SG}/\ttt{RS} phase) \\
+\ttt{RD} & y  & R-style definition \\
+\ttt{RF} & y  & row-filling definition \\
+\ttt{CG} & y  & immediate gap-filling definition \\
+\ttt{CC} & y* & coincidence processed \\
+\ttt{DD} & y* & deduction processed \\
+\ttt{CP} & y  & preferred list gap-filling definition \\
+\ttt{CD} & y  & C-style definition \\
+\ttt{Lx} & n  & lookahead performed (type \ttt{x}) \\
+\ttt{CO} & n  & table compacted \\
+\ttt{CL} & n  & complete lookahead (table as deduction stack) \\
+\ttt{UH} & n  & updated completed-row counter \\
+\ttt{RA} & n  & remaining cosets applied to relators \\
+\ttt{SG} & n  & subgroup generator phase \\
+\ttt{RS} & n  & relators in subgroup phase \\
+\ttt{DS} & n  & stack overflowed (compacted and doubled) \\
+\hline\hline
+\end{tabular*}
+\end{table}
+
+\tsc{Notes:}
+Hole monitoring is expensive, so don't turn it on unless you really need
+  it.
+If you wish to print out the presentation \amp the parameters, but not
+  the progress messages, then set \ttt{mess} non-zero, but very large.
+(You'll still get the \ttt{SG}, \ttt{DS}, etc.\@ messages, but not the
+  \ttt{RD}, \ttt{DD}, etc.\@ ones.)
+You can set \ttt{mess} to \ttt{1}, to monitor all enumerator actions, but
+  be warned that this can yield very large output files.
+
+\quad\ttt{mo[de]\ ;}
+
+Prints the possible enumeration modes, as deduced from the command history
+  since the last call to the enumerator; see Section~\ref{sec:style}.
+
+\quad\ttt{nc\ /\ normal[\ closure]\ :\ [0/1]\ ;}
+
+This option takes the current table (which may or may not be complete),
+  and traces $g^{-1}wg$ and $gwg^{-1}$ for all group generators $g$ and 
+  all subgroup generator words $w$.
+The trace starts at coset \#1 (ie, the subgroup), and we note whether we
+  get back to coset \#1 or not.
+If we do not, then we print out a line of output.
+If the argument is present \amp set (ie, \ttt{1}), then the offending
+  conjugate is also added to the subgroup generators; the default is not
+  to do so.
+A single pass though the (original) subgroup generators is made, and scans
+  which do \emph{not} complete are \emph{not} processed 
+  (ie, printed/added).
+
+\tsc{Notes:}
+It is the \emph{users} responsibility to rerun the enumeration (\amp the 
+  \ttt{nc} option) as necessary until the situation stabilises.
+
+\quad\ttt{no[\ relators\ in\ subgroup]\ :\ [-1/0/1..]\ ;}
+
+It is sometimes helpful to include the relators in the subgroup, in the
+  sense that they are applied to coset \#1 at the start of an enumeration.
+An argument of \ttt{0} turns this feature off, and an argument of \ttt{-1}
+  includes all the relators.
+A positive argument includes the appropriate number of relators, in order.
+
+\quad\ttt{oo\ /\ order[\ option]\ :\ int\ ;}
+
+This option finds a coset with order a multiple of $|\ttt{int}|$ modulo
+  the subgroup, and prints out its coset representative.
+If $\ttt{int} > 0$, then the first coset (in order) meeting the requirement
+  is printed.
+If $\ttt{int} < 0$, then all cosets meeting the requirement are printed.
+Finally, if $\ttt{int} = 0$, then the orders of all cosets are printed.
+
+\quad\ttt{opt[ions]\ ;} 
+
+This command dumps details of the version of \ace\ you're running; eg,
+  when it was built, and the memory model used.
+A typical output, illustrating a build for big tables, is:
+ 
+\bv\begin{verbatim}
+  ACE 4.000 executable built: 09:42:35 on Oct 25 2003
+  BInt, SInt: 8, 4    Coset, Entry: 8, 5
+\end{verbatim}\ev
+
+$\bullet$
+Note that the time/date quoted is actually that when the \ttt{util2.o}
+  object was built from \ttt{util2.c}.
+This may not be when the executable was built; to force this, do a
+  \ttt{make} \ttt{clean} first.
+
+\quad\ttt{path[\ compression]\ :\ [0/1]\ ;}
+
+To correctly process multiple concidences, a union-find must be performed.
+If both path compression and weighted union are used, then this can be
+  done in essentially linear time (see, e.g., \cite{CLR}).
+Weighted union alone, in the worst-case, is worse than linear, but is
+  subquadratic.
+In practice, path compression is expensive, since it involves many coset
+  table accesses.
+So, by default, path compression is turned off; it can be turned on by
+  \ttt{path:1}.
+It has no effect on the result, but may effect the running time and the
+  internal statistics.
+
+\tsc{Guru Notes:}
+The whole question of the best way to handle large coincidence forests is
+  problematic.
+Formally, \ace\ does not do a weighted union, since it is constrained to
+  replace the higher-numbered of a coincident pair.
+In practice, this seems to amount to much the same thing!
+Turning path compression on cuts down the amount of data movement during
+  coincidence processing at the expense of having to trace the paths and
+  compress them.
+In general, it does not seem to be worthwhile.
+
+\quad\ttt{pd[efinitions]\ :\ [0/1]\ ;}
+
+If the argument is \ttt{0} (ie, false), then Felsch style definitions are 
+  made using the next empty table slot.
+If the argument is \ttt{1} (ie, true), then gaps of length one found during
+  relator scans in Felsch style are preferentially filled (subject to the 
+  value of \ttt{fi}).
+The gaps are noted in the preferred definition queue (whose size is set by
+  the \ttt{psiz} command).  
+Provided a live such gap survives (and no coincidence occurs, which causes
+  the queue to be discarded) the next coset will be defined to fill the
+  oldest gap of length one.
+The default value depends on the strategy selected (see 
+  Section~\ref{sec:strat}).
+%If you want to know more details, read the code.
+
+\quad\ttt{pd\ si[ze]\ /\ psiz[e]\ :\ [0/2/4/8/...]\ ;}
+
+The preferred definition queue is implemented as a ring, dropping
+  earliest entries.
+Its size \tit{must} be $2^n$\kern-2pt, for some $n>0$.
+An argument of \ttt{0} selects the default size of $256$.
+Each queue slot takes two words (i.e., 8 bytes), and the queue can store
+  up to $2^n-1$ entries.
+
+\quad\ttt{print\ det[ails]\ /\ sr\ :\ [int]\ ;}
+
+This command prints out details of the current presentation and parameters.
+No argument, or an argument of \ttt{0}, prints out the group \amp
+  subgroup name, the group's relators and the subgroup's generators.
+If the argument is \ttt{1}, then the current setting of the enumeration
+  control parameters is also printed.
+(This printout is the same as that produced at the start of a run when
+  messaging is on.)
+Arguments of \ttt{2} -- \ttt{5} print out the current values of
+  \ttt{enum}, \ttt{rel}, \ttt{subg} \amp \ttt{gen}, respectively.
+See Appendix~\ref{app:ex} for some examples.
+ 
+\tsc{Notes:}
+The output is printed out in a form suitable for input, so that a record
+  of a previous run can be used to replicate the run.
+Note that, due to the defaulting of some parameters and the special
+  meaning attached to some values, a little care has to be taken in
+  interpreting the parameters.
+If you wish to \tit{exactly} duplicate a run, you should use the output
+  of \ttt{sr} \tit{after} the run completes.
+
+\quad\ttt{pr[int\ table]\ :\ [[-]int[,int[,int]]]\ ;}  TBA ... out of date
+
+Compact the table, and then print it out from the first to the second
+  argument, in steps of the third argument.
+If the first argument is negative, then the orders (if available) and
+  representatives of the cosets are printed also.
+The third argument defaults to one.
+The one-argument form is equivalent to the two-argument form with a first
+  argument of \ttt{1} and the argument used as the second argument.
+The no-argument form prints the entire table, without orders or
+  representatives.
+
+\quad\ttt{pure\ c[t]\ ;}
+
+Sets the strategy to basic C-style (coset table based) -- 
+  no compaction, no gap-filling, no relators in subgroup; 
+  see Section~\ref{sec:strat}.
+
+\quad\ttt{pure\ r[t]\ ;}
+
+Sets the strategy to basic R-style (relator based) -- 
+  no Mendelsohn, no compaction, no lookahead, no row-filling;
+  see Section~\ref{sec:strat}.
+
+\quad\ttt{rc\ /\ random\ coinc[idences]:\ int[,int]\ ;}
+
+This option attempts to find nontrivial subgroups with index a multiple
+  of the first argument by repeatedly putting random cosets coincident
+  with coset \#1 and seeing what happens.
+If the first argument is \ttt{0} any \emph{non-trival} finite index is
+  accepted, while if it's \ttt{1} \emph{any} finite index will do.
+The starting coset table must be non-empty, but need not be complete.
+The second argument puts a limit on the number of attempts, with a default
+  of eight.
+For each attempt, we repeatedly add random coset representatives to the 
+  subgroup and redo the enumeration.
+If the table becomes too small, the attempt is aborted, the original 
+  subgroup generators restored, the CT is recalculated, and another attempt
+  made.
+If an attempt succeeds, then the new set of subgroup generators is
+  retained.
+
+\tsc{Guru Notes:}
+(i)
+A coset can have many different representatives.
+Consider running \ttt{st} before \ttt{rc}, to canonicise the table and the
+  representatives.
+This makes the reps minimal; sadly, however, it will only do so for the
+  first of a series of attempts.
+(ii)
+If a series of attempts to find a subgroup fails, consider running the
+  enumeration with different parameters.
+Although \ttt{rc} is random, it is always working with the same coset
+  table; changing the parameters will give a different table and hence
+  a different set of reps.
+% TBA: example (via email) from Norman Johnson (Feb 01), where Sims:3
+%   works better than Hard?
+
+\quad\ttt{rec[over]\ /\ contig[uous]\ ;}
+
+Invokes the compaction routine on the table to recover the space used by
+  any dead cosets.
+A \ttt{CO} message line is printed if any cosets were recovered, and a
+  \ttt{co} line if none were.
+This routine is called automatically if the \ttt{cy}, \ttt{nc}, \ttt{pr}
+  or \ttt{st} options are invoked.
+
+\quad\ttt{rep\ :\ 1..7[,int]\ ;}
+
+The \ttt{rep} (random equivalent presentations) option complements the
+  \ttt{aep} option.
+It generates and tests some random equivalent presentations.
+The mandatory argument acts as for \ttt{aep}, while the optional second
+  argument sets the number of presentations, with a default of eight.
+
+The routine first turns \ttt{asis} on and \ttt{mess} off, and then 
+  generates and tests the requested equivalent presentations.
+For each presentation the relators used and the summary result line is
+  printed.
+\ttt{asis} \amp \ttt{mess} are now restored to their original values, and 
+  the system is ready for further commands.
+
+\tsc{Notes:}
+The relator inversions \amp rotations are `genuinely' random.
+The relator permuting is a little bit of a kludge, with the `quality' of
+  the permutations tending to improve with successive presentations. 
+When the \ttt{rep} command completes, the presentation active is the 
+  \tit{last} one generated.
+
+\tsc{Guru Note:}
+It might appear that neglecting to restore the original presentation is an
+  error.
+In fact, it is a useful feature!
+Suppose that the space of equivalent presentations is too large to
+  exhaustively test.
+As noted in the entry for \ttt{aep}, we can start up multiple copies of
+  \ttt{aep} at random points in the search-space.
+Manually generating `random' equivalent presentations to serve as
+  starting-points is tedious and error-prone.
+The \ttt{rep} option provides a simple solution; simply run \ttt{rep}
+  before \ttt{aep}!
+
+\quad\ttt{r[factor]\ /\ rt[\ factor]\ :\ [int]\ ;}
+
+The value of this parameter sets the `blocking factor' for R-style
+  definitions; i.e., the number of cosets applied to all the relators
+  during each pass through the enumerator's main loop.
+The absolute value of \ttt{int} is the value used.
+The enumeration style is selected by the values of the \ttt{ct} \amp
+  \ttt{rt} parameters; see Section~\ref{sec:style}.
+
+\quad\ttt{row[\ filling]\ :\ [0/1]\ ;}
+
+When making HLT-style definitions, it is normal to scan each row of the
+  table after its coset has been applied to all relators, and make 
+  definitions to fill any holes encountered.
+Failure to do so can cause even simple enumerations to overflow; see
+  Section~\ref{ex002}.
+To turn row filling off, use \ttt{row:0}.
+  
+\quad\ttt{sc\ /\ stabil[ising\ cosets]\ :\ int\ ;}
+
+This option takes the current table (which may or may not be complete),
+  and looks for (the requested number of) cosets which `stabilise' the
+  subgroup.
+A coset $c$ stabilises the subgroup $\langle w_1, \dots, w_s \rangle$ if 
+  $c w_j = c$ for all $1 \le j \le s$.
+%
+If $\ttt{int} > 0$, the first \ttt{int} stabilising cosets found are
+  printed.
+If $\ttt{int} = 0$, all of the stabilising cosets, plus their
+  representatives, are printed.
+If $\ttt{int} < 0$, the first $|\ttt{int}|$ stabilising cosets,
+  plus their representatives, are printed.
+
+\quad\ttt{sims\ :\ 1/3/5/7/9\ ;}
+
+In his book \cite{Sim}, Sims discusses ten standard enumeration
+  strategies.
+These are effectively HLT (with \amp without the \ttt{mend} parameter,
+  and with \amp without continuous `lookahead') and Felsch, all either with
+  or without table standardisation as the enumeration proceeds.
+\ace\ does not implement table standardisation on an ongoing basis, 
+  although tables from an incomplete or paused enumeration can be 
+  standardised before the enumeration is continued.
+The other five strategies are implemented, and can be selected by this
+  command.
+The argument matches the number given in \cite[\S5.5]{Sim}; see
+  Section~\ref{sec:strat} for the parameter settings.
+With care, it is possible to duplicate the statistics given in \cite{Sim};
+  some examples are given in Section~\ref{ex001}.
+
+\quad\ttt{st[andard\ table]\ ;}
+
+This option compacts and then standardises the table (which may or may
+  not be complete).
+That is, for a given ordering of the generators in the columns of the
+  table, it produces the `canonic' version of the current table.
+In such a table, a row-major scan encounters previously unseen cosets in
+  (contiguous) numeric order; see Section~\ref{ex000} for an example.
+
+\tsc{Notes:}
+(i)
+In a canonic table, the coset representatives are in length plus (column
+  order) lexicographic order, and each is the minimum in this order.
+Further, they are a Schreier set (ie, each prefix of a rep is also a rep).
+(ii)
+See Sims \cite{Sim} for a discussion of standardising tables, and what
+  this achieves.
+
+\tsc{Guru Notes:}
+In half of the ten standard enumeration strategies of Sims \cite{Sim}, the
+  table is standardised repeatedly.
+This is expensive computationally, but can result in fewer cosets being
+  necessary.
+The effect of doing this can be investigated in \ace\ by (repeatedly)
+  halting the enumeration, standardising the table, and continuing; see 
+  Section~\ref{ex007} for an example.
+
+\quad\ttt{style\ ;}
+
+Prints the current enumeration style, as deduced from the current \ttt{Ct}
+  \amp \ttt{Rt} parameters; see Section~\ref{sec:style}.
+
+\quad\ttt{subg[roup\ name]\ :\ <string>\ ;}
+
+This command defines the name by which the current subgroup will be
+  identified in any printout.
+It has no effect on the actual enumeration, and defaults to \ttt{H}.
+An empty name is accepted; to see what the current name is, use the
+  \ttt{sr} command.
+
+\quad\ttt{sys[tem]\ :\ <string>\ ;}
+
+Passes \ttt{string} to a shell, via the C library routine \ttt{system()}.
+This is a useful, but dangerous, command; so caveat emptor.
+
+$\bullet$
+An example of its usefulness is the situation where a large number of 
+  \ace\ input scripts are being processed on a variety of machines.
+To keep track of the machine that ran each script, a \ttt{sys:} 
+  \ttt{uname} \ttt{-n;} command (on a Unix box) will include the machine's
+  name in the output file.
+
+\quad\ttt{text\ :\ <string>\ ;}
+
+Just echoes the string.
+This allows the output from a run driven by a script to be tarted up.
+
+\quad\ttt{tw\ /\ trace[\ word]\ :\ int,<word>\ ;}
+
+Traces \ttt{word} through the coset table, starting at coset \ttt{int}.
+Prints the final coset, if the trace completes.
+
+\quad\ttt{wo[rkspace]\ :\ [int[k/m/g]]\ ;}
+
+By default, \ace\ has a physical table size of $10^6$ entries (eg, 
+  $4 \times 10^6$ bytes in a 32-bit environment).
+The number of cosets in the table is the table size divided by the number
+  of columns.
+The \ttt{wo} command allows the physical table size, in entries, to be
+  set.
+(It causes the memory for the table to be allocated, but it is only divided
+  up into columns when an enumeration is started.)
+The argument is multiplied by $1$, $10^3$\kern-2pt, $10^6$\kern-2pt, or 
+  $10^9$\kern-2pt, depending as nothing, a \ttt{k}, an \ttt{m}, or a 
+  \ttt{g} is appended to the argument.
+
+$\bullet$
+The actual number of usable rows in the table (the \ttt{tabsiz} internal
+  variable) is $\lfloor \mathrm{entries}/\mathrm{columns} \rfloor - 2$.
+The $-2$ is to allow for possible rounding errors and the fact that coset
+  \#0 is not used.
+(The rounding stuff is not needed in \ace\ 4, but is left in so that CT
+  sizes match up with those produced by \ace\ 3.)
+
+$\bullet$
+If the requested amount of memory cannot be allocated, a warning is printed
+  and \ttt{wo} is reset to its default (and memory allocated).
+Failure to allocate the default size workspace is fatal.
+
+$\bullet$
+The number of cosets which can be used depends on the size of the
+  \ttt{Entry} type used to store CT entries.
+This limit may be more or less than the number of rows allowed by the
+  allocated workspace.
+
+\quad\ttt{\#\ ...\ <newline>}
+
+Any input between a sharp sign (\ttt{\#}) and the next newline is ignored.
+This allows comments to be included anywhere in command scripts.
+Note that if a comment follows one or more commands on a line, the final
+  command should be terminated by a \ttt{;}, otherwise the parser may get
+  confused and report an error.
+
+

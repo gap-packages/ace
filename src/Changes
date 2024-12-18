@@ -1,6 +1,7 @@
 
 This file documents the changes made to ACE 3.000 as part of the upgrade to
   ACE 3.001.
+(ACE 3.001 was the starting point for the ACE 4.xxx rewrite.)
 This includes changes made to development versions of ACE which came after
   3.000 but before the official 3.001 release & code freeze, and temporary
   code introduced for one reason or another and then deleted.
