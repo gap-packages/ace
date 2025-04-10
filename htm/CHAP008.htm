@@ -70,7 +70,7 @@ Let's redo that part of the above  example  after  first  setting  the
 going on behind the scenes.
 <p>
 <pre>
-gap&gt; SetInfoACELevel(3); # Just to see what's going on behind the scenes
+gap&gt; SetInfoLevel(InfoACE, 3); # Just to see what's going on behind the scenes
 gap&gt; # Recall that we did: TCENUM:=ACETCENUM;;
 gap&gt; G := PerfectGroup(IsPermGroup, 16*60, 1   # Arguments ... as per usual
 &gt;                      : max := 50, mess := 10 # ... but we use ACE options
@@ -128,7 +128,7 @@ A5 2^4
 The following example calls <font face="Gill Sans,Helvetica,Arial">ACE</font> for up to 800 coset  numbers  (<code>max
 := 800</code>) using Mendelsohn style relator processing (<code>mendelsohn</code>)  and
 sets progress messages to be printed every 500  iterations  (<code>messages
-:=500</code>); we do ``<code>SetInfoACELevel(3);</code>'' so  that  we  may  see  these
+:=500</code>); we do ``<code>SetInfoLevel(InfoACE, 3);</code>'' so  that  we  may  see  these
 messages.  The  value  of  <code>table</code>,  i.e.&nbsp;the  <font face="Gill Sans,Helvetica,Arial">GAP</font>   coset   table,
 immediately follows the last <font face="Gill Sans,Helvetica,Arial">ACE</font>  message  (``<code>#I </code>'')  line,  but
 both the coset table from <font face="Gill Sans,Helvetica,Arial">ACE</font> and the <font face="Gill Sans,Helvetica,Arial">GAP</font> coset table have  been
@@ -139,7 +139,7 @@ ACEExample("perf602p5");</code>. You may wish to peruse  the  notes  in  the
 that the final table output here is <code>lenlex</code>  standardised.)
 <p>
 <pre>
-gap&gt; SetInfoACELevel(3);           # So we can see the progress messages
+gap&gt; SetInfoLevel(InfoACE, 3);     # So we can see the progress messages
 gap&gt; G := PerfectGroup(IsSubgroupFpGroup,2^5*60, 2);;# See previous example:
 gap&gt;                               # "Example where ACE is made the
 gap&gt;                               #  Standard Coset Enumerator"
@@ -208,15 +208,15 @@ we  have  relied  on  the  default  level  of  messaging  from  <font face="Gill
 here) only, without parameter information. The result line is  visible
 in the <code>Info</code>-ed component of the output  below  because  we  set  the
 <code>InfoLevel</code> of <code>InfoACE</code> to a value of at least 2 (in fact we  set  it
-to 3; doing ``<code>SetInfoACELevel(2);</code>'' would  make  <strong>only</strong>  the  result
+to 3; doing ``<code>SetInfoLevel(InfoACE, 2);</code>'' would  make  <strong>only</strong>  the  result
 line visible). We have however used the option <code>echo</code>, so that we  can
 see how the interface handled the arguments and options. On-line  try:
-<code>SetInfoACELevel(3); ACEExample("A5-C5", ACEStart);</code> (this  is  nearly
+<code>SetInfoLevel(InfoACE, 3); ACEExample("A5-C5", ACEStart);</code> (this  is  nearly
 equivalent to the sequence following, but the variables <code>F</code>, <code>a</code>, <code>b</code>,
 <code>G</code> are not accessible, being ``local'' to <code>ACEExample</code>).
 <p>
 <pre>
-gap&gt; SetInfoACELevel(3); # So we can see output from ACE binary
+gap&gt; SetInfoLevel(InfoACE, 3); # So we can see output from ACE binary
 gap&gt; F := FreeGroup("a","b");; a := F.1;;  b := F.2;;
 gap&gt; G := F / [a^2, b^3, (a*b)^5 ];
 &lt;fp group on the generators [ a, b ]&gt;
@@ -345,12 +345,12 @@ gap&gt; ACEExample();
 #I  4. Try the *-ed examples to explore how to modify options when an
 #I     enumeration fails (just follow the instructions you get within the
 #I     break-loop, or see Notes 2. and 3.).
-#I  5. Try `SetInfoACELevel(3);' before calling ACEExample, to see the
+#I  5. Try `SetInfoLevel(InfoACE, 3);' before calling ACEExample, to see the
 #I     effect of setting the "mess" (= "messages") option.
 #I  6. To suppress a long output, use a double semicolon (`;;') after the
 #I     ACEExample command. (However, this does not suppress Info-ed output.)
-#I  7. Also, try `SetInfoACELevel(2);' or `SetInfoACELevel(4);' before 
-#I     calling ACEExample.
+#I  7. Also, try `SetInfoLevel(InfoACE, 2);' or `SetInfoLevel(InfoACE, 4);'
+#I     before calling ACEExample.
 gap&gt; 
 
 </pre>
@@ -381,7 +381,7 @@ short-hand for inverses, e.g.&nbsp;<code>C = c^-1</code> (see <code>Group Relato
 <font face="Gill Sans,Helvetica,Arial">ACE</font> ``Run Parameters'' block).
 <p>
 <pre>
-gap&gt; SetInfoACELevel(3);
+gap&gt; SetInfoLevel(InfoACE, 3);
 gap&gt; ACEExample("F27-purec");
 #I  # ACEExample "F27-purec" : enumeration of cosets of H in G,
 #I  # where G = F(2,7) = C_29, H = Id, using purec strategy.
@@ -480,7 +480,7 @@ same abbreviations for options to over-ride them.  Also  observe  that
 our new options are <strong>last</strong>.
 <p>
 <pre>
-gap&gt; SetInfoACELevel(2);
+gap&gt; SetInfoLevel(InfoACE, 2);
 gap&gt; ACEExample("F27-purec", ACECosetTableFromGensAndRels
 &gt;               : sg := ["c"], subgroup := "&lt; c &gt;", messages := 0);
 #I  # ACEExample "F27-purec" : enumeration of cosets of H in G,
@@ -540,7 +540,7 @@ we're at it we'll pass the <code>hlt</code> (see&nbsp;<a href="CHAP005.htm#SSEC0
 (which will over-ride <code>purec</code>). (The <code>InfoACE</code> level is still  2.)  To
 avoid getting a trace-back during the <code>break</code>-loop (which can  look  a
 little   scary   to   the   unitiated)   we   will    set    <code>OnBreak</code>
-(see&nbsp;<a href="https://www.gap-system.org/Manuals/doc/ref/chap6.html#X82EBF01181C3C859">OnBreak</a>) as follows:
+(see&nbsp;<a href="https://docs.gap-system.org/doc/ref/chap6.html#X82EBF01181C3C859">OnBreak</a>) as follows:
 <p>
 <pre>
 gap&gt; NormalOnBreak := OnBreak;; # Save the old value to restore it later
@@ -753,7 +753,7 @@ gap&gt;
 
 </pre>
 <p>
-The output (<code>Info</code>-ed at <code>InfoACELevel</code> 1) states that a number of new
+The output (<code>Info</code>-ed at <code>InfoACE</code> level 1) states that a number of new
 functions are defined. During a  <font face="Gill Sans,Helvetica,Arial">GAP</font>  session,  you  can  find  out
 details of these functions by typing:
 <p>
@@ -764,5 +764,5 @@ gap&gt; ?Using ACEReadResearchExample
 <p>
 [<a href = "chapters.htm">Up</a>] [<a href ="CHAP00A.htm">Previous</a>] [<a href ="CHAP00C.htm">Next</a>] [<a href = "theindex.htm">Index</a>]
 <P>
-<address>ACE manual<br>January 2023
+<address>ACE manual<br>April 2025
 </address></body></html>

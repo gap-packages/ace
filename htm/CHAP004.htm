@@ -60,7 +60,7 @@ gap&gt; RecNames(KnownACEOptions);
 </pre>
 <p>
 (See Section&nbsp;<a href="CHAP004.htm#SECT008">The KnownACEOptions Record</a>.) Also, from within a <font face="Gill Sans,Helvetica,Arial">GAP</font>
-session, you may use <font face="Gill Sans,Helvetica,Arial">GAP</font>'s help browser (see Chapter&nbsp;<a href="https://www.gap-system.org/Manuals/doc/ref/chap2.html#X8755A2C67B197C63">The  Help System</a> in the  <font face="Gill Sans,Helvetica,Arial">GAP</font>  Reference  Manual);  to  find  out  about  any
+session, you may use <font face="Gill Sans,Helvetica,Arial">GAP</font>'s help browser (see Chapter&nbsp;<a href="https://docs.gap-system.org/doc/ref/chap2.html#X8755A2C67B197C63">The  Help System</a> in the  <font face="Gill Sans,Helvetica,Arial">GAP</font>  Reference  Manual);  to  find  out  about  any
 particular <font face="Gill Sans,Helvetica,Arial">ACE</font> option, simply type: ``<code>?option  </code><var>option</var><code></code>'',  where
 <var>option</var> is one of the options listed above without any quotes, e.g.
 <p>
@@ -89,10 +89,10 @@ two usual mechanisms provided by <font face="Gill Sans,Helvetica,Arial">GAP</fon
 <ul>
 <p>
 <li> options may be set globally using the function <code>PushOptions</code>
-(see Chapter&nbsp;<a href="https://www.gap-system.org/Manuals/doc/ref/chap8.html#X7FD84061873F72A2">Options Stack</a> in the <font face="Gill Sans,Helvetica,Arial">GAP</font> Reference  Manual); or
+(see Chapter&nbsp;<a href="https://docs.gap-system.org/doc/ref/chap8.html#X7FD84061873F72A2">Options Stack</a> in the <font face="Gill Sans,Helvetica,Arial">GAP</font> Reference  Manual); or
 <p>
 <li> options may be appended to the argument list of any function
-call, separated by a colon from the argument list  (see  <a href="https://www.gap-system.org/Manuals/doc/ref/chap4.html#X78C70489791FDF43">Function Calls</a> in the <font face="Gill Sans,Helvetica,Arial">GAP</font> Reference Manual), in which case  they  are  then
+call, separated by a colon from the argument list  (see  <a href="https://docs.gap-system.org/doc/ref/chap4.html#X78C70489791FDF43">Function Calls</a> in the <font face="Gill Sans,Helvetica,Arial">GAP</font> Reference Manual), in which case  they  are  then
 passed on recursively to any subsequent inner function call, which may
 in turn have options of their own.
 <p>
@@ -106,11 +106,11 @@ that prior to calling <code>ACEStart</code> the <code>OptionsStack</code> be emp
 <h2><a name="SECT002">4.2 Warnings regarding Options</a></h2>
 <p><p>
 As mentioned above, one can set options globally  using  the  function
-<code>PushOptions</code> (see Chapter&nbsp;<a href="https://www.gap-system.org/Manuals/doc/ref/chap8.html#X7FD84061873F72A2">Options Stack</a> in the <font face="Gill Sans,Helvetica,Arial">GAP</font> Reference
+<code>PushOptions</code> (see Chapter&nbsp;<a href="https://docs.gap-system.org/doc/ref/chap8.html#X7FD84061873F72A2">Options Stack</a> in the <font face="Gill Sans,Helvetica,Arial">GAP</font> Reference
 Manual); however, options pushed onto  <code>OptionsStack</code>,  in  this  way,
 remain there  until  an  explicit  <code>PopOptions()</code>  call  is  made.  In
 contrast, options passed in the usual way behind a colon  following  a
-function's arguments (see <a href="https://www.gap-system.org/Manuals/doc/ref/chap4.html#X78C70489791FDF43">Function Calls</a> in the <font face="Gill Sans,Helvetica,Arial">GAP</font> Reference
+function's arguments (see <a href="https://docs.gap-system.org/doc/ref/chap4.html#X78C70489791FDF43">Function Calls</a> in the <font face="Gill Sans,Helvetica,Arial">GAP</font> Reference
 Manual)  are  local,  and  disappear  from  <code>OptionsStack</code>  after  the
 function has executed successfully; nevertheless, a function, that  is
 passed options this way, will also  see  any  global  options  or  any
@@ -119,7 +119,7 @@ unless those  options  are  over-ridden  by  options  passed  via  the
 function. Also note that duplication of  option  names  for  different
 programs  may  lead   to   misinterpretations.   Since   a   non-empty
 <code>OptionsStack</code> is potentially a mine-field for the  unwary  user,  the
-function  <code>ResetOptionsStack</code>  (see&nbsp;<a href="https://www.gap-system.org/Manuals/doc/ref/chap8.html#X83D1190984DA3B85">ResetOptionsStack</a>   in   the
+function  <code>ResetOptionsStack</code>  (see&nbsp;<a href="https://docs.gap-system.org/doc/ref/chap8.html#X83D1190984DA3B85">ResetOptionsStack</a>   in   the
 Reference Manual) is now in the <font face="Gill Sans,Helvetica,Arial">GAP</font> library and
 <p>
 <a name = "SSEC002.1"></a>
@@ -355,7 +355,7 @@ and the output from <font face="Gill Sans,Helvetica,Arial">ACE</font>, which whe
 are stored in files whose full path names are recorded in  the  record
 fields   <code>ACEData.infile</code>   and    <code>ACEData.outfile</code>,    respectively.
 Alternatively, both interactively and non-interactively  one  can  set
-the <code>InfoLevel</code> of <code>InfoACE</code> to 3 (see&nbsp;<a href="CHAP001.htm#SSEC009.3">SetInfoACELevel</a>), to see  the
+the <code>InfoLevel</code> of <code>InfoACE</code> to 3 (see&nbsp;<a href="CHAP001.htm#SSEC009.1">InfoACE</a>), to see  the
 output from <font face="Gill Sans,Helvetica,Arial">ACE</font>, or to 4 to  also  see  the  commands  directed  to
 <font face="Gill Sans,Helvetica,Arial">ACE</font>.
 <p>
@@ -1327,7 +1327,7 @@ situation both interactively and   non-interactively  by  setting  the
 <code>InfoLevel</code> of <code>InfoACE</code> to 3 via
 <p>
 <pre>
-gap&gt; SetInfoACELevel(3);
+gap&gt; SetInfoLevel(InfoACE, 3);
 
 </pre>
 <p>
@@ -1409,5 +1409,5 @@ used directly via the <font face="Gill Sans,Helvetica,Arial">ACE</font> standalo
 <p>
 [<a href = "chapters.htm">Up</a>] [<a href ="CHAP003.htm">Previous</a>] [<a href ="CHAP005.htm">Next</a>] [<a href = "theindex.htm">Index</a>]
 <P>
-<address>ACE manual<br>January 2023
+<address>ACE manual<br>April 2025
 </address></body></html>

@@ -83,7 +83,7 @@ gap&gt; TCENUM:=ACETCENUM;;
 </pre>
 <p>
 This    sets    the    function    <code>CosetTableFromGensAndRels</code>    (see
-Section&nbsp;<a href="https://www.gap-system.org/Manuals/doc/ref/chap47.html#X7BD0CEBA7B225416">Coset  Tables  and  Coset  Enumeration</a>  in  the   <font face="Gill Sans,Helvetica,Arial">GAP</font>
+Section&nbsp;<a href="https://docs.gap-system.org/doc/ref/chap47.html#X7BD0CEBA7B225416">Coset  Tables  and  Coset  Enumeration</a>  in  the   <font face="Gill Sans,Helvetica,Arial">GAP</font>
 Reference Manual) to be  the  function  <code>ACECosetTableFromGensAndRels</code>
 (described in Section&nbsp;<a href="CHAP001.htm#SECT002">Using ACE Directly to Generate a Coset Table</a>),
 which then can be called with all the options defined for  the  <font face="Gill Sans,Helvetica,Arial">ACE</font>
@@ -138,7 +138,7 @@ Here <var>fgens</var> is a list of free generators, <var>rels</var> a list of  w
 these generators giving relators for a finitely presented  group,  and
 <var>sgens</var> the list of subgroup generators, again expressed as  words  in
 the free generators. All these are given in the standard <font face="Gill Sans,Helvetica,Arial">GAP</font> format
-(see Chapter&nbsp;<a href="https://www.gap-system.org/Manuals/doc/ref/chap47.html#X7AA982637E90B35A">Finitely Presented Groups</a> of the  <font face="Gill Sans,Helvetica,Arial">GAP</font>  Reference
+(see Chapter&nbsp;<a href="https://docs.gap-system.org/doc/ref/chap47.html#X7AA982637E90B35A">Finitely Presented Groups</a> of the  <font face="Gill Sans,Helvetica,Arial">GAP</font>  Reference
 Manual). Note that the 3-argument form  of  <code>ACECosetTable</code>  described
 here is merely a synonym for <code>ACECosetTableFromGensAndRels</code>, and  that
 <code>ACECosetTable</code> may be called in a different  way  in  an  interactive
@@ -261,11 +261,11 @@ table. Despite the fact that the eventual coset  table  only  has  one
 line (i.e.&nbsp;there is exactly one coset number)  <font face="Gill Sans,Helvetica,Arial">ACE</font>  <strong>did</strong>  need  to
 define more than 2 coset numbers. To  find  out  just  how  many  were
 required before the final  collapse,  let's  set  the  <code>InfoLevel</code>  of
-<code>InfoACE</code> (see&nbsp;<a href="CHAP001.htm#SSEC009.3">SetInfoACELevel</a>) to 2, so that the <font face="Gill Sans,Helvetica,Arial">ACE</font> enumeration
+<code>InfoACE</code> (see&nbsp;<a href="CHAP001.htm#SSEC009.1">InfoACE</a>) to 2, so that the <font face="Gill Sans,Helvetica,Arial">ACE</font> enumeration
 result is printed.
 <p>
 <pre>
-gap&gt; SetInfoACELevel(2);
+gap&gt; SetInfoLevel(InfoACE, 2);
 gap&gt; ACECosetTable(fgens, rels, [c]);
 #I  INDEX = 1 (a=1 r=2 h=2 n=2; l=6 c=0.00; m=2049 t=3127)
 [ [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], 
@@ -590,16 +590,16 @@ with <code>ACEExample</code>.
 <strong>Notes</strong>
 <p>
 Most examples use the <code>mess</code>  ( = <tt>messages</tt>)  option.  To  see  the
-effect of this, it is recommended to do: <code>SetInfoACELevel(3);</code>  before
-calling <code>ACEExample</code>, with an example.
+effect of this, it is recommended to do: <code>SetInfoLevel(InfoACE, 3);</code>
+before calling <code>ACEExample</code>, with an example.
 <p>
 The coset table output from <code>ACEExample</code>, when called with many of the
 examples and with the <font face="Gill Sans,Helvetica,Arial">ACE</font>  function  <code>ACECosetTableFromGensAndRels</code>
 is often quite long. Recall that  the  output  may  be  suppressed  by
 following the (<code>ACEExample</code>) command with a double semicolon (<code>;;</code>).
 <p>
-Also, try <code>SetInfoACELevel(2);</code> before  calling <code>ACEExample</code>, with  an
-example.
+Also, try <code>SetInfoLevel(InfoACE, 2);</code> before  calling <code>ACEExample</code>,
+with an example.
 <p>
 If you unexpectedly observe <code>aceexampleoptions</code> in your  output,  then
 most probably you have unintentionally passed options  by  the  global
@@ -620,7 +620,7 @@ Also provided are:
 <li><code>ACEReadResearchExample( </code><var>filename</var><code> ) F</code>
 <li><code>ACEReadResearchExample() F</code>
 <p>
-which perform <code>Read</code> (see Section&nbsp;<a href="https://www.gap-system.org/Manuals/doc/ref/chap9.html#X8373AC6B7D5F9167">Read</a> in the  <font face="Gill Sans,Helvetica,Arial">GAP</font>  Reference
+which perform <code>Read</code> (see Section&nbsp;<a href="https://docs.gap-system.org/doc/ref/chap9.html#X8373AC6B7D5F9167">Read</a> in the  <font face="Gill Sans,Helvetica,Arial">GAP</font>  Reference
 Manual) on <var>filename</var> or, with no argument,  the  file  with  filename
 <code>"pgrelfind.g"</code> in the <code>res-examples</code> directory;  e.g.&nbsp;the  effect  of
 running
@@ -781,7 +781,7 @@ limited.
 <p>
 The output of the <font face="Gill Sans,Helvetica,Arial">ACE</font> binary is, by default, not displayed. However
 the user may choose to see some, or all, of this output. This is  done
-via the <code>Info</code> mechanism  (see  Chapter&nbsp;<a href="https://www.gap-system.org/Manuals/doc/ref/chap7.html#X7A9C902479CB6F7C">Info  Functions</a>  in  the
+via the <code>Info</code> mechanism  (see  Chapter&nbsp;<a href="https://docs.gap-system.org/doc/ref/chap7.html#X7A9C902479CB6F7C">Info  Functions</a>  in  the
 <font face="Gill Sans,Helvetica,Arial">GAP</font> Reference Manual). For this purpose, there is  the  <var>InfoClass</var>
 <code>InfoACE</code>. Each line of output from <font face="Gill Sans,Helvetica,Arial">ACE</font> is directed to  a  call  to
 <code>Info</code> and will be displayed for the user to see if the <code>InfoLevel</code> of
@@ -789,30 +789,14 @@ via the <code>Info</code> mechanism  (see  Chapter&nbsp;<a href="https://www.gap
 1, and it is recommended that you leave it at this level,  or  higher.
 Only messages which we think that the user will really want to see are
 directed to <code>Info</code> at <code>InfoACE</code> level 1. To turn off  <strong>all</strong>  <code>InfoACE</code>
-messaging, set the <code>InfoACE</code> level to 0  (see&nbsp;<a href="CHAP001.htm#SSEC009.3">SetInfoACELevel</a>).  For
-convenience, we provide the function
+messaging, set the <code>InfoACE</code> level to 0  (see&nbsp;<a href="CHAP001.htm#SSEC009.1">InfoACE</a>).
 <p>
-<a name = "SSEC009.2"></a>
-<li><code>InfoACELevel() F</code>
-<p>
-which returns the current <code>InfoLevel</code> of <code>InfoACE</code>, i.e.&nbsp;it is  simply
-a shorthand for <code>InfoLevel(InfoACE)</code>.
-<p>
-To set the <code>InfoLevel</code> of <code>InfoACE</code> we also provide
-<p>
-<a name = "SSEC009.3"></a>
-<li><code>SetInfoACELevel( </code><var>level</var><code> ) F</code>
-<li><code>SetInfoACELevel() F</code>
-<p>
-which for a non-negative integer  <var>level</var>,  sets  the  <code>InfoLevel</code>  of
-<code>InfoACE</code>    to    <var>level</var>    (i.e.&nbsp;it    is    a    shorthand     for
-<code>SetInfoLevel(InfoACE, </code><var>level</var><code>)</code>),  or  with  no  arguments  sets  the
-<code>InfoACE</code> level to the default value 1.  Currently,  information  from
+Currently,  information  from
 <font face="Gill Sans,Helvetica,Arial">ACE</font> is directed to <code>Info</code> at four <code>InfoACE</code> levels: 1, 2, 3 and  4.
 The command
 <p>
 <pre>
-gap&gt; SetInfoACELevel(2);
+gap&gt; SetInfoLevel(InfoACE, 2);
 
 </pre>
 <p>
@@ -820,7 +804,7 @@ enables the display of the results line of an enumeration from <font face="Gill 
 whereas
 <p>
 <pre>
-gap&gt; SetInfoACELevel(3);
+gap&gt; SetInfoLevel(InfoACE, 3);
 
 </pre>
 <p>
@@ -831,7 +815,7 @@ particular,  the  progress  messages,  emitted  by  <font face="Gill Sans,Helvet
 will be displayed via <code>Info</code>. Finally,
 <p>
 <pre>
-gap&gt; SetInfoACELevel(4);
+gap&gt; SetInfoLevel(InfoACE, 4);
 
 </pre>
 <p>
@@ -901,5 +885,5 @@ gives details of the C code compilation).
 <p>
 [<a href = "chapters.htm">Up</a>] [<a href ="CHAP002.htm">Next</a>] [<a href = "theindex.htm">Index</a>]
 <P>
-<address>ACE manual<br>January 2023
+<address>ACE manual<br>April 2025
 </address></body></html>

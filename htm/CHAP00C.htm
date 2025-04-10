@@ -64,10 +64,10 @@ By  default,  the  presentation  is  not  echoed;   use   the   <code>echo</code
 (see&nbsp;<a href="CHAP004.htm#SSEC011.12">option echo</a>) option if you want that.  Also,  by  default,  the
 <font face="Gill Sans,Helvetica,Arial">ACE</font> binary only prints a <strong>results message</strong>, but we won't  see  that
 unless   we   set   <code>InfoACE</code>   to   a   level   of   at    least    2
-(see&nbsp;<a href="CHAP001.htm#SSEC009.3">SetInfoACELevel</a>):
+(see&nbsp;<a href="CHAP001.htm#SSEC009.1">InfoACE</a>):
 <p>
 <pre>
-gap&gt; SetInfoACELevel(2);
+gap&gt; SetInfoLevel(InfoACE, 2);
 
 </pre>
 <p>
@@ -94,7 +94,7 @@ into a <font face="Gill Sans,Helvetica,Arial">GAP</font> record with <code>index
 To dump  out  the  presentation  and  parameters  associated  with  an
 enumeration,  <font face="Gill Sans,Helvetica,Arial">ACE</font>  provides  the  <code>sr</code>  (see&nbsp;<a href="CHAP00D.htm#SSEC005.7">option  sr</a>)  option.
 However, you won't see output of this  command,  unless  you  set  the
-<code>InfoACELevel</code> to at least 3. Also, to ensure the reliability  of  the
+<code>InfoACE</code> level to at least 3. Also, to ensure the reliability  of  the
 output of the <code>sr</code> option, an enumeration  should  <strong>precede</strong>  it;  for
 <code>ACEStats</code> (and <code>ACECosetTableFromGensAndRels</code>) the directive  <code>start</code>
 (see&nbsp;<a href="CHAP00D.htm#SSEC003.2">option start</a>) required to initiate an enumeration  is  inserted
@@ -108,7 +108,7 @@ mind let's  rerun  the  enumeration  and  get  <font face="Gill Sans,Helvetica,A
 presentation and parameters:
 <p>
 <pre>
-gap&gt; SetInfoACELevel(3);
+gap&gt; SetInfoLevel(InfoACE, 3);
 gap&gt; ACEStats(fgens, [], [] : start, sr := 1);
 #I  ACE 3.001        Wed Oct 31 09:36:39 2001
 #I  =========================================
@@ -536,7 +536,7 @@ message</strong>. Then <code>ACECosetTable</code> extracts the  incomplete  tabl
 <code>print</code> (see <a href="CHAP00D.htm#SSEC005.8">option print</a>) directive. If you wish  to  see  all  the
 options that are directed to <font face="Gill Sans,Helvetica,Arial">ACE</font>, set  the  <code>InfoACE</code>  level  to  4
 (then all such commands are <code>Info</code>-ed behind a ``<code>ToACE&gt;  </code>''  prompt;
-see&nbsp;<a href="CHAP001.htm#SSEC009.3">SetInfoACELevel</a>).
+see&nbsp;<a href="CHAP001.htm#SSEC009.1">InfoACE</a>).
 <p>
 Following the standalone manual, we  now  set  things  up  to  do  the
 alternating group <i>A</i><sub>5</sub>, of order 60. (We saw the group  <i>A</i><sub>5</sub>  with
@@ -559,7 +559,7 @@ defining relators, for example) we first assign the variable <code>a</code> to b
 <code>F.1</code> (and <code>b</code> to be <code>F.2</code>).
 <p>
 <pre>
-gap&gt; SetInfoACELevel(4);
+gap&gt; SetInfoLevel(InfoACE, 4);
 gap&gt; a := F.1;; b := F.2;;
 gap&gt; # Enumerating A_5 = &lt; a, b | a^2, b^3, (a*b)^5 &gt;
 gap&gt; # over Id (trivial subgp)
@@ -699,10 +699,10 @@ the  <code>subgroup</code>  (see&nbsp;<a href="CHAP004.htm#SSEC019.2">option  su
 save anything by doing this, since afterwards the  variables  <code>fgens</code>,
 <code>a</code>, <code>b</code> and <code>F</code> would no longer be associated with <code>ACEStart</code> process
 1. Instead, we will use the more convenient 4-argument form, and  also
-switch the <code>InfoACELevel</code> back to 3:
+switch the <code>InfoACE</code> level back to 3:
 <p>
 <pre>
-gap&gt; SetInfoACELevel(3);
+gap&gt; SetInfoLevel(InfoACE, 3);
 gap&gt; ACEStart(1, ACEGroupGenerators(1), ACERelators(1), [ a*b ]
 &gt;             : messages := 1);
 #I  ***
@@ -858,11 +858,11 @@ option <code>asis</code> to 1; this bit of skulduggery stops <font face="Gill Sa
 as an involution, allowing <code>a</code> and <code>A</code> (the inverse of <code>a</code>) to take up
 the first two columns of the coset table, effectively stopping  <font face="Gill Sans,Helvetica,Arial">ACE</font>
 from reordering the generators. To see what is passed  to  <font face="Gill Sans,Helvetica,Arial">ACE</font>,  at
-the enumeration stage, we set the <code>InfoACELevel</code> to 4,  but  since  we
+the enumeration stage, we set the <code>InfoACE</code> level to 4,  but  since  we
 don't really want to see messages this time we set <code>messages := 0</code>.
 <p>
 <pre>
-gap&gt; SetInfoACELevel(4);
+gap&gt; SetInfoLevel(InfoACE, 4);
 gap&gt; ACEStart(1, ACEGroupGenerators(1), ACERelators(1), [ a*b ]
 &gt;             : messages := 0, lenlex);
 #I  ToACE&gt; group:ab;
@@ -952,7 +952,7 @@ The following duplicates the ``Total''  (<code>totcosets</code>  in  <font face=
 strategy.
 <p>
 <pre>
-gap&gt; SetInfoACELevel(1); # No behind-the-scenes info. please
+gap&gt; SetInfoLevel(InfoACE, 1); # No behind-the-scenes info. please
 gap&gt; F := FreeGroup("r", "s", "t");; r := F.1;; s := F.2;; t := F.3;;
 gap&gt; ACEStats([r, s, t], [(r^t*r^-2)^-1, (s^r*s^-2)^-1, (t^s*t^-2)^-1], []
 &gt;             : sims := 3);
@@ -1028,5 +1028,5 @@ game. Let's hope you win most of the time.
 <p>
 [<a href = "chapters.htm">Up</a>] [<a href ="CHAP00B.htm">Previous</a>] [<a href ="CHAP00D.htm">Next</a>] [<a href = "theindex.htm">Index</a>]
 <P>
-<address>ACE manual<br>January 2023
+<address>ACE manual<br>April 2025
 </address></body></html>

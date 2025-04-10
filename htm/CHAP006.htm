@@ -17,7 +17,7 @@
 <p>
 The user will probably benefit most from interactive use of <font face="Gill Sans,Helvetica,Arial">ACE</font>  by
 setting   the   <code>InfoLevel</code>   of   <code>InfoACE</code>    to    at    least    3
-(see&nbsp;<a href="CHAP001.htm#SSEC009.3">SetInfoACELevel</a>),  particularly  if  she  uses  the  <code>messages</code>
+(see&nbsp;<a href="CHAP001.htm#SSEC009.1">InfoACE</a>),  particularly  if  she  uses  the  <code>messages</code>
 option with a non-zero value.
 <p>
 Have you read the various options warnings yet? If  not,  please  take
@@ -85,11 +85,11 @@ generators <var>fgens</var> giving relators for a finitely presented group; and
 <var>sgens</var>, a list of subgroup generators, again expressed  as  words  in
 the free generators <var>fgens</var>. Each of <var>fgens</var>, <var>rels</var> and  <var>sgens</var>  are
 given in the standard <font face="Gill Sans,Helvetica,Arial">GAP</font> format for finitely presented groups (See
-Chapter&nbsp;<a href="https://www.gap-system.org/Manuals/doc/ref/chap47.html#X7AA982637E90B35A">Finitely  Presented  Groups</a>  of  the  <font face="Gill Sans,Helvetica,Arial">GAP</font>   Reference
+Chapter&nbsp;<a href="https://docs.gap-system.org/doc/ref/chap47.html#X7AA982637E90B35A">Finitely  Presented  Groups</a>  of  the  <font face="Gill Sans,Helvetica,Arial">GAP</font>   Reference
 Manual).
 <p>
 All forms of <code>ACEStart</code> accept options described in  Chapters&nbsp;<a href="CHAP004.htm">Options for ACE</a> and&nbsp;<a href="CHAP005.htm">Strategy  Options  for  ACE</a>,  and  Appendix&nbsp;<a href="CHAP00D.htm">Other  ACE Options</a>, which are listed behind  a  colon  in  the  usual  way  (see
-<a href="https://www.gap-system.org/Manuals/doc/ref/chap4.html#X78C70489791FDF43">Function Calls</a> in the <font face="Gill Sans,Helvetica,Arial">GAP</font> Reference Manual).  The  reader  is
+<a href="https://docs.gap-system.org/doc/ref/chap4.html#X78C70489791FDF43">Function Calls</a> in the <font face="Gill Sans,Helvetica,Arial">GAP</font> Reference Manual).  The  reader  is
 strongly   encouraged   to   read   the   introductory   sections   of
 Chapter&nbsp;<a href="CHAP004.htm">Options  for  ACE</a>,  with  regard  to  options.  The   global
 mechanism (via <code>PushOptions</code>) of passing options is <strong>not</strong>  recommended
@@ -654,7 +654,7 @@ establishes <code>ACEData.io[</code><var>i</var><code>].args.fgens</code>, if  n
 <code>ACEData.io[</code><var>i</var><code>].args.fgens</code>.  As  a  side-effect,  if  any   of   the
 remaining       fields       of       <code>ACEData.io[</code><var>i</var><code>].args</code>        or
 <code>ACEData.io[</code><var>i</var><code>].acegens</code> are unset, they  are  also  set.  Note  that
-<font face="Gill Sans,Helvetica,Arial">GAP</font> provides  <code>GroupWithGenerators</code>  (see&nbsp;<a href="https://www.gap-system.org/Manuals/doc/ref/chap39.html#X8589EF9C7B658B94">GroupWithGenerators</a>
+<font face="Gill Sans,Helvetica,Arial">GAP</font> provides  <code>GroupWithGenerators</code>  (see&nbsp;<a href="https://docs.gap-system.org/doc/ref/chap39.html#X8589EF9C7B658B94">GroupWithGenerators</a>
 in the <font face="Gill Sans,Helvetica,Arial">GAP</font> Reference Manual) to establish a free group on  a  given
 set of already-defined generators.
 <p>
@@ -1562,7 +1562,7 @@ options (see&nbsp;<a href="CHAP004.htm#SSEC012.1">ACEParameterOptions</a>), some
 write <var>string</var> to the <var>i</var>th or  default  interactive  <font face="Gill Sans,Helvetica,Arial">ACE</font>  process;
 <var>string</var> must be in exactly the form the  <font face="Gill Sans,Helvetica,Arial">ACE</font>  standalone  expects.
 The command is  echoed  via  <code>Info</code>  at  <code>InfoACE</code>  level  4  (with  a
-``<code>ToACE&gt; </code>'' prompt); i.e.&nbsp;<code>SetInfoACELevel(4);</code>  will  allow  you to
+``<code>ToACE&gt; </code>'' prompt); i.e.&nbsp;<code>SetInfoLevel(InfoACE, 4);</code>  will  allow  you to
 see what is transmitted to the <font face="Gill Sans,Helvetica,Arial">ACE</font> binary. <code>ACEWrite</code> returns <code>true</code>
 if successful in writing to the stream of the interactive <font face="Gill Sans,Helvetica,Arial">ACE</font> process,
 and <code>fail</code> otherwise.
@@ -1625,5 +1625,5 @@ wait indefinitely.
 <p>
 [<a href = "chapters.htm">Up</a>] [<a href ="CHAP005.htm">Previous</a>] [<a href ="CHAP00A.htm">Next</a>] [<a href = "theindex.htm">Index</a>]
 <P>
-<address>ACE manual<br>January 2023
+<address>ACE manual<br>April 2025
 </address></body></html>
