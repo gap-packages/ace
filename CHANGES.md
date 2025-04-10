@@ -2,6 +2,11 @@ In this file we record the changes since the 3.xxx versions of the ACE
 package. Also look at gap/CHANGES  for  a  history  of  the  pre-3.xxx
 development.
 
+## Version 5.7.0 (2025-04-10)
+  * Deprecate `InfoACELevel` and `SetInfoACELevel` (instead one
+    may use `InfoACE` together with `SetInfoLevel`)
+  * Various janitorial changes
+
 ## Version 5.6.2 (2023-01-03)
   * Enhance the `configure` script to accept `--with-gaproot=PATH`
   * Drop the `-ansi` option from the flags passed to the C compiler
