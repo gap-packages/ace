@@ -1,0 +1,356 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%W  pt.tex             ACE standalone documentation          Colin Ramsay
+%W                                                            Greg Gamble
+%%
+%H  $Id$
+%%
+
+%%  Colin Ramsay - 21 Sep 1999  is the true author of this document
+%%  Greg Gamble  - 28-29 Feb 2000 made minor modifications:
+%%                * modifications detailed in CHANGES
+%%                * put this header at the top for CVS
+
+%%  The Proof-table chapter.
+%%
+%%  5   10   15   20   25   30   35   40   45   50   55   60   65   70   75
+%%..|....|....|....|....|....|....|....|....|....|....|....|....|....|....|
+
+TBA:
+Put the relation proving et al.\@ (incl DI) as a separate, \#ifdef'd,
+  add-on package to \ace\ - with its own chapter in the manual?
+We can do other things with this data structure; i.e., find a presentation
+  for the subgroup in terms of the given subgroup generators.
+
+\section{Example}
+
+The Fibonacci group 
+ $$ F(2,5) = \langle a,b,c,d,e \mid abC, bcD, cdE, deA, eaB \rangle $$
+  is known to be the cyclic group of order $11$, $C_{11}$ \cite{Can}.
+A proof of this can be readily extracted from an index one coset 
+  enumeration of $[F(2,5) : \langle a \rangle]$, as discussed in \cite{Lee2}.
+We use this as an example to illustrate, in detail, the basic technique for
+  producing proofs from the workings of an enumeration.
+%
+For an enumeration of $[F(2,5) : \langle a \rangle]$, it is obvious that a
+  total of more than one coset must be defined, and it is straightforward
+  to establish that two are not sufficient, since there are only eight
+  possible choices to check for the definition of coset \#$2$.
+So the three-coset enumeration given is minimal.
+
+For definiteness, we assume that the relators are processed in the order
+  given, relators are processed from left to right until a gap or their
+  end and then processed from right to left, deductions are made from left
+  to right when a relator closes, deductions are stored in a stack (we 
+  assume that both a deduction and its inverse are stored, with the 
+  deduction at the top to make explicit the processing order), new
+  coincidences are stored in a queue after performing a union-find, and
+  that table rows are processed in column order (i.e., 
+  $a$, $A$, \dots, $e$, $E$).
+
+In what follows, we trace through the entire sequence of operations, and
+  explicitly list the proof word associated with each (non-definition)
+  table entry.
+The relator, possibly cycled and/or inverted, is given in square brackets
+  at the \tit{end} of the proof word.
+Cosets appear as subscripts.
+Subgroup generators are given in double square brackets.
+For example, if $\alpha,\beta,\gamma$ are cosets at some stage of an
+  enumeration and it is known that $\alpha a = \beta$ \amp 
+  $\gamma C = \alpha$, then the relator $abC$ yields the deduction 
+  $\beta b = \gamma$, which has proof word 
+  $_{\beta}A_{\alpha}c_{\gamma}[Cab]_{\gamma}$;
+  the meaning of this proof word is:
+  $\beta A=\alpha, \alpha C=\gamma, \gamma Cab = \gamma$.
+Coincidences in proof words will be indicated using `$0$' (e.g., 
+  $_\alpha 0_\beta$), and we adopt the convention of writing the 
+  higher-numbered coset (i.e., the one to be `replaced') on the left when
+  $\alpha = \beta$.
+
+\tsc{Step 1}:
+Processing the subgroup generator yields the deduction $1a=1$ and its
+  inverse $1A=1$.
+We associate the words $_1[[a]]_1$ \amp $_1[[A]]_1$, respectively, with
+  these entries.
+Testing these deductions yields nothing, and leaves both the stack and the
+  queue empty.
+
+\tsc{Step 2}:
+Make the definition $1E=2$ and its inverse $2e=1$, and push $2e$ and then
+  $1E$ onto the stack.
+Popping and processing $1E$ yields nothing.
+Popping and processing $2e$ yields, successively, the deductions and
+  proof words $1d=2$ ($_1a_1E_2[eAd]_2$), $2D=1$ ($_2e_1A_1[aED]_1$),
+  $1B=2$ ($_1A_1E_2[eaB]_2$) \amp $2b=1$ ($_2e_1a_1[AEb]_1$).
+The deductions are pushed in the order $2D$, $1d$, $2b$ \amp $1B$.
+Testing these deductions yields nothing, and leaves both the stack and the
+  queue empty.
+
+\tsc{Step 3}:
+Make the definition $1c=3$ and its inverse $3C=1$, and push $3C$ and then
+  $1c$ onto the stack.
+Processing $1c$ yields $3D=2$ ($_3C_1B_2[bcD]_2$) \amp $2d=3$
+  ($_2b_1c_3[CBd]_3$), and stacks $2d$ then $3D$.
+Processing $3D$ and then $2d$ yields nothing.
+Processing $3C$ yields $1b=3$ ($_1A_1c_3[Cab]_3$) \amp $3B=1$
+  ($_3C_1a_1[AcB]_1$), and stacks $3B$ and then $1b$.
+Processing $1b$ yields $3c=2$ ($_3B_1d_2[Dbc]_2$) \amp $2C=3$
+  ($_2D_1b_3[BdC]_3$), and stacks $2C$ \amp $3c$.
+Processing $3c$ yields $3E=3$ ($_3D_2C_3[cdE]_3$) \amp $3e=3$
+  ($_3c_2d_3[DCe]_3$), and stacks $3e$ \amp $3E$.
+Processing $3E$ yields nothing.
+Processing $3e$ yields $3A=2$ ($_3E_3D_2[deA]_2$) \amp $2a=3$
+  ($_2d_3e_3[EDa]_3$), and stacks $2a$ \amp $3A$.
+Processing $3A$ yields nothing.
+Processing $2a$ yields $1e=2$ ($_1b_3A_2[aBe]_2$) \amp $2E=1$
+  ($_2a_3B_1[bAE]_1$), and stacks $2E$ \amp $1e$.
+Processing $1e$ yields nothing.
+Processing $2E$ yields that $3=1$, with proof word $_3C_1e_2D_1[dEc]_1$.
+
+\begin{table}
+\hrule
+\caption{Coset table at beginning of step $4$}
+\label{tab:step4}
+\smallskip
+\renewcommand{\arraystretch}{0.875}
+\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}lrrrrrrrrrr} 
+\hline\hline
+coset & $a$ & $A$ & $b$ & $B$ & $c$ & $C$ & $d$ & $D$ & $e$ & $E$ \\ 
+\hline
+ 1 & 1 & 1 & 3 & 2 & 3 & - & 2 & - & 2 & 2 \\
+ 2 & 3 & - & 1 & - & - & 3 & 3 & 1 & 1 & 1 \\
+ 3 & - & 2 & - & 1 & 2 & 1 & - & 2 & 3 & 3 \\
+\hline\hline
+\end{tabular*}
+\end{table}
+
+\tsc{Step 4}:
+At this point the stack contains, from bottom to top, $3B$ \amp $2C$, and
+  we are currently processing $2E(=1)$.
+The current state of the table is given in Table~\ref{tab:step4}.
+We suspend deduction processing, and switch over to coincidence processing.
+We remove $3=1$ from the queue, and process the information (and its
+  inverse) in row \#$3$ of the table, `moving' it to row \#$1$.
+Because \ace\ uses the first two columns to store the coincidence
+  information, the order in which we process the consequences of a primary
+  coincidence is a little counter-intuitive; so we'll list the actions
+  in detail.
+
+Process columns 1/2 of $3=1$:
+Column $a$ yields nothing.
+For column $A$, we first clear its inverse entry at $2a$ (it will be set,
+  if necessary, during later coincidence-consequence processing).
+We now find the coincidence $2=1$ (the proof word, $_2 a_3 0_1$, uses
+  the entry for $2a$ which we've just cleared, but we'll assume that we
+  still know what it was, since it hasn't actually been `overwritten'
+  as yet!), which is `remembered'\kern-1.5pt, but not yet queued.
+The inverse entry for $1A$ (which is in $1a$) is already set, so no
+  further action is required.
+
+Process columns 1/2 of $2=1$:
+We now queue the coincidence $2=1$, and process the information in the
+  first two columns of row \#$2$ of the table.
+In fact, since the $2a$ entry has been cleared, and the $2A$ entry was
+  already empty, nothing has to be done.
+
+Process remaining columns of $3=1$:
+Column $b$ yields nothing.
+%
+For column $B$, the inverse entry for $3B$ (i.e., $1b$) is cleared, and the
+  coincidence $2=1$ is rediscovered (but does nothing).
+The inverse entry for $1B$ (which is in $2b$) is already set, so no
+  further action is required.
+%
+For column $c$, the inverse entry for $3c$ (i.e., $2C$) is cleared.
+The fact that $1c=3$, and $3=1$, causes the coincidence $2=1$ to be
+  rediscovered, but this does nothing.
+The inverse entry for $1c$ (which is in $3C$) is already set, so no
+  further action is required.
+%
+For column $C$, the inverse entry for $3C$ (i.e., $1c$) is cleared.
+Since the $1C$ entry is blank, we deduce that $1C=1$ ($_1 0_3 C_1$) \amp
+  $1c=1$ ($_1 c_3 0_1$), and stack $1c$ then $1C$.
+%
+Column $d$ yields nothing.
+%
+For column $D$, the inverse entry for $3D$ (i.e., $2d$) is cleared.
+Since the $1D$ entry is blank, we deduce that $1D=2$ ($_1 0_3 D_2$) \amp
+  $2d=1$ ($_2 d_3 0_1$), and stack $2d$ then $1D$.
+%
+For column $e$, the inverse entry for $3e$ (i.e., $3E$) is not cleared,
+  since it equals $3$ (which is actually $1$!).
+We now find that $2=1$, but this yields nothing.
+The inverse entry for $1e$ (which is in $2E$) is already set, so no
+  further action is required.
+%
+The processing for column $E$ is a `mirror-image' to that for column $e$,
+  and so yields nothing.
+
+Process remaining columns of $2=1$:
+At this point the coset table is as shown in Table~\ref{tab:step4f}.
+Coset \#$3$ is dead and has been fully processed; i.e., no row of the table
+  (other than \#$3$) contains a $3$.
+Coset \#$2$ is coincident with coset \#$1$, and has been fully processed
+  in columns $1$ \amp $2$ only (so there are no $2$'s in columns $1$ \amp
+  $2$ of row \#$1$).
+%
+For column $b$, the inverse entry for $2b$ (i.e., $1B$) is cleared.
+Since the $1b$ entry is blank, we deduce that $1b=1$ ($_1 0_2 b_1$) \amp
+  $1B=1$ ($_1 B_2 0_1$), and stack $1B$ then $1b$.
+%
+Columns $B$, $c$ \amp $C$ yields nothing.
+%
+For column $d$, the inverse entry for $2d$ (i.e., $1D$) is cleared.
+Since $2$ is actually $1$, we discover the vacuous coincidence $1=1$.
+The inverse entry for $1d$ (which is in $2D$) is already set, so no
+  further action is required.
+%
+For column $D$, the inverse entry for $2D$ (i.e., $1d$) is cleared.
+Since the $1D$ entry is blank, we deduce that $1D=1$ ($_1 0_2 D_1$) \amp
+  $1d=1$ ($_1 d_2 0_1$), and stack $1d$ then $1D$.
+%
+For column $e$, the inverse entry for $2e$ (i.e., $1E$) is cleared.
+Since $2$ is actually $1$, we discover the vacuous coincidence $1=1$.
+The inverse entry for $1e$ (which is in $2E$) is already set, so no
+  further action is required.
+%
+For column $E$, the inverse entry for $2E$ (i.e., $1e$) is cleared.
+Since the $1E$ entry is blank, we deduce that $1E=1$ ($_1 0_2 E_1$) \amp
+  $1e=1$ ($_1 e_2 0_1$), and stack $1e$ then $1E$.
+
+\tsc{Step 5}:
+At this point we resume the processing of the deduction $2E$.
+However, the only coset remaining active is \#$1$, and all of its entries
+  are $1$.
+So all remaining deductions are either discarded (since they involve dead
+  cosets) or yield nothing (since all relator scans complete), and the
+  enumeration is complete.
+At this point, the coset table is the same as shown in
+  Table~\ref{tab:step4f}, except that all the entries in the first row
+  are $1$.
+
+\begin{table}
+\hrule
+\caption{Coset table at final stage of step $4$}
+\label{tab:step4f}
+\smallskip
+\renewcommand{\arraystretch}{0.875}
+\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}lrrrrrrrrrr} 
+\hline\hline
+coset & $a$ & $A$ & $b$ & $B$ & $c$ & $C$ & $d$ & $D$ & $e$ & $E$ \\ 
+\hline
+ 1 & 1 & 1 & - & 2 & 1 & 1 & 2 & 2 & 2 & 2 \\
+ 2 & - & - & 1 & - & - & - & 1 & 1 & 1 & 1 \\
+ 3 & - & 2 & - & 1 & 2 & 1 & - & 2 & 3 & 3 \\
+\hline\hline
+\end{tabular*}
+\end{table}
+
+\tsc{Notes:}
+Of course, the tables shown in Tables~\ref{tab:step4} \amp
+  \ref{tab:step4f} are actually split between the `original' \ace\ table
+  and the auxiliary data structures maintained by the PT package.
+%
+Note that multiple coincidences can cause more complicated proof
+  words, which this example does not illustrate.
+%
+Two further examples, complete with their working, can be found in 
+  \cite{Lee4}.
+Note however, that the proof words there (called `substitution words') do
+  not explicitly include the relevant relator.
+
+The proof words currently associated with the entries in the coset table
+  are shown in Table~\ref{tab:prf}.
+Recall that `$0$' denotes a coincidence, and note that words without a
+  $0$ or a $[\cdot]$ term denote definitions.
+In practice, proof words are never actually deleted or overwritten, since
+  we may need them to extract a proof.
+Instead, each table entry has associated with it a `stack' of proof words,
+  and the appropriate one must be selected when expanding a current or
+  previous table entry.
+
+\begin{table}
+\hrule
+\caption{Final proof words}
+\label{tab:prf}
+\smallskip
+\renewcommand{\arraystretch}{0.900}
+\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}rlll} 
+\hline\hline
+ & \multicolumn{3}{c}{coset} \\
+\cline{2-4}
+generator & 1           & 2                 & 3 \\ 
+\hline
+$a$ & $_1[[a]]_1$       & $_2d_3e_3[EDa]_3$ & - \\
+%
+$A$ & $_1[[A]]_1$       & -                 & $_3E_3D_2[deA]_2$ \\
+%
+$b$ & $_1A_1c_3[Cab]_3$ & $_2e_1a_1[AEb]_1$ & - \\
+    & $_1 0_2 b_1$      & -                 & - \\
+%
+$B$ & $_1A_1E_2[eaB]_2$ & -                 & $_3C_1a_1[AcB]_1$ \\
+    & $_1 B_2 0_1$      & -                 & - \\
+%
+$c$ & $_1c_3$           & -                 & $_3B_1d_2[Dbc]_2$ \\
+    & $_1 c_3 0_1$      & -                 & - \\
+%
+$C$ & $_1 0_3 C_1$      & $_2D_1b_3[BdC]_3$ & $_3C_1$ \\
+%
+$d$ & $_1a_1E_2[eAd]_2$ & $_2b_1c_3[CBd]_3$ & - \\
+    & $_1 d_2 0_1$      & $_2 d_3 0_1$      & - \\
+%
+$D$ & $_1 0_3 D_2$      & $_2e_1A_1[aED]_1$ & $_3C_1B_2[bcD]_2$ \\
+    & $_1 0_2 D_1$      & -                 & - \\
+%
+$e$ & $_1b_3A_2[aBe]_2$ & $_2e_1$           & $_3c_2d_3[DCe]_3$ \\
+    & $_1 e_2 0_1$      & -                 & - \\
+%
+$E$ & $_1E_2$           & $_2a_3B_1[bAE]_1$ & $_3D_2C_3[cdE]_3$ \\
+    & $_1 0_2 E_1$      & -                 & - \\
+\hline\hline
+\end{tabular*}
+\end{table}
+
+As an example of the use of the PT, consider the fact that $1b=1$; that
+  is, $b \in \langle a \rangle$.
+To prove this formally, we exhibit a word which is equivalent to $b$ and
+  which reduces to a product of subgroup generators (i.e., $a$'s).
+Expanding $_1b_1$ yields $_10_2b_1$, and expanding both parts of this
+  yields $_10_3 A_2 e_1 a_1[AEb]_1$.
+Successively expanding this now gives
+  $$\begin{array}{l}
+  _1[CeD]_1 d_2 E_1 c_3 E_3 D_2[deA]_2 e_1 [[a]]_1 [AEb]_1 , \\
+  _1[CeD]_1 a_1E_2[eAd]_2 a_3B_1[bAE]_1 c_3 D_2C_3[cdE]_3 C_1B_2[bcD]_2
+    [deA]_2 e_1 [[a]]_1 [AEb]_1 , \\
+  _1[CeD]_1 [[a]]_1 E_2[eAd]_2 d_3e_3[EDa]_3 C_1a_1[AcB]_1 [bAE]_1 c_3
+    C_1B_2[bcD]_2 D_1b_3[BdC]_3  \\
+    \quad\quad [cdE]_3 C_1 A_1E_2[eaB]_2 [bcD]_2 [deA]_2 e_1 [[a]]_1
+    [AEb]_1 .
+  \end{array}$$
+At this point we can cancel $_1c_3C_1$ to simply $_1$, and continue
+  $$\begin{array}{l}
+  _1[CeD]_1 [[a]]_1 E_2[eAd]_2 b_1c_3[CBd]_3 c_2d_3[DCe]_3 [EDa]_3 C_1
+    [[a]]_1 [AcB]_1 [bAE]_1 A_1E_2 \\
+    \quad\quad [eaB]_2 [bcD]_2 e_1A_1[aED]_1 A_1c_3[Cab]_3 [BdC]_3 
+    [cdE]_3 C_1 [[A]]_1 E_2[eaB]_2 [bcD]_2 \\
+    \quad\quad [deA]_2 e_1 [[a]]_1 [AEb]_1 .
+  \end{array}$$
+Another three steps now yields the final proof word
+  $$\begin{array}{l}
+  _1[CeD]_1[[a]]_1E_2[eAd]_2e_1[[a]]_1[AEb]_1c_3[CBd]_3C_1[[a]]_1[AcB]_1
+    [[a]]_1E_2[eAd]_2[Dbc]_2e_1 \\
+    \quad\quad [[a]]_1[AEb]_1c_3[CBd]_3[DCe]_3[EDa]_3C_1
+    [[a]]_1[AcB]_1[bAE]_1[[A]]_1E_2[eaB]_2[bcD]_2 \\
+    \quad\quad e_1[[A]]_1[aED]_1[[A]]_1c_3[Cab]_3[BdC]_3[cdE]_3C_1[[A]]_1
+    E_2[eaB]_2[bcD]_2[deA]_2e_1 \\
+    \quad\quad [[a]]_1[AEb]_1 .
+  \end{array}$$
+If this entire word is freely reduced, then we recover the word $b$, while
+  if we freely reduce after deleting the relators, then we obtain the
+  word $a^3$\kern-1.5pt.
+Since free reductions and relator deletions are reversible, this word 
+  proves that $b=a^3$\kern-1.5pt.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%E

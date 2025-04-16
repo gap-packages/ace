@@ -17,10 +17,15 @@ distclean: clean
 doc:
 	(cd doc;./make_doc)
 
+# TeX sources of ace3001 manual are available in history of the package repository
+# otherdoc:
+#	(cd standalone-doc;latex ace3001;bibtex ace3001;latex ace3001;latex ace3001)
+#	(cd standalone-doc;dvips ace3001 -o)
+#	(cd standalone-doc;rm ace3001.{toc,blg,log,aux})
+#
+# TeX sources of ace41 manual: to build the manual with xelatex and metapost
 otherdoc:
-	(cd standalone-doc;latex ace3001;bibtex ace3001;latex ace3001;latex ace3001)
-	(cd standalone-doc;dvips ace3001 -o)
-	(cd standalone-doc;rm ace3001.{toc,blg,log,aux})
+	cd standalone-doc && make
 
 Makefile: configure Makefile.in $(GAPPATH)/sysinfo.gap
 	./configure "$(GAPPATH)"
