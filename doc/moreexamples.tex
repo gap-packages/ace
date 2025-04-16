@@ -65,10 +65,10 @@ By  default,  the  presentation  is  not  echoed;   use   the   `echo'
 (see~"option echo") option if you want that.  Also,  by  default,  the
 {\ACE} binary only prints a *results message*, but we won't  see  that
 unless   we   set   `InfoACE'   to   a   level   of   at    least    2
-(see~"SetInfoACELevel"):
+(see~"InfoACE"):
 
 \beginexample
-gap> SetInfoACELevel(2);
+gap> SetInfoLevel(InfoACE, 2);
 
 \endexample
 
@@ -96,7 +96,7 @@ into a {\GAP} record with `index' field 0.
 To dump  out  the  presentation  and  parameters  associated  with  an
 enumeration,  {\ACE}  provides  the  `sr'  (see~"option  sr")  option.
 However, you won't see output of this  command,  unless  you  set  the
-`InfoACELevel' to at least 3. Also, to ensure the reliability  of  the
+`InfoACE' level to at least 3. Also, to ensure the reliability  of  the
 output of the `sr' option, an enumeration  should  *precede*  it;  for
 `ACEStats' (and `ACECosetTableFromGensAndRels') the directive  `start'
 (see~"option start") required to initiate an enumeration  is  inserted
@@ -110,7 +110,7 @@ mind let's  rerun  the  enumeration  and  get  {\ACE}'s  dump  of  the
 presentation and parameters:
 
 \beginexample
-gap> SetInfoACELevel(3);
+gap> SetInfoLevel(InfoACE, 3);
 gap> ACEStats(fgens, [], [] : start, sr := 1);
 #I  ACE 3.001        Wed Oct 31 09:36:39 2001
 #I  =========================================
@@ -538,7 +538,7 @@ message*. Then `ACECosetTable' extracts the  incomplete  table  via  a
 `print' (see "option print") directive. If you wish  to  see  all  the
 options that are directed to {\ACE}, set  the  `InfoACE'  level  to  4
 (then all such commands are `Info'-ed behind a ```ToACE>  '''  prompt;
-see~"SetInfoACELevel").
+see~"InfoACE").
 
 Following the standalone manual, we  now  set  things  up  to  do  the
 alternating group $A_5$, of order $60$. (We saw the group  $A_5$  with
@@ -562,7 +562,7 @@ defining relators, for example) we first assign the variable `a' to be
 `F.1' (and `b' to be `F.2').
 
 \beginexample
-gap> SetInfoACELevel(4);
+gap> SetInfoLevel(InfoACE, 4);
 gap> a := F.1;; b := F.2;;
 gap> # Enumerating A_5 = < a, b || a^2, b^3, (a*b)^5 >
 gap> # over Id (trivial subgp)
@@ -705,10 +705,10 @@ the  `subgroup'  (see~"option  subgroup")  option   with   the   value
 save anything by doing this, since afterwards the  variables  `fgens',
 `a', `b' and `F' would no longer be associated with `ACEStart' process
 1. Instead, we will use the more convenient 4-argument form, and  also
-switch the `InfoACELevel' back to 3:
+switch the `InfoACE' level back to 3:
 
 \beginexample
-gap> SetInfoACELevel(3);
+gap> SetInfoLevel(InfoACE, 3);
 gap> ACEStart(1, ACEGroupGenerators(1), ACERelators(1), [ a*b ]
 >             : messages := 1);
 #I  ***
@@ -843,11 +843,11 @@ option `asis' to 1; this bit of skulduggery stops {\ACE} treating  `a'
 as an involution, allowing `a' and `A' (the inverse of `a') to take up
 the first two columns of the coset table, effectively stopping  {\ACE}
 from reordering the generators. To see what is passed  to  {\ACE},  at
-the enumeration stage, we set the `InfoACELevel' to 4,  but  since  we
+the enumeration stage, we set the `InfoACE' level to 4,  but  since  we
 don't really want to see messages this time we set `messages := 0'.
 
 \beginexample
-gap> SetInfoACELevel(4);
+gap> SetInfoLevel(InfoACE, 4);
 gap> ACEStart(1, ACEGroupGenerators(1), ACERelators(1), [ a*b ]
 >             : messages := 0, lenlex);
 #I  ToACE> group:ab;
@@ -939,7 +939,7 @@ The following duplicates the ``Total''  (`totcosets'  in  {\ACE})  and
 strategy.
 
 \beginexample
-gap> SetInfoACELevel(1); # No behind-the-scenes info. please
+gap> SetInfoLevel(InfoACE, 1); # No behind-the-scenes info. please
 gap> F := FreeGroup("r", "s", "t");; r := F.1;; s := F.2;; t := F.3;;
 gap> ACEStats([r, s, t], [(r^t*r^-2)^-1, (s^r*s^-2)^-1, (t^s*t^-2)^-1], []
 >             : sims := 3);

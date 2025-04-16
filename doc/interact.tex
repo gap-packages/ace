@@ -13,7 +13,7 @@
 
 The user will probably benefit most from interactive use of {\ACE}  by
 setting   the   `InfoLevel'   of   `InfoACE'    to    at    least    3
-(see~"SetInfoACELevel"),  particularly  if  she  uses  the  `messages'
+(see~"InfoACE"),  particularly  if  she  uses  the  `messages'
 option with a non-zero value.
 
 Have you read the various options warnings yet? If  not,  please  take
@@ -1437,7 +1437,7 @@ options (see~"ACEParameterOptions"), some of the  values  reported  by
 write <string> to the <i>th or  default  interactive  {\ACE}  process;
 <string> must be in exactly the form the  {\ACE}  standalone  expects.
 The command is  echoed  via  `Info'  at  `InfoACE'  level  4  (with  a
-```ToACE> ''' prompt); i.e.~`SetInfoACELevel(4);'  will  allow  you to
+```ToACE> ''' prompt); i.e.~`SetInfoLevel(InfoACE, 4);'  will  allow  you to
 see what is transmitted to the {\ACE} binary. `ACEWrite' returns `true'
 if successful in writing to the stream of the interactive {\ACE} process,
 and `fail' otherwise.

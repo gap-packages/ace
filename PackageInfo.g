@@ -2,8 +2,9 @@ SetPackageInfo( rec(
 
 PackageName := "ACE",
 Subtitle    := "Advanced Coset Enumerator",
-Version     := "5.7.0DEV",
-Date        := "12/03/2023", # dd/mm/yyyy format
+
+Version     := "5.7.0",
+Date        := "10/04/2025", # dd/mm/yyyy format
 License     := "MIT",
 
 Persons := [
@@ -155,7 +156,7 @@ AvailabilityTest :=
     if Filename(DirectoriesPackagePrograms("ace"), "ace") = fail then
       LogPackageLoadingMessage( PACKAGE_WARNING,
           [ "The program `ace' is not compiled." ] );
-      return fail;
+      return false;
     fi;
     return true;
   end,

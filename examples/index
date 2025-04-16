@@ -41,9 +41,9 @@ Notes
 4. Try the *-ed examples to explore how to modify options when an
    enumeration fails (just follow the instructions you get within the
    break-loop, or see Notes 2. and 3.).
-5. Try `SetInfoACELevel(3);' before calling ACEExample, to see the
+5. Try `SetInfoLevel(InfoACE, 3);' before calling ACEExample, to see the
    effect of setting the "mess" (= "messages") option.
 6. To suppress a long output, use a double semicolon (`;;') after the
    ACEExample command. (However, this does not suppress Info-ed output.)
-7. Also, try `SetInfoACELevel(2);' or `SetInfoACELevel(4);' before 
-   calling ACEExample.
+7. Also, try `SetInfoLevel(InfoACE, 2);' or `SetInfoLevel(InfoACE, 4);'
+   before calling ACEExample.

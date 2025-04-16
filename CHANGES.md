@@ -2,12 +2,10 @@ In this file we record the changes since the 3.xxx versions of the ACE
 package. Also look at gap/CHANGES  for  a  history  of  the  pre-3.xxx
 development.
 
-## Version 5.7.0DEV (2023-03-12)
-  * use ACE 4.1 sources, adjust GAP interface accordingly
-    in particular, take care of  ACE's pmode option removed,
-    remove aceoutfile ACE GAP package option. 
-  * build and install docs for the standalone ACE program
-
+## Version 5.7.0 (2025-04-10)
+  * Deprecate `InfoACELevel` and `SetInfoACELevel` (instead one
+    may use `InfoACE` together with `SetInfoLevel`)
+  * Various janitorial changes
 
 ## Version 5.6.2 (2023-01-03)
   * Enhance the `configure` script to accept `--with-gaproot=PATH`
@@ -70,10 +68,10 @@ development.
   * PackageInfo.g,README,VERSION,doc/{manual,ace,install}.tex:
     - routine changes
   * tst/aceds.tst
-    - Info lines in example only appear when `InfoACELevel` is set to 3.
+    - Info lines in example only appear when `InfoACE` is set to 3.
       This has been wrong for a while. It was wrong in Version 5.0.
       Line `SetInfoACELevel(3)` added. Some additional lines also appear
-      at this `InfoACELevel`. These and some further tidy-ups done.
+      at this `InfoACE` level. These and some further tidy-ups done.
 
 ## Version 5.1 (2012-01-22)
   Last GAP 4.4 version.
