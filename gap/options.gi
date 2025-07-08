@@ -53,9 +53,9 @@
 ##
 
 InstallValue(KnownACEOptions, rec(
-  # aceinfile, aceignore, aceignoreunknown, acenowarnings, silent (and 
-  # further down: aceoutfile) are GAP-introduced options ... they  are
-  # not ACE binary options.
+  # aceinfile, aceignore, aceignoreunknown, acenowarnings, silent
+  # are GAP-introduced options ...
+  # they are not ACE binary options.
   aceinfile := [5, IsString],
   aceignore := [5, x -> IsList(x) and ForAll(x, xi -> IsString(xi))],
   aceignoreunknown := [10, x -> IsList(x) and ForAll(x, xi -> IsString(xi))],
@@ -71,8 +71,6 @@ InstallValue(KnownACEOptions, rec(
   rl := [2, IS_ACE_STRINGS],
   aep  := [3, [1..7]],
   ai := [2, IsString],
-  ao   := [2, IsString],      # "aceoutfile" is a GAP-introduced 
-  aceoutfile := [4, IsString],# synonym for "ao"
   asis := [2, [0,1]],
   begin := [3, [""]],         # "begin" and "start" are synomyms
   start := [5, [""]],         # ... "end" synonym omitted (it is a GAP keyword)
@@ -93,9 +91,6 @@ InstallValue(KnownACEOptions, rec(
   default := [3, [""]],
   ds := [2, IS_INC_POS_INT_LIST],
   dr := [2, IS_INC_POS_INT_LIST],
-  dump := [1, x -> x in ["",0,1,2] or
-                   (IsList(x) and x[1] in [0..2] and
-                    (Length(x) = 1 or (Length(x) = 2 and x[2] in [0,1])))],
   easy := [4, [""]],
   echo := [4, [0,1,2]],       # hijacked! ... we don't pass this to ACE
   enumeration := [4, IsString],
@@ -118,7 +113,6 @@ InstallValue(KnownACEOptions, rec(
   hard := [2, [""]],
   help := [1, [""]],
   hlt  := [3, [""]],
-  hole := [2, [-1..100]],
   lookahead := [4, [0..4]],
   loop := [4, x -> x = 0 or IsPosInt(x)],
   max  := [3, x -> x = 0 or (IsInt(x) and x >= 2)],
@@ -132,9 +126,7 @@ InstallValue(KnownACEOptions, rec(
   options := [3, [""]],
   oo   := [2, IsInt],       # "oo" and "order" are synonyms
   order := [5, IsInt],
-  #parameters := [3, [""]], # decommissioned ACE option
   path := [4, [0,1]],
-  pmode := [4, [0..3]],
   psize := [4, x -> x = 0 or 
                     (IsInt(x) and IsEvenInt(x) and IsPrimePowerInt(x))],
   sr := [2, ["",0,1,2,3,4,5]],
@@ -152,7 +144,6 @@ InstallValue(KnownACEOptions, rec(
   rep  := [2, x -> x in [1..7] or
                    (IsList(x) and Length(x) <= 2 and x[1] in [1..7] and
                     ForAll(x{[2..Length(x)]}, IsInt))],
-  #restart := [7, [""]],    # decommissioned ACE option
   rfactor := [1, IsInt],    # "rfactor" and "rt" are synonyms
   rt   := [2, IsInt],
   row  := [3, [0,1]],
@@ -160,8 +151,6 @@ InstallValue(KnownACEOptions, rec(
   stabilising := [6, IsInt],
   sims := [4, [1,3,5,7,9]],
   standard := [2, [""]],
-  statistics := [4, [""]],  # "statistics" and "stats" are synonyms
-  stats := [5, [""]],
   style := [5, [""]],
   subgroup := [4, IsString],
   system := [3, IsString],
@@ -185,7 +174,6 @@ InstallValue(KnownACEOptions, rec(
 ##
 
 InstallValue(ACEOptionSynonyms, rec(
-  ao   := ["aceoutfile"],
   ct   := ["cfactor"],
   fill := ["ffactor"],
   messages := ["monitor"],
@@ -195,7 +183,6 @@ InstallValue(ACEOptionSynonyms, rec(
   rt   := ["rfactor"],
   sc   := ["stabilising"],
   tw   := ["trace"],
-  stats := ["statistics"],
   start := ["begin"],
   bye  := ["exit", "qui"],
   redo := ["check"]
@@ -209,7 +196,7 @@ InstallValue(ACEOptionSynonyms, rec(
 ##
 
 InstallValue(NonACEbinOptions,
-  [ "aceinfile",     "aceoutfile", "aceignore",    "aceignoreunknown",
+  [ "aceignore",    "aceignoreunknown",
     "acenowarnings", "aceecho",    "aceincomment", "aceexampleoptions",
     "echo",          "silent",     "lenlex",       "semilenlex",
     "incomplete" ]
@@ -264,7 +251,6 @@ InstallValue(ACEParameterOptions, rec(
   fill := rec(default := 0, easy := 1,  felsch0 := 1, hlt := 1,
               purec := 1,   purer := 1, sims1 := 1,   sims3 := 1,
               sims5 := 1,   sims7 := 1, sims9 := 1),
-  hole := -1,
   lookahead := rec(default := 0, hlt := 1),
   loop := 0,
   max  := 0,
@@ -274,9 +260,6 @@ InstallValue(ACEParameterOptions, rec(
               purec := 0,    purer := 0, sims1 := 0,   sims3 := 0,
               sims5 := 0,    sims7 := 0, sims9 := 0),
   path := rec(default := 0),
-  pmode := rec(default := 3, easy := 0,  felsch0 := 0, hlt := 0,
-               purec := 0,   purer := 0, sims1 := 0,   sims3 := 0,
-               sims5 := 0,   sims7 := 0, sims9 := 0),
   psize := rec(default := 256),
   # `rt' is synonymous with `rfactor' but here we list just once.
   rt   := rec(default := 0,   easy := 1000,  hard := 1, 
@@ -311,7 +294,6 @@ InstallValue(ACEStrategyOptions,
 InstallValue(ACE_OPT_TRANSLATIONS, rec(
   purec := "pure c", # These first two haven't been called NonACEbinOptions
   purer := "pure r", 
-  aceoutfile := "ao",
   aceecho := "echo", 
   aceincomment := "#"
 ));
@@ -327,7 +309,6 @@ InstallValue(ACE_OPT_TRANSLATIONS, rec(
 InstallValue(ACE_OPT_ACTIONS, rec(
   purec := "passed to ACE via option: pure c",
   purer := "passed to ACE via option: pure r", 
-  aceoutfile := "passed to ACE via option: ao",
   aceecho := "passed to ACE via option: echo",
   aceincomment := "passed as an ACE comment, behind a '#'",
   aceexampleoptions := "inserted by ACEExample, not passed to ACE"
@@ -366,10 +347,8 @@ InstallValue(ACE_OPT_SENTINELS, rec(
   mode := line -> IsMatchingSublist(line, "start ="),
   nc   := fail,
   order := fail,
-  options := line -> IsMatchingSublist(line, "  host info"),
-  dump  := line -> IsMatchingSublist(line, "  #----"),
+  options := line -> IsMatchingSublist(line, "  ---"),
   sr    := line -> IsMatchingSublist(line, "  #----"),
-  stats := line -> IsMatchingSublist(line, "  #----"),
   print := fail,
   rc   := line -> Length(line) > 12 and
                   line{[1..13]} in ["* No success;", "* An appropri",

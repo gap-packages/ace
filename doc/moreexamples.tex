@@ -391,7 +391,7 @@ gap> ACEParameters(1);
 rec( enumeration := "G", subgroup := "H", workspace := 1000000, 
   max := 249998, messages := 0, time := -1, hole := -1, loop := 0, asis := 0, 
   path := 0, row := 1, mendelsohn := 0, no := 0, lookahead := 0, 
-  compaction := 10, ct := 0, rt := 0, fill := 7, pmode := 3, psize := 256, 
+  compaction := 10, ct := 0, rt := 0, fill := 7, psize := 256, 
   dmode := 4, dsize := 1000 )
 
 \endexample
@@ -759,29 +759,6 @@ progress messages tagged by `AD:' (coset 1 application definition) and
 definition). So there must have  been  3  coincidences:  observe  that
 there were 3 progress messages with a `CC:'  tag.  (See  Appendix~"The
 Meanings of ACE's Output Messages".)
-
-We can dump out the  statistics  accumulated  during  the  run,  using
-`ACEDumpStatistics'  (see~"ACEDumpStatistics"),  which   `Info's   the
-{\ACE}  output  of  the  `statistics'  (see~"option  statistics")   at
-`InfoACE' level 1.
-
-\beginexample
-gap> ACEDumpStatistics();
-#I    #- ACE 3.001: Level 0 Statistics -
-#I  cdcoinc=0 rdcoinc=2 apcoinc=0 rlcoinc=0 clcoinc=0
-#I    xcoinc=2 xcols12=4 qcoinc=3
-#I    xsave12=0 s12dup=0 s12new=0
-#I    xcrep=6 crepred=0 crepwrk=0 xcomp=0 compwrk=0
-#I  xsaved=0 sdmax=0 sdoflow=0
-#I  xapply=1 apdedn=1 apdefn=1
-#I  rldedn=0 cldedn=0
-#I  xrdefn=1 rddedn=5 rddefn=13 rdfill=0
-#I  xcdefn=0 cddproc=0 cdddedn=0 cddedn=0
-#I    cdgap=0 cdidefn=0 cdidedn=0 cdpdl=0 cdpof=0
-#I    cdpdead=0 cdpdefn=0 cddefn=0
-#I    #---------------------------------
-
-\endexample
 
 The statistic `qcoinc=3' states what we had already observed,  namely,
 that there  were  three  coincidences.  Of  these,  two  were  primary

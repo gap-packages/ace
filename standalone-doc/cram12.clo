@@ -1,0 +1,149 @@
+
+% cram12.clo - 29 Feb 00 - Colin Ramsay
+%
+% My version of the `size12.clo' 12pt class option file.
+%
+% Everything in 6x9 (152.4x228.6) centered in A4 = 210.224x297.302
+%
+%   5   10   15   20   25   30   35   40   45   50   55   60   65   70   75
+% ..|....|....|....|....|....|....|....|....|....|....|....|....|....|....|
+
+\ProvidesFile{cram12.clo}[29/01/00 cram's 12pt class option]
+
+\renewcommand\normalsize{%
+   \@setfontsize\normalsize\@xiipt{14.5}%
+   \abovedisplayskip 8\p@ \@plus4\p@ \@minus4\p@
+   \abovedisplayshortskip 4\p@ \@plus3\p@
+%   \belowdisplayshortskip 3\p@ \@plus3\p@
+   \belowdisplayshortskip \abovedisplayshortskip
+   \belowdisplayskip \abovedisplayskip
+   \let\@listi\@listI}
+\normalsize
+
+\newcommand\small{%
+   \@setfontsize\small\@xipt{13.6}%
+   \abovedisplayskip 11\p@ \@plus3\p@ \@minus6\p@
+   \abovedisplayshortskip \z@ \@plus3\p@
+   \belowdisplayshortskip 6.5\p@ \@plus3.5\p@ \@minus3\p@
+   \def\@listi{\leftmargin\leftmargini
+               \topsep 9\p@ \@plus3\p@ \@minus5\p@
+               \parsep 4.5\p@ \@plus2\p@ \@minus\p@
+               \itemsep \parsep}%
+   \belowdisplayskip \abovedisplayskip
+}
+
+\newcommand\footnotesize{%
+   \@setfontsize\footnotesize\@xpt\@xiipt
+   \abovedisplayskip 10\p@ \@plus2\p@ \@minus5\p@
+   \abovedisplayshortskip \z@ \@plus3\p@
+   \belowdisplayshortskip 6\p@ \@plus3\p@ \@minus3\p@
+   \def\@listi{\leftmargin\leftmargini
+               \topsep 6\p@ \@plus2\p@ \@minus2\p@
+               \parsep 3\p@ \@plus2\p@ \@minus\p@
+               \itemsep \parsep}%
+   \belowdisplayskip \abovedisplayskip
+}
+
+\newcommand\scriptsize{\@setfontsize\scriptsize\@viiipt{9.5}}
+\newcommand\tiny{\@setfontsize\tiny\@vipt\@viipt}
+\newcommand\large{\@setfontsize\large\@xivpt{18}}
+\newcommand\Large{\@setfontsize\Large\@xviipt{22}}
+\newcommand\LARGE{\@setfontsize\LARGE\@xxpt{25}}
+\newcommand\huge{\@setfontsize\huge\@xxvpt{30}}
+\let\Huge=\huge
+
+\setlength\parindent{0\p@}
+
+\setlength\smallskipamount{3\p@ \@plus 1\p@ \@minus 1\p@}
+\setlength\medskipamount{6\p@ \@plus 2\p@ \@minus 2\p@}
+\setlength\bigskipamount{12\p@ \@plus 4\p@ \@minus 4\p@}
+
+\setlength\headheight{0\p@}
+\setlength\headsep   {0\p@}
+\setlength\topskip   {12\p@}
+\setlength\footskip{17.5mm}
+
+\if@compatibility \setlength\maxdepth{4\p@} \else
+\setlength\maxdepth{.5\topskip} \fi
+
+\setlength{\textwidth}{152.4mm}
+
+\if@compatibility\else
+  \@settopoint\textwidth
+\fi
+
+\setlength{\textheight}{228.6mm}
+
+%%\addtolength\textheight{\topskip}
+
+\if@twocolumn
+ \setlength\marginparsep {10\p@}
+\else
+  \setlength\marginparsep{10\p@}
+\fi
+
+\setlength\marginparpush{7\p@}
+
+\setlength{\oddsidemargin}{3.512mm}
+  \@settopoint\oddsidemargin
+\setlength\marginparwidth{20mm}
+  \@settopoint\marginparwidth
+\setlength{\evensidemargin}{3.512mm}
+  \@settopoint\evensidemargin
+
+\setlength{\topmargin}{8.951mm}
+\@settopoint\topmargin
+
+\setlength\footnotesep{8.4\p@}
+\setlength{\skip\footins}{10.8\p@ \@plus 4\p@ \@minus 2\p@}
+
+\setlength\floatsep    {12\p@ \@plus 3\p@ \@minus 3\p@}
+\setlength\textfloatsep{12\p@ \@plus 3\p@ \@minus 3\p@}
+\setlength\intextsep   {12\p@ \@plus 3\p@ \@minus 3\p@}
+\setlength\dblfloatsep    {14\p@ \@plus 2\p@ \@minus 4\p@}
+\setlength\dbltextfloatsep{20\p@ \@plus 2\p@ \@minus 4\p@}
+
+\setlength\@fptop{0\p@ \@plus 1fil}
+\setlength\@fpsep{6\p@ \@plus 2fil}
+\setlength\@fpbot{0\p@ \@plus 1fil}
+\setlength\@dblfptop{0\p@ \@plus 1fil}
+\setlength\@dblfpsep{6\p@ \@plus 2fil}
+\setlength\@dblfpbot{0\p@ \@plus 1fil}
+
+\setlength\partopsep{0\p@ \@plus 1.5\p@ \@minus 0\p@}
+
+\def\@listi{\leftmargin\leftmargini
+            \parsep  0\p@  \@plus1.5\p@ \@minus0.5\p@
+            \topsep  0\p@  \@plus1.5\p@ \@minus0.5\p@
+            \itemsep 0\p@  \@plus1.5\p@ \@minus0.5\p@}
+\let\@listI\@listi
+\@listi
+
+\def\@listii {\leftmargin\leftmarginii
+              \labelwidth\leftmarginii
+              \advance\labelwidth-\labelsep
+              \topsep    5\p@   \@plus2.5\p@ \@minus\p@
+              \parsep    2.5\p@ \@plus\p@    \@minus\p@
+              \itemsep   \parsep}
+
+\def\@listiii{\leftmargin\leftmarginiii
+              \labelwidth\leftmarginiii
+              \advance\labelwidth-\labelsep
+              \topsep    2.5\p@\@plus\p@\@minus\p@
+              \parsep    \z@
+              \partopsep \p@ \@plus\z@ \@minus\p@
+              \itemsep   \topsep}
+
+\def\@listiv {\leftmargin\leftmarginiv
+              \labelwidth\leftmarginiv
+              \advance\labelwidth-\labelsep}
+
+\def\@listv  {\leftmargin\leftmarginv
+              \labelwidth\leftmarginv
+              \advance\labelwidth-\labelsep}
+
+\def\@listvi {\leftmargin\leftmarginvi
+              \labelwidth\leftmarginvi
+              \advance\labelwidth-\labelsep}
+
+\endinput

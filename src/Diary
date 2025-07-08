@@ -1,0 +1,200 @@
+
+This file documents the rewrite/upgrade from ACE 3.001 to ACE 4.000.
+
+5 Sep 03
+                                                                        -->78]
+wc *.h:  x3,   839  4621  36095
+wc *.c: x14, 10385 41000 296168
+
+- all (existing) DTT (Debug/Test/Trace) code removed.
+- New header/comment style introduced, with source code width changed to 78 
+  chars.
+- ACE_VER changed to ACEVER & to 4.000.
+- AL1_BINARY flag removed, and workspace multipliers fixed as decimal.
+- manual; basic changes from ACE 3.000 to ACE 4.xxx (aka Ver 4.0 Rel 00)
+
+6 Sep 03
+
+- AL2_HINFO flag removed, and machine name p/out removed.  Note added to sys
+  cmd about using "uname -n" instead.
+- SLLI flag removed.
+- AL0_CC & AL0_DD flags removed.  So coincs & dedns are included in the action
+  cnt for messaging.
+- the "hole limit" cmd was removed, as were -ve values for the "message" cmd.
+  So were all occurrences of the "hlimit" & "msghol" variables.  The 
+  al0_nholes() fn was retained, for the time being.  The -257 rtn value is now
+  unused.  The MSGMID macro was deleted, and its printout done inline.
+- removed AL0_STAT flag, statistics cmd & entire statistics package.
+- the `place-holders' for the old "par[ameter]" & "restart" cmds were deleted.
+
+7 Sep 03
+
+- the "ti[me limit]" cmd & the tlimit variable were removed.  The -258 rtn 
+  value is now unused. 
+- the "dump" cmd & all its fns were removed.
+- the "ai" & "ao" cmds were removed.  The fip/fop FILE* were removed, and all
+  i/o done via stdin/stdout.  stderr is *not* used anywhere.
+
+10 Sep 03
+
+- reorganised make file to work with object files
+- split parser.c into parser.c & cmdloop.c
+- all the error handlers moved into ace.c
+- the enum0x.c files changed to enum0x.inc `include' files
+- the SWAP macro was removed, and swaps done directly
+
+12 Sep 03
+
+- sorted stupid error introduced on 10th (cf SWAP macro)
+- gave things a bit of a work-out, as a check-up!
+- tidied up some of the example/demo files
+
+13 Sep 03
+
+- further testing & demo file workout
+
+19 Sep 03
+
+- tidied up some of the sources
+- bit the bullet, and started on the long long & packed stuff
+- did all the CTentry stuff
+
+20 Sep 03
+
+- did some testing, using 24/32/40 bits.  32 seems more or less to match old
+  ACE (good, we were hoping this would be the case).  Both 24/40 slower, with
+  40 worse than 24 (reasonable, more bytes to shuffle); the speed penalty can
+  get up to ~x2 (hmm).  Memory usage is what we'd expect.
+
+22 Sep 03
+
+- tinkered with Coset (ex StdInt) & Entry (ex CTentry) code
+- introduced Coset printf kludge; ie, #define P ...
+- started working through source, introducing Coset (& tidying-up)
+  ... al2.h, enum00.inc, ace.c
+- changed workspace allocations/manipulations to include (size_t) casts
+- retuned o/p format/width
+
+23 Sep 03
+
+- more code tinkering & testing
+- started working on al1.h
+
+24 Sep 03
+
+- worked thro' ... al1.h, util1.c
+- reworking & tested CT printing (still needs mulling over!)
+
+25 Sep 03
+
+- working thro' ... util2.c
+
+26 Sep 03
+
+- removed strdup(), and reworked grpname/subgrpname code
+- storm stopped play ...
+
+27 Sep 03
+
+- tidied-up grpname/subgrpname stuff
+- moved outlen() to postproc.c
+- worked thro' ... util2.c
+- started on ... parser.c
+
+28 Sep 03
+
+- completed ... parser.c
+
+29 Sep 03
+
+- further testing & demo file workout
+- worked through ... enum02.inc, enum01.inc
+- removed BTINT macro
+
+30 Sep 03
+
+- finished moving all #include's about, and paring to the minimum
+- started on ... cmdloop.c
+
+2 Oct 03
+
+- continued ... cmdloop.c
+
+4 Oct 03
+
+- completed ... cmdloop.c
+- started ... al0.h
+- changed P macro to C
+- introduced SInt & BInt types, and S & B macros
+- al0_date() moved to ace.c & renamed datetime()
+
+6 Oct 03
+
+- continued ... al0.h
+
+7 Oct 03
+
+- finished ... al0.h
+- all extant "long long" changed to BInt
+- PMode deleted, and replaced with PDef flg (Logic); mode 3 code retained as
+  the TRUE code, rest deleted; help & other code altered;
+
+8 Oct 03
+
+- updated ... util0.c, coinc.c
+- did some work on the test i/p files, and did some testing
+- started on ... control.c
+
+11 Oct 03
+
+- did some work on the manual
+- completed ... control.c, postproc.c
+
+12 Oct 03
+
+- completed ... enum.c
+- sorted out types in enum01/02
+- added missing `break' for state 58 at state-machine exit!
+- all src code now updated for Coset type (still some BInt/SInt stuff), and 
+  compiles without *any* warnings (on my home box).
+
+18 Oct 03
+
+- did some work on manual
+- tidied up various files in the ~/ace4/ tree
+- sorted warning due to sizeof() type
+- tidied up some source files
+
+20 Oct 03
+
+- removed some errant "lld" in printf cmds
+- did some work on manual
+- moved some `int' types to `SInt'
+- tabsiz changed to BInt type
+- changed NEXTPD macro (to prevent some compilers whinging)
+
+25 Oct 03
+
+- makefile (THE)DATE macro deleted, used __DATE__/__TIME__ instead.  Put note
+  in doco re "util2.o", not executable.
+- worked through, checking types ... al2.h, ace.c, util2.c, enum01.inc,
+  enum00.inc
+
+27 Oct 03
+
+- finally sorted-out test020.in problem (typo in presn)
+- worked through ... util0.c, enum02.inc
+
+1 Nov 03
+
+- did some manual work
+- worked through ... al1.h, al0.h, control.c, util1.c, cmdloop.c, parser.c,
+  coinc.c, postproc.c, enum.c.  All variable/fns now correctly typed (I hope),
+  and embarrassing fungus crash sorted!
+- made all `local' fns static
+
+2 Nov 03
+
+- macroised choices for BInt/SInt & Coset/Entry.  Tested the modes, and 
+  sorted out some type conflicts.
+

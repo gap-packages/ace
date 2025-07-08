@@ -33,13 +33,13 @@ gap> RecNames(KnownACEOptions);
   "system", "silent", "time", "begin", "text", "options", "fill", 
   "aceinfile", "aceignore", "aceignoreunknown", "acenowarnings", "aceecho", 
   "aceincomment", "aceexampleoptions", "lenlex", "semilenlex", "incomplete", 
-  "sg", "rl", "aep", "ai", "ao", "aceoutfile", "asis", "bye", "exit", "qui", 
+  "sg", "rl", "aep", "asis", "bye", "exit", "qui", 
   "cc", "cfactor", "ct", "redo", "compaction", "continu", "dmode", "dsize", 
-  "dr", "dump", "easy", "echo", "enumeration", "felsch", "ffactor", "hard", 
-  "hlt", "hole", "lookahead", "loop", "mendelsohn", "messages", "monitor", 
-  "mode", "nc", "no", "oo", "pmode", "psize", "sr", "print", "purec", 
+  "dr", "easy", "echo", "enumeration", "felsch", "ffactor", "hard", 
+  "hlt", "lookahead", "loop", "mendelsohn", "messages", "monitor",
+  "mode", "nc", "no", "oo", "psize", "sr", "print", "purec", 
   "purer", "rc", "recover", "contiguous", "rfactor", "rt", "row", "sc", 
-  "stabilising", "sims", "standard", "statistics", "stats", "style", "tw", 
+  "stabilising", "sims", "standard", "style", "tw",
   "trace", "workspace" ]
 
 \endexample
@@ -155,7 +155,7 @@ Options  for each of  the       {\ACE}       interface       functions
 `ACECosetTableFromGensAndRels',   `ACECosetTable',   `ACEStats'    and
 `ACEStart' (see  Chapter~"Functions  for  Using  ACE  Interactively"),
 comprise the few  non-{\ACE}-binary  options  (`silent',  `aceinfile',
-`aceoutfile',   `aceignore',   `aceignoreunknown',    `acenowarnings',
+`aceignore',   `aceignoreunknown',    `acenowarnings',
 `aceincomment',     `aceecho'     and     `echo')     discussed     in
 Section "Non-ACE-binary  Options",  (almost)  all  single-word  {\ACE}
 binary options and  `purer'  and  `purec'.  The  options  `purer'  and
@@ -632,13 +632,6 @@ normally used by {\ACE} (i.e.~when option `aceinfile' is not used)  is
 stored in `ACEData.infile'.
 
 
-\>`aceoutfile:=<filename>'{option aceoutfile}@{option `aceoutfile'}&
-Redirects {\ACE} output to file <filename>;  <filename>  should  be  a
-string. (Shortest abbreviation: `aceo'.)
-
-This  is  actually  a  synonym  for  the  `ao'  option.  Please  refer
-to~"option ao", for further discussion of this option.
-
 \>`aceignore:=<optionList>'{option aceignore}@{option `aceignore'}&
 Directs an {\ACE} function to  ignore  the  options  in  <optionList>;
 <optionList> should be a list of strings.
@@ -765,8 +758,8 @@ Options'' may be obtained by
 gap> Concatenation( List(RecNames(ACEParameterOptions),
 >                        optname -> ACEOptionData(optname).synonyms) );
 [ "path", "subgroup", "max", "time", "fill", "ffactor", "asis", "ct", 
-  "cfactor", "compaction", "dmode", "dsize", "enumeration", "hole", 
-  "lookahead", "loop", "mendelsohn", "messages", "monitor", "no", "pmode", 
+  "cfactor", "compaction", "dmode", "dsize", "enumeration",
+  "lookahead", "loop", "mendelsohn", "messages", "monitor", "no",
   "psize", "rt", "rfactor", "row", "workspace" ]
 
 \endexample
@@ -864,8 +857,8 @@ definitions* (see Section~"Enumeration Style"). Making definitions  in
 C style, that is filling the coset table line by line, it can be  very
 advantageous to  switch  to  making  definitions  from  the  preferred
 definition stack. Possible definitions  can  be  extracted  from  this
-stack in  various  ways  and  the  two  options  `pmode'  and  `psize'
-(see~"option pmode" and~"option psize"  respectively)  regulate  this.
+stack in  various  ways  and  the option `psize' (see~"option psize")
+regulate  this.
 However it should be clearly understood that  making  all  definitions
 from a preferred definition stack one may  violate  the  condition  of
 Mendelsohn's theorem, and the option `fill' (see~"option fill") can be
@@ -907,27 +900,6 @@ This option is identified as `Fi'  in  the  ``Run  Parameters''  block
 the {\ACE} binary, `fi' is an allowed abbreviation of `fill'. However,
 `fi' is a {\GAP} keyword and so the shortest  abbreviation  of  `fill'
 allowed by the interface functions is `fil'.
-
-\>`pmode:=<val>'{option pmode}@{option `pmode'}&
-Option for preferred definitions; `<val>' should  be  in  the  integer
-range 0 to 3. (Shortest abbreviation: `pmod'.)
-
-The  value of  the  `pmode' option  determines  which definitions  are
-preferred.  If  the argument is  0, then Felsch style  definitions are
-made using  the next empty table  slot.  If the  argument is non-zero,
-then gaps of length one found during relator scans in Felsch style are
-preferentially  filled  (subject to  the  value  of  `fill').  If  the
-argument  is 1,  they are  filled  immediately, and  if it  is 2,  the
-consequent deduction  is also made  immediately (of course,  these are
-also put on the deduction stack).  If the argument is 3, then the gaps
-of length one are noted in the preferred definition queue.
-
-Provided such a gap survives (and no coincidence occurs, which  causes
-the queue to be discarded) the next coset number will  be  defined  to
-fill the oldest gap of length one. The default value is either 0 or 3,
-depending on the strategy selected (see Chapter~"Strategy Options  for
-ACE"). If you want to know more details, read the code.
-
 
 \>`psize:=<val>'{option psize}@{option `psize'}&
 Size of preferred definition queue; `<val>' *must* be 0 or $2^n$,  for
@@ -1228,18 +1200,6 @@ numbers at any point of an enumeration)  are  bounded  by  `max'.  See
 Section~"Coset  Statistics  Terminology",  for  a  discussion  of  the
 terminology: *activecosets* and *maxcosets*.
 
-\>`hole:=<val>'{option hole}@{option `hole'}&
-Maximum percentage of holes allowed during an enumeration;
-`<val>' should be an integer in the range $-1$ to 100.
-(Shortest abbreviation: `ho'.)
-
-This is an experimental feature which  allows  an  enumeration  to  be
-terminated when the percentage of holes in the table exceeds  a  given
-value. In practice, calculating this is very expensive, and  it  tends
-to remain constant or  decrease  throughout  an  enumeration.  So  the
-feature doesn't seem very useful. The default value of $-1$ turns this
-feature off. If you want more details, read the source code.
-
 \enditems
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1264,8 +1224,7 @@ it on unless you really need it.
 
 Note   that,  ordinarily,  one   will   not   see   these    messages:
 non-interactively,   these   messages    are    directed    to    file
-`ACEData.outfile'   (or   <filename>,   if   option   `aceoutfile   :=
-<filename>', or `ao := <filename>', is used), and interactively  these
+`ACEData.outfile', and interactively  these
 messages are simply  not  displayed.  However,  one  can  change  this
 situation both interactively and   non-interactively  by  setting  the
 `InfoLevel' of `InfoACE' to 3 via
@@ -1304,33 +1263,6 @@ Sets the `Subgroup Name' to <string>; <string> must  of  course  be  a
 string. (Shortest abbreviation: `subg'.)
 
 The default `Subgroup Name' is `"H"'.
-
-\enditems
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\Section{Options for redirection of ACE Output}
-
-\beginitems
-
-\>`ao:=<filename>'{option ao}@{option `ao'}
-\>`aceoutfile:=<filename>'{option aceoutfile!ao synonym}@{option `aceoutfile'}&
-Redirects (`a'lters) `o'utput to <filename>; <filename>  should  be  a
-string.
-
-Non-interactively, output from {\ACE} is normally directed to a temporary
-file whose full path is stored in `ACEData.outfile', which  is  parsed
-to produce a coset table or a list of statistics. This  option  causes
-{\ACE}'s output to  be  directed  to  <filename>  instead,  presumably
-because the user wishes to see (and keep) data output  by  the  {\ACE}
-binary,    other    than    the    coset     table     output     from
-`ACECosetTableFromGensAndRels' or the statistics output by `ACEStats'.
-Please refer to Appendix~"The  Meanings  of  ACE's  output  messages",
-where we discuss the meaning of the additional data to be found in the
-{\ACE} binary's output. The option `aceoutfile' is a {\GAP}-introduced
-synonym for `ao', that is translated to `ao' before submission to  the
-{\ACE} binary.  Do  not  use  option  `aceoutfile'  when  running  the
-standalone directly. Happily, `ao' can also be regarded as  mnemonical
-for `aceoutfile'.
 
 \enditems
 

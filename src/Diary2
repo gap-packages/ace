@@ -1,0 +1,131 @@
+
+# .../ACE4/src/Diary2, 18 Aug 14
+
+This file documents the rewrite/upgrade from ACE 4.000 (version 4.0, release 00)
+to ACE 41xx (ver 4.1, rel xx).  The aim is to leave the functionality unchanged,
+while enabling reliable compiling and execution on a variety of systems, with a
+variety of memory models, using the GNU gcc compiler.  Compilation, or cross-
+compilation, of Windows executables is supported. 
+
+pre-April 2014
+
+Did lots of experiments with C99 types (ie, inttypes.h), Windows and 64-bit 
+versions of cygwin and MinGW.  Got gcc's packed structs working on both unix and
+Windows.  Refined the testX.c example programmes and their make files, to work
+on all machines (if appropriate - cygwin supports POSIX, Windows does not).
+Introduced the COPYING file and the MIT license (this is a permissive open
+source license).
+
+1-3 Apr 14
+
+- moved over and archived the original Changes and Diary files, and started this
+  file (Diary2)
+- moved over the x3/x10/x3 *.h/*.c/*.inc files
+- copyrighted & licensed the 3x*.h files, and changed ACEVER to 4.100
+- copyrighted & licensed the 3x*.inc files, with a bit of comment editing
+- expanded make.linux to build ACE 4.1
+
+4 Apr 14
+
+- reworked make.cygwin to build ACE 4.1 and to include all available compilers
+- did some checking with "cygcheck" & "objdump -p"
+- tinkered with make.linux
+- copyrighted & licensed the 10x*.c files, with a bit of comment editing
+
+5/6 Apr 14
+
+- reworked al0.h to use int64_t etc for types and to replace B/S/C macros with
+  PB/PS/PC (as PRId64 etc)
+- replaced bigCT etc compiler constants with B64S32C40 etc
+- reworked make.linux
+- worked through all printf() uses of B/S/C to replace with PB/PS/PC
+- added a cast to (Coset) to CT(...) in a printf() to prevent compiler whinging
+- changed margins on (some) source lines to 80 cols
+
+7-9 Apr 14
+
+- reworked make.cygwin
+- created build1.bash to make all 5 x compiler by 4 x memory model combinations,
+  on my Dell 64-bit cygwin
+- did some testing of executables (+DLL) on various Windows boxes: WinXP, Vista
+  & Win7
+- all seems to work 'as expected'
+- tested actually memory usage of ace.XXX using Resource Monitor & Task Manager,
+  all seems OK
+- checked test4 timing rollover on XP/Vista.  CPS is 1000, so goes through 
+  2147.5 & 4295 OK.
+
+10/11 Apr 14
+
+- added test8 to test gcc's built-in CPU type & support function()
+- reworked test4 to also print hex version of clock() value
+- reworked some make files
+- did some testing on windows boxes
+
+13/14 Apr3 14
+
+- sorted stupid typo in al0_rslt(), from 5/6Apr
+- reworked some comments in util0.c & enum.c
+- removed unused function al0_nholes()
+- tinkered with make files
+- started on al0_clock()/_diff() reworking
+
+15/16 Apr 14
+
+- worked on CLK32/64 stuff in util0.c, added #error directive
+- reworked B8S4C5 etc stuff in al0.h, added #error directive
+- reworked make files 
+- included CLK field in al2_opt() printout
+- reworked comments in util0.c, al0.h & util2.c
+- reworked test4.c to test0a.c, added to make files, and tested
+
+18-23 Apr 14
+
+- worked through all the *.h/*.c/*.inc files, sorting any typos, clarifying the
+  comments and generally tidying-up
+- added in and/or edited some of the .../demo/ scripts
+
+23-27 Apr 14
+- included & reworked the ex0a.c example
+- included & reworked the ex0d.c example
+- started work on the guide
+- tidied up some of the .../demo/ files
+
+28-30 Apr 14
+- worked on ex0d.c example
+- created test100.in demo file
+- started on the ex1* examples
+
+1-21 May 14
+- finished all the exN* examples in src
+- worked on the demo *.in examples, included \nocite{}'s in ace41.tex
+- worked on the guide
+- worked on all the make files
+- added the hidden Deb[ug] command
+
+22 May 14
+- started testing/installing on all machines, instituted the tmp/ACE4100/x28458/
+  etc 'distribution' system
+- started collecting the Warnings.txt/Errors.txt files
+- worked on helper bash files
+
+23 May 14
+- added some fflush(stdout) to main loops in cmdloop.c & enum.c in an attempt to
+  ameliorate the buffered o/p on, eg, Windows
+- recorded, but did not use, the return value of the system() call, to prevent
+  compiler warning (NO: it then complains re unused variable)
+- LAST CHANGE to any of the source code; ie, src/*.{h|c|inc} files
+
+6Jun14 - started using UQ's HPCU (ie, barrine) for some tests
+9Jun14 - started work on manual
+
+15-17 Aug 14
+- first pass on the stuff to build the ace4100 directory tree; ie, the
+  distribution
+- reworked some of the demo/*.in files
+- reworked some of the src/make.* files
+
+18 Aug 14
+- did some basic tests of make.linux/cygwin/cmd to check nothing was broken
+
+

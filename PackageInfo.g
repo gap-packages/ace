@@ -2,6 +2,7 @@ SetPackageInfo( rec(
 
 PackageName := "ACE",
 Subtitle    := "Advanced Coset Enumerator",
+
 Version     := "5.7.0",
 Date        := "10/04/2025", # dd/mm/yyyy format
 License     := "MIT",
@@ -13,7 +14,7 @@ Persons := [
     IsAuthor      := true,
     IsMaintainer  := true,
     Email         := "Greg.Gamble@uwa.edu.au",
-    WWWHome       := "http://staffhome.ecm.uwa.edu.au/~00021149",
+    WWWHome       := "https://research-repository.uwa.edu.au/en/persons/gregory-gamble",
     PostalAddress := Concatenation( [
                        "Greg Gamble\n",
                        "Department of Mathematics and Statistics\n",
@@ -46,7 +47,7 @@ Persons := [
     FirstNames    := "George",
     IsAuthor      := true,
     IsMaintainer  := false,
-    Email         := "havas@itee.uq.edu.au",
+    Email         := "georgehavas@gmail.com",
     WWWHome       := "http://staff.itee.uq.edu.au/havas",
     PostalAddress := Concatenation( [
                        "George Havas\n",
@@ -64,7 +65,7 @@ Persons := [
     FirstNames    := "Colin",
     IsAuthor      := true,
     IsMaintainer  := false,
-    Email         := "cram@itee.uq.edu.au",
+    Email         := "cramsay1954@gmail.com",
     PostalAddress := Concatenation( [
                        "Colin Ramsay\n",
                        "Centre for Discrete Mathematics and Computing\n",
@@ -92,6 +93,22 @@ Persons := [
                        "Germany" ),
     Place         := "Kaiserslautern, Germany",
     Institution   := "RPTU Kaiserslautern-Landau"
+  ),
+  rec(
+    LastName      := "Pasechnik",
+    FirstNames    := "Dmitrii",
+    IsAuthor      := false,
+    IsMaintainer  := true,
+    Email         := "dima@pasechnik.info",
+    WWWHome       := "https://www.pasechnik.info",
+    PostalAddress := Concatenation(
+                       "Department of Computer Science\n",
+                       "University of Oxford\n",
+                       "Wolfson Building, Parks Road\n",
+                       "Oxford OX1 3QD\n",
+                       "UK" ),
+    Place         := "Oxford, UK",
+    Institution   := "University of Oxford"
   )
 ],
 
@@ -153,7 +170,7 @@ BannerString := Concatenation(
       " <", ~.Persons[1].Email, "> (address for correspondence)\n",
 "       ", ~.Persons[2].FirstNames, " ", ~.Persons[2].LastName,
       " (", ~.Persons[2].WWWHome, ")\n",
-"           [uses ACE binary (C code program) version: 3.001]\n",
+"           [uses ACE binary (C code program) version: 4.1]\n",
 "C code by  ", ~.Persons[3].FirstNames, " ", ~.Persons[3].LastName,
       " (", ~.Persons[3].WWWHome, ")\n",
 "           ", ~.Persons[4].FirstNames, " ", ~.Persons[4].LastName,

@@ -200,8 +200,8 @@ slot and are  (in  principle)  tested  in  all  essentially  different
 positions in the relators; i.e.~this is a Felsch-like style.
 
 However, in  C  style,  some  definitions  may  be  made  following  a
-preferred definition strategy, controlled by the `pmode'  and  `psize'
-options (see~"option pmode" and~"option psize").
+preferred definition strategy, controlled by the `psize'
+options (see~"option psize").
 
 \atindex{Cr style}{@Cr style}
 *Cr style* &
@@ -310,13 +310,12 @@ choose which coset number should be defined next, based on  the  value
 of each potential definition. In particular, definitions  which  close
 relator cycles (or at least shorten gaps in cycles)  are  favoured.  A
 definition which actually closes a relator  cycle  immediately  yields
-twice as many table entries (deductions)  as  other  definitions.  The
-value of the `pmode'  option  (see~"option  pmode")  determines  which
-definitions are *preferred*; if the value of  the  `pmode'  option  is
-non-zero, depending on the `pmode' value, gaps  of  length  one  found
-during relator C style  (i.e.~Felsch-like)  scans  are  either  filled
-immediately  (subject  to  the  value  of  `fill')  or  noted  in  the
-*preferred  definition  stack*.  The  preferred  definition  stack  is
+twice as many table entries (deductions)  as  other  definitions.
+Gaps of length one found during relator C style (i.e.~Felsch-like) scans
+are either filled immediately (subject to the value of `fill') or noted
+in the *preferred  definition  stack*.
+
+The  preferred  definition  stack  is
 implemented as a  ring  of  size  determined  by  the  `psize'  option
 (see~"option psize"). However, making preferred definitions carelessly
 can violate the conditions required for guaranteed termination of  the

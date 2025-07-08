@@ -1,36 +1,52 @@
 
-/**************************************************************************
+/*****************************************************************************
 
-        util2.c
-        Colin Ramsay (cram@itee.uq.edu.au)
-        6 Dec 00
+  util2.c
+  27 Oct 03, 19 Apr 14
+  Colin Ramsay, uqcramsa@uq.edu.au
 
-        ADVANCED COSET ENUMERATOR, Version 3.001
+  ACE 4.100: Advanced Coset Enumerator, Version 4.1, Release 00
 
-        Copyright 2000
-        Centre for Discrete Mathematics and Computing,
-        Department of Mathematics and 
-          Department of Computer Science & Electrical Engineering,
-        The University of Queensland, QLD 4072.
-	(http://staff.itee.uq.edu.au/havas)
+Copyright (c)  2014  Centre for Discrete Mathematics and Computing, 
+                     The University of Queensland, Australia
 
-These are the utilities for Level 2 of ACE.
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
 
-**************************************************************************/
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+
+
+Various utilities for the "demonstration interactive interface"; ie, Level 2.
+
+*****************************************************************************/
 
 #include "al2.h"
 
-#include <string.h>
-#include <ctype.h>
-#include <sys/types.h>
 #include <time.h>
 
-        /******************************************************************
-        void al2_init(void)
+/*****************************************************************************
+  void al2_init(void)
 
-        One-off initialisation of the Level 2 stuff, and all lower levels.
-	Note that there is no need to initialise, for example, intarr[].
-        ******************************************************************/
+One-off initialisation of the Level 2 stuff, and all lower levels.  Note that 
+there is no need to initialise, for example, intarr[].  lresult is init'd to
+`invalid mode' (just in case).  Note the seeding of the random num gen'r.  We
+need some sort of not-repeatability across a succession of runs, so we use the
+current time; we don't need crypto style randomness, statistical is way good
+enough.
+*****************************************************************************/
 
 void al2_init(void)
   {
@@ -38,7 +54,7 @@ void al2_init(void)
 
   okstart = okcont   = okredo = FALSE;
   tabinfo = tabindex = FALSE;
-  lresult = -8192;			/* invalid mode ! */
+  lresult = -8192;
 
   echo   = FALSE;
   skipnl = TRUE;
@@ -50,446 +66,153 @@ void al2_init(void)
 
   intcnt = 0;
 
-  srand((unsigned int)time(NULL));	/* Seed rand() with time */
+  srand((unsigned int)time(NULL));
   }
 
-	/******************************************************************
-        char *al2_strdup(char *s)
+/*******************************************************************************
+  void al2_opt(void)
 
-        strdup() is not ANSI C, so this is our version.  Should we regard
-	an error as fatal, and abort?
-	******************************************************************/
+Pretty-prints some build specific info ...
 
-char *al2_strdup(char *s)
-  {
-  char *t;
-
-  if ((t = malloc(strlen(s)+1)) == NULL)
-    { al2_continue("out of memory in al2_strdup()"); }
-
-  return(strcpy(t,s));
-  }
-
-	/******************************************************************
-        int al2_outlen(int i)
-
-	Returns the print-length of an integer i (i.e., ~ $\log_{10}i$).
-	The int i is assumed to satisfy i >= 0.
-	******************************************************************/
-
-int al2_outlen(int i)
-  {
-  int len = 1;
-
-  while ((i /= 10) != 0)
-    { len++; }
-
-  return(len);
-  }
-
-/**************************************************************************
-All Level 2 errors are filtered by one of the following three handlers. 
-These take the appropriate action, and then jump back to the top-level
-main() routine; ie, the outermost level of Level 2.  We swallow the 
-remainder of any input line (possibly losing some commands); so multi-line 
-commands in error may not be properly tidied-up. The question of what
-exactly to do if fip/fop are not stdin/stdout is put in the `too hard' 
-basket; we simply switch them both back to their defaults.  Note that, 
-although the code for _continue() & _restart() is the same, they return to 
-different points (& do different things) in main().
-
-Warning: The error-handling is fairly basic, since it's not our intent to
-develop a fully-fledged interactive interface.  We simply tidy-up the best
-we can and carry on.
-**************************************************************************/
-
-	/******************************************************************
-	void al2_continue(char *msg)
-
-	An error has occurred, but it doesn't affected the ok... flags, or
-	the table's validity.
-        ******************************************************************/
-
-void al2_continue(char *msg)
-  {
-  if (fop != stdout)
-    {
-    if (fop != NULL)
-      { fclose(fop); }
-    fop = stdout;
-    }
-  if (fip != stdin)
-    {
-    if (fip != NULL)
-      { fclose(fip); }
-    fip = stdin;
-    currip = '\0';
-    }
-
-  fflush(fop);
-  fprintf(fop, "** ERROR (continuing with next line)\n");
-  fprintf(fop, "   %s\n", msg);
-
-  while ( !(currip == '\n' || currip == '\r' || currip == EOF) )
-    { al2_nextip(); }
-
-  longjmp(env,1);
-  }
-
-	/******************************************************************
-	void al2_restart(char *msg)
-
-	Something nasty has happened & we'll be disallowing continue/redo.
-        ******************************************************************/
-
-void al2_restart(char *msg)
-  {
-  if (fop != stdout)
-    {
-    if (fop != NULL)
-      { fclose(fop); }
-    fop = stdout;
-    }
-  if (fip != stdin)
-    {
-    if (fip != NULL)
-      { fclose(fip); }
-    fip = stdin;
-    currip = '\0';
-    }
-
-  fflush(fop);
-  fprintf(fop, "** ERROR (restarting with next line)\n");
-  fprintf(fop, "   %s\n", msg);
-
-  while ( !(currip == '\n' || currip == '\r' || currip == EOF) )
-    { al2_nextip(); }
-
-  longjmp(env,2);
-  }
-
-	/******************************************************************
-	void al2_abort(char *msg)
-
-	No point in being clever here, we're going to stop.
-        ******************************************************************/
-
-void al2_abort(char *msg)
-  {
-  if (fop != stdout)
-    {
-    if (fop != NULL)
-      { fclose(fop); }
-    fop = stdout;
-    }
-  if (fip != stdin)
-    {
-    if (fip != NULL)
-      { fclose(fip); }
-    fip = stdin;
-    currip = '\0';
-    }
-
-  fflush(fop);
-  fprintf(fop, "** ERROR (aborting)\n");
-  fprintf(fop, "   %s\n", msg);
-
-  longjmp(env,3);
-  }
-
-        /******************************************************************
-	void al2_aip(char *name)
-
-	Switch to a new input file.  We abort via _restart() if this is not
-	possible, and that call will reset fip/fop properly.
-        ******************************************************************/
-
-void al2_aip(char *name)
-  {
-  /* Close the current input file (unless it is 'stdin'). */
-
-  if (fip != stdin && fip != NULL)  
-    { fclose(fip); }
-  fip = NULL;
-
-  /* Try to open the new input file (unless it is 'stdin'). */
-
-  if (strcmp(name, "stdin") != 0)  
-    { 
-    if ((fip = fopen(name, "r")) == NULL)
-      { al2_restart("can't open new input, using 'stdin'"); }
-    }
-  else
-    { fip = stdin; }
-
-  currip = '\0'; 			/* Initialise current i/p char. */
-  }
-
-        /******************************************************************
-	void al2_aop(char *name)
-
-	Switch to a new output file.  We abort via _restart() if this is 
-	not possible, and that call will reset fip/fop properly.  Note
-	that there is no need to run setvbuf() on stdout, since this was 
-	done in the call to al0_init().
-        ******************************************************************/
-
-void al2_aop(char *name)
-  {
-  /* Close the current output file (unless it is 'stdout'). */
-
-  if (fop != stdout && fop != NULL)  
-    { fclose(fop); }
-  fop = NULL;
-
-  /* Try to open the new output file (unless it is 'stdout'). */
-
-  if (strcmp(name, "stdout") != 0)  
-    { 
-    if ((fop = fopen(name, "w")) == NULL)
-      {
-      fop = stdout;
-      fprintf(fop, "can't open new output, using 'stdout'");
-      }
-    else
-      { setvbuf(fop, NULL, _IOLBF, 0); }	/* line buffered o/p */
-    }
-  else
-    { fop = stdout; }
-  }
-
-        /******************************************************************
-        void al2_dump(Logic allofit)
-
-        Dump out the internals of Level 2 of ACE, working through al2.h
-        more or less in order.
-        ******************************************************************/
-
-void al2_dump(Logic allofit)
-  {
-  int i;
-
-  fprintf(fop, "  #---- %s: Level 2 Dump ----\n", ACE_VER);
-
-	/* env; - nothing (meaningful) we can do here! */
-
-	/* okstart, okcont, okredo; */
-  fprintf(fop, "okstart=%d okcont=%d okredo=%d\n", 
-                okstart,   okcont,   okredo);
-
-	/* tabinfo, tabindex, lresult */
-  fprintf(fop, "tabinfo=%d tabindex=%d lresult=%d\n", 
-                tabinfo,   tabindex,   lresult);
-
-	/* echo, skipnl, currip, currkey, currname; */
-  fprintf(fop, "echo=%d skipnl=%d currip=%d", echo, skipnl, currip);
-  if (isprint(currip))
-    { fprintf(fop, "(%c)\n", currip); }
-  else
-    { fprintf(fop, "\n"); }
-  fprintf(fop, "currkey=%s\n", currkey);
-  fprintf(fop, "currname=%s\n", currname);
-
-	/* *currword, currsiz, currexp; */
-  fprintf(fop, "currsize=%d currexp=%d currword=", currsiz, currexp);
-  if (currword == NULL)
-    { fprintf(fop, "NULL"); }
-  else
-    {
-    if (allofit)
-      {
-      for (i = 0; i < currsiz; i++)
-        { fprintf(fop, "%d ", currword[i]); }
-      }
-    else
-      { fprintf(fop, "non-NULL"); }
-    }
-  fprintf(fop, "\n");
-
-	/* intcnt, intarr[32]; */
-  if (intcnt == 0)
-    { fprintf(fop, "intcnt=0 (empty)\n"); }
-  else
-    {
-    fprintf(fop, "intcnt=%d intarr[]=", intcnt);
-    for (i = 0; i < intcnt; i++)
-      { fprintf(fop, "%d ", intarr[i]); }
-    fprintf(fop, "\n");
-    }
-
-  fprintf(fop, "  #---------------------------------\n");
-  }
-
-        /******************************************************************
-	void al2_opt(void)
-
-	Pretty-print the date of compilation and all the various options
-	included in this build.
-        ******************************************************************/
+The __DATE__ & __TIME__ macros from the compiler give when *this* file was 
+compiled.  This may not be when the executable was built (if, eg, seperate *.o
+files were generated).  Sizeof() returns a size_t type, which may not be int (it
+may be long or long long).  Hence the casts to prevent some compilers spitting
+out a warning.  We pick up CLK32 or CLK64 from the compiler's command line, if
+we can.
+*******************************************************************************/
 
 void al2_opt(void)
   {
-  fprintf(fop, "%s executable\n", ACE_VER);
+  printf("%s executable built: %s on %s\n", ACEVER, __TIME__, __DATE__);
 
-  fprintf(fop, "Level 0 options:\n");
-#ifdef AL0_STAT
-  fprintf(fop, "  statistics package = on\n");
+  printf("BInt, SInt: %d, %d    ", (int)sizeof(BInt), (int)sizeof(SInt));
+  printf("Coset, Entry: %d, %d", (int)sizeof(Coset), (int)sizeof(Entry));
+
+#if defined (CLK32)
+  printf("    CLK: 32");
+#elif defined (CLK64)
+  printf("    CLK: 64");
 #else
-  fprintf(fop, "  statistics package = off\n");
-#endif
-#ifdef AL0_CC
-  fprintf(fop, "  coinc processing messages = on\n");
-#else
-  fprintf(fop, "  coinc processing messages = off\n");
-#endif
-#ifdef AL0_DD
-  fprintf(fop, "  dedn processing messages = on\n");
-#else
-  fprintf(fop, "  dedn processing messages = off\n");
+  printf("    CLK: unknown");
 #endif
 
-  fprintf(fop, "Level 1 options:\n");
-#ifdef AL1_BINARY
-  fprintf(fop, "  workspace multipliers = binary\n");
-#else
-  fprintf(fop, "  workspace multipliers = decimal\n");
-#endif
-
-  fprintf(fop, "Level 2 options:\n");
-#ifdef AL2_HINFO
-  fprintf(fop, "  host info = on\n");
-#else
-  fprintf(fop, "  host info = off\n");
-#endif
+  printf("\n");
   }
 
-        /******************************************************************
-	void al2_help(void)
-        ******************************************************************/
+/*****************************************************************************
+  void al2_help(void)
+
+TBA ... this is a bit overwhelming, split into sections?
+*****************************************************************************/
 
 void al2_help(void)
   {
-  fprintf(fop, "  #---- %s: Level 2 Help ----\n", ACE_VER);
-  fprintf(fop, "add gen[erators] / sg : <word list> ;\n");
-  fprintf(fop, "add rel[ators] / rl : <relation list> ;\n");
-  fprintf(fop, "aep : 1..7 ;\n");
-  fprintf(fop, "ai / alter i[nput] : [<filename>] ;\n");
-  fprintf(fop, "ao / alter o[utput] : [<filename>] ;\n");
-  fprintf(fop, "as[is] : [0/1] ;\n");
-  fprintf(fop, "beg[in] / end / start ;\n");
-  fprintf(fop, "bye / exit / q[uit] ;\n");
-  fprintf(fop, "cc / coset coinc[idence] : int ;\n");
-  fprintf(fop, "c[factor] / ct[ factor] : [int] ;\n");
-  fprintf(fop, "check / redo ;\n");
-  fprintf(fop, "com[paction] : [0..100] ;\n");
-  fprintf(fop, "cont[inue] ;\n");
-  fprintf(fop, "cy[cles] ;\n");
-  fprintf(fop, "ded mo[de] / dmod[e] : [0..4] ;\n");
-  fprintf(fop, "ded si[ze] / dsiz[e] : [0/1..] ;\n");
-  fprintf(fop, "def[ault] ;\n");
-  fprintf(fop, "del gen[erators] / ds : <int list> ;\n");
-  fprintf(fop, "del rel[ators] / dr : <int list> ;\n");
-  fprintf(fop, "d[ump] : [0/1/2[,0/1]] ;\n");
-  fprintf(fop, "easy ;\n");
-  fprintf(fop, "echo : [0/1] ;\n");
-  fprintf(fop, "enum[eration] / group name : <string> ;\n");
-  fprintf(fop, "fel[sch] : [0/1] ;\n");
-  fprintf(fop, "f[factor] / fi[ll factor] : [0/1..] ;\n");
-  fprintf(fop, "gen[erators] / subgroup gen[erators] : <word list> ;\n");
-  fprintf(fop, "gr[oup generators]: [<letter list> / int] ;\n");
-  fprintf(fop, "group relators / rel[ators] : <relation list> ;\n");
-  fprintf(fop, "hard ;\n");
-  fprintf(fop, "h[elp] ;\n");
-  fprintf(fop, "hlt ;\n");
-  fprintf(fop, "ho[le limit] : [-1/0..100] ;\n");
-  fprintf(fop, "look[ahead] : [0/1..4] ;\n");
-  fprintf(fop, "loop[ limit] : [0/1..] ;\n");
-  fprintf(fop, "max[ cosets] : [0/2..] ;\n");
-  fprintf(fop, "mend[elsohn] : [0/1] ;\n");
-  fprintf(fop, "mess[ages] / mon[itor] : [int] ;\n");
-  fprintf(fop, "mo[de] ;\n");
-  fprintf(fop, "nc / normal[ closure] : [0/1] ;\n");
-  fprintf(fop, "no[ relators in subgroup] : [-1/0/1..] ;\n");
-  fprintf(fop, "oo / order[ option] : int ;\n");
-  fprintf(fop, "opt[ions] ;\n");
-  fprintf(fop, "par[ameters] ; - old option (ignored)\n");
-  fprintf(fop, "path[ compression] : [0/1] ;\n");
-  fprintf(fop, "pd mo[de] / pmod[e] : [0/1..3] ;\n");
-  fprintf(fop, "pd si[ze] / psiz[e] : [0/2/4/8/...] ;\n");
-  fprintf(fop, "print det[ails] / sr : [int] ;\n");
-  fprintf(fop, "pr[int table] : [[-]int[,int[,int]]] ;\n");
-  fprintf(fop, "pure c[t] ;\n");
-  fprintf(fop, "pure r[t] ;\n");
-  fprintf(fop, "rc / random coinc[idences]: int[,int] ;\n");
-  fprintf(fop, "rec[over] / contig[uous] ;\n");
-  fprintf(fop, "rep : 1..7[,int] ;\n");
-  fprintf(fop, "restart ; - old option (ignored)\n");
-  fprintf(fop, "r[factor] / rt[ factor] : [int] ;\n");
-  fprintf(fop, "row[ filling] : [0/1] ;\n");
-  fprintf(fop, "sc / stabil[ising cosets] : int ;\n");
-  fprintf(fop, "sims : 1/3/5/7/9 ;\n");
-  fprintf(fop, "st[andard table] ;\n");
-#ifdef AL0_STAT
-  fprintf(fop, "stat[istics] / stats ;\n");
-#endif
-  fprintf(fop, "style ;\n");
-  fprintf(fop, "subg[roup name] : <string> ;\n");
-  fprintf(fop, "sys[tem] : <string> ;\n");
-  fprintf(fop, "text : <string> ;\n");
-  fprintf(fop, "ti[me limit] : [-1/0/1..] ;\n");
-  fprintf(fop, "tw / trace[ word] : int,<word> ;\n");
-  fprintf(fop, "wo[rkspace] : [int[k/m/g]] ;\n");
-  fprintf(fop, "# ... <newline> - a comment (ignored)\n");
-  fprintf(fop, "  #---------------------------------\n");
+  printf("  -- Level 2 Help ------------------------------------\n");
+  printf("add gen[erators] / sg : <word list> ;\n");
+  printf("add rel[ators] / rl : <relation list> ;\n");
+  printf("aep : 1..7 ;\n");
+  printf("as[is] : [0/1] ;\n");
+  printf("beg[in] / end / start ;\n");
+  printf("bye / exit / q[uit] ;\n");
+  printf("cc / coset coinc[idence] : int ;\n");
+  printf("c[factor] / ct[ factor] : [int] ;\n");
+  printf("check / redo ;\n");
+  printf("com[paction] : [0..100] ;\n");
+  printf("cont[inue] ;\n");
+  printf("cy[cles] ;\n");
+  printf("ded mo[de] / dmod[e] : [0..4] ;\n");
+  printf("ded si[ze] / dsiz[e] : [0/1..] ;\n");
+  printf("def[ault] ;\n");
+  printf("del gen[erators] / ds : <int list> ;\n");
+  printf("del rel[ators] / dr : <int list> ;\n");
+  printf("easy ;\n");
+  printf("echo : [0/1] ;\n");
+  printf("enum[eration] / group name : <string> ;\n");
+  printf("fel[sch] : [0/1] ;\n");
+  printf("f[factor] / fi[ll factor] : [0/1..] ;\n");
+  printf("gen[erators] / subgroup gen[erators] : <word list> ;\n");
+  printf("gr[oup generators]: [<letter list> / int] ;\n");
+  printf("group relators / rel[ators] : <relation list> ;\n");
+  printf("hard ;\n");
+  printf("h[elp] ;\n");
+  printf("hlt ;\n");
+  printf("look[ahead] : [0/1..4] ;\n");
+  printf("loop[ limit] : [0/1..] ;\n");
+  printf("max[ cosets] : [0/2..] ;\n");
+  printf("mend[elsohn] : [0/1] ;\n");
+  printf("mess[ages] / mon[itor] : [0/+int] ;\n");
+  printf("mo[de] ;\n");
+  printf("nc / normal[ closure] : [0/1] ;\n");
+  printf("no[ relators in subgroup] : [-1/0/1..] ;\n");
+  printf("oo / order[ option] : int ;\n");
+  printf("opt[ions] ;\n");
+  printf("path[ compression] : [0/1] ;\n");
+  printf("pd[efinitions] : [0/1] ;\n");
+  printf("pd si[ze] / psiz[e] : [0/2/4/8/...] ;\n");
+  printf("print det[ails] / sr : [int] ;\n");
+  printf("pr[int table] : [[-]int[,[-]int]] ;\n");
+  printf("pure c[t] ;\n");
+  printf("pure r[t] ;\n");
+  printf("rc / random coinc[idences]: int[,int] ;\n");
+  printf("rec[over] / contig[uous] ;\n");
+  printf("rep : 1..7[,int] ;\n");
+  printf("r[factor] / rt[ factor] : [int] ;\n");
+  printf("row[ filling] : [0/1] ;\n");
+  printf("sc / stabil[ising cosets] : int ;\n");
+  printf("sims : 1/3/5/7/9 ;\n");
+  printf("st[andard table] ;\n");
+  printf("style ;\n");
+  printf("subg[roup name] : <string> ;\n");
+  printf("sys[tem] : <string> ;\n");
+  printf("text : <string> ;\n");
+  printf("tw / trace[ word] : int,<word> ;\n");
+  printf("wo[rkspace] : [int[k/m/g]] ;\n");
+  printf("# ... <newline> - a comment (ignored)\n");
+  printf("  ----------------------------------------------------\n");
   }
 
-        /******************************************************************
-	void al2_nextip(void)
+/*****************************************************************************
+  void al2_nextip(void)
 
-	Primes currip with the next character from fip, if we're not at the
-	end-of-file.  Echoes the character if echo is on.
-        ******************************************************************/
+Primes currip with the next character from stdin, if we're not at the end-of-
+file.  Echoes the character if echo is on.
+*****************************************************************************/
 
 void al2_nextip(void)
   {
   if (currip != EOF) 
     { 
-    currip = fgetc(fip); 
-
-    if (echo && currip != EOF) 
-      { fputc(currip, fop); }
+    currip = getchar(); 
+    if (echo && currip != EOF)  { putchar(currip); }
     }
   }
 
-        /******************************************************************
-	void al2_skipws(void)
+/*****************************************************************************
+  void al2_skipws(void)
 
-	Skip all whitespace characters.
-        ******************************************************************/
+Skip all whitespace characters (incl. comments).
+*****************************************************************************/
 
 void al2_skipws(void)
   {
   Logic comment = (currip == '#');
 
-  while ( currip == ' ' || currip == '\t' || comment || 
-          (skipnl && (currip == '\n' || currip == '\r')) ) 
+  while ( currip == ' ' || currip == '\t' || comment 
+          || (skipnl && (currip == '\n' || currip == '\r')) ) 
     {
     al2_nextip();
-    comment = (currip == '#' || 
-           (comment && currip != '\n' && currip != '\r' && currip != EOF));
+    comment = ( currip == '#' || 
+            (comment && currip != '\n' && currip != '\r' && currip != EOF) );
     }
   }
 
-        /******************************************************************
-	void al2_nextnw(void)
+/*****************************************************************************
+  void al2_nextnw(void)
 
-	Skip to the next non-whitespace character.
-        ******************************************************************/
+Skip to the next non-whitespace character.
+*****************************************************************************/
 
 void al2_nextnw(void)
-  {
-  al2_nextip();
-  al2_skipws();
-  }
-
+  { al2_nextip();  al2_skipws(); }
 

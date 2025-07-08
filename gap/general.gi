@@ -107,7 +107,7 @@ local optnames, echo, errmsg, onbreakmsg, infile, datarec, ToACE, gens,
   if ACEfname = "ACECosetTableFromGensAndRels" and infile <> fail then
     datarec := rec(
         infile  := infile,
-        outfile := VALUE_ACE_OPTION(optnames, ACEData.outfile, "aceoutfile"),
+        outfile := ACEData.outfile,
         stream  := OutputTextFile(infile, false) );
     ToACE := function(list) WRITE_LIST_TO_ACE_STREAM(datarec.stream, list); end;
   else
@@ -121,7 +121,7 @@ local optnames, echo, errmsg, onbreakmsg, infile, datarec, ToACE, gens,
       ACEData.ni := datarec;
     fi;
     FLUSH_ACE_STREAM_UNTIL(datarec.stream, 3, 3, ACE_READ_NEXT_LINE, 
-                           line -> IsMatchingSublist(line, "name", 3));
+                           line -> IsMatchingSublist(line, "====", 1));
     ToACE := function(list) 
                  INTERACT_TO_ACE_WITH_ERRCHK(datarec, list);
              end;
@@ -146,14 +146,7 @@ local optnames, echo, errmsg, onbreakmsg, infile, datarec, ToACE, gens,
   ToACE([ "Subgroup Generators: ", 
           ACE_WORDS(sgens, fgens, datarec.acegens), ";" ]);
 
-  if ACEfname  = "ACECosetTableFromGensAndRels" then
-    ignored := [ ];
-  else 
-    ignored := [ "aceinfile" ];
-  fi;
-  if ACEfname  = "ACEStart" then
-    Add(ignored, "aceoutfile");
-  fi;
+  ignored := [ ];
   if datarec.enforceAsis then
     Add(ignored, "asis");
     ToACE([ "Asis: 1;" ]);
@@ -174,9 +167,7 @@ local optnames, echo, errmsg, onbreakmsg, infile, datarec, ToACE, gens,
       ToACE([ "Start;" ]);
     fi;
     if ACEfname = "ACECosetTableFromGensAndRels" then
-      if standard = "lenlex" then
-        ToACE([ "Standard;" ]);
-      fi;
+      ToACE([ "Standard;" ]);
       ToACE([ "Print Table;" ]);
     fi;
     CloseStream(datarec.stream);

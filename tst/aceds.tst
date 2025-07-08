@@ -37,7 +37,7 @@ gap> ACEDeleteSubgroupGenerators( i, [ 2 ] );
 #I  start = yes, continue = yes, redo = yes
 #I  ***
 #I  INDEX = 640 (a=640 r=1673 h=1 n=1673; l=2 c=0.00; m=811 t=1672)
-#I    #--- ACE 3.001: Run Parameters ---
+#I    -- Run Parameters ----------------------------------
 #I  Group Name: G;
 #I  Group Relators: (s)^2, (t)^2, (u)^2, (v)^2, (d)^2, aad, (b)^3, (st)^2, 
 #I    (uv)^2, (su)^2, (sv)^2, (tu)^2, (tv)^2, Asau, Atav, Auas, Avat, Bvbu, 
@@ -45,7 +45,7 @@ gap> ACEDeleteSubgroupGenerators( i, [ 2 ] );
 #I    (ab)^5;
 #I  Subgroup Name: H;
 #I  Subgroup Generators: b;
-#I    #---------------------------------
+#I    ----------------------------------------------------
 [ b ]
 gap> SetInfoLevel(InfoACE, lev);
 gap> ACEQuit(i);

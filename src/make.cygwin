@@ -1,0 +1,95 @@
+
+# .../src/make.cygwin, 17 Aug 14
+#
+# This make file is for 64-bit cygwin systems which have the 64-bit mingw
+# Windows port of GNU's gcc installed.  It will build either a 'native' cygwin
+# executable or a Windows one using mingw-w64 (or mingw32), depending on your
+# choice of compiler.  These executables can be moved to other Windows boxes
+# (they may, or may not, run on the box they were compiled on), but the native
+# ones must be accompanied by the cygwin1.dll.  (Being tied to the DLL is
+# tedious, but it does allow POSIX support.)  Uncomment the appropriate
+# definition of CC and set any required FLAGS before proceding.  Make sure that
+# the 'correct' gcc is selected, and that the path is set so that the compiler
+# (usually in /usr/bin/) is picked up OK.
+#
+# Usage example: make -f make.cygwin test3
+
+# CC is the compiler to use, along with the 'standard' flags.  This is common 
+# to all the programmes.  Note that there are usually many copies of gcc, but
+# they're aliases/copies of these ...
+
+#CC = gcc -std=c99 -pedantic -Wall
+
+#CC = i686-pc-cygwin-gcc.exe -std=c99 -pedantic -Wall
+#CC = x86_64-pc-cygwin-gcc.exe -std=c99 -pedantic -Wall
+
+#CC = i686-w64-mingw32-gcc.exe -std=c99 -pedantic -Wall
+ CC = x86_64-w64-mingw32-gcc.exe -std=c99 -pedantic -Wall
+
+#CC = i686-pc-mingw32-gcc.exe -std=c99 -pedantic -Wall
+
+# Optional FLAGS, for ace and ace dependents, are
+#   optimisation: -O0, -O1, -O2, -O3
+#   memory model: -DB8S4C8, -DB8S4C5, -DB8S4C4, -DB4S4C4, -DB4S4C3, etc
+#    clock model: -DCLK32 -DCLK64
+
+#FLAGS = -O2 -DB8S8C8 -DCLK64
+#FLAGS = -O2 -DB8S4C8 -DCLK64
+#FLAGS = -O2 -DB8S4C5 -DCLK64
+#FLAGS = -O2 -DB8S4C4 -DCLK64
+
+ FLAGS = -O2 -DB8S4C5 -DCLK32
+#FLAGS = -O2 -DB4S4C4 -DCLK32
+#FLAGS = -O2 -DB4S4C3 -DCLK32
+
+# ACE sources, neatly arranged into levels 2/1/0.
+
+SRC2  = ace.c cmdloop.c parser.c postproc.c util2.c
+SRC1  = control.c util1.c
+SRC0  = coinc.c enum.c util0.c
+SRC0A = enum00.inc enum01.inc enum02.inc
+
+# ACE executable.
+
+ace: al2.h $(SRC2) al1.h $(SRC1) al0.h $(SRC0) $(SRC0A)
+	$(CC) $(FLAGS) -o ace $(SRC2) $(SRC1) $(SRC0)
+
+# ACE dependent test/example programmes.
+
+test0a: test0a.c al0.h $(SRC0) $(SRC0A)
+	$(CC) $(FLAGS) -o test0a test0a.c $(SRC0)
+
+ex0a: ex0a.c al0.h $(SRC0) $(SRC0A)
+	$(CC) $(FLAGS) -o ex0a ex0a.c $(SRC0)
+
+ex0d: ex0d.c al0.h $(SRC0) $(SRC0A)
+	$(CC) $(FLAGS) -o ex0d ex0d.c $(SRC0)
+
+ex1a: ex1a.c al1.h $(SRC1) al0.h $(SRC0) $(SRC0A)
+	$(CC) $(FLAGS) -o ex1a ex1a.c $(SRC1) $(SRC0)
+
+ex1d: ex1d.c al1.h $(SRC1) al0.h $(SRC0) $(SRC0A)
+	$(CC) $(FLAGS) -o ex1d ex1d.c $(SRC1) $(SRC0)
+
+# Machine/OS test programmes.
+# Add -O1/O2/O3 for test7.c to test the effects of optimisation.
+
+test3: test3.c
+	$(CC) -o test3 test3.c
+
+test4: test4.c
+	$(CC) -o test4 test4.c
+
+test5: test5.c
+	$(CC) -o test5 test5.c
+
+test7: test7.c
+	$(CC) -o test7 test7.c
+
+# tidy up ...
+
+clean:
+	rm -rf *~ ace.exe
+	rm -rf test0a.exe ex0a.exe ex0d.exe ex1a.exe ex1d.exe
+	rm -rf test3.exe test4.exe test5.exe test7.exe
+
