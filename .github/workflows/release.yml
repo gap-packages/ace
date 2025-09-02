@@ -25,7 +25,21 @@ jobs:
       - uses: gap-actions/build-pkg-docs@v1
         with:
           use-latex: true
-
+      - name: "Work around bug in the old TeX based GAP documentation system"
+        run: |
+          # Copy some HTML files to work around an old bug in the old GAP
+          # documentation system. For details, please refer to
+          # <https://github.com/gap-system/gap/issues/4430>.
+          #
+          # Note: we used to create symlinks instead of copying the files, which
+          # seems conceptually cleaner, but caused breakage in the GAP release
+          # process. Figuring out the details does not seem worth the hassle, so
+          # just copy the files instead. For details, please refer to
+          # <https://github.com/gap-system/gap/issues/5011>.
+          cp -f htm/CHAP00A.htm htm/CHAP007.htm
+          cp -f htm/CHAP00B.htm htm/CHAP008.htm
+          cp -f htm/CHAP00C.htm htm/CHAP009.htm
+          cp -f htm/CHAP00D.htm htm/CHAP010.htm
       - uses: gap-actions/release-pkg@v1
         with:
           dry-run: ${{ inputs.dry-run }}
