@@ -4,6 +4,7 @@ set -e
 echo "TeXing documentation"
 # delete old stuff to avoid spurious or "hidden errors" caused by their presence
 rm -f manual.aux manual.pdf manual.idx manual.ilg manual.ind manual.lab manual.log manual.six manual.toc
+
 # TeX the manual
 tex manual
 # ... and build its bibliography
