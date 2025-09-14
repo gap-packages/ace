@@ -164,7 +164,7 @@ BannerString := Concatenation(
 "---------------------------------------------------------------------------",
 "\n" ),
 
-TestFile := "tst/aceds.tst",
+TestFile := "tst/testall.g",
 
 Keywords := [ "coset enumeration", "Felsch strategy", "HLT strategy",
               "coset table", "index", "maxcosets", "activecosets" ]
