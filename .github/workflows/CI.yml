@@ -18,44 +18,52 @@ concurrency:
 jobs:
   # The CI test job
   test:
-    name: ${{ matrix.gap-branch }} ${{ matrix.ABI }} - HPC ${{ matrix.HPCGAP }}
+    name: GAP ${{ matrix.gap-version }} ${{ matrix.ABI == '32' && '(' || '' }}${{ matrix.ABI }}${{ matrix.ABI == '32' && '-bit)' || '' }}
     runs-on: ubuntu-latest
+    env:
+      ABI: ${{ matrix.ABI }}
     strategy:
       fail-fast: false
       matrix:
-        gap-branch:
+        gap-version:
           - master
-          - stable-4.14
-          - stable-4.13
-          - stable-4.12
-          - stable-4.11
-          - stable-4.10
+          - stable-4.15
+          - '4.14'
+          - '4.13'
+          - '4.12'
+          - '4.11'
+          - '4.10'
           - stable-4.9
         ABI:
           - ''
-        HPCGAP:
-          - no
         include:
-          - gap-branch: master
-            ABI: 32
-            HPCGAP: no
-          - gap-branch: master
-            ABI: ''
-            HPCGAP: yes
+          - gap-version: master
+            ABI: '32'
 
     steps:
       - uses: actions/checkout@v5
+      - name: "Install 32-bit Ubuntu packages"
+        if: ${{ runner.os == 'Linux' && matrix.ABI == '32' }}
+        run: |
+          sudo dpkg --add-architecture i386
+          sudo apt-get update
+          packages=(
+            libgmp-dev:i386
+            libreadline-dev:i386
+            zlib1g-dev:i386
+            gcc-multilib
+            g++-multilib
+          )
+          sudo apt-get install "${packages[@]}"
       - uses: gap-actions/setup-gap@v3
         with:
-          GAPBRANCH: ${{ matrix.gap-branch }}
-          ABI: ${{ matrix.ABI }}
-          HPCGAP: ${{ matrix.HPCGAP }}
-      - uses: gap-actions/build-pkg@v1
-      - uses: gap-actions/run-pkg-tests@v3
-      - uses: gap-actions/run-pkg-tests@v3
+          gap-version: ${{ matrix.gap-version }}
+      - uses: gap-actions/build-pkg@v2
+      - uses: gap-actions/run-pkg-tests@v4
+      - uses: gap-actions/run-pkg-tests@v4
         with:
-          only-needed: true
-      - uses: gap-actions/process-coverage@v2
+          mode: 'onlyneeded'
+      - uses: gap-actions/process-coverage@v3
       - uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
@@ -68,9 +76,9 @@ jobs:
     steps:
       - uses: actions/checkout@v5
       - uses: gap-actions/setup-gap@v3
-      - uses: gap-actions/build-pkg-docs@v1
+      - uses: gap-actions/build-pkg-docs@v2
         with:
-          use-latex: 'true'
+          use-latex: true
       - name: 'Upload documentation'
         uses: actions/upload-artifact@v4
         with:
