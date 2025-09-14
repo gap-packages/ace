@@ -18,8 +18,8 @@ concurrency:
 jobs:
   # The CI test job
   test:
-    name: GAP ${{ matrix.gap-version }} ${{ matrix.ABI == '32' && '(' || '' }}${{ matrix.ABI }}${{ matrix.ABI == '32' && '-bit)' || '' }}
-    runs-on: ubuntu-latest
+    name: ${{ matrix.os }} - GAP ${{ matrix.gap-version }} ${{ matrix.ABI == '32' && '(' || '' }}${{ matrix.ABI }}${{ matrix.ABI == '32' && '-bit)' || '' }}
+    runs-on: ${{ matrix.os }}-latest
     env:
       ABI: ${{ matrix.ABI }}
     strategy:
@@ -36,12 +36,20 @@ jobs:
           - stable-4.9
         ABI:
           - ''
+        os:
+          - ubuntu
         include:
           - gap-version: master
             ABI: '32'
+            os: ubuntu
+          - gap-version: master
+            ABI: ''
+            os: windows
 
     steps:
       - uses: actions/checkout@v5
+      - uses: gap-actions/setup-cygwin@v2
+        if: ${{ runner.os == 'Windows' }}
       - name: "Install 32-bit Ubuntu packages"
         if: ${{ runner.os == 'Linux' && matrix.ABI == '32' }}
         run: |
