@@ -42,7 +42,7 @@ jobs:
             ABI: '32'
 
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - name: "Install 32-bit Ubuntu packages"
         if: ${{ runner.os == 'Linux' && matrix.ABI == '32' }}
         run: |
