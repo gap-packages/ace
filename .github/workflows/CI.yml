@@ -19,10 +19,8 @@ concurrency:
 jobs:
   # The CI test job
   test:
-    name: GAP ${{ matrix.gap-version }} ${{ matrix.ABI == '32' && '(' || '' }}${{ matrix.ABI }}${{ matrix.ABI == '32' && '-bit)' || '' }}
+    name: GAP ${{ matrix.gap-version }}
     runs-on: ubuntu-latest
-    env:
-      ABI: ${{ matrix.ABI }}
     strategy:
       fail-fast: false
       matrix:
@@ -35,27 +33,9 @@ jobs:
           - '4.11'
           - '4.10'
           - stable-4.9
-        ABI:
-          - ''
-        include:
-          - gap-version: master
-            ABI: '32'
 
     steps:
       - uses: actions/checkout@v6
-      - name: "Install 32-bit Ubuntu packages"
-        if: ${{ runner.os == 'Linux' && matrix.ABI == '32' }}
-        run: |
-          sudo dpkg --add-architecture i386
-          sudo apt-get update
-          packages=(
-            libgmp-dev:i386
-            libreadline-dev:i386
-            zlib1g-dev:i386
-            gcc-multilib
-            g++-multilib
-          )
-          sudo apt-get install "${packages[@]}"
       - uses: gap-actions/setup-gap@v3
         with:
           gap-version: ${{ matrix.gap-version }}
