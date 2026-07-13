@@ -41,7 +41,9 @@ jobs:
         with:
           mode: 'onlyneeded'
       - uses: gap-actions/process-coverage@v3
+      - name: Generate C coverage reports
+        working-directory: src
+        run: gcov -pb *.gcno
       - uses: codecov/codecov-action@v6
         with:
-          plugins: gcov
           token: ${{ secrets.CODECOV_TOKEN }}
