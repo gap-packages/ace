@@ -27,7 +27,7 @@ obtained!
 **************************************************************************/
 
 #include "al2.h"
-#ifdef AL2_HINFO
+#if defined(AL2_HINFO) && !defined(_WIN32)
 #include <sys/utsname.h>
 #endif
 
@@ -57,6 +57,12 @@ int main(void)
   {
   al2_init();		/* Initialise Levels 2, 1 & 0 (incl. fop/fop) */
 
+#ifdef _WIN32
+  /* GAP drives ACE through a pipe, and MSVCRT has no line buffering: without
+  this, replies would sit in the stdio buffer until it fills. */
+  setvbuf(stdout, NULL, _IONBF, 0);
+#endif
+
   fprintf(fop, "%s        %s", ACE_VER, al0_date());
   fprintf(fop, "=========================================\n");
 
@@ -69,9 +75,15 @@ int main(void)
 #ifdef AL2_HINFO
   fprintf(fop, "Host information:\n");
   {
+#ifdef _WIN32
+    const char *name = getenv("COMPUTERNAME");
+    if (name != NULL)
+      fprintf(fop, "  name = %s\n", name);
+#else
     struct utsname name;
     if (uname(&name) == 0)
       fprintf(fop, "  name = %s\n", name.nodename);
+#endif
   }
   fflush(fop);
 #endif
