@@ -5,8 +5,8 @@ In this chapter  we  collect  together  a  number  of  examples  which
 illustrate the various ways in which the &ACE; Package may  be  used,
 and give some interactions with the <C>ACEExample</C> function. In a number
 of cases, we have set the <C>InfoLevel</C> of <C>InfoACE</C> to 3, so  that  all
-output from &ACE; is displayed, prepended by <Q>&#x2018;#I  </Q>'. Recall that
-to also see the commands directed <E>to</E> &ACE; (behind a  <Q>&#x2018;ToACE&gt; </Q>'
+output from &ACE; is displayed, prepended by <Q>#I  </Q>. Recall that
+to also see the commands directed <E>to</E> &ACE; (behind a  <Q>ToACE&gt; </Q>
 prompt), you will need to set  the  <C>InfoACE</C>  level  to  4.  We  have
 omitted the line
 <Example><![CDATA[
@@ -149,9 +149,9 @@ A5 2^4
 The following example calls &ACE; for up to 800 coset  numbers  (<C>max
 := 800</C>) using Mendelsohn style relator processing (<C>mendelsohn</C>)  and
 sets progress messages to be printed every 500  iterations  (<C>messages
-:=500</C>); we do <Q>&#x2018;SetInfoLevel(InfoACE, 3);</Q>' so  that  we  may  see  these
+:=500</C>); we do <Q>SetInfoLevel(InfoACE, 3);</Q> so  that  we  may  see  these
 messages.  The  value  of  <C>table</C>,  i.e.&nbsp;the  &GAP;   coset   table,
-immediately follows the last &ACE;  message  (<Q>&#x2018;#I </Q>')  line,  but
+immediately follows the last &ACE;  message  (<Q>#I </Q>)  line,  but
 both the coset table from &ACE; and the &GAP; coset table have  been
 abbreviated. A  slightly  modified  version  of  this  example,  which
 includes  the  <C>echo</C>  option  is  available  on-line  via  <C>table  :=
@@ -222,11 +222,11 @@ gap> table := ACECosetTableFromGensAndRels(
 Now we illustrate a simple interactive process, with an enumeration of
 an index 12 subgroup (isomorphic to <M>C_5</M>) within <M>A_5</M>. Observe  that
 we  have  relied  on  the  default  level  of  messaging  from  &ACE;
-(<C>messages</C> = 0) which gives a result line (the  <Q>&#x2018;#I  INDEX</Q>' line
+(<C>messages</C> = 0) which gives a result line (the  <Q>#I  INDEX</Q> line
 here) only, without parameter information. The result line is  visible
 in the <C>Info</C>-ed component of the output  below  because  we  set  the
 <C>InfoLevel</C> of <C>InfoACE</C> to a value of at least 2 (in fact we  set  it
-to 3; doing <Q>&#x2018;SetInfoLevel(InfoACE, 2);</Q>' would  make  <E>only</E>  the  result
+to 3; doing <Q>SetInfoLevel(InfoACE, 2);</Q> would  make  <E>only</E>  the  result
 line visible). We have however used the option <C>echo</C>, so that we  can
 see how the interface handled the arguments and options. On-line  try:
 <C>SetInfoLevel(InfoACE, 3); ACEExample("A5-C5", ACEStart);</C> (this  is  nearly
@@ -531,7 +531,7 @@ will no longer be the trivial group), via the <C>subgroup</C>  option  (see
 <P/>
 In considering the example following, observe that in the <C>Info</C> block
 all the original example options are listed along with our new options
-<C>sg := [ "c" ], messages := 0</C> after the tag  <Q>&#x2018;#  User  Options</Q>'.
+<C>sg := [ "c" ], messages := 0</C> after the tag  <Q>#  User  Options</Q>.
 Following the <C>Info</C> block there is a block  due  to  <C>echo</C>;  in  its
 listing of the options first up there is <C>aceexampleoptions</C>  alerting
 us that we passed some <C>ACEExample</C> options; observe also that in this
@@ -594,7 +594,7 @@ will not be able to complete  the  enumeration,  and  hence  enters  a
 we're at it we'll pass the <C>hlt</C> (see&nbsp;<Ref Subsect="option hlt"/>)  strategy  option
 (which will over-ride <C>purec</C>). (The <C>InfoACE</C> level is still  2.)  To
 avoid getting a trace-back during the <K>break</K>-loop (which can  look  a
-little   scary   to   the   unitiated)   we   will    set    <C>OnBreak</C>
+little   scary   to   the   uninitiated)   we   will    set    <C>OnBreak</C>
 (see&nbsp;<Ref Func="OnBreak" BookName="ref"/>) as follows:
 <Example><![CDATA[
 gap> NormalOnBreak := OnBreak;; # Save the old value to restore it later
@@ -716,7 +716,7 @@ Other options set via ACE defaults:
 ]]></Log>
 Observe that  <C>purec</C>  did  <E>not</E>  disappear  from  the  option  list;
 nevertheless, it <E>is</E> over-ridden by the <C>hlt</C> option (at  the  &ACE;
-level). Observe the  <Q>&#x2018;Other options set via ACE defaults</Q>' list  of
+level). Observe the  <Q>Other options set via ACE defaults</Q> list  of
 options  that  has  resulted  from  having  the  <C>echo  :=  2</C>  option
 (see&nbsp;<Ref Subsect="option echo"/>). Observe, also, that  <C>hlt</C>  is  nowhere  near  as
 good, here, as  <C>purec</C>  (refer  to  Section&nbsp;<Ref Sect="Using ACE Directly to Generate a Coset Table"/>):  whereas  <C>purec</C>  completed   the   same

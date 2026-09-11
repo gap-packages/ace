@@ -297,7 +297,7 @@ subgroup generators; i.e., forces coset <C><A>val</A></C> to coincide with coset
 <Index>option <C>rc</C></Index>Enforce <C>r</C>andom <C>c</C>oincidences; <A>val</A> and <A>attempts</A> must be positive
 integers.
 <P/>
-This option attempts upto <A>attempts</A> (or,  in  the  first  and  second
+This option attempts up to <A>attempts</A> (or,  in  the  first  and  second
 forms, 8) times to find nontrivial subgroups with index a multiple  of
 <A>val</A> by repeatedly making random coset numbers coincident with  coset
 1 and seeing what happens. The starting coset table must be non-empty,

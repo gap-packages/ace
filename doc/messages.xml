@@ -17,7 +17,7 @@ at <C>InfoACE</C> level 3. To see the  <C>Info</C>-ed  &ACE;  output,  set  the
 gap> SetInfoLevel(InfoACE, 3);
 ]]></Example>
 This  causes  each  line  of  &ACE;  output  to  be  prepended   with
-<Q>&#x2018;#I  </Q>'.  Below,  we describe the <C>Info</C>-ed output  observed  when
+<Q>#I  </Q>.  Below,  we describe the <C>Info</C>-ed output  observed  when
 each of <C>ACECosetTableFromGensAndRels</C>, <C>ACECosetTable</C>, <C>ACEStats</C> or
 <C>ACEStart</C> is called with three arguments, and presume that users will
 be able to extend the description  to  explain  output  observed  from
@@ -38,7 +38,7 @@ asterisks:
 #I  ***
 ]]></Log>
 <E>Guru note:</E>
-The three asterisks are generated  by  a  <Q>&#x2018;text:<E></E>*</Q>'  (see&nbsp;<Ref Subsect="option text"/>) directive, emitted to &ACE;, so that &ACE;'s response can  be
+The three asterisks are generated  by  a  <Q>text:<E></E>*</Q>  (see&nbsp;<Ref Subsect="option text"/>) directive, emitted to &ACE;, so that &ACE;'s response can  be
 used as a sentinel to flush out any user errors, or any output from  a
 user's use of Appendix&nbsp;<Ref Chap="Other ACE Options"/> options.
 <P/>

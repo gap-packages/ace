@@ -52,7 +52,7 @@ unless   we   set   <C>InfoACE</C>   to   a   level   of   at    least    2
 gap> SetInfoLevel(InfoACE, 2);
 ]]></Example>
 Calling <C>ACEStats</C> with arguments <C>fgens</C>, <C>[]</C>, <C>[]</C>, defines a  free
-froup with 2 generators, since the second argument  defines  an  empty
+group with 2 generators, since the second argument  defines  an  empty
 relator list; and since  the  third  argument  is  an  empty  list  of
 generators, the  subgroup  defined  is  trivial.  So  the  enumeration
 overflows:
@@ -62,7 +62,7 @@ gap> ACEStats(fgens, [], []);
 rec( activecosets := 249998, cputime := 0, cputimeUnits := "10^-2 seconds", 
   index := 0, maxcosets := 249998, totcosets := 249998 )
 ]]></Example>
-The  line  starting  with   <Q>&#x2018;#I  </Q>'.  is  the  <C>Info</C>-ed  <E>results
+The  line  starting  with   <Q>#I  </Q>.  is  the  <C>Info</C>-ed  <E>results
 message</E> from &ACE;;  see  Appendix&nbsp;<Ref Chap="The Meanings of ACE's output messages"/> for details  on  what  it  means.  Observe  that  since  the
 enumeration overflowed, &ACE;'s result message  has  been  translated
 into a &GAP; record with <C>index</C> field 0.
@@ -126,7 +126,7 @@ rec( index := 0, cputime := 9, cputimeUnits := "10^-2 seconds",
   activecosets := 249998, maxcosets := 249998, totcosets := 249998 )
 ]]></Log>
 Essentially, because &ACE; had  not  done  an  enumeration  prior  to
-getting the <C>print</C> directive, it complained with an  <Q>&#x2018;<E></E>  ERROR</Q>',
+getting the <C>print</C> directive, it complained with an  <Q><E></E>  ERROR</Q>,
 recovered  and  went  on  with  the  <C>start</C>  directive  automatically
 inserted by the <C>ACEStats</C> command:  no  ill  effects  at  the  &GAP;
 level, but also no table.
@@ -415,7 +415,7 @@ gap> ACECosetTable(1 : incomplete);
 Error, no such interactive ACE session
 
 ]]></Example>
-Observe the line beginning <Q>&#x2018;#I start = yes,</Q>'  (the  first line in
+Observe the line beginning <Q>#I start = yes,</Q>  (the  first line in
 the output of <C>ACECosetTable</C>). This line appears in response  to  the
 option <C>mode</C> (see&nbsp;<Ref Subsect="option mode"/>) inserted  by  <C>ACECosetTable</C>  after
 any user options; it is inserted  in  order  to  check  that  no  user
@@ -426,7 +426,7 @@ see&nbsp;<Ref Subsect="option continu"/>) is directed at &ACE; which  evokes  a 
 message</E>. Then <C>ACECosetTable</C> extracts the  incomplete  table  via  a
 <C>print</C> (see <Ref Subsect="option print"/>) directive. If you wish  to  see  all  the
 options that are directed to &ACE;, set  the  <C>InfoACE</C>  level  to  4
-(then all such commands are <C>Info</C>-ed behind a <Q>&#x2018;ToACE&gt;  </Q>'  prompt;
+(then all such commands are <C>Info</C>-ed behind a <Q>ToACE&gt;  </Q>  prompt;
 see&nbsp;<Ref Func="InfoACE"/>).
 <P/>
 Following the standalone manual, we  now  set  things  up  to  do  the
@@ -442,7 +442,7 @@ get the <Q>Run Parameters</Q> block (the same as that obtained  with  <C>sr
 <C>F</C> is the free group we defined  on  generators  <C>fgens</C>:  <C>"a"</C>  and
 <C>"b"</C>. Here we will be interested in seeing what is transmitted to the
 &ACE; binary; so we will set  the  <C>InfoACE</C>  level  to  4  (what  is
-transmitted to &ACE; will now appear behind a  <Q>&#x2018;ToACE&gt; </Q>'  prompt,
+transmitted to &ACE; will now appear behind a  <Q>ToACE&gt; </Q>  prompt,
 and we will still see the messages <E>from</E>  &ACE;).  Note,  that  when
 &GAP;  prints  <C>F.1</C>  (<M>=</M>  <C>fgens[1]</C>)  it  displays  <C>a</C>,  but  the
 <E>variable</E> <C>a</C> is (at the moment) unassigned; so for  convenience  (in
@@ -652,8 +652,8 @@ algorithm to get his statistics (see&nbsp;<Ref Subsect="option mendelsohn"/>).
 <P/>
 <E>Note:</E> 
 HLT as it appears in Table 5.5.1 of <Cite Key="Sim94"/> is achieved in &ACE;
-with the sequence <Q>&#x2018;hlt, lookahead  :=  0</Q>'  and  CHLT  is  (nearly)
-equivalent to  <Q>&#x2018;hlt,  lookahead  :=  0,  mendelsohn</Q>';  also  Sims'
+with the sequence <Q>hlt, lookahead  :=  0</Q>  and  CHLT  is  (nearly)
+equivalent to  <Q>hlt,  lookahead  :=  0,  mendelsohn</Q>;  also  Sims'
 <C><A>save</A> = false</C> equates to R style (<C>rt</C>  positive,  <C>ct  :=  0</C>)  in
 &ACE;, and <C><A>save</A> = true</C>, for Sims' HLT and CHLT,  equates  to  R*
 style (<C>rt</C> negative, <C>ct := 0</C>)  in  &ACE;.  Sims'  Felsch  strategy

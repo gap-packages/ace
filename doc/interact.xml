@@ -1606,7 +1606,7 @@ options (see&nbsp;<Ref Func="ACEParameterOptions"/>), some of the  values  repor
 write <A>string</A> to the <A>i</A>th or  default  interactive  &ACE;  process;
 <A>string</A> must be in exactly the form the  &ACE;  standalone  expects.
 The command is  echoed  via  <C>Info</C>  at  <C>InfoACE</C>  level  4  (with  a
-<Q>&#x2018;ToACE&gt; </Q>' prompt); i.e.&nbsp;<C>SetInfoLevel(InfoACE, 4);</C>  will  allow  you to
+<Q>ToACE&gt; </Q> prompt); i.e.&nbsp;<C>SetInfoLevel(InfoACE, 4);</C>  will  allow  you to
 see what is transmitted to the &ACE; binary. <C>ACEWrite</C> returns <K>true</K>
 if successful in writing to the stream of the interactive &ACE; process,
 and <K>fail</K> otherwise.

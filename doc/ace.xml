@@ -211,8 +211,8 @@ brk> return;
 [ [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], 
   [ 1 ], [ 1 ], [ 1 ], [ 1 ] ]
 ]]></Log>
-Observe how the lines  after  the  <Q>&#x2018;Entering  break  read-eval-print
-loop</Q>' announcement tell you <E>exactly</E> what to  do. At  the  
+Observe how the lines  after  the  <Q>Entering  break  read-eval-print
+loop</Q> announcement tell you <E>exactly</E> what to  do. At  the  
 <K>break</K>-loop  prompt  <C>brk&gt;</C>  we  relaxed  all
 restrictions on <C>max</C> (by re-setting it to 0) and typed  <C>return;</C>  to
 leave the <K>break</K>-loop. The coset  enumeration  was  then  successful,
@@ -230,7 +230,7 @@ gap> ACECosetTable(fgens, rels, [c]);
 [ [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], 
   [ 1 ], [ 1 ], [ 1 ], [ 1 ] ]
 ]]></Example>
-The enumeration result line is the <C>Info</C> line  beginning  <Q>&#x2018;#I </Q>'.
+The enumeration result line is the <C>Info</C> line  beginning  <Q>#I </Q>.
 Appendix&nbsp;<Ref Chap="The Meanings of ACE's output messages"/>  explains  how  to
 interpret such output messages from &ACE;. In particular, it explains
 that <C>t=3127</C> tells us that a <C>t</C>otal number  of  3127  coset  numbers
@@ -310,7 +310,7 @@ Essentially, <C>IsACEStandardCosetTable</C>  extends  the  &GAP;  function
 Users who wish their coset tables  to  use  <C>ACECosetTable</C>  with  the
 <C>lenlex</C>    (see&nbsp;<Ref Subsect="option lenlex"/>)     option,     which     causes
 <C>lenlex</C> standardisation to occur at the &ACE; (rather  than  &GAP;)
-level, should be aquainted with the following function.
+level, should be acquainted with the following function.
 <P/>
 <Index>IsACEGeneratorsInPreferredOrder</Index>@<C>IsACEGeneratorsInPreferredOrder</C>!non-interactive
 </Description>
@@ -332,7 +332,7 @@ switch the  first  two  generators.  <C>IsACEGeneratorsInPreferredOrder</C>
 returns <K>true</K> if the order of the  generators  <A>gens</A>  would  not  be
 changed  within  &ACE;  and  <K>false</K>,  otherwise.  (Technically,   by
 <Q>involution</Q> above, we really mean <Q>a generator <C>x</C> for which there
-is a relator in <A>rels</A> of form <C>x*x</C> or &#x2018;x^2</Q>'. Such a generator may,
+is a relator in <A>rels</A> of form <C>x*x</C> or <C>x^2</C></Q>. Such a generator may,
 of course, turn out to actually be the identity.)
 <P/>
 <E>Guru Notes:</E>
@@ -554,7 +554,7 @@ ACEStart called with the following options:
 except that some internal <Q>magic</Q> of <C>ACEExample</C> edits the  example
 file and displays equivalent commands a user <Q>would</Q> execute. If the
 user  has  passed  options  to  <C>ACEExample</C>   these   appear   in   a
-<Q>&#x2018;# User Options</Q>' block after the original options of the  example
+<Q># User Options</Q> block after the original options of the  example
 in the <C>Info</C> portion of the output. By comparing with the portion  of
 the output from the <C>echo</C> option (unless the user has over-ridden the
 <C>echo</C> option), the user may directly observe any over-riding  effects
@@ -812,7 +812,7 @@ will be displayed via <C>Info</C>. Finally,
 gap> SetInfoLevel(InfoACE, 4);
 ]]></Example>
 enables the display of all the input  directed  to  &ACE;  (behind  a
-<Q>&#x2018;ToACE&gt; </Q>' prompt, so you can distinguish it  from  other  output).
+<Q>ToACE&gt; </Q> prompt, so you can distinguish it  from  other  output).
 The <C>InfoACE</C> level of 4 is really for gurus who are familiar with the
 &ACE; standalone.
 </Description>

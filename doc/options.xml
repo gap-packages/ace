@@ -31,7 +31,7 @@ gap> RecNames(KnownACEOptions);
 ]]></Example>
 (See Section&nbsp;<Ref Sect="The KnownACEOptions Record"/>.) Also, from within a &GAP;
 session, you may use &GAP;'s help browser (see Chapter&nbsp;<Ref Chap="The Help System" BookName="ref"/> in the  &GAP;  Reference  Manual);  to  find  out  about  any
-particular &ACE; option, simply type: <Q>&#x2018;?option  <A>option</A></Q>',  where
+particular &ACE; option, simply type: <Q>?option  <A>option</A></Q>,  where
 <A>option</A> is one of the options listed above without any quotes, e.g.
 <Log><![CDATA[
 gap> ?option echo
@@ -239,7 +239,7 @@ and <E>felsch 1</E>. To get the <E>felsch 1</E> strategy,  the  user  must  pass
 <C>felsch := 1</C>. If the user were to pass <C>felsch := false</C>  the  result
 would be the <E>felsch 0</E> strategy (since <K>false</K> is  always  translated
 to 0), i.e.&nbsp;the same as how <C>felsch := true</C> would be interpreted.  We
-could protect the user more from  such  ideosyncrasies,  but  we  have
+could protect the user more from  such  idiosyncrasies,  but  we  have
 erred on the side of simplicity in order to make  the  interface  less
 vulnerable to upgrades of the &ACE; binary.</Item>
 </List>
@@ -487,7 +487,7 @@ options that are excluded via the <C>aceignore</C>  and  <C>aceignoreunknown</C>
 options  (described  below),   <E>all</E>   options   that   are   on   the
 <C>OptionsStack</C> when an &ACE; interface function is called, are passed
 to the &ACE; binary. Even options that produce the  warning  message:
-<Q>&#x2018;unknown (maybe new) or bad</Q>', by virtue of not being  a  field  of
+<Q>unknown (maybe new) or bad</Q>, by virtue of not being  a  field  of
 <C>KnownACEOptions</C>, are passed to the &ACE; binary  (except  that  the
 options <C>purer</C> and <C>purec</C> are first translated to <C>pure r</C> and <C>pure
 c</C>, respectively). When the &ACE; binary encounters an option that it
@@ -650,7 +650,7 @@ superfluous    if    <C>ACEIgnoreUnknownDefault    :=    true</C>    unless
 </Subsection>
 <Subsection Label="option acenowarnings">
 <Heading><C>acenowarnings</C></Heading>
-<Index>option <C>acenowarnings</C></Index>Inhibits the warning message <Q>&#x2018;unknown (maybe new) or bad option</Q>'
+<Index>option <C>acenowarnings</C></Index>Inhibits the warning message <Q>unknown (maybe new) or bad option</Q>
 for options not listed in <C>KnownACEOptions</C>.
 (Shortest abbreviation: <C>acenow</C>.)
 <P/>
@@ -929,7 +929,7 @@ that  the  implications  of  any  definitions/deductions  made   while
 applying coset numbers may not become apparent until much  later.  One
 way to alleviate this problem is to perform  lookaheads  occasionally;
 that is, to test the information in the table, looking for  deductions
-or  concidences.  &ACE;  can  perform  a  lookahead  when  the  table
+or  coincidences.  &ACE;  can  perform  a  lookahead  when  the  table
 overflows, before the compaction routine is called. Lookahead  can  be
 done using the entire table or only that part of the table  above  the
 current coset number, and it  can  be  done  R style  (scanning  coset
@@ -1080,7 +1080,7 @@ it.
 <Heading><C>path</C></Heading>
 <Index>option <C>path</C></Index>Turns on path compression.
 <P/>
-To correctly  process  multiple  concidences,  a  union-find  must  be
+To correctly  process  multiple  coincidences,  a  union-find  must  be
 performed. If both path compression and weighted union are used,  then
 this can be done in essentially linear time (see, e.g., <Cite Key="CLR90"/>).
 Weighted union alone, in the worst-case, is worse than linear, but  is
@@ -1220,7 +1220,7 @@ situation both interactively and   non-interactively  by  setting  the
 gap> SetInfoLevel(InfoACE, 3);
 ]]></Example>
 <P/>
-Then &ACE;'s messages are  displayed  prepended  with  <Q>&#x2018;#I  </Q>'.
+Then &ACE;'s messages are  displayed  prepended  with  <Q>#I  </Q>.
 Please refer to Appendix&nbsp;<Ref Chap="The Meanings of ACE's output messages"/>,
 where the meanings of &ACE;'s output messages are fully discussed.
 </Subsection>
