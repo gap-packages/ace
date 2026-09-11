@@ -2,6 +2,10 @@ In this file we record the changes since the 3.xxx versions of the ACE
 package. Also look at gap/CHANGES  for  a  history  of  the  pre-3.xxx
 development.
 
+## Unreleased
+  * Fix various issues which prevented ACE from working with a native
+    Windows (MinGW) build of GAP
+
 ## Version 5.7.0 (2025-04-10)
   * Deprecate `InfoACELevel` and `SetInfoACELevel` (instead one
     may use `InfoACE` together with `SetInfoLevel`)
