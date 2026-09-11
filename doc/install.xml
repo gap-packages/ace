@@ -1,0 +1,91 @@
+<!-- W  install.tex     ACE documentation - installation     Alexander Hulpke / W                                                      Joachim Neub"user / W                                                            Greg Gamble / Y  Copyright (C) 2000  Centre for Discrete Mathematics and Computing / Y                      Department of Information Tech. & Electrical Eng. / Y                      University of Queensland, Australia. -->
+<Chapter Label="Installing and Loading the ACE Package">
+<Heading>Installing and Loading the ACE Package</Heading>
+<Section Label="Installing the ACE Package">
+<Heading>Installing the ACE Package</Heading>
+To install, unpack the archive file, which should have a name of  form
+<C>ace-<A>XXX</A>.tar.gz</C>  for  some  package  version  number   <A>XXX</A>, as  a
+sub-directory in the <C>pkg</C> hierarchy of your version of &GAP;&nbsp;4. This
+might be the <C>pkg</C> directory of the &GAP;&nbsp;4  home  directory;  it  is
+however also possible to keep an additional <C>pkg</C>  directory  in  your
+private directories. The only  essential  difference  with  installing
+&ACE; in a <C>pkg</C> directory different to the &GAP;&nbsp;4  home  directory
+is  that  one  must  start  &GAP;   with   the   <C>-l</C>   switch   (see
+Section&nbsp;<Ref Sect="Command Line Options" BookName="ref"/>),  e.g.&nbsp;if  your  private   <C>pkg</C>
+directory is a subdirectory of <C>mygap</C>  in  your  home  directory  you
+might type:
+<Log><![CDATA[
+  gap -l ";<myhomedir>/mygap"
+]]></Log>
+where <A>myhomedir</A> is the  path to your  home  directory,  which may be
+replaced by a tilde.  The empty path before the semicolon is filled in
+by the default path of the &GAP;&nbsp;4 home directory.
+<P/>
+After unpacking the archive, go to the newly created  <C>ace</C>  directory
+and call <C>./configure <A>path</A></C> where <A>path</A> is the path to  the  &GAP;
+home directory. So for example if you install the package in the  main
+<C>pkg</C> directory call
+<Log><![CDATA[
+./configure ../..
+]]></Log>
+This  will fetch  the  architecture  type for  which  &GAP; has  been
+compiled last and create a <C>Makefile</C>. Now simply call
+<Log><![CDATA[
+make
+]]></Log>
+to compile the binary and to install it in the appropriate place.
+<P/>
+Note that the  current version of the configuration  process only sets
+up  directory paths.  If you  need a  different compiler  or different
+compiler options, you need to edit <C>src/Makefile.in</C>  yourself,  prior
+to calling <C>make</C>.
+<P/>
+If you use this installation of &GAP; on different hardware platforms
+you will have to compile the binary for each platform separately. This
+is done by calling <C>configure</C>,  editing  <C>src/Makefile.in</C>  possibly,
+and calling <C>make</C> for the package anew  immediately  after  compiling
+&GAP; itself for the respective  architecture.  If  your  version  of
+&GAP; is already compiled (and has last been  compiled  on  the  same
+architecture)  you  do  not  need  to  compile  &GAP;  again,  it  is
+sufficient  to  call  the  <C>configure</C>  script  in  the  &GAP;   home
+directory.
+<P/>
+The manual you are currently reading describes how to use  the  &ACE;
+Package; it can be found in the <C>doc</C> subdirectory of the package.
+<P/>
+The subdirectory <C>standalone-doc</C> contains the file <C>ace3001.ps</C> which
+holds a version of the user manual for the &ACE; standalone; it forms
+part of&nbsp;<Cite Key="Ram99ace"/>). You should consult  it  if  you  are  going  to
+switch to  the  &ACE;  standalone,  e.g.&nbsp;in  order  to  directly  use
+interactive facilities.
+<P/>
+The  <C>src</C> subdirectory  contains a  copy  of the  original source  of
+&ACE;.  (The  only modification  is  that  a  file <C>Makefile.in</C>  was
+obtained from  the different <C>make.xyz</C> and  will be used  to create a
+<C>Makefile</C>.)  You  can replace  the source by  a newer  version before
+compiling.
+<P/>
+If you encounter problems in installation please read the file <C>README.md</C>.
+</Section>
+<Section Label="Loading the ACE Package">
+<Heading>Loading the ACE Package</Heading>
+To use the &ACE; Package you have  to  request  it  explicitly.
+This is done by calling
+<Example><![CDATA[
+gap> LoadPackage("ace");
+true
+]]></Example>
+<Index>banner!suppression</Index>
+The banner may be suppressed by providing <K>false</K> as second argument
+to the  <C>LoadPackage</C>
+command.    The    <C>LoadPackage</C>    command    is     described     in
+Section&nbsp;<Ref Func="LoadPackage" BookName="ref"/> in the &GAP; Reference Manual.
+<P/>
+If &GAP; cannot find a working binary, the call to <C>LoadPackage</C> will
+fail.
+<P/>
+If you want to load  the  &ACE;  package  by   default,  you  can  put
+the  <C>LoadPackage</C> command into your <C>gaprc</C> (or  <C>.gaprc</C>  file)  (see
+Section&nbsp;<Ref Sect="The gap.ini and gaprc files" BookName="ref"/> in the &GAP; Reference Manual).
+</Section>
+</Chapter>

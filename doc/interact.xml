@@ -1,0 +1,1669 @@
+<!-- W  interact.tex   ACE documentation - interactive fns  Joachim Neub"user / W                                                            Greg Gamble / Y  Copyright (C) 2000  Centre for Discrete Mathematics and Computing / Y                      Department of Information Tech. & Electrical Eng. / Y                      University of Queensland, Australia. -->
+<Chapter Label="Functions for Using ACE Interactively">
+<Heading>Functions for Using ACE Interactively</Heading>
+The user will probably benefit most from interactive use of &ACE;  by
+setting   the   <C>InfoLevel</C>   of   <C>InfoACE</C>    to    at    least    3
+(see&nbsp;<Ref Func="InfoACE"/>),  particularly  if  she  uses  the  <C>messages</C>
+option with a non-zero value.
+<P/>
+Have you read the various options warnings yet? If  not,  please  take
+the time to  read  Section&nbsp;<Ref Sect="General Warnings regarding the Use of Options"/>  which  directs  you  to  various   important   sections   of
+Chapter&nbsp;<Ref Chap="Options for ACE"/>.
+<P/>
+We describe in this chapter the functions that manipulate and initiate
+interactive &ACE; processes.
+<P/>
+An  interactive  &ACE;  process  is  initiated  by   <C>ACEStart</C>   and
+terminated  via  <C>ACEQuit</C>;   these   functions   are   described   in
+Section&nbsp;<Ref Sect="Starting and Stopping Interactive ACE Processes"/>.  <C>ACEStart</C>
+also has forms that manipulate an already started  interactive  &ACE;
+process. <C>ACEStart</C> always  returns  a  positive  integer  <A>i</A>,  which
+identifies the  interactive  &ACE;  process  that  was  initiated  or
+manipulated.
+<P/>
+Most functions (there is one <C>ACEStart</C> exception), that manipulate an
+already started interactive &ACE; process,  have  a  form  where  the
+first  argument  is  the  integer  <A>i</A>  returned  by  the   initiating
+<C>ACEStart</C> command, and a second form with one argument  fewer  (where
+the integer <A>i</A> is  discovered  by  a  default  mechanism,  namely  by
+determining the least integer <A>i</A>  for  which  there  is  a  currently
+active interactive &ACE; process). We will  thus  commonly  say  that
+<Q>for the <A>i</A>th (or default) interactive  ACE  process</Q>  a  certain
+function performs a given action. In each case, it is an error, if <A>i</A>
+is not the index of an active interactive process,  or  there  are  no
+current active interactive processes.
+<P/>
+<E>Notes</E>: 
+The global method of passing options (via <C>PushOptions</C>),  should  not
+be  used  with  any  of  the  interactive  functions.  In  fact,   the
+<C>OptionsStack</C> should be empty at the  time  any  of  the  interactive
+functions is called.
+<P/>
+On <K>quit</K>ting &GAP;, <C>ACEQuitAll();</C> is  executed,  which  terminates
+all active interactive &ACE; processes. If &GAP; is  killed  without
+<K>quit</K>ting, before all interactive &ACE;  processes  are  terminated,
+<E>zombie</E> processes (still living  <E>child</E>  processes  whose  <E>parents</E>
+have died), will result. Since zombie processes do consume  resources,
+in such an event, the responsible computer user should  seek  out  and
+kill the still living <C>ace</C> children (e.g.&nbsp;by piping the output  of  a
+<C>ps</C> with appropriate options, usually <C>aux</C> or <C>ef</C>, to  <C>grep  ace</C>,
+to find the process ids, and then using <C>kill</C>; try <C>man ps</C> and  <C>man
+kill</C> if these hints are unhelpful).
+<Section Label="Starting and Stopping Interactive ACE Processes">
+<Heading>Starting and Stopping Interactive ACE Processes</Heading>
+<ManSection>
+<Func Name="ACEStart" Label="details" Arg="fgens, rels, sgens"/>
+<Func Name="ACEStart" Arg="i"/>
+<Func Name="ACEStart" Label="for [:options]" Arg=""/>
+<Func Name="ACEStart" Label="for i, fgens, rels, sgens [:options]" Arg="i, fgens, rels, sgens"/>
+<Func Name="ACEStart" Label="for 0 [:options]" Arg="0"/>
+<Func Name="ACEStart" Label="for 0, fgens, rels, sgens [:options]" Arg="0, fgens, rels, sgens"/>
+<Func Name="ACEStart" Label="for 0, i [:options]" Arg="0, i"/>
+<Func Name="ACEStart" Label="for 0, i, fgens, rels, sgens [:options]" Arg="0, i, fgens, rels, sgens"/>
+<Description>
+The variables are: <A>i</A>, a  positive  integer  numbering  from  1  that
+represents (indexes) an already running  interactive  &ACE;  process;
+<A>fgens</A>, a list of free generators; <A>rels</A>, a list  of  words  in  the
+generators <A>fgens</A> giving relators for a finitely presented group; and
+<A>sgens</A>, a list of subgroup generators, again expressed  as  words  in
+the free generators <A>fgens</A>. Each of <A>fgens</A>, <A>rels</A> and  <A>sgens</A>  are
+given in the standard &GAP; format for finitely presented groups (See
+Chapter&nbsp;<Ref Chap="Finitely Presented Groups" BookName="ref"/>  of  the  &GAP;   Reference
+Manual).
+<P/>
+All forms of <C>ACEStart</C> accept options described in  Chapters&nbsp;<Ref Chap="Options for ACE"/> and&nbsp;<Ref Chap="Strategy Options for ACE"/>,  and  Appendix&nbsp;<Ref Chap="Other ACE Options"/>, which are listed behind  a  colon  in  the  usual  way  (see
+<Ref Sect="Function Calls" BookName="ref"/> in the &GAP; Reference Manual).  The  reader  is
+strongly   encouraged   to   read   the   introductory   sections   of
+Chapter&nbsp;<Ref Chap="Options for ACE"/>,  with  regard  to  options.  The   global
+mechanism (via <C>PushOptions</C>) of passing options is <E>not</E>  recommended
+for use with the interactive &ACE; interface functions; please ensure
+the <C>OptionsStack</C> is  empty  before  calling  an  interactive  &ACE;
+interface function.
+<P/>
+The  return  value  (for  all  forms  of  <C>ACEStart</C>)  is  an  integer
+(numbering from  1)  which  represents  the  running  process.  It  is
+possible to have more than one interactive process  running  at  once.
+The integer returned may be used to index which of these processes  an
+interactive &ACE; interface function should be applied to.
+<P/>
+The first four forms  of  <C>ACEStart</C>  insert  a  <C>start</C>  (see&nbsp;<Ref Subsect="option begin"/>) directive after the user's options to invoke  an  enumeration.
+The last four forms, with <C>0</C> as  first  argument,  do  not  insert  a
+<C>start</C> directive. Moreover, the last 3 forms of <C>ACEStart</C>, with  <C>0</C>
+as  first  argument  only  differ  from  the  corresponding  forms  of
+<C>ACEStart</C> without the <C>0</C> argument, in that  they  do  not  insert  a
+<C>start</C> directive. <C>ACEStart(0)</C>,  however,  is  special;  unlike  the
+no-argument form of <C>ACEStart</C> it invokes  a  new  interactive  &ACE;
+process. We will now further describe each form of <C>ACEStart</C>, in  the
+order they appear above.
+<P/>
+The first form of <C>ACEStart</C> (on three arguments) is the usual way  to
+start an interactive &ACE; process.
+<P/>
+When <C>ACEStart</C> is called with one positive integer  argument  <A>i</A>  it
+starts a new enumeration on the <A>i</A>th running process, i.e.&nbsp;it  scrubs
+a previously generated table and starts from  scratch  with  the  same
+parameters (i.e.&nbsp;the same arguments and options); except that  if  new
+options are included these will modify  those  given  previously.  The
+only reason for doing such a thing, without new options, is to perhaps
+compare timings of runs (a second run is quicker  because  memory  has
+already been allocated).  If  you  are  interested  in  this  sort  of
+information, however, you may be better off dealing directly with  the
+standalone.
+<P/>
+When <C>ACEStart</C> is  called  with  no  arguments  it  finds  the  least
+positive integer <A>i</A> for which an interactive process is  running  and
+applies <C>ACEStart(<A>i</A>)</C>. (Most users will  only  run  one  interactive
+process at a time. Hence, <C>ACEStart()</C> will be a useful  shortcut  for
+<C>ACEStart(1)</C>.)
+<P/>
+The fourth form  of  <C>ACEStart</C>  on  four  arguments,  invokes  a  new
+enumeration on the <A>i</A>th running process, with new generators <A>fgens</A>,
+relators <A>rels</A> and subgroup generators <A>sgens</A>. This is provided so a
+user can re-use an already running process, rather than  start  a  new
+process. This may be useful when pseudo-ttys are  a  scarce  resource.
+See   the    notes    for    the    non-interactive    <C>ACECosetTable</C>
+(<Ref Func="ACECosetTableFromGensAndRels"/>) which demonstrates an application  of
+a usage of this and the following form of <C>ACEStart</C> in a loop.
+<P/>
+The fifth form of <C>ACEStart</C> (on the one argument: <C>0</C>)  initiates  an
+interactive &ACE; process, processes any user options, but  does  not
+insert a <C>start</C> (see&nbsp;<Ref Subsect="option begin"/>) directive. This form  is  mainly
+for gurus who are familiar with the &ACE; standalone and who wish, at
+least initially,  to  communicate  with  &ACE;  using  the  primitive
+read/write tools of  Section&nbsp;<Ref Sect="Primitive ACE Read/Write Functions"/>.  In
+this  case,  after  the  group  generators,  relators,  and   subgroup
+generators have been set in the &ACE; process, invocations of any  of
+<C>ACEGroupGenerators</C>     (see&nbsp;<Ref Func="ACEGroupGenerators"/>),     <C>ACERelators</C>
+(see&nbsp;<Ref Func="ACERelators"/>),                           <C>ACESubgroupGenerators</C>
+(see&nbsp;<Ref Func="ACESubgroupGenerators"/>),           or            <C>ACEParameters</C>
+(see&nbsp;<Ref Func="ACEParameters"/>) will establish the corresponding &GAP;  values.
+Be warned, though, that unless one of the general  &ACE;  modes  (see
+Section&nbsp;<Ref Sect="General ACE Modes"/>): <C>ACEStart</C> (without  a  zero  argument),
+<C>ACERedo</C> (see&nbsp;<Ref Func="ACERedo"/>) or <C>ACEContinue</C> (see&nbsp;<Ref Func="ACEContinue"/>), or one
+of the mode options: <C>start</C> (see&nbsp;<Ref Subsect="option begin"/>), <C>redo</C> (see&nbsp;<Ref Subsect="option check"/>) or <C>continu</C> (see&nbsp;<Ref Subsect="option continu"/>), has been invoked since the
+last change of any parameter options (see&nbsp;<Ref Func="ACEParameterOptions"/>), some
+of the values reported by <C>ACEParameters</C> may well be <E>incorrect</E>.
+<P/>
+The sixth form of <C>ACEStart</C> (on four arguments), is  like  the  first
+form of <C>ACEStart</C> (on three  arguments),  except  that  it  does  not
+insert a <C>start</C>  (see&nbsp;<Ref Subsect="option begin"/>)  directive.  It  initiates  an
+interactive &ACE; process, with a presentation defined by its last  3
+arguments.
+<P/>
+The seventh form of <C>ACEStart</C> (on two arguments), is like the  second
+form of <C>ACEStart</C> (on one argument), except that it does not insert a
+<C>start</C> (see&nbsp;<Ref Subsect="option begin"/>) directive. It processes any  new  options
+for  the  <A>i</A>th  interactive  &ACE;  process.  <C>ACEStart(0,  <A>i</A>   [:
+<A>options</A> ] )</C>, is similar to <C>SetACEOptions(<A>i</A>  [:  <A>options</A>  ]  )</C>
+(see&nbsp;<Ref Func="SetACEOptions"/>), but unlike the latter does not invoke a general
+mode (see Section&nbsp;<Ref Sect="General ACE Modes"/>).
+<P/>
+The last form of <C>ACEStart</C> (on five arguments), is  like  the  fourth
+form of <C>ACEStart</C> (on four arguments), except that it does not insert
+a <C>start</C> (see&nbsp;<Ref Subsect="option begin"/>)  directive.  It  re-uses  an  existing
+interactive &ACE; process, with a new presentation. There is no  form
+of <C>ACEStart</C> with the same functionality as this form, where the  <A>i</A>
+argument is omitted.
+<P/>
+<E>Note:</E>
+When an interactive  &ACE;  process  is  initiated  by  <C>ACEStart</C>  a
+process number <A>i</A> is assigned to it (the integer <A>i</A> returned by  the
+<C>ACEStart</C> command), an &ACE; (binary) process (in the UNIX sense) is
+started up, a &GAP; iostream is  assigned  to  communicate  with  the
+&ACE;  (binary)  process,  and  the   essential   <Q>defining</Q>   data
+associated  with  the  interactive  &ACE;   process   is   saved   in
+<C>ACEData.io[<A>i</A>]</C> (see&nbsp;<Ref Func="ACEData"/> for precisely what is saved).
+</Description>
+</ManSection>
+<ManSection>
+<Func Name="ACEQuit" Label="details" Arg="i"/>
+<Func Name="ACEQuit" Arg=""/>
+<Description>
+terminate an interactive &ACE; process,  where  <A>i</A>  is  the  integer
+returned by <C>ACEStart</C> when the process was  started.  If  the  second
+form is used (i.e.&nbsp;without arguments) then the interactive process  of
+least index that is still running is terminated.
+<P/>
+<E>Note:</E>
+<C>ACEQuit(<A>i</A>)</C> terminates the &ACE; (binary) process  of  interactive
+&ACE; process <A>i</A>, and closes its &GAP; iostream,  and  unbinds  the
+record <C>ACEData.io[<A>i</A>]</C> (see&nbsp;<Ref Func="ACEStart"/> note).
+<P/>
+It can happen that the &ACE; (binary) process, and hence  the  &GAP;
+iostream assigned to communicate with it, can die,  e.g.&nbsp;by  the  user
+typing a <C>Ctrl-C</C> while the &ACE; (binary) process is  engaged  in  a
+long  calculation.  <C>IsACEProcessAlive</C>  (see&nbsp;<Ref Func="IsACEProcessAlive"/>)  is
+provided to check the status of the &GAP;  iostream  (and  hence  the
+status of the &ACE; (binary) process it was communicating  with);  in
+the   case   that   it   is   indeed    dead,    <C>ACEResurrectProcess</C>
+(see&nbsp;<Ref Func="ACEResurrectProcess"/>) may be used to start a new &ACE; (binary)
+process and assign a new &GAP; iostream to communicate  with  it,  by
+using the <Q>defining</Q> data of the interactive &ACE; process saved in
+<C>ACEData.io[<A>i</A>]</C>.
+</Description>
+</ManSection>
+<ManSection>
+<Func Name="ACEQuitAll" Arg=""/>
+<Description>
+is provided as a convenience,  to  terminate  all  active  interactive
+&ACE; processes with a single command. It is equivalent to  executing
+<C>ACEQuit(<A>i</A>)</C>  for  all  active  interactive  &ACE;  processes   <A>i</A>
+(see&nbsp;<Ref Func="ACEQuit"/>).
+</Description>
+</ManSection>
+</Section>
+<Section Label="General ACE Modes">
+<Heading>General ACE Modes</Heading>
+For our purposes, we define an interactive &ACE; interface command to
+be  an  &ACE;  mode,  if  it  delivers  an  enumeration  result  (see
+Section&nbsp;<Ref Sect="Results Messages"/>). Thus, <C>ACEStart</C> (see&nbsp;<Ref Func="ACEStart"/>), except
+when called with the  argument  0,  and  the  commands  <C>ACERedo</C>  and
+<C>ACEContinue</C> which we describe below are &ACE; modes; we call  these
+<E>general &ACE; modes</E>. Additionally, there  are  two  other  commands
+which   deliver   enumeration   results:    <C>ACEAllEquivPresentations</C>
+(see&nbsp;<Ref Func="ACEAllEquivPresentations"/>)   and   <C>ACERandomEquivPresentations</C>
+(see&nbsp;<Ref Func="ACERandomEquivPresentations"/>); we call these <Q>experimentation</Q>
+&ACE; modes and describe them in Section&nbsp;<Ref Sect="Experimentation ACE Modes"/>.
+<P/>
+<E>Guru Note:</E>
+The &ACE; standalone uses the term <C>mode</C>  in  a  slightly  different
+sense. There, the commands: <C>start</C>, <C>redo</C>  or  <K>continue</K>,  put  the
+&ACE; enumerator in <C>start mode</C>, <C>redo mode</C> or <C>continue mode</C>.  In
+this manual, we have used the term to mean  the  command  itself,  and
+generalised it  to  include  any  command  that  produces  enumeration
+results.
+<P/>
+After changing any of  &ACE;'s  parameters,  one  of  three  <E>general
+modes</E> is possible: one may be able to <Q>continue</Q> via  <C>ACEContinue</C>
+(see&nbsp;<Ref Func="ACEContinue"/>), or <Q>redo</Q> via <C>ACERedo</C> (see&nbsp;<Ref Func="ACERedo"/>), or  if
+neither of  these  is  possible  one  may  have  to  re-<Q>start</Q>  the
+enumeration   via   <C>ACEStart</C>   (see&nbsp;<Ref Func="ACEStart"/>).   Generally,    the
+appropriate mode is invoked automatically when options are changed; so
+most users should be able to ignore the following three functions.
+<ManSection>
+<Func Name="ACEModes" Arg="[i]"/>
+<Description>
+for the <A>i</A>th (or default) interactive &ACE; process, return a record
+whose fields are the modes <C>ACEStart</C>,  <C>ACEContinue</C>  and  <C>ACERedo</C>,
+and whose values are <K>true</K> if the mode is possible  for  the  process
+and <K>false</K> otherwise.
+</Description>
+</ManSection>
+<ManSection>
+<Func Name="ACEContinue" Arg="i"/>
+<Func Name="ACEContinue" Label="for [:options]" Arg=""/>
+<Description>
+for the <A>i</A>th (or  default)  interactive  &ACE;  process,  apply  any
+<A>options</A> and then <Q>continue</Q> the current enumeration, building upon
+the existing table. If a previous  run  stopped  without  producing  a
+finite index you can, in principle, change  any  of  the  options  and
+continue on. Of course, if you make any changes which  invalidate  the
+current table, you won't be allowed to <C>ACEContinue</C> and an error will
+be raised. However, after <K>quit</K>ting the <K>break</K>-loop, the interactive
+&ACE; process should normally still be active; after  doing  so,  run
+<C>ACEModes</C> (see&nbsp;<Ref Func="ACEModes"/>) to see which of <C>ACERedo</C> or <C>ACEStart</C> is
+possible.
+</Description>
+</ManSection>
+<ManSection>
+<Func Name="ACERedo" Arg="i"/>
+<Func Name="ACERedo" Label="for [:options]" Arg=""/>
+<Description>
+for the <A>i</A>th (or  default)  interactive  &ACE;  process,  apply  any
+<A>options</A> and then <Q>redo</Q>  the  current  enumeration  from  coset  1
+(i.e., the subgroup), keeping any existing information in the table.
+<P/>
+<E>Notes:</E>
+The  difference  between  <C>ACEContinue</C>  and  <C>ACERedo</C>  is   somewhat
+technical, and the user should regard it as a mode that  is  a  little
+more  expensive  than  <C>ACEContinue</C>  but  cheaper  than   <C>ACEStart</C>.
+<C>ACERedo</C> is really intended for the case  where  additional  relators
+and/or subgroup generators have been introduced;  the  current  table,
+which may be incomplete or exhibit a finite index, is still <Q>valid</Q>.
+However, the new data may allow the enumeration to complete, or  cause
+a collapse to a smaller index. In some cases,  <C>ACERedo</C>  may  not  be
+possible and an error  will  be  raised;  in  this  case,  <K>quit</K>  the
+<K>break</K>-loop, and try <C>ACEStart</C>, which will discard the current table
+and re-<Q>start</Q> the enumeration.
+</Description>
+</ManSection>
+</Section>
+<Section Label="Interactive ACE Process Utility Functions and Interruption of an Interactive ACE Process">
+<Heading>Interactive ACE Process Utility Functions and Interruption of an Interactive ACE Process</Heading>
+<ManSection>
+<Func Name="ACEProcessIndex" Arg="[i]"/>
+<Description>
+With argument <A>i</A>, which must be a positive integer, <C>ACEProcessIndex</C>
+returns <A>i</A> if it corresponds to an  active  interactive  process,  or
+raises an error. With no  arguments  it  returns  the  default  active
+interactive process or returns <K>fail</K> and emits a warning  message  to
+<C>Info</C> at <C>InfoACE</C> or <C>InfoWarning</C> level 1.
+<P/>
+<E>Note:</E>
+Essentially, an  interactive  &ACE;  process  <A>i</A>  is  <Q>active</Q>  if
+<C>ACEData.io[<A>i</A>]</C> is bound (i.e.&nbsp;we still have some  data  telling  us
+about it). Also see&nbsp;<Ref Func="ACEStart"/> note.
+</Description>
+</ManSection>
+<ManSection>
+<Func Name="ACEProcessIndices" Arg=""/>
+<Description>
+returns the list of integer indices of all active  interactive  &ACE;
+processes (see&nbsp;<Ref Func="ACEProcessIndex"/> for the meaning of <Q>active</Q>).
+</Description>
+</ManSection>
+<ManSection>
+<Func Name="IsACEProcessAlive" Arg="[i]"/>
+<Description>
+return <K>true</K> if  the  &GAP;  iostream  of  the  <A>i</A>th  (or  default)
+interactive &ACE; process started by <C>ACEStart</C>  is  alive  (i.e.&nbsp;can
+still  be  written  to),  or  <K>false</K>,  otherwise.  (See   the   notes
+for&nbsp;<Ref Func="ACEStart"/> and&nbsp;<Ref Func="ACEQuit"/>.)
+<P/>
+<Index>interruption of an interactive ACE process</Index>
+<Index><K>break</K>-loop</Index>
+If the user does not yet have a <C>gap&gt;</C> prompt then usually  &ACE;  is
+still away doing something and an &ACE; interface function  is  still
+waiting for a reply from &ACE;. Typing a <C>Ctrl-C</C> (i.e.&nbsp;holding  down
+the <C>Ctrl</C> key and typing <C>c</C>) will stop the waiting and  send  &GAP;
+into a <K>break</K>-loop, from which one has no option but to <C>quit;</C>.  The
+typing of <C>Ctrl-C</C>, in such a circumstance, usually causes the  stream
+of the interactive &ACE; process to die; to  check  this  we  provide
+<C>IsACEProcessAlive</C> (see&nbsp;<Ref Func="IsACEProcessAlive"/>). If  the  stream  of  an
+interactive &ACE; process, indexed by <A>i</A>,  say,  has  died,  it  may
+still be possible to recover enough of the state, before the death  of
+the stream, from  the  information  stored  in  the  <C>ACEData.io[<A>i</A>]</C>
+record (see Section&nbsp;<Ref Sect="The ACEData Record"/>). For such a purpose, we have
+provided <C>ACEResurrectProcess</C> (see&nbsp;<Ref Func="ACEResurrectProcess"/>).
+<P/>
+The &GAP; iostream of an interactive &ACE; process will also die  if
+the &ACE; binary has a segmentation fault. We do hope that this never
+happens to you, but if it does and the failure is  reproducible,  then
+it's a bug and we'd like to know about it. Please read the file <C>README.md</C>
+that comes with the &ACE; package to find out what to  include  in  a
+bug report and who to email it to.
+</Description>
+</ManSection>
+<ManSection>
+<Func Name="ACEResurrectProcess" Arg="i"/>
+<Func Name="ACEResurrectProcess" Label="for [: options]" Arg=""/>
+<Description>
+re-generate the &GAP; iostream of the <A>i</A>th (or default)  interactive
+&ACE; process started by <C>ACEStart</C> (see&nbsp;<Ref Func="ACEStart"/>, the final  note,
+in particular), and try to recover as much as possible of the previous
+state from saved values  of  the  process's  arguments  and  parameter
+options. The possible <A>options</A> here are <C>use</C> and <C>useboth</C> which are
+described in detail below.
+<P/>
+The arguments of the <A>i</A>th interactive &ACE; process  are  stored  in
+<C>ACEData.io[<A>i</A>].args</C>, a  record  with  fields  <C>fgens</C>,  <C>rels</C>  and
+<C>sgens</C>, which are the &GAP; group generators, relators and  subgroup
+generators, respectively (see Section&nbsp;<Ref Sect="The ACEData Record"/>).  Option
+information is saved in <C>ACEData.io[<A>i</A>].options</C> when a user uses  an
+interactive  &ACE;  interface   function   with   options   or   uses
+<C>SetACEOptions</C> (see&nbsp;<Ref Func="SetACEOptions"/>). Parameter option information is
+saved in <C>ACEData.io[<A>i</A>].parameters</C> if <C>ACEParameters</C> (see&nbsp;<Ref Func="ACEParameters"/>)
+is used to extract from  &ACE;  the  current  values  of  the  &ACE;
+parameter options (this is generally less reliable unless one  of  the
+general &ACE; modes (see Section&nbsp;<Ref Sect="General ACE Modes"/>), has  been  run
+previously).
+<P/>
+By   default,   <C>ACEResurrectProcess</C>   recovers   parameter    option
+information from <C>ACEData.io[<A>i</A>].options</C> if it  is  bound,  or  from
+<C>ACEData.io[<A>i</A>].parameters</C>  if   it   is   bound,   otherwise.   The
+<C>ACEData.io[<A>i</A>].options</C>  record,  however,  is  first  filtered  for
+parameter and  strategy  options  (see  Sections&nbsp;<Ref Func="ACEParameterOptions"/>
+and&nbsp;<Ref Sect="The ACEStrategyOptions List"/>) and the <C>echo</C> option  (see&nbsp;<Ref Subsect="option echo"/>). To alter this behaviour, the user is provided two options:
+<List>
+<Mark><C>use := <A>useList</A></C></Mark>
+<Item><A>useList</A>  may   contain   one  or  both   of
+<C>"options"</C>  and  <C>"parameters"</C>.  By  default,  <C>use  =   ["options",
+"parameters"]</C>.</Item>
+<Mark><C>useboth</C></Mark>
+<Item>(A boolean option). By default, <C>useboth = false</C>.</Item>
+</List>
+If <C>useboth = true</C>, <C>SetACEOptions</C> (see&nbsp;<Ref Func="SetACEOptions"/>) is  applied
+to    the    <A>i</A>th    interactive    &ACE;    process    with    each
+<C>ACEData.io[<A>i</A>].(<A>field</A>)</C>   for   each   <A>field</A>   (<C>"options"</C>   or
+<C>"parameters"</C>) that is bound and in <A>useList</A>, in the  order  implied
+by <A>useList</A>. If <C>useboth = false</C>, <C>SetACEOptions</C>  is  applied  with
+<C>ACEData.io[<A>i</A>].(<A>field</A>)</C> for only the first <A>field</A> that  is  bound
+in <A>useList</A>. The current value of the <C>echo</C> option is also preserved
+(no matter what values the user chooses for the  <C>use</C>  and  <C>useboth</C>
+options).
+<P/>
+<E>Notes:</E>
+Do not use general &ACE;  options  with  <C>ACEResurrectProcess</C>;  they
+will  only   be   superseded   by   those   options   recovered   from
+<C>ACEData.io[<A>i</A>].options</C>     and/or     <C>ACEData.io[<A>i</A>].parameters</C>.
+Instead, call <C>SetACEOptions</C> first (or afterwards). When called prior
+to <C>ACEResurrectProcess</C>, <C>SetACEOptions</C> will emit a warning that the
+stream is dead; despite this, the <C>ACEData.io[<A>i</A>].options</C> <E>will</E>  be
+updated.
+<P/>
+<C>ACEResurrectProcess</C>  does  <E>not</E>  invoke   an   &ACE;   mode   (see
+Section&nbsp;<Ref Sect="General ACE Modes"/>).  This  leaves  the  user  free  to  use
+<C>SetACEOptions</C> (which does invoke an &ACE; mode) to  further  modify
+options afterwards.
+</Description>
+</ManSection>
+<ManSection>
+<Func Name="ToACEGroupGenerators" Arg="fgens"/>
+<Description>
+This function produces, from a  &GAP;  list  <A>fgens</A>  of  free  group
+generators, the  &ACE;  directive  string  required  by  the  <C>group</C>
+(see&nbsp;<Ref Subsect="option group"/>) option. (The <C>group</C> option may be used to define
+the equivalent of <A>fgens</A> in an &ACE; process.)
+</Description>
+</ManSection>
+<ManSection>
+<Func Name="ToACEWords" Arg="fgens, words"/>
+<Description>
+This function produces, from a  &GAP;  list  <A>words</A>  in  free  group
+generators <A>fgens</A>, a string  that  represents  those  <A>words</A>  as  an
+&ACE; list of words. <C>ToACEWords</C> may be  used  to  provide  suitable
+values   for   the   options   <C>relators</C>   (see&nbsp;<Ref Subsect="option relators"/>),
+<C>generators</C> (see&nbsp;<Ref Subsect="option generators"/>), <C>sg</C>  (see&nbsp;<Ref Subsect="option sg"/>),  and
+<C>rl</C> (see&nbsp;<Ref Subsect="option rl"/>).
+</Description>
+</ManSection>
+</Section>
+<Section Label="Experimentation ACE Modes">
+<Heading>Experimentation ACE Modes</Heading>
+Now we describe the two <E>experimentation modes</E>. The term  <E>mode</E>  was
+defined in Section&nbsp;<Ref Sect="General ACE Modes"/>.
+<ManSection>
+<Func Name="ACEAllEquivPresentations" Arg="[i], val"/>
+<Description>
+for the <A>i</A>th (or default) interactive &ACE; process,  generates  and
+tests an enumeration for combinations  of  relator  ordering,  relator
+rotations, and relator inversions; <A>val</A> is in the integer range 1  to
+7.
+<P/>
+The argument <A>val</A> is considered as a binary number.  Its  three  bits
+are treated as flags, and control relator rotations (the  <M>2^0</M>  bit),
+relator inversions (the <M>2^1</M> bit) and relator  orderings  (the  <M>2^2</M>
+bit),  respectively;  where  <M>1</M>  means  <Q>active</Q>  and   <M>0</M>   means
+<Q>inactive</Q>. (See below for an example).
+<P/>
+Before we describe the &GAP; output of <C>ACEAllEquivPresentations</C> let
+us spend some time considering what happens before the  &ACE;  binary
+output is parsed.
+<P/>
+The <C>ACEAllEquivPresentations</C>  command  first  performs  a  <Q>priming
+run</Q> using the options as they stand. In particular, the  <C>asis</C>  and
+<C>messages</C> options are honoured.
+<P/>
+It  then  turns  <C>asis</C>  (see&nbsp;<Ref Subsect="option asis"/>)   on   and   <C>messages</C>
+(see&nbsp;<Ref Subsect="option messages"/>) off (i.e.&nbsp;sets <C>messages</C> to 0), and generates
+and tests the requested  equivalent  presentations.  The  maximum  and
+minimum values attained by <C>m</C> (the maximum number  of  coset  numbers
+defined at any stage) and <C>t</C>  (the  total  number  of  coset  numbers
+defined) are tracked, and each time the  statistics  are  better  than
+what we've already seen, the &ACE; binary emits a summary result line
+for the relators used. See  Appendix&nbsp;<Ref Chap="The Meanings of ACE's output messages"/> for a discussion of the statistics <C>m</C> and <C>t</C>.  To  observe
+these messages set  the  <C>InfoLevel</C>  of  <C>InfoACE</C>  to  3;  and  it's
+<E>recommended</E> that you do this so that you get some idea of  what  the
+&ACE; binary is doing.
+<P/>
+The order in which the  equivalent  presentations  are  generated  and
+tested has no particular significance, but note that the  presentation
+as given <E>after</E> the initial priming run) is the  <E>last</E>  presentation
+to be generated and tested, so that  the  group's  relators  are  left
+<Q>unchanged</Q> by running the <C>ACEAllEquivPresentations</C> command.
+<P/>
+As discussed by Cannon, Dimino, Havas  and  Watson  <Cite Key="CDHW73"/>  and
+Havas and Ramsay <Cite Key="HR01"/> such equivalent presentations  can  yield
+large variations in  the  number  of  coset  numbers  required  in  an
+enumeration. For this command, we are interested in this variation.
+<P/>
+After  the  final  presentation  is  run,   some   additional   status
+information messages are printed to the &ACE; output:
+<List>
+<Item>  the number of runs which yielded a finite index; 
+
+</Item>
+<Item>  the total number of runs (excluding the priming run); and 
+
+</Item>
+<Item>  the range of values observed for <C>m</C> and <C>t</C>.</Item>
+</List>
+As an example (drawn from the discussion in <Cite Key="HR99ace"/>) consider the
+enumeration   of   the   <M>448</M>   coset   numbers   of   the   subgroup
+<M>\langle  a^2,a^{-1}b \rangle</M> of the group
+<Display>
+(8,7 \mid 2,3) 
+    = \langle a,b \mid a^8 = b^7 = (ab)^2 = (a^{-1}b)^3 = 1 \rangle.
+</Display>
+There are <M>4!=24</M>  relator  orderings  and  <M>2^4=16</M>  combinations  of
+relator or inverted relator. Exponents are  taken  into  account  when
+rotating relators, so the relators given give rise to 1, 1,  2  and  2
+rotations respectively, for a total of <M>1.1.2.2=4</M>  combinations.  So,
+for  <A>val</A><M>{} = 7</M>   (resp.&nbsp;<M>3</M>),   <M>24.16.4=1536</M>   (resp.&nbsp;<M>16.4=64</M>)
+equivalent presentations are tested.
+<P/>
+Now we describe the output  of  <C>ACEAllEquivPresentations</C>;  it  is  a
+record with fields:
+<List>
+<Mark><C>primingResult</C></Mark>
+<Item>the  &ACE;  enumeration  result  message  (see
+Section&nbsp;<Ref Sect="Results Messages"/>) of the priming run;</Item>
+<Mark><C>primingStats</C></Mark>
+<Item>the enumeration result of the priming run  as  a
+&GAP;  record  with  fields   <C>index</C>,   <C>cputime</C>,   <C>cputimeUnits</C>,
+<C>activecosets</C>, <C>maxcosets</C> and <C>totcosets</C>, exactly as for the record
+returned by <C>ACEStats</C> (see&nbsp;<Ref Func="ACEStats"/>);</Item>
+<Mark><C>equivRuns</C></Mark>
+<Item>a list of data records, one for each  progressively
+<Q>best</Q> run, where each record has fields:</Item>
+<Mark><C>rels</C></Mark>
+<Item>the relators in the order used for the run,</Item>
+<Mark><C>enumResult</C></Mark>
+<Item>the  &ACE;  enumeration  result   message   (see
+Section&nbsp;<Ref Sect="Results Messages"/>) of the run, and</Item>
+<Mark><C>stats</C></Mark>
+<Item>the enumeration result as a &GAP; record exactly  like
+the record returned by <C>ACEStats</C> (see&nbsp;<Ref Func="ACEStats"/>);</Item>
+<Mark><C>summary</C></Mark>
+<Item>a record with fields:</Item>
+<Mark><C>successes</C></Mark>
+<Item>the total number of successful (i.e.&nbsp;having  finite
+enumeration index) runs,</Item>
+<Mark><C>runs</C></Mark>
+<Item>the  total  number  of  equivalent  presentation   runs
+executed,</Item>
+<Mark><C>maxcosetsRange</C></Mark>
+<Item>the range of values as a  &GAP;  list  inside
+which each <C>equivRuns[<A>i</A>].maxcosets</C> lies, and</Item>
+<Mark><C>totcosetsRange</C></Mark>
+<Item>the range of values as a  &GAP;  list  inside
+which each <C>equivRuns[<A>i</A>].totcosets</C> lies.</Item>
+</List>
+<E>Notes:</E>
+In general, the length of the <C>equivRuns</C> field list will be less than
+the number of runs executed.
+<P/>
+There is no way to stop the <C>ACEAllEquivPresentations</C> command  before
+it has completed, other than killing the task. So do a  reality  check
+beforehand on the size of the search  space  and  the  time  for  each
+enumeration. If you are interested in finding a <Q>good</Q>  enumeration,
+it can be very helpful, in terms of running time, to put a tight limit
+on the number of coset numbers via the <C>max</C> option. You may also have
+to set <C>compaction</C>  =  <M>100</M>  to  prevent  time-wasting  attempts  to
+recover space via compaction. This maximises throughput by causing the
+<Q>bad</Q> enumerations, which are in the majority, to  overflow  quickly
+and abort. If you wish to explore a very large search-space,  consider
+firing up many copies of &ACE;, and starting each with  a  <Q>random</Q>
+equivalent   presentation.   Alternatively,   you   could   use    the
+<C>ACERandomEquivPresentations</C> command.
+</Description>
+</ManSection>
+<ManSection>
+<Func Name="ACERandomEquivPresentations" Arg="i, val"/>
+<Func Name="ACERandomEquivPresentations" Label="for val" Arg="val"/>
+<Func Name="ACERandomEquivPresentations" Label="for i, [val]" Arg="i, [val]"/>
+<Func Name="ACERandomEquivPresentations" Label="for [val]" Arg="[val]"/>
+<Func Name="ACERandomEquivPresentations" Label="for i, [val, Npresentations]" Arg="i, [val, Npresentations]"/>
+<Func Name="ACERandomEquivPresentations" Label="for [val, Npresentations]" Arg="[val, Npresentations]"/>
+<Description>
+for the <A>i</A>th (or default) interactive &ACE; process,  generates  and
+tests up to <A>Npresentations</A> (or 8,  in  the  first  4  forms)  random
+presentations; <A>val</A>, an integer in the range 1  to  7,  acts  as  for
+<C>ACEAllEquivPresentations</C> and <A>Npresentations</A>, when given, should be
+a positive integer.
+<P/>
+The routine first turns <C>asis</C> (see&nbsp;<Ref Subsect="option asis"/>) on  and  <C>messages</C>
+(see&nbsp;<Ref Subsect="option messages"/>) off (i.e.&nbsp;sets  <C>messages</C>  to  0),  and  then
+generates  and  tests  the  requested  number  of  random   equivalent
+presentations. For  each  presentation,  the  relators  used  and  the
+summary result line are printed by &ACE;. To observe  these  messages
+set the <C>InfoLevel</C> of <C>InfoACE</C> to at least 3.
+<P/>
+<C>ACERandomEquivPresentations</C> parses the &ACE; messages,  translating
+them to &GAP;, and thus returns a list of  records  (similar  to  the
+field     <C>equivRuns</C>     of     the      returned      record      of
+<C>ACEAllEquivPresentations</C>). Each record of the returned list  is  the
+data derived from a presentation run and has fields:
+<List>
+<Mark><C>rels</C></Mark>
+<Item>the relators in the order used for the run,</Item>
+<Mark><C>enumResult</C></Mark>
+<Item>the  &ACE;  enumeration   result   message   (see
+Section&nbsp;<Ref Sect="Results Messages"/>) of the run, and</Item>
+<Mark><C>stats</C></Mark>
+<Item>the enumeration result as a &GAP; record  exactly  like
+the record returned by <C>ACEStats</C> (see&nbsp;<Ref Func="ACEStats"/>).</Item>
+</List>
+<E>Notes:</E>
+The relator inversions and rotations  are  <Q>genuinely</Q>  random.  The
+relator permuting is a little bit of a kludge, with the <Q>quality</Q> of
+the permutations tending to  improve  with  successive  presentations.
+When  the   <C>ACERandomEquivPresentations</C>   command   completes,   the
+presentation active is the <E>last</E> one generated.
+<P/>
+<E>Guru Notes:</E>
+It might appear that neglecting to restore the  original  presentation
+is an error. In fact, it is a useful feature! Suppose that  the  space
+of equivalent presentations is too  large  to  exhaustively  test.  As
+noted in the entry for <C>ACEAllEquivPresentations</C>,  we  can  start  up
+multiple copies of <C>ACEAllEquivPresentations</C> at random points in  the
+search-space. Manually generating <C>random</C> equivalent presentations to
+serve   as   starting-points   is   tedious   and   error-prone.   The
+<C>ACERandomEquivPresentations</C>  command  provides  a  simple  solution;
+simply    run    <C>ACERandomEquivPresentations(<A>i</A>,     7);</C>     before
+<C>ACEAllEquivPresentations(<A>i</A>, 7);</C>.
+</Description>
+</ManSection>
+</Section>
+<Section Label="Interactive Query Functions and an Option Setting Function">
+<Heading>Interactive Query Functions and an Option Setting Function</Heading>
+<ManSection>
+<Func Name="ACEGroupGenerators" Arg="[i]"/>
+<Description>
+return  the  &GAP;  group  generators  of  the  <A>i</A>th  (or   default)
+interactive &ACE; process. If no generators have been saved  for  the
+interactive &ACE; process, possibly because the process  was  started
+via   <C>ACEStart(0);</C>   (see&nbsp;<Ref Func="ACEStart"/>),   the   &ACE;   process   is
+interrogated, and the equivalent in  &GAP;  is  saved  and  returned.
+Essentially,   <C>ACEGroupGenerators(<A>i</A>)</C>   interrogates   &ACE;   and
+establishes <C>ACEData.io[<A>i</A>].args.fgens</C>, if  necessary,  and  returns
+<C>ACEData.io[<A>i</A>].args.fgens</C>.  As  a  side-effect,  if  any   of   the
+remaining       fields       of       <C>ACEData.io[<A>i</A>].args</C>        or
+<C>ACEData.io[<A>i</A>].acegens</C> are unset, they  are  also  set.  Note  that
+&GAP; provides  <C>GroupWithGenerators</C>  (see&nbsp;<Ref Func="GroupWithGenerators" BookName="ref"/>
+in the &GAP; Reference Manual) to establish a free group on  a  given
+set of already-defined generators.
+</Description>
+</ManSection>
+<ManSection>
+<Func Name="ACERelators" Arg="[i]"/>
+<Description>
+return the &GAP; relators  of  the  <A>i</A>th  (or  default)  interactive
+&ACE; process. If no relators have been  saved  for  the  interactive
+&ACE;  process,  possibly  because  the  process  was   started   via
+<C>ACEStart(0);</C> (see&nbsp;<Ref Func="ACEStart"/>), the &ACE; process  is  interrogated,
+the  equivalent  in  &GAP;  is  saved  and   returned.   Essentially,
+<C>ACERelators(<A>i</A>)</C>     interrogates     &ACE;     and     establishes
+<C>ACEData.io[<A>i</A>].args.rels</C>,     if     necessary,     and     returns
+<C>ACEData.io[<A>i</A>].args.rels</C>. As a side-effect, if any of the remaining
+fields  of  <C>ACEData.io[<A>i</A>].args</C>  or  <C>ACEData.io[<A>i</A>].acegens</C>  are
+unset, they are also set.
+</Description>
+</ManSection>
+<ManSection>
+<Func Name="ACESubgroupGenerators" Arg="[i]"/>
+<Description>
+return the &GAP;  subgroup  generators  of  the  <A>i</A>th  (or  default)
+interactive &ACE; process. If no subgroup generators have been  saved
+for the interactive &ACE; process, possibly because the  process  was
+started via <C>ACEStart(0);</C> (see&nbsp;<Ref Func="ACEStart"/>),  the  &ACE;  process  is
+interrogated,  the  equivalent  in  &GAP;  is  saved  and   returned.
+Essentially,  <C>ACESubgroupGenerators(<A>i</A>)</C>  interrogates  &ACE;   and
+establishes <C>ACEData.io[<A>i</A>].args.sgens</C>, if  necessary,  and  returns
+<C>ACEData.io[<A>i</A>].args.sgens</C>.  As  a  side-effect,  if  any   of   the
+remaining       fields       of       <C>ACEData.io[<A>i</A>].args</C>        or
+<C>ACEData.io[<A>i</A>].acegens</C> are unset, they are also set.
+</Description>
+</ManSection>
+<ManSection>
+<Func Name="DisplayACEArgs" Arg="[i]"/>
+<Description>
+display the arguments (i.e.&nbsp;<A>fgens</A>, <A>rels</A> and <A>sgens</A>) of the  <A>i</A>th
+(or   default)   process   started    by    <C>ACEStart</C>.    In    fact,
+<C>DisplayACEArgs(<A>i</A>)</C>   is    just    a    pretty-printer    of    the
+<C>ACEData.io[<A>i</A>].args</C> record. Use <C>GetACEArgs</C>  (see&nbsp;<Ref Func="GetACEOptions"/>)
+in          assignments.          Unlike          <C>ACEGroupGenerators</C>
+(see&nbsp;<Ref Func="ACEGroupGenerators"/>),  <C>ACERelators</C>   (see&nbsp;<Ref Func="ACERelators"/>)   and
+<C>ACESubgroupGenerators</C>                 (see&nbsp;<Ref Func="ACESubgroupGenerators"/>),
+<C>DisplayACEArgs</C> does not have the side-effect of setting any  of  the
+fields of <C>ACEData.io[<A>i</A>].args</C> if they are unset.
+</Description>
+</ManSection>
+<ManSection>
+<Func Name="GetACEArgs" Arg="[i]"/>
+<Description>
+return a record of the current  arguments  (i.e.&nbsp;<A>fgens</A>,  <A>rels</A>  and
+<A>sgens</A>) of the <A>i</A>th (or default) process started by  <C>ACEStart</C>.  In
+fact, <C>GetACEOptions(<A>i</A>)</C> simply returns  the  <C>ACEData.io[<A>i</A>].args</C>
+record,  or  an  empty  record  if  that  record  is  unbound.  Unlike
+<C>ACEGroupGenerators</C>     (see&nbsp;<Ref Func="ACEGroupGenerators"/>),     <C>ACERelators</C>
+(see&nbsp;<Ref Func="ACERelators"/>)            and             <C>ACESubgroupGenerators</C>
+(see&nbsp;<Ref Func="ACESubgroupGenerators"/>),  <C>GetACEOptions</C>  does  not  have   the
+side-effect of setting any of the fields of <C>ACEData.io[<A>i</A>].args</C>  if
+they are unset.
+</Description>
+</ManSection>
+<ManSection>
+<Func Name="DisplayACEOptions" Arg="[i]"/>
+<Description>
+display the options, explicitly set by the user, of the  <A>i</A>th  (or  default)  process  started  by
+<C>ACEStart</C>. In fact, <C>DisplayACEOptions(<A>i</A>)</C> is just a pretty-printer
+of   the   <C>ACEData.io[<A>i</A>].options</C>   record.   Use   <C>GetACEOptions</C>
+(see&nbsp;<Ref Func="GetACEOptions"/>) in assignments. Please note that no-value &ACE;
+options  will   appear   with   the   assigned   value   <K>true</K>   (see
+Section&nbsp;<Ref Sect="Interpretation of ACE Options"/> for how the  &ACE;  interface
+functions interpret such options).
+<P/>
+<E>Notes:</E> 
+Any  options  set  via  <C>ACEWrite</C>  (see&nbsp;<Ref Func="ACEWrite"/>)  will  <E>not</E>   be
+displayed. Also, recall that if &ACE; is not  given  any  options  it
+uses the <C>default</C> strategy  (see  Section&nbsp;<Ref Sect="What happens if no ACE Strategy Option or if no ACE Option is passed"/>).  To  discover  the
+various    settings    of     the     &ACE;     Parameter     Options
+(see&nbsp;<Ref Func="ACEParameterOptions"/>) in  vogue  for  the  &ACE;  process,  use
+<C>ACEParameters</C> (see&nbsp;<Ref Func="ACEParameters"/>).
+</Description>
+</ManSection>
+<ManSection>
+<Func Name="GetACEOptions" Arg="[i]"/>
+<Description>
+return  a  record  of  the  current  options  (those  that  have  been
+explicitly set by the user) of the <A>i</A>th (or default) process  started
+by <C>ACEStart</C>. Please note that no-value &ACE;  options  will  appear
+with the assigned value <K>true</K>  (see  Section&nbsp;<Ref Sect="Interpretation of ACE Options"/>  for  how  the  &ACE;  interface  functions  interpret  such
+options).    The     notes     applying     to     <C>DisplayACEOptions</C>
+(see&nbsp;<Ref Func="DisplayACEOptions"/>) also apply here.
+</Description>
+</ManSection>
+<ManSection>
+<Func Name="SetACEOptions" Arg="i"/>
+<Func Name="SetACEOptions" Label="for [:options]" Arg=""/>
+<Description>
+modify the current options of the <A>i</A>th (or default)  process  started
+by <C>ACEStart</C>. Please ensure that the <C>OptionsStack</C> is  empty  before
+calling <C>SetACEOptions</C>, otherwise the options already present on  the
+<C>OptionsStack</C> will also be <Q>seen</Q>. All interactive &ACE; interface
+functions that accept options, actually call an  internal  version  of
+<C>SetACEOptions</C>;  so,  it  is  generally   important   to   keep   the
+<C>OptionsStack</C> clear while working with &ACE; interactively.
+<P/>
+After setting the options passed, the first  mode  of  the  following:
+<C>ACEContinue</C>  (see&nbsp;<Ref Func="ACEContinue"/>),   <C>ACERedo</C>   (see&nbsp;<Ref Func="ACERedo"/>)   or
+<C>ACEStart</C> (see&nbsp;<Ref Func="ACEStart"/>), that may  be  applied,  is  automatically
+invoked.
+<P/>
+Since  a  user  will   sometimes have options in the form  of a record 
+(e.g.&nbsp;via <C>GetACEOptions</C>),   we    provide  an  alternative  to   the
+behind-the-colon  syntax,  in a  manner .like  <C>PushOptions</C>, for  the
+passing of options via <C>SetACEOptions</C>:
+</Description>
+</ManSection>
+<ManSection>
+<Func Name="SetACEOptions" Label="record version" Arg="[i], optionsRec"/>
+<Description>
+In this form, the record <A>optionsRec</A> is used to  update  the  current
+options of the <A>i</A>th (or default) process started by <C>ACEStart</C>.  Note
+that since <A>optionsRec</A> is a record each field must have  an  assigned
+value; in particular, no-value &ACE; options should be  assigned  the
+value <K>true</K> (see Section&nbsp;<Ref Sect="Interpretation of ACE Options"/>).  Please
+don't mix these two forms of <C>SetACEOptions</C>  with  the  previous  two
+forms; i.e.&nbsp;do <E>not</E> pass both a record argument  and  options,  since
+this will lead to options appearing in the wrong order; if you want to
+do this, make two separate calls to  <C>SetACEOptions</C>,  e.g.&nbsp;let's  say
+you have a process like that started by:
+<Log><![CDATA[
+gap> ACEExample("A5", ACEStart);
+#I  # ACEExample "A5" : enumeration of cosets of H in G,
+#I  # where G = A_5, H = Id,  using default strategy.
+#I  #
+#I  # F, a, b, G are local to ACEExample
+#I  F := FreeGroup("a","b"); a := F.1;  b := F.2;
+#I  G := F / [a^2, b^3, (a*b)^5 ];
+#I  ACEStart(
+#I      # Arguments
+#I      FreeGeneratorsOfFpGroup(G), 
+#I      RelatorsOfFpGroup(G), 
+#I      [] # Generators of identity subgroup (empty list)
+#I      # Options
+#I      : echo, # Echo handled by GAP (not ACE)
+#I        enum := "A_5",  # Give the group G a meaningful name
+#I        subg := "Id");  # Give the subgroup a meaningful name
+ACEStart called with the following arguments:
+ Group generators : [ a, b ]
+ Group relators : [ a^2, b^3, (a*b)^5 ]
+ Subgroup generators : [  ]
+#I  ACE 3.001        Fri Sep 11 19:43:09 2026
+#I  =========================================
+#I  Host information:
+#I    name = Max-M1-Max.local
+ACEStart called with the following options:
+ enum := A_5
+ echo := true (not passed to ACE)
+ subg := Id
+#I  ***
+#I  INDEX = 60 (a=60 r=77 h=1 n=77; l=3 c=0.00; m=66 t=76)
+3
+]]></Log>
+then the following demonstrates both usages of <C>SetACEOptions</C>:
+<Example><![CDATA[
+gap> SetACEOptions( rec(echo := 2) );
+SetACEOptions called with the following options:
+ echo := 2 (not passed to ACE)
+Other options set via ACE defaults:
+ asis := 0
+ compaction := 10
+ ct := 0
+ dmode := 4
+ dsize := 1000
+ enumeration := G
+ fill := 0
+ hole := -1
+ lookahead := 0
+ loop := 0
+ max := 0
+ mendelsohn := 0
+ messages := 0
+ no := -1
+ path := 0
+ pmode := 3
+ psize := 256
+ row := 1
+ rt := 0
+ subgroup := H
+ time := -1
+ workspace := 1000000
+gap> SetACEOptions( : hlt);
+SetACEOptions called with the following options:
+ hlt (no value)
+Other options set via ACE defaults:
+ asis := 0
+ compaction := 10
+ ct := 0
+ dmode := 0
+ dsize := 1000
+ enumeration := G
+ fill := 1
+ hole := -1
+ lookahead := 1
+ loop := 0
+ max := 0
+ mendelsohn := 0
+ messages := 0
+ no := 0
+ path := 0
+ pmode := 0
+ psize := 256
+ row := 1
+ rt := 1000
+ subgroup := H
+ time := -1
+ workspace := 1000000
+#I  start = yes, continue = yes, redo = yes
+#I  ***
+#I  INDEX = 60 (a=60 r=77 h=1 n=77; l=2 c=0.00; m=66 t=76)
+]]></Example>
+Each of the three commands above generates output; for brevity it  has
+not been included.
+<P/>
+<E>Notes:</E>
+<P/>
+<Index><K>break</K>-loop</Index>
+When    <C>ACECosetTableFromGensAndRels</C>    enters    a     <K>break</K>-loop
+(see&nbsp;<Ref Func="ACECosetTable"/>), local versions of the second form  of  each  of
+<C>DisplayACEOptions</C> and <C>SetACEOptions</C> become available. (Even though
+the names are similar and their function is analogous they are in fact
+different functions.)
+</Description>
+</ManSection>
+<ManSection>
+<Func Name="ACEParameters" Arg="[i]"/>
+<Description>
+return a record of the current values of the &ACE; Parameter  Options
+(see&nbsp;<Ref Func="ACEParameterOptions"/>) of the <A>i</A>th (or default) process  started
+by <C>ACEStart</C>, according to &ACE;. Please note that some options  may
+be reported with incorrect values if they have been  changed  recently
+without following up with one of the modes <C>ACEContinue</C>, <C>ACERedo</C> or
+<C>ACEStart</C>. Together the commands <C>ACEGroupGenerators</C>, <C>ACERelators</C>,
+<C>ACESubgroupGenerators</C> and <C>ACEParameters</C> give the equivalent &GAP;
+information that is obtained in &ACE; with  <C>sr  :=  1</C>  (see&nbsp;<Ref Subsect="option sr"/>), which is the <Q>Run Parameters</Q> block obtained in the  messaging
+output (observable when the <C>InfoLevel</C> of  <C>InfoACE</C>  is  set  to  at
+least 3), when <C>messages</C> (see&nbsp;<Ref Subsect="option messages"/>) is  set  a  non-zero
+value.
+<P/>
+<E>Notes:</E>
+One use for this function might be to determine the  options  required
+to replicate a previous run,  but  be  sure  that,  if  this  is  your
+purpose, any recent change in the parameter  option  values  has  been
+followed by an invocation of one of <C>ACEContinue</C> (see&nbsp;<Ref Func="ACEContinue"/>),
+<C>ACERedo</C> (see&nbsp;<Ref Func="ACERedo"/>) or <C>ACEStart</C> (see&nbsp;<Ref Func="ACEStart"/>).
+<P/>
+As a side-effect, for  &ACE;  process  <A>i</A>,  any  of  the  fields  of
+<C>ACEData.io[<A>i</A>].args</C> or <C>ACEData.io[<A>i</A>].acegens</C>  that  are  unset,
+are set.
+</Description>
+</ManSection>
+<ManSection>
+<Func Name="IsCompleteACECosetTable" Arg="[i]"/>
+<Description>
+return, for the <A>i</A>th (or  default)  process  started  by  <C>ACEStart</C>,
+<K>true</K> if  &ACE;'s  current  coset  table  is  complete,  or  <K>false</K>
+otherwise.
+<P/>
+<E>Note:</E>
+The completeness of the coset table of the  <A>i</A>th  interactive  &ACE;
+process      is       determined       by       checking       whether
+<C>ACEData.io[<A>i</A>].stats.index</C> is positive; a value of  zero  indicates
+the   last   enumeration    failed    to    complete.    The    record
+<C>ACEData.io[<A>i</A>].stats</C>  is  what  is  returned   by   <C>ACEStats(<A>i</A>)</C>
+(see&nbsp;<Ref Func="ACEStats"/>).
+</Description>
+</ManSection>
+<ManSection>
+<Func Name="ACEDisplayCosetTable" Arg="i"/>
+<Func Name="ACEDisplayCosetTable" Label="no arguments" Arg=""/>
+<Func Name="ACEDisplayCosetTable" Label="for i, [val]" Arg="i, [val]"/>
+<Func Name="ACEDisplayCosetTable" Label="for [val]" Arg="[val]"/>
+<Func Name="ACEDisplayCosetTable" Label="for i, [val, last]" Arg="i, [val, last]"/>
+<Func Name="ACEDisplayCosetTable" Label="for [val, last]" Arg="[val, last]"/>
+<Func Name="ACEDisplayCosetTable" Label="for i, [val, last, by]" Arg="i, [val, last, by]"/>
+<Func Name="ACEDisplayCosetTable" Label="for [val, last, by]" Arg="[val, last, by]"/>
+<Description>
+compact and display the (possibly incomplete) coset table of the <A>i</A>th
+(or default) process started by <C>ACEStart</C>; <A>val</A> must be an  integer,
+and <A>last</A> and <A>by</A> must be positive integers. In the first two  forms
+of the command, the entire coset table is displayed, without orders or
+coset representatives. In the third and  fourth  forms,  the  absolute
+value of <A>val</A> is taken to be  the  last  line  of  the  table  to  be
+displayed (and 1 is taken to be the first); in  the  fifth  and  sixth
+forms, <C>|<A>val</A>|</C> is taken to be the first line  of  the  table  to  be
+displayed, and <A>last</A> is taken to be the number of the last line to be
+displayed. In the last two forms, the table  is  displayed  from  line
+<C>|<A>val</A>|</C> to line <A>last</A> in steps of <A>by</A>. If <A>val</A> is negative,  then
+the  orders   modulo   the   subgroup   (if   available)   and   coset
+representatives are displayed also.
+<P/>
+<E>Note:</E>
+The coset table displayed will normally only be <C>lenlex</C>  standardised
+if   the   call   to    <C>ACEDisplayCosetTable</C>    is    preceded    by
+<C>ACEStandardCosetNumbering</C>   (see&nbsp;<Ref Func="ACEStandardCosetNumbering"/>).   The
+options <C>lenlex</C> (see&nbsp;<Ref Subsect="option lenlex"/>) and  <C>semilenlex</C>  (see&nbsp;<Ref Subsect="option semilenlex"/>)     are     only     executed     by      <C>ACECosetTable</C>
+(see&nbsp;<Ref Func="ACECosetTable"/>). The &ACE; binary does not provide <C>semilenlex</C>
+standardisation, and hence <C>ACEDisplayCosetTable</C> will never display a
+<C>semilenlex</C> standard coset table.
+</Description>
+</ManSection>
+<ManSection>
+<Func Name="ACECosetRepresentative" Arg="[i], n"/>
+<Description>
+return, for the <A>i</A>th (or default) process started by <C>ACEStart</C>,  the
+coset representative of coset <A>n</A> of the current coset table  held  by
+&ACE;, where <A>n</A> must be a positive integer.
+</Description>
+</ManSection>
+<ManSection>
+<Func Name="ACECosetRepresentatives" Arg="[i]"/>
+<Description>
+return, for the <A>i</A>th (or default) process started by <C>ACEStart</C>,  the
+list of coset representatives of  the  current  coset  table  held  by
+&ACE;.
+</Description>
+</ManSection>
+<ManSection>
+<Func Name="ACETransversal" Arg="[i]"/>
+<Description>
+return, for the <A>i</A>th (or default) process started by <C>ACEStart</C>,  the
+list of coset representatives of  the  current  coset  table  held  by
+&ACE;, if the  current  table  is  complete,  and  <K>fail</K>  otherwise.
+Essentially, <C>ACETransversal(<A>i</A>) = ACECosetRepresentatives(<A>i</A>)</C>  for
+a complete table.
+</Description>
+</ManSection>
+<ManSection>
+<Func Name="ACECycles" Arg="[i]"/>
+<Func Name="ACEPermutationRepresentation" Arg="[i]"/>
+<Description>
+return, for the <A>i</A>th (or default) process started  by  <C>ACEStart</C>,  a
+list of permutations corresponding to the group generators, (i.e., the
+permutation representation), if the current coset table held by &ACE;
+is complete or <K>fail</K>, otherwise. In the event of failure a message is
+emitted to <C>Info</C> at <C>InfoACE</C> or <C>InfoWarning</C> level 1.
+</Description>
+</ManSection>
+<ManSection>
+<Func Name="ACETraceWord" Arg="[i], n, word"/>
+<Description>
+for the <A>i</A>th (or  default)  interactive  &ACE;  process  started  by
+<C>ACEStart</C>, trace <A>word</A> through &ACE;'s  coset  table,  starting  at
+coset <A>n</A>, and return the final coset number if the  trace  completes,
+and <K>fail</K> otherwise. In Group  Theory  terms,  if  the  cosets  of  a
+subgroup <M>H</M> in a group <M>G</M> are  the  subject  of  interactive  &ACE;
+process <A>i</A> and the coset identified by that process  by  the  integer
+<A>n</A> corresponds to some coset <M>Hx</M>, for some <M>x</M> in  <M>G</M>,  and  <A>word</A>
+represents the element <M>g</M> of <M>G</M>, then, providing the  current  coset
+table is complete enough, <C>ACETraceWord( <A>i</A>, <A>n</A>, <A>word</A>  )</C>  returns
+the integer identifying the coset <M>Hxg</M>.
+<P/>
+<E>Notes:</E>
+You may wish to compact &ACE;'s coset table first, either  explicitly
+via <C>ACERecover</C> (see&nbsp;<Ref Func="ACERecover"/>), or, implicitly, via any  function
+call that invokes &ACE;'s compaction routine (see&nbsp;<Ref Func="ACERecover"/> note).
+<P/>
+If you actually wanted &ACE;'s  coset  representative,  then,  for  a
+<E>compact</E>   table,   feed   the   output    of    <C>ACETraceWord</C>    to
+<C>ACECosetRepresentative</C> (see&nbsp;<Ref Func="ACECosetRepresentative"/>).
+</Description>
+</ManSection>
+<ManSection>
+<Func Name="ACEOrders" Arg="i"/>
+<Func Name="ACEOrders" Label="no arguments" Arg=""/>
+<Func Name="ACEOrders" Label="for i : suborder := suborder" Arg="i"/>
+<Func Name="ACEOrders" Label="for : suborder := suborder" Arg=""/>
+<Description>
+for the <A>i</A>th (or  default)  interactive  &ACE;  process  started  by
+<C>ACEStart</C>, search for all coset numbers whose representatives' orders
+(modulo the subgroup) are either  finite,  or,  if  invoked  with  the
+<C>suborder</C> option,  are  multiples  of  <A>suborder</A>,  where  <A>suborder</A>
+should be a positive integer. <C>ACEOrders</C> returns a  (possibly  empty)
+list of records, each with fields <C>coset</C>, <C>order</C>  and  <C>rep</C>,  which
+are respectively, the coset number, its order modulo the subgroup, and
+a representative for each coset number satisfying the criteria of  the
+search.
+<P/>
+<E>Note:</E>
+You may wish to compact &ACE;'s coset table first, either  explicitly
+via <C>ACERecover</C> (see&nbsp;<Ref Func="ACERecover"/>), or, implicitly, via any  function
+call that invokes &ACE;'s compaction routine (see&nbsp;<Ref Func="ACERecover"/> note).
+</Description>
+</ManSection>
+<ManSection>
+<Func Name="ACEOrder" Arg="[i], suborder"/>
+<Description>
+for the <A>i</A>th (or  default)  interactive  &ACE;  process  started  by
+<C>ACEStart</C>, search for coset  number(s)  whose  coset  representatives
+have  order  modulo  the  subgroup  a  multiple  of  <A>suborder</A>.  When
+<A>suborder</A> is a positive integer, <C>ACEOrder</C> returns just  one  record
+with fields <C>coset</C>, <C>order</C> and <C>rep</C>, which  are  respectively,  the
+coset number, its order modulo the subgroup, and a representative  for
+the first coset number satisfying  the  criteria  of  the  search,  or
+<K>fail</K> if there is no such coset number. The value of  <A>suborder</A>  may
+also be a negative integer, in which case, <C>ACEOrder( <A>i</A>,  <A>suborder</A>
+)</C> is equivalent to <C>ACEOrders( <A>i</A> : suborder :=  |<A>suborder</A>|)</C>;  or
+<A>suborder</A> may be zero,  in  which  case,  <C>ACEOrder(  <A>i</A>,  0  )</C>  is
+equivalent to <C>ACEOrders( <A>i</A> )</C>.
+<P/>
+<E>Note:</E>
+You may wish to compact &ACE;'s coset table first, either  explicitly
+via <C>ACERecover</C> (see&nbsp;<Ref Func="ACERecover"/>), or, implicitly, via any  function
+call that invokes &ACE;'s compaction routine (see&nbsp;<Ref Func="ACERecover"/> note).
+</Description>
+</ManSection>
+<ManSection>
+<Func Name="ACECosetOrderFromRepresentative" Arg="[i], cosetrep"/>
+<Description>
+for the <A>i</A>th (or default) interactive &ACE; process return the order
+(modulo the subgroup) of the coset with representative  <A>cosetrep</A>,  a
+word in the free group generators.
+<P/>
+<E>Note:</E>   
+<C>ACECosetOrderFromRepresentative</C> calls  <C>ACETraceWord</C>  to  determine
+the coset (number) to which <A>cosetrep</A> belongs,  and  then  scans  the
+output of <C>ACEOrders</C> to determine the order of the coset (number).
+</Description>
+</ManSection>
+<ManSection>
+<Func Name="ACECosetsThatNormaliseSubgroup" Arg="[i], n"/>
+<Description>
+for the <A>i</A>th (or  default)  interactive  &ACE;  process  started  by
+<C>ACEStart</C>, determine non-trivial  (i.e.&nbsp;other  than  coset  1)  coset
+numbers whose representatives normalise the subgroup.
+<List>
+<Item> If <A>n</A> <M>&gt; 0</M>, the list of the first  <A>n</A>  non-trivial  coset
+numbers whose representatives normalise the subgroup is returned.
+
+</Item>
+<Item> If <A>n</A> <M>&lt; 0</M>, a list of records  with  fields  <C>coset</C>  and
+<C>rep</C>  which  represent  the  coset  number  and   a   representative,
+respectively,  of  the  first  <A>n</A>  non-trivial  coset  numbers  whose
+representatives normalise the subgroup is returned.
+
+</Item>
+<Item> If <A>n</A> <M>= 0</M>, a list of  records  with  fields  <C>coset</C>  and
+<C>rep</C>  which  represent  the  coset  number  and   a   representative,
+respectively, of all non-trivial coset numbers  whose  representatives
+normalise the subgroup is returned.</Item>
+</List>
+<E>Note:</E>
+You may wish to compact &ACE;'s coset table first, either  explicitly
+via <C>ACERecover</C> (see&nbsp;<Ref Func="ACERecover"/>), or, implicitly, via any  function
+call that invokes &ACE;'s compaction routine (see&nbsp;<Ref Func="ACERecover"/> note).
+</Description>
+</ManSection>
+<ManSection>
+<Func Name="ACEStyle" Arg="[i]"/>
+<Description>
+returns the current enumeration style as one of  the  strings:  <C>"C"</C>,
+<C>"Cr"</C>, <C>"CR"</C>, <C>"R"</C>, <C>"R*"</C>, <C>"Rc"</C>, <C>"R/C"</C>, or <C>"R/C (defaulted)"</C>
+(see Section&nbsp;<Ref Sect="Enumeration Style"/>).
+<P/>
+The next two functions of this section are really intended for  &ACE;
+standalone gurus. To fully understand their output you  will  need  to
+consult the standalone manual and the C source code.
+</Description>
+</ManSection>
+<ManSection>
+<Func Name="ACEDumpVariables" Arg="i"/>
+<Func Name="ACEDumpVariables" Label="no arguments" Arg=""/>
+<Func Name="ACEDumpVariables" Label="for i, [level]" Arg="i, [level]"/>
+<Func Name="ACEDumpVariables" Label="for [level]" Arg="[level]"/>
+<Func Name="ACEDumpVariables" Label="for i, [level, detail]" Arg="i, [level, detail]"/>
+<Func Name="ACEDumpVariables" Label="for [level, detail]" Arg="[level, detail]"/>
+<Description>
+dump the internal variables  of  &ACE;  of  the  <A>i</A>th  (or  default)
+process started by <C>ACEStart</C>; <A>level</A> should be one of 0,  1,  or  2,
+and <A>detail</A> should be 0 or 1.
+<P/>
+The value of <A>level</A> determines which of the three levels of &ACE; to
+dump. (You will need to read the standalone manual to understand  what
+Levels 0, 1 and 2 are all about.) The value of <A>detail</A> determines the
+amount of detail (<C><A>detail</A> = 0</C> means less  detail).  The  first  two
+forms of <C>ACEDumpVariables</C> (with no list argument) selects <C><A>level</A> =
+0, <A>detail</A> = 0</C>. The third and fourth forms  (with  a  list  argument
+containing the integer <A>level</A>) makes <C><A>detail</A> = 0</C>. This command  is
+intended for gurus; the source code should be consulted  to  see  what
+the output means.
+</Description>
+</ManSection>
+<ManSection>
+<Func Name="ACEDumpStatistics" Arg="[i]"/>
+<Description>
+dump &ACE;'s internal statistics accumulated during the  most  recent
+enumeration of the <A>i</A>th (or default) process started  by  <C>ACEStart</C>,
+provided the &ACE; binary  was  built  with  the  statistics  package
+(which    it    is    by    default).    Use     <C>ACEBinaryVersion();</C>
+(see&nbsp;<Ref Func="ACEBinaryVersion"/>) to check for the inclusion of the  statistics
+package.  See  the  <F>enum.c</F>  source  file  for  the  meaning  of  the
+variables.
+</Description>
+</ManSection>
+<ManSection>
+<Func Name="ACEBinaryVersion" Arg="[i]"/>
+<Description>
+for the <A>i</A>th (or default) process started by <C>ACEStart</C>,  print,  via
+<C>Info</C> (at <C>InfoACE</C> level 1), version details of  the  &ACE;  binary
+you are currently running, including what compiler flags were set when
+the executable was built, and also returns the version number  of  the
+binary as a string. Essentially the information obtained  is  what  is
+obtained via &ACE;'s <C>options</C> option (see&nbsp;<Ref Subsect="option options"/>), and the
+returned value is what is stored in <C>ACEData.version</C> (see&nbsp;<Ref Func="ACEData"/>).
+A typical output, illustrating the default build, is:
+<Log><![CDATA[
+gap> ACEBinaryVersion();
+#I  No interactive ACE sessions are currently active
+#I  ACE Binary Version: 3.001
+#I  ACE 3.001        Sat Feb 27 11:27:15 2016
+#I  =========================================
+#I  Host information:
+#I    name = banksia
+#I  ACE 3.001 executable built:
+#I    Wed Feb 24 15:25:26 AWST 2016
+#I  Level 0 options:
+#I    statistics package = on
+#I    coinc processing messages = on
+#I    dedn processing messages = on
+#I  Level 1 options:
+#I    workspace multipliers = decimal
+#I  Level 2 options:
+#I    host info = on
+"3.001"
+]]></Log>
+<E>Notes:</E>
+The &ACE; binary's banner may also appear in the output  (if  it  has
+not already appeared). Unlike other &ACE;  interface  functions,  the
+information   obtained   via   <C>ACEBinaryVersion();</C>   is   absolutely
+independent  of  any  enumeration.  For  this  reason,  we   make   it
+permissible to run <C>ACEBinaryVersion();</C> when there are  no  currently
+active  interactive  &ACE;  processes;   and,   in   such   a   case,
+<C>ACEBinaryVersion();</C> emits a warning that there  are  no  interactive
+&ACE; sessions currently active and initiates (and closes again)  its
+own stream to obtain the information from the &ACE; binary.  For  the
+current version of the &ACE; package (the &GAP; code component)  use
+<C>ACEPackageVersion();</C> (see&nbsp;<Ref Func="ACEPackageVersion"/>).
+</Description>
+</ManSection>
+</Section>
+<Section Label="Interactive Versions of Non-interactive ACE Functions">
+<Heading>Interactive Versions of Non-interactive ACE Functions</Heading>
+<ManSection>
+<Func Name="ACECosetTable" Label="interactive" Arg="[i]"/>
+<Description>
+return a coset table  as  a  &GAP;  object,  in  standard  form  (for
+&GAP;).   These   functions   perform   the    same    function    as
+<C>ACECosetTableFromGensAndRels</C> and <C>ACECosetTable</C> on three  arguments
+(see&nbsp;<Ref Func="ACECosetTable"/>), albeit interactively, on the <A>i</A>th (or default)
+process started by <C>ACEStart</C>. If options are passed then an  internal
+version of <C>ACEModes</C> is run to determine which of the general  &ACE;
+modes (see Section&nbsp;<Ref Sect="General ACE Modes"/>)  <C>ACEContinue</C>,  <C>ACERedo</C>  or
+<C>ACEStart</C> is possible; and (an internal version of) the first mode of
+these that is allowed is executed, to ensure the  resultant  table  is
+correct for the current options.
+</Description>
+</ManSection>
+<ManSection>
+<Func Name="ACEStats" Label="interactive" Arg="[i]"/>
+<Description>
+perform  the  same  function  as   <C>ACEStats</C>   on   three   arguments
+(see&nbsp;<Ref Func="ACEStats"/> --- non-interactive version), albeit interactively, on
+the <A>i</A>th (or default) process started by <C>ACEStart</C>. If  options  are
+passed then an internal version of  <C>ACEModes</C>  is  run  to  determine
+which of the general &ACE; modes (see  Section&nbsp;<Ref Sect="General ACE Modes"/>)
+<C>ACEContinue</C>, <C>ACERedo</C> or <C>ACEStart</C> is possible; and  (an  internal
+version of) the first mode of these that is allowed  is  executed,  to
+ensure the resultant statistics are correct for the current options.
+<P/>
+See Section&nbsp;<Ref Sect="Example of Using ACE Interactively (Using ACEStart)"/>  for
+an example demonstrating both these functions  within  an  interactive
+process.
+</Description>
+</ManSection>
+<ManSection>
+<Func Name="IsACEGeneratorsInPreferredOrder" Label="interactive" Arg="[i]"/>
+<Description>
+for the <A>i</A>th (or  default)  interactive  &ACE;  process  started  by
+<C>ACEStart</C>, return <K>true</K> if the group generators of that process, are
+in an order that will not be changed by &ACE;, and <K>false</K> otherwise.
+This function has greatest relevance to users who call <C>ACECosetTable</C>
+(see&nbsp;<Ref Func="ACECosetTable" Label="interactive"/>),   with    the    <C>lenlex</C>    option
+(see&nbsp;<Ref Subsect="option lenlex"/>). For more details, see the  discussion  for  the
+non-interactive    version    of     <C>IsACEGeneratorsInPreferredOrder</C>
+(<Ref Func="IsACEGeneratorsInPreferredOrder"/>),  which   is   called   with   two
+arguments.
+</Description>
+</ManSection>
+</Section>
+<Section Label="Steering ACE Interactively">
+<Heading>Steering ACE Interactively</Heading>
+<Index>dead coset (number)</Index>
+<ManSection>
+<Func Name="ACERecover" Arg="[i]"/>
+<Description>
+invoke the compaction routine on the coset  table  of  the  <A>i</A>th  (or
+default) interactive &ACE; process started by <C>ACEStart</C>, in order to
+recover the space used by the dead coset numbers. A <C>CO</C> message  line
+is printed if any rows of the coset table were recovered, and  a  <C>co</C>
+line if  none  were.  (See  Appendix&nbsp;<Ref Chap="The Meanings of ACE's output messages"/> for the meanings of these messages.)
+<P/>
+<E>Note:</E>
+The  compaction  routine  is  called   automatically   when   any   of
+<C>ACEDisplayCosetTable</C>                   (see&nbsp;<Ref Func="ACEDisplayCosetTable"/>),
+<C>ACECosetRepresentative</C>               (see&nbsp;<Ref Func="ACECosetRepresentative"/>),
+<C>ACECosetRepresentatives</C>             (see&nbsp;<Ref Func="ACECosetRepresentatives"/>),
+<C>ACETransversal</C>          (see&nbsp;<Ref Func="ACETransversal"/>),          <C>ACECycles</C>
+(see&nbsp;<Ref Func="ACECycles"/>),                         <C>ACEStandardCosetNumbering</C>
+(see&nbsp;<Ref Func="ACEStandardCosetNumbering"/>),                     <C>ACECosetTable</C>
+(see&nbsp;<Ref Func="ACECosetTable"/>)    or    <C>ACEConjugatesForSubgroupNormalClosure</C>
+(see&nbsp;<Ref Func="ACEConjugatesForSubgroupNormalClosure"/>), is invoked.
+<P/>
+<Index>lenlex standardisation scheme</Index>@<C>lenlex</C> standardisation scheme
+</Description>
+</ManSection>
+<ManSection>
+<Func Name="ACEStandardCosetNumbering" Arg="[i]"/>
+<Description>
+compact and then do a  <C>lenlex</C>  standardisation  (see  Section&nbsp;<Ref Sect="Coset Table Standardisation Schemes"/>) of the  numbering  of  cosets  in  the
+coset table of the  <A>i</A>th  (or  default)  interactive  &ACE;  process
+started by <C>ACEStart</C>. That is, for a given ordering of the generators
+in the columns of the table, they produce a  canonic  table.  A  table
+that  includes  a  column  for  each  generator  inverse   immediately
+following the column for  the  corresponding  generator,  standardised
+according to the <C>lenlex</C> scheme, has the property  that  a  row-major
+scan (i.e.&nbsp;a scan of the successive rows of the <E>body</E>  of  the  table
+row by row, from left to right) encounters previously unseen cosets in
+numeric order. This function does  not  display  the  new  table;  use
+<C>ACEDisplayCosetTable</C> (see&nbsp;<Ref Func="ACEDisplayCosetTable"/>) for that.
+<P/>
+<E>Notes:</E>
+In a <C>lenlex</C> canonic table, the  coset  representatives  are  ordered
+first according to length and then the lexicographic order defined  by
+the order the generators and their inverses  head  the  columns.  Note
+that,  unless  special  action  is  taken,  &ACE;  avoids  having  an
+involutory generator in the first column (by swapping  the  first  two
+generators), except when there is only  one  generator,  or  when  the
+second generator is also an involution;  so  the  lexicographic  order
+used by &ACE; need not necessarily correspond with the order in which
+the generators were first put  to  &ACE;.  (We  have  used  the  term
+<Q>involution</Q> above; what we really mean is  a  generator  <C>x</C>  for
+which there is a relator <C>x*x</C> or <C>x^2</C>.  Such  a  generator  may,  of
+course,  turn  out  to  actually  be  the  identity.)   The   function
+<C>IsACEGeneratorsInPreferredOrder</C>                                 (see
+<Ref Func="IsACEGeneratorsInPreferredOrder"/>) detects  cases  when  &ACE;  would
+swap the first two generators.
+<P/>
+Standardising the coset numbering within &ACE; does <E>not</E> affect  the
+&GAP; coset table obtained via <C>ACECosetTable</C> (see&nbsp;<Ref Func="ACECosetTable"/>).
+If <C>ACECosetTable</C> is called  without  the  <C>lenlex</C>  option  &GAP;'s
+default  standardisation  is  applied  after  conversion  of  &ACE;'s
+output, which undoes an &ACE; standardisation. On the other hand,  if
+<C>ACECosetTable</C> is called with the <C>lenlex</C> option then after a  check
+and  special  action,  if  required,  the  equivalent  of  a  call  to
+<C>ACEStandardCosetNumbering</C> is invoked, irrespective of whether it has
+been done by the user beforehand. The check that is done is a call  to
+<C>IsACEGeneratorsInPreferredOrder</C>                                 (see
+<Ref Func="IsACEGeneratorsInPreferredOrder"/>)  to  ensure  that  &ACE;  has  not
+swapped the first two generators. The special action  taken  when  the
+call to  <C>IsACEGeneratorsInPreferredOrder</C>  returns  <K>false</K>,  is  the
+setting of  the  <C>asis</C>  option  (see&nbsp;<Ref Subsect="option asis"/>)  to  1  and  the
+resubmission of the relators to &ACE; taking care not to  submit  the
+relator that determines the first generator as an involution  as  that
+generator squared (these two actions together avert &ACE;'s  swapping
+of the first two generators), followed by  the  re-<C>start</C>ing  of  the
+enumeration.
+<P/>
+<E>Guru Notes:</E>
+In  five  of  the  ten  standard  enumeration   strategies   of   Sims
+<Cite Key="Sim94"/> (i.e.&nbsp;the five Sims strategies not provided  by  &ACE;),
+the   table   is   standardised   repeatedly.   This   is    expensive
+computationally, but can result in fewer cosets being  necessary.  The
+effect of doing this can be investigated  in  &ACE;  by  (repeatedly)
+halting the enumeration (via restrictive options),  standardising  the
+coset numbering, and continuing (see Section&nbsp;<Ref Sect="Emulating Sims"/>  for  an
+example).
+</Description>
+</ManSection>
+<ManSection>
+<Func Name="ACEAddRelators" Arg="[i], wordlist"/>
+<Description>
+add, for the <A>i</A>th (or default) interactive &ACE; process started  by
+<C>ACEStart</C>, the words in the list <A>wordlist</A> to any  relators  already
+present, and automatically invoke <C>ACERedo</C>, if it can be applied,  or
+otherwise <C>ACEStart</C>. Note that &ACE;  sorts  the  resultant  relator
+list, unless the <C>asis</C> option (see&nbsp;<Ref Subsect="option asis"/>) has been set to  1;
+don't assume, unless <C>asis = 1</C>,  that  the  new  relators  have  been
+appended in user-provided order to  the  previously  existing  relator
+list.  <C>ACEAddRelators</C>  also  returns  the  new  relator  list.   Use
+<C>ACERelators</C> (see&nbsp;<Ref Func="ACERelators"/>) to  determine  the  current  relator
+list.
+</Description>
+</ManSection>
+<ManSection>
+<Func Name="ACEAddSubgroupGenerators" Arg="[i], wordlist"/>
+<Description>
+add, for the <A>i</A>th (or default) interactive &ACE; process started  by
+<C>ACEStart</C>,  the  words  in  the  list  <A>wordlist</A>  to  any   subgroup
+generators already present, and automatically invoke <C>ACERedo</C>, if  it
+can be applied, or otherwise <C>ACEStart</C>. Note that  &ACE;  sorts  the
+resultant  subgroup  generator  list,   unless   the   <C>asis</C>   option
+(see&nbsp;<Ref Subsect="option asis"/>) has been set to 1; don't assume,  unless  <C>asis  =
+1</C>,  that  the  new  subgroup  generators  have   been   appended   in
+user-provided order to  the  previously  existing  subgroup  generator
+list.  <C>ACEAddSubgroupGenerators</C>  also  returns  the   new   subgroup
+generator          list.          Use          <C>ACESubgroupGenerators</C>
+(see&nbsp;<Ref Func="ACESubgroupGenerators"/>)  to  determine  the   current   subgroup
+generator list.
+</Description>
+</ManSection>
+<ManSection>
+<Func Name="ACEDeleteRelators" Arg="[i], list"/>
+<Description>
+for the <A>i</A>th (or  default)  interactive  &ACE;  process  started  by
+<C>ACEStart</C>, delete <A>list</A> from the current relators, if list is a list
+of words in the group generators, or those current relators indexed by
+the integers in <A>list</A>, if <A>list</A> is a list of positive integers,  and
+automatically invoke <C>ACEStart</C>. <C>ACEDeleteRelators</C> also returns  the
+new relator list. Use <C>ACERelators</C> (see&nbsp;<Ref Func="ACERelators"/>)  to  determine
+the current relator list.
+</Description>
+</ManSection>
+<ManSection>
+<Func Name="ACEDeleteSubgroupGenerators" Arg="[i], list"/>
+<Description>
+for the <A>i</A>th (or  default)  interactive  &ACE;  process  started  by
+<C>ACEStart</C>, delete <A>list</A> from the  current  subgroup  generators,  if
+list is a list of words in the  group  generators,  or  those  current
+subgroup generators indexed by the integers in <A>list</A>, if <A>list</A> is  a
+list  of  positive  integers,  and  automatically  invoke  <C>ACEStart</C>.
+<C>ACEDeleteSubgroupGenerators</C> also returns the new subgroup  generator
+list.  Use  <C>ACESubgroupGenerators</C>  (see&nbsp;<Ref Func="ACESubgroupGenerators"/>)  to
+determine the current subgroup generator list.
+</Description>
+</ManSection>
+<ManSection>
+<Func Name="ACECosetCoincidence" Arg="[i], n"/>
+<Description>
+for the <A>i</A>th (or  default)  interactive  &ACE;  process  started  by
+<C>ACEStart</C>, return the representative of coset <A>n</A>, where <A>n</A> must  be
+a positive integer, and add  it  to  the  subgroup  generators;  i.e.,
+equates  this  coset  with  coset  1,  the  subgroup.   <C>ACERedo</C>   is
+automatically invoked.
+</Description>
+</ManSection>
+<ManSection>
+<Func Name="ACERandomCoincidences" Arg="i, subindex"/>
+<Func Name="ACERandomCoincidences" Label="for subindex" Arg="subindex"/>
+<Func Name="ACERandomCoincidences" Label="for i, [subindex]" Arg="i, [subindex]"/>
+<Func Name="ACERandomCoincidences" Label="for [subindex]" Arg="[subindex]"/>
+<Func Name="ACERandomCoincidences" Label="for i, [subindex, attempts]" Arg="i, [subindex, attempts]"/>
+<Func Name="ACERandomCoincidences" Label="for [subindex, attempts]" Arg="[subindex, attempts]"/>
+<Description>
+for the <A>i</A>th (or  default)  interactive  &ACE;  process  started  by
+<C>ACEStart</C>, attempt up to <A>attempts</A> (or, in the first four forms,  8)
+times to find nontrivial subgroups with index a multiple of <A>subindex</A>
+by repeatedly making random coset numbers coincident with coset 1  and
+seeing what happens. The starting coset table must be  non-empty,  but
+must  <E>not</E>  be   complete   (use   <C>ACERandomlyApplyCosetCoincidence</C>
+(see&nbsp;<Ref Func="ACERandomlyApplyCosetCoincidence"/>)  if  your  table  is  already
+complete).  For  each  attempt,  by  applying  &ACE;'s  <C>rc</C>   option
+(see&nbsp;<Ref Subsect="option rc"/>) random coset representatives are repeatedly added to
+the subgroup and the enumeration <C>redo</C>ne. If the  table  becomes  too
+small, the  attempt  is  aborted,  the  original  subgroup  generators
+restored, and another attempt made. If an attempt succeeds,  then  the
+new set of subgroup generators  is  retained.  <C>ACERandomCoincidences</C>
+returns   the   list   of   new   subgroup   generators   added.   Use
+<C>ACESubgroupGenerators</C> (see&nbsp;<Ref Func="ACESubgroupGenerators"/>) to determine the
+current subgroup generator list.
+<P/>
+<E>Notes:</E> 
+<C>ACERandomCoincidences</C> may add subgroup generators even if it  failed
+to  determine  a  nontrivial  subgroup  with  index  a   multiple   of
+<A>subindex</A>; in such a case, the original status  may  be  restored  by
+applying                                 <C>ACEDeleteSubgroupGenerators</C>
+(see&nbsp;<Ref Func="ACEDeleteSubgroupGenerators"/>)  with   the   list   returned   by
+<C>ACERandomCoincidences</C>.
+<P/>
+<C>ACERandomCoincidences</C> applies the <C>rc</C> option (see&nbsp;<Ref Subsect="option rc"/>)  of
+&ACE; which takes  the  line  that  if  an  enumeration  has  already
+obtained a finite index then either, <A>subindex</A> is already  a  divisor
+of that finite index, or the request is impossible. Thus an invocation
+of <C>ACERandomCoincidences</C>, in the  case  where  the  coset  table  is
+already complete, is an error.
+<P/>
+<E>Guru  Notes:</E>  A  coset  can  have  many  different  representatives.
+Consider              running              <C>ACEStandardCosetNumbering</C>
+(see&nbsp;<Ref Func="ACEStandardCosetNumbering"/>) before  <C>ACERandomCoincidences</C>,  to
+canonicise the table and the representatives.
+</Description>
+</ManSection>
+<ManSection>
+<Func Name="ACERandomlyApplyCosetCoincidence" Arg="i"/>
+<Func Name="ACERandomlyApplyCosetCoincidence" Label="for [: controlOptions]" Arg=""/>
+<Description>
+for the <A>i</A>th (or  default)  interactive  &ACE;  process  started  by
+<C>ACEStart</C>, try to find a larger proper subgroup (i.e.&nbsp;a  subgroup  of
+smaller   but    nontrivial    index),    by    repeatedly    applying
+<C>ACECosetCoincidence</C>  (see&nbsp;<Ref Func="ACECosetCoincidence"/>)  and  seeing   what
+happens;  <C>ACERandomlyApplyCosetCoincidence</C>  returns  the   (possibly
+empty) list of new subgroup generators added. The starting coset table
+must    already    be    complete     (use     <C>ACERandomCoincidences</C>
+(see&nbsp;<Ref Func="ACERandomCoincidences"/>) if your table is not already  complete).
+<C>ACERandomlyApplyCosetCoincidence</C> provides the following four options
+(<A>controlOptions</A>).
+<List>
+<Mark><C>subindex := <A>subindex</A></C></Mark>
+<Item>Sets the restriction that the final index  should  be  a  multiple  of
+<A>subindex</A>; <A>subindex</A> must be  a  positive  integer  divisor  of  the
+initial subgroup index.</Item>
+<Mark><C>hibound := <A>hibound</A></C></Mark>
+<Item>Sets the restriction that the final index should  be  (strictly)  less
+than <A>hibound</A>; <A>hibound</A> must be an integer that is  greater  than  1
+and at most the initial subgroup index.</Item>
+<Mark><C>lobound := <A>lobound</A></C></Mark>
+<Item>Sets the restriction that the final index should be (strictly) greater
+than <A>lobound</A>; <A>lobound</A> must be an integer that is at  least  1  and
+(strictly) less than the initial subgroup index.</Item>
+<Mark><C>attempts := <A>attempts</A></C></Mark>
+<Item>Sets  the   restriction   that   the   number   of   applications   of
+<C>ACECosetCoincidence</C> should be at most <A>attempts</A>; <A>attempts</A> must be
+a positive integer.</Item>
+</List>
+By default, <C><A>subindex</A> =  1</C>,  <A>hibound</A>  is  the  existing  subgroup
+index, <C><A>lobound</A> = 1</C> and <C><A>attempts</A> = 8</C>. If after an  attempt  the
+new index is a multiple of <A>subindex</A>, less than <A>hibound</A> and greater
+than <A>lobound</A> then the  process  terminates  (and  the  list  of  new
+subgroup generators is returned). Otherwise, if an attempt  reaches  a
+stage where the criteria cannot be satisfied, the attempt is  aborted,
+the original subgroup generators restored, and another  attempt  made.
+If  no  attempt  is  successful  an  empty  list  is   returned.   Use
+<C>ACESubgroupGenerators</C> (see&nbsp;<Ref Func="ACESubgroupGenerators"/>) to determine the
+current subgroup generator list.
+</Description>
+</ManSection>
+<ManSection>
+<Func Name="ACEConjugatesForSubgroupNormalClosure" Arg="i"/>
+<Func Name="ACEConjugatesForSubgroupNormalClosure" Label="no arguments" Arg=""/>
+<Func Name="ACEConjugatesForSubgroupNormalClosure" Label="for i : add" Arg="i"/>
+<Func Name="ACEConjugatesForSubgroupNormalClosure" Label="for : add" Arg=""/>
+<Description>
+for the <A>i</A>th (or  default)  interactive  &ACE;  process  started  by
+<C>ACEStart</C>, test each conjugate of a subgroup  generator  by  a  group
+generator for membership in the subgroup,  and  return  the  (possibly
+empty) list of conjugates that were determined to not  belong  to  the
+subgroup (coset 1); and,  if  called  with  the  <C>add</C>  option,  these
+conjugates are also added to the existing list of subgroup generators.
+<P/>
+<E>Notes:</E> A conjugate of a subgroup generator is tested for  membership
+of the subgroup, by checking whether it can be traced from coset 1  to
+coset 1  (see  <C>ACETraceWord</C>:&nbsp;<Ref Func="ACETraceWord"/>).  For  an  <E>incomplete</E>
+coset  table,  such  a  trace  may  not  complete,   in   which   case
+<C>ACEConjugatesForSubgroupNormalClosure</C> may return an empty list  even
+though the subgroup is <E>not</E> normally closed within the group.
+<P/>
+The <C>add</C> option does <E>not</E> guarantee that the resultant  subgroup  is
+normally closed. It is still possible  that  some  conjugates  of  the
+newly added subgroup generators will not be elements of the subgroup.
+<P/>
+<E>Example:</E>
+To      demonstrate      the      usage      and      features      of
+<C>ACEConjugatesForSubgroupNormalClosure</C>, let us  consider  an  example
+where we know pretty well what to expect.
+<P/>
+Let <M>G</M> be the group, isomorphic to the symmetric  group  <M>S_6</M>,  with
+the presentation
+<Display>
+\{ a, b \mid a^2, b^6, (ab^{-1}ab)^3, (ab^{-1}ab^2)^4, (ab)^5, 
+             (ab^{-2}ab^2)^2 \}
+</Display>
+(from  <Cite Key="CM72"/>),  and  let  <M>H</M>  be  the  subgroup  <M>\langle  ab^3
+\rangle</M>. There is an isomorphism <M>\phi</M> from <M>G</M> to <M>S_6</M> mapping <M>a</M>
+onto <M>(1,2)</M> and <M>ab^3</M> onto <M>(1,2,3,4,5,6)</M>. It follows  that  <M>\phi</M>
+maps <M>ab^3</M> into <M>A_6</M>. So we know that the normal closure of <M>H</M>  has
+index 2 in <M>G</M>. Let us observe this via &ACE;.
+<P/>
+First we start an enumeration with <C>max</C> set to 80.
+<Log><![CDATA[
+gap> F := FreeGroup( "a", "b" );;
+gap> a := F.1;; b := F.2;;
+gap> fgens := GeneratorsOfGroup( F );;
+gap> rels := [ a^2, b^6, (a*b^-1*a*b)^3, (a*b^-1*a*b^2)^4, (a*b)^5,
+>              (a*b^-2*a*b^2)^2 ];;
+gap> sgens := [ a*b^3 ];;
+gap> i := ACEStart( fgens, rels, sgens : max := 80 );;
+#I  ACE 3.001        Fri Sep 11 19:43:09 2026
+#I  =========================================
+#I  Host information:
+#I    name = Max-M1-Max.local
+#I  ***
+#I  OVERFLOW (a=76 r=5 h=15 n=81; l=5 c=0.00; m=80 t=80)
+gap> IsCompleteACECosetTable( i );
+false
+gap> ACEConjugatesForSubgroupNormalClosure( i : add );
+#I  CO: a=76 r=5 h=15 n=77; c=+0.00
+#I  * All (traceable) conjugates in subgroup
+#I  ---------------------
+#I  ACEConjugatesForSubgroupNormalClosure: All (traceable) conjugates in subgp
+[  ]
+]]></Log>
+Though we know that <M>H</M> is not equal to its normal closure, we did not
+get any new elements (we had warned  above  of  such  a  possibility).
+Apparently our incomplete table is too small. So let us increase <C>max</C>
+to 100 and continue.
+<Example><![CDATA[
+gap> ACEContinue( i : max := 100 );;
+Error, Variable: 'i' must have a value
+gap> IsCompleteACECosetTable( i );
+Error, Variable: 'i' must have a value
+gap> ACEConjugatesForSubgroupNormalClosure( i : add );
+Error, Variable: 'i' must have a value
+gap> IsCompleteACECosetTable( i );
+Error, Variable: 'i' must have a value
+gap> ACEStats( i ).index;
+Error, Variable: 'i' must have a value
+]]></Example>
+This time we got a new element, and after adding it  to  the  subgroup
+generators  we  obtained  a  complete  table.  However  the  resulting
+subgroup need not yet be the normal closure of <M>H</M>  (and  in  fact  we
+know that it is not). So we continue with another call to the function
+<C>ACEConjugatesForSubgroupNormalClosure</C>.
+<Example><![CDATA[
+gap> ACEConjugatesForSubgroupNormalClosure( i : add );
+Error, Variable: 'i' must have a value
+gap> ACEStats( i ).index;
+Error, Variable: 'i' must have a value
+]]></Example>
+Now we have the index that we expected. Another call to  the  function
+<C>ACEConjugatesForSubgroupNormalClosure</C>  should  not  yield  any  more
+conjugates. We ensure that this is indeed the case  and  then  display
+the resulting list of subgroup generators.
+<Example><![CDATA[
+gap> ACEConjugatesForSubgroupNormalClosure( i : add );
+Error, Variable: 'i' must have a value
+gap> ACESubgroupGenerators( i );
+Error, Variable: 'i' must have a value
+]]></Example>
+</Description>
+</ManSection>
+</Section>
+<Section Label="Primitive ACE Read/Write Functions">
+<Heading>Primitive ACE Read/Write Functions</Heading>
+For those familiar with the  workings  of  the  &ACE;  standalone  we
+provide primitive read/write tools to  communicate  directly  with  an
+interactive &ACE; process,  started  via  <C>ACEStart</C>  (possibly  with
+argument 0, but this is not essential). For the most part, it is up to
+the user to translate the output  strings  from  &ACE;  into  a  form
+useful in &GAP;. However, after the group generators,  relators,  and
+subgroup  generators  have  been  set  in  the  &ACE;  process,   via
+<C>ACEWrite</C>,    invocations    of    any    of     <C>ACEGroupGenerators</C>
+(see&nbsp;<Ref Func="ACEGroupGenerators"/>),     <C>ACERelators</C>     (see&nbsp;<Ref Func="ACERelators"/>),
+<C>ACESubgroupGenerators</C>       (see&nbsp;<Ref Func="ACESubgroupGenerators"/>),        or
+<C>ACEParameters</C> (see&nbsp;<Ref Func="ACEParameters"/>) will establish the corresponding
+&GAP; values.  Be  warned  though,  that  unless  one  of  the  modes
+<C>ACEStart</C>  (without  a  zero  argument;  see&nbsp;<Ref Func="ACEStart"/>),   <C>ACERedo</C>
+(see&nbsp;<Ref Func="ACERedo"/>)  or  <C>ACEContinue</C>   (see&nbsp;<Ref Func="ACEContinue"/>),   or   their
+equivalent  for  the  standalone   &ACE;   (<C>start;</C>,   <C>redo;</C>,   or
+<C>continue;</C>), has been invoked since the last change of any  parameter
+options (see&nbsp;<Ref Func="ACEParameterOptions"/>), some of the  values  reported  by
+<C>ACEParameters</C> may well be <E>incorrect</E>.
+<ManSection>
+<Func Name="ACEWrite" Arg="[i], string"/>
+<Description>
+write <A>string</A> to the <A>i</A>th or  default  interactive  &ACE;  process;
+<A>string</A> must be in exactly the form the  &ACE;  standalone  expects.
+The command is  echoed  via  <C>Info</C>  at  <C>InfoACE</C>  level  4  (with  a
+<Q>&#x2018;ToACE&gt; </Q>' prompt); i.e.&nbsp;<C>SetInfoLevel(InfoACE, 4);</C>  will  allow  you to
+see what is transmitted to the &ACE; binary. <C>ACEWrite</C> returns <K>true</K>
+if successful in writing to the stream of the interactive &ACE; process,
+and <K>fail</K> otherwise.
+<P/>
+<E>Note:</E>
+If <C>ACEWrite</C> returns <K>fail</K> (which means that the &ACE; process  has
+died), you may like to try resurrecting the interactive &ACE; process
+via <C>ACEResurrectProcess</C> (see&nbsp;<Ref Func="ACEResurrectProcess"/>).
+</Description>
+</ManSection>
+<ManSection>
+<Func Name="ACERead" Arg="[i]"/>
+<Description>
+read a complete line of &ACE;  output,  from  the  <A>i</A>th  or  default
+interactive &ACE; process, if there is output to be read and  returns
+<K>fail</K> otherwise. When successful, the line is returned  as  a  string
+complete with trailing newline  character.  Please  note  that  it  is
+possible to be <Q>too quick</Q> (i.e.&nbsp;the return  can  be  <K>fail</K>  purely
+because the output from &ACE; is not there  yet),  but  if  <C>ACERead</C>
+finds any output at all, it waits for a complete line.
+</Description>
+</ManSection>
+<ManSection>
+<Func Name="ACEReadAll" Arg="[i]"/>
+<Description>
+read and return as many <E>complete</E> lines of &ACE;  output,  from  the
+<A>i</A>th or default interactive &ACE; process, as there are to be  read,
+<E>at the time of the call</E>, as a list  of  strings  with  the  trailing
+newlines removed and returns the empty  list  otherwise.  <C>ACEReadAll</C>
+also writes each line read via <C>Info</C> at <C>InfoACE</C> level  3.  Whenever
+<C>ACEReadAll</C> finds only a partial line,  it  waits  for  the  complete
+line, thus increasing the probability that it  has  captured  all  the
+output to be had from &ACE;.
+</Description>
+</ManSection>
+<ManSection>
+<Func Name="ACEReadUntil" Arg="[i], IsMyLine[, Modify]"/>
+<Description>
+read complete lines of  &ACE;  output,  from  the  <A>i</A>th  or  default
+interactive &ACE; process, <Q>chomps</Q> them (i.e.&nbsp;removes any trailing
+newline character), emits them to <C>Info</C> at  <C>InfoACE</C>  level  3,  and
+applies the function <A>Modify</A> (where <A>Modify</A>  is  just  the  identity
+map/function for the first two forms) until a <Q>chomped</Q> line  <A>line</A>
+for which <C><A>IsMyLine</A>( <A>Modify</A>(<A>line</A>)  )</C>  is  true.  <C>ACEReadUntil</C>
+returns the list of <A>Modify</A>-ed <Q>chomped</Q> lines read.
+<P/>
+<E>Notes:</E> 
+When provided by the user, <A>Modify</A> should be a function that  accepts
+a single string argument.
+<P/>
+<A>IsMyLine</A> should be a function that is able to accept the  output  of
+<A>Modify</A> (or take a  single  string  argument  when  <A>Modify</A>  is  not
+provided) and should return a boolean.
+<P/>
+If <C><A>IsMyLine</A>( <A>Modify</A>(<A>line</A>) )</C> is never true, <C>ACEReadUntil</C> will
+wait indefinitely.
+</Description>
+</ManSection>
+</Section>
+</Chapter>

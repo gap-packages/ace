@@ -1,0 +1,442 @@
+<!-- W  basics.tex          ACE documentation - basics       Alexander Hulpke / W                                                      Joachim Neub"user / W                                                            Greg Gamble / Y  Copyright (C) 2000  Centre for Discrete Mathematics and Computing / Y                      Department of Information Tech. & Electrical Eng. / Y                      University of Queensland, Australia. -->
+<Chapter Label="Some Basics">
+<Heading>Some Basics</Heading>
+<Index>strategy</Index><Index>Felsch strategy</Index>
+<Index>HLT strategy</Index>
+Throughout this manual for the use of &ACE; as a &GAP;  package,  we
+shall assume that the reader already knows the basic  ideas  of  coset
+enumeration, as can be found for  example  in&nbsp;<Cite Key="Neu82"/>.  There,  a
+simple proof is given for the fact that  a  coset  enumeration  for  a
+subgroup of finite index in a finitely presented group must eventually
+terminate with the correct result, provided  the  enumeration  process
+obeys  a  simple  condition  (Mendelsohn's  condition)  formulated  in
+Lemma&nbsp;1 and Theorem&nbsp;2 of&nbsp;<Cite Key="Neu82"/>.  This  basic  condition  leaves
+room for a great variety of <E>strategies</E> for  coset  enumeration;  two
+<Q>classical</Q> ones have been known for a  long  time  as  the  <E>Felsch
+strategy</E> and the <E>HLT strategy</E> (for Haselgrove, Leech and  Trotter).
+Extensive  experimental  studies  on  many  strategies  can  be  found
+in&nbsp;<Cite Key="CDHW73"/>,  <Cite Key="Hav91"/>,  <Cite Key="HR99ace"/>,  and  <Cite Key="HR01"/>,  in
+particular.
+<P/>
+A few basic points should be particularly understood:
+<List>
+<Item> <Q>Subgroup (generator) and relator tables</Q> that are used in
+the description of coset enumeration in <Cite Key="Neu82"/>, and to which  we
+will also occasionally refer in this manual, do <E>not</E> physically exist
+in  the  implementation  of  coset  enumeration  in  &ACE;.   For   a
+terminology that is closer to the actual implementation  and  also  to
+the  formulations  in  the  manual  for  the  &ACE;  standalone   see
+<Cite Key="CDHW73"/> and <Cite Key="Hav91"/>.
+
+<Index>cosets!coset numbers</Index><Index>cosets!coset table</Index><Index>holes</Index>
+</Item>
+<Item> Coset enumeration proceeds by defining <E>coset numbers</E>  that
+really denote possible representatives for cosets written as words  in
+the generators of the group. At the time of their generation it is not
+guaranteed that any two of these words do indeed  represent  different
+cosets. The state of an  enumeration  at  any  time  is  stored  in  a
+2-dimensional array known as a <E>coset table</E> whose rows are indexed by
+coset numbers and whose columns are indexed by  the  group  generators
+and their inverses. Entries of  the  coset  table  that  are  not  yet
+defined are known as  <E>holes</E>  (typically  they  are  filled  with  0,
+i.e.&nbsp;an invalid coset number).
+
+<Index>cosets</Index><Index>cosets!coset application</Index><Index>cosets!coset numbers</Index>
+</Item>
+<Item> It is customary in talking about coset enumeration to  speak
+of <E>cosets</E> when really coset numbers are meant. While we try to avoid
+this in this interface manual, in certain word  combinations  such  as
+<E>coset application</E> we will follow this custom.
+
+<Index>deduction</Index><Index>deduction!deduction stack</Index>
+</Item>
+<Item> The definition of a coset number may  lead  to  <E>deductions</E>
+from the <Q>closing of rows in subgroup or relator tables</Q>. These  are
+kept in a <E>deduction stack</E>.
+
+<Index>coincidence</Index><Index>coincidence!coincidence queue</Index>
+</Item>
+<Item>  Also  it  may  be  found  that  (different)  words  in  the
+generators defining different coset numbers really  lie  in  the  same
+coset of the given subgroup. This is called a <E>coincidence</E>  and  will
+eventually lead to the elimination of the  larger  of  the  two  coset
+numbers.  Until  this   elimination   has   been   performed   pending
+coincidences are kept in a <E>queue of coincidences</E>.
+
+<Index>preferred definition</Index><Index>definition!preferred</Index>
+<Index>preferred definition!preferred definition stack</Index>
+</Item>
+<Item> A definition that will actually close a row in a subgroup or
+relator table will immediately yield twice  as  many  entries  in  the
+coset  table  as  other  definitions.  Such  definitions  are   called
+<E>preferred definitions</E>, the places in rows of a subgroup  or  relator
+table that they close are also referred to as <Q>gaps of  length  one</Q>
+or minimal gaps. Such gaps can be found  at  little  extra  cost  when
+<Q>relators are traced from a given  coset  number</Q>.  &ACE;  keeps  a
+selection of them in a <E>preferred definition stack</E> for  use  in  some
+definition strategies (see&nbsp;<Cite Key="Hav91"/>).</Item>
+</List>
+It will also be necessary to understand some further basic features of
+the  implementation and  the corresponding  terminology which  we will
+explain in the sequel.
+<Section Label="Enumeration Style">
+<Heading>Enumeration Style</Heading>
+The first main decision for any coset enumeration is in which sequence
+to make definitions. When a new coset number has  to  be  defined,  in
+&ACE; there are basically three possible methods to choose from:
+<Index>C style<Subkey>definition</Subkey></Index>
+<List>
+<Item> One may fill the next empty entry  in  the  coset  table  by
+scanning from the left/top of the coset table towards the right/bottom
+-- that is, in order row by row. This is called <E>C  style  definition</E>
+(for <E>C</E>oset Table Based definition)  of  coset  numbers.  In  fact  a
+procedure needs to follow a method like this to some  extent  for  the
+proofs that coset enumeration eventually terminates  in  the  case  of
+finite index (see&nbsp;<Cite Key="Neu82"/>).
+
+<Index>R style<Subkey>definition</Subkey></Index>
+</Item>
+<Item>  For  an  <E>R  style   definition</E>   (for   <E>R</E>elator   Based
+definition),  the  order  in  which  coset  numbers  are  defined   is
+explicitly prescribed by the order in  which  rows  of  (the  subgroup
+generator  tables  and)  the  relator  tables  are  filled  by  making
+definitions.
+
+<Index>preferred definition</Index>
+<Index>preferred definition!preferred definition stack</Index>
+<Index>strategy!minimal gaps</Index>
+</Item>
+<Item> One may choose  definitions  from  a  <E>Preferred  Definition
+Stack</E>. In this stack possibilities for definition  of  coset  numbers
+are stored that will close a certain row of  a  relator  table.  Using
+these <E>preferred definitions</E> is  sometimes  also  referred  to  as  a
+<E>minimal gaps strategy</E>. The idea of using these is that by closing  a
+row in a relator table, thus, one will immediately get a  consequence.
+We will come back to the obvious question of where  one  obtains  this
+<Q>preferred definition stack</Q>.</Item>
+</List>
+The <E>enumeration style</E> is mainly determined by  the  balance  between
+C style and R style definitions, which is controlled by the values  of
+the <C>ct</C> and <C>rt</C> options (see&nbsp;<Ref Subsect="option ct"/> and&nbsp;<Ref Subsect="option rt"/>).
+<P/>
+However this still leaves us with plenty of freedom for the design  of
+definition strategies, freedom which can,  for  example,  be  used  to
+great advantage in Felsch-type strategies. Though it is  not  strictly
+necessary,  before  embarking  on  further  enumeration,   Felsch-type
+programs generally start off  by  ensuring  that  each  of  the  given
+subgroup generators produces a cycle of coset numbers at coset  1.  To
+explain the idea, an example may help. Suppose  <M>a,b</M>  are  the  group
+generators and <M>w=Abab</M> is a subgroup generator, where <M>A</M>  represents
+the inverse of <M>a</M>; then to say that <Q><M>(1,i,j,k)</M> is  a  cycle  of
+coset numbers produced at coset 1 by <M>w</M></Q> means  that  the  successive
+application  of  the  <Q>letters</Q>  <M>A,b,a,b</M>  of   <M>w</M>   takes   one
+successively from coset 1, through cosets <M>i</M>, <M>j</M> and <M>k</M>,  and  back
+to coset 1, i.e.&nbsp;<M>A</M> applied to coset 1  results  in  coset  <M>i</M>,  <M>b</M>
+applied to coset <M>i</M> results in coset <M>j</M>, <M>a</M> applied  to  coset  <M>j</M>
+results in coset <M>k</M>, and finally <M>b</M> applied to coset  <M>k</M>  takes  us
+back to coset <M>1</M>. In this  way,  a  hypothetical  subgroup  table  is
+filled first. The use of this and other  possibilities  leads  to  the
+following table of <E>enumeration styles</E>.
+<Log><![CDATA[
+Rt value     Ct value     style name
+-----------------------------------------
+
+   0           >0         C
+  <0           >0         Cr
+  >0           >0         CR
+
+  >0            0         R
+  <0            0         R*
+  >0           <0         Rc
+  <0           <0         R/C
+   0            0         R/C (defaulted)
+
+-----------------------------------------
+]]></Log>
+<List>
+<Mark><Index>C style</Index>
+<E>C style</E></Mark>
+<Item>In this style, most definitions are made in the next empty coset table
+slot and are  (in  principle)  tested  in  all  essentially  different
+positions in the relators; i.e.&nbsp;this is a Felsch-like style.
+<P/>
+However, in  C  style,  some  definitions  may  be  made  following  a
+preferred definition strategy, controlled by the <C>pmode</C>  and  <C>psize</C>
+options (see&nbsp;<Ref Subsect="option pmode"/> and&nbsp;<Ref Subsect="option psize"/>).</Item>
+<Mark><Index>Cr style</Index>
+<E>Cr style</E></Mark>
+<Item>is like C style except that a single R style pass is  done  after  the
+initial C style pass.</Item>
+<Mark><Index>CR style</Index>
+<E>CR style</E></Mark>
+<Item>In this style, alternate passes of C style and R style are performed.</Item>
+<Mark><Index>R style</Index>
+<E>R  style</E></Mark>
+<Item>In this style,  all  the  definitions  are  made  via  relator  scans;
+i.e.&nbsp;this is an HLT-like style.</Item>
+<Mark><Index>R* style</Index>
+<E>R</E> style*</Mark>
+<Item>makes definitions the same as R style, but tests  all  definitions  as
+for C style.</Item>
+<Mark><Index>Rc style</Index>
+<E>Rc style</E></Mark>
+<Item>is like R style, except that a single C style pass is done  after  the
+initial R style pass.</Item>
+<Mark><Index>R/C style</Index>
+<E>R/C style</E></Mark>
+<Item>In this style, we  run  in  R  style  until  an  overflow,  perform  a
+lookahead on the entire table, and then switch to CR style.</Item>
+<Mark><Index>Defaulted  R/C  style</Index>
+<Index>R/C (defaulted) style</Index>
+<E>Defaulted R/C</E> (<M>={}</M><E>R/C (defaulted)</E> <M></M>) <E>style</E></Mark>
+<Item>is the default style  used  if  you  call  &ACE;  without  specifying
+options. In it, we use R/C style with <C>ct</C> set to 1000 and <C>rt</C> set to
+approximately <M>2000</M> divided by the total length of the relators in an
+attempt to balance R style and C style definitions when we  switch  to
+CR style.</Item>
+</List>
+</Section>
+<Section Label="Finding Deductions, Coincidences, and Preferred Definitions">
+<Heading>Finding Deductions, Coincidences, and Preferred Definitions</Heading>
+<Index>definition</Index>
+First, let us  broadly  discuss  strategies  and  how  they  influence
+<Q>definitions</Q>. By <E>definition</E> we mean the  allocation  of  a  coset
+number. In a complete coset table each group relator produces a  cycle
+of cosets numbers at each coset number, in  particular,  at  coset  1;
+i.e.&nbsp;for each relator <M>w</M>, and for each coset number  <M>i</M>,  successive
+application of the letters of <M>w</M> trace through a  sequence  of  coset
+numbers that begins and ends in <M>i</M> (see  Section&nbsp;<Ref Sect="Enumeration Style"/>
+for an example). It has been found to be a good general  rule  to  use
+the given group relators as  subgroup  generators.  This  ensures  the
+early definition of some useful coset numbers, and is the basis of the
+<C>default</C>  strategy  (see&nbsp;<Ref Subsect="option default"/>).  The  number  of   group
+relators included as subgroup generators is  determined  by  the  <C>no</C>
+option (see&nbsp;<Ref Subsect="option no"/>). Over a wide range of  examples  the  use  of
+group relators in  this  way  has  been  shown  to  produce  generally
+beneficial results in terms of the maximum number  of  cosets  numbers
+defined at any one time and the total number of coset numbers defined.
+In&nbsp;<Cite Key="CDHW73"/>, it  was  reported  that  for  some  Macdonald  group
+<M>G(\alpha,\beta)</M> examples, (pure) Felsch-type strategies (that  don't
+include the given group  relators  as  subgroup  generators)  e.g.&nbsp;the
+<C>felsch := 0</C> strategy  (see&nbsp;<Ref Subsect="option felsch"/>)  defined  significantly
+more coset numbers than HLT-type (e.g.&nbsp;the <C>hlt</C> strategy, see&nbsp;<Ref Subsect="option hlt"/>) strategies. The comparison of these strategies in terms of total
+number of coset numbers defined, in&nbsp;<Cite Key="Hav91"/>, for the  enumeration
+of the cosets  of  a  certain  index  40  subgroup  of  the  <M>G(3,21)</M>
+Macdonald group were 91 for HLT versus 16067 for  a  pure  Felsch-type
+strategy. For the Felsch strategy with the group relators included  as
+subgroup generators, as for the <C>felsch :=  1</C>  strategy  (see&nbsp;<Ref Subsect="option felsch"/>) the total number of coset numbers defined reduced markedly to
+59.
+<P/>
+<Index>deduction</Index>
+A <E>deduction</E> occurs when the scanning of a  relator  results  in  the
+assignment of a coset table body entry.  A  completed  table  is  only
+valid if  every  table  entry  has  been  tested  in  all  essentially
+different positions in all relators. This testing can either  be  done
+directly (Felsch strategy) or via relator scanning (HLT strategy).  If
+it is done directly, then more than one deduction can be waiting to be
+processed at any one time. The untested deductions  are  stored  in  a
+stack. How this stack is managed is determined by the  <C>dmode</C>  option
+(see&nbsp;<Ref Subsect="option dmode"/>), and its size is controlled by the <C>dsize</C> option
+(see&nbsp;<Ref Subsect="option dsize"/>).
+<P/>
+<Index>coincidence</Index><Index>dead coset (number)</Index>
+As already mentioned a <E>coincidence</E> occurs when it is determined that
+two coset numbers in fact represent the same coset. When  this  occurs
+the larger  coset  number  becomes  a  <E>dead  coset  number</E>  and  the
+coincidence is placed in a  queue.  When  and  how  these  dead  coset
+numbers  are  eventually  eliminated  is  controlled  by  the  options
+<C>dmode</C>, <C>path</C> and <C>compaction</C> (see&nbsp;<Ref Subsect="option dmode"/>,  <Ref Subsect="option path"/>
+and&nbsp;<Ref Subsect="option compaction"/>). The user  may  also  force  coincidences  to
+occur (see Section&nbsp;<Ref Sect="Finding Subgroups"/>), which,  however,  may  change
+the subgroup whose cosets are enumerated.
+<P/>
+<Index>preferred definition!preferred definition stack</Index>
+The key  to  performance  of  coset  enumeration  procedures  is  good
+selection  of  the  next   coset   number   to   be   defined.   Leech
+in&nbsp;<Cite Key="Lee77"/>  and&nbsp;<Cite Key="Lee84"/>  showed  how  a  number   of   coset
+enumerations could be simplified by removing coset numbers  needlessly
+defined by computer implementations. Human  enumerators  intelligently
+choose which coset number should be defined next, based on  the  value
+of each potential definition. In particular, definitions  which  close
+relator cycles (or at least shorten gaps in cycles)  are  favoured.  A
+definition which actually closes a relator  cycle  immediately  yields
+twice as many table entries (deductions)  as  other  definitions.  The
+value of the <C>pmode</C>  option  (see&nbsp;<Ref Subsect="option pmode"/>)  determines  which
+definitions are <E>preferred</E>; if the value of  the  <C>pmode</C>  option  is
+non-zero, depending on the <C>pmode</C> value, gaps  of  length  one  found
+during relator C style  (i.e.&nbsp;Felsch-like)  scans  are  either  filled
+immediately  (subject  to  the  value  of  <C>fill</C>)  or  noted  in  the
+<E>preferred  definition  stack</E>.  The  preferred  definition  stack  is
+implemented as a  ring  of  size  determined  by  the  <C>psize</C>  option
+(see&nbsp;<Ref Subsect="option psize"/>). However, making preferred definitions carelessly
+can violate the conditions required for guaranteed termination of  the
+coset enumeration procedure in the case of finite index. To avoid such
+a violation &ACE; ensures a fraction of the  coset  table  is  filled
+before  a  preferred  definition  is  made;  the  reciprocal  of  this
+fraction, the <C>fill factor</C>, is  manipulated  via  the  <C>fill</C>  option
+(see&nbsp;<Ref Subsect="option fill"/>).  In&nbsp;<Cite Key="Hav91"/>,  the  <C>felsch   :=   1</C>   type
+enumeration of the cosets of the certain  index  40  subgroup  of  the
+<M>G(3,21)</M> Macdonald group was further  improved  to  require  a  total
+number of coset numbers  of  just  43  by  incorporating  the  use  of
+preferred definitions.
+</Section>
+<Section Label="Finding Subgroups">
+<Heading>Finding Subgroups</Heading>
+<Index>coincidence</Index>
+The &ACE; package, via its  interactive  &ACE;  interface  functions
+(described  in  Chapter&nbsp;<Ref Chap="Functions for Using ACE Interactively"/>),
+provides the possibility of searching for subgroups. To  do  this  one
+starts at a known subgroup (possibly the trivial subgroup).  Then  one
+may augment it by adding new subgroup generators either explicitly via
+<C>ACEAddSubgroupGenerators</C>     (see&nbsp;<Ref Func="ACEAddSubgroupGenerators"/>)     or
+implicitly by introducing <E>coincidences</E>  (see  <C>ACECosetCoincidence</C>:
+<Ref Func="ACECosetCoincidence"/>,           or           <C>ACERandomCoincidences</C>:
+<Ref Func="ACERandomCoincidences"/>). Also, one may descend to  smaller  subgroups
+by  deleting  subgroup  generators  via  <C>ACEDeleteSubgroupGenerators</C>
+(see&nbsp;<Ref Func="ACEDeleteSubgroupGenerators"/>).
+</Section>
+<Section Label="Coset Table Standardisation Schemes">
+<Heading>Coset Table Standardisation Schemes</Heading>
+<Index><C>lenlex</C> standardisation scheme</Index> 
+The default standardisation scheme for &GAP; and  the
+standardisation scheme provided by &ACE; is the <C>lenlex</C>  scheme,  of
+Charles Sims&nbsp;<Cite Key="Sim94"/>. This scheme numbers cosets first  according
+to word-length and then according  to  a  lexical  ordering  of  coset
+representatives. Each coset representative is a word  in  an  alphabet
+consisting of the user-supplied generators and their inverses, and the
+lexical ordering of <C>lenlex</C> is that implied by ordering that alphabet
+so that each generator is followed by its inverse, and the  generators
+appear in user-supplied order. See below for an  example  which  gives
+the first 20 lines  of  the  <C>lenlex</C>  standard  coset  table  of  the
+(infinite) group with presentation <M>\langle x, y, a, b \mid x^2,  y^3,
+a^4, b^2\rangle</M>.
+<P/>
+In the table each  inverse  of  a  generator  is  represented  by  the
+corresponding uppercase letter (<M>X</M>  represents  the  inverse  of  <M>x</M>
+etc.), and the lexical ordering of the representatives is that implied
+by defining an ordering of the alphabet  of  user-supplied  generators
+and  their  inverses  to  be  <M>x&lt;X&lt;y&lt;Y&lt;a&lt;A&lt;b&lt;B</M>.
+<P/>
+A <C>lenlex</C> standard coset table whose columns correspond, in order, to
+the already-described alphabet, of generators and their inverses,  has
+an important property: a scan of the body of the table row by row from
+left to right, encounters new coset numbers in numeric order.  Observe
+that the table below has this property: the definition of coset  1  is
+implicit; the first coset number we encounter in the table body is  2,
+then 2 again, 3, 4, 5, 6, 7, then 7 again, etc.
+<P/>
+With the <C>lenlex</C> option (see&nbsp;<Ref Subsect="option lenlex"/>), the coset table output
+by <C>ACECosetTable</C> or <C>ACECosetTableFromGensAndRels</C>  is  standardised
+according to the <C>lenlex</C> scheme.
+<Log><![CDATA[
+ coset no. ||      x      X      y      Y      a      A      b      B   rep've
+-----------+------------------------------------------------------------------
+         1 ||      2      2      3      4      5      6      7      7
+         2 ||      1      1      8      9     10     11     12     12    x
+         3 ||     13     13      4      1     14     15     16     16    y
+         4 ||     17     17      1      3     18     19     20     20    Y
+         5 ||     21     21     22     23     24      1     25     25    a
+         6 ||     26     26     27     28      1     24     29     29    A
+         7 ||     30     30     31     32     33     34      1      1    b
+         8 ||     35     35      9      2     36     37     38     38    xy
+         9 ||     39     39      2      8     40     41     42     42    xY
+        10 ||     43     43     44     45     46      2     47     47    xa
+        11 ||     48     48     49     50      2     46     51     51    xA
+        12 ||     52     52     53     54     55     56      2      2    xb
+        13 ||      3      3     57     58     59     60     61     61    yx
+        14 ||     62     62     63     64     65      3     66     66    ya
+        15 ||     67     67     68     69      3     65     70     70    yA
+        16 ||     71     71     72     73     74     75      3      3    yb
+        17 ||      4      4     76     77     78     79     80     80    Yx
+        18 ||     81     81     82     83     84      4     85     85    Ya
+        19 ||     86     86     87     88      4     84     89     89    YA
+        20 ||     90     90     91     92     93     94      4      4    Yb
+]]></Log>
+<Index><C>semilenlex</C> standardisation scheme</Index>
+Another standardisation scheme for coset tables numbers cosets according to
+coset representative word-length in the group generators  and  lexical
+ordering  imposed  by  the  user-supplied  ordering   of   the   group
+generators; it is known as <C>semilenlex</C> since  though  like  <C>lenlex</C>,
+generator inverses do not feature. Here again is 20 lines of the coset
+table of the group with presentation <M>\langle x, y,  a,  b  \mid  x^2,
+y^3, a^4, b^2\rangle</M>, this time <C>semilenlex</C> standardised.
+<Log><![CDATA[
+ coset no. ||      x      y      a      b    rep've
+-----------+--------------------------------------
+         1 ||      2      3      4      5
+         2 ||      1      6      7      8    x
+         3 ||      9     10     11     12    y
+         4 ||     13     14     15     16    a
+         5 ||     17     18     19      1    b
+         6 ||     20     21     22     23    xy
+         7 ||     24     25      2     26    xa
+         8 ||     27     28     29      2    xb
+         9 ||      3     30     31     32    yx
+        10 ||     33      1     34     35    yy
+        11 ||     36     37     38     39    ya
+        12 ||     40     41     42      3    yb
+        13 ||      4     43     44     45    ax
+        14 ||     46     47     48     49    ay
+        15 ||     50     51     52     53    aa
+        16 ||     54     55     56      4    ab
+        17 ||      5     57     58     59    bx
+        18 ||     60     61     62     63    by
+        19 ||     64     65     66     67    ba
+        20 ||      6     68     69     70    xyx
+]]></Log>
+The term <C>semilenlex</C> was  coined  by  Edmund  Robertson  and  Joachim
+Neubüser, for the  scheme's  applicability  to  semigroups
+where generator inverses need not exist. This scheme ensures  that  as
+one scans the  columns  corresponding  to  the  group  generators  (in
+user-supplied order) row by row, one encounters new coset  numbers  in
+numeric order.
+<P/>
+Observe that the representatives are ordered according to  length  and
+then the lexical ordering implied by defining <M>x&lt;y&lt;a&lt;b</M> (with  some
+words omitted due to their equivalence to words that precede  them  in
+the ordering). Also observe that as one scans the body  of  the  table
+row by row from left to right new  coset  numbers  appear  in  numeric
+order without gaps (2, 3, 4,  5,  then  1  which  we  have  implicitly
+already seen, 6, 7, etc.).
+</Section>
+<Section Label="Coset Statistics Terminology">
+<Heading>Coset Statistics Terminology</Heading>
+<Index>activecosets</Index><Index>maxcosets</Index><Index>totcosets</Index>
+<Index>coincidence</Index><Index>dead coset (number)</Index><Index>alive coset number</Index>
+There are three statistics involved in the counting  of  coset  number
+definitions: <C>activecosets</C>, <C>maxcosets</C> and  <C>totcosets</C>;  these  are
+three of  the  fields  of  the  record  returned  by  <C>ACEStats</C>  (see
+Section&nbsp;<Ref Sect="Using ACE Directly to Test whether a Coset Enumeration Terminates"/>), and they correspond to the <C>a</C>, <C>m</C> and  <C>t</C>  statistics
+of an &ACE; <Q>results message</Q> (see Appendix&nbsp;<Ref Chap="The Meanings of ACE's output messages"/>). As already described, coset enumeration proceeds by
+defining coset numbers; <C>totcosets</C> counts <E>all</E> such definitions made
+during  an  enumeration.  During  the   coset   enumeration   process,
+<E>coincidences</E>  usually  occur,  resulting  in  the  larger  of   each
+coincident  pair  becoming  a  <E>dead  coset  number</E>.  The   statistic
+<C>activecosets</C> is the count of coset numbers  left  <E>alive</E>  (i.e.&nbsp;not
+dead) at the end of an enumeration; and  <C>maxcosets</C>  is  the  maximum
+number of <E>alive</E> cosets at any point of an enumeration.
+<P/>
+In practice, the statistics <C>maxcosets</C> and <C>totcosets</C> tend to be  of
+a similar order, though, of course, <C>maxcosets</C> can never be more than
+<C>totcosets</C>.
+</Section>
+<Section Label="Other Terminology">
+<Heading>Other Terminology</Heading>
+<Index>loop</Index><Index>pass</Index><Index>state (machine)</Index>
+In various places in this manual, we will refer to a (main) <E>loop</E>  or
+a <E>pass</E> through such a loop.  We  don't  intend  to  give  a  precise
+meaning to these terms. The reader will need to forgive us for  giving
+somewhat circular definitions in our attempt to make these terms  less
+nebulous. It is sufficient to appreciate that the &ACE; enumerator is
+organised as a state machine, where each <E>state</E> is  a  value  of  the
+coset table held internally by  &ACE;  at  the  end  of  each  <Q>main
+loop</Q>. Each step from  one  state  to  the  next  (i.e.&nbsp;each  passage
+through the main loop)  performs  an  <Q>action</Q>  (i.e.,  <C>lookahead</C>,
+<C>compaction</C>; see&nbsp;<Ref Subsect="option lookahead"/>  and&nbsp;<Ref Subsect="option compaction"/>)  or  a
+block of actions (i.e., <C>|ct|</C> coset number definitions, <C>|rt|</C>  coset
+number applications). &ACE; counts the number of passes  through  the
+main loop; if the option  <C>loop</C>  (see&nbsp;<Ref Subsect="option loop"/>)  is  set  to  a
+positive integer, &ACE; makes an early return  when  the  loop  count
+hits the value of <C>loop</C>.
+</Section>
+</Chapter>
