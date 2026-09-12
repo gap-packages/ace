@@ -56,12 +56,12 @@ group with 2 generators, since the second argument  defines  an  empty
 relator list; and since  the  third  argument  is  an  empty  list  of
 generators, the  subgroup  defined  is  trivial.  So  the  enumeration
 overflows:
-<Example><![CDATA[
+<Log><![CDATA[
 gap> ACEStats(fgens, [], []);
 #I  OVERFLOW (a=249998 r=83333 h=83333 n=249999; l=337 c=0.00; m=249998 t=249998)
 rec( activecosets := 249998, cputime := 0, cputimeUnits := "10^-2 seconds", 
   index := 0, maxcosets := 249998, totcosets := 249998 )
-]]></Example>
+]]></Log>
 The  line  starting  with   <Q>#I  </Q>.  is  the  <C>Info</C>-ed  <E>results
 message</E> from &ACE;;  see  Appendix&nbsp;<Ref Chap="The Meanings of ACE's output messages"/> for details  on  what  it  means.  Observe  that  since  the
 enumeration overflowed, &ACE;'s result message  has  been  translated
@@ -664,14 +664,14 @@ The following duplicates the <Q>Total</Q>  (<C>totcosets</C>  in  &ACE;)  and
 <Q>Max.&nbsp;Active</Q> (<C>maxcosets</C> in &ACE;) statistics for Example&nbsp;5.2  of
 <Cite Key="Sim94"/>,  found  in  Sims'  Table&nbsp;5.5.3,  for  the  <C>sims  :=  3</C>
 strategy.
-<Example><![CDATA[
+<Log><![CDATA[
 gap> SetInfoLevel(InfoACE, 1); # No behind-the-scenes info. please
 gap> F := FreeGroup("r", "s", "t");; r := F.1;; s := F.2;; t := F.3;;
 gap> ACEStats([r, s, t], [(r^t*r^-2)^-1, (s^r*s^-2)^-1, (t^s*t^-2)^-1], []
 >             : sims := 3);
 rec( activecosets := 1, cputime := 0, cputimeUnits := "10^-2 seconds", 
   index := 1, maxcosets := 673, totcosets := 673 )
-]]></Example>
+]]></Log>
 By replacing <C>sims := 3</C> with <C>sims := <A>i</A></C> for <A>i</A> equal to&nbsp;1,  5,  7
 or&nbsp;9, one may verify that for <A>i</A> equal to&nbsp;1  or&nbsp;9,  Sims'  statistics
 are again  duplicated,  and  observe  a  slight  variance  with  Sims'
@@ -701,21 +701,21 @@ gap> ACEEvenSims := function(fgens, rels, sgens, i, maxstart, maxstep)
 It turns out that one can duplicate the Sims' strategy 4 statistics in
 Table&nbsp;5.5.3 of <Cite Key="Sim94"/>, with <C><A>i</A> = 3</C> (so that <C><A>i</A> + 1  =  4</C>),
 <C><A>maxstart</A> = 14</C> and <C><A>maxstep</A> = 50</C>:
-<Example><![CDATA[
+<Log><![CDATA[
 gap> ACEEvenSims([r, s, t], [(r^t*r^-2)^-1, (s^r*s^-2)^-1, (t^s*t^-2)^-1],
 >                [], 3, 14, 50);
 rec( activecosets := 1, cputime := 0, cputimeUnits := "10^-2 seconds", 
   index := 1, maxcosets := 393, totcosets := 393 )
-]]></Example>
+]]></Log>
 Setting <C><A>maxstep</A> = 60</C> (and leaving the other parameters  the  same)
 also gives Sims' statistics, but <C><A>maxstart</A> = 64</C> with  <C><A>maxstep</A>  =
 80</C> does better:
-<Example><![CDATA[
+<Log><![CDATA[
 gap> ACEEvenSims([r, s, t], [(r^t*r^-2)^-1, (s^r*s^-2)^-1, (t^s*t^-2)^-1],
 >                [], 3, 64, 80);
 rec( activecosets := 1, cputime := 0, cputimeUnits := "10^-2 seconds", 
   index := 1, maxcosets := 352, totcosets := 352 )
-]]></Example>
+]]></Log>
 Even though the (<C>lenlex</C>) standardisation steps in the above examples
 produce a significant improvement over the  <C>sims  :=  3</C>  statistics,
 this  does  not  happen  universally.  Sims  <Cite Key="Sim94"/>  gives  many

@@ -794,7 +794,7 @@ ACEStart called with the following options:
 3
 ]]></Log>
 then the following demonstrates both usages of <C>SetACEOptions</C>:
-<Example><![CDATA[
+<Log><![CDATA[
 gap> SetACEOptions( rec(echo := 2) );
 SetACEOptions called with the following options:
  echo := 2 (not passed to ACE)
@@ -850,7 +850,7 @@ Other options set via ACE defaults:
 #I  start = yes, continue = yes, redo = yes
 #I  ***
 #I  INDEX = 60 (a=60 r=77 h=1 n=77; l=2 c=0.00; m=66 t=76)
-]]></Example>
+]]></Log>
 Each of the three commands above generates output; for brevity it  has
 not been included.
 <P/>

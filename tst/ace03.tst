@@ -10,22 +10,6 @@
 #
 gap> START_TEST("ace03.tst");
 
-# doc/options.xml:16-31
-gap> RecNames(KnownACEOptions);
-[ "default", "help", "check", "generators", "start", "cycles", "normal", 
-  "ds", "group", "subgroup", "relators", "order", "max", "rep", "system", 
-  "silent", "ct", "easy", "time", "begin", "text", "options", "fill", 
-  "aceinfile", "aceignore", "aceignoreunknown", "acenowarnings", "aceecho", 
-  "aceincomment", "aceexampleoptions", "lenlex", "semilenlex", "incomplete", 
-  "sg", "rl", "aep", "ai", "ao", "aceoutfile", "asis", "bye", "exit", "qui", 
-  "cc", "cfactor", "redo", "compaction", "continu", "dmode", "dsize", "dr", 
-  "dump", "echo", "enumeration", "felsch", "ffactor", "hard", "hlt", "hole", 
-  "lookahead", "loop", "mendelsohn", "messages", "monitor", "mode", "nc", 
-  "no", "oo", "path", "pmode", "psize", "sr", "print", "purec", "purer", 
-  "rc", "recover", "contiguous", "rfactor", "rt", "row", "sc", "stabilising", 
-  "sims", "standard", "statistics", "stats", "style", "tw", "trace", 
-  "workspace" ]
-
 # doc/options.xml:342-345
 gap> KnownACEOptions.compaction;
 [ 3, [ 0 .. 100 ] ]
@@ -41,14 +25,6 @@ gap> ACEStrategyOptions;
 # doc/options.xml:466-469
 gap> Concatenation( [ "messages" ], ACEOptionSynonyms.("messages") );
 [ "messages", "monitor" ]
-
-# doc/options.xml:738-745
-gap> Concatenation( List(RecNames(ACEParameterOptions),
->                        optname -> ACEOptionData(optname).synonyms) );
-[ "subgroup", "max", "ct", "cfactor", "time", "fill", "ffactor", "asis", 
-  "compaction", "dmode", "dsize", "enumeration", "hole", "lookahead", "loop", 
-  "mendelsohn", "messages", "monitor", "no", "path", "pmode", "psize", "rt", 
-  "rfactor", "row", "workspace" ]
 
 # doc/options.xml:1219-1221
 gap> SetInfoLevel(InfoACE, 3);

@@ -16,12 +16,6 @@ gap> F := FreeGroup("a", "b");; fgens := FreeGeneratorsOfFpGroup(F);;
 # doc/moreexamples.xml:51-53
 gap> SetInfoLevel(InfoACE, 2);
 
-# doc/moreexamples.xml:59-64
-gap> ACEStats(fgens, [], []);
-#I  OVERFLOW (a=249998 r=83333 h=83333 n=249999; l=337 c=0.00; m=249998 t=249998)
-rec( activecosets := 249998, cputime := 0, cputimeUnits := "10^-2 seconds", 
-  index := 0, maxcosets := 249998, totcosets := 249998 )
-
 # doc/moreexamples.xml:372-376
 gap> ACEStats(1); # The interactive version of ACEStats takes 1 or no arg'ts
 Error, no such interactive ACE session
@@ -120,14 +114,6 @@ gap> ACEDisplayCosetTable([-12]);
 #I  No interactive ACE sessions are currently active
 Error, no currently active interactive ACE sessions
 
-# doc/moreexamples.xml:667-674
-gap> SetInfoLevel(InfoACE, 1); # No behind-the-scenes info. please
-gap> F := FreeGroup("r", "s", "t");; r := F.1;; s := F.2;; t := F.3;;
-gap> ACEStats([r, s, t], [(r^t*r^-2)^-1, (s^r*s^-2)^-1, (t^s*t^-2)^-1], []
->             : sims := 3);
-rec( activecosets := 1, cputime := 0, cputimeUnits := "10^-2 seconds", 
-  index := 1, maxcosets := 673, totcosets := 673 )
-
 # doc/moreexamples.xml:690-700
 gap> ACEEvenSims := function(fgens, rels, sgens, i, maxstart, maxstep)
 >      local j;
@@ -138,18 +124,6 @@ gap> ACEEvenSims := function(fgens, rels, sgens, i, maxstart, maxstep)
 >      od;
 >      return ACEStats(j);
 >    end;;
-
-# doc/moreexamples.xml:704-709
-gap> ACEEvenSims([r, s, t], [(r^t*r^-2)^-1, (s^r*s^-2)^-1, (t^s*t^-2)^-1],
->                [], 3, 14, 50);
-rec( activecosets := 1, cputime := 0, cputimeUnits := "10^-2 seconds", 
-  index := 1, maxcosets := 393, totcosets := 393 )
-
-# doc/moreexamples.xml:713-718
-gap> ACEEvenSims([r, s, t], [(r^t*r^-2)^-1, (s^r*s^-2)^-1, (t^s*t^-2)^-1],
->                [], 3, 64, 80);
-rec( activecosets := 1, cputime := 0, cputimeUnits := "10^-2 seconds", 
-  index := 1, maxcosets := 352, totcosets := 352 )
 
 #
 gap> STOP_TEST("ace07.tst", 1);

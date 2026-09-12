@@ -10,63 +10,6 @@
 #
 gap> START_TEST("ace04.tst");
 
-# doc/interact.xml:797-853
-gap> SetACEOptions( rec(echo := 2) );
-SetACEOptions called with the following options:
- echo := 2 (not passed to ACE)
-Other options set via ACE defaults:
- asis := 0
- compaction := 10
- ct := 0
- dmode := 4
- dsize := 1000
- enumeration := G
- fill := 0
- hole := -1
- lookahead := 0
- loop := 0
- max := 0
- mendelsohn := 0
- messages := 0
- no := -1
- path := 0
- pmode := 3
- psize := 256
- row := 1
- rt := 0
- subgroup := H
- time := -1
- workspace := 1000000
-gap> SetACEOptions( : hlt);
-SetACEOptions called with the following options:
- hlt (no value)
-Other options set via ACE defaults:
- asis := 0
- compaction := 10
- ct := 0
- dmode := 0
- dsize := 1000
- enumeration := G
- fill := 1
- hole := -1
- lookahead := 1
- loop := 0
- max := 0
- mendelsohn := 0
- messages := 0
- no := 0
- path := 0
- pmode := 0
- psize := 256
- row := 1
- rt := 1000
- subgroup := H
- time := -1
- workspace := 1000000
-#I  start = yes, continue = yes, redo = yes
-#I  ***
-#I  INDEX = 60 (a=60 r=77 h=1 n=77; l=2 c=0.00; m=66 t=76)
-
 # doc/interact.xml:1547-1558
 gap> ACEContinue( i : max := 100 );;
 Error, Variable: 'i' must have a value

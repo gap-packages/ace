@@ -8,6 +8,7 @@
 ##
 
 gap> START_TEST( "Testing ACEDeleteSubgroupGenerators with bad input" );
+gap> SetInfoLevel(InfoACE, 1);
 gap> G := PerfectGroup( IsSubgroupFpGroup, 2^5*60, 2 );
 A5 2^4 E N 2^1
 gap> F := FreeGroupOfFpGroup( G );
@@ -27,8 +28,7 @@ rec( activecosets := 80, cputimeUnits := "10^-2 seconds", index := 80,
   maxcosets := 123, totcosets := 187 )
 gap> ACEDeleteSubgroupGenerators( i, [ t ] );             
 [ b ]
-gap> lev := InfoLevel(InfoACE);
-1
+gap> lev := InfoLevel(InfoACE);;
 gap> SetInfoLevel(InfoACE, 3);
 gap> ACEDeleteSubgroupGenerators( i, [ 2 ] );
 #I  ** ERROR (continuing with next line)

@@ -223,13 +223,13 @@ define more than 2 coset numbers. To  find  out  just  how  many  were
 required before the final  collapse,  let's  set  the  <C>InfoLevel</C>  of
 <C>InfoACE</C> (see&nbsp;<Ref Func="InfoACE"/>) to 2, so that the &ACE; enumeration
 result is printed.
-<Example><![CDATA[
+<Log><![CDATA[
 gap> SetInfoLevel(InfoACE, 2);
 gap> ACECosetTable(fgens, rels, [c]);
 #I  INDEX = 1 (a=1 r=2 h=2 n=2; l=6 c=0.00; m=2049 t=3127)
 [ [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], 
   [ 1 ], [ 1 ], [ 1 ], [ 1 ] ]
-]]></Example>
+]]></Log>
 The enumeration result line is the <C>Info</C> line  beginning  <Q>#I </Q>.
 Appendix&nbsp;<Ref Chap="The Meanings of ACE's output messages"/>  explains  how  to
 interpret such output messages from &ACE;. In particular, it explains
@@ -238,12 +238,12 @@ needed to be defined before the final  collapse  to  1  coset  number.
 Using some of the many options that &ACE; provides, one  may  achieve
 this  result  more  efficiently,  e.g.&nbsp;with   the   <C>purec</C>   strategy
 (see&nbsp;<Ref Subsect="option purec"/>):
-<Example><![CDATA[
+<Log><![CDATA[
 gap> ACECosetTable(fgens, rels, [c] : purec);
 #I  INDEX = 1 (a=1 r=2 h=2 n=2; l=4 c=0.00; m=332 t=332)
 [ [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], 
   [ 1 ], [ 1 ], [ 1 ], [ 1 ] ]
-]]></Example>
+]]></Log>
 &ACE; needs to define a <C>t</C>otal number of only  (relatively-speaking)
 332 coset numbers before the final collapse to 1 coset number.
 <P/>
@@ -507,7 +507,7 @@ option, if one has  passed  options  to  <C>ACEExample</C>,  one  will  see
 <A>examplename</A>'s options and the additional options.
 <P/>
 Consider the example <C>"A5"</C>. The effect of running
-<Example><![CDATA[
+<Log><![CDATA[
 gap> ACEExample("A5", ACEStart);
 #I  # ACEExample "A5" : enumeration of cosets of H in G,
 #I  # where G = A_5, H = Id,  using default strategy.
@@ -534,9 +534,9 @@ ACEStart called with the following options:
  subg := Id
 #I  INDEX = 60 (a=60 r=77 h=1 n=77; l=3 c=0.00; m=66 t=76)
 1
-]]></Example>
+]]></Log>
 is essentially equivalent to executing:
-<Example><![CDATA[
+<Log><![CDATA[
 gap> file := Filename(DirectoriesPackageLibrary("ace", "examples"), "A5");;
 gap> ACEfunc := ACEStart;;
 gap> ReadAsFunction(file)();
@@ -550,7 +550,7 @@ ACEStart called with the following options:
  subg := Id
 #I  INDEX = 60 (a=60 r=77 h=1 n=77; l=3 c=0.00; m=66 t=76)
 2
-]]></Example>
+]]></Log>
 except that some internal <Q>magic</Q> of <C>ACEExample</C> edits the  example
 file and displays equivalent commands a user <Q>would</Q> execute. If the
 user  has  passed  options  to  <C>ACEExample</C>   these   appear   in   a

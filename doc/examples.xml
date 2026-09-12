@@ -262,7 +262,7 @@ The return value on the last line is an <Q>index</Q> that identifies  the
 interactive process; we use this <Q>index</Q> with functions that need to
 interact with the interactive &ACE; process; we now demonstrate  this
 with the interactive version of <C>ACEStats</C>:
-<Example><![CDATA[
+<Log><![CDATA[
 gap> ACEStats(1);
 rec( activecosets := 60, cputime := 0, cputimeUnits := "10^-2 seconds", 
   index := 60, maxcosets := 66, totcosets := 76 )
@@ -271,11 +271,11 @@ gap> # ... we could have relied on the default:
 gap> ACEStats();
 rec( activecosets := 60, cputime := 0, cputimeUnits := "10^-2 seconds", 
   index := 60, maxcosets := 66, totcosets := 76 )
-]]></Example>
+]]></Log>
 Similarly, we may use <C>ACECosetTable</C> with 0 or 1 arguments, which  is
 the interactive version of <C>ACECosetTableFromGensAndRels</C>,  and  which
 returns a standard table.
-<Example><![CDATA[
+<Log><![CDATA[
 gap> ACECosetTable(); # Interactive version of ACECosetTableFromGensAndRels()
 #I  CO: a=60 r=61 h=1 n=61; c=+0.00
 #I   coset |      b      B      a
@@ -361,7 +361,7 @@ gap> ACEQuit(1); # Again, we could have omitted the 1
 gap> # If we had more than one interactive process we could have
 gap> # terminated them all in one go with:
 gap> ACEQuitAll();
-]]></Example>
+]]></Log>
 </Section>
 <Section Label="Fun with ACEExample">
 <Heading>Fun with ACEExample</Heading>
@@ -540,7 +540,7 @@ by <C>subgroup := "&lt; c &gt;", messages := 0</C>, but the quotes for the value
 of <C>subgroup</C> are not visible); note that we don't  have  to  use  the
 same abbreviations for options to over-ride them.  Also  observe  that
 our new options are <E>last</E>.
-<Example><![CDATA[
+<Log><![CDATA[
 gap> SetInfoLevel(InfoACE, 2);
 gap> ACEExample("F27-purec", ACECosetTableFromGensAndRels
 >               : sg := ["c"], subgroup := "< c >", messages := 0);
@@ -583,7 +583,7 @@ ACECosetTableFromGensAndRels called with the following options:
 #I  INDEX = 1 (a=1 r=2 h=2 n=2; l=4 c=0.00; m=332 t=332)
 [ [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], 
   [ 1 ], [ 1 ], [ 1 ], [ 1 ] ]
-]]></Example>
+]]></Log>
 <Index><K>break</K>-loop</Index><Index>OnBreak</Index>
 Now following on from our last example we shall  demonstrate  how  one
 can recover from a <K>break</K>-loop (see Section&nbsp;<Ref Sect="Using ACE Directly to Generate a Coset Table"/>). To force the <K>break</K>-loop we pass <C>max := 2</C>

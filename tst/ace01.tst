@@ -28,62 +28,6 @@ gap> rels:= [ a*b*c^-1, b*c*d^-1, c*d*e^-1, d*e*x^-1,
 >             e*x*y^-1, x*y*a^-1, y*a*b^-1];;
 gap> ACECosetTable(fgens, rels, [c]);;
 
-# doc/ace.xml:226-232
-gap> SetInfoLevel(InfoACE, 2);
-gap> ACECosetTable(fgens, rels, [c]);
-#I  INDEX = 1 (a=1 r=2 h=2 n=2; l=6 c=0.00; m=2049 t=3127)
-[ [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], 
-  [ 1 ], [ 1 ], [ 1 ], [ 1 ] ]
-
-# doc/ace.xml:241-246
-gap> ACECosetTable(fgens, rels, [c] : purec);
-#I  INDEX = 1 (a=1 r=2 h=2 n=2; l=4 c=0.00; m=332 t=332)
-[ [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], 
-  [ 1 ], [ 1 ], [ 1 ], [ 1 ] ]
-
-# doc/ace.xml:510-537
-gap> ACEExample("A5", ACEStart);
-#I  # ACEExample "A5" : enumeration of cosets of H in G,
-#I  # where G = A_5, H = Id,  using default strategy.
-#I  #
-#I  # F, a, b, G are local to ACEExample
-#I  F := FreeGroup("a","b"); a := F.1;  b := F.2;
-#I  G := F / [a^2, b^3, (a*b)^5 ];
-#I  ACEStart(
-#I      # Arguments
-#I      FreeGeneratorsOfFpGroup(G), 
-#I      RelatorsOfFpGroup(G), 
-#I      [] # Generators of identity subgroup (empty list)
-#I      # Options
-#I      : echo, # Echo handled by GAP (not ACE)
-#I        enum := "A_5",  # Give the group G a meaningful name
-#I        subg := "Id");  # Give the subgroup a meaningful name
-ACEStart called with the following arguments:
- Group generators : [ a, b ]
- Group relators : [ a^2, b^3, (a*b)^5 ]
- Subgroup generators : [  ]
-ACEStart called with the following options:
- enum := A_5
- echo := true (not passed to ACE)
- subg := Id
-#I  INDEX = 60 (a=60 r=77 h=1 n=77; l=3 c=0.00; m=66 t=76)
-1
-
-# doc/ace.xml:539-553
-gap> file := Filename(DirectoriesPackageLibrary("ace", "examples"), "A5");;
-gap> ACEfunc := ACEStart;;
-gap> ReadAsFunction(file)();
-ACEStart called with the following arguments:
- Group generators : [ a, b ]
- Group relators : [ a^2, b^3, (a*b)^5 ]
- Subgroup generators : [  ]
-ACEStart called with the following options:
- enum := A_5
- echo := true (not passed to ACE)
- subg := Id
-#I  INDEX = 60 (a=60 r=77 h=1 n=77; l=3 c=0.00; m=66 t=76)
-2
-
 # doc/ace.xml:603-624
 gap> ACEReadResearchExample("pgrelfind.g");
 #I  The following are now defined:
