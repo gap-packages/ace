@@ -58,9 +58,10 @@ generators, the  subgroup  defined  is  trivial.  So  the  enumeration
 overflows:
 <Log><![CDATA[
 gap> ACEStats(fgens, [], []);
-#I  OVERFLOW (a=249998 r=83333 h=83333 n=249999; l=337 c=0.00; m=249998 t=249998)
-rec( activecosets := 249998, cputime := 0, cputimeUnits := "10^-2 seconds", 
-  index := 0, maxcosets := 249998, totcosets := 249998 )
+#I  OVERFLOW (a=249998 r=83333 h=83333 n=249999; l=337 c=0.10; m=249998 t=2499\
+98)
+rec( index := 0, cputime := 10, cputimeUnits := "10^-2 seconds", 
+  activecosets := 249998, maxcosets := 249998, totcosets := 249998 )
 ]]></Log>
 The  line  starting  with   <Q>#I  </Q>.  is  the  <C>Info</C>-ed  <E>results
 message</E> from &ACE;;  see  Appendix&nbsp;<Ref Chap="The Meanings of ACE's output messages"/> for details  on  what  it  means.  Observe  that  since  the
@@ -143,20 +144,20 @@ gap> ACEStats(fgens, [], [] : start, print := [-1, 12]);
 #I  OVERFLOW (a=249998 r=83333 h=83333 n=249999; l=337 c=0.10; m=249998 t=2499\
 98)
 #I  co: a=249998 r=83333 h=83333 n=249999; c=+0.00
-#I   coset ||      a      A      b      B   order   rep've
+#I   coset |      a      A      b      B   order   rep've
 #I  -------+---------------------------------------------
-#I       1 ||      2      3      4      5
-#I       2 ||      6      1      7      8       0   a
-#I       3 ||      1      9     10     11       0   A
-#I       4 ||     12     13     14      1       0   b
-#I       5 ||     15     16      1     17       0   B
-#I       6 ||     18      2     19     20       0   aa
-#I       7 ||     21     22     23      2       0   ab
-#I       8 ||     24     25      2     26       0   aB
-#I       9 ||      3     27     28     29       0   AA
-#I      10 ||     30     31     32      3       0   Ab
-#I      11 ||     33     34      3     35       0   AB
-#I      12 ||     36      4     37     38       0   ba
+#I       1 |      2      3      4      5
+#I       2 |      6      1      7      8       0   a
+#I       3 |      1      9     10     11       0   A
+#I       4 |     12     13     14      1       0   b
+#I       5 |     15     16      1     17       0   B
+#I       6 |     18      2     19     20       0   aa
+#I       7 |     21     22     23      2       0   ab
+#I       8 |     24     25      2     26       0   aB
+#I       9 |      3     27     28     29       0   AA
+#I      10 |     30     31     32      3       0   Ab
+#I      11 |     33     34      3     35       0   AB
+#I      12 |     36      4     37     38       0   ba
 #I  ***
 rec( index := 0, cputime := 10, cputimeUnits := "10^-2 seconds", 
   activecosets := 249998, maxcosets := 249998, totcosets := 249998 )
@@ -203,20 +204,20 @@ gap> ACECosetTableFromGensAndRels(fgens, [], [] : start, print := [-1, 12],
 #I  OVERFLOW (a=249998 r=83333 h=83333 n=249999; l=337 c=0.09; m=249998 t=2499\
 98)
 #I  co: a=249998 r=83333 h=83333 n=249999; c=+0.00
-#I   coset ||      a      A      b      B   order   rep've
+#I   coset |      a      A      b      B   order   rep've
 #I  -------+---------------------------------------------
-#I       1 ||      2      3      4      5
-#I       2 ||      6      1      7      8       0   a
-#I       3 ||      1      9     10     11       0   A
-#I       4 ||     12     13     14      1       0   b
-#I       5 ||     15     16      1     17       0   B
-#I       6 ||     18      2     19     20       0   aa
-#I       7 ||     21     22     23      2       0   ab
-#I       8 ||     24     25      2     26       0   aB
-#I       9 ||      3     27     28     29       0   AA
-#I      10 ||     30     31     32      3       0   Ab
-#I      11 ||     33     34      3     35       0   AB
-#I      12 ||     36      4     37     38       0   ba
+#I       1 |      2      3      4      5
+#I       2 |      6      1      7      8       0   a
+#I       3 |      1      9     10     11       0   A
+#I       4 |     12     13     14      1       0   b
+#I       5 |     15     16      1     17       0   B
+#I       6 |     18      2     19     20       0   aa
+#I       7 |     21     22     23      2       0   ab
+#I       8 |     24     25      2     26       0   aB
+#I       9 |      3     27     28     29       0   AA
+#I      10 |     30     31     32      3       0   Ab
+#I      11 |     33     34      3     35       0   AB
+#I      12 |     36      4     37     38       0   ba
 #I  ***
 fail
 ]]></Log>
@@ -250,36 +251,36 @@ gap> ACECosetTableFromGensAndRels(fgens, [], [] : max := 12,
 #I    name = rigel
 #I  OVERFLOW (a=12 r=4 h=4 n=13; l=5 c=0.00; m=12 t=12)
 #I  co: a=12 r=4 h=4 n=13; c=+0.00
-#I   coset ||      a      A      b      B   order   rep've
+#I   coset |      a      A      b      B   order   rep've
 #I  -------+---------------------------------------------
-#I       1 ||      2      3      4      5
-#I       2 ||      6      1      7      8       0   a
-#I       3 ||      1      9     10     11       0   A
-#I       4 ||     12      0      0      1       0   b
-#I       5 ||      0      0      1      0       0   B
-#I       6 ||      0      2      0      0       0   aa
-#I       7 ||      0      0      0      2       0   ab
-#I       8 ||      0      0      2      0       0   aB
-#I       9 ||      3      0      0      0       0   AA
-#I      10 ||      0      0      0      3       0   Ab
-#I      11 ||      0      0      3      0       0   AB
-#I      12 ||      0      4      0      0       0   ba
+#I       1 |      2      3      4      5
+#I       2 |      6      1      7      8       0   a
+#I       3 |      1      9     10     11       0   A
+#I       4 |     12      0      0      1       0   b
+#I       5 |      0      0      1      0       0   B
+#I       6 |      0      2      0      0       0   aa
+#I       7 |      0      0      0      2       0   ab
+#I       8 |      0      0      2      0       0   aB
+#I       9 |      3      0      0      0       0   AA
+#I      10 |      0      0      0      3       0   Ab
+#I      11 |      0      0      3      0       0   AB
+#I      12 |      0      4      0      0       0   ba
 #I  ***
 #I  co: a=12 r=4 h=4 n=13; c=+0.00
-#I   coset ||      a      A      b      B
+#I   coset |      a      A      b      B
 #I  -------+----------------------------
-#I       1 ||      2      3      4      5
-#I       2 ||      6      1      7      8
-#I       3 ||      1      9     10     11
-#I       4 ||     12      0      0      1
-#I       5 ||      0      0      1      0
-#I       6 ||      0      2      0      0
-#I       7 ||      0      0      0      2
-#I       8 ||      0      0      2      0
-#I       9 ||      3      0      0      0
-#I      10 ||      0      0      0      3
-#I      11 ||      0      0      3      0
-#I      12 ||      0      4      0      0
+#I       1 |      2      3      4      5
+#I       2 |      6      1      7      8
+#I       3 |      1      9     10     11
+#I       4 |     12      0      0      1
+#I       5 |      0      0      1      0
+#I       6 |      0      2      0      0
+#I       7 |      0      0      0      2
+#I       8 |      0      0      2      0
+#I       9 |      3      0      0      0
+#I      10 |      0      0      0      3
+#I      11 |      0      0      3      0
+#I      12 |      0      4      0      0
 #I  ACECosetTable: Coset table is incomplete, reduced & lenlex standardised.
 [ [ 2, 6, 1, 12, 0, 0, 0, 0, 3, 0, 0, 0 ], 
   [ 3, 1, 9, 0, 0, 2, 0, 0, 0, 0, 0, 4 ], 
@@ -369,22 +370,36 @@ the   commands:    <C>ACEGroupGenerators</C>    (see&nbsp;<Ref Func="ACEGroupGen
 <P/>
 We can obtain the enumeration statistics record, via  the  interactive
 version of <C>ACEStats</C> (see&nbsp;<Ref Func="ACEStats" Label="interactive"/>) :
-<Example><![CDATA[
+<Log><![CDATA[
 gap> ACEStats(1); # The interactive version of ACEStats takes 1 or no arg'ts
-Error, no such interactive ACE session
-
-]]></Example>
+rec( index := 0, cputime := 10, cputimeUnits := "10^-2 seconds", 
+  activecosets := 249998, maxcosets := 249998, totcosets := 249998 )
+]]></Log>
 To display 12 lines of the  coset  table  with  coset  representatives
 without invoking a further enumeration we could do: <C>ACEStart(0,  1  :
 print   :=   [-1,   12]);</C>.   Alternatively,   we    may    use    the
 <C>ACEDisplayCosetTable</C> (see&nbsp;<Ref Func="ACEDisplayCosetTable"/>) (the table  itself
 is emitted at <C>InfoACE</C> level 1, since by default we  presumably  want
 to see it):
-<Example><![CDATA[
+<Log><![CDATA[
 gap> ACEDisplayCosetTable(1, [-1, 12]);
-Error, no such interactive ACE session
-
-]]></Example>
+#I  co: a=249998 r=83333 h=83333 n=249999; c=+0.00
+#I   coset |      a      A      b      B   order   rep've
+#I  -------+---------------------------------------------
+#I       1 |      2      3      4      5
+#I       2 |      6      1      7      8       0   a
+#I       3 |      1      9     10     11       0   A
+#I       4 |     12     13     14      1       0   b
+#I       5 |     15     16      1     17       0   B
+#I       6 |     18      2     19     20       0   aa
+#I       7 |     21     22     23      2       0   ab
+#I       8 |     24     25      2     26       0   aB
+#I       9 |      3     27     28     29       0   AA
+#I      10 |     30     31     32      3       0   Ab
+#I      11 |     33     34      3     35       0   AB
+#I      12 |     36      4     37     38       0   ba
+#I  ------------------------------------------------------------
+]]></Log>
 Still with the same interactive &ACE; process we can now emulate  the
 <C>ACECosetTableFromGensAndRels</C> exchange that  gave  us  an  incomplete
 coset table. Note that it is still necessary to invoke an  enumeration
@@ -395,26 +410,62 @@ equivalent of the 4  options  one  (or  two)  at  a  time,  via  their
 equivalent interactive commands.  Note  that  the  <C>ACEStart</C>  command
 (without <C>0</C> as first argument) inserts a <C>start</C> directive after  the
 user option <C>max</C>:
-<Example><![CDATA[
+<Log><![CDATA[
 gap> ACEStart(1 : max := 12);
-Error, no such interactive ACE session
-
-]]></Example>
+#I  ***
+#I  OVERFLOW (a=12 r=4 h=4 n=13; l=5 c=0.00; m=12 t=12)
+1
+]]></Log>
 Now the following <C>ACEDisplayCosetTable</C> command does  the  equivalent
 of the <C>print := [-1, 12]</C> option.
-<Example><![CDATA[
+<Log><![CDATA[
 gap> ACEDisplayCosetTable(1, [-1, 12]);
-Error, no such interactive ACE session
-
-]]></Example>
+#I  co: a=12 r=4 h=4 n=13; c=+0.00
+#I   coset |      a      A      b      B   order   rep've
+#I  -------+---------------------------------------------
+#I       1 |      2      3      4      5
+#I       2 |      6      1      7      8       0   a
+#I       3 |      1      9     10     11       0   A
+#I       4 |     12      0      0      1       0   b
+#I       5 |      0      0      1      0       0   B
+#I       6 |      0      2      0      0       0   aa
+#I       7 |      0      0      0      2       0   ab
+#I       8 |      0      0      2      0       0   aB
+#I       9 |      3      0      0      0       0   AA
+#I      10 |      0      0      0      3       0   Ab
+#I      11 |      0      0      3      0       0   AB
+#I      12 |      0      4      0      0       0   ba
+#I  ------------------------------------------------------------
+]]></Log>
 Finally, we call <C>ACECosetTable</C> with 1 argument  (which  invokes  the
 interactive version of <C>ACECosetTableFromGensAndRels</C>) with the option
 <C>incomplete</C>.
-<Example><![CDATA[
+<Log><![CDATA[
 gap> ACECosetTable(1 : incomplete);
-Error, no such interactive ACE session
-
-]]></Example>
+#I  start = yes, continue = yes, redo = yes
+#I  ***
+#I  OVERFLOW (a=12 r=4 h=4 n=13; l=4 c=0.00; m=12 t=12)
+#I  co: a=12 r=4 h=4 n=13; c=+0.00
+#I   coset |      a      A      b      B
+#I  -------+----------------------------
+#I       1 |      2      3      4      5
+#I       2 |      6      1      7      8
+#I       3 |      1      9     10     11
+#I       4 |     12      0      0      1
+#I       5 |      0      0      1      0
+#I       6 |      0      2      0      0
+#I       7 |      0      0      0      2
+#I       8 |      0      0      2      0
+#I       9 |      3      0      0      0
+#I      10 |      0      0      0      3
+#I      11 |      0      0      3      0
+#I      12 |      0      4      0      0
+#I  ACECosetTable: Coset table is incomplete, reduced & lenlex standardised.
+[ [ 2, 6, 1, 12, 0, 0, 0, 0, 3, 0, 0, 0 ], 
+  [ 3, 1, 9, 0, 0, 2, 0, 0, 0, 0, 0, 4 ], 
+  [ 4, 7, 10, 0, 1, 0, 0, 2, 0, 0, 3, 0 ], 
+  [ 5, 8, 11, 1, 0, 0, 2, 0, 0, 3, 0, 0 ] ]
+]]></Log>
 Observe the line beginning <Q>#I start = yes,</Q>  (the  first line in
 the output of <C>ACECosetTable</C>). This line appears in response  to  the
 option <C>mode</C> (see&nbsp;<Ref Subsect="option mode"/>) inserted  by  <C>ACECosetTable</C>  after
@@ -448,10 +499,10 @@ and we will still see the messages <E>from</E>  &ACE;).  Note,  that  when
 <E>variable</E> <C>a</C> is (at the moment) unassigned; so for  convenience  (in
 defining relators, for example) we first assign the variable <C>a</C> to be
 <C>F.1</C> (and <C>b</C> to be <C>F.2</C>).
-<Example><![CDATA[
+<Log><![CDATA[
 gap> SetInfoLevel(InfoACE, 4);
 gap> a := F.1;; b := F.2;;
-gap> # Enumerating A_5 = < a, b || a^2, b^3, (a*b)^5 >
+gap> # Enumerating A_5 = < a, b | a^2, b^3, (a*b)^5 >
 gap> # over Id (trivial subgp)
 gap> ACEStart(1, fgens, [a^2, b^3, (a*b)^5], []
 >                                     # 4th arg empty (to define Id)
@@ -459,9 +510,31 @@ gap> ACEStart(1, fgens, [a^2, b^3, (a*b)^5], []
 >               subgroup := "Id",     # Define the Subgroup Name
 >               max := 0,             # Set `max' back to default (no limit)
 >               messages := 1000);    # Progress messages every 1000 iter'ns
-Error, no such interactive ACE session
-
-]]></Example>
+#I  ToACE> group:ab;
+#I  ToACE> relators:a^2,b^3,a*b*a*b*a*b*a*b*a*b;
+#I  ToACE> generators;
+#I  ToACE> enumeration:A_5;
+#I  ToACE> subgroup:Id;
+#I  ToACE> max:0;
+#I  ToACE> messages:1000;
+#I  ToACE> text:***;
+#I  ***
+#I  ToACE> text:***;
+#I  ***
+#I  ToACE> Start;
+#I    #--- ACE 3.001: Run Parameters ---
+#I  Group Name: A_5;
+#I  Group Generators: ab;
+#I  Group Relators: (a)^2, (b)^3, (ab)^5;
+#I  Subgroup Name: Id;
+#I  Subgroup Generators: ;
+#I  Wo:1000000; Max:333331; Mess:1000; Ti:-1; Ho:-1; Loop:0;
+#I  As:0; Path:0; Row:1; Mend:0; No:3; Look:0; Com:10;
+#I  C:0; R:0; Fi:6; PMod:3; PSiz:256; DMod:4; DSiz:1000;
+#I    #---------------------------------
+#I  INDEX = 60 (a=60 r=77 h=1 n=77; l=3 c=0.00; m=66 t=76)
+1
+]]></Log>
 Observe that the <C>fgens</C> and  subgroup  generators  (the  empty  list)
 arguments are transmitted to &ACE; via the  &ACE;  binary's  <C>group</C>
 and <C>generators</C> options, respectively. Observe also, that the relator
@@ -475,15 +548,49 @@ were defined (if we had tried <C>felsch</C> we would have achieved the best
 possible: <C>t=60</C>).  Note,  that  &ACE;  already  <Q>knew</Q>  the  group
 generators  and  subgroup  generators;  so,  we  could  have   avoided
 re-transmitting that information by using the <C>relators</C>  (see&nbsp;<Ref Subsect="option relators"/>) option:
-<Example><![CDATA[
+<Log><![CDATA[
 gap> ACEStart(1 : relators := ToACEWords(fgens, [a^2, b^3, (a*b)^5]),
 >                 enumeration := "A_5",
 >                 subgroup := "Id",
 >                 max := 0,
 >                 messages := 1000);
-Error, no such interactive ACE session
-
-]]></Example>
+#I  Detected usage of a synonym of one (or more) of the options:
+#I      `group', `relators', `generators'.
+#I  Discarding current values of args.
+#I  (The new args will be extracted from ACE, later).
+#I  ToACE> relators:a^2,b^3,a*b*a*b*a*b*a*b*a*b;
+#I  ToACE> enumeration:A_5;
+#I  ToACE> subgroup:Id;
+#I  ToACE> max:0;
+#I  ToACE> messages:1000;
+#I  No group generators saved. Setting value(s) from ACE ...
+#I  ToACE> sr:1;
+#I    #--- ACE 3.001: Run Parameters ---
+#I  Group Name: A_5;
+#I  Group Generators: ab;
+#I  Group Relators: (a)^2, bbb, ababababab;
+#I  Subgroup Name: Id;
+#I  Subgroup Generators: ;
+#I  Wo:1000000; Max:333331; Mess:1000; Ti:-1; Ho:-1; Loop:0;
+#I  As:0; Path:0; Row:1; Mend:0; No:3; Look:0; Com:10;
+#I  C:0; R:0; Fi:6; PMod:3; PSiz:256; DMod:4; DSiz:1000;
+#I    #---------------------------------
+#I  ToACE> text:***;
+#I  ***
+#I  ToACE> Start;
+#I    #--- ACE 3.001: Run Parameters ---
+#I  Group Name: A_5;
+#I  Group Generators: ab;
+#I  Group Relators: (a)^2, (b)^3, (ab)^5;
+#I  Subgroup Name: Id;
+#I  Subgroup Generators: ;
+#I  Wo:1000000; Max:333331; Mess:1000; Ti:-1; Ho:-1; Loop:0;
+#I  As:0; Path:0; Row:1; Mend:0; No:3; Look:0; Com:10;
+#I  C:0; R:0; Fi:6; PMod:3; PSiz:256; DMod:4; DSiz:1000;
+#I    #---------------------------------
+#I  INDEX = 60 (a=60 r=77 h=1 n=77; l=3 c=0.00; m=66 t=76)
+1
+]]></Log>
 Note the usage  of  <C>ToACEWords</C>  (see&nbsp;<Ref Func="ToACEWords"/>)  to  provide  the
 appropriate string value of the <C>relators</C> option. Also,  observe  the
 <C>Info</C>-ed warning of the action  triggered  by  using  the  <C>relators</C>
@@ -502,18 +609,15 @@ transmitting <C>Start</C> to &ACE;.
 <P/>
 In  particular,  &GAP;  no  longer  thinks  <C>fgens</C>  are  the   group
 generators:
-<Example><![CDATA[
+<Log><![CDATA[
 gap> ACEGroupGenerators(1) = fgens;
-Error, no such interactive ACE session
-
-]]></Example>
+false
+]]></Log>
 Groan! We will just have to re-instantiate everything:
-<Example><![CDATA[
+<Log><![CDATA[
 gap> fgens := ACEGroupGenerators(1);;
-Error, no such interactive ACE session
-
 gap> F := GroupWithGenerators(fgens);; a := F.1;; b := F.2;;
-]]></Example>
+]]></Log>
 We now define a non-trivial subgroup, of small enough index,  to  make
 the observation of all progress messages, by setting <C>messages :=  1</C>,
 a not too onerous proposition. As for defining the relators, we  could
@@ -524,13 +628,43 @@ save anything by doing this, since afterwards the  variables  <C>fgens</C>,
 <C>a</C>, <C>b</C> and <C>F</C> would no longer be associated with <C>ACEStart</C> process
 1. Instead, we will use the more convenient 4-argument form, and  also
 switch the <C>InfoACE</C> level back to 3:
-<Example><![CDATA[
+<Log><![CDATA[
 gap> SetInfoLevel(InfoACE, 3);
 gap> ACEStart(1, ACEGroupGenerators(1), ACERelators(1), [ a*b ]
 >             : messages := 1);
-Error, no such interactive ACE session
-
-]]></Example>
+#I  ***
+#I  ***
+#I    #--- ACE 3.001: Run Parameters ---
+#I  Group Name: A_5;
+#I  Group Generators: ab;
+#I  Group Relators: (a)^2, (b)^3, (ab)^5;
+#I  Subgroup Name: Id;
+#I  Subgroup Generators: ab;
+#I  Wo:1000000; Max:333331; Mess:1; Ti:-1; Ho:-1; Loop:0;
+#I  As:0; Path:0; Row:1; Mend:0; No:3; Look:0; Com:10;
+#I  C:0; R:0; Fi:6; PMod:3; PSiz:256; DMod:4; DSiz:1000;
+#I    #---------------------------------
+#I  AD: a=2 r=1 h=1 n=3; l=1 c=+0.00; m=2 t=2
+#I  SG: a=2 r=1 h=1 n=3; l=1 c=+0.00; m=2 t=2
+#I  RD: a=3 r=1 h=1 n=4; l=2 c=+0.00; m=3 t=3
+#I  RD: a=4 r=2 h=1 n=5; l=2 c=+0.00; m=4 t=4
+#I  RD: a=5 r=2 h=1 n=6; l=2 c=+0.00; m=5 t=5
+#I  RD: a=6 r=2 h=1 n=7; l=2 c=+0.00; m=6 t=6
+#I  RD: a=7 r=2 h=1 n=8; l=2 c=+0.00; m=7 t=7
+#I  RD: a=8 r=2 h=1 n=9; l=2 c=+0.00; m=8 t=8
+#I  RD: a=9 r=2 h=1 n=10; l=2 c=+0.00; m=9 t=9
+#I  CC: a=8 r=2 h=1 n=10; l=2 c=+0.00; d=0
+#I  RD: a=9 r=5 h=1 n=11; l=2 c=+0.00; m=9 t=10
+#I  RD: a=10 r=5 h=1 n=12; l=2 c=+0.00; m=10 t=11
+#I  RD: a=11 r=5 h=1 n=13; l=2 c=+0.00; m=11 t=12
+#I  RD: a=12 r=5 h=1 n=14; l=2 c=+0.00; m=12 t=13
+#I  RD: a=13 r=5 h=1 n=15; l=2 c=+0.00; m=13 t=14
+#I  RD: a=14 r=5 h=1 n=16; l=2 c=+0.00; m=14 t=15
+#I  CC: a=13 r=6 h=1 n=16; l=2 c=+0.00; d=0
+#I  CC: a=12 r=6 h=1 n=16; l=2 c=+0.00; d=0
+#I  INDEX = 12 (a=12 r=16 h=1 n=16; l=3 c=0.00; m=14 t=15)
+1
+]]></Log>
 Observe that we used <C>ACERelators(1)</C> (see&nbsp;<Ref Func="ACERelators"/>) to grab  the
 value  of  the  relators  we  had  defined  earlier.  We   also   used
 <C>ACEGroupGenerators(1)</C> (see&nbsp;<Ref Func="ACEGroupGenerators"/>) to  get  the  group
@@ -547,11 +681,22 @@ We can dump out the  statistics  accumulated  during  the  run,  using
 <C>ACEDumpStatistics</C>  (see&nbsp;<Ref Func="ACEDumpStatistics"/>),  which   <C>Info</C>s   the
 &ACE;  output  of  the  <C>statistics</C>  (see&nbsp;<Ref Subsect="option statistics"/>)   at
 <C>InfoACE</C> level 1.
-<Example><![CDATA[
+<Log><![CDATA[
 gap> ACEDumpStatistics();
-#I  No interactive ACE sessions are currently active
-Error, no currently active interactive ACE sessions
-]]></Example>
+#I    #- ACE 3.001: Level 0 Statistics -
+#I  cdcoinc=0 rdcoinc=2 apcoinc=0 rlcoinc=0 clcoinc=0
+#I    xcoinc=2 xcols12=4 qcoinc=3
+#I    xsave12=0 s12dup=0 s12new=0
+#I    xcrep=6 crepred=0 crepwrk=0 xcomp=0 compwrk=0
+#I  xsaved=0 sdmax=0 sdoflow=0
+#I  xapply=1 apdedn=1 apdefn=1
+#I  rldedn=0 cldedn=0
+#I  xrdefn=1 rddedn=5 rddefn=13 rdfill=0
+#I  xcdefn=0 cddproc=0 cdddedn=0 cddedn=0
+#I    cdgap=0 cdidefn=0 cdidedn=0 cdpdl=0 cdpof=0
+#I    cdpdead=0 cdpdefn=0 cddefn=0
+#I    #---------------------------------
+]]></Log>
 The statistic <C>qcoinc=3</C> states what we had already observed,  namely,
 that there  were  three  coincidences.  Of  these,  two  were  primary
 coincidences  (<C>rdcoinc=2</C>).  Since  <C>t=15</C>,   there   were   fourteen
@@ -563,11 +708,25 @@ will need to read the C code comments.
 <P/>
 Now let us display  all  12  lines  of  the  coset  table  with  coset
 representatives.
-<Example><![CDATA[
+<Log><![CDATA[
 gap> ACEDisplayCosetTable([-12]);
-#I  No interactive ACE sessions are currently active
-Error, no currently active interactive ACE sessions
-]]></Example>
+#I  CO: a=12 r=13 h=1 n=13; c=+0.00
+#I   coset |      b      B      a   order   rep've
+#I  -------+--------------------------------------
+#I       1 |      3      2      2
+#I       2 |      1      3      1       3   B
+#I       3 |      2      1      4       3   b
+#I       4 |      8      5      3       5   ba
+#I       5 |      4      8      6       2   baB
+#I       6 |      9      7      5       5   baBa
+#I       7 |      6      9      8       3   baBaB
+#I       8 |      5      4      7       5   bab
+#I       9 |      7      6     10       5   baBab
+#I      10 |     12     11      9       3   baBaba
+#I      11 |     10     12     12       2   baBabaB
+#I      12 |     11     10     11       3   baBabab
+#I  ------------------------------------------------------------
+]]></Log>
 Note  how  the  pre-printout  compaction  phase  now  does  some  work
 (indicated  by  the  upper-case   <C>CO:</C>   tag),   since   there   were
 coincidences, and hence dead coset numbers. Note how <C>b</C> and <C>B</C>  head
@@ -584,14 +743,27 @@ standardisation and coset table display steps a  compaction  phase  is
 invoked but on both occasions the lowercase <C>co:</C> tag  indicates  that
 nothing is done (all the recovery of dead coset numbers that could  be
 done was done earlier).
-<Example><![CDATA[
+<Log><![CDATA[
 gap> ACEStandardCosetNumbering();
-#I  No interactive ACE sessions are currently active
-Error, no currently active interactive ACE sessions
+#I  co/ST: a=12 r=13 h=1 n=13; c=+0.00
 gap> ACEDisplayCosetTable([-12]);
-#I  No interactive ACE sessions are currently active
-Error, no currently active interactive ACE sessions
-]]></Example>
+#I  co: a=12 r=13 h=1 n=13; c=+0.00
+#I   coset |      b      B      a   order   rep've
+#I  -------+--------------------------------------
+#I       1 |      2      3      3
+#I       2 |      3      1      4       3   b
+#I       3 |      1      2      1       3   B
+#I       4 |      5      6      2       5   ba
+#I       5 |      6      4      7       5   bab
+#I       6 |      4      5      8       2   baB
+#I       7 |      8      9      5       5   baba
+#I       8 |      9      7      6       5   baBa
+#I       9 |      7      8     10       3   babaB
+#I      10 |     11     12      9       3   babaBa
+#I      11 |     12     10     12       3   babaBab
+#I      12 |     10     11     11       2   babaBaB
+#I  ------------------------------------------------------------
+]]></Log>
 Of course, the table above is not <C>lenlex</C> with respect to  the  order
 of the generators we had originally given to &ACE;; to get  that,  we
 would have needed to specify <C>lenlex</C>  (see&nbsp;<Ref Subsect="option lenlex"/>)  at  the
@@ -604,20 +776,46 @@ the first two columns of the coset table, effectively stopping  &ACE;
 from reordering the generators. To see what is passed  to  &ACE;,  at
 the enumeration stage, we set the <C>InfoACE</C> level to 4,  but  since  we
 don't really want to see messages this time we set <C>messages := 0</C>.
-<Example><![CDATA[
+<Log><![CDATA[
 gap> SetInfoLevel(InfoACE, 4);
 gap> ACEStart(1, ACEGroupGenerators(1), ACERelators(1), [ a*b ]
 >             : messages := 0, lenlex);
-Error, no such interactive ACE session
-
+#I  ToACE> group:ab;
+#I  ToACE> relators:aa, b^3,a*b*a*b*a*b*a*b*a*b;
+#I  ToACE> generators:a*b;
+#I  ToACE> asis:1;
+#I  ToACE> messages:0;
+#I  ToACE> text:***;
+#I  ***
+#I  ToACE> text:***;
+#I  ***
+#I  ToACE> Start;
+#I  INDEX = 12 (a=12 r=17 h=1 n=17; l=3 c=0.00; m=15 t=16)
+1
 gap> ACEStandardCosetNumbering();
-#I  No interactive ACE sessions are currently active
-Error, no currently active interactive ACE sessions
+#I  ToACE> standard;
+#I  CO/ST: a=12 r=13 h=1 n=13; c=+0.00
 gap> # The capitalised `CO' indicates space was recovered during compaction
 gap> ACEDisplayCosetTable([-12]);
-#I  No interactive ACE sessions are currently active
-Error, no currently active interactive ACE sessions
-]]></Example>
+#I  ToACE> print:-12;
+#I  ToACE> text:------------------------------------------------------------;
+#I  co: a=12 r=13 h=1 n=13; c=+0.00
+#I   coset |      a      A      b      B   order   rep've
+#I  -------+---------------------------------------------
+#I       1 |      2      2      3      2
+#I       2 |      1      1      1      3       2   a
+#I       3 |      4      4      2      1       3   b
+#I       4 |      3      3      5      6       5   ba
+#I       5 |      7      7      6      4       5   bab
+#I       6 |      8      8      4      5       2   baB
+#I       7 |      5      5      8      9       5   baba
+#I       8 |      6      6      9      7       5   baBa
+#I       9 |     10     10      7      8       3   babaB
+#I      10 |      9      9     11     12       3   babaBa
+#I      11 |     12     12     12     10       3   babaBab
+#I      12 |     11     11     10     11       2   babaBaB
+#I  ------------------------------------------------------------
+]]></Log>
 You may have noticed the use of &ACE;'s <C>text</C> option  several  times
 above; this just tells &ACE; to print the argument  given  to  <C>text</C>
 (as a comment). This is used by the &GAP; interface  as  a  sentinel;
@@ -669,8 +867,8 @@ gap> SetInfoLevel(InfoACE, 1); # No behind-the-scenes info. please
 gap> F := FreeGroup("r", "s", "t");; r := F.1;; s := F.2;; t := F.3;;
 gap> ACEStats([r, s, t], [(r^t*r^-2)^-1, (s^r*s^-2)^-1, (t^s*t^-2)^-1], []
 >             : sims := 3);
-rec( activecosets := 1, cputime := 0, cputimeUnits := "10^-2 seconds", 
-  index := 1, maxcosets := 673, totcosets := 673 )
+rec( index := 1, cputime := 0, cputimeUnits := "10^-2 seconds", 
+  activecosets := 1, maxcosets := 673, totcosets := 673 )
 ]]></Log>
 By replacing <C>sims := 3</C> with <C>sims := <A>i</A></C> for <A>i</A> equal to&nbsp;1,  5,  7
 or&nbsp;9, one may verify that for <A>i</A> equal to&nbsp;1  or&nbsp;9,  Sims'  statistics
@@ -704,8 +902,8 @@ Table&nbsp;5.5.3 of <Cite Key="Sim94"/>, with <C><A>i</A> = 3</C> (so that <C><A
 <Log><![CDATA[
 gap> ACEEvenSims([r, s, t], [(r^t*r^-2)^-1, (s^r*s^-2)^-1, (t^s*t^-2)^-1],
 >                [], 3, 14, 50);
-rec( activecosets := 1, cputime := 0, cputimeUnits := "10^-2 seconds", 
-  index := 1, maxcosets := 393, totcosets := 393 )
+rec( index := 1, cputime := 0, cputimeUnits := "10^-2 seconds", 
+  activecosets := 1, maxcosets := 393, totcosets := 393 )
 ]]></Log>
 Setting <C><A>maxstep</A> = 60</C> (and leaving the other parameters  the  same)
 also gives Sims' statistics, but <C><A>maxstart</A> = 64</C> with  <C><A>maxstep</A>  =
@@ -713,8 +911,8 @@ also gives Sims' statistics, but <C><A>maxstart</A> = 64</C> with  <C><A>maxstep
 <Log><![CDATA[
 gap> ACEEvenSims([r, s, t], [(r^t*r^-2)^-1, (s^r*s^-2)^-1, (t^s*t^-2)^-1],
 >                [], 3, 64, 80);
-rec( activecosets := 1, cputime := 0, cputimeUnits := "10^-2 seconds", 
-  index := 1, maxcosets := 352, totcosets := 352 )
+rec( index := 1, cputime := 0, cputimeUnits := "10^-2 seconds", 
+  activecosets := 1, maxcosets := 352, totcosets := 352 )
 ]]></Log>
 Even though the (<C>lenlex</C>) standardisation steps in the above examples
 produce a significant improvement over the  <C>sims  :=  3</C>  statistics,

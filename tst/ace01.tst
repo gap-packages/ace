@@ -13,14 +13,10 @@ gap> START_TEST("ace01.tst");
 # doc/ace.xml:58-60
 gap> TCENUM:=ACETCENUM;;
 
-# doc/ace.xml:70-73
-gap> FactorCosetAction(G,H : workspace:=10^9);
-Error, Variable: 'G' must have a value
-
-# doc/ace.xml:79-81
+# doc/ace.xml:78-80
 gap> TCENUM:=GAPTCENUM;;
 
-# doc/ace.xml:162-169
+# doc/ace.xml:161-168
 gap> F:= FreeGroup( "a", "b", "c", "d", "e", "x", "y");;
 gap> a:= F.1;; b:= F.2;; c:= F.3;; d:= F.4;; e:= F.5;; x:= F.6;; y:= F.7;;
 gap> fgens:= [a, b, c, d, e, x, y];;
@@ -28,7 +24,7 @@ gap> rels:= [ a*b*c^-1, b*c*d^-1, c*d*e^-1, d*e*x^-1,
 >             e*x*y^-1, x*y*a^-1, y*a*b^-1];;
 gap> ACECosetTable(fgens, rels, [c]);;
 
-# doc/ace.xml:603-624
+# doc/ace.xml:567-588
 gap> ACEReadResearchExample("pgrelfind.g");
 #I  The following are now defined:
 #I  
@@ -50,7 +46,7 @@ gap> ACEReadResearchExample("pgrelfind.g");
 #I  
 #I  For information type: ?Using ACEReadResearchExample
 
-# doc/ace.xml:626-648
+# doc/ace.xml:590-612
 gap> Read( Filename(DirectoriesPackageLibrary("ace", "res-examples"),
 >                   "pgrelfind.g") );
 #I  The following are now defined:
@@ -73,13 +69,13 @@ gap> Read( Filename(DirectoriesPackageLibrary("ace", "res-examples"),
 #I  
 #I  For information type: ?Using ACEReadResearchExample
 
-# doc/ace.xml:798-800
+# doc/ace.xml:762-764
 gap> SetInfoLevel(InfoACE, 2);
 
-# doc/ace.xml:803-805
+# doc/ace.xml:767-769
 gap> SetInfoLevel(InfoACE, 3);
 
-# doc/ace.xml:811-813
+# doc/ace.xml:775-777
 gap> SetInfoLevel(InfoACE, 4);
 
 #

@@ -96,58 +96,6 @@ You should see all the above (and a little  more),  except  that  your
 dates and host information will no doubt differ, by running:
 <Log><![CDATA[
 gap> ACEExample("A5-C5" : echo:=0, messages:=-1);
-#I  # ACEExample "A5-C5" : enumeration of cosets of H in G,
-#I  # where G = A_5, H = C_5,  using default strategy.
-#I  #
-#I  # F, a, b, G are local to ACEExample
-#I  F := FreeGroup("a","b"); a := F.1;  b := F.2;
-#I  G := F / [a^2, b^3, (a*b)^5 ];
-#I  ACEStats(
-#I      # Arguments
-#I      FreeGeneratorsOfFpGroup(G), RelatorsOfFpGroup(G), [a*b]
-#I      # Options
-#I      : echo, # Echo handled by GAP (not ACE)
-#I        enum := "A_5",  # Give the group G a meaningful name
-#I        subg := "C_5",  # Give the subgroup a meaningful name
-#I      # User Options
-#I        echo := 0,
-#I        messages := -1);
-#I  ACE 3.001        Fri Sep 11 19:43:09 2026
-#I  =========================================
-#I  Host information:
-#I    name = Max-M1-Max.local
-#I  ***
-#I    #--- ACE 3.001: Run Parameters ---
-#I  Group Name: A_5;
-#I  Group Generators: ab;
-#I  Group Relators: (a)^2, (b)^3, (ab)^5;
-#I  Subgroup Name: C_5;
-#I  Subgroup Generators: ab;
-#I  Wo:1000000; Max:333331; Mess:-1; Ti:-1; Ho:-1; Loop:0;
-#I  As:0; Path:0; Row:1; Mend:0; No:3; Look:0; Com:10;
-#I  C:0; R:0; Fi:6; PMod:3; PSiz:256; DMod:4; DSiz:1000;
-#I    #---------------------------------
-#I  AD: a=2 r=1 h=1 n=3; h=66.67% l=1 c=+0.00; m=2 t=2
-#I  SG: a=2 r=1 h=1 n=3; h=33.33% l=1 c=+0.00; m=2 t=2
-#I  RD: a=3 r=1 h=1 n=4; h=33.33% l=2 c=+0.00; m=3 t=3
-#I  RD: a=4 r=2 h=1 n=5; h=16.67% l=2 c=+0.00; m=4 t=4
-#I  RD: a=5 r=2 h=1 n=6; h=20.00% l=2 c=+0.00; m=5 t=5
-#I  RD: a=6 r=2 h=1 n=7; h=22.22% l=2 c=+0.00; m=6 t=6
-#I  RD: a=7 r=2 h=1 n=8; h=23.81% l=2 c=+0.00; m=7 t=7
-#I  RD: a=8 r=2 h=1 n=9; h=25.00% l=2 c=+0.00; m=8 t=8
-#I  RD: a=9 r=2 h=1 n=10; h=25.93% l=2 c=+0.00; m=9 t=9
-#I  CC: a=8 r=2 h=1 n=10; h=16.67% l=2 c=+0.00; d=0
-#I  RD: a=9 r=5 h=1 n=11; h=11.11% l=2 c=+0.00; m=9 t=10
-#I  RD: a=10 r=5 h=1 n=12; h=13.33% l=2 c=+0.00; m=10 t=11
-#I  RD: a=11 r=5 h=1 n=13; h=15.15% l=2 c=+0.00; m=11 t=12
-#I  RD: a=12 r=5 h=1 n=14; h=16.67% l=2 c=+0.00; m=12 t=13
-#I  RD: a=13 r=5 h=1 n=15; h=17.95% l=2 c=+0.00; m=13 t=14
-#I  RD: a=14 r=5 h=1 n=16; h=19.05% l=2 c=+0.00; m=14 t=15
-#I  CC: a=13 r=6 h=1 n=16; h=10.26% l=2 c=+0.00; d=0
-#I  CC: a=12 r=6 h=1 n=16; h=5.56% l=2 c=+0.00; d=0
-#I  INDEX = 12 (a=12 r=16 h=1 n=16; l=3 c=0.00; m=14 t=15)
-rec( activecosets := 12, cputime := 0, cputimeUnits := "10^-2 seconds", 
-  index := 12, maxcosets := 14, totcosets := 15 )
 ]]></Log>
 In the following table we  list  the  statistics  that  can  follow  a
 progress or results message tag, in order:

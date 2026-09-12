@@ -15,19 +15,19 @@ of  &ACE;  options,   after   loading   the   &ACE;   Package   (see
 Section&nbsp;<Ref Sect="Loading the ACE Package"/>), by typing
 <Log><![CDATA[
 gap> RecNames(KnownACEOptions);
-[ "default", "help", "check", "generators", "start", "cycles", "normal", 
-  "ds", "group", "subgroup", "relators", "order", "max", "rep", "system", 
-  "silent", "ct", "easy", "time", "begin", "text", "options", "fill", 
+[ "default", "help", "check", "generators", "start", "path", "cycles", 
+  "normal", "ds", "group", "subgroup", "relators", "order", "max", "rep", 
+  "system", "silent", "time", "begin", "text", "options", "fill", 
   "aceinfile", "aceignore", "aceignoreunknown", "acenowarnings", "aceecho", 
   "aceincomment", "aceexampleoptions", "lenlex", "semilenlex", "incomplete", 
   "sg", "rl", "aep", "ai", "ao", "aceoutfile", "asis", "bye", "exit", "qui", 
-  "cc", "cfactor", "redo", "compaction", "continu", "dmode", "dsize", "dr", 
-  "dump", "echo", "enumeration", "felsch", "ffactor", "hard", "hlt", "hole", 
-  "lookahead", "loop", "mendelsohn", "messages", "monitor", "mode", "nc", 
-  "no", "oo", "path", "pmode", "psize", "sr", "print", "purec", "purer", 
-  "rc", "recover", "contiguous", "rfactor", "rt", "row", "sc", "stabilising", 
-  "sims", "standard", "statistics", "stats", "style", "tw", "trace", 
-  "workspace" ]
+  "cc", "cfactor", "ct", "redo", "compaction", "continu", "dmode", "dsize", 
+  "dr", "dump", "easy", "echo", "enumeration", "felsch", "ffactor", "hard", 
+  "hlt", "hole", "lookahead", "loop", "mendelsohn", "messages", "monitor", 
+  "mode", "nc", "no", "oo", "pmode", "psize", "sr", "print", "purec", 
+  "purer", "rc", "recover", "contiguous", "rfactor", "rt", "row", "sc", 
+  "stabilising", "sims", "standard", "statistics", "stats", "style", "tw", 
+  "trace", "workspace" ]
 ]]></Log>
 (See Section&nbsp;<Ref Sect="The KnownACEOptions Record"/>.) Also, from within a &GAP;
 session, you may use &GAP;'s help browser (see Chapter&nbsp;<Ref Chap="The Help System" BookName="ref"/> in the  &GAP;  Reference  Manual);  to  find  out  about  any
@@ -738,10 +738,10 @@ Options</Q> may be obtained by
 <Log><![CDATA[
 gap> Concatenation( List(RecNames(ACEParameterOptions),
 >                        optname -> ACEOptionData(optname).synonyms) );
-[ "subgroup", "max", "ct", "cfactor", "time", "fill", "ffactor", "asis", 
-  "compaction", "dmode", "dsize", "enumeration", "hole", "lookahead", "loop", 
-  "mendelsohn", "messages", "monitor", "no", "path", "pmode", "psize", "rt", 
-  "rfactor", "row", "workspace" ]
+[ "path", "subgroup", "max", "time", "fill", "ffactor", "asis", "ct", 
+  "cfactor", "compaction", "dmode", "dsize", "enumeration", "hole", 
+  "lookahead", "loop", "mendelsohn", "messages", "monitor", "no", "pmode", 
+  "psize", "rt", "rfactor", "row", "workspace" ]
 ]]></Log>
 We describe the <Q>&ACE; Parameter Options</Q> in the  Sections&nbsp;<Ref Sect="General ACE Parameter Options that Modify the Enumeration Process"/>,  <Ref Sect="ACE Parameter Options Modifying C Style Definitions"/>,  <Ref Sect="ACE Parameter Options for R Style Definitions"/>, <Ref Sect="ACE Parameter Options for Deduction Handling"/>, <Ref Sect="Technical ACE Parameter Options"/>, <Ref Sect="ACE Parameter Options controlling ACE Output"/>, and&nbsp;<Ref Sect="ACE Parameter Options that give Names to the Group and Subgroup"/>, following.
 </Description>

@@ -762,94 +762,11 @@ do this, make two separate calls to  <C>SetACEOptions</C>,  e.g.&nbsp;let's  say
 you have a process like that started by:
 <Log><![CDATA[
 gap> ACEExample("A5", ACEStart);
-#I  # ACEExample "A5" : enumeration of cosets of H in G,
-#I  # where G = A_5, H = Id,  using default strategy.
-#I  #
-#I  # F, a, b, G are local to ACEExample
-#I  F := FreeGroup("a","b"); a := F.1;  b := F.2;
-#I  G := F / [a^2, b^3, (a*b)^5 ];
-#I  ACEStart(
-#I      # Arguments
-#I      FreeGeneratorsOfFpGroup(G), 
-#I      RelatorsOfFpGroup(G), 
-#I      [] # Generators of identity subgroup (empty list)
-#I      # Options
-#I      : echo, # Echo handled by GAP (not ACE)
-#I        enum := "A_5",  # Give the group G a meaningful name
-#I        subg := "Id");  # Give the subgroup a meaningful name
-ACEStart called with the following arguments:
- Group generators : [ a, b ]
- Group relators : [ a^2, b^3, (a*b)^5 ]
- Subgroup generators : [  ]
-#I  ACE 3.001        Fri Sep 11 19:43:09 2026
-#I  =========================================
-#I  Host information:
-#I    name = Max-M1-Max.local
-ACEStart called with the following options:
- enum := A_5
- echo := true (not passed to ACE)
- subg := Id
-#I  ***
-#I  INDEX = 60 (a=60 r=77 h=1 n=77; l=3 c=0.00; m=66 t=76)
-3
 ]]></Log>
 then the following demonstrates both usages of <C>SetACEOptions</C>:
 <Log><![CDATA[
 gap> SetACEOptions( rec(echo := 2) );
-SetACEOptions called with the following options:
- echo := 2 (not passed to ACE)
-Other options set via ACE defaults:
- asis := 0
- compaction := 10
- ct := 0
- dmode := 4
- dsize := 1000
- enumeration := G
- fill := 0
- hole := -1
- lookahead := 0
- loop := 0
- max := 0
- mendelsohn := 0
- messages := 0
- no := -1
- path := 0
- pmode := 3
- psize := 256
- row := 1
- rt := 0
- subgroup := H
- time := -1
- workspace := 1000000
 gap> SetACEOptions( : hlt);
-SetACEOptions called with the following options:
- hlt (no value)
-Other options set via ACE defaults:
- asis := 0
- compaction := 10
- ct := 0
- dmode := 0
- dsize := 1000
- enumeration := G
- fill := 1
- hole := -1
- lookahead := 1
- loop := 0
- max := 0
- mendelsohn := 0
- messages := 0
- no := 0
- path := 0
- pmode := 0
- psize := 256
- row := 1
- rt := 1000
- subgroup := H
- time := -1
- workspace := 1000000
-#I  start = yes, continue = yes, redo = yes
-#I  ***
-#I  INDEX = 60 (a=60 r=77 h=1 n=77; l=2 c=0.00; m=66 t=76)
 ]]></Log>
 Each of the three commands above generates output; for brevity it  has
 not been included.
@@ -1525,18 +1442,9 @@ gap> rels := [ a^2, b^6, (a*b^-1*a*b)^3, (a*b^-1*a*b^2)^4, (a*b)^5,
 >              (a*b^-2*a*b^2)^2 ];;
 gap> sgens := [ a*b^3 ];;
 gap> i := ACEStart( fgens, rels, sgens : max := 80 );;
-#I  ACE 3.001        Fri Sep 11 19:43:09 2026
-#I  =========================================
-#I  Host information:
-#I    name = Max-M1-Max.local
-#I  ***
-#I  OVERFLOW (a=76 r=5 h=15 n=81; l=5 c=0.00; m=80 t=80)
 gap> IsCompleteACECosetTable( i );
 false
 gap> ACEConjugatesForSubgroupNormalClosure( i : add );
-#I  CO: a=76 r=5 h=15 n=77; c=+0.00
-#I  * All (traceable) conjugates in subgroup
-#I  ---------------------
 #I  ACEConjugatesForSubgroupNormalClosure: All (traceable) conjugates in subgp
 [  ]
 ]]></Log>
@@ -1544,39 +1452,39 @@ Though we know that <M>H</M> is not equal to its normal closure, we did not
 get any new elements (we had warned  above  of  such  a  possibility).
 Apparently our incomplete table is too small. So let us increase <C>max</C>
 to 100 and continue.
-<Example><![CDATA[
+<Log><![CDATA[
 gap> ACEContinue( i : max := 100 );;
-Error, Variable: 'i' must have a value
 gap> IsCompleteACECosetTable( i );
-Error, Variable: 'i' must have a value
+false
 gap> ACEConjugatesForSubgroupNormalClosure( i : add );
-Error, Variable: 'i' must have a value
+[ b^-1*a*b^4 ]
 gap> IsCompleteACECosetTable( i );
-Error, Variable: 'i' must have a value
+true
 gap> ACEStats( i ).index;
-Error, Variable: 'i' must have a value
-]]></Example>
+20
+]]></Log>
 This time we got a new element, and after adding it  to  the  subgroup
 generators  we  obtained  a  complete  table.  However  the  resulting
 subgroup need not yet be the normal closure of <M>H</M>  (and  in  fact  we
 know that it is not). So we continue with another call to the function
 <C>ACEConjugatesForSubgroupNormalClosure</C>.
-<Example><![CDATA[
+<Log><![CDATA[
 gap> ACEConjugatesForSubgroupNormalClosure( i : add );
-Error, Variable: 'i' must have a value
+[ b^-2*a*b^5, b*a*b^2 ]
 gap> ACEStats( i ).index;
-Error, Variable: 'i' must have a value
-]]></Example>
+2
+]]></Log>
 Now we have the index that we expected. Another call to  the  function
 <C>ACEConjugatesForSubgroupNormalClosure</C>  should  not  yield  any  more
 conjugates. We ensure that this is indeed the case  and  then  display
 the resulting list of subgroup generators.
-<Example><![CDATA[
+<Log><![CDATA[
 gap> ACEConjugatesForSubgroupNormalClosure( i : add );
-Error, Variable: 'i' must have a value
+#I  ACEConjugatesForSubgroupNormalClosure: All (traceable) conjugates in subgp
+[  ]
 gap> ACESubgroupGenerators( i );
-Error, Variable: 'i' must have a value
-]]></Example>
+[ a*b^3, b*a*b^2, b^-1*a*b^4, b^-2*a*b^5 ]
+]]></Log>
 </Description>
 </ManSection>
 </Section>

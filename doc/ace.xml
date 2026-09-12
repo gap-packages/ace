@@ -67,10 +67,9 @@ interface, not just the options <C>max</C> and <C>silent</C>. If <C>TCENUM</C> i
 to <C>ACETCENUM</C> without any  further  action,  the  <C>default</C>  strategy
 (option) of the &ACE; enumerator will be used (see  Chapter&nbsp;<Ref Chap="Strategy Options for ACE"/>). This and other options can be modified in the  ways 
 described in Chapter&nbsp;<Ref Chap="Options for ACE"/>. For instance,
-<Example><![CDATA[
+<Log><![CDATA[
 gap> FactorCosetAction(G,H : workspace:=10^9);
-Error, Variable: 'G' must have a value
-]]></Example>
+]]></Log>
 will result in &ACE; called with workspace of size <M>10^9</M>, instead of
 the default value.
 <P/>
@@ -509,47 +508,12 @@ option, if one has  passed  options  to  <C>ACEExample</C>,  one  will  see
 Consider the example <C>"A5"</C>. The effect of running
 <Log><![CDATA[
 gap> ACEExample("A5", ACEStart);
-#I  # ACEExample "A5" : enumeration of cosets of H in G,
-#I  # where G = A_5, H = Id,  using default strategy.
-#I  #
-#I  # F, a, b, G are local to ACEExample
-#I  F := FreeGroup("a","b"); a := F.1;  b := F.2;
-#I  G := F / [a^2, b^3, (a*b)^5 ];
-#I  ACEStart(
-#I      # Arguments
-#I      FreeGeneratorsOfFpGroup(G), 
-#I      RelatorsOfFpGroup(G), 
-#I      [] # Generators of identity subgroup (empty list)
-#I      # Options
-#I      : echo, # Echo handled by GAP (not ACE)
-#I        enum := "A_5",  # Give the group G a meaningful name
-#I        subg := "Id");  # Give the subgroup a meaningful name
-ACEStart called with the following arguments:
- Group generators : [ a, b ]
- Group relators : [ a^2, b^3, (a*b)^5 ]
- Subgroup generators : [  ]
-ACEStart called with the following options:
- enum := A_5
- echo := true (not passed to ACE)
- subg := Id
-#I  INDEX = 60 (a=60 r=77 h=1 n=77; l=3 c=0.00; m=66 t=76)
-1
 ]]></Log>
 is essentially equivalent to executing:
 <Log><![CDATA[
 gap> file := Filename(DirectoriesPackageLibrary("ace", "examples"), "A5");;
 gap> ACEfunc := ACEStart;;
 gap> ReadAsFunction(file)();
-ACEStart called with the following arguments:
- Group generators : [ a, b ]
- Group relators : [ a^2, b^3, (a*b)^5 ]
- Subgroup generators : [  ]
-ACEStart called with the following options:
- enum := A_5
- echo := true (not passed to ACE)
- subg := Id
-#I  INDEX = 60 (a=60 r=77 h=1 n=77; l=3 c=0.00; m=66 t=76)
-2
 ]]></Log>
 except that some internal <Q>magic</Q> of <C>ACEExample</C> edits the  example
 file and displays equivalent commands a user <Q>would</Q> execute. If the
