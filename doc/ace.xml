@@ -1,0 +1,842 @@
+<!-- W  ace.tex         ACE documentation introduction       Alexander Hulpke / W                                                      Joachim Neub"user / W                                                            Greg Gamble / Y  Copyright (C) 2000  Centre for Discrete Mathematics and Computing / Y                      Department of Information Tech. & Electrical Eng. / Y                      University of Queensland, Australia. -->
+<Chapter Label="The ACE Package">
+<Heading>The ACE Package</Heading>
+<Index>ACE</Index>
+The <Q>Advanced Coset Enumerator</Q> &ACE;:
+<Log><![CDATA[
+ACE coset enumerator (C) 1995-2001 by George Havas and Colin Ramsay
+]]></Log>
+<URL>http://staff.itee.uq.edu.au/havas</URL>
+<P/>
+can  be called  from within  &GAP; through  an interface,  written by
+Alexander Hulpke and Greg Gamble, which is described in this manual.
+<P/>
+The interface links to an external binary and therefore is only usable
+under UNIX (see  Section&nbsp;<Ref Sect="Installing the ACE Package"/>  for  how  to
+install  &ACE;).  It  will  not  work  on  Windows.
+The current version requires at least &GAP;&nbsp;4.4.
+<List>
+<Item> one may supplant the  usual  &GAP;  coset  enumerator  (see
+Section&nbsp;<Ref Sect="Using ACE as a Default for Coset Enumerations"/>),
+
+</Item>
+<Item>  one  may  generate  a  coset  table  using  &ACE;  without
+redefining the usual &GAP; coset enumerator (see  Section&nbsp;<Ref Sect="Using ACE Directly to Generate a Coset Table"/>),
+
+</Item>
+<Item> one  may  simply  test  whether  a  coset  enumeration  will
+terminate (see Section&nbsp;<Ref Sect="Using ACE Directly to Test whether a Coset Enumeration Terminates"/>),
+
+</Item>
+<Item> one may  use  &GAP;  to  write  a  script  for  the  &ACE;
+standalone  (see  Section&nbsp;<Ref Sect="Writing ACE Standalone Input Files to Generate a Coset Table"/>), and
+
+</Item>
+<Item> one may interact with  the  &ACE;  standalone  from  within
+&GAP; (see Section&nbsp;<Ref Sect="Using ACE Interactively"/>).  Among  other  things,
+the   interactive   &ACE;   interface   functions    (described    in
+Chapter&nbsp;<Ref Chap="Functions for Using ACE Interactively"/>) enable  the  user  to
+search for subgroups of a group (see the note  of  Section&nbsp;<Ref Sect="Using ACE Interactively"/>).</Item>
+</List>
+Each of these ways gives the user access to a welter of options, which
+are discussed in full  in  Chapters&nbsp;<Ref Chap="Options for ACE"/>  and&nbsp;<Ref Chap="Strategy Options for ACE"/>. Yet more options are provided in Appendix&nbsp;<Ref Chap="Other ACE Options"/>,  but  please  take  note  of  the  Appendix's   introductory
+paragraph. Check out Appendix&nbsp;<Ref Chap="Examples"/> for numerous examples of  the
+&ACE; commands.
+<P/>
+<E>Note</E>: Some care needs to be taken with  options;  be  sure  to  read
+Section&nbsp;<Ref Sect="General Warnings regarding the Use of Options"/>  and  the
+introductory sections of Chapter&nbsp;<Ref Chap="Options for ACE"/> for  some  warnings
+regarding them and a general discussion of their use, before using any
+of the functions provided by this interface to the &ACE; binary.
+<Section Label="Using ACE as a Default for Coset Enumerations">
+<Heading>Using ACE as a Default for Coset Enumerations</Heading>
+After loading &ACE; (see Section&nbsp;<Ref Sect="Loading the ACE Package"/>),  if  you
+want to use the &ACE; coset enumerator as a  default  for  all  coset
+enumerations done by &GAP; (which may also  get  called  indirectly),
+you can achieve this  by  setting  the  global  variable  <C>TCENUM</C>  to
+<C>ACETCENUM</C>.
+<Example><![CDATA[
+gap> TCENUM:=ACETCENUM;;
+]]></Example>
+This    sets    the    function    <C>CosetTableFromGensAndRels</C>    (see
+Section&nbsp;<Ref Sect="Coset Tables and Coset Enumeration" BookName="ref"/>  in  the   &GAP;
+Reference Manual) to be  the  function  <C>ACECosetTableFromGensAndRels</C>
+(described in Section&nbsp;<Ref Sect="Using ACE Directly to Generate a Coset Table"/>),
+which then can be called with all the options defined for  the  &ACE;
+interface, not just the options <C>max</C> and <C>silent</C>. If <C>TCENUM</C> is set
+to <C>ACETCENUM</C> without any  further  action,  the  <C>default</C>  strategy
+(option) of the &ACE; enumerator will be used (see  Chapter&nbsp;<Ref Chap="Strategy Options for ACE"/>). This and other options can be modified in the  ways 
+described in Chapter&nbsp;<Ref Chap="Options for ACE"/>. For instance,
+<Log><![CDATA[
+gap> FactorCosetAction(G,H : workspace:=10^9);
+]]></Log>
+will result in &ACE; called with workspace of size <M>10^9</M>, instead of
+the default value.
+<P/>
+You can switch back to the coset  enumerator  built  into  the  &GAP;
+library by assigning <C>TCENUM</C> to <C>GAPTCENUM</C>.
+<Example><![CDATA[
+gap> TCENUM:=GAPTCENUM;;
+]]></Example>
+</Section>
+<Section Label="Using ACE Directly to Generate a Coset Table">
+<Heading>Using ACE Directly to Generate a Coset Table</Heading>
+If, on the other hand you do not want to set up  &ACE;  globally  for
+your coset enumerations, you may call the &ACE;  interface  directly,
+which will allow you to decide for yourself, for each such call, which
+options you want to use for running &ACE;. Please note  the  warnings
+regarding options in Section&nbsp;<Ref Sect="General Warnings regarding the Use of Options"/>. The functions discussed in this and  the  following  section
+(<C>ACECosetTableFromGensAndRels</C> and <C>ACEStats</C>)  are  non-interactive,
+i.e.&nbsp;by their use, a file with your  input  data  in  &ACE;  readable
+format will be handed to &ACE; and you will get the  answer  back  in
+&GAP; format. At that moment however the &ACE;  job  is  terminated,
+that is, you cannot send any further questions or requests  about  the
+result of that job to &ACE;. For an interactive use  of  &ACE;  from
+&GAP; see Section&nbsp;<Ref Sect="Using ACE Interactively"/>  and  Chapter&nbsp;<Ref Chap="Functions for Using ACE Interactively"/>.
+<P/>
+Using the &ACE; interface directly to generate a coset table is  done
+by either of
+<P/>
+<Index><C>ACECosetTable</C><Subkey>non-interactive</Subkey></Index>
+<ManSection>
+<Func Name="ACECosetTableFromGensAndRels" Arg="fgens, rels, sgens"/>
+<Func Name="ACECosetTable" Arg="fgens, rels, sgens"/>
+<Description>
+Here <A>fgens</A> is a list of free generators, <A>rels</A> a list of  words  in
+these generators giving relators for a finitely presented  group,  and
+<A>sgens</A> the list of subgroup generators, again expressed as  words  in
+the free generators. All these are given in the standard &GAP; format
+(see Chapter&nbsp;<Ref Chap="Finitely Presented Groups" BookName="ref"/> of the  &GAP;  Reference
+Manual). Note that the 3-argument form  of  <C>ACECosetTable</C>  described
+here is merely a synonym for <C>ACECosetTableFromGensAndRels</C>, and  that
+<C>ACECosetTable</C> may be called in a different  way  in  an  interactive
+&ACE;    session    (see    Sections&nbsp;<Ref Sect="Using ACE Interactively"/>
+and&nbsp;<Ref Func="ACECosetTable" Label="interactive"/>).
+<P/>
+Behind the colon any  selection  of  the  options  available  for  the
+interface (see Chapters&nbsp;<Ref Chap="Options for ACE"/>  and&nbsp;<Ref Chap="Strategy Options for ACE"/>) can be given, separated by commas like record components.  These
+can be used e.g.&nbsp;to preset limits of space and time  to  be  used,  to
+modify input and output and to modify the enumeration procedure.  Note
+that strategies are simply special options that set a  number  of  the
+options, detailed in Chapter&nbsp;<Ref Chap="Options for ACE"/>, all at once.
+<P/>
+Please see Section&nbsp;<Ref Sect="General Warnings regarding the Use of Options"/> for
+a discussion regarding global and local passing of  options,  and  the
+non-orthogonal nature of &ACE;'s options.
+<P/>
+Each of <C>ACECosetTableFromGensAndRels</C> and <C>ACECosetTable</C>  calls  the
+&ACE; binary and, if successful, returns a standard coset table, as a
+&GAP; list of  lists.  At  the  time  of  writing,  two  coset  table
+standardisations schemes were possible: <C>lenlex</C> and <C>semilenlex</C> (see
+Section&nbsp;<Ref Sect="Coset Table Standardisation Schemes"/>). The user  may  control
+which standardisation scheme is used by selecting either the  <C>lenlex</C>
+(see&nbsp;<Ref Subsect="option lenlex"/>)  or  <C>semilenlex</C>   (see&nbsp;<Ref Subsect="option semilenlex"/>)
+option;  otherwise  the  table  is  standardised according to &GAP;'s
+the  value  of  <C>CosetTableStandard</C>  (which  by default is <C>lenlex</C>).
+We provide  <C>IsACEStandardCosetTable</C>  (see&nbsp;<Ref Func="IsACEStandardCosetTable"/>)
+to determine whether a table (list of lists) is standard  relative  to
+&GAP;'s default standardisation scheme, or with the  use  of  options
+(e.g.&nbsp;<C>lenlex</C> or <C>semilenlex</C>) to another standardisation scheme.
+<P/>
+If the determination of a coset table is unsuccessful, then one of the
+following occurs:
+<List>
+<Item> with the <C>incomplete</C> option  (see&nbsp;<Ref Subsect="option incomplete"/>)  an
+incomplete coset table is returned (as a list of lists), with zeros in
+positions where valid coset numbers could not be determined; or
+
+</Item>
+<Item> with the <C>silent</C> option (see&nbsp;<Ref Subsect="option silent"/>),  <K>fail</K>  is
+returned; or
+
+</Item>
+<Item> a  <K>break</K>-loop  is  entered.  This  last   possibility   is
+discussed in detail via the example that follows.</Item>
+</List>
+The example given  below  is  the  call  for  a  presentation  of  the
+Fibonacci group F(2,7) for  which  we  shall  discuss  the  impact  of
+various options in Section&nbsp;<Ref Sect="Fun with ACEExample"/>. Observe that in  the
+example, no options are passed,  which  means  that  &ACE;  uses  the
+<C>default</C> strategy (see Chapter&nbsp;<Ref Chap="Strategy Options for ACE"/>).
+<Example><![CDATA[
+gap> F:= FreeGroup( "a", "b", "c", "d", "e", "x", "y");;
+gap> a:= F.1;; b:= F.2;; c:= F.3;; d:= F.4;; e:= F.5;; x:= F.6;; y:= F.7;;
+gap> fgens:= [a, b, c, d, e, x, y];;
+gap> rels:= [ a*b*c^-1, b*c*d^-1, c*d*e^-1, d*e*x^-1,
+>             e*x*y^-1, x*y*a^-1, y*a*b^-1];;
+gap> ACECosetTable(fgens, rels, [c]);;
+]]></Example>
+<Index><K>break</K>-loop</Index>
+In computing  the  coset  table,  <C>ACECosetTableFromGensAndRels</C>  must
+first do a coset enumeration (which is where &ACE; comes in!). If the
+coset enumeration does not finish in the preset limits a  <K>break</K>-loop
+is entered,  unless  the  <C>incomplete</C>  (see&nbsp;<Ref Subsect="option incomplete"/>)  or
+<C>silent</C> (see&nbsp;<Ref Subsect="option silent"/>) options is set. In  the  event  that  a
+<K>break</K>-loop is entered, don't despair or be frightened  by  the  word
+<C>Error</C>; by tweaking &ACE;'s options via the <C>SetACEOptions</C> function
+that becomes available in the <K>break</K>-loop and then  typing  <C>return;</C>
+it may be possible to help &ACE; complete the coset enumeration  (and
+hence successfully compute the coset table); if not, you will  end  up
+in the <K>break</K>-loop again, and you can have another go (or <C>quit;</C>  if
+you've had enough). The  <C>SetACEOptions</C>  function  is  a  no-argument
+function; it's there <E>purely</E> to pass <E>options</E> (which, of course, are
+listed behind a colon (<C>:</C>)  with  record  components  syntax).  Let's
+continue the Fibonacci example above, redoing  the  last  command  but
+with the option <C>max := 2</C>  (see&nbsp;<Ref Subsect="option max"/>),  so  that  the  coset
+enumeration has only two coset numbers to play with and hence is bound
+to fail to complete, putting us in a <K>break</K>-loop.
+<P/>
+<Index><C>ACECosetTable</C><Subkey><K>break</K>-loop example</Subkey></Index>
+<Log><![CDATA[
+gap> ACECosetTable(fgens, rels, [c] : max := 2);
+Error, no coset table ...
+ the `ACE' coset enumeration failed with the result:
+ OVERFLOW (a=2 r=1 h=1 n=3; l=5 c=0.00; m=2 t=2)
+ called from
+<function "ACECosetTable">( <arguments> ) called from read-eval-loop
+Entering break read-eval-print loop ...
+ try relaxing any restrictive options
+ e.g. try the `hard' strategy or increasing `workspace'
+ type: '?strategy options' for info on strategies
+ type: '?options for ACE' for info on options
+ type: 'DisplayACEOptions();' to see current ACE options;
+ type: 'SetACEOptions(:<option1> := <value1>, ...);'
+ to set <option1> to <value1> etc.
+ (i.e. pass options after the ':' in the usual way)
+ ... and then, type: 'return;' to continue.
+ Otherwise, type: 'quit;' to quit to outer loop.
+brk> SetACEOptions(: max := 0);
+brk> return;
+[ [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], 
+  [ 1 ], [ 1 ], [ 1 ], [ 1 ] ]
+]]></Log>
+Observe how the lines  after  the  <Q>Entering  break  read-eval-print
+loop</Q> announcement tell you <E>exactly</E> what to  do. At  the  
+<K>break</K>-loop  prompt  <C>brk&gt;</C>  we  relaxed  all
+restrictions on <C>max</C> (by re-setting it to 0) and typed  <C>return;</C>  to
+leave the <K>break</K>-loop. The coset  enumeration  was  then  successful,
+allowing the computation of what turned out  to  be  a  trivial  coset
+table. Despite the fact that the eventual coset  table  only  has  one
+line (i.e.&nbsp;there is exactly one coset number)  &ACE;  <E>did</E>  need  to
+define more than 2 coset numbers. To  find  out  just  how  many  were
+required before the final  collapse,  let's  set  the  <C>InfoLevel</C>  of
+<C>InfoACE</C> (see&nbsp;<Ref Func="InfoACE"/>) to 2, so that the &ACE; enumeration
+result is printed.
+<Log><![CDATA[
+gap> SetInfoLevel(InfoACE, 2);
+gap> ACECosetTable(fgens, rels, [c]);
+#I  INDEX = 1 (a=1 r=2 h=2 n=2; l=6 c=0.00; m=2049 t=3127)
+[ [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], 
+  [ 1 ], [ 1 ], [ 1 ], [ 1 ] ]
+]]></Log>
+The enumeration result line is the <C>Info</C> line  beginning  <Q>#I </Q>.
+Appendix&nbsp;<Ref Chap="The Meanings of ACE's output messages"/>  explains  how  to
+interpret such output messages from &ACE;. In particular, it explains
+that <C>t=3127</C> tells us that a <C>t</C>otal number  of  3127  coset  numbers
+needed to be defined before the final  collapse  to  1  coset  number.
+Using some of the many options that &ACE; provides, one  may  achieve
+this  result  more  efficiently,  e.g.&nbsp;with   the   <C>purec</C>   strategy
+(see&nbsp;<Ref Subsect="option purec"/>):
+<Log><![CDATA[
+gap> ACECosetTable(fgens, rels, [c] : purec);
+#I  INDEX = 1 (a=1 r=2 h=2 n=2; l=4 c=0.00; m=332 t=332)
+[ [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ], 
+  [ 1 ], [ 1 ], [ 1 ], [ 1 ] ]
+]]></Log>
+&ACE; needs to define a <C>t</C>otal number of only  (relatively-speaking)
+332 coset numbers before the final collapse to 1 coset number.
+<P/>
+<E>Notes:</E> 
+To initiate the coset enumeration,  the  <C>start</C>  option  (see&nbsp;<Ref Subsect="option begin"/>) is quietly inserted after the user's supplied options,  unless
+the user herself supplies one  of  the  enumeration-invoking  options,
+which are: <C>start</C>, or one of its synonyms, <C>aep</C>  (see&nbsp;<Ref Subsect="option aep"/>)
+or <C>rep</C> (see&nbsp;<Ref Subsect="option rep"/>).
+<P/>
+When  a  user  calls  <C>ACECosetTable</C>   with   the   <C>lenlex</C>   option
+(see&nbsp;<Ref Subsect="option lenlex"/>),  occasionally  it  is  necessary  to   enforce
+<C>asis</C><M>{}=1</M> (see&nbsp;<Ref Subsect="option asis"/>), which may be counter to the  desires
+of the  user.  The  occasions  where  this  action  is  necessary  are
+precisely those for which, for the  arguments  <A>gens</A>  and  <A>rels</A>  of
+<C>ACECosetTable</C>,   <C>IsACEGeneratorsInPreferredOrder</C>   would    return
+<K>false</K>.
+<P/>
+The non-interactive <C>ACECosetTable</C> and <C>ACECosetTableFromGensAndRels</C>
+now use an iostream to communicate with the &ACE; binary in order  to
+avoid filling up a temporary directory with an incomplete coset  table
+in  the  case  where  an  enumeration  overflows.  This  is  generally
+advantageous. However, on some systems, it may <E>not</E> be  advisable  to
+repeatedly  call  <C>ACECosetTable</C>  or   <C>ACECosetTableFromGensAndRels</C>
+(e.g.&nbsp;in a loop), since one may run out of the pseudo  ttys  used  for
+iostreams. If you encounter this problem, consider using an adaptation
+of  the  usage  of  the  interactive  forms  of  <C>ACECosetTable</C>   and
+<C>ACEStats</C>                            (see&nbsp;<Ref Func="ACECosetTable" Label="interactive"/>
+and&nbsp;<Ref Func="ACEStats" Label="interactive"/>), together with  <C>ACEStart</C>  initialisation
+steps, that is sketched in the schema below. For the  following  code,
+it  is  imagined  the  scenario  is  one  of  looping   over   several
+possibilities of <A>fgens</A>, <A>rels</A> and <A>sgens</A>; the two special forms of
+<C>ACEStart</C> used, allow one to continually re-use a single  interactive
+&ACE; process (i.e.&nbsp;only <E>one</E> iostream is used).
+<Log><![CDATA[
+  \# start the interactive ACE process with no group information
+  procId := ACEStart(0);
+  while <expr> do
+    fgens := ...; rels := ...; sgens := ...;
+    ACEStart(procId, fgens, rels, sgens : <options>);
+    if ACEStats(procId).index > 0 then
+      table := ACECosetTable(procId);
+      ...
+    fi;
+  od;
+]]></Log>
+For an already  calculated  coset  table,  we  provide  the  following
+function to determine whether or not it has been standardised.
+</Description>
+</ManSection>
+<ManSection>
+<Func Name="IsACEStandardCosetTable" Arg="table"/>
+<Description>
+returns <K>true</K> if <A>table</A> (a list of lists of  integers)  is  standard
+according to &GAP;'s default or  the  <A>option</A>  (either  <C>lenlex</C>  or
+<C>semilenlex</C>)  standardisation  scheme,  or  <K>false</K>  otherwise.   See
+Section&nbsp;<Ref Sect="Coset Table Standardisation Schemes"/>   for   a   detailed
+discussion of the <C>lenlex</C> and <C>semilenlex</C> standardisation schemes.
+<P/>
+<E>Note:</E>
+Essentially, <C>IsACEStandardCosetTable</C>  extends  the  &GAP;  function
+<C>IsStandardized</C>.
+<P/>
+<Index><C>lenlex</C> standardisation</Index>
+Users who wish their coset tables  to  use  <C>ACECosetTable</C>  with  the
+<C>lenlex</C>    (see&nbsp;<Ref Subsect="option lenlex"/>)     option,     which     causes
+<C>lenlex</C> standardisation to occur at the &ACE; (rather  than  &GAP;)
+level, should be acquainted with the following function.
+<P/>
+<Index>IsACEGeneratorsInPreferredOrder</Index>@<C>IsACEGeneratorsInPreferredOrder</C>!non-interactive
+</Description>
+</ManSection>
+<ManSection>
+<Func Name="IsACEGeneratorsInPreferredOrder" Arg="gens, rels"/>
+<Description>
+returns <K>true</K> if <A>gens</A>, a list of free group generators, are  in  an
+order which will  not  be  changed  by  &ACE;,  for  the  group  with
+presentation <M>\langle &lt;gens&gt; \mid &lt;rels&gt;\rangle</M>, where  <A>rels</A>  is  a
+list   of   relators   (i.e.&nbsp;words   in   the   generators    <A>gens</A>).
+<C>IsACEGeneratorsInPreferredOrder</C> may also be called  in  a  different
+way         for         interactive          &ACE;          processes
+(see&nbsp;<Ref Func="IsACEGeneratorsInPreferredOrder" Label="interactive"/>).
+<P/>
+For a presentation with more than one generator, the  first  generator
+of which is an involution and the second is  not,  &ACE;  prefers  to
+switch the  first  two  generators.  <C>IsACEGeneratorsInPreferredOrder</C>
+returns <K>true</K> if the order of the  generators  <A>gens</A>  would  not  be
+changed  within  &ACE;  and  <K>false</K>,  otherwise.  (Technically,   by
+<Q>involution</Q> above, we really mean <Q>a generator <C>x</C> for which there
+is a relator in <A>rels</A> of form <C>x*x</C> or <C>x^2</C></Q>. Such a generator may,
+of course, turn out to actually be the identity.)
+<P/>
+<E>Guru Notes:</E>
+If  <C>IsACEGeneratorsInPreferredOrder(<A>gens</A>,  <A>rels</A>)</C>  would   return
+<K>false</K>, it is possible to enforce a user's order  of  the  generators
+within &ACE;, by setting the option <C>asis</C> (see&nbsp;<Ref Subsect="option asis"/>)  to  1
+and, by passing the relator that determines that <C><A>gens</A>[1]</C> (which we
+will assume is <C>x</C>) has order  at  most  2,  as:  <C>x*x</C>  (rather  than
+<C>x^2</C>).  Behind  the  scenes  this  is  precisely  what  is  done,  if
+necessary, when <C>ACECosetTable</C> is called with the <C>lenlex</C> option.
+<P/>
+The user may avoid all the technicalities  by  either  not  using  the
+<C>lenlex</C> option (and allowing &GAP; to  take  care  of  the  <C>lenlex</C>
+standardisation), or by swapping the first  two  generators  in  those
+cases where  <C>IsACEGeneratorsInPreferredOrder(<A>gens</A>,  <A>rels</A>)</C>  would
+return <K>false</K>.
+</Description>
+</ManSection>
+</Section>
+<Section Label="Using ACE Directly to Test whether a Coset Enumeration Terminates">
+<Heading>Using ACE Directly to Test whether a Coset Enumeration Terminates</Heading>
+If you only want to  test, whether a coset enumeration terminates, and
+don't want to  transfer the whole coset table  to &GAP;, you can call
+<P/>
+<Index><C>ACEStats</C><Subkey>non-interactive</Subkey></Index>
+<ManSection>
+<Func Name="ACEStats" Arg="fgens, rels, sgens"/>
+<Description>
+which calls &ACE; non-interactively to do the coset enumeration,  the
+result of which is parsed and returned as a &GAP; record with fields
+<List>
+<Mark><C>index</C></Mark>
+<Item>the index of the subgroup <M>\langle &lt;sgens&gt;  \rangle</M>  in
+<M>\langle &lt;fgens&gt; \mid &lt;rels&gt; \rangle</M>, or <M>0</M> if the enumeration  does
+not succeed;</Item>
+<Mark><C>cputime</C></Mark>
+<Item>the total CPU  time  used  as  an  integer  number  of
+<C>cputimeUnits</C> (the next field);</Item>
+<Mark><C>cputimeUnits</C></Mark>
+<Item>the units of the  <C>cputime</C>  field,  e.g.&nbsp;<C>"10^-2
+seconds"</C>;</Item>
+<Mark><Index>activecosets</Index>
+<C>activecosets</C></Mark>
+<Item>the number of currently  <E>active</E>  (i.e.&nbsp;<E>alive</E>)
+coset numbers (see Section&nbsp;<Ref Sect="Coset Statistics Terminology"/>);</Item>
+<Mark><Index>maxcosets</Index>
+<C>maxcosets</C></Mark>
+<Item>the <E>maximum</E> number of alive coset numbers  at  any
+one  time  in   the   enumeration   (see   Section&nbsp;<Ref Sect="Coset Statistics Terminology"/>); and</Item>
+<Mark><Index>totcosets</Index>
+<C>totcosets</C></Mark>
+<Item>the  <E>total</E>  number  of  coset  numbers  that  were
+defined   in   the   enumeration   (see   Section&nbsp;<Ref Sect="Coset Statistics Terminology"/>).</Item>
+</List>
+Options (see Chapters&nbsp;<Ref Chap="Options for ACE"/>  and&nbsp;<Ref Chap="Strategy Options for ACE"/>)   are   used    in    exactly    the    same    way    as    for
+<C>ACECosetTableFromGensAndRels</C>, discussed in the previous section; and
+the same  warnings  alluded  to  previously,  regarding  options  (see
+Section&nbsp;<Ref Sect="General Warnings regarding the Use of Options"/>), apply.
+<P/>
+<E>Notes:</E>
+To initiate the coset enumeration,  the  <C>start</C>  option  (see&nbsp;<Ref Subsect="option begin"/>) is quietly inserted after the user's supplied options,  unless
+the user herself supplies one  of  the  enumeration-invoking  options,
+which are: <C>start</C>, or one of its synonyms, <C>aep</C>  (see&nbsp;<Ref Subsect="option aep"/>)
+or <C>rep</C> (see&nbsp;<Ref Subsect="option rep"/>).
+<P/>
+The fields of the  <C>ACEStats</C>  record  are  determined  by  parsing  a
+<Q>results  message</Q>  (see  Appendix&nbsp;<Ref Chap="The Meanings of ACE's output messages"/>) from &ACE;.
+<P/>
+<C>ACEStats</C> may also be called in a different  way  in  an  interactive
+&ACE; session (see&nbsp;<Ref Func="ACEStats" Label="interactive"/>).
+</Description>
+</ManSection>
+</Section>
+<Section Label="Writing ACE Standalone Input Files to Generate a Coset Table">
+<Heading>Writing ACE Standalone Input Files to Generate a Coset Table</Heading>
+If you want to use &ACE; as a standalone with its own syntax, you can
+write an &ACE; standalone input file by calling <C>ACECosetTable</C>  with
+three arguments (see <Ref Func="ACECosetTableFromGensAndRels"/>)  and  the  option
+<C>aceinfile := <A>filename</A></C> (see&nbsp;<Ref Subsect="option aceinfile"/>). This will keep the
+input file for the &ACE; standalone produced by the &GAP;  interface
+under the file name <A>filename</A> (and  just  return)  so  that  you  can
+perform interactive work in the standalone.
+</Section>
+<Section Label="Using ACE Interactively">
+<Heading>Using ACE Interactively</Heading>
+An interactive &ACE; process is initiated with the command
+<ManSection>
+<Func Name="ACEStart" Label="introduction" Arg="fgens, rels, sgens"/>
+<Description>
+whose    arguments    and    options    are     exactly     as     for
+<C>ACECosetTableFromGensAndRels</C>  and  <C>ACEStats</C>,   as   discussed   in
+Sections&nbsp;<Ref Sect="Using ACE Directly to Generate a Coset Table"/> and&nbsp;<Ref Sect="Using ACE Directly to Test whether a Coset Enumeration Terminates"/>.  The  usual
+warnings  regarding  options  apply  (see  Section&nbsp;<Ref Sect="General Warnings regarding the Use of Options"/>). <C>ACEStart</C> has a number of other forms
+(see&nbsp;<Ref Func="ACEStart" Label="details"/>).
+<P/>
+The return value is an integer (numbering from 1) which represents the
+running process. (It is possible to have  more  than  one  interactive
+process running at once.) The integer returned may be  used  to  index
+which of these processes an  interactive  &ACE;  function  should  be
+applied to.
+<P/>
+An interactive &ACE; process is terminated with the command
+</Description>
+</ManSection>
+<ManSection>
+<Func Name="ACEQuit" Label="introduction" Arg="i"/>
+<Description>
+where <A>i</A> is the integer returned by <C>ACEStart</C> when the  process  was
+begun.   <C>ACEQuit</C>   may   also   be   called   with   no    arguments
+(see&nbsp;<Ref Func="ACEQuit" Label="details"/>).
+<P/>
+We discuss each of these commands, as well as the range  of  functions
+which enable one to access  features  of  the  &ACE;  standalone  not
+available non-interactively, in depth, in Chapter&nbsp;<Ref Chap="Functions for Using ACE Interactively"/>.
+<P/>
+<E>Note:</E>
+<P/>
+<Index>coincidence</Index>
+&ACE; not only allows one to do a coset enumeration of a group  by  a
+given (and then fixed) subgroup but it also allows one to  search  for
+subgroups by starting from a given one (possibly the trivial subgroup)
+and then augmenting  it  by  adding  new  subgroup  generators  either
+explicitly               via                <C>ACEAddSubgroupGenerators</C>
+(see&nbsp;<Ref Func="ACEAddSubgroupGenerators"/>)   or   implicitly   by    introducing
+<E>coincidences</E> (see <C>ACECosetCoincidence</C>:  <Ref Func="ACECosetCoincidence"/>,  or
+<C>ACERandomCoincidences</C>: <Ref Func="ACERandomCoincidences"/>);  or  one  can  find
+smaller   subgroups    by    deleting    subgroup    generators    via
+<C>ACEDeleteSubgroupGenerators</C> (see&nbsp;<Ref Func="ACEDeleteSubgroupGenerators"/>).
+</Description>
+</ManSection>
+</Section>
+<Section Label="Accessing ACE Examples with ACEExample and ACEReadResearchExample">
+<Heading>Accessing ACE Examples with ACEExample and ACEReadResearchExample</Heading>
+There are a number of examples available in the <C>examples</C>  directory,
+which may be accessed via
+<ManSection>
+<Func Name="ACEExample" Arg=""/>
+<Func Name="ACEExample" Label="for examplename [:options]" Arg="examplename"/>
+<Func Name="ACEExample" Label="for examplename, ACEfunc [:options]" Arg="examplename, ACEfunc"/>
+<Description>
+where  <A>examplename</A>  is  a  string,  the  name  of  an  example  (and
+corresponding file in the <C>examples</C> directory); and <A>ACEfunc</A> is  the
+&ACE; function with which the example is to be executed.
+<P/>
+If <C>ACEExample</C> is called with no arguments,  or  with  the  argument:
+<C>"index"</C> (meant in the sense of <Q>list</Q>),  or  with  a  non-existent
+example  name,  a  list  of  available  examples  is  displayed.   See
+Section&nbsp;<Ref Sect="Fun with ACEExample"/> where the list is displayed.
+<P/>
+By  default,  examples  are  executed  via  <C>ACEStats</C>.  However,   if
+<C>ACEExample</C> is called with a second argument (choose from the (other)
+alternatives:   <C>ACECosetTableFromGensAndRels</C>    (or,    equivalently
+<C>ACECosetTable</C>), or <C>ACEStart</C>), the example is executed  using  that
+function, instead. Note that, whereas the first  argument  appears  in
+double quotes (since it's a string),  the  second  argument  does  not
+(since it's a function); e.g.&nbsp;to execute example <C>"A5"</C> with  function
+<C>ACECosetTable</C>, one would type: <C>ACEExample("A5", ACECosetTable);</C>.
+<P/>
+<C>ACEExample</C> also accepts user options, which  may  be  passed  either
+globally  (i.e.&nbsp;by  using  <C>PushOptions</C>  to  push   them   onto   the
+<C>OptionsStack</C>) or locally  behind  a  colon  after  the  <C>ACEExample</C>
+arguments, and they are passed to <C>ACEStats</C> or <A>ACEfunc</A> as  if  they
+were <E>appended</E> to the existing options of <A>examplename</A>; in this way,
+the user may <E>over-ride</E> any or all of the options  of  <A>examplename</A>.
+This is done by passing  an  option  <C>aceexampleoptions</C>  (see&nbsp;<Ref Subsect="option aceexampleoptions"/>), which sets up a mechanism to  reverse  the  usual
+order in which options of recursively called functions are pushed onto
+the <C>OptionsStack</C>. The option <C>aceexampleoptions</C>  is  <E>not</E>  a  user
+option; it is intended only for <E>internal</E> use  by  <C>ACEExample</C>,  for
+the above purpose. In the portion of the  output  due  to  the  <C>echo</C>
+option, if one has  passed  options  to  <C>ACEExample</C>,  one  will  see
+<C>aceexampleoptions</C> listed first and the result of the interaction  of
+<A>examplename</A>'s options and the additional options.
+<P/>
+Consider the example <C>"A5"</C>. The effect of running
+<Log><![CDATA[
+gap> ACEExample("A5", ACEStart);
+]]></Log>
+is essentially equivalent to executing:
+<Log><![CDATA[
+gap> file := Filename(DirectoriesPackageLibrary("ace", "examples"), "A5");;
+gap> ACEfunc := ACEStart;;
+gap> ReadAsFunction(file)();
+]]></Log>
+except that some internal <Q>magic</Q> of <C>ACEExample</C> edits the  example
+file and displays equivalent commands a user <Q>would</Q> execute. If the
+user  has  passed  options  to  <C>ACEExample</C>   these   appear   in   a
+<Q># User Options</Q> block after the original options of the  example
+in the <C>Info</C> portion of the output. By comparing with the portion  of
+the output from the <C>echo</C> option (unless the user has over-ridden the
+<C>echo</C> option), the user may directly observe any over-riding  effects
+of user-passed options.
+<P/>
+Please see Section&nbsp;<Ref Sect="Fun with ACEExample"/> for some sample  interactions
+with <C>ACEExample</C>.
+<P/>
+<E>Notes</E>
+<P/>
+Most examples use the <C>mess</C>  (<M>=  `messages'</M>)  option.  To  see  the
+effect of this, it is recommended to do: <C>SetInfoLevel(InfoACE, 3);</C>
+before calling <C>ACEExample</C>, with an example.
+<P/>
+The coset table output from <C>ACEExample</C>, when called with many of the
+examples and with the &ACE;  function  <C>ACECosetTableFromGensAndRels</C>
+is often quite long. Recall that  the  output  may  be  suppressed  by
+following the (<C>ACEExample</C>) command with a double semicolon (<C>;;</C>).
+<P/>
+Also, try <C>SetInfoLevel(InfoACE, 2);</C> before  calling <C>ACEExample</C>,
+with an example.
+<P/>
+If you unexpectedly observe <C>aceexampleoptions</C> in your  output,  then
+most probably you have unintentionally passed options  by  the  global
+method, by having a non-empty <C>OptionsStack</C>. One possible  remedy  is
+to use <C>FlushOptionsStack();</C> (see&nbsp;<Ref Func="FlushOptionsStack"/>), before trying
+your <C>ACEExample</C> call again.
+<P/>
+As discussed in Section&nbsp;<Ref Sect="Interpretation of ACE Options"/>,  there  is
+generally no sensible meaning that can  be  attributed  to  setting  a
+strategy option (see Chapter&nbsp;<Ref Chap="Strategy Options for ACE"/>)  to  <K>false</K>;
+if you wish to nullify the effect of a strategy option,  pass  another
+strategy  option,  e.g.&nbsp;pass  the  <C>default</C>  (see&nbsp;<Ref Subsect="option default"/>)
+strategy option.
+<P/>
+Also provided are:
+</Description>
+</ManSection>
+<ManSection>
+<Func Name="ACEReadResearchExample" Arg="[filename]"/>
+<Description>
+which perform <C>Read</C> (see Section&nbsp;<Ref Func="Read" BookName="ref"/> in the  &GAP;  Reference
+Manual) on <A>filename</A> or, with no argument,  the  file  with  filename
+<C>"pgrelfind.g"</C> in the <C>res-examples</C> directory;  e.g.&nbsp;the  effect  of
+running
+<Example><![CDATA[
+gap> ACEReadResearchExample("pgrelfind.g");
+#I  The following are now defined:
+#I  
+#I  Functions:
+#I    PGRelFind, ClassesGenPairs, TranslatePresentation,
+#I    IsACEResExampleOK
+#I  Variables:
+#I    ACEResExample, ALLRELS, newrels, F, a, b, newF, x, y,
+#I    L2_8, L2_16, L3_3s, U3_3s, M11, M12, L2_32,
+#I    U3_4s, J1s, L3_5s, PSp4_4s, presentations
+#I  
+#I  Also:
+#I  
+#I  TCENUM = ACETCENUM  (Todd-Coxeter Enumerator is now ACE)
+#I  
+#I  For an example of their application, you might like to try:
+#I  gap> ACEReadResearchExample("doL28.g" : optex := [1,2,4,5,8]);
+#I  (the output is 65 lines followed by a 'gap> ' prompt)
+#I  
+#I  For information type: ?Using ACEReadResearchExample
+]]></Example>
+is equivalent to executing:
+<Example><![CDATA[
+gap> Read( Filename(DirectoriesPackageLibrary("ace", "res-examples"),
+>                   "pgrelfind.g") );
+#I  The following are now defined:
+#I  
+#I  Functions:
+#I    PGRelFind, ClassesGenPairs, TranslatePresentation,
+#I    IsACEResExampleOK
+#I  Variables:
+#I    ACEResExample, ALLRELS, newrels, F, a, b, newF, x, y,
+#I    L2_8, L2_16, L3_3s, U3_3s, M11, M12, L2_32,
+#I    U3_4s, J1s, L3_5s, PSp4_4s, presentations
+#I  
+#I  Also:
+#I  
+#I  TCENUM = ACETCENUM  (Todd-Coxeter Enumerator is now ACE)
+#I  
+#I  For an example of their application, you might like to try:
+#I  gap> ACEReadResearchExample("doL28.g" : optex := [1,2,4,5,8]);
+#I  (the output is 65 lines followed by a 'gap> ' prompt)
+#I  
+#I  For information type: ?Using ACEReadResearchExample
+]]></Example>
+The examples provided in the <C>res-examples</C>  directory  were  used  to
+solve a genuine research problem, the results of which are reported in
+<Cite Key="CHHR01"/>. Please see Section&nbsp;<Ref Sect="Using ACEReadResearchExample"/>  for
+a detailed description and examples of its use.
+</Description>
+</ManSection>
+<ManSection>
+<Func Name="ACEPrintResearchExample" Arg="example-filename[, output-filename]"/>
+<Description>
+print the <Q>essential</Q> contents of the file <A>example-filename</A> in the
+<C>res-examples</C> directory to the terminal, or with two arguments to the
+file  <A>output-filename</A>;  <A>example-filename</A>   and   <A>output-filename</A>
+should be strings. <C>ACEPrintResearchExample</C> is provided  to  make  it
+easy for users to copy and edit the examples for their own purposes.
+</Description>
+</ManSection>
+</Section>
+<Section Label="General Warnings regarding the Use of Options">
+<Heading>General Warnings regarding the Use of Options</Heading>
+Firstly, let us mention (and we will remind you later) that an  &ACE;
+strategy is merely a special option of &ACE; that sets  a  number  of
+the options described in Chapter&nbsp;<Ref Chap="Options for ACE"/> all  at  once.  The
+strategy options are discussed in their own chapter (Chapter&nbsp;<Ref Chap="Strategy Options for ACE"/>).
+<P/>
+In Section&nbsp;<Ref Sect="Passing ACE Options"/>, we describe the two  means  provided
+by &GAP; by which &ACE; options may be passed. In  Section&nbsp;<Ref Sect="Warnings regarding Options"/>, we discuss how options <Q>left over</Q> from previous
+calculations can upset subsequent calculations; and hence, to  <Q>clear
+the  decks</Q>   in   such   circumstances,   why   we   have   provided
+<C>FlushOptionsStack</C>   (see&nbsp;<Ref Func="FlushOptionsStack"/>).   However,   removing
+<C>OptionsStack</C> options does not remove the options  previously  passed
+to  an  <E>interactive</E>  &ACE;  process;  Section&nbsp;<Ref Sect="Warnings regarding Options"/> discusses that too.
+<P/>
+Note,  that  the  &ACE;  package   treatment   of   options   is   an
+<Q>enhancement</Q> over the general way &GAP; treats  options.  Firstly,
+the &ACE; binary allows abbreviations and mixed case of  options  and
+so  the  &ACE;  package  does  also,   as   much   as   is   possible
+(see&nbsp;<Ref Sect="Abbreviations and mixed case for ACE Options"/>). Secondly,  since
+&ACE;'s options are in general not orthogonal,  the  order  in  which
+they are put to &ACE; is, in general, honoured (see&nbsp;<Ref Sect="Honouring of the order in which ACE Options are passed"/>). Thirdly, the &ACE;  binary's
+concept of a boolean option is slightly different to that of &GAP;'s;
+Section&nbsp;<Ref Sect="Interpretation of ACE Options"/> discusses, in particular,  how
+an option detected by &GAP; as <K>true</K> is passed to the &ACE; binary.
+<P/>
+Finally, Section&nbsp;<Ref Sect="What happens if no ACE Strategy Option or if no ACE Option is passed"/> discusses what happens if no option is selected.
+</Section>
+<Section Label="The ACEData Record">
+<Heading>The ACEData Record</Heading>
+<ManSection>
+<Var Name="ACEData"/>
+<Description>
+is a &GAP; record in which the essential data for an  &ACE;  session
+within &GAP; is stored; its fields are:
+<List>
+<Mark><C>binary</C></Mark>
+<Item>the path of the &ACE; binary;</Item>
+<Mark><C>tmpdir</C></Mark>
+<Item>the path of the  temporary  directory  containing  the
+non-interactive   &ACE;   input   and   output   files   (also    see
+<Ref Func="ACEDirectoryTemporary"/> below);</Item>
+<Mark><C>ni</C></Mark>
+<Item>the data record for a non-interactive &ACE; process;</Item>
+<Mark><C>io</C></Mark>
+<Item>list  of  data  records  for  <C>ACEStart</C>   (see  below 
+and&nbsp;<Ref Func="ACEStart"/>) processes;</Item>
+<Mark><C>infile</C></Mark>
+<Item>the full path of the &ACE; input file;</Item>
+<Mark><C>outfile</C></Mark>
+<Item>the full path of the &ACE; output file; and</Item>
+<Mark><C>version</C></Mark>
+<Item>the  version  of  the  current  &ACE;  binary.   More
+detailed information regarding the compilation of the binary is  given
+by <C>ACEBinaryVersion</C> (see&nbsp;<Ref Func="ACEBinaryVersion"/>).</Item>
+</List>
+Non-interactive processes used to use files rather than streams (hence
+the fields <C>infile</C> and <C>outfile</C> above;  these  may  disappear  in  a
+later version of the &ACE; package).
+<P/>
+Each time an interactive &ACE; process is  initiated  via  <C>ACEStart</C>
+(see&nbsp;<Ref Func="ACEStart"/>), an identifying number <A>ioIndex</A> is generated for the
+interactive process and  a  record  <C>ACEData.io[<A>ioIndex</A>]</C>  with  the
+following fields is created. A  non-interactive  process  has  similar
+fields but is stored in the record <C>ACEData.ni</C>.
+<List>
+<Mark><C>procId</C></Mark>
+<Item>the identifying number of the process  (<A>ioIndex</A>  for
+interactive processes, and 0 for a non-interactive process);</Item>
+<Mark><C>args</C></Mark>
+<Item>a record with fields: <C>fgens</C>, <C>rels</C>,  <C>sgens</C>  whose
+values  are  the  corresponding   arguments   passed   originally   to
+<C>ACEStart</C>;</Item>
+<Mark><C>options</C></Mark>
+<Item>the current options record of the interactive process;</Item>
+<Mark><C>acegens</C></Mark>
+<Item>a list of strings representing the generators used  by
+&ACE; (if the names of the generators passed via the  first  argument
+<A>fgens</A> of <C>ACEStart</C> were all lowercase alphabetic  characters,  then
+<C>acegens</C> is the <C>String</C> equivalent of <A>fgens</A>,  i.e.&nbsp;<C>acegens[1]   =
+String(<A>fgens</A>[1])</C> etc.);</Item>
+<Mark><C>stream</C></Mark>
+<Item>the IOStream opened for an interactive &ACE;  process
+initiated via <C>ACEStart</C>; and</Item>
+<Mark><C>enumResult</C></Mark>
+<Item>the enumeration result (string) without the trailing  newline,  output
+from &ACE;;</Item>
+<Mark><C>stats</C></Mark>
+<Item>a record as output by the function <C>ACEStats</C>.</Item>
+<Mark><C>enforceAsis</C></Mark>
+<Item>a  boolean  that  is  set  to  <K>true</K>  whenever  the   <C>asis</C>   option
+(see&nbsp;<Ref Subsect="option asis"/>) must  be  set  to  <C>1</C>.  It  is  usually  <K>false</K>.
+See&nbsp;<Ref Func="IsACEGeneratorsInPreferredOrder"/> <E>Guru Notes</E> for the details.</Item>
+</List>
+</Description>
+</ManSection>
+<ManSection>
+<Func Name="ACEDirectoryTemporary" Arg="dir"/>
+<Description>
+calls the UNIX command <C>mkdir</C>  to  create  <A>dir</A>,  which  must  be  a
+string, and if  successful  a  directory  object  for  <A>dir</A>  is  both
+assigned to <C>ACEData.tmpdir</C> and returned. The fields <C>ACEData.infile</C>
+and <C>ACEData.outfile</C> are also set to be  files  in  <C>ACEData.tmpdir</C>,
+and on exit from &GAP; <A>dir</A> is removed. Most users will  never  need
+this command;  by  default,  &GAP;  typically  chooses  a  <Q>random</Q>
+subdirectory of <C>/tmp</C> for  <C>ACEData.tmpdir</C>  which  may  occasionally
+have limits on what  may  be  written  there.  <C>ACEDirectoryTemporary</C>
+permits the user to choose a directory (object) where one  is  not  so
+limited.
+</Description>
+</ManSection>
+</Section>
+<Section Label="Setting the Verbosity of ACE via Info and InfoACE">
+<Heading>Setting the Verbosity of ACE via Info and InfoACE</Heading>
+<ManSection>
+<InfoClass Name="InfoACE"/>
+<Description>
+The output of the &ACE; binary is, by default, not displayed. However
+the user may choose to see some, or all, of this output. This is  done
+via the <C>Info</C> mechanism  (see  Chapter&nbsp;<Ref Sect="Info Functions" BookName="ref"/>  in  the
+&GAP; Reference Manual). For this purpose, there is  the  <A>InfoClass</A>
+<C>InfoACE</C>. Each line of output from &ACE; is directed to  a  call  to
+<C>Info</C> and will be displayed for the user to see if the <C>InfoLevel</C> of
+<C>InfoACE</C> is high enough. By default, the <C>InfoLevel</C> of <C>InfoACE</C>  is
+1, and it is recommended that you leave it at this level,  or  higher.
+Only messages which we think that the user will really want to see are
+directed to <C>Info</C> at <C>InfoACE</C> level 1. To turn off  <E>all</E>  <C>InfoACE</C>
+messaging, set the <C>InfoACE</C> level to 0  (see&nbsp;<Ref Func="InfoACE"/>).
+<P/>
+Currently,  information  from
+&ACE; is directed to <C>Info</C> at four <C>InfoACE</C> levels: 1, 2, 3 and  4.
+The command
+<Example><![CDATA[
+gap> SetInfoLevel(InfoACE, 2);
+]]></Example>
+enables the display of the results line of an enumeration from &ACE;,
+whereas
+<Example><![CDATA[
+gap> SetInfoLevel(InfoACE, 3);
+]]></Example>
+enables the display of  all  of  the  output  from  &ACE;  (including
+&ACE;'s  banner,  containing  the  host  machine   information);   in
+particular,  the  progress  messages,  emitted  by  &ACE;  when   the
+<C>messages</C> option (see&nbsp;<Ref Subsect="option messages"/>) is set to a non-zero  value,
+will be displayed via <C>Info</C>. Finally,
+<Example><![CDATA[
+gap> SetInfoLevel(InfoACE, 4);
+]]></Example>
+enables the display of all the input  directed  to  &ACE;  (behind  a
+<Q>ToACE&gt; </Q> prompt, so you can distinguish it  from  other  output).
+The <C>InfoACE</C> level of 4 is really for gurus who are familiar with the
+&ACE; standalone.
+</Description>
+</ManSection>
+</Section>
+<Section Label="Acknowledgements">
+<Heading>Acknowledgements</Heading>
+Large parts of this manual,  in  particular  the  description  of  the
+options for running &ACE;, are directly copied  from  the  respective
+descriptions in the manual&nbsp;<Cite Key="Ram99ace"/> for the standalone version  of
+&ACE; by Colin Ramsay.  Most  of  the  examples,  in  the  <C>examples</C>
+directory and accessed  via  the  <C>ACEExample</C>  function,  are  direct
+translations of Colin Ramsay's  <C>test###.in</C>  files  in  the  <C>src</C>
+directory.
+<P/>
+Many thanks to Joachim Neubüser who not only provided  one
+of the early manual drafts and hence a template for the style  of  the
+manual and conceptual hooks for the design of the  Package  code,  but
+also meticulously proof-read  all  drafts  and  made  many  insightful
+comments.
+<P/>
+Many thanks also to Volkmar Felsch who, in testing the &ACE; Package,
+discovered a number of bugs, made a number of important suggestions on
+code improvement, thoroughly checked all the  examples,  and  provided
+the example found at the end of Section&nbsp;<Ref Sect="Steering ACE Interactively"/>
+which  demonstrates  rather  nicely  how  one  can  use  the  function
+<C>ACEConjugatesForSubgroupNormalClosure</C>.
+<P/>
+We  also  wish  to  acknowledge the contribution of Charles Sims.  The
+inclusion of the <C>incomplete</C> (see <Ref Subsect="option incomplete"/>)  and  <C>lenlex</C>
+(see&nbsp;<Ref Subsect="option lenlex"/>) options, were made in response  to  requests  to
+the  &GAP;  developers  to  include  such  options  for  coset  table
+functions. Also, the definition of <C>lenlex</C> standardisation  of  coset
+tables (see Section&nbsp;<Ref Sect="Coset Table Standardisation Schemes"/>), is due  to
+him.
+<P/>
+Finally, much of the work since 2005 in modifying the  &ACE;  package
+particularly for new versions of &GAP; and in getting &ACE;  to  its
+new home on <C>GitHub</C> has been due to Max Horn.
+</Section>
+<Section Label="Changes from earlier versions">
+<Heading>Changes from earlier versions</Heading>
+A reasonably comprehensive history of  the  evolution  of  pre-release
+versions of the &ACE; Package, is contained in the file <C>CHANGES</C>  in
+the <C>gap</C> directory.
+<P/>
+The <C>3.xxx</C> versions of the &ACE; Package were compatible with &GAP;
+4.2, but were built for use with  &GAP;  4.3.  However,  the  current
+version of the &ACE; Package requires at least &GAP; 4.4. Users  who
+still have &GAP; 4.3 will need  to  use  &ACE;  4.1.  One  important
+change in &GAP; from &GAP; 4.2 to &GAP; 4.3 that has relevance  for
+&ACE; Package users is the change of the  default  standard  for  the
+numbering of  cosets  in  a  coset  table  (see  Section&nbsp;<Ref Sect="Coset Table Standardisation Schemes"/>).
+<ManSection>
+<Func Name="ACEPackageVersion" Arg=""/>
+<Description>
+gives the current version of the &ACE; Package (i.e.&nbsp;the &GAP;  code
+component; the  function  <C>ACEBinaryVersion</C>  (see&nbsp;<Ref Func="ACEBinaryVersion"/>)
+gives details of the C code compilation).
+</Description>
+</ManSection>
+</Section>
+</Chapter>

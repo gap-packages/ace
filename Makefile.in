@@ -15,7 +15,7 @@ distclean: clean
 
 # use this target only if you want to build the manual from scratch.
 doc:
-	(cd doc;./make_doc)
+	gap makedoc.g
 
 otherdoc:
 	(cd standalone-doc;latex ace3001;bibtex ace3001;latex ace3001;latex ace3001)

@@ -47,7 +47,7 @@ To install  the ACE package, move  the file `ace-XXX.tar.gz` into  the `pkg`
 directory  in which  you plan  to  install ACE.  Usually, this  will be  the
 directory `pkg` in the  hierarchy of your version of GAP  4. (However, it is
 also  possible  to  keep  an  additional `pkg`  directory  in  your  private
-directories,  see  section  "ref:Installing  GAP  Packages"  of  the  GAP  4
+directories,  see  section "Installing GAP Packages" of the GAP 4
 reference manual for details on how to do this.)
 
 Then unpack `ace-XXX.tar.gz`,  which in most Linux environments  can be done
@@ -89,16 +89,16 @@ That's it. Now start GAP and type
 The ACE banner should appear on the screen.
 
 For details on how to use the ACE package see the  package  documentation
-in the  `doc`  subdirectory  (view  either  `manual.dvi`  via  `xdvi`  or
-`manual.ps` via `ghostview` or `manual.pdf`  via  a  PDF  viewer),  which
-gives information on how to use ACE from within GAP. The ACE user  manual
-(`ace3001.ps`  or  `ace3001.pdf`)  in  the  `standalone-doc`   directory,
-explains how to use the ACE binary (i.e. the C program that is interfaced
-with by the package from within GAP) as a stand-alone.
+in the  `doc`  subdirectory  (open  `chap0_mj.html`  in  a  browser,  or
+`manual.pdf` in a PDF viewer), which gives information on how to use  ACE
+from within GAP. The ACE user  manual  (`ace3001.ps`)  in  the
+`standalone-doc` directory explains how to use the ACE binary (i.e. the C
+program that is interfaced with by the package from within GAP) as a
+stand-alone.
 
 The `src` subdirectory contains a copy of the C source code for ACE.  The
-only modification are those listed in  src/CHANGES.  In  particular,  the
-the following bug was fixed on 25 February, 2001.
+only modifications are those listed in `src/CHANGES`. In particular,  the
+following bug was fixed on 25 February, 2001.
 
 A bug was  discovered  in  ACE  3.000  on  22  December,  2000  that  was
 particularly manifested by the Linux gcc compilers listed below. The  bug

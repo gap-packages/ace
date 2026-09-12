@@ -3,6 +3,8 @@ package. Also look at gap/CHANGES  for  a  history  of  the  pre-3.xxx
 development.
 
 ## Unreleased
+  * Convert the manual from plain TeX to GAPDoc; its examples are now
+    extracted to `tst/` and run by the test suite
   * Fix various issues which prevented ACE from working with a native
     Windows (MinGW) build of GAP
 
