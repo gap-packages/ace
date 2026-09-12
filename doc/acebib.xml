@@ -10,6 +10,7 @@
   <publisher>Pergamon Press, Oxford</publisher>
   <year>1970</year>
   <pages>21--35</pages>
+  <doi>10.1016/b978-0-08-012975-4.50006-0</doi>
 </incollection></entry>
 <entry id="CDHW73"><article>
   <author>
@@ -26,6 +27,7 @@
   <number>123</number>
   <pages>463--490</pages>
   <month>July</month>
+  <doi>10.1090/s0025-5718-1973-0335610-5</doi>
 </article></entry>
 <entry id="Dok88"><article>
   <author>
@@ -69,6 +71,7 @@
   <number>573</number>
   <series>Lecture Notes in Mathematics</series>
   <pages>126--129</pages>
+  <doi>10.1007/bfb0087818</doi>
 </incollection></entry>
 <entry id="Magma"><article>
   <author>
@@ -82,6 +85,7 @@
   <year>1997</year>
   <volume>24</volume>
   <pages>235--265</pages>
+  <doi>10.1006/jsco.1996.0125</doi>
 </article></entry>
 <entry id="GAP"><manual>
   <author>
@@ -150,6 +154,7 @@
   </editor>  
   <pages>191--199</pages>
   <publisher>ACM Press</publisher>
+  <doi>10.1145/120694.120723</doi>
 </inproceedings></entry>
 <entry id="Pla92"><book>
   <author>
@@ -176,6 +181,7 @@
   </author>  
   <title>Some challenging group presentations</title>
   <year>1999 (preprint)</year>
+  <doi>10.1017/s1446788700001178</doi>
 </misc></entry>
 <entry id="HR99a"><misc>
   <author>
@@ -230,6 +236,7 @@
   <year>1976</year>
   <volume>15</volume>
   <pages>297--305</pages>
+  <doi>10.1017/s0004972700022668</doi>
 </article></entry>
 <entry id="Ede89"><mastersthesis>
   <author>
@@ -279,6 +286,7 @@
   <year>1963</year>
   <volume>59</volume>
   <pages>257--267</pages>
+  <doi>10.1017/s0305004100036872</doi>
 </article></entry>
 <entry id="Sim94"><book>
   <author>
@@ -287,6 +295,7 @@
   <title>Computation with finitely presented groups</title>
   <publisher>Cambridge University Press</publisher>
   <year>1994</year>
+  <doi>10.1017/cbo9780511574702</doi>
 </book></entry>
 <entry id="Neu82"><incollection>
   <author>
@@ -299,6 +308,7 @@
   <year>1982</year>
   <series>London Mathematical Society Lecture Note Series 71</series>
   <pages>1--45</pages>
+  <doi>10.1017/cbo9780511661884.004</doi>
 </incollection></entry>
 <entry id="Men64"><article>
   <author>
@@ -311,6 +321,7 @@
   <volume>16</volume>
   <pages>509--516</pages>
   <note>Corrigendum: <E>Ibid.</E> 17:505, 1965.</note>
+  <doi>10.4153/cjm-1964-052-3</doi>
 </article></entry>
 <entry id="Con65"><article>
   <author>
@@ -346,6 +357,7 @@
   <volume>62</volume>
   <number>1</number>
   <pages>105--118</pages>
+  <doi>10.1017/s0004972700018529</doi>
 </article></entry>
 <entry id="HR01"><incollection>
   <author>
@@ -373,6 +385,7 @@
   <volume>30</volume>
   <number>9</number>
   <pages>4613--4619</pages>
+  <doi>10.1081/agb-120013342</doi>
 </article></entry>
 <entry id="CMY79"><article>
   <author>
@@ -410,6 +423,7 @@
   <year>1951</year>
   <volume>26</volume>
   <pages>61--64</pages>
+  <doi>10.1112/jlms/s1-26.1.61</doi>
 </article></entry>
 <entry id="Neu54"><article>
   <author>
@@ -422,6 +436,7 @@
   <year>1954</year>
   <volume>246</volume>
   <pages>503--554</pages>
+  <doi>10.1098/rsta.1954.0007</doi>
 </article></entry>
 <entry id="Neu79"><article>
   <author>
@@ -433,6 +448,7 @@
   <volume>2</volume>
   <number>1</number>
   <pages>18--19</pages>
+  <doi>10.1007/bf03024380</doi>
 </article></entry>
 <entry id="CH97"><incollection>
   <author>
@@ -452,6 +468,7 @@
   <number>226</number>
   <series>Lecture Notes in Control and Information Sciences</series>
   <pages>15--27</pages>
+  <doi>10.1007/bfb0037072</doi>
 </incollection></entry>
 <entry id="CLR90"><book>
   <author>
@@ -483,6 +500,7 @@
   <publisher>Springer-Verlag</publisher>
   <year>1972</year>
   <edition>3rd</edition>
+  <doi>10.1007/978-3-662-21946-1</doi>
 </book></entry>
 <entry id="Ram99"><techreport>
   <author>
