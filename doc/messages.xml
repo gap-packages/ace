@@ -1,0 +1,190 @@
+<!-- W  messages.tex        ACE appendix - messages          Alexander Hulpke / W                                                      Joachim Neub"user / W                                                            Greg Gamble / Y  Copyright (C) 2000  Centre for Discrete Mathematics and Computing / Y                      Department of Information Tech. & Electrical Eng. / Y                      University of Queensland, Australia. -->
+<Chapter Label="The Meanings of ACE's output messages">
+<Heading>The Meanings of ACE's output messages</Heading>
+In this chapter, we discuss the meanings of the messages  that  appear
+in output from the &ACE; binary, the verbosity of which is determined
+by the <C>messages</C> option (see&nbsp;<Ref Subsect="option messages"/>).  Actually  our  aim
+here is to concentrate  on  describing  those  <Q>messages</Q>  that  are
+controlled  by  the  <C>messages</C>  option,  namely  the  <E>progress</E>  and
+<E>results   messages</E>;   other   output   from   &ACE;    is    fairly
+self-explanatory. (We describe some other output  to  give  points  of
+reference.)
+<P/>
+Both interactively and non-interactively, &ACE; output  is  <C>Info</C>-ed
+at <C>InfoACE</C> level 3. To see the  <C>Info</C>-ed  &ACE;  output,  set  the
+<C>InfoLevel</C> of <C>InfoACE</C> to at least 3, e.g.
+<Example><![CDATA[
+gap> SetInfoLevel(InfoACE, 3);
+]]></Example>
+This  causes  each  line  of  &ACE;  output  to  be  prepended   with
+<Q>#I  </Q>.  Below,  we describe the <C>Info</C>-ed output  observed  when
+each of <C>ACECosetTableFromGensAndRels</C>, <C>ACECosetTable</C>, <C>ACEStats</C> or
+<C>ACEStart</C> is called with three arguments, and presume that users will
+be able to extend the description  to  explain  output  observed  from
+other  &ACE;  interface  functions.  The  first-observed  (<C>Info</C>-ed)
+output from &ACE;, is &ACE;'s banner, e.g.
+<Log><![CDATA[
+#I  ACE 3.001        Sat Feb 27 11:44:12 2016
+#I  =========================================
+#I  Host information:
+#I    name = banksia
+#I  ***
+]]></Log>
+If there were any errors in the directives put to  &ACE;,  or  output
+from the options described in Appendix&nbsp;<Ref Chap="Other ACE Options"/>, they  will
+appear next. Then,  the  next  observed  output  is  a  row  of  three
+asterisks:
+<Log><![CDATA[
+#I  ***
+]]></Log>
+<E>Guru note:</E>
+The three asterisks are generated  by  a  <Q>text:<E></E>*</Q>  (see&nbsp;<Ref Subsect="option text"/>) directive, emitted to &ACE;, so that &ACE;'s response can  be
+used as a sentinel to flush out any user errors, or any output from  a
+user's use of Appendix&nbsp;<Ref Chap="Other ACE Options"/> options.
+<P/>
+Next, if the <C>messages</C> option (see&nbsp;<Ref Subsect="option messages"/>)  is  set  to  a
+non-zero value, what is observed is a heading like:
+<Log><![CDATA[
+#I    #--- ACE 3.001: Run Parameters ---
+]]></Log>
+(where <C>3.001</C> may be replaced be some later  version  number  of  the
+&ACE; binary) followed by the <Q>input parameters</Q> developed from the
+arguments  and  options  passed   to   <C>ACECosetTableFromGensAndRels</C>,
+<C>ACEStats</C> or <C>ACEStart</C>. After these appears a separator:
+<Log><![CDATA[
+#I    #---------------------------------
+]]></Log>
+followed by any <E>progress messages</E> (progress messages only  occur  if
+<C>messages</C> is non-zero;  recall  that  by  default  <C>messages</C>  =  0),
+followed by a <E>results message</E>.
+<P/>
+In the case of <C>ACECosetTableFromGensAndRels</C>, the  <E>results  message</E>
+is followed by a compaction (<C>CO</C> or  <C>co</C>)  progress  message  and  a
+coset table.
+<P/>
+&ACE;'s exit banner which should look something like:
+<Log><![CDATA[
+=========================================
+ACE 3.001        Sat Feb 27 11:44:17 2016
+]]></Log>
+is only seen when running &ACE; as a standalone.
+<P/>
+Both <E>progress messages</E> and  the  <E>results  message</E>  consist  of  an
+initial tag followed by a list of statistics. All messages have values
+for the statistics <C>a</C>, <C>r</C>, <C>h</C>, <C>n</C>, <C>h</C>,  <C>l</C>  and  <C>c</C>  (excepting
+that the second <C>h</C>, the one following  the  <C>n</C>  statistic,  is  only
+given if hole monitoring has been turned on by setting <C>messages</C>  <M>&lt;
+0</M>, which as noted above is expensive and  should  be  avoided  unless
+really needed). Additionally, there may appear the statistics: <C>m</C> and
+<C>t</C> (as for the results message); <C>d</C>; or <C>s</C>, <C>d</C> and <C>c</C> (as for the
+<C>DS</C> progress message). The meanings of  the  various  statistics  and
+tags will follow later. The following is a sample progress message:
+<Log><![CDATA[
+#I  AD: a=2 r=1 h=1 n=3; h=66.67% l=1 c=+0.00; m=2 t=2
+]]></Log>
+with tag <C>AD</C> and values for the statistics <C>a</C>, <C>r</C>,  <C>h</C>,  <C>n</C>,  <C>h</C>
+(appears because <C>messages</C> <M>&lt;  0</M>),  <C>l</C>,  <C>c</C>,  <C>m</C>  and  <C>t</C>.  The
+following is a sample results message:
+<Log><![CDATA[
+#I  INDEX = 12 (a=12 r=16 h=1 n=16; l=3 c=0.01; m=14 t=15)
+]]></Log>
+which, in this case, declares a successful enumeration  of  the  coset
+numbers of a subgroup of index 12 within a group,  and,  as  it  turns
+out, values for the same statistics as the sample progress message.
+<P/>
+You should see all the above (and a little  more),  except  that  your
+dates and host information will no doubt differ, by running:
+<Log><![CDATA[
+gap> ACEExample("A5-C5" : echo:=0, messages:=-1);
+]]></Log>
+In the following table we  list  the  statistics  that  can  follow  a
+progress or results message tag, in order:
+<Log><![CDATA[
+--------------------------------------------------------------------
+statistic   meaning
+--------------------------------------------------------------------
+a           number of active coset numbers
+r           number of applied coset numbers
+h           first (potentially) incomplete row
+n           next coset number definition
+h           percentage of holes in the table (if `messages'$ \< 0$) 
+l           number of main loop passes
+c           total CPU time
+m           maximum number of active coset numbers
+t           total number of coset numbers defined
+s           new deduction stack size (with DS tag)
+d           current deduction stack size, or
+              no. of non-redundant deductions retained (with DS tag)
+c           no. of redundant deductions discarded (with DS tag)
+--------------------------------------------------------------------
+]]></Log>
+Now that we have discussed the various  meanings  of  the  statistics,
+it's time to  discuss  the  various  types  of  progress  and  results
+messages possible. First we describe progress messages.
+<Section Label="Progress Messages">
+<Heading>Progress Messages</Heading>
+A progress message (and its tag) indicates the function just completed
+by the enumerator. In the following table, the possible message <C>tag</C>s
+appear in the first column. In the <C>action</C> column,  a  <C>y</C>  indicates
+the function is aggregated and counted. Every time this count  reaches
+the value of <C>messages</C>, a message line is printed and  the  count  is
+zeroed. Those tags flagged  with  a  <C>y*</C>  are  only  present  if  the
+appropriate option was included when the &ACE; binary was compiled (a
+default compilation includes the appropriate options; so normally read
+<C>y*</C> as <C>y</C>). Tags with an <C>n</C> in the  <C>action</C>  column  indicate  the
+function is not counted, and cause a message line to be  output  every
+time they occur. They also cause the action count to be reset.
+<Log><![CDATA[
+------------------------------------------------------------------
+tag   action      meaning
+------------------------------------------------------------------
+AD         y      coset 1 application definition (`SG'/`RS' phase)
+RD         y      R-style definition
+RF         y      row-filling definition
+CG         y      immediate gap-filling definition
+CC         y*     coincidence processed
+DD         y*     deduction processed
+CP         y      preferred list gap-filling definition
+CD         y      C-style definition
+Lx         n      lookahead performed (type `x')
+CO         n      table compacted
+co         n      compaction routine called, but nothing recovered
+CL         n      complete lookahead (table as deduction stack)
+UH         n      updated completed-row counter
+RA         n      remaining coset numbers applied to relators
+SG         n      subgroup generator phase
+RS         n      relators in subgroup phase
+DS         n      stack overflowed (compacted and doubled)
+------------------------------------------------------------------
+]]></Log>
+</Section>
+<Section Label="Results Messages">
+<Heading>Results Messages</Heading>
+The possible results are given in the following table; any result  not
+listed represents an internal error and  should  be  reported  to  the
+&ACE; authors.
+<Log><![CDATA[
+result tag           meaning 
+-------------------------------------------------------------------
+INDEX = x            finite index of `x' obtained
+OVERFLOW             out of table space
+SG PHASE OVERFLOW    out of space (processing subgroup generators)
+ITERATION LIMIT      `loop' limit triggered
+TIME LIMT            `ti' limit triggered
+HOLE LIMIT           `ho' limit triggered
+INCOMPLETE TABLE     all coset numbers applied, but table has holes
+MEMORY PROBLEM       out of memory (building data structures)
+-------------------------------------------------------------------
+]]></Log>
+<E>Notes:</E>
+Recall that hole monitoring is switched on by setting a negative value
+for the <C>messages</C> (see&nbsp;<Ref Subsect="option messages"/>) option, but note that  hole
+monitoring is expensive, so don't turn it on unless  you  really  need
+it. If you wish to print out the presentation and the options, but not
+the progress messages, then set <C>messages</C> non-zero, but  very  large.
+(You'll still get the <C>SG</C>, <C>DS</C>, etc. messages,  but  not  the  <C>RD</C>,
+<C>DD</C>, etc. ones.) You can  set  <C>messages</C>  to  <M>1</M>,  to  monitor  all
+enumerator actions, but be warned  that  this  can  yield  very  large
+output files.
+</Section>
+</Chapter>

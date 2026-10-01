@@ -1,0 +1,527 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE file SYSTEM "bibxmlext.dtd">
+<file>
+<entry id="Lee70"><incollection>
+  <author>
+    <name><first>John</first><last>Leech</last></name>
+  </author>  
+  <title>Coset enumeration</title>
+  <booktitle>Computational Problems in Abstract Algebra</booktitle>
+  <publisher>Pergamon Press, Oxford</publisher>
+  <year>1970</year>
+  <pages>21--35</pages>
+  <doi>10.1016/b978-0-08-012975-4.50006-0</doi>
+</incollection></entry>
+<entry id="CDHW73"><article>
+  <author>
+    <name><first>John J.</first><last>Cannon</last></name>
+    <name><first>Lucien A.</first><last>Dimino</last></name>
+    <name><first>George</first><last>Havas</last></name>
+    <name><first>Jane M.</first><last>Watson</last></name>
+  </author>  
+  <title>Implementation and analysis of the <C>Todd-Coxeter</C>
+                        algorithm</title>
+  <journal>Mathematics of Computation</journal>
+  <year>1973</year>
+  <volume>27</volume>
+  <number>123</number>
+  <pages>463--490</pages>
+  <month>July</month>
+  <doi>10.1090/s0025-5718-1973-0335610-5</doi>
+</article></entry>
+<entry id="Dok88"><article>
+  <author>
+    <name><first>Dragomir Z.</first><last>Dokovic</last></name>
+  </author>  
+  <title>Presentations of some finite simple groups</title>
+  <journal>Journal of the Australian Mathematical Society 
+                        (Series A)</journal>
+  <year>1988</year>
+  <volume>45</volume>
+  <number>2</number>
+  <pages>143--168</pages>
+  <month>October</month>
+</article></entry>
+<entry id="Lee84"><incollection>
+  <author>
+    <name><first>John</first><last>Leech</last></name>
+  </author>  
+  <title>Coset enumeration</title>
+  <booktitle>Computational Group Theory</booktitle>
+  <publisher>Academic Press</publisher>
+  <year>1984</year>
+  <editor>
+    <name><first>Michael D.</first><last>Atkinson</last></name>
+  </editor>  
+  <pages>3--18</pages>
+</incollection></entry>
+<entry id="War77"><incollection>
+  <author>
+    <name><first>J. N.</first><last>Ward</last></name>
+  </author>  
+  <title>A note on the <C>Todd-Coxeter</C> algorithm</title>
+  <booktitle>Group Theory (Canberra, 1975)</booktitle>
+  <publisher>Springer-Verlag</publisher>
+  <year>1977</year>
+  <editor>
+    <name><first>R. A.</first><last>Bryce</last></name>
+    <name><first>J.</first><last>Cossey</last></name>
+    <name><first>M. F.</first><last>Newman</last></name>
+  </editor>  
+  <number>573</number>
+  <series>Lecture Notes in Mathematics</series>
+  <pages>126--129</pages>
+  <doi>10.1007/bfb0087818</doi>
+</incollection></entry>
+<entry id="Magma"><article>
+  <author>
+    <name><first>W.</first><last>Bosma</last></name>
+    <name><first>J.</first><last>Cannon</last></name>
+    <name><first>C.</first><last>Playoust</last></name>
+  </author>  
+  <title>The Magma algebra system I: 
+                        the user language</title>
+  <journal>Journal of Symbolic Computation</journal>
+  <year>1997</year>
+  <volume>24</volume>
+  <pages>235--265</pages>
+  <doi>10.1006/jsco.1996.0125</doi>
+</article></entry>
+<entry id="GAP"><manual>
+  <author>
+    <name><first>M. Schönert et al.</first><last></last></name>
+  </author>  
+  <title>GAP -- Groups, Algorithms and Programming</title>
+  <organization>Lehrstuhl D für Mathematik</organization>
+  <address>Rheinisch-Westfälische Technische Hochschule,
+                        Aachen</address>
+  <year>1995</year>
+</manual></entry>
+<entry id="AHT84"><incollection>
+  <author>
+    <name><first>M. D.</first><last>Atkinson</last></name>
+    <name><first>R. A.</first><last>Hassan</last></name>
+    <name><first>M. P.</first><last>Thorne</last></name>
+  </author>  
+  <title>Group theory on a micro-computer</title>
+  <booktitle>Computational Group Theory</booktitle>
+  <publisher>Academic Press</publisher>
+  <year>1984</year>
+  <editor>
+    <name><first>Michael D.</first><last>Atkinson</last></name>
+  </editor>  
+  <pages>275--280</pages>
+</incollection></entry>
+<entry id="HKRR84"><incollection>
+  <author>
+    <name><first>George</first><last>Havas</last></name>
+    <name><first>P. E.</first><last>Kenne</last></name>
+    <name><first>J. S.</first><last>Richardson</last></name>
+    <name><first>E. F.</first><last>Robertson</last></name>
+  </author>  
+  <title>A <C>Tietze</C> transformation program</title>
+  <booktitle>Computational Group Theory</booktitle>
+  <publisher>Academic Press</publisher>
+  <year>1984</year>
+  <editor>
+    <name><first>Michael D.</first><last>Atkinson</last></name>
+  </editor>  
+  <pages>69--73</pages>
+</incollection></entry>
+<entry id="Bee84"><incollection>
+  <author>
+    <name><first>M. J.</first><last>Beetham</last></name>
+  </author>  
+  <title>Space saving in coset enumeration</title>
+  <booktitle>Computational Group Theory</booktitle>
+  <publisher>Academic Press</publisher>
+  <year>1984</year>
+  <editor>
+    <name><first>Michael D.</first><last>Atkinson</last></name>
+  </editor>  
+  <pages>19--25</pages>
+</incollection></entry>
+<entry id="Hav91"><inproceedings>
+  <author>
+    <name><first>George</first><last>Havas</last></name>
+  </author>  
+  <title>Coset enumeration strategies</title>
+  <booktitle>ISSAC'91 (Proceedings of the 1991 International
+  Symposium on Symbolic and Algebraic Computation)</booktitle>
+  <year>1991</year>
+  <editor>
+    <name><first>Stephen M.</first><last>Watt</last></name>
+  </editor>  
+  <pages>191--199</pages>
+  <publisher>ACM Press</publisher>
+  <doi>10.1145/120694.120723</doi>
+</inproceedings></entry>
+<entry id="Pla92"><book>
+  <author>
+    <name><first>P. J.</first><last>Plauger</last></name>
+  </author>  
+  <title>The Standard <C>C</C> Library</title>
+  <publisher>Prentice Hall</publisher>
+  <year>1992</year>
+</book></entry>
+<entry id="C11"><misc>
+  <note>Group-pub-forum e-mail list
+                     (group-pub-forum@maths.bath.ac.uk),
+                   Problem 11, 1996.
+                   See
+  <URL>http://www2.bath.ac.uk/~masgcs/problem/problem11.htm</URL></note>
+  <key>Group-pub-forum</key>
+</misc></entry>
+<entry id="HHKR"><misc>
+  <author>
+    <name><first>George</first><last>Havas</last></name>
+    <name><first>Derek F.</first><last>Holt</last></name>
+    <name><first>P. E.</first><last>Kenne</last></name>
+    <name><first>Sarah</first><last>Rees</last></name>
+  </author>  
+  <title>Some challenging group presentations</title>
+  <year>1999 (preprint)</year>
+  <doi>10.1017/s1446788700001178</doi>
+</misc></entry>
+<entry id="HR99a"><misc>
+  <author>
+    <name><first>George</first><last>Havas</last></name>
+    <name><first>Colin</first><last>Ramsay</last></name>
+  </author>  
+  <title>Coset enumeration: ACE version 3</title>
+  <year>1999</year>
+  <note>ACE version 3.001 is available from
+                   <URL>http://www.csee.uq.edu.au/~cram/ce.html</URL></note>
+</misc></entry>
+<entry id="HR99ace"><misc>
+  <author>
+    <name><first>George</first><last>Havas</last></name>
+    <name><first>Colin</first><last>Ramsay</last></name>
+  </author>  
+  <title>Coset enumeration: ACE version 3</title>
+  <year>1999</year>
+  <note>ACE version 3.001 is available from
+                   <URL>http://staff.itee.uq.edu.au/havas</URL></note>
+</misc></entry>
+<entry id="KB70"><incollection>
+  <author>
+    <name><first>D. E.</first><last>Knuth</last></name>
+    <name><first>P. B.</first><last>Bendix</last></name>
+  </author>  
+  <title>Simple word problems in universal algebras</title>
+  <booktitle>Computational Problems in Abstract Algebra</booktitle>
+  <publisher>Pergamon Press, Oxford</publisher>
+  <year>1970</year>
+  <pages>263--297</pages>
+</incollection></entry>
+<entry id="Lee77"><incollection>
+  <author>
+    <name><first>John</first><last>Leech</last></name>
+  </author>  
+  <title>Computer proof of relations in groups</title>
+  <booktitle>Topics in Group Theory and Computation</booktitle>
+  <publisher>Academic Press</publisher>
+  <year>1977</year>
+  <editor>
+    <name><first>Michael P. J.</first><last>Curran</last></name>
+  </editor>  
+  <pages>38--61</pages>
+</incollection></entry>
+<entry id="Hav76"><article>
+  <author>
+    <name><first>George</first><last>Havas</last></name>
+  </author>  
+  <title>Computer aided determination of a <C>Fibonacci</C> group</title>
+  <journal>Bulletin of the Australian Mathematical Society</journal>
+  <year>1976</year>
+  <volume>15</volume>
+  <pages>297--305</pages>
+  <doi>10.1017/s0004972700022668</doi>
+</article></entry>
+<entry id="Ede89"><mastersthesis>
+  <author>
+    <name><first>Margaret</first><last>Edeson</last></name>
+  </author>  
+  <title>Investigations in coset enumeration</title>
+  <school>Canberra College of Advanced Education</school>
+  <year>1989</year>
+</mastersthesis></entry>
+<entry id="Fel98"><misc>
+  <author>
+    <name><first>V.</first><last>Felsch</last></name>
+  </author>  
+  <note>E-mail to Havas, 1998</note>
+</misc></entry>
+<entry id="Moo97"><article>
+  <author>
+    <name><first>E. H.</first><last>Moore</last></name>
+  </author>  
+  <title>Concerning the abstract groups of order <M>k!</M> and
+                   <M>k!/2</M> holohedrically isomorphic with the
+                   symmetric and the alternating substitution-groups
+                   on <M>k</M> letters</title>
+  <journal>Proceedings of the London Mathematical Society (1)</journal>
+  <year>1897</year>
+  <volume>28</volume>
+  <pages>357--366</pages>
+</article></entry>
+<entry id="TC36"><article>
+  <author>
+    <name><first>J. A.</first><last>Todd</last></name>
+    <name><first>H. S. M.</first><last>Coxeter</last></name>
+  </author>  
+  <title>A practical method for enumerating cosets of finite
+                        abstract groups</title>
+  <journal>Proceedings of the Edinburgh Mathematical Society</journal>
+  <year>1936</year>
+  <volume>5</volume>
+  <pages>26--34</pages>
+</article></entry>
+<entry id="Lee63"><article>
+  <author>
+    <name><first>J.</first><last>Leech</last></name>
+  </author>  
+  <title>Coset enumeration on digital computers</title>
+  <journal>Proceedings of the Cambridge Philosophical Society</journal>
+  <year>1963</year>
+  <volume>59</volume>
+  <pages>257--267</pages>
+  <doi>10.1017/s0305004100036872</doi>
+</article></entry>
+<entry id="Sim94"><book>
+  <author>
+    <name><first>Charles C.</first><last>Sims</last></name>
+  </author>  
+  <title>Computation with finitely presented groups</title>
+  <publisher>Cambridge University Press</publisher>
+  <year>1994</year>
+  <doi>10.1017/cbo9780511574702</doi>
+</book></entry>
+<entry id="Neu82"><incollection>
+  <author>
+    <name><first>J.</first><last>Neubüser</last></name>
+  </author>  
+  <title>An elementary introduction to coset table methods in
+                        computational group theory</title>
+  <booktitle>Groups -- St. Andrews 1981</booktitle>
+  <publisher>Cambridge University Press</publisher>
+  <year>1982</year>
+  <series>London Mathematical Society Lecture Note Series 71</series>
+  <pages>1--45</pages>
+  <doi>10.1017/cbo9780511661884.004</doi>
+</incollection></entry>
+<entry id="Men64"><article>
+  <author>
+    <name><first>N. S.</first><last>Mendelsohn</last></name>
+  </author>  
+  <title>An algorithmic solution for a word problem in group
+                        theory</title>
+  <journal>Canadian Journal of Mathematics</journal>
+  <year>1964</year>
+  <volume>16</volume>
+  <pages>509--516</pages>
+  <note>Corrigendum: <E>Ibid.</E> 17:505, 1965.</note>
+  <doi>10.4153/cjm-1964-052-3</doi>
+</article></entry>
+<entry id="Con65"><article>
+  <author>
+    <name><first>J. H.</first><last>Conway</last></name>
+  </author>  
+  <title>Problem #5327</title>
+  <journal>American Mathematical Monthly</journal>
+  <year>1965</year>
+  <volume>72</volume>
+  <pages>915</pages>
+  <note>Solutions, by various authors, given in: 
+                   Generators and relations for cyclic groups,
+                   <E>Ibid.</E>, 74:91--93, 1965.</note>
+</article></entry>
+<entry id="Dic01"><book>
+  <author>
+    <name><first>L. E.</first><last>Dickson</last></name>
+  </author>  
+  <title>Linear Groups, with an exposition of the Galois field
+                        theory</title>
+  <publisher>B.G. Teubner, Leipzig</publisher>
+  <year>1901</year>
+</book></entry>
+<entry id="HR00"><article>
+  <author>
+    <name><first>George</first><last>Havas</last></name>
+    <name><first>Colin</first><last>Ramsay</last></name>
+  </author>  
+  <title>Proving a group trivial made easy: 
+                   a case study in coset enumeration</title>
+  <journal>Bulletin of the Australian Mathematical Society</journal>
+  <year>2000</year>
+  <volume>62</volume>
+  <number>1</number>
+  <pages>105--118</pages>
+  <doi>10.1017/s0004972700018529</doi>
+</article></entry>
+<entry id="HR01"><incollection>
+  <author>
+    <name><first>George</first><last>Havas</last></name>
+    <name><first>Colin</first><last>Ramsay</last></name>
+  </author>  
+  <title>Groups and Computation <C>III</C></title>
+  <booktitle>Ohio State University Mathematical Research Institute
+                   Publications</booktitle>
+  <publisher>de Gruyter</publisher>
+  <year>2001</year>
+  <volume>8</volume>
+  <pages>183--192</pages>
+</incollection></entry>
+<entry id="CHHR01"><article>
+  <author>
+    <name><first>Colin M.</first><last>Campbell</last></name>
+    <name><first>George</first><last>Havas</last></name>
+    <name><first>Alexander</first><last>Hulpke</last></name>
+    <name><first>Edmund F.</first><last>Robertson</last></name>
+  </author>  
+  <title>Efficient simple groups</title>
+  <journal>Communications in Algebra</journal>
+  <year>2002</year>
+  <volume>30</volume>
+  <number>9</number>
+  <pages>4613--4619</pages>
+  <doi>10.1081/agb-120013342</doi>
+</article></entry>
+<entry id="CMY79"><article>
+  <author>
+    <name><first>John J.</first><last>Cannon</last></name>
+    <name><first>John</first><last>McKay</last></name>
+    <name><first>Kiang Chuen</first><last>Young</last></name>
+  </author>  
+  <title>The non-abelian Simple groups <C><M>G</M></C>, 
+  <M>|G| &lt; 10^5</M> --- presentations</title>
+  <journal>Communications in Algebra</journal>
+  <year>1979</year>
+  <volume>7</volume>
+  <number>13</number>
+  <pages>1397--1406</pages>
+</article></entry>
+<entry id="CR84"><article>
+  <author>
+    <name><first>Colin M.</first><last>Campbell</last></name>
+    <name><first>Edmund F.</first><last>Robertson</last></name>
+  </author>  
+  <title>Presentations for the Simple groups <C><M>G</M></C>, 
+                   <M>10^5 &lt; |G| &lt; 10^6</M></title>
+  <journal>Communications in Algebra</journal>
+  <year>1984</year>
+  <volume>12</volume>
+  <number>21</number>
+  <pages>2643--2663</pages>
+</article></entry>
+<entry id="Hig51"><article>
+  <author>
+    <name><first>G.</first><last>Higman</last></name>
+  </author>  
+  <title>A finitely generated infinite simple group</title>
+  <journal>Journal of the London Mathematical Society</journal>
+  <year>1951</year>
+  <volume>26</volume>
+  <pages>61--64</pages>
+  <doi>10.1112/jlms/s1-26.1.61</doi>
+</article></entry>
+<entry id="Neu54"><article>
+  <author>
+    <name><first>B. H.</first><last>Neumann</last></name>
+  </author>  
+  <title>An essay on free products of groups with
+                        amalgamations</title>
+  <journal>Philosophical Transactions of the Royal Society of
+                        London (A)</journal>
+  <year>1954</year>
+  <volume>246</volume>
+  <pages>503--554</pages>
+  <doi>10.1098/rsta.1954.0007</doi>
+</article></entry>
+<entry id="Neu79"><article>
+  <author>
+    <name><first>B. H.</first><last>Neumann</last></name>
+  </author>  
+  <title>Proofs</title>
+  <journal>The Mathematical Intelligencer</journal>
+  <year>1979</year>
+  <volume>2</volume>
+  <number>1</number>
+  <pages>18--19</pages>
+  <doi>10.1007/bf03024380</doi>
+</article></entry>
+<entry id="CH97"><incollection>
+  <author>
+    <name><first>Gene</first><last>Cooperman</last></name>
+    <name><first>George</first><last>Havas</last></name>
+  </author>  
+  <title>Practical parallel coset enumeration</title>
+  <booktitle>Workshop on High Performance Computing and Gigabit 
+                        Local Area Networks</booktitle>
+  <publisher>Springer-Verlag</publisher>
+  <year>1997</year>
+  <editor>
+    <name><first>G.</first><last>Cooperman</last></name>
+    <name><first>G.</first><last>Michler</last></name>
+    <name><first>H.</first><last>Vinck</last></name>
+  </editor>  
+  <number>226</number>
+  <series>Lecture Notes in Control and Information Sciences</series>
+  <pages>15--27</pages>
+  <doi>10.1007/bfb0037072</doi>
+</incollection></entry>
+<entry id="CLR90"><book>
+  <author>
+    <name><first>Thomas H.</first><last>Cormen</last></name>
+    <name><first>Charles E.</first><last>Leiserson</last></name>
+    <name><first>Ronald L.</first><last>Rivest</last></name>
+  </author>  
+  <title>Introduction to Algorithms</title>
+  <publisher>The MIT Press</publisher>
+  <year>1990</year>
+</book></entry>
+<entry id="MKS76"><book>
+  <author>
+    <name><first>Wilhelm</first><last>Magnus</last></name>
+    <name><first>Abraham</first><last>Karrass</last></name>
+    <name><first>Daniel</first><last>Solitar</last></name>
+  </author>  
+  <title>Combinatorial Group Theory</title>
+  <publisher>Dover</publisher>
+  <year>1976</year>
+  <edition>2nd</edition>
+</book></entry>
+<entry id="CM72"><book>
+  <author>
+    <name><first>H. S. M.</first><last>Coxeter</last></name>
+    <name><first>W. O. J.</first><last>Moser</last></name>
+  </author>  
+  <title>Generators and Relations for Discrete Groups</title>
+  <publisher>Springer-Verlag</publisher>
+  <year>1972</year>
+  <edition>3rd</edition>
+  <doi>10.1007/978-3-662-21946-1</doi>
+</book></entry>
+<entry id="Ram99"><techreport>
+  <author>
+    <name><first>Colin</first><last>Ramsay</last></name>
+  </author>  
+  <title>ACE for Amateurs (Version 3.001)</title>
+  <institution>Centre for Discrete Mathematics and Computing,
+                   The University of Queensland</institution>
+  <year>1999</year>
+  <number>14</number>
+  <address>St.~Lucia 4072, Australia</address>
+</techreport></entry>
+<entry id="Ram99ace"><techreport>
+  <author>
+    <name><first>Colin</first><last>Ramsay</last></name>
+  </author>  
+  <title>ACE for Amateurs (Version 3.001)</title>
+  <institution>Centre for Discrete Mathematics and Computing,
+                   The University of Queensland</institution>
+  <year>1999</year>
+  <number>14</number>
+  <address>St.~Lucia 4072, Australia</address>
+</techreport></entry>
+</file>

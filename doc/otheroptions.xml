@@ -1,0 +1,707 @@
+<!-- W  otheroptions.tex    ACE appendix - other options     Alexander Hulpke / W                                                      Joachim Neub"user / W                                                            Greg Gamble / Y  Copyright (C) 2000  Centre for Discrete Mathematics and Computing / Y                      Department of Information Tech. & Electrical Eng. / Y                      University of Queensland, Australia. -->
+<Chapter Label="Other ACE Options">
+<Heading>Other ACE Options</Heading>
+Here we list all the known &ACE; options not provided  earlier.  Most
+of the options provided here have  interactive  function  alternatives
+(each such alternative is noted at the end of the  section  describing
+the corresponding option  and  introduced  by  <Q><E>INTERACTIVELY</E>,  use
+...</Q>). A few options have only limited usefulness from &GAP;; many
+options, users will normally only wish to use if generating  an  input
+file,  by  using  the  option  <C>aceinfile</C>  (see&nbsp;<Ref Subsect="option aceinfile"/>).
+However all  options  here  are  functional,  both  interactively  and
+non-interactively.
+<Section Label="Experimentation Options">
+<Heading>Experimentation Options</Heading>
+<Subsection Label="option aep">
+<Heading><C>aep</C></Heading>
+<Index>option <C>aep</C></Index>Runs the enumeration for <C>a</C>ll <C>e</C>quivalent <C>p</C>resentations;
+<A>val</A> is in the integer range 1 to 7.
+<P/>
+The <C>aep</C> option runs  an  enumeration  for  combinations  of  relator
+ordering, relator rotations, and relator inversions.
+<P/>
+The argument <A>val</A> is considered as a binary number.  Its  three  bits
+are treated as flags, and control relator rotations (the  <M>2^0</M>  bit),
+relator inversions (the <M>2^1</M> bit) and relator  orderings  (the  <M>2^2</M>
+bit),  respectively;  where  <M>1</M>  means  <Q>active</Q>  and   <M>0</M>   means
+<Q>inactive</Q>. (See below for an example).
+<P/>
+The <C>aep</C> option first performs a <Q>priming run</Q> using the options as
+they stand. In particular,  the  <C>asis</C>  and  <C>messages</C>  options  are
+honoured.
+<P/>
+It then turns <C>asis</C> on and <C>messages</C> off  (i.e.&nbsp;sets  <C>messages</C>  to
+0), and generates and tests the  requested  equivalent  presentations.
+The maximum and minimum values attained by <C>m</C> (the maximum number  of
+coset numbers defined at any stage) and <C>t</C> (the total number of coset
+numbers defined) are tracked, and each time a new <Q>record</Q> is found,
+the relators  used  and  the  summary  result  line  is  printed.  See
+Appendix&nbsp;<Ref Chap="The Meanings of ACE's output messages"/> for a  discussion  of
+the statistics <C>m</C> and <C>t</C>. To observe these messages either  set  the
+<C>InfoLevel</C> of <C>InfoACE</C> to 3 or non-interactively you can peruse  the
+&ACE; output file (see&nbsp;<Ref Subsect="option aceoutfile"/>).
+<P/>
+Normally when a non-interactive &ACE; interface function  is  called,
+the option <C>start</C> (see&nbsp;<Ref Subsect="option begin"/>), is quietly inserted after all
+the options provided by the user, to  initiate  a  coset  enumeration.
+Since the <C>aep</C> option invokes an enumeration, the quiet insertion  of
+the <C>start</C> option is neither needed nor done, when a  non-interactive
+&ACE; interface function is called with the <C>aep</C> option.
+<P/>
+The order in which the  equivalent  presentations  are  generated  and
+tested has no particular significance, but note that the  presentation
+as given <E>after</E> the initial priming run) is the  <E>last</E>  presentation
+to be generated and tested, so that  the  group's  relators  are  left
+<C>unchanged</C> by running the <C>aep</C> option, (not that  a  non-interactive
+user cares).
+<P/>
+As discussed by Cannon, Dimino, Havas  and  Watson  <Cite Key="CDHW73"/>  and
+Havas and Ramsay <Cite Key="HR01"/> such equivalent presentations  can  yield
+large variations in  the  number  of  coset  numbers  required  in  an
+enumeration. For this command, we are interested in this variation.
+<P/>
+After  the  final  presentation  is  run,   some   additional   status
+information messages are printed to the &ACE; output file:
+<P/>
+<List>
+<Item>the number of runs which yielded a finite index;</Item>
+<Item>the total number of runs (excluding the priming run); and</Item>
+<Item>the range of values observed for <C>m</C> and <C>t</C>.</Item>
+</List>
+<P/>
+As an example (drawn from the discussion in <Cite Key="HR99ace"/>) consider the
+enumeration   of   the   <M>448</M>   coset   numbers   of   the   subgroup
+<M>\langle  a^2,a^{-1}b \rangle</M> of the group
+<Display>
+(8,7 \mid 2,3) 
+    = \langle a,b \mid a^8 = b^7 = (ab)^2 = (a^{-1}b)^3 = 1 \rangle.
+</Display>
+There are <M>4!=24</M>  relator  orderings  and  <M>2^4=16</M>  combinations  of
+relator or inverted relator. Exponents are  taken  into  account  when
+rotating relators, so the relators given give rise to 1, 1,  2  and  2
+rotations respectively, for a total of <M>1.1.2.2=4</M>  combinations.  So,
+for  <C>aep</C>  =  <M>7</M>   (resp.&nbsp;<M>3</M>),   <M>24.16.4=1536</M>   (resp.&nbsp;<M>16.4=64</M>)
+equivalent presentations are tested.
+<P/>
+<E>Notes:</E>
+There is no way to stop the <C>aep</C>  option  before  it  has  completed,
+other than killing the task. So do a reality check beforehand  on  the
+size of the search space and the time for each enumeration. If you are
+interested in finding a <Q>good</Q> enumeration, it can be very  helpful,
+in terms of running time, to put a tight limit on the number of  coset
+numbers via the <C>max</C> option. You may also have to set <C>compaction</C>  =
+<M>100</M>  to  prevent  time-wasting  attempts  to   recover   space   via
+compaction.  This  maximises  throughput  by   causing   the   <Q>bad</Q>
+enumerations, which are in  the  majority,  to  overflow  quickly  and
+abort. If you wish to explore  a  very  large  search-space,  consider
+firing up many copies of &ACE;, and starting each with  a  <Q>random</Q>
+equivalent  presentation.  Alternatively,  you  could  use  the  <C>rep</C>
+command.
+<P/>
+<E>INTERACTIVELY</E>,            use             <C>ACEAllEquivPresentations</C>
+(see&nbsp;<Ref Func="ACEAllEquivPresentations"/>).
+</Subsection>
+<Subsection Label="option rep">
+<Heading><C>rep</C></Heading>
+<Index>option <C>rep</C></Index>Run the enumeration for <C>r</C>andom <C>e</C>quivalent <C>p</C>resentations;
+<A>val</A> is in the integer range 1 to 7;
+<A>Npresentations</A> must be a positive integer.
+<P/>
+The <C>rep</C> (random equivalent  presentations)  option  complements  the
+<C>aep</C>  option.  It  generates  and  tests   some   random   equivalent
+presentations. The argument <A>val</A>  acts  as  for  <C>aep</C>.  It  is  also
+possible to set the number <A>Npresentations</A>  of  random  presentations
+used (by default, eight  are  used),  by  using  the  extended  syntax
+<C>rep:=[<A>val</A>,<A>Npresentations</A>]</C>.
+<P/>
+The routine first  turns  <C>asis</C>  on  and  <C>messages</C>  off  (i.e.&nbsp;sets
+<C>messages</C> to 0), and then generates and tests the requested number of
+random equivalent presentations. For each presentation,  the  relators
+used and the  summary  result  line  are  printed.  To  observe  these
+messages either set the <C>InfoLevel</C> of <C>InfoACE</C>  to  at  least  3  or
+non-interactively you can peruse the &ACE; output  file  (see&nbsp;<Ref Subsect="option aceoutfile"/>).
+<P/>
+Normally when a non-interactive &ACE; interface function  is  called,
+the option <C>start</C> (see&nbsp;<Ref Subsect="option begin"/>), is quietly inserted after all
+the options provided by the user, to  initiate  a  coset  enumeration.
+Since the <C>rep</C> option invokes an enumeration, the quiet insertion  of
+the <C>start</C> option is neither needed nor done, when a  non-interactive
+&ACE; interface function is called with the <C>rep</C> option.
+<P/>
+<E>Notes:</E>
+The relator inversions and rotations  are  <Q>genuinely</Q>  random.  The
+relator permuting is a little bit of a kludge, with the <Q>quality</Q> of
+the permutations tending to  improve  with  successive  presentations.
+When the <C>rep</C> command  completes,  the  presentation  active  is  the
+<E>last</E> one generated, (not that the non-interactive user cares).
+<P/>
+<E>Guru Notes:</E>
+It might appear that neglecting to restore the  original  presentation
+is an error. In fact, it is a useful feature! Suppose that  the  space
+of equivalent presentations is too  large  to  exhaustively  test.  As
+noted in the entry for <C>aep</C>, we can start up multiple copies of <C>aep</C>
+at random points in the  search-space.  Manually  generating  <C>random</C>
+equivalent presentations to serve as starting-points  is  tedious  and
+error-prone. The <C>rep</C> option provides a simple solution;  simply  run
+<C>rep := 7</C> before <C>aep := 7</C>.
+<P/>
+<E>INTERACTIVELY</E>,           use           <C>ACERandomEquivPresentations</C>
+(see&nbsp;<Ref Func="ACERandomEquivPresentations"/>).
+</Subsection>
+</Section>
+<Section Label="Options that Modify a Presentation">
+<Heading>Options that Modify a Presentation</Heading>
+<Subsection Label="option group">
+<Heading><C>group</C></Heading>
+<Index>option <C>group</C></Index>Defines the <C>group</C> generators; <A>grpgens</A> should be an  integer  (that
+is the number of generators) or a string that is the concatenation of,
+or a list of, single-lowercase-letter group generator  names,  i.e.&nbsp;it
+should be in a form suitable  for  the  &ACE;  binary  to  interpret.
+(Shortest abbreviation: <C>gr</C>.)
+<P/>
+The group generators should normally be input as one of the  arguments
+of an &ACE; interface function, though this option may be useful when
+<C>ACEStart</C> (see&nbsp;<Ref Func="ACEStart"/>) is called with the single argument 0. This
+option may also be useful for re-using an interactive  process  for  a
+new enumeration, rather than using <C>ACEQuit</C> to kill the  process  and
+<C>ACEStart</C> to initiate a new process.  If  the  generators  each  have
+names that as strings are single lowercase letters, those same strings
+are used to represent the same generators by &ACE;; otherwise, &ACE;
+will represent each generator by  an  integer,  numbered  sequentially
+from 1.
+<P/>
+To convert a &GAP; list <A>fgens</A> of free group generators into a  form
+suitable   for   the   <C>group</C>   option,   use    the    construction:
+<C>ToACEGroupGenerators(<A>fgens</A>)</C>  (see&nbsp;<Ref Func="ToACEGroupGenerators"/>).  It  is
+<E>strongly recommended</E> that users  of  the  <C>group</C>  option  use  this
+construction.
+<P/>
+<E>Notes:</E>
+Any use of the  <C>group</C>  command  which  actually  defines  generators
+invalidates any previous enumeration, and stays in  effect  until  the
+next <C>group</C> command. Any words for the  group  or  subgroup  must  be
+entered using the nominated generator format, and  all  printout  will
+use this format. A valid set of generators is the minimum  information
+necessary before &ACE; will attempt an enumeration.
+<P/>
+<E>Guru Notes:</E>
+The columns of the coset table are allocated in the same order as  the
+generators are listed, insofar as this is  possible,  given  that  the
+first two columns must be  a  generator/inverse  pair  or  a  pair  of
+involutions. The ordering of the columns can, in  some  cases,  affect
+the definition sequence of cosets and  impact  the  statistics  of  an
+enumeration.
+</Subsection>
+<Subsection Label="option relators">
+<Heading><C>relators</C></Heading>
+<Index>option <C>relators</C></Index>Defines the group <C>relators</C>; <A>relators</A> must be a string or  list  of
+strings that the &ACE; binary can interpret as  words  in  the  group
+generators. (Shortest abbreviation: <C>rel</C>.)
+<P/>
+The group relators should normally be input as one of the arguments of
+an &ACE; interface function, but  this  option  may  occasionally  be
+useful with interactive processes (see&nbsp;<Ref Subsect="option group"/>). If  <A>wordList</A>
+is an empty list, the group is free.
+<P/>
+To convert a  &GAP;  list  <A>rels</A>  of  relators  in  the  free  group
+generators <A>fgens</A> into a form suitable for the <C>relators</C> option, use
+the construction: <C>ToACEWords(<A>fgens</A>, <A>rels</A>)</C> (see&nbsp;<Ref Func="ToACEWords"/>).
+</Subsection>
+<Subsection Label="option generators">
+<Heading><C>generators</C></Heading>
+<Index>option <C>generators</C></Index>Defines the subgroup <C>generators</C>; <A>subgens</A> must be a string or  list
+of strings that the &ACE; binary can interpret as words in the  group
+generators. (Shortest abbreviation: <C>gen</C>.)
+<P/>
+The subgroup generators  should  normally  be  input  as  one  of  the
+arguments of  an  &ACE;  interface  function,  but  this  option  may
+occasionally  be  useful  with  interactive   processes   (see&nbsp;<Ref Subsect="option group"/>). By default, there are no subgroup generators and the subgroup
+is trivial. This command allows a list of subgroup generating words to
+be entered.
+<P/>
+To convert a &GAP; list <A>sgens</A> of subgroup generators  in  the  free
+group generators <A>fgens</A> into a form  suitable  for  the  <C>generators</C>
+option,   use   the   construction:   <C>ToACEWords(<A>fgens</A>,   <A>sgens</A>)</C>
+(see&nbsp;<Ref Func="ToACEWords"/>).
+</Subsection>
+<Subsection Label="option sg">
+<Heading><C>sg</C></Heading>
+<Index>option <C>sg</C></Index>Adds the words in <A>subgens</A> to  any  <C>s</C>ubgroup  <C>g</C>enerators  already
+present; <A>subgens</A> must be a string or list of strings that the &ACE;
+binary can interpret as words in the group generators.
+<P/>
+The enumeration must  be  (re)<C>start</C>ed  or  <C>redo</C>ne,  it  cannot  be
+<C>continu</C>ed.
+<P/>
+To convert a &GAP; list <A>sgens</A> of subgroup generators  in  the  free
+group generators <A>fgens</A> into a form  suitable  for  the  <C>generators</C>
+option,   use   the   construction:   <C>ToACEWords(<A>fgens</A>,   <A>sgens</A>)</C>
+(see&nbsp;<Ref Func="ToACEWords"/>).
+<P/>
+<E>INTERACTIVELY</E>,            use             <C>ACEAddSubgroupGenerators</C>
+(see&nbsp;<Ref Func="ACEAddSubgroupGenerators"/>).
+</Subsection>
+<Subsection Label="option rl">
+<Heading><C>rl</C></Heading>
+<Index>option <C>rl</C></Index>Appends the <C>r</C>elator  <C>l</C>ist  <A>relators</A>  to  the  existing  list  of
+relators present; <A>relators</A> must be a string or list of strings  that
+the &ACE; binary can interpret as words in the group generators.
+<P/>
+The enumeration must  be  (re)<C>start</C>ed  or  <C>redo</C>ne,  it  cannot  be
+<C>continu</C>ed.
+<P/>
+To convert a  &GAP;  list  <A>rels</A>  of  relators  in  the  free  group
+generators <A>fgens</A> into a form suitable for the <C>rl</C> option,  use  the
+construction: <C>ToACEWords(<A>fgens</A>, <A>rels</A>)</C> (see&nbsp;<Ref Func="ToACEWords"/>).
+<P/>
+<E>INTERACTIVELY</E>, use <C>ACEAddRelators</C> (see&nbsp;<Ref Func="ACEAddRelators"/>).
+</Subsection>
+<Subsection Label="option ds">
+<Heading><C>ds</C></Heading>
+<Index>option <C>ds</C></Index><C>D</C>eletes <C>s</C>ubgroup generators; <A>list</A> must be  a  list  of  positive
+integers.
+<P/>
+This command  allows  subgroup  generators  to  be  deleted  from  the
+presentation. If the generators are numbered from 1 in the output  of,
+say, the <C>sr</C> command (see&nbsp;<Ref Subsect="option sr"/>), then the generators listed in
+<C><A>list</A></C> are deleted; <C><A>list</A></C> must be a strictly increasing sequence.
+<P/>
+<E>INTERACTIVELY</E>,           use           <C>ACEDeleteSubgroupGenerators</C>
+(see&nbsp;<Ref Func="ACEDeleteSubgroupGenerators"/>).
+</Subsection>
+<Subsection Label="option dr">
+<Heading><C>dr</C></Heading>
+<Index>option <C>dr</C></Index><C>D</C>eletes relators; <A>list</A> must be a list of positive integers.
+<P/>
+This  command  allows  group  relators  to   be   deleted   from   the
+presentation. If the relators are numbered from 1 in  the  output  of,
+say, the <C>sr</C> command (see&nbsp;<Ref Subsect="option sr"/>), then the relators  listed  in
+<C><A>list</A></C> are deleted; <C><A>list</A></C> must be a strictly increasing sequence.
+<P/>
+<E>INTERACTIVELY</E>, use <C>ACEDeleteRelators</C> (see&nbsp;<Ref Func="ACEDeleteRelators"/>).
+</Subsection>
+<Subsection Label="option cc">
+<Heading><C>cc</C></Heading>
+<Index>option <C>cc</C></Index>Makes <C>c</C>oset <A>val</A>  <C>c</C>oincide  with  coset  1;  <A>val</A>  should  be  a
+positive integer.
+<P/>
+Prints out the representative of coset <C><A>val</A></C>, and  adds  it  to  the
+subgroup generators; i.e., forces coset <C><A>val</A></C> to coincide with coset
+1, the subgroup.
+<P/>
+<E>INTERACTIVELY</E>,               use               <C>ACECosetCoincidence</C>
+(see&nbsp;<Ref Func="ACECosetCoincidence"/>).
+</Subsection>
+<Subsection Label="option rc">
+<Heading><C>rc</C></Heading>
+<Index>option <C>rc</C></Index>Enforce <C>r</C>andom <C>c</C>oincidences; <A>val</A> and <A>attempts</A> must be positive
+integers.
+<P/>
+This option attempts up to <A>attempts</A> (or,  in  the  first  and  second
+forms, 8) times to find nontrivial subgroups with index a multiple  of
+<A>val</A> by repeatedly making random coset numbers coincident with  coset
+1 and seeing what happens. The starting coset table must be non-empty,
+but should not be complete. For each attempt, we repeatedly add random
+coset representatives to the subgroup and <C>redo</C> the  enumeration.  If
+the table becomes too small, the  attempt  is  aborted,  the  original
+subgroup generators restored, and another attempt made. If an  attempt
+succeeds, then the new set of subgroup generators is retained.
+<P/>
+<E>Guru Notes:</E>
+A coset number can have many different coset representatives. Consider
+running <C>standard</C> before <C>rc</C>, to canonicise the table and hence  the
+coset representatives.
+<P/>
+<E>INTERACTIVELY</E>,              use              <C>ACERandomCoincidences</C>
+(see&nbsp;<Ref Func="ACERandomCoincidences"/>).
+</Subsection>
+</Section>
+<Section Label="Mode Options">
+<Heading>Mode Options</Heading>
+<Subsection Label="option mode">
+<Heading><C>mode</C></Heading>
+<Index>option <C>mode</C></Index>Prints the possible enumeration <C>mode</C>s.
+(Shortest abbreviation: <C>mo</C>.)
+<P/>
+Prints the possible  enumeration  <C>mode</C>s  (i.e.&nbsp;which  of  <C>continu</C>,
+<C>redo</C> or <C>start</C> are possible (see&nbsp;<Ref Subsect="option continu"/>,  <Ref Subsect="option check"/>
+and <Ref Subsect="option begin"/>).
+<P/>
+<E>INTERACTIVELY</E>, use <C>ACEModes</C> (see&nbsp;<Ref Func="ACEModes"/>).
+</Subsection>
+<Subsection Label="option begin">
+<Heading><C>begin</C>, <C>start</C></Heading>
+<Index>option <C>begin</C></Index><Index>option <C>start</C></Index>Start an enumeration. (Shortest abbreviation of <C>begin</C> is <C>beg</C>.)
+<P/>
+Any existing information in the table is cleared, and the  enumeration
+starts from coset 1 (i.e., the subgroup).
+<P/>
+Normally when a non-interactive &ACE; interface function  is  called,
+the option <C>start</C> (see&nbsp;<Ref Subsect="option begin"/>), is quietly inserted after all
+the options provided by the user, to  initiate  a  coset  enumeration;
+however, this is not done, if the user  herself  supplies  either  the
+<C>begin</C> or <C>start</C> option.
+<P/>
+<E>INTERACTIVELY</E>, use <C>ACEStart</C> (see&nbsp;<Ref Func="ACEStart"/>).
+</Subsection>
+<Subsection Label="option check">
+<Heading><C>check</C>, <C>redo</C></Heading>
+<Index>option <C>check</C></Index><Index>option <C>redo</C></Index><C>Redo</C> an extant enumeration, using the current parameters.
+<P/>
+As opposed to <C>start</C> (see&nbsp;<Ref Subsect="option begin"/>), which clears  an  existing
+coset table, any existing information in the table  is  retained,  and
+the enumeration is restarted from coset 1 (i.e., the subgroup).
+<P/>
+<E>Notes:</E>
+This option is really intended for the case where additional  relators
+(option <C>rl</C>; see&nbsp;<Ref Subsect="option rl"/>)  and/or  subgroup  generators  (option
+<C>sg</C>; see&nbsp;<Ref Subsect="option sg"/>) have been introduced. The current table,  which
+may be incomplete  or  exhibit  a  finite  index,  is  still  <E>valid</E>.
+However, the additional data may allow the enumeration to complete, or
+cause a collapse to a smaller index.
+<P/>
+<E>INTERACTIVELY</E>, use <C>ACERedo</C> (see&nbsp;<Ref Func="ACERedo"/>).
+</Subsection>
+<Subsection Label="option continu">
+<Heading><C>continu</C></Heading>
+<Index>option <C>continu</C></Index><Index Key="option continue">option <C>continue</C><Subkey>deprecated: use <C>continu</C></Subkey></Index><C>Continu</C>es the current enumeration, building upon the existing table.
+(Shortest abbreviation: <C>cont</C>.)
+<P/>
+If a previous run stopped without producing a finite index you can, in
+principle, change any of the parameters and <C>continu</C>e on. Of  course,
+if you make any changes which invalidate the current table, you  won't
+be allowed to <K>continue</K>,  although  you  may  be  allowed  to  <C>redo</C>
+(see&nbsp;<Ref Subsect="option check"/>). If <C>redo</C> is not  allowed,  you  must  re-<C>start</C>
+(see&nbsp;<Ref Subsect="option begin"/>).
+<P/>
+<E>Note:</E> The &ACE; standalone allows the option <K>continue</K>,  but  this
+is a &GAP; keyword, and so &GAP; users  must  use
+(mixed-case abbreviations of) <C>continu</C>.
+<P/>
+<E>INTERACTIVELY</E>, use <C>ACEContinue</C> (see&nbsp;<Ref Func="ACEContinue"/>).
+</Subsection>
+</Section>
+<Section Label="Options that Interact with the Operating System">
+<Heading>Options that Interact with the Operating System</Heading>
+<Subsection Label="option ai">
+<Heading><C>ai</C></Heading>
+<Index>option <C>ai</C></Index><C>A</C>lter <C>i</C>nput to standard input or <A>filename</A>; <A>filename</A> must be  a
+string.
+<P/>
+By default, commands to &ACE; are read from standard input (i.e., the
+keyboard). With no value <C>ai</C> causes &ACE; to revert to reading  from
+standard input; otherwise, the <C>ai</C> command closes the  current  input
+file,  and  opens  <C><A>filename</A></C>  as  the  source   of   commands.   If
+<C><A>filename</A></C> can't be opened, input reverts to standard input.
+<P/>
+<E>Notes:</E>
+If you switch to taking input from (another) file, remember to  switch
+back before the end of that file; otherwise the <C>EOF</C> there will cause
+&ACE; to terminate.
+</Subsection>
+<Subsection Label="option bye">
+<Heading><C>bye</C>, <C>exit</C>, <C>qui</C></Heading>
+<Index>option <C>bye</C></Index><Index>option <C>exit</C></Index><Index>option <C>qui</C></Index>Quit &ACE;. (Shortest abbreviation of <C>qui</C> is <C>q</C>.)
+<P/>
+This quits &ACE; nicely, printing the date and  the  time.  An  <C>EOF</C>
+(end-of-file;  i.e.,  <C>^d</C>)  has  the  same   effect,   so   proper
+termination occurs if &ACE; is taking its input from a script file.
+<P/>
+Note  that  <C>qui</C>  actually  abbreviates  the   corresponding   &ACE;
+directive <K>quit</K>, but since <K>quit</K> is  a  &GAP;  keyword  it  is  not
+available via the &GAP; interface to &ACE;.
+<P/>
+<E>INTERACTIVELY</E>, use <C>ACEQuit</C> (see&nbsp;<Ref Func="ACEQuit"/>).
+</Subsection>
+<Subsection Label="option system">
+<Heading><C>system</C></Heading>
+<Index>option <C>system</C></Index>Does a shell escape, to execute <A>string</A>; <A>string</A> must be a string.
+(Shortest abbreviation: <C>sys</C>.)
+<P/>
+Since &GAP; already provides <C>Exec()</C> for this purpose,  this  option
+is unlikely to have a use.
+</Subsection>
+</Section>
+<Section Label="Query Options">
+<Heading>Query Options</Heading>
+<Subsection Label="option cycles">
+<Heading><C>cycles</C></Heading>
+<Index>option <C>cycles</C></Index>Prints out the table in <C>cycles</C>. (Shortest abbreviation: <C>cy</C>.)
+<P/>
+This option prints out the permutation representation.
+<P/>
+<E>INTERACTIVELY</E>, use <C>ACECycles</C> (see&nbsp;<Ref Func="ACECycles"/>).
+</Subsection>
+<Subsection Label="option dump">
+<Heading><C>dump</C></Heading>
+<Index>option <C>dump</C></Index><C>Dump</C> the internal variables of &ACE;; <A>level</A> must be an integer in
+the range 0 to 2, and <A>detail</A> must be 0 or 1.
+(Shortest abbreviation: <C>d</C>.)
+<P/>
+The value of <A>level</A> determines which of the three levels of &ACE; to
+dump. (You will need to read the standalone manual  <C>acce3001.dvi</C>  in
+the <C>standalone-doc</C> directory to understand what Levels 0,  1  and  2
+are all about.) The value of <A>detail</A> determines the amount of  detail
+(<C><A>detail</A> = 0</C> means less detail). The first form (with no arguments)
+selects <C><A>level</A> = 0, <A>detail</A> = 0</C>. The second form of  this  command
+makes <C><A>detail</A> = 0</C>. This option is intended for  gurus;  the  source
+code should be consulted to see what the output means.
+<P/>
+<E>INTERACTIVELY</E>, use <C>ACEDumpVariables</C> (see&nbsp;<Ref Func="ACEDumpVariables"/>).
+</Subsection>
+<Subsection Label="option help">
+<Heading><C>help</C></Heading>
+<Index>option <C>help</C></Index>Prints the &ACE; help screen. (Shortest abbreviation: <C>h</C>.)
+<P/>
+This option prints the list of options of the &ACE; binary. Note that
+this list is longer than a standard screenful.
+</Subsection>
+<Subsection Label="option nc">
+<Heading><C>nc</C>, <C>normal</C></Heading>
+<Index>option <C>nc</C></Index><Index>option <C>normal</C></Index>Check or attempt to enforce normal closure; <A>val</A> must be 0 or 1.
+<P/>
+This option tests the subgroup for normal closure within the group. If
+a conjugate of a subgroup generator by a generator, is  determined  to
+belong to a coset other than coset 1, it is printed out, and if <C><A>val</A>
+=  1</C>,  then  any  such  conjugate  is  also  added  to  the  subgroup
+generators. With no argument or if <C><A>val</A> = 0</C>, &ACE;  does  not  add
+any new subgroup generators.
+<P/>
+<E>Notes:</E>
+The method of determination of  whether  a  conjugate  of  a  subgroup
+generator is in the subgroup, is by testing whether it can  be  traced
+from coset 1 to coset 1  (see  <C>trace</C>:&nbsp;<Ref Subsect="option tw"/>).
+<P/>
+The resultant subgroup need not be  normally  closed  after  executing
+option <C>nc</C>  with  the  value  1.  It  is  still  possible  that  some
+conjugates of the newly added subgroup generators will not be elements
+of the subgroup.
+<P/>
+<E>INTERACTIVELY</E>,      use      <C>ACEConjugatesForSubgroupNormalClosure</C>
+(see&nbsp;<Ref Func="ACEConjugatesForSubgroupNormalClosure"/>).
+</Subsection>
+<Subsection Label="option options">
+<Heading><C>options</C></Heading>
+<Index>option <C>options</C></Index>Dumps version information of the &ACE; binary.
+(Shortest abbreviation: <C>opt</C>.)
+<P/>
+A rather unfortunate name for an option; this command dumps details of
+the <Q>options</Q> included in the version  of  &ACE;  when  the  &ACE;
+binary was compiled.
+<P/>
+A typical output, is as follows:
+<P/>
+<Log><![CDATA[
+Executable built:
+  Sat Feb 27 15:57:59 EST 1999
+Level 0 options:
+  statistics package = on
+  coinc processing messages = on
+  dedn processing messages = on
+Level 1 options:
+  workspace multipliers = decimal
+Level 2 options:
+  host info = on
+]]></Log>
+<P/>
+<E>INTERACTIVELY</E>    and    non-interactively,    use    the     command
+<C>ACEBinaryVersion();</C> (see&nbsp;<Ref Func="ACEBinaryVersion"/>) for  this  information,
+instead, unless you want it in an &ACE; standalone input file.
+</Subsection>
+<Subsection Label="option oo">
+<Heading><C>oo</C>, <C>order</C></Heading>
+<Index>option <C>oo</C></Index><Index>option <C>order</C></Index>Print a coset representative of a coset number with order  a  multiple
+of <A>val</A> modulo the subgroup; <A>val</A> must be an integer.
+<P/>
+This option finds a coset with order a multiple  of  <C>|<A>val</A>|</C>  modulo
+the subgroup, and prints out its coset representative.  If  <C><A>val</A>  &lt;
+0</C>, then all coset numbers meeting the  requirement  are  printed.  If
+<C><A>val</A> &gt; 0</C>, then just the first coset number meeting the  requirement
+is printed. Also, <C><A>val</A> = 0</C> is permitted; this special value effects
+the printing of the orders (modulo the subgroup) of all coset numbers.
+<P/>
+<E>INTERACTIVELY</E>,  use  <C>ACEOrders</C>  (see&nbsp;<Ref Func="ACEOrders"/>),  for  the  case
+<C><A>val</A> = 0</C>, or <C>ACEOrder</C> (see&nbsp;<Ref Func="ACEOrder"/>), otherwise.
+</Subsection>
+<Subsection Label="option sr">
+<Heading><C>sr</C></Heading>
+<Index>option <C>sr</C></Index>Print out parameters of the current presentation;  <A>val</A>  must  be  an
+integer in the range 0 to 5.
+<P/>
+No argument, or <C><A>val</A> = 0</C>, prints out the <C>Group Name</C>, the  group's
+<C>relators</C>, <C>Subgroup Name</C> and the subgroup's <C>generators</C>. If <C><A>val</A>
+= 1</C>, then the <C>Group Generators</C> and the current setting of the <Q>run
+parameters</Q> is also  printed.  The  printout  is  the  same  as  that
+produced at the start of a run  when  option  <C>messages</C>  (see&nbsp;<Ref Subsect="option messages"/>) is non-zero. Also, <A>val</A> equal to 2, 3, 4, or 5  print  out
+just the <C>Group Name</C>, just the group's <C>relators</C>, just the <C>Subgroup
+Name</C>, or just the subgroup's <C>generators</C>, respectively.
+<P/>
+<E>Notes:</E>
+The <C>sr</C> option should  only  be  used  <E>after</E>  an  enumeration  run;
+otherwise, the value 0 for some options will be unreliable. To  ensure
+this occurs non-interactively, ensure one of the options that  invokes
+an enumeration: <C>start</C> (see&nbsp;<Ref Subsect="option begin"/>)  or  <C>aep</C>  (see&nbsp;<Ref Subsect="option aep"/>) or <C>rep</C> (see&nbsp;<Ref Subsect="option rep"/>), precedes the <C>sr</C> option. (When  an
+enumeration-invoking option is included  non-interactively  the  quiet
+inclusion step of the <C>start</C> option is omitted.)
+<P/>
+<E>INTERACTIVELY</E>, use <C>ACEGroupGenerators</C>  (see&nbsp;<Ref Func="ACEGroupGenerators"/>),
+<C>ACERelators</C>   (see&nbsp;<Ref Func="ACERelators"/>),   <C>ACESubgroupGenerators</C>    (see
+<Ref Func="ACESubgroupGenerators"/>), and <C>ACEParameters</C> (see&nbsp;<Ref Func="ACEParameters"/>).
+</Subsection>
+<Subsection Label="option print">
+<Heading><C>print</C></Heading>
+<Index>option <C>print</C></Index>Compact and print the coset table;  <A>val</A>  must  be  an  integer,  and
+<A>last</A> and <A>by</A> must be positive integers.
+(Shortest abbreviation: <C>pr</C>.)
+<P/>
+In the first (no value) form, <C>print</C> prints the entire  coset  table,
+without orders or coset  representatives.  In  the  second  and  third
+forms, the absolute value of <A>val</A> is taken to be the last line of the
+table to be printed (and 1 is taken to be the first);  in  the  fourth
+and fifth forms, <C>|<A>val</A>|</C> is taken to be the first line of the  table
+to be printed, and <A>last</A> is taken to be the number of the  last  line
+to be printed. In the last  form,  the  table  is  printed  from  line
+<C>|<A>val</A>|</C> to line <A>last</A> in steps of <A>by</A>. If <A>val</A> is negative,  then
+the  orders   modulo   the   subgroup   (if   available)   and   coset
+representatives are printed also.
+<P/>
+<E>INTERACTIVELY</E>,              use               <C>ACEDisplayCosetTable</C>
+(see&nbsp;<Ref Func="ACEDisplayCosetTable"/>).
+</Subsection>
+<Subsection Label="option sc">
+<Heading><C>sc</C>, <C>stabilising</C></Heading>
+<Index>option <C>sc</C></Index><Index>option <C>stabilising</C></Index>Print out the coset numbers whose elements normalise the subgroup; 
+<A>val</A> must be an integer.
+(Shortest abbreviation of <C>stabilising</C> is <C>stabil</C>.)
+<P/>
+If <C><A>val</A> &gt; 0</C>, the first <C><A>val</A></C> non-trivial (i.e.&nbsp;other  than  coset
+1) coset numbers whose elements normalise the subgroup are printed. If
+<C><A>val</A> = 0</C>, all non-trivial coset numbers  whose  elements  normalise
+the subgroup, plus their representatives, are printed.  If  <C><A>val</A>  &lt;
+0</C>, the first  <C>|<A>val</A>|</C>  non-trivial  coset  numbers  whose  elements
+normalise the subgroup, plus their representatives, are printed.
+<P/>
+<E>Note:</E>
+The name of this option is an historical hangover. It is named for the
+property that elements that <Q>normalise</Q> a subgroup, may be  said  to
+<Q>stabilise</Q> that subgroup when they act  <Q>by  conjugation</Q>.  Also,
+the option <C>normal</C> (see&nbsp;<Ref Subsect="option nc"/>) already performs a different
+function.
+<P/>
+<E>INTERACTIVELY</E>,         use          <C>ACECosetsThatNormaliseSubgroup</C>
+(see&nbsp;<Ref Func="ACECosetsThatNormaliseSubgroup"/>).
+</Subsection>
+<Subsection Label="option statistics">
+<Heading><C>statistics</C>, <C>stats</C></Heading>
+<Index>option <C>statistics</C></Index><Index>option <C>stats</C></Index>Dump enumeration statistics.
+(Shortest abbreviation of <C>statistics</C> is <C>stat</C>.)
+<P/>
+If the statistics package is compiled into the &ACE; code,  which  it
+is by default (see the <C>options</C>&nbsp;<Ref Subsect="option options"/> option),  then  this
+option  dumps  the  statistics  accumulated  during  the  most  recent
+enumeration. See the <F>enum.c</F> source  file  for  the  meaning  of  the
+variables.
+<P/>
+<E>INTERACTIVELY</E>, use <C>ACEDumpStatistics</C> (see&nbsp;<Ref Func="ACEDumpStatistics"/>).
+</Subsection>
+<Subsection Label="option style">
+<Heading><C>style</C></Heading>
+<Index>option <C>style</C></Index>Prints the current enumeration style.
+<P/>
+This option prints the current enumeration style, as deduced from  the
+current <C>ct</C> and <C>rt</C> parameters (see&nbsp;<Ref Sect="Enumeration Style"/>).
+<P/>
+<E>INTERACTIVELY</E>, use <C>ACEStyle</C> (see&nbsp;<Ref Func="ACEStyle"/>).
+</Subsection>
+<Subsection Label="option tw">
+<Heading><C>tw</C>, <C>trace</C></Heading>
+<Index>option <C>tw</C></Index><Index>option <C>trace</C></Index>Trace <C><A>word</A></C> through the coset table,  starting  at  coset  <C><A>val</A></C>;
+<A>val</A> must be a positive integer, and <A>word</A> must be  a  word  in  the
+group generators.
+<P/>
+This option prints the final coset number of the trace, if  the  trace
+completes.
+<P/>
+<E>INTERACTIVELY</E>, use <C>ACETraceWord</C> (see&nbsp;<Ref Func="ACETraceWord"/>).
+</Subsection>
+</Section>
+<Section Label="Options that Modify the Coset Table">
+<Heading>Options that Modify the Coset Table</Heading>
+<Subsection Label="option recover">
+<Heading><C>recover</C>, <C>contiguous</C></Heading>
+<Index>dead coset (number)</Index><Index>option <C>recover</C></Index><Index>option <C>contiguous</C></Index><C>Recover</C> space used by dead coset numbers.
+(Shortest  abbreviation  of  <C>recover</C>   is   <C>reco</C>,   and   shortest
+abbreviation of <C>contiguous</C> is <C>contig</C>.)
+<P/>
+This option invokes the compaction routine on the table to recover the
+space used by any dead coset numbers. A <C>CO</C> message line  is  printed
+if any cosets were recovered, and a  <C>co</C>  line  if  none  were.  This
+routine is called automatically if  the  <C>cycles</C>,  <C>nc</C>,  <C>print</C>  or
+<C>standard</C> options (see&nbsp;<Ref Subsect="option cycles"/>, <Ref Subsect="option nc"/>,  <Ref Subsect="option print"/>
+and <Ref Subsect="option standard"/>) are invoked.
+<P/>
+<E>INTERACTIVELY</E>, use <C>ACERecover</C> (see&nbsp;<Ref Func="ACERecover"/>).
+</Subsection>
+<Subsection Label="option standard">
+<Heading><C>standard</C></Heading>
+<Index>option <C>standard</C></Index>Compacts &ACE;'s  coset  table  and  standardises  the  numbering  of
+cosets, according to the <C>lenlex</C>  scheme  (see  Section&nbsp;<Ref Sect="Coset Table Standardisation Schemes"/>). (Shortest abbreviation: <C>st</C>.)
+<P/>
+For a given ordering of the generators in the columns of the table, it
+produces a canonical numbering of the cosets. This function  does  not
+display the new table; use the <C>print</C> (see&nbsp;<Ref Subsect="option print"/>) for  that.
+Such a table has the property that a scan of the  successive  rows  of
+the <E>body</E> of the table row by row, from  left  to  right,  encounters
+previously unseen cosets in numeric order.
+<P/>
+<E>Notes:</E>
+In a <C>lenlex</C> standard table, the coset  representatives  are  ordered
+first according to length and then the lexicographic order defined  by
+the order the generators and their inverses  head  the  columns.  Note
+that, since &ACE; avoids having an involutory generator in the  first
+column when it can, this  lexicographic  order  does  not  necessarily
+correspond with the order in which the generators were  first  put  to
+&ACE;. Two tables are equivalent only if their canonic forms are  the
+same. Invoking this option directly does <E>not</E> affect the &GAP; coset
+table obtained via  <C>ACECosetTable</C>;  use  the  <C>lenlex</C>  (see&nbsp;<Ref Subsect="option lenlex"/>) option, if you want your table  <C>lenlex</C>  standardised.  (The
+<C>lenlex</C> option restarts the enumeration, if it is necessary to ensure
+the generators have not been rearranged.)
+<P/>
+<E>Guru Notes:</E>
+In  five  of  the  ten  standard  enumeration   strategies   of   Sims
+<Cite Key="Sim94"/> (i.e.&nbsp;the five Sims strategies not provided  by  &ACE;),
+the   table   is   standardised   repeatedly.   This   is    expensive
+computationally, but can result in fewer cosets being  necessary.  The
+effect of doing this can be investigated  in  &ACE;  by  (repeatedly)
+halting the enumeration (via restrictive options),  standardising  the
+coset numbering, and continuing (see Section&nbsp;<Ref Sect="Emulating Sims"/>  for  an
+interactive example).
+<P/>
+<E>INTERACTIVELY</E>,            use            <C>ACEStandardCosetNumbering</C>
+(see&nbsp;<Ref Func="ACEStandardCosetNumbering"/>).
+</Subsection>
+</Section>
+<Section Label="Options for Comments">
+<Heading>Options for Comments</Heading>
+<Subsection Label="option text">
+<Heading><C>text</C></Heading>
+<Index>option <C>text</C></Index>Prints <A>string</A> in the output; <A>string</A> must be a string.
+<P/>
+This allows the user to add comments to the output from &ACE;.
+<P/>
+<E>Note:</E>
+Please avoid using this option to insert comments starting with  three
+asterisks: <C>***</C>, since this string is used as a  sentinel  internally
+in flushing output from &ACE;.
+</Subsection>
+<Subsection Label="option aceincomment vs option text">
+<Heading><C>aceincomment</C></Heading>
+<Index>option <C>aceincomment</C><Subkey>different to option <C>text</C></Subkey></Index>Prints comment <A>string</A> in the &ACE; input; <A>string</A> must be a string.
+(Shortest abbreviation: <C>aceinc</C>.)
+<P/>
+This option prints the comment <A>string</A> behind a sharp sign (<C>#</C>)  in
+the input to &ACE;. Only useful  for  adding  comments  (that  &ACE;
+ignores) to standalone input files.
+</Subsection>
+</Section>
+</Chapter>
