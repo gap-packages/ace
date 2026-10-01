@@ -3,43 +3,52 @@ package. Also look at gap/CHANGES  for  a  history  of  the  pre-3.xxx
 development.
 
 ## Unreleased
+
   * Fix various issues which prevented ACE from working with a native
     Windows (MinGW) build of GAP
 
-## Version 5.7.0 (2025-04-10)
+## 5.7.0 (2025-04-10)
+
   * Deprecate `InfoACELevel` and `SetInfoACELevel` (instead one
     may use `InfoACE` together with `SetInfoLevel`)
   * Various janitorial changes
 
-## Version 5.6.2 (2023-01-03)
+## 5.6.2 (2023-01-03)
+
   * Enhance the `configure` script to accept `--with-gaproot=PATH`
   * Drop the `-ansi` option from the flags passed to the C compiler
 
-## Version 5.6.1 (2022-09-26)
+## 5.6.1 (2022-09-26)
+
   * Re-release of 5.6 to avoid an issue with the GAP release process
 
-## Version 5.6 (2022-09-15)
+## 5.6 (2022-09-15)
+
   * Various minor improvements to the C code
 
-## Version 5.5 (2022-08-01)
+## 5.5 (2022-08-01)
+
   * Work around a bug in the GAP help system that prevents it from finding
     the HTML version of the ACE manual appendices. This affects searches in
     these appendices when GAP is configured to open help in a web browser
     instead of the terminal.
 
-## Version 5.4 (2022-03-09)
+## 5.4 (2022-03-09)
+
   * Adapt test suite to changes to the library of perfect groups
   * Allow overriding compiler by setting the `CC` environment variable
   * Various janitorial changes
 
-## Version 5.3 (2020-02-12)
+## 5.3 (2020-02-12)
+
   * Increase default workspace from 10^6 to 10^8 words
   * Fix compatibility with Cygwin
   * Drop build date from binary
   * Allow overriding CC and use CFLAGS and LDFLAGS
   * Various janitorial changes
 
-## Version 5.2 (2016-03-11)
+## 5.2 (2016-03-11)
+
   Mainly cosmetic changes to improve compatibility with GAP 4.7.
   * LICENSE (new file)
     - All parts of ACE (including the GAP package, and the original C
@@ -77,7 +86,8 @@ development.
       Line `SetInfoACELevel(3)` added. Some additional lines also appear
       at this `InfoACE` level. These and some further tidy-ups done.
 
-## Version 5.1 (2012-01-22)
+## 5.1 (2012-01-22)
+
   Last GAP 4.4 version.
   * make_zoo,pack_pkg:
     - make_zoo is deprecated
@@ -94,7 +104,8 @@ development.
   * PackageInfo.g,README,VERSION,doc/{manual,ace,install}.tex:
     - routine changes including an update to address and email address
 
-## Version 5.0 (2006-01-26)
+## 5.0 (2006-01-26)
+
   * pre-GAP 4.4 compatibility features removed:
     - gap/ace.g:
       . banner removed ... this role is performed by PackageInfo.g
@@ -114,7 +125,8 @@ development.
   * PackageInfo.g,README,VERSION,doc/{ace,install,examples}.tex:
     - routine changes as per above
 
-## Version 4.1
+## 4.1
+
   GAP 4.4 Release version.
   * PkgInfo.g replaced by PackageInfo.g
     - `Pkg...` fields replaced by `Package...` fields
@@ -131,7 +143,8 @@ development.
   * README,VERSION,doc/{ace,install,examples}.tex:
     - routine changes as per above
 
-## Version 4.0
+## 4.0
+
   Revised for GAP 4.4. Not given general release.
   * init.g 
     - for GAP 4.3 compatibility, if GAP 4.3 then 
@@ -149,7 +162,8 @@ development.
   * GAP 4.2 compatibility no longer supported 
     - ace/compat4r2.g[di] no longer distributed
 
-## Version 3.003
+## 3.003
+
   * Initial value of `ACEIgnoreUnknownDefault` is now  `true`  (previously
     it was `false`).
 
@@ -161,11 +175,13 @@ development.
   * Option `pkgbanner` used to control the printing of the banner on
     loading.
 
-## Version 3.002
+## 3.002
+
   * `ACEIgnoreUnknownDefault` added.
 
   * Option `continue` changed to `continu`, as `continue` is a keyword in
     GAP 4.3.
 
-## Version 3.001
+## 3.001
+
   * First release.
